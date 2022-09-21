@@ -1,92 +1,111 @@
-# YoanDev-Starter-Pack-Projet
+# templategp-agile-sae-s3
 
-Starter Pack pour organiser un nouveau projet avec GitLab.
+Template de base pour gérer (en mode SCRUM-light) les SAE du s3 avec GitLab 🦊
 
-## Getting started
+![bannière](.ressources/SAE-s3-logo-bleu.png)
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+##  1. <a name='Tabledesmatires'></a> Table des matières
+<!-- vscode-markdown-toc -->
+* 1. [ Table des matières](#Tabledesmatires)
+* 2. [Pourquoi ce dépôt ?](#Pourquoicedpt)
+* 3. [Que propose ce dépôt ?](#Queproposecedpt)
+	* 3.1. [Les labels](#Leslabels)
+	* 3.2. [Les Jalons](#Lesjalons)
+	* 3.3. [Le Board](#LeBoard)
+	* 3.4. [Les branches](#Lesbranches)
+	* 3.5. [Modèles pour les issues et les merges requests](#Modlespourlesissuesetlesmergesrequests)
+* 4. [Comment utiliser ce dépôt ?](#Commentutilisercedpt)
+* 5. [Licence](#Licence)
+* 6. [Auteur](#Auteur)
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+<!-- vscode-markdown-toc-config
+	numbering=true
+	autoSave=true
+	/vscode-markdown-toc-config -->
+<!-- /vscode-markdown-toc -->
 
-## Add your files
+##  2. <a name='Pourquoicedpt'></a>Pourquoi ce dépôt ?
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+Ce dépot à pour objectif de fournir un outil de démarrage rapide pour organiser et gérer de façon agile un nouveau projet avec GitLab, notamment pour la SAE du s3.
 
-```
-cd existing_repo
-git remote add origin https://gitlab.com/yoandev.co/yoandev-starter-pack-projet.git
-git branch -M main
-git push -uf origin main
-```
+Partant du constat que le démarrage d'un projet est un processus long et complexe, on fournit ici un outil simple pour lancer un projet avec GitLab, que vous pourrez réutiiser et adapter au fil du temps avec votre propre affinité de GiLab.
 
-## Integrate with your tools
+##  3. <a name='Queproposecedpt'></a>Que propose ce dépôt ?
 
-- [ ] [Set up project integrations](https://gitlab.com/yoandev.co/yoandev-starter-pack-projet/-/settings/integrations)
+Ce dépôt fournit un ensemble de modèles, de fichiers et de paramétrages pour vous faciliter le démarrage d'un projet avec GitLab, que vous pouvez modifier à volonté.
+Vous trouverez les éléments suivants :
 
-## Collaborate with your team
+-   Ce fichier README.md
+-   Des modèles pour les issues et les merge requests, et un modèle pour la réunion en séance avec le tuteur-SAE 
+-   Une collection de labels
+-   Une liste de jalons (_milestones_) correspondant aux dates des séances de SAE avec le tuteur
+-   Un modèle de Board
+-   3 Branches spécifiques à la SAE :
+    -   Main
+    -   Pré-Démonstration
+    -   Démonstration
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
+(Dans un cadre professionnel, ces 2 dernières branches s'appellent _pré-production_ et _production_)
 
-## Test and Deploy
+###  3.1. <a name='Leslabels'></a>Les labels
 
-Use the built-in continuous integration in GitLab.
+Les labels sont des éléments qui sont associés à des _issues_ et _merge requests_ : ils permettent de les classer, les organiser et les identifier simplement. Voici ceux qu'on propose ici, vous pouvez en supprimer ou ajouter d'autres.
 
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
+On a distingué les labels prioritaires :
 
-***
+![label](.ressources/labels.png)
 
-# Editing this README
+Des labels utilisés pour le board :
 
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
+![label](.ressources/labels2.png)
 
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
+###  3.2. <a name='Lesjalons'></a>Les Jalons
 
-## Name
-Choose a self-explaining name for your project.
+Les jalons (milestones) sont les échéances connues du projet, qu'il faut préparer ou pour lesquelles certaines tâches / livrables doivent être terminées.
+Dans le modèle, on a défini des jalons qui devraient vous aider, notamment pour préparer chaque séance de SAE avec le tuteur.
 
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
+Libre à vous de les adapter.
 
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
+![label](.ressources/jalons.png)
 
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
+###  3.3. <a name='LeBoard'></a>Le Board
 
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
+Le Board est l'outil central de GitLab pour organiser et gérer les tâches afférentes au projet.
 
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
+Il permet de les visualiser et de suivre leur progression.
 
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
+La structure de ce board adopte l'approche [Scrumban](https://asana.com/fr/resources/scrumban).
 
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
+![board](.ressources/theBoard.png)
 
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
+###  3.4. <a name='Lesbranches'></a>Les branches
 
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
+Les trois branches proposées dans ce template permettent de gérer de manière simple l'état du votre projet, jusqu'à la revue finale de projet devant un jury de 2 enseignants.
 
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
+Ce modèle est librement inspiré de l'approche GitLab Flow, pour en savoir plus : [GitLab Flow](https://www.youtube.com/watch?v=ZJuUz5jWb44).
 
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
+![](.ressources/branches.png)
 
-## License
-For open source projects, say how it is licensed.
+###  3.5. <a name='Modlespourlesissuesetlesmergesrequests'></a>Modèles pour les issues et les merges requests
 
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+Ce template propose des modèles pour les _issues_ et les _merge requests_ afin de simplifier et standardiser leur utilisation par les équipes du projet.
+
+![board](.ressources/issues.png)
+
+![board](.ressources/mr.png)
+
+##  4. <a name='Commentutilisercedpt'></a>Comment utiliser ce dépôt ?
+
+> Vous utilisez ce dépôt comme **base d'inspiration** pour votre gérer votre projet simplement en adaptant les éléments à votre contexte.
+
+> **Vous pouvez également télécharger l'export du dépôt pour l'importer avec tous les éléments dèja présents (labels, issues, merges requests, board, branches, ...)**
+> 1. [Télécharger l'export du dépôt](.ressources/export.tar.gz)
+> 2. [Importer l'export dans GitLab](https://docs.gitlab.com/ee/user/project/settings/import_export.html#import-a-project-and-its-data)
+
+##  5. <a name='Licence'></a>Licence
+
+Ce dépôt est sous licence [MIT](LICENSE)
+
+##  6. <a name='Auteur'></a>Auteur
+Contact : @V.Deslandres
+Ce travail est basé sur le kit starter de projet de [YoanDev](https://yoandev.co)
