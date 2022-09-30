@@ -1,0 +1,32 @@
+{
+  "name": "likavynent/parraindex",
+  "description": "School project for the third semester of french Computer Science Bachelor",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Luka MARET",
+      "email": "maret.luka@gmail.com"
+    },
+    {
+      "name": "Lilian BAUDRY",
+      "email": "lilian.baudry21@gmail.com"
+    },
+    {
+      "name": "Melvyn DELPREE",
+      "email": "melvyn2701@gmail.com"
+    },
+    {
+      "name": "Vincent CHAVOT-DAMBRUN",
+      "email": "vincent.chavotdambrun@gmail.com"
+    }
+  ],
+  "require": {
+    "php-di/php-di": "^6.4"
+  }
+}
