@@ -85,3 +85,5 @@ fabric.properties
 .idea
 
 /vendor/
+
+.phpunit.result.cache
