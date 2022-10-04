@@ -7,16 +7,14 @@ use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
-use Twig\Loader\FilesystemLoader;
 
 abstract class Controller {
 
     private Environment $twig;
 
-    public function __construct() {
-        $this->twig = new Environment(new FilesystemLoader(VIEW_DIRECTORY));
+    public function __construct(Environment $twig) {
+        $this->twig = $twig;
     }
-
 
     public function get(Router $router, array $parameters): void {
     }
@@ -34,7 +32,7 @@ abstract class Controller {
         try {
             echo $this->twig->render($template, $parameters);
         } catch (LoaderError|RuntimeError|SyntaxError $e) {
-            if (DEBUG_TIME) {
+            if (DEBUG) {
                 dump($e);
             }
         }
