@@ -23,7 +23,7 @@ class Injector {
 
     public function build(): void {
 
-        $twig = new Environment(new FilesystemLoader(dirname(__DIR__) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
+        $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
         $this->container->set(UserService::class, create(UserService::class));
         $this->container->set(Environment::class, $twig);
