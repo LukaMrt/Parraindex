@@ -87,3 +87,5 @@ fabric.properties
 /vendor/
 
 .phpunit.result.cache
+
+composer.phar

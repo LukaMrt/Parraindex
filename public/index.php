@@ -21,7 +21,6 @@ $router = new Router();
 $injector = new Injector();
 $injector->build();
 
-
 try {
     $injector->setUpRouter($router);
 } catch (DependencyException|NotFoundException $e) {
