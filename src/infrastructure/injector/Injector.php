@@ -11,6 +11,7 @@ use DI\DependencyException;
 use DI\NotFoundException;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
+use Twig\TwigFunction;
 use function DI\create;
 
 class Injector {
@@ -24,6 +25,15 @@ class Injector {
     public function build(): void {
 
         $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
+        $twig->addFunction(new TwigFunction('style', function (string $path) {
+            return 'style/' . $path;
+        }));
+        $twig->addFunction(new TwigFunction('script', function (string $path) {
+            return 'js/' . $path;
+        }));
+        $twig->addFunction(new TwigFunction('image', function (string $path) {
+            return 'img/' . $path;
+        }));
 
         $this->container->set(UserService::class, create(UserService::class));
         $this->container->set(Environment::class, $twig);
