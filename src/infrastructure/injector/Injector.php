@@ -2,8 +2,11 @@
 
 namespace App\infrastructure\injector;
 
-use App\application\UserService;
+use App\application\UserRepository;
 use App\controller\HomeController;
+use App\infrastructure\database\DatabaseConnection;
+use App\infrastructure\database\TomlConfiguration;
+use App\infrastructure\MySqlUserRepository;
 use App\infrastructure\router\Router;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -12,7 +15,7 @@ use DI\NotFoundException;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
-use function DI\create;
+use function DI\get;
 
 class Injector {
 
@@ -35,8 +38,12 @@ class Injector {
             return 'img/' . $path;
         }));
 
-        $this->container->set(UserService::class, create(UserService::class));
+        $databaseConnection = new DatabaseConnection(TomlConfiguration::getConfiguration());
+
         $this->container->set(Environment::class, $twig);
+        $this->container->set(DatabaseConnection::class, $databaseConnection);
+
+        $this->container->set(UserRepository::class, get(MySqlUserRepository::class));
     }
 
     /**
