@@ -3,10 +3,8 @@
 namespace App\infrastructure\injector;
 
 use App\application\UserDAO;
-use App\controller\Error404Controller;
 use App\controller\HomeController;
 use App\infrastructure\database\DatabaseConnection;
-use App\infrastructure\database\TomlConfiguration;
 use App\infrastructure\MySqlUserDAO;
 use App\infrastructure\router\Router;
 use DI\Container;

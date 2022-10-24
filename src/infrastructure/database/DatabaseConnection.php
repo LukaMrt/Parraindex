@@ -15,12 +15,12 @@ class DatabaseConnection {
 	private function connect(): void {
 
 		[
-			'driver' => $driver,
-			'host' => $host,
-			'port' => $port,
-			'database' => $database,
-			'username' => $username,
-			'password' => $password,
+			'DRIVER' => $driver,
+			'HOST' => $host,
+			'PORT' => $port,
+			'DATABASE' => $database,
+			'USERNAME' => $username,
+			'PASSWORD' => $password,
 		] = $_ENV;
 
 		$this->database = new PDO("$driver:host=$host; dbname=$database; port=$port; charset=utf8", $username, $password);

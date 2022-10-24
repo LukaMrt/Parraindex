@@ -1,6 +1,5 @@
 <?php
 
-use App\infrastructure\database\TomlConfiguration;
 use App\infrastructure\injector\Injector;
 use App\infrastructure\router\Router;
 use DI\DependencyException;
@@ -13,7 +12,7 @@ require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR 
 $dotenv = Dotenv\Dotenv::createImmutable('../');
 $dotenv->load();
 
-if ($_ENV['debug']) {
+if ($_ENV['DEBUG'] === "true") {
 	$whoops = new Run();
 	$whoops->pushHandler(new PrettyPageHandler);
 	$whoops->register();
@@ -26,7 +25,7 @@ $injector->build();
 try {
 	$injector->setUpRouter($router);
 } catch (DependencyException|NotFoundException $e) {
-	if (DEBUG) {
+	if ($_ENV['DEBUG'] === "true") {
 		dump($e);
 	}
 }

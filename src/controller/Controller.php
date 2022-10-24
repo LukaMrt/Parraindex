@@ -51,7 +51,7 @@ abstract class Controller {
         try {
             echo $this->twig->render($template, $parameters);
         } catch (LoaderError|RuntimeError|SyntaxError $e) {
-            if (DEBUG) {
+            if ($_ENV['DEBUG'] === "true") {
                 dump($e);
             }
         }
