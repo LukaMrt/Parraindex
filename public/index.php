@@ -7,14 +7,15 @@ use DI\NotFoundException;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
+require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-const DEBUG = true;
+$dotenv = Dotenv\Dotenv::createImmutable('../');
+$dotenv->load();
 
-if (DEBUG) {
-    $whoops = new Run();
-    $whoops->pushHandler(new PrettyPageHandler);
-    $whoops->register();
+if ($_ENV['DEBUG'] === "true") {
+	$whoops = new Run();
+	$whoops->pushHandler(new PrettyPageHandler);
+	$whoops->register();
 }
 
 $router = new Router();
@@ -22,11 +23,11 @@ $injector = new Injector();
 $injector->build();
 
 try {
-    $injector->setUpRouter($router);
+	$injector->setUpRouter($router);
 } catch (DependencyException|NotFoundException $e) {
-    if (DEBUG) {
-        dump($e);
-    }
+	if ($_ENV['DEBUG'] === "true") {
+		dump($e);
+	}
 }
 
 $router->run();
