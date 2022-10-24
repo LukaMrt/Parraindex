@@ -20,48 +20,48 @@ use function DI\get;
 
 class Injector {
 
-    private Container $container;
+	private Container $container;
 
-    public function __construct() {
-        $this->container = ContainerBuilder::buildDevContainer();
-    }
+	public function __construct() {
+		$this->container = ContainerBuilder::buildDevContainer();
+	}
 
-    public function build(): void {
+	public function build(): void {
 
-        $twig = $this->buildTwig();
-        $databaseConnection = new DatabaseConnection(TomlConfiguration::getConfiguration());
-        $userDAO = get(MySqlUserDAO::class);
+		$twig = $this->buildTwig();
+		$databaseConnection = new DatabaseConnection();
+		$userDAO = get(MySqlUserDAO::class);
 
-        $this->container->set(Environment::class, $twig);
-        $this->container->set(DatabaseConnection::class, $databaseConnection);
+		$this->container->set(Environment::class, $twig);
+		$this->container->set(DatabaseConnection::class, $databaseConnection);
 
-        $this->container->set(UserDAO::class, $userDAO);
-    }
+		$this->container->set(UserDAO::class, $userDAO);
+	}
 
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function setUpRouter(Router $router): void {
+	/**
+	 * @throws DependencyException
+	 * @throws NotFoundException
+	 */
+	public function setUpRouter(Router $router): void {
 
-        $router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+		$router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
 
-    }
+	}
 
-    private function buildTwig(): Environment {
-        $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
+	private function buildTwig(): Environment {
+		$twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
-        $twig->addFunction(new TwigFunction('style', function (string $path) {
-            return 'style/' . $path;
-        }));
-        $twig->addFunction(new TwigFunction('script', function (string $path) {
-            return 'js/' . $path;
-        }));
-        $twig->addFunction(new TwigFunction('image', function (string $path) {
-            return 'img/' . $path;
-        }));
+		$twig->addFunction(new TwigFunction('style', function (string $path) {
+			return 'style/' . $path;
+		}));
+		$twig->addFunction(new TwigFunction('script', function (string $path) {
+			return 'js/' . $path;
+		}));
+		$twig->addFunction(new TwigFunction('image', function (string $path) {
+			return 'img/' . $path;
+		}));
 
-        return $twig;
-    }
+		return $twig;
+	}
 
 }

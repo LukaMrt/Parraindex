@@ -10,12 +10,13 @@ use Whoops\Run;
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
-define("DEBUG", TomlConfiguration::getDebugMode());
+$dotenv = Dotenv\Dotenv::createImmutable('../');
+$dotenv->load();
 
-if (DEBUG) {
-    $whoops = new Run();
-    $whoops->pushHandler(new PrettyPageHandler);
-    $whoops->register();
+if ($_ENV['debug']) {
+	$whoops = new Run();
+	$whoops->pushHandler(new PrettyPageHandler);
+	$whoops->register();
 }
 
 $router = new Router();
@@ -23,11 +24,11 @@ $injector = new Injector();
 $injector->build();
 
 try {
-    $injector->setUpRouter($router);
+	$injector->setUpRouter($router);
 } catch (DependencyException|NotFoundException $e) {
-    if (DEBUG) {
-        dump($e);
-    }
+	if (DEBUG) {
+		dump($e);
+	}
 }
 
 $router->run();

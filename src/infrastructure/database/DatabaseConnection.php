@@ -2,36 +2,37 @@
 
 namespace App\infrastructure\database;
 
-use App\model\database\DatabaseCredentials;
 use PDO;
 
 class DatabaseConnection {
 
-    private DatabaseCredentials $databaseCredentials;
-    private PDO $database;
+	private PDO $database;
 
-    public function __construct(DatabaseCredentials $databaseCredentials) {
-        $this->databaseCredentials = $databaseCredentials;
-        $this->connect();
-    }
+	public function __construct() {
+		$this->connect();
+	}
 
-    private function connect(): void {
+	private function connect(): void {
 
-        $this->database = new PDO(
-            $this->databaseCredentials->getDsn(),
-            $this->databaseCredentials->getUsername(),
-            $this->databaseCredentials->getPassword(),
-            array(
-                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-                PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-                PDO::ATTR_STRINGIFY_FETCHES => false
-            )
-        );
+		[
+			'driver' => $driver,
+			'host' => $host,
+			'port' => $port,
+			'database' => $database,
+			'username' => $username,
+			'password' => $password,
+		] = $_ENV;
 
-    }
+		$this->database = new PDO("$driver:host=$host; dbname=$database; port=$port; charset=utf8", $username, $password);
 
-    public function getDatabase(): PDO {
-        return $this->database;
-    }
+		$this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+		$this->database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+		$this->database->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+
+	}
+
+	public function getDatabase(): PDO {
+		return $this->database;
+	}
 
 }
