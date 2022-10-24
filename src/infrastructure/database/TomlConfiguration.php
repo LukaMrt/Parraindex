@@ -21,4 +21,9 @@ class TomlConfiguration {
             ->build();
     }
 
+    public static function getDebugMode(): bool {
+        $toml = Parser::fromFile(dirname(__DIR__, 3) . DIRECTORY_SEPARATOR . 'configuration.toml');
+        return $toml['env']['debug'];
+    }
+
 }

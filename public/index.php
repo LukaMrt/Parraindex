@@ -1,5 +1,6 @@
 <?php
 
+use App\infrastructure\database\TomlConfiguration;
 use App\infrastructure\injector\Injector;
 use App\infrastructure\router\Router;
 use DI\DependencyException;
@@ -9,7 +10,7 @@ use Whoops\Run;
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor/autoload.php';
 
-const DEBUG = true;
+define("DEBUG", TomlConfiguration::getDebugMode());
 
 if (DEBUG) {
     $whoops = new Run();

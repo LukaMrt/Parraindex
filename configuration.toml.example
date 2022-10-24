@@ -1,3 +1,6 @@
+[env]
+debug = true
+
 [database]
 driver = "mysql"
 host = "localhost"
