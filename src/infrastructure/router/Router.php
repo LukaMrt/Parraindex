@@ -14,43 +14,11 @@ class Router {
         $this->router = new AltoRouter();
     }
 
-    public function put(string $url, Controller $controller, string $name): self {
+    public function registerRoute(string $method, string $url, Controller $controller, string $name): self {
 
-        $closure = function (Router $router, array $parameters = []) use ($controller): void {
-            $controller->put($router, $parameters);
+        $closure = function (Router $router, array $parameters = []) use ($controller, $method): void {
+            $controller->call($method, $router, $parameters);
         };
-
-        return $this->registerRoute('PUT', $url, $name, $closure);
-    }
-
-    public function get(string $url, Controller $controller, string $name): self {
-
-        $closure = function (Router $router, array $parameters = []) use ($controller): void {
-            $controller->get($router, $parameters);
-        };
-
-        return $this->registerRoute('GET', $url, $name, $closure);
-    }
-
-    public function post(string $url, Controller $controller, string $name): self {
-
-        $closure = function (Router $router, array $parameters = []) use ($controller): void {
-            $controller->post($router, $parameters);
-        };
-
-        return $this->registerRoute('POST', $url, $name, $closure);
-    }
-
-    public function delete(string $url, Controller $controller, string $name): self {
-
-        $closure = function (Router $router, array $parameters = []) use ($controller): void {
-            $controller->delete($router, $parameters);
-        };
-
-        return $this->registerRoute('DELETE', $url, $name, $closure);
-    }
-
-    private function registerRoute(string $method, string $url, string $name, $closure): self {
 
         try {
             $this->router->map($method, $url, $closure, $name);

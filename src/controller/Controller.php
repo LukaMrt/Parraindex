@@ -16,6 +16,25 @@ abstract class Controller {
         $this->twig = $twig;
     }
 
+    public function call(string $method, Router $router, array $parameters): void {
+
+        switch ($method) {
+            case 'GET':
+                $this->get($router, $parameters);
+                break;
+            case 'POST':
+                $this->post($router, $parameters);
+                break;
+            case 'PUT':
+                $this->put($router, $parameters);
+                break;
+            case 'DELETE':
+                $this->delete($router, $parameters);
+                break;
+        }
+
+    }
+
     public function get(Router $router, array $parameters): void {
     }
 

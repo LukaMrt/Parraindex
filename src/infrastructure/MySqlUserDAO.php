@@ -2,11 +2,11 @@
 
 namespace App\infrastructure;
 
-use App\application\UserRepository;
+use App\application\UserDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\model\User;
 
-class MySqlUserRepository implements UserRepository {
+class MySqlUserDAO implements UserDAO {
 
     private DatabaseConnection $databaseConnection;
 

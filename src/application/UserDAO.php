@@ -2,7 +2,7 @@
 
 namespace App\application;
 
-interface UserRepository {
+interface UserDAO {
 
     function getUsers(): array;
 

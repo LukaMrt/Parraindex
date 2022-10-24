@@ -2,11 +2,12 @@
 
 namespace App\infrastructure\injector;
 
-use App\application\UserRepository;
+use App\application\UserDAO;
+use App\controller\Error404Controller;
 use App\controller\HomeController;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\database\TomlConfiguration;
-use App\infrastructure\MySqlUserRepository;
+use App\infrastructure\MySqlUserDAO;
 use App\infrastructure\router\Router;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -27,7 +28,29 @@ class Injector {
 
     public function build(): void {
 
+        $twig = $this->buildTwig();
+        $databaseConnection = new DatabaseConnection(TomlConfiguration::getConfiguration());
+        $userDAO = get(MySqlUserDAO::class);
+
+        $this->container->set(Environment::class, $twig);
+        $this->container->set(DatabaseConnection::class, $databaseConnection);
+
+        $this->container->set(UserDAO::class, $userDAO);
+    }
+
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function setUpRouter(Router $router): void {
+
+        $router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+
+    }
+
+    private function buildTwig(): Environment {
         $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
+
         $twig->addFunction(new TwigFunction('style', function (string $path) {
             return 'style/' . $path;
         }));
@@ -38,22 +61,7 @@ class Injector {
             return 'img/' . $path;
         }));
 
-        $databaseConnection = new DatabaseConnection(TomlConfiguration::getConfiguration());
-
-        $this->container->set(Environment::class, $twig);
-        $this->container->set(DatabaseConnection::class, $databaseConnection);
-
-        $this->container->set(UserRepository::class, get(MySqlUserRepository::class));
-    }
-
-    /**
-     * @throws DependencyException
-     * @throws NotFoundException
-     */
-    public function setUpRouter(Router $router): void {
-
-        $router->get('/', $this->container->get(HomeController::class), 'home');
-
+        return $twig;
     }
 
 }
