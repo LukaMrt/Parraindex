@@ -1,0 +1,13 @@
+{% extends '/layouts/default.html.twig' %}
+
+{% set style = style('home.css') %}
+{% set title = 'Parraindex - Accueil' %}
+
+{% block content %}
+
+	<h1>Accueil</h1>
+
+	{% include 'components/button.twig' with {'button_content' : 'first custom button'} %}
+	{% include 'components/button.twig' with {'button_content' : 'second custom button'} %}
+
+{% endblock %}

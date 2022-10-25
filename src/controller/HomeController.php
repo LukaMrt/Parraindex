@@ -13,7 +13,7 @@ class HomeController extends Controller {
     }
 
     public function get(Router $router, array $parameters): void {
-        $this->render('home.html.twig');
+        $this->render('home.twig');
     }
 
 }
