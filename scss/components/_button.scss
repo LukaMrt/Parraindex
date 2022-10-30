@@ -5,12 +5,12 @@
 	border-radius: f.rem(20);
 	padding: f.rem(10) f.rem(20);	
 
-	&.primary{
+	&--primary{
 		background-color: var(--dark-blue);
 		color: var(--white);
 	}
 
-	&.secondary{
+	&--secondary{
 		border: 1px solid var(--dark-blue);
 		background-color: var(--white);
 		color: var(--dark-blue);

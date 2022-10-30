@@ -42,11 +42,11 @@ a:active {
   border-radius: 1.25rem;
   padding: 0.625rem 1.25rem;
 }
-.btn.primary {
+.btn--primary {
   background-color: var(--dark-blue);
   color: var(--white);
 }
-.btn.secondary {
+.btn--secondary {
   border: 1px solid var(--dark-blue);
   background-color: var(--white);
   color: var(--dark-blue);
