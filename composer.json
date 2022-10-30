@@ -37,5 +37,10 @@
   },
   "require-dev": {
     "phpunit/phpunit": "^9.5"
+  },
+  "scripts": {
+    "test": "phpunit",
+    "server": "php -S localhost:8000 -t public",
+    "sass": "sass --watch scss:public/css"
   }
 }
