@@ -4,7 +4,7 @@ namespace App\infrastructure;
 
 use App\application\UserDAO;
 use App\infrastructure\database\DatabaseConnection;
-use App\model\User;
+use App\model\user\User;
 
 class MySqlUserDAO implements UserDAO {
 
