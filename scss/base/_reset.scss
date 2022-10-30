@@ -1,0 +1,21 @@
+@use "../abstracts/functions" as f;
+
+body{
+	display: grid;
+	grid-template-rows: auto 1fr auto;
+
+	margin: 0;
+	padding: f.rem(16);
+
+	width: 100vw;
+	width: 100dvw;
+
+	min-height: 100vh;
+	min-height: 100dvh;
+
+	box-sizing: border-box;
+
+	font-family: 'lato', Helvetica, sans-serif;
+	background-color: var(--white);
+	color: var(--dark-blue);
+}
