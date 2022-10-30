@@ -1,0 +1,18 @@
+@use "../abstracts/functions" as f;
+
+.btn{
+	border: 0;
+	border-radius: f.rem(20);
+	padding: f.rem(10) f.rem(20);	
+
+	&.primary{
+		background-color: var(--dark-blue);
+		color: var(--white);
+	}
+
+	&.secondary{
+		border: 1px solid var(--dark-blue);
+		background-color: var(--white);
+		color: var(--dark-blue);
+	}
+}

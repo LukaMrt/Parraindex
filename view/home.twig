@@ -5,9 +5,18 @@
 
 {% block content %}
 
-	<h1>Accueil</h1>
+	<h1>{{title}}</h1>
 
-	{% include 'components/button.twig' with {'button_content' : 'first custom button'} %}
-	{% include 'components/button.twig' with {'button_content' : 'second custom button'} %}
+	{% include 'components/button.twig' with {
+		'button_content' : 'first custom button',
+		'priority' : 'primary',
+		}
+	%}
+
+	{% include 'components/button.twig' with {
+		'button_content' : 'second custom button',
+		'priority' : 'secondary',
+		}
+	%}
 
 {% endblock %}
