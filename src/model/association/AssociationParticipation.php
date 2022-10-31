@@ -2,18 +2,18 @@
 
 namespace App\model\association;
 
-use App\model\user\User;
+use App\model\person\Person;
 use DateTime;
 
 class AssociationParticipation {
 
-    private User $user;
+    private Person $user;
     private Association $association;
     private Role $role;
     private DateTime $start;
     private ?DateTime $end;
 
-    public function __construct(User $user, Association $association, Role $role, DateTime $start, ?DateTime $end) {
+    public function __construct(Person $user, Association $association, Role $role, DateTime $start, ?DateTime $end) {
         $this->user = $user;
         $this->association = $association;
         $this->role = $role;

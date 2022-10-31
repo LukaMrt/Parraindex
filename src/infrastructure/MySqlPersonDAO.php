@@ -4,9 +4,9 @@ namespace App\infrastructure;
 
 use App\application\UserDAO;
 use App\infrastructure\database\DatabaseConnection;
-use App\model\user\User;
+use App\model\person\Person;
 
-class MySqlUserDAO implements UserDAO {
+class MySqlPersonDAO implements UserDAO {
 
     private DatabaseConnection $databaseConnection;
 
@@ -23,7 +23,7 @@ class MySqlUserDAO implements UserDAO {
         $users = array();
 
         while ($row = $result->fetch()) {
-            $users[] = new User($row->lastName);
+            $users[] = new Person($row->lastName);
         }
 
         return $users;

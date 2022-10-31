@@ -1,6 +1,6 @@
 <?php
 
-namespace App\model\user\characteristic;
+namespace App\model\person\characteristic;
 
 class Characteristics {
 

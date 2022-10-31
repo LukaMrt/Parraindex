@@ -1,6 +1,6 @@
 <?php
 
-namespace App\model\user;
+namespace App\model\person;
 
 class Biography {
 

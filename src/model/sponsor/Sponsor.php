@@ -2,18 +2,18 @@
 
 namespace App\model\sponsor;
 
-use App\model\user\User;
+use App\model\person\Person;
 use App\model\utils\Id;
 use DateTime;
 
 abstract class Sponsor {
 
     private Id $id;
-    private User $godFather;
-    private User $godSon;
+    private Person $godFather;
+    private Person $godSon;
     private DateTime $date;
 
-    protected function __construct(Id $id, User $godFather, User $godSon, DateTime $date) {
+    protected function __construct(Id $id, Person $godFather, Person $godSon, DateTime $date) {
         $this->id = $id;
         $this->godFather = $godFather;
         $this->godSon = $godSon;
