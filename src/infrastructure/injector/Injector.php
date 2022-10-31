@@ -5,7 +5,7 @@ namespace App\infrastructure\injector;
 use App\application\UserDAO;
 use App\controller\HomeController;
 use App\infrastructure\database\DatabaseConnection;
-use App\infrastructure\MySqlUserDAO;
+use App\infrastructure\MySqlPersonDAO;
 use App\infrastructure\router\Router;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -28,7 +28,7 @@ class Injector {
 
 		$twig = $this->buildTwig();
 		$databaseConnection = new DatabaseConnection();
-		$userDAO = get(MySqlUserDAO::class);
+		$userDAO = get(MySqlPersonDAO::class);
 
 		$this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
