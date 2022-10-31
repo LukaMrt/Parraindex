@@ -1,0 +1,5 @@
+@use "../abstracts/mixins" as m;
+
+.carousel{
+	@include m.flex($justify: space-around, $direction: row);
+}

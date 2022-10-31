@@ -1,0 +1,119 @@
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
+body {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  margin: 0;
+  padding: 1rem;
+  width: 100vw;
+  width: 100dvw;
+  min-height: 100vh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  font-family: "lato", Helvetica, sans-serif;
+  background-color: var(--white);
+  color: var(--dark-blue);
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 700;
+  line-height: 1.1;
+  margin-top: 0;
+}
+
+a,
+a:visited,
+a:active {
+  text-decoration: none;
+  color: inherit;
+}
+
+:root {
+  --dark-blue: hsl(216, 48%, 14%);
+  --light-grey: hsl(0, 0%, 94%);
+  --grey: hsl(0, 0%, 85%);
+  --dark-grey: hsl(0, 0%, 54%);
+  --white: hsl(0, 0%, 100%);
+}
+
+.btn {
+  border: 0;
+  border-radius: 1.25rem;
+  padding: 0.625rem 1.25rem;
+}
+.btn--primary {
+  background-color: var(--dark-blue);
+  color: var(--white);
+}
+.btn--secondary {
+  border: 1px solid var(--dark-blue);
+  background-color: var(--white);
+  color: var(--dark-blue);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 16.875rem;
+  height: 25rem;
+  background-color: var(--white);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+  padding-bottom: 1.5625rem;
+  border-radius: 2.1875rem;
+  overflow: hidden;
+}
+.card__profil {
+  font-size: 1.5rem;
+  text-align: center;
+  margin: 0.625rem 0;
+}
+.card__last-name {
+  text-transform: uppercase;
+  white-space: nowrap;
+  font-weight: 700;
+}
+.card__banner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  background-color: var(--light-grey);
+}
+.card__picture {
+  width: 6.25rem;
+  height: 6.25rem;
+  margin: 1.25rem;
+  border-radius: 100%;
+  background-color: var(--white);
+  box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+.card__description {
+  padding: 0 3.125rem;
+  font-size: 0.875rem;
+  height: 100%;
+  overflow: hidden;
+  text-align: justify;
+}
+.card::after {
+  content: "";
+  position: absolute;
+  bottom: 0.75rem;
+  height: 0.25rem;
+  width: 2.5rem;
+  border-radius: 0.125rem;
+  background-color: var(--dark-blue);
+}
+
+.carousel {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
+}
+
+/*# sourceMappingURL=tree.css.map */

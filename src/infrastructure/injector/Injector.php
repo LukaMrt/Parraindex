@@ -4,6 +4,7 @@ namespace App\infrastructure\injector;
 
 use App\application\UserDAO;
 use App\controller\HomeController;
+use App\controller\TreeController;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\MySqlPersonDAO;
 use App\infrastructure\router\Router;
@@ -43,6 +44,7 @@ class Injector {
 	public function setUpRouter(Router $router): void {
 
 		$router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 
 	}
 

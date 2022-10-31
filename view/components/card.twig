@@ -1,0 +1,22 @@
+<article class="card">
+	<div class="card__banner">
+		<div class="card__picture"></div>
+	</div>
+
+	<div class="card__profil">
+		<span class="card__first-name">Lilian</span>
+		<span class="card__last-name">BAUDRY</span>
+	</div>
+
+	<i class="card__identifiant">@lilian_baudry</i>
+
+	<div class="card__social-network">
+		{% for i in 1..5 %}
+			* 
+		{% endfor %}
+	</div>
+
+	<p class="card__description">
+		{{ description }}
+	</p>
+</article>
