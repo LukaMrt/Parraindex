@@ -1,5 +1,8 @@
 @use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
 
 .carousel{
-	@include m.flex($justify: space-around, $direction: row);
+	@include m.flex($direction: row);
+	gap: f.rem(16);
+	min-width: max-content;
 }

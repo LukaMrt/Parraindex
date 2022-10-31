@@ -3,6 +3,7 @@
 
 .card{
 	@include m.flex();
+	gap: f.rem(7);
 
 	position: relative;
 	width: f.rem(270);
@@ -17,7 +18,6 @@
 	&__profil{
 		font-size: f.rem(24);
 		text-align: center;
-		margin: f.rem(10) 0;
 	}
 
 	&__last-name{
@@ -32,6 +32,12 @@
 		background-color: var(--light-grey);
 	}
 
+	&__social-network{
+		@include m.flex($justify: space-between, $direction: row);
+		width: 55%;
+		margin: f.rem(5) 0;
+	}
+
 	&__picture{
 		width: f.rem(100);
 		height: f.rem(100);
@@ -43,7 +49,8 @@
 	}
 	
 	&__description{
-		padding: 0 f.rem(50);
+		padding: 0 f.rem(40);
+		margin: 0;
 		font-size: f.rem(14);
 		height: 100%;
 		overflow: hidden;

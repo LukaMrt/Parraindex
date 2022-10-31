@@ -1,0 +1,14 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.social-network{
+	width: f.rem(20);
+	height: f.rem(20);
+	background-color: var(--dark-blue);
+	border-radius: 50%;
+	@include m.flex();
+
+	&__icon{
+		width: 50%;
+	}
+}
