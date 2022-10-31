@@ -14,4 +14,8 @@ class Id {
         return (string) $this->id;
     }
 
+    public function isValid(): bool {
+        return $this->id >= 0;
+    }
+
 }

@@ -10,6 +10,10 @@ class Image {
         $this->url = $url;
     }
 
+    public static function empty(): Image {
+        return new Image("");
+    }
+
     public function __toString() {
         return $this->url;
     }

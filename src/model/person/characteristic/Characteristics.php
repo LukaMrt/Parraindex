@@ -10,6 +10,10 @@ class Characteristics {
         $this->characteristics = $characteristics;
     }
 
+    public static function empty(): Characteristics {
+        return new Characteristics();
+    }
+
     public function addCharacteristic(Characteristic $characteristic): void {
         $this->characteristics[] = $characteristic;
     }

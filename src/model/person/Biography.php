@@ -10,6 +10,10 @@ class Biography {
         $this->lines = $lines;
     }
 
+    public static function empty(): Biography {
+        return new Biography("");
+    }
+
     public function __toString(): string {
         $string = "";
         foreach ($this->lines as $line) {

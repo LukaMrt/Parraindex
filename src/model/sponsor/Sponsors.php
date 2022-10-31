@@ -10,4 +10,8 @@ class Sponsors {
         $this->sponsors = $sponsors;
     }
 
+    public static function empty(): Sponsors {
+        return new Sponsors();
+    }
+
 }

@@ -2,11 +2,11 @@
 
 namespace App\infrastructure\injector;
 
-use App\application\UserDAO;
+use App\application\person\PersonDAO;
 use App\controller\HomeController;
 use App\controller\TreeController;
 use App\infrastructure\database\DatabaseConnection;
-use App\infrastructure\MySqlPersonDAO;
+use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\router\Router;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -34,7 +34,7 @@ class Injector {
 		$this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
 
-		$this->container->set(UserDAO::class, $userDAO);
+		$this->container->set(PersonDAO::class, $userDAO);
 	}
 
 	/**

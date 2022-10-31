@@ -2,17 +2,22 @@
 
 namespace App\controller;
 
+use App\application\person\PersonDAO;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
 class TreeController extends Controller {
 
-	public function __construct(Environment $twig) {
-		parent::__construct($twig);
-	}
+    private PersonDAO $personDAO;
 
-	public function get(Router $router, array $parameters): void {
-		$this->render('tree.twig');
+    public function __construct(Environment $twig, PersonDAO $personDAO) {
+        parent::__construct($twig);
+        $this->personDAO = $personDAO;
+    }
+
+    public function get(Router $router, array $parameters): void {
+        $people = $this->personDAO->getAllPeople();
+		$this->render('tree.twig', ['people' => $people]);
 	}
 
 }

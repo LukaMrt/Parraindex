@@ -39,7 +39,7 @@
     "phpunit/phpunit": "^9.5"
   },
   "scripts": {
-    "test": "phpunit",
+    "test": "phpunit --testdox",
     "server": "php -S localhost:8000 -t public",
     "sass": "sass --watch scss:public/css"
   }

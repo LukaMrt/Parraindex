@@ -23,7 +23,7 @@ class Router {
         try {
             $this->router->map($method, $url, $closure, $name);
         } catch (Exception $e) {
-            dump($e->getMessage());
+            d($e->getMessage());
         }
 
         return $this;

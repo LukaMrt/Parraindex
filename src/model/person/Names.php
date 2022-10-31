@@ -12,8 +12,18 @@ class Names {
         $this->lastName = $lastName;
     }
 
+    public static function default(): Names {
+        return new Names("", "");
+    }
+
     public function __toString(): string {
         return $this->firstName . ' ' . $this->lastName;
     }
+
+    public function isEmpty(): bool {
+        return $this->firstName === "" && $this->lastName === "";
+    }
+
+
 
 }

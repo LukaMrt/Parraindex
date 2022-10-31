@@ -10,4 +10,8 @@ class Families {
         $this->families = $families;
     }
 
+    public static function empty(): Families {
+        return new Families();
+    }
+
 }

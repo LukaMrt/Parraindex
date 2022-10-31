@@ -10,4 +10,8 @@ class Associations {
         $this->associations = $associations;
     }
 
+    public static function empty(): Associations {
+        return new Associations();
+    }
+
 }
