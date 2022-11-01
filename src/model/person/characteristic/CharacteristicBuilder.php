@@ -2,8 +2,6 @@
 
 namespace App\model\person\characteristic;
 
-use App\model\utils\Id;
-use App\model\utils\Url;
 use LogicException;
 
 /**
@@ -11,8 +9,8 @@ use LogicException;
  */
 class CharacteristicBuilder {
 
-	/** @var Id $id */
-	private Id $id;
+	/** @var int $id */
+	private int $id;
 
 	/** @var string $title */
 	private string $title;
@@ -20,8 +18,8 @@ class CharacteristicBuilder {
 	/** @var CharacteristicType $type */
 	private CharacteristicType $type;
 
-	/** @var Url $url */
-	private Url $url;
+	/** @var string $url */
+	private string $url;
 
 	/** @var string $image */
 	private string $image;
@@ -33,10 +31,10 @@ class CharacteristicBuilder {
 	private string $value;
 
 	/**
-	 * @param Id $id Set id property.
+	 * @param int $id Set id property.
 	 * @return $this Builder instance.
 	 */
-	public function withId(Id $id): CharacteristicBuilder {
+	public function withId(int $id): CharacteristicBuilder {
 		$this->id = $id;
 		return $this;
 	}
@@ -50,14 +48,14 @@ class CharacteristicBuilder {
 		return $this;
 	}
 
-    /**
-     * @param CharacteristicType $type Set type property.
-     * @return $this Builder instance.
-     */
-    public function withType(CharacteristicType $type): CharacteristicBuilder {
-        $this->type = $type;
-        return $this;
-    }
+	/**
+	 * @param CharacteristicType $type Set type property.
+	 * @return $this Builder instance.
+	 */
+	public function withType(CharacteristicType $type): CharacteristicBuilder {
+		$this->type = $type;
+		return $this;
+	}
 
 	/**
 	 * @param string $url Set url property.
@@ -77,14 +75,14 @@ class CharacteristicBuilder {
 		return $this;
 	}
 
-    /**
-     * @param bool $visible Set visible property.
-     * @return $this Builder instance.
-     */
-    public function withVisible(bool $visible): CharacteristicBuilder {
-        $this->visible = $visible;
-        return $this;
-    }
+	/**
+	 * @param bool $visible Set visible property.
+	 * @return $this Builder instance.
+	 */
+	public function withVisible(bool $visible): CharacteristicBuilder {
+		$this->visible = $visible;
+		return $this;
+	}
 
 	/**
 	 * @param string $value Set value property.
@@ -96,11 +94,11 @@ class CharacteristicBuilder {
 	}
 
     /**
-     * @return Id
+     * @return int
      */
-    public function getId(): Id {
-        return $this->id;
-    }
+	public function getId(): int {
+		return $this->id;
+	}
 
 	/**
 	 * @return string
@@ -109,12 +107,12 @@ class CharacteristicBuilder {
 		return $this->title;
 	}
 
-    /**
-     * @return CharacteristicType
-     */
-    public function getType(): CharacteristicType {
-        return $this->type;
-    }
+	/**
+	 * @return CharacteristicType
+	 */
+	public function getType(): CharacteristicType {
+		return $this->type;
+	}
 
 	/**
 	 * @return string
@@ -130,12 +128,12 @@ class CharacteristicBuilder {
 		return $this->image;
 	}
 
-    /**
-     * @return bool
-     */
-    public function isVisible(): bool {
-        return $this->visible;
-    }
+	/**
+	 * @return bool
+	 */
+	public function isVisible(): bool {
+		return $this->visible;
+	}
 
 	/**
 	 * @return string
@@ -148,9 +146,8 @@ class CharacteristicBuilder {
 	 * @return Characteristic New instance from Builder.
 	 * @throws LogicException if Builder does not validate.
 	 */
-    public function build(): Characteristic {
-
-        return new Characteristic($this);
-    }
+	public function build(): Characteristic {
+		return new Characteristic($this);
+	}
 
 }

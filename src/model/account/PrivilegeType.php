@@ -4,8 +4,8 @@ namespace App\model\account;
 
 enum PrivilegeType {
 
-    case ADMIN;
-    case TEACHER;
-    case STUDENT;
+	case ADMIN;
+	case TEACHER;
+	case STUDENT;
 
 }

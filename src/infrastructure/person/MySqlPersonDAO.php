@@ -4,60 +4,47 @@ namespace App\infrastructure\person;
 
 use App\application\person\PersonDAO;
 use App\infrastructure\database\DatabaseConnection;
-use App\model\person\Biography;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
-use App\model\utils\Id;
-use App\model\utils\Image;
-use DateTime;
 
 class MySqlPersonDAO implements PersonDAO {
 
-    private DatabaseConnection $databaseConnection;
+	private DatabaseConnection $databaseConnection;
 
-    public function __construct(DatabaseConnection $databaseConnection) {
-        $this->databaseConnection = $databaseConnection;
-    }
+	public function __construct(DatabaseConnection $databaseConnection) {
+		$this->databaseConnection = $databaseConnection;
+	}
 
-    function getAllPeople(): array {
+	function getAllPeople(): array {
 
-        $connection = $this->databaseConnection->getDatabase();
+		$connection = $this->databaseConnection->getDatabase();
 
-        $result = $connection->query("SELECT * FROM Person");
+		$result = $connection->query("SELECT * FROM Person");
 
-        $users = array();
+		$users = array();
 
-        while ($row = $result->fetch()) {
-            $users[] = $this->buildPerson($row);
-        }
+		while ($row = $result->fetch()) {
+			$users[] = $this->buildPerson($row);
+		}
 
-        return $users;
-    }
+		$result -> closeCursor();
 
-    /**
-     * @param mixed $row
-     * @return Person
-     */
-    public function buildPerson(mixed $row): Person {
+		return $users;
+	}
 
-        $builder = PersonBuilder::aPerson()
-            ->withId(new Id($row->id_person))
-            ->withName(new Identity($row->first_name, $row->last_name));
+	/**
+	 * @param mixed $row
+	 * @return Person
+	 */
+	public function buildPerson(mixed $row): Person {
 
-        if ($row->birthdate != null) {
-            $builder->withBirthDate(DateTime::createFromFormat("Y-m-d", $row->birthdate));
-        }
-
-        if ($row->biography != null) {
-            $builder->withBiography(new Biography($row->biography));
-        }
-
-        if ($row->picture != null) {
-            $builder->withPicture(new Image($row->picture));
-        }
-
-        return $builder->build();
-    }
+		$builder = PersonBuilder::aPerson()
+			->withId($row->id_person)
+			->withIdentity(new Identity($row->first_name, $row->last_name, $row->picture, $row->birthdate))
+			->withBiography($row->biography);
+		
+		return $builder->build();
+	}
 
 }
