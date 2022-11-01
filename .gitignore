@@ -91,3 +91,5 @@ fabric.properties
 composer.phar
 
 .env
+
+public/css/*

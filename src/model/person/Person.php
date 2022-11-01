@@ -13,14 +13,14 @@ use DateTime;
 class Person {
 
 	private Id $id;
-	private Names $name;
+	private Identity $name;
 	private DateTime $birthDate;
 	private Biography $biography;
-	private Image $picture;
-	private Characteristics $characteristics;
-	private Sponsors $sponsors;
-	private Families $families;
-	private Associations $associations;
+	private string $picture;
+	private array $characteristics;
+	private array $sponsors;
+	private array $families;
+	private array $associations;
 
 	public function __construct(PersonBuilder $builder) {
 		$this->id = $builder->getId();

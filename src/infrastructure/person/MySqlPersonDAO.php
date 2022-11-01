@@ -5,7 +5,7 @@ namespace App\infrastructure\person;
 use App\application\person\PersonDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\model\person\Biography;
-use App\model\person\Names;
+use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
 use App\model\utils\Id;
@@ -43,7 +43,7 @@ class MySqlPersonDAO implements PersonDAO {
 
         $builder = PersonBuilder::aPerson()
             ->withId(new Id($row->id_person))
-            ->withName(new Names($row->first_name, $row->last_name));
+            ->withName(new Identity($row->first_name, $row->last_name));
 
         if ($row->birthdate != null) {
             $builder->withBirthDate(DateTime::createFromFormat("Y-m-d", $row->birthdate));

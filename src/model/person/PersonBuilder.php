@@ -19,8 +19,8 @@ class PersonBuilder {
     /** @var Id $id */
     private Id $id;
 
-    /** @var Names $name */
-    private Names $name;
+    /** @var Identity $name */
+    private Identity $name;
 
     /** @var DateTime $birthDate */
     private DateTime $birthDate;
@@ -28,29 +28,29 @@ class PersonBuilder {
     /** @var Biography $biography */
     private Biography $biography;
 
-    /** @var Image $picture */
-    private Image $picture;
+    /** @var string $picture */
+    private string $picture;
 
-    /** @var Characteristics $characteristics */
-    private Characteristics $characteristics;
+    /** @var array $characteristics */
+    private array $characteristics;
 
-    /** @var Sponsors $sponsors */
-    private Sponsors $sponsors;
+    /** @var array $sponsors */
+    private array $sponsors;
 
-    /** @var Families $families */
-    private Families $families;
+    /** @var array $families */
+    private array $families;
 
-    /** @var Associations $associations */
-    private Associations $associations;
+    /** @var array $associations */
+    private array $associations;
 
     private function __construct() {
         $this->birthDate = DateTime::createFromFormat('Y-m-d', '0000-00-00');
         $this->biography = Biography::empty();
-        $this->picture = Image::empty();
-        $this->characteristics = Characteristics::empty();
-        $this->sponsors = Sponsors::empty();
-        $this->families = Families::empty();
-        $this->associations = Associations::empty();
+        $this->picture = null;
+        $this->characteristics = array();
+        $this->sponsors = array();
+        $this->families = array();
+        $this->associations = array();
     }
 
     public static function aPerson(): PersonBuilder {
@@ -67,10 +67,10 @@ class PersonBuilder {
     }
 
     /**
-     * @param Names $name Set name property.
+     * @param Identity $name Set name property.
      * @return $this Builder instance.
      */
-    public function withName(Names $name): PersonBuilder {
+    public function withName(Identity $name): PersonBuilder {
         $this->name = $name;
         return $this;
     }
@@ -94,46 +94,46 @@ class PersonBuilder {
     }
 
     /**
-     * @param ?Image $picture Set picture property.
+     * @param ?string $picture Set picture property.
      * @return $this Builder instance.
      */
-    public function withPicture(?Image $picture): PersonBuilder {
+    public function withPicture(?string $picture): PersonBuilder {
         $this->picture = $picture ?? $this->picture;
         return $this;
     }
 
     /**
-     * @param Characteristics $characteristics Set characteristics property.
+     * @param array $characteristics Set characteristics property.
      * @return $this Builder instance.
      */
-    public function withCharacteristics(Characteristics $characteristics): PersonBuilder {
+    public function withCharacteristics(array $characteristics): PersonBuilder {
         $this->characteristics = $characteristics;
         return $this;
     }
 
     /**
-     * @param Sponsors $sponsors Set sponsors property.
+     * @param array $sponsors Set sponsors property.
      * @return $this Builder instance.
      */
-    public function withSponsors(Sponsors $sponsors): PersonBuilder {
+    public function withSponsors(array $sponsors): PersonBuilder {
         $this->sponsors = $sponsors;
         return $this;
     }
 
     /**
-     * @param Families $families Set families property.
+     * @param array $families Set families property.
      * @return $this Builder instance.
      */
-    public function withFamilies(Families $families): PersonBuilder {
+    public function withFamilies(array $families): PersonBuilder {
         $this->families = $families;
         return $this;
     }
 
     /**
-     * @param Associations $associations Set associations property.
+     * @param array $associations Set associations property.
      * @return $this Builder instance.
      */
-    public function withAssociations(Associations $associations): PersonBuilder {
+    public function withAssociations(array $associations): PersonBuilder {
         $this->associations = $associations;
         return $this;
     }
@@ -157,9 +157,9 @@ class PersonBuilder {
     }
 
     /**
-     * @return Names
+     * @return Identity
      */
-    public function getName(): Names {
+    public function getName(): Identity {
         return $this->name;
     }
 
@@ -178,37 +178,37 @@ class PersonBuilder {
     }
 
     /**
-     * @return Image
+     * @return string
      */
-    public function getPicture(): Image {
+    public function getPicture(): string {
         return $this->picture;
     }
 
     /**
-     * @return Characteristics
+     * @return array
      */
-    public function getCharacteristics(): Characteristics {
+    public function getCharacteristics(): array {
         return $this->characteristics;
     }
 
     /**
-     * @return Sponsors
+     * @return array
      */
-    public function getSponsors(): Sponsors {
+    public function getSponsors(): array {
         return $this->sponsors;
     }
 
     /**
-     * @return Families
+     * @return array
      */
-    public function getFamilies(): Families {
+    public function getFamilies(): array {
         return $this->families;
     }
 
     /**
-     * @return Associations
+     * @return array
      */
-    public function getAssociations(): Associations {
+    public function getAssociations(): array {
         return $this->associations;
     }
 

@@ -2,7 +2,7 @@
 
 namespace App\model\person;
 
-class Names {
+class Identity {
 
 	private string $firstName;
 	private string $lastName;
@@ -12,8 +12,8 @@ class Names {
 		$this->lastName = $lastName;
 	}
 
-	public static function default(): Names {
-		return new Names("", "");
+	public static function default(): Identity {
+		return new Identity("", "");
 	}
 
 	public function __toString(): string {

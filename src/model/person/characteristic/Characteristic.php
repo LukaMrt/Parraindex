@@ -9,12 +9,12 @@ use App\model\utils\Url;
 class Characteristic {
 
     private Id $id;
-    private Title $title;
+    private string $title;
     private CharacteristicType $type;
-    private Url $url;
-    private Image $image;
+    private string $url;
+    private string $image;
     private bool $visible;
-    private Value $value;
+    private string $value;
 
     public function __construct(CharacteristicBuilder $builder) {
         $this->id = $builder->getId();

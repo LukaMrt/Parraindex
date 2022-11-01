@@ -9,7 +9,7 @@ use DateTime;
 class School {
 
     private Id $id;
-    private SchoolName $name;
+    private string $name;
     private SchoolAddress $address;
     private DateTime $creationDate;
     private ?Person $director;

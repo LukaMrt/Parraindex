@@ -9,11 +9,11 @@ class AssociationParticipation {
 
     private Person $user;
     private Association $association;
-    private Role $role;
+    private string $role;
     private DateTime $start;
     private ?DateTime $end;
 
-    public function __construct(Person $user, Association $association, Role $role, DateTime $start, ?DateTime $end) {
+    public function __construct(Person $user, Association $association, string $role, DateTime $start, ?DateTime $end) {
         $this->user = $user;
         $this->association = $association;
         $this->role = $role;

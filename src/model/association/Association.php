@@ -2,15 +2,13 @@
 
 namespace App\model\association;
 
-use App\model\utils\Id;
-
 class Association {
 
-    private Siret $id;
-    private AssociationName $name;
+    private int $siret;
+    private string $name;
 
-    public function __construct(Siret $id, AssociationName $name) {
-        $this->id = $id;
+    public function __construct(int $siret, string $name) {
+        $this->siret = $siret;
         $this->name = $name;
     }
 

@@ -8,9 +8,9 @@ use DateTime;
 
 class HeartSponsor extends Sponsor {
 
-    private Description $description;
+    private string $description;
 
-    public function __construct(Id $id, Person $godFather, Person $godSon, DateTime $date, Description $description) {
+    public function __construct(Id $id, Person $godFather, Person $godSon, DateTime $date, string $description) {
         parent::__construct($id, $godFather, $godSon, $date);
         $this->description = $description;
     }

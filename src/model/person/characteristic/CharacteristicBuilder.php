@@ -3,52 +3,52 @@
 namespace App\model\person\characteristic;
 
 use App\model\utils\Id;
-use App\model\utils\Image;
 use App\model\utils\Url;
+use LogicException;
 
 /**
  * Builder instance for {@see Characteristic}.
  */
 class CharacteristicBuilder {
 
-    /** @var Id $id */
-    private Id $id;
+	/** @var Id $id */
+	private Id $id;
 
-    /** @var Title $title */
-    private Title $title;
+	/** @var string $title */
+	private string $title;
 
-    /** @var CharacteristicType $type */
-    private CharacteristicType $type;
+	/** @var CharacteristicType $type */
+	private CharacteristicType $type;
 
-    /** @var Url $url */
-    private Url $url;
+	/** @var Url $url */
+	private Url $url;
 
-    /** @var Image $image */
-    private Image $image;
+	/** @var string $image */
+	private string $image;
 
-    /** @var bool $visible */
-    private bool $visible;
+	/** @var bool $visible */
+	private bool $visible;
 
-    /** @var Value $value */
-    private Value $value;
+	/** @var string $value */
+	private string $value;
 
-    /**
-     * @param Id $id Set id property.
-     * @return $this Builder instance.
-     */
-    public function withId(Id $id): CharacteristicBuilder {
-        $this->id = $id;
-        return $this;
-    }
+	/**
+	 * @param Id $id Set id property.
+	 * @return $this Builder instance.
+	 */
+	public function withId(Id $id): CharacteristicBuilder {
+		$this->id = $id;
+		return $this;
+	}
 
-    /**
-     * @param Title $title Set title property.
-     * @return $this Builder instance.
-     */
-    public function withTitle(Title $title): CharacteristicBuilder {
-        $this->title = $title;
-        return $this;
-    }
+	/**
+	 * @param string $title Set title property.
+	 * @return $this Builder instance.
+	 */
+	public function withTitle(string $title): CharacteristicBuilder {
+		$this->title = $title;
+		return $this;
+	}
 
     /**
      * @param CharacteristicType $type Set type property.
@@ -59,23 +59,23 @@ class CharacteristicBuilder {
         return $this;
     }
 
-    /**
-     * @param Url $url Set url property.
-     * @return $this Builder instance.
-     */
-    public function withUrl(Url $url): CharacteristicBuilder {
-        $this->url = $url;
-        return $this;
-    }
+	/**
+	 * @param string $url Set url property.
+	 * @return $this Builder instance.
+	 */
+	public function withUrl(string $url): CharacteristicBuilder {
+		$this->url = $url;
+		return $this;
+	}
 
-    /**
-     * @param Image $image Set image property.
-     * @return $this Builder instance.
-     */
-    public function withImage(Image $image): CharacteristicBuilder {
-        $this->image = $image;
-        return $this;
-    }
+	/**
+	 * @param string $image Set image property.
+	 * @return $this Builder instance.
+	 */
+	public function withImage(string $image): CharacteristicBuilder {
+		$this->image = $image;
+		return $this;
+	}
 
     /**
      * @param bool $visible Set visible property.
@@ -86,14 +86,14 @@ class CharacteristicBuilder {
         return $this;
     }
 
-    /**
-     * @param Value $value Set value property.
-     * @return $this Builder instance.
-     */
-    public function withValue(Value $value): CharacteristicBuilder {
-        $this->value = $value;
-        return $this;
-    }
+	/**
+	 * @param string $value Set value property.
+	 * @return $this Builder instance.
+	 */
+	public function withValue(string $value): CharacteristicBuilder {
+		$this->value = $value;
+		return $this;
+	}
 
     /**
      * @return Id
@@ -102,12 +102,12 @@ class CharacteristicBuilder {
         return $this->id;
     }
 
-    /**
-     * @return Title
-     */
-    public function getTitle(): Title {
-        return $this->title;
-    }
+	/**
+	 * @return string
+	 */
+	public function getTitle(): string {
+		return $this->title;
+	}
 
     /**
      * @return CharacteristicType
@@ -116,19 +116,19 @@ class CharacteristicBuilder {
         return $this->type;
     }
 
-    /**
-     * @return Url
-     */
-    public function getUrl(): Url {
-        return $this->url;
-    }
+	/**
+	 * @return string
+	 */
+	public function getUrl(): string {
+		return $this->url;
+	}
 
-    /**
-     * @return Image
-     */
-    public function getImage(): Image {
-        return $this->image;
-    }
+	/**
+	 * @return string
+	 */
+	public function getImage(): string {
+		return $this->image;
+	}
 
     /**
      * @return bool
@@ -137,17 +137,17 @@ class CharacteristicBuilder {
         return $this->visible;
     }
 
-    /**
-     * @return Value
-     */
-    public function getValue(): Value {
-        return $this->value;
-    }
+	/**
+	 * @return string
+	 */
+	public function getValue(): string {
+		return $this->value;
+	}
 
-    /**
-     * @return Characteristic New instance from Builder.
-     * @throws \LogicException if Builder does not validate.
-     */
+	/**
+	 * @return Characteristic New instance from Builder.
+	 * @throws LogicException if Builder does not validate.
+	 */
     public function build(): Characteristic {
 
         return new Characteristic($this);

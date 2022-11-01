@@ -4,10 +4,10 @@ namespace App\model\school\degree;
 
 class Degree {
 
-    private DegreeName $name;
-    private DegreeLevel $level;
-    private Ects $ects;
-    private Duration $duration;
+    private string $name;
+    private int $level;
+    private int $ects;
+    private int $duration;
     private bool $official;
 
 }
