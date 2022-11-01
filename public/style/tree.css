@@ -1,7 +1,9 @@
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@400;700&display=swap");
 body {
-  display: grid;
-  grid-template-rows: auto 1fr auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
   margin: 0;
   padding: 1rem;
   width: 100vw;
@@ -12,10 +14,6 @@ body {
   font-family: "lato", Helvetica, sans-serif;
   background-color: var(--white);
   color: var(--dark-blue);
-}
-
-main {
-  overflow-x: hidden;
 }
 
 h1,
@@ -62,8 +60,10 @@ a:active {
   align-items: center;
   justify-content: center;
   gap: 0.4375rem;
+  user-select: none;
   position: relative;
-  width: 16.875rem;
+  min-width: 16.875rem;
+  max-width: 16.875rem;
   height: 25rem;
   background-color: var(--white);
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
@@ -123,12 +123,32 @@ a:active {
 }
 
 .carousel {
+  position: relative;
+  width: 80vw;
+}
+.carousel__slider {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  min-width: max-content;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding: 2rem;
+  gap: 6.25rem;
+  overflow-x: hidden;
+}
+.carousel::after, .carousel::before {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 2.5rem;
+  height: 100%;
+  background: linear-gradient(to right, transparent 0%, var(--white) 100%);
+  z-index: 1;
+}
+.carousel::before {
+  left: 0;
+  background: linear-gradient(to left, transparent 0%, var(--white) 100%);
 }
 
 .social-network {

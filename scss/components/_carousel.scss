@@ -2,7 +2,34 @@
 @use "../abstracts/functions" as f;
 
 .carousel{
-	@include m.flex($direction: row);
-	gap: f.rem(16);
-	min-width: max-content;
+	position: relative;
+	width: 80vw;
+	
+	&__slider{
+		@include m.flex($direction: row, $justify: flex-start);
+		box-sizing: border-box;	
+		padding: f.rem(32);
+		gap: f.rem(100);
+		
+		overflow-x: hidden;
+	}
+	
+	&::after,
+	&::before{
+		content: '';
+		position: absolute;
+		right: 0;
+		top: 0;
+
+		width: f.rem(40);
+		height: 100%;
+
+		background: linear-gradient(to right, transparent 0%, var(--white) 100%);
+		z-index: 1;
+	}
+	
+	&::before{
+		left: 0;
+		background: linear-gradient(to left, transparent 0%, var(--white) 100%);
+	}
 }

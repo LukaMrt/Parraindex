@@ -1,15 +1,19 @@
 <section class="carousel">
+	<div class="carousel__slider">
 
-	{% include 'components/card.twig' with {
-		'description': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga totam aut sequi magni, eligendi excepturi ea optio quae numquam voluptatem ab itaque quidem culpa ipsam deserunt architecto atque est harum.',
-	} %}
+		{% include 'components/card.twig' with {
+			'description': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga totam aut sequi magni, eligendi excepturi ea optio quae numquam voluptatem ab itaque quidem culpa ipsam deserunt architecto atque est harum.',
+			}
+		%}
 
-	{% include 'components/card.twig' with {
-		'description': 'Eligendi excepturi ea optio quae numquam voluptatem ab itaque quidem culpa ipsam deserunt architecto atque est harum.',
-	} %}
+		{% for i in 1..8 %}
+			{% include 'components/card.twig' %}
+		{% endfor %}
 
-	{% include 'components/card.twig' with {
-		'description': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga totam aut sequi magni, eligendi excepturi ea optio quae numquam voluptatem ab itaque quidem culpa ipsam.',
-	} %}
-
+		{% include 'components/card.twig' with {
+			'description': 'Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fuga totam aut sequi magni, eligendi excepturi ea optio quae numquam voluptatem ab itaque quidem culpa ipsam.',
+			}
+		%}
+		
+	</div>
 </section>
