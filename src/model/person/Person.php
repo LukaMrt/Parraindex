@@ -12,30 +12,38 @@ use DateTime;
 
 class Person {
 
-    private Id $id;
-    private Names $name;
-    private DateTime $birthDate;
-    private Biography $biography;
-    private Image $picture;
-    private Characteristics $characteristics;
-    private Sponsors $sponsors;
-    private Families $families;
-    private Associations $associations;
+	private Id $id;
+	private Names $name;
+	private DateTime $birthDate;
+	private Biography $biography;
+	private Image $picture;
+	private Characteristics $characteristics;
+	private Sponsors $sponsors;
+	private Families $families;
+	private Associations $associations;
 
-    public function __construct(PersonBuilder $builder) {
-        $this->id = $builder->getId();
-        $this->name = $builder->getName();
-        $this->birthDate = $builder->getBirthDate();
-        $this->biography = $builder->getBiography();
-        $this->picture = $builder->getPicture();
-        $this->characteristics = $builder->getCharacteristics();
-        $this->sponsors = $builder->getSponsors();
-        $this->families = $builder->getFamilies();
-        $this->associations = $builder->getAssociations();
-    }
+	public function __construct(PersonBuilder $builder) {
+		$this->id = $builder->getId();
+		$this->name = $builder->getName();
+		$this->birthDate = $builder->getBirthDate();
+		$this->biography = $builder->getBiography();
+		$this->picture = $builder->getPicture();
+		$this->characteristics = $builder->getCharacteristics();
+		$this->sponsors = $builder->getSponsors();
+		$this->families = $builder->getFamilies();
+		$this->associations = $builder->getAssociations();
+	}
 
-    public function getName(): string {
-        return $this->name;
-    }
+	public function getName(): string {
+		return $this->name;
+	}
+
+	public function getFirstName(): string {
+		return $this->name->getFirstName();
+	}
+
+	public function getLastName(): string {
+		return $this->name->getLastName();
+	}
 
 }
