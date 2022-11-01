@@ -2,8 +2,8 @@
 
 namespace person;
 
-use App\application\PersonDAO;
-use App\application\PersonService;
+use App\application\person\PersonDAO;
+use App\application\person\PersonService;
 use App\model\person\Person;
 use PHPUnit\Framework\TestCase;
 
