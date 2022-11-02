@@ -3,8 +3,10 @@
 
 		{% for person in people %}
 			{% include 'components/card.twig' with {
-				'firstName': person.FirstName,
-				'lastName': person.LastName,
+				'firstName': person.firstName,
+				'lastName': person.lastName,
+				'picture': person.picture,
+				'description': person.biography,
 				}
 			%}
 		{% endfor %}

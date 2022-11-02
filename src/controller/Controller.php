@@ -52,7 +52,7 @@ abstract class Controller {
             echo $this->twig->render($template, $parameters);
         } catch (LoaderError|RuntimeError|SyntaxError $e) {
             if ($_ENV['DEBUG'] === "true") {
-                d($e);
+                dd($e);
             }
         }
     }

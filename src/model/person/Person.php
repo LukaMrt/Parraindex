@@ -36,4 +36,12 @@ class Person {
 		return $this->identity->getLastName();
 	}
 
+	public function getBiography(): string {
+		return $this->biography;
+	}
+
+	public function getPicture(): string {
+		return $this->identity->getPicture();
+	}
+
 }

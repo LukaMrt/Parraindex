@@ -1,13 +1,13 @@
 
 // relocate the slider to the specified position
-const relocateSlider = (pourcentage) =>{
+const relocateSlider = (pourcentage) => {
 	sliderUI.slider.scrollLeft = pourcentage * (sliderUI.slider.scrollWidth - sliderUI.slider.clientWidth)
 	selectMiddleCard();
 };
 
 // relocate the scrollbar to match the slider position
-const relocateScrollbar = () =>{
-	sliderUI.cursor.value = getHorizontalRatio()*100;
+const relocateScrollbar = () => {
+	sliderUI.cursor.value = getHorizontalRatio() * 100;
 	selectMiddleCard();
 };
 
@@ -59,19 +59,19 @@ sliderUI.slider.addEventListener("mousemove", (event) => {
 	relocateScrollbar();
 });
 
-sliderUI.slider.addEventListener("mouseup", (event) => {
+sliderUI.slider.addEventListener("mouseup", () => {
 	sliderController.isMouseDown = false;
 });
 
-sliderUI.slider.addEventListener("mouseleave", (event) => {
+sliderUI.slider.addEventListener("mouseleave", () => {
 	sliderController.isMouseDown = false;
 });
 
-sliderUI.cursor.addEventListener("input", (event) => {
-	relocateSlider(sliderUI.cursor.value/100)
+sliderUI.cursor.addEventListener("input", () => {
+	relocateSlider(sliderUI.cursor.value / 100)
 });
 
-// ------------------ Inititialization ----------------- //
+// ------------------ Initialization ----------------- //
 
 relocateSlider(0.5)
 relocateScrollbar();

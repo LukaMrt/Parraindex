@@ -40,4 +40,8 @@ class Identity {
 		return $this->lastName;
 	}
 
+	public function getPicture(): string {
+		return $this->picture ?? "";
+	}
+
 }
