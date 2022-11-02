@@ -48,6 +48,8 @@
 		width: f.rem(100);
 		height: f.rem(100);
 		margin: f.rem(20);
+		
+		object-fit: cover;
 
 		border-radius: 100%;
 		background-color: var(--white);

@@ -57,8 +57,15 @@ class Injector {
 		$twig->addFunction(new TwigFunction('script', function (string $path) {
 			return 'js/' . $path;
 		}));
+
 		$twig->addFunction(new TwigFunction('image', function (string $path) {
 			return 'img/' . $path;
+		}));
+		$twig->addFunction(new TwigFunction('picture', function (string $path) {
+			return 'img/pictures/' . $path;
+		}));
+		$twig->addFunction(new TwigFunction('icon', function (string $path) {
+			return 'img/icons/' . $path;
 		}));
 
 		return $twig;

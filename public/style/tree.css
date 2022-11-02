@@ -101,6 +101,7 @@ a:active {
   width: 6.25rem;
   height: 6.25rem;
   margin: 1.25rem;
+  object-fit: cover;
   border-radius: 100%;
   background-color: var(--white);
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;

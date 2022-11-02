@@ -13,7 +13,7 @@ class Identity {
 	public function __construct(string $firstName, string $lastName, ?string $picture, ?string $birthdate) {
 		$this->firstName = $firstName;
 		$this->lastName = $lastName;
-		$this->picture = $picture;
+		$this->picture = $picture ?? 'no-picture.svg';
 
 		if ($birthdate) {
 			$this->birthdate = DateTime::createFromFormat("Y-m-d", $birthdate);
@@ -41,7 +41,7 @@ class Identity {
 	}
 
 	public function getPicture(): string {
-		return $this->picture ?? "";
+		return $this->picture;
 	}
 
 }
