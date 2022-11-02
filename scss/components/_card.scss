@@ -19,6 +19,7 @@
 	padding-bottom: f.rem(25);
 	border-radius: f.rem(35);
 	overflow: hidden;
+	transition: all 200ms ease-in-out;
 
 	&__profil{
 		font-size: f.rem(24);
@@ -72,5 +73,9 @@
 		border-radius: f.rem(2);
 
 		background-color: var(--dark-blue);
+	}
+
+	&--middle{
+		scale: 1.2;
 	}
 }

@@ -8,7 +8,7 @@
 	&__slider{
 		@include m.flex($direction: row, $justify: flex-start);
 		box-sizing: border-box;	
-		padding: f.rem(32);
+		padding: f.rem(150) f.rem(70);
 		gap: f.rem(100);
 		
 		overflow-x: hidden;
@@ -31,5 +31,45 @@
 	&::before{
 		left: 0;
 		background: linear-gradient(to left, transparent 0%, var(--white) 100%);
+	}
+}
+
+.scrollbar{
+	@include m.flex();
+	width: 100%;
+
+	&__cursor {
+
+		width: 70%;
+		appearance: none;
+		
+		background: var(--light-grey);
+		height: f.rem(8);
+		border-radius: 20px;
+
+		&::-webkit-slider-runnable-track{
+			cursor: pointer;
+			height: f.rem(8);
+			background: var(--light-grey);
+			border-radius: f.rem(4);
+		}
+
+		&::-moz-range-thumb{
+			width: f.rem(20);	
+			height: f.rem(20);
+			background: var(--dark-grey);
+			border-radius: 50%;
+			border: 0;
+		}
+
+		&::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			position: relative;
+			width: f.rem(20);
+			height: f.rem(20);
+			background: var((--dark-grey));
+			border-radius: 50%;
+			top: -50%;
+		}
 	}
 }

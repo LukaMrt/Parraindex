@@ -70,6 +70,7 @@ a:active {
   padding-bottom: 1.5625rem;
   border-radius: 2.1875rem;
   overflow: hidden;
+  transition: all 200ms ease-in-out;
 }
 .card__profil {
   font-size: 1.5rem;
@@ -121,6 +122,9 @@ a:active {
   border-radius: 0.125rem;
   background-color: var(--dark-blue);
 }
+.card--middle {
+  scale: 1.2;
+}
 
 .carousel {
   position: relative;
@@ -132,7 +136,7 @@ a:active {
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
-  padding: 2rem;
+  padding: 9.375rem 4.375rem;
   gap: 6.25rem;
   overflow-x: hidden;
 }
@@ -149,6 +153,43 @@ a:active {
 .carousel::before {
   left: 0;
   background: linear-gradient(to left, transparent 0%, var(--white) 100%);
+}
+
+.scrollbar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+}
+.scrollbar__cursor {
+  width: 70%;
+  appearance: none;
+  background: var(--light-grey);
+  height: 0.5rem;
+  border-radius: 20px;
+}
+.scrollbar__cursor::-webkit-slider-runnable-track {
+  cursor: pointer;
+  height: 0.5rem;
+  background: var(--light-grey);
+  border-radius: 0.25rem;
+}
+.scrollbar__cursor::-moz-range-thumb {
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--dark-grey);
+  border-radius: 50%;
+  border: 0;
+}
+.scrollbar__cursor::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  position: relative;
+  width: 1.25rem;
+  height: 1.25rem;
+  background: var(--dark-grey);
+  border-radius: 50%;
+  top: -50%;
 }
 
 .social-network {
