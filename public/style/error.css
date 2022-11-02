@@ -60,6 +60,16 @@ a:active {
   height: 100%;
   position: relative;
 }
+.error-block__background {
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: auto;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  filter: drop-shadow(1px 1px 5px rgba(0, 0, 0, 0.6));
+}
 .error-block__title {
   font-size: 3.125rem;
   font-weight: 400;
