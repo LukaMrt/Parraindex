@@ -8,6 +8,7 @@ use App\application\person\PersonDAO;
 use App\controller\ContactController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
+use App\controller\LoginController;
 use App\controller\TreeController;
 use App\controller\UpdateController;
 use App\infrastructure\database\contact\MysqlContactDAO;
@@ -64,6 +65,7 @@ class Injector {
 		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
+		$router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login');
 		
 	}
 
