@@ -18,10 +18,20 @@ const getHorizontalRatio = () => {
 
 // give to the middle card the class "card--middle"
 const selectMiddleCard = () => {
-	let index = Math.round(getHorizontalRatio() * (sliderUI.cards.length - 1));
-	sliderUI.middleCard?.classList.remove("card--middle");
-	sliderUI.middleCard = sliderUI.cards[index];
-	sliderUI.middleCard.classList.add("card--middle");
+	let index = getHorizontalRatio() * (sliderUI.cards.length - 1);
+	let roundedIndex = Math.round(index);
+
+	let diff = index - roundedIndex;
+
+	sliderUI.middleCards.forEach(card => card.classList.remove('card--middle'));
+	sliderUI.middleCards = [];
+
+	if (Math.abs(diff) > 0.4 && roundedIndex > 0) {
+		sliderUI.middleCards.push(sliderUI.cards[roundedIndex + Math.round(diff*2)]);
+	}
+
+	sliderUI.middleCards.push(sliderUI.cards[roundedIndex]);
+	sliderUI.middleCards.forEach(card => card.classList.add("card--middle"));
 }
 
 // --------------------- constants --------------------- //
@@ -30,7 +40,7 @@ const sliderUI = {
 	slider : document.querySelector(".carousel__slider"),
 	cards : document.querySelectorAll(".card"),
 	cursor : document.querySelector(".scrollbar__cursor"),
-	middleCard : null,
+	middleCards : Array(),
 }
 
 const sliderController = {
