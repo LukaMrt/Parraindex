@@ -7,8 +7,8 @@
 	
 	&__slider{
 		@include m.flex($direction: row, $justify: flex-start);
-		box-sizing: border-box;	
-		padding: f.rem(150) f.rem(70);
+		box-sizing: border-box;
+		padding: 0 45%;
 		gap: f.rem(100);
 		
 		overflow-x: hidden;

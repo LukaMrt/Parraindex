@@ -4,15 +4,16 @@
 .card{
 	@include m.flex();
 	gap: f.rem(7);
+	margin: f.rem(70) 0;
 
 	user-select: none;
 
 	position: relative;
-	
-	min-width: f.rem(270);
-	max-width: f.rem(270);
+	min-width: max-content;
 
-	height: f.rem(400);
+	height: min(40vh, f.rem(350));
+	aspect-ratio: 27/40;
+
 	background-color: var(--white);
 	@include m.hard-box-shadow();
 
@@ -24,6 +25,7 @@
 	&__profil{
 		font-size: f.rem(24);
 		text-align: center;
+		padding: 0 5%;
 	}
 
 	&__last-name{
@@ -34,25 +36,25 @@
 
 	&__banner{
 		@include m.flex();
+		height: 33%;
 		width: 100%;
 		background-color: var(--light-grey);
 	}
 
 	&__social-network{
 		@include m.flex($justify: space-between, $direction: row);
-		width: 55%;
+		width: 50%;
 		margin: f.rem(5) 0;
 	}
 
 	&__picture{
-		width: f.rem(100);
-		height: f.rem(100);
-		margin: f.rem(20);
+		@include m.flex();
+
+		height: 70%;
+		aspect-ratio: 1/1;
 		
 		object-fit: cover;
-
-		border-radius: 100%;
-		background-color: var(--white);
+		border-radius: 50%;
 		@include m.hard-box-shadow();
 	}
 	
@@ -63,6 +65,7 @@
 		height: 100%;
 		overflow: hidden;
 		text-align: justify;
+		flex-grow: 1;
 	}
 
 	&::after{
@@ -79,5 +82,6 @@
 
 	&--middle{
 		scale: 1.2;
+		margin: 0;
 	}
 }

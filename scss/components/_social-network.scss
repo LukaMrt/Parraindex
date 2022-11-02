@@ -3,7 +3,8 @@
 
 .social-network{
 	width: f.rem(20);
-	height: f.rem(20);
+	aspect-ratio: 1/1;
+
 	background-color: var(--dark-blue);
 	border-radius: 50%;
 	@include m.flex();

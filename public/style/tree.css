@@ -16,6 +16,14 @@ body {
   color: var(--dark-blue);
 }
 
+main {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+
 h1,
 h2,
 h3 {
@@ -29,6 +37,12 @@ a:visited,
 a:active {
   text-decoration: none;
   color: inherit;
+}
+
+i {
+  font-style: normal;
+  color: var(--dark-grey);
+  font-size: 0.625rem;
 }
 
 :root {
@@ -60,11 +74,12 @@ a:active {
   align-items: center;
   justify-content: center;
   gap: 0.4375rem;
+  margin: 4.375rem 0;
   user-select: none;
   position: relative;
-  min-width: 16.875rem;
-  max-width: 16.875rem;
-  height: 25rem;
+  min-width: max-content;
+  height: min(40vh, 21.875rem);
+  aspect-ratio: 27/40;
   background-color: var(--white);
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   padding-bottom: 1.5625rem;
@@ -75,6 +90,7 @@ a:active {
 .card__profil {
   font-size: 1.5rem;
   text-align: center;
+  padding: 0 5%;
 }
 .card__last-name {
   text-transform: uppercase;
@@ -86,6 +102,7 @@ a:active {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  height: 33%;
   width: 100%;
   background-color: var(--light-grey);
 }
@@ -94,16 +111,18 @@ a:active {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 55%;
+  width: 50%;
   margin: 0.3125rem 0;
 }
 .card__picture {
-  width: 6.25rem;
-  height: 6.25rem;
-  margin: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 70%;
+  aspect-ratio: 1/1;
   object-fit: cover;
-  border-radius: 100%;
-  background-color: var(--white);
+  border-radius: 50%;
   box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
 }
 .card__description {
@@ -113,6 +132,7 @@ a:active {
   height: 100%;
   overflow: hidden;
   text-align: justify;
+  flex-grow: 1;
 }
 .card::after {
   content: "";
@@ -125,6 +145,7 @@ a:active {
 }
 .card--middle {
   scale: 1.2;
+  margin: 0;
 }
 
 .carousel {
@@ -137,7 +158,7 @@ a:active {
   align-items: center;
   justify-content: flex-start;
   box-sizing: border-box;
-  padding: 9.375rem 4.375rem;
+  padding: 0 45%;
   gap: 6.25rem;
   overflow-x: hidden;
 }
@@ -195,7 +216,7 @@ a:active {
 
 .social-network {
   width: 1.25rem;
-  height: 1.25rem;
+  aspect-ratio: 1/1;
   background-color: var(--dark-blue);
   border-radius: 50%;
   display: flex;
