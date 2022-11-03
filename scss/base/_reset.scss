@@ -1,8 +1,8 @@
 @use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
 
 body{
-	display: grid;
-	grid-template-rows: auto 1fr auto;
+	@include m.flex($direction: column, $justify: space-between);
 
 	margin: 0;
 	padding: f.rem(16);
@@ -18,4 +18,8 @@ body{
 	font-family: 'lato', Helvetica, sans-serif;
 	background-color: var(--white);
 	color: var(--dark-blue);
+}
+main{
+	flex-grow: 1;
+	@include m.flex($direction: column, $justify: space-evenly);
 }

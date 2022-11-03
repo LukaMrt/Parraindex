@@ -21,11 +21,11 @@ class ErrorController extends Controller {
 		switch ($router->getParameter('error')) {
 			case 403:
 				$error['code'] = 403;
-				$error['message'] = 'Accès refusé';
+				$error['message'] = 'accès refusé';
 				break;
 			case 404:
 				$error['code'] = 404;
-				$error['message'] = 'Page non trouvée';
+				$error['message'] = 'page non trouvée';
 				break;
 			default:
 				header('Location: ' . $router->url('error', ['error' => 404]));
