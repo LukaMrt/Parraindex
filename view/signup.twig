@@ -1,0 +1,25 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('home.css') %}
+{% set title = 'Parraindex.signUp' %}
+
+{% block content %}
+
+    <h1>{{title}}</h1>
+    <form>
+        <label>Sign UP</label>
+        <div class="formSignUp-group">
+            <label for="email">Email</label>
+            <input type="email" id="email" placeholder="Student Email" name="mail">
+        </div>
+        <div class="formSignUp-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password" name="signUp-pwd">
+        </div>
+        <button type="submit" class="form-btn">Submit</button>
+    </form>
+    <a href="/login">
+        <input type="submit" class="form-btn" id="login-btn" value="Already have an account ?">
+    </a>
+
+{% endblock %}

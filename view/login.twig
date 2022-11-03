@@ -8,41 +8,22 @@
 {% block content %}
 
     <h1>{{title}}</h1>
-    <div class="hide" id="loginClass">
-        <form>
-            <label>login</label>
-            <div class="form-group">
-                <label for="id">Email</label>
-                <input type="text" class="form-control" id="id" placeholder="login">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
-    </div>
-    <div class="hide" id="signUpClass">
-        <form>
-            <label>Sign UP</label>
-            <div class="form-group">
-                <label for="email">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="Student Email">
-            </div>
-            <div class="form-group">
-                <label for="password">Password</label>
-                <input type="password" class="form-control" id="password" placeholder="Password">
-            </div>
-            <button type="submit" class="btn btn-default">Submit</button>
-        </form>
-    </div>
+    <form>
+        <label>login</label>
+        <div class="formLogin-group">
+            <label for="id">Email</label>
+            <input type="text" id="form-id" placeholder="login" name="login">
+        </div>
+        <div class="formLogin-group">
+            <label for="password">Password</label>
+            <input type="password" id="password" placeholder="Password" name="login-pwd">
+        </div>
+        <button type="submit" class="form-btn">Submit</button>
+    </form>
+    <a href="signup">
+        <input type="submit" class="form-btn" id="signUp-btn" value="Sign up">
+    </a>
 
-    <div class="form-group">
-        <form>
-            <input type="submit" class="btn btn-primary" id="login" name="login">
-            <input type="submit" class="btn btn-primary" id="signUp" name="register">
-        </form>
-    </div>
     <script src="{{script('login.js')}}"></script>
 
 {% endblock %}
