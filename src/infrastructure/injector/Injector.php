@@ -74,9 +74,7 @@ class Injector {
 		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 		
-=======
 		$router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup');
->>>>>>> fix: transfert php files in controllers
 	}
 
 	private function buildTwig(): Environment {

@@ -12,26 +12,38 @@ class SignUpController extends Controller {
 	}
 
 	public function get(Router $router, array $parameters): void {
-		$this->render('signup.twig');
-		if(isset($_POST['mail']) && isset($_POST['signup-pwd']) && isset($_POST['signup-pwd-confirm'])){
+		$this->render('signup.twig', ['router' => $router]);
+	}
+
+	public function post(Router $router, array $parameters): void {
+
+		if (isset($_POST['email']) && isset($_POST['pwd']) && isset($_POST['pwd-confirm'])) {
+
 			$conn = new DatabaseConnection();
-			$database= $conn->getDatabase();
-			$login = $_POST['signup'];
-			$pwd = hash($_POST['signup-pwd'], PASSWORD_DEFAULT);
-			$pwdConfirm = hash($_POST['signup-pwd-confirm'], PASSWORD_DEFAULT);
-			if($pwd == $pwdConfirm){
-				$sql = $database->prepare("INSERT INTO Account (email, password) VALUES (:login, :pwd)");
-				$sql->bindParam(':login', $login);
+			$database = $conn->getDatabase();
+			$email = $_POST['email'];
+			$pwd = $_POST['pwd'];
+			$pwdConfirm = $_POST['pwd-confirm'];
+			$name = $_POST['name'];
+			$firstname = $_POST['firstname'];
+
+			if ($pwd == $pwdConfirm) {
+				$sql = $database->prepare("INSERT INTO Account (email, password, id_person) VALUES (:email, :pwd, (SELECT P.id_person FROM Person P WHERE last_name = :name AND first_name = :firstname))");
+				$sql->bindParam(':email', $email);
 				$sql->bindParam(':pwd', $pwd);
-				$database->exec($sql);
-				header('Location: /');
+				$sql->bindParam(':name', $name);
+				$sql->bindParam(':firstname', $firstname);
+//				$database->exec($sql);
+				$database = null;
+				header('Location: ' . $router->url('home'));
+			} else {
+				$error = 'Les mots de passe ne correspondent pas';
 			}
-			else{
-				echo "Les mots de passe ne correspondent pas";
-			}
+
+		} else {
+			$error = 'Veuillez remplir tous les champs';
 		}
-		else{
-			echo "Veuillez remplir tous les champs";
-		}
+
+		$this->render('signup.twig', ['router' => $router, 'error' => $error ?? '']);
 	}
 }

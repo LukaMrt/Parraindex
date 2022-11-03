@@ -1,29 +1,42 @@
 {% extends '/layouts/default.twig' %}
 
-{% set style = style('home.css') %}
+{% set style = style('login.css') %}
 {% set title = 'Parraindex.login' %}
 
-
+{% block javascripts %}
+	<script src="{{ script('login.js') }}" defer></script>
+{% endblock %}
 
 {% block content %}
 
-    <h1>{{title}}</h1>
-    <form action = "/login" method="post">
-        <label>login</label>
-        <div class="formLogin-group">
-            <label for="form-id">Email</label>
-            <input type="text" id="form-id" placeholder="login" name="login">
-        </div>
-        <div class="formLogin-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" name="login-pwd">
-        </div>
-        <input type="submit" class="form-btn" value="Submit">
-    </form>
-    <a href="/signup">
-        <input type="submit" class="form-btn" id="signUp-btn" value="Sign up">
-    </a>
+	<h1>Connexion</h1>
 
-    <script src="{{script('login.js')}}" defer></script>
+	{% if error %}
+
+		<div class="error" style="background-color: red; margin: 40px 0">
+			<h2>Erreur</h2>
+			{{ error }}
+		</div>
+
+	{% endif %}
+
+	<form action="{{ router.url("login_post") }}" method="post">
+
+		<div class="formLogin-group">
+			<label for="form-id">Email</label>
+			<input type="text" id="form-id" placeholder="login" name="login">
+		</div>
+
+		<div class="formLogin-group">
+			<label for="password">Password</label>
+			<input type="password" id="password" placeholder="Password" name="login-pwd">
+		</div>
+
+		<input type="submit" class="form-btn" value="Submit">
+	</form>
+
+	<a href="{{ router.url("signup_get") }}">
+		<input type="submit" class="form-btn" id="signUp-btn" value="Sign up">
+	</a>
 
 {% endblock %}
