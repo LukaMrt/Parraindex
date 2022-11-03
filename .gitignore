@@ -94,4 +94,5 @@ composer.phar
 
 scss/*.css
 scss/*.css.map
-public/css/*.css
+public/style/*
+public/css/*

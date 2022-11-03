@@ -1,0 +1,29 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.error-block {
+
+	@include m.flex();
+	gap: f.rem(10);
+	position: relative;
+	text-align: center;
+	color: var(--dark-blue);
+	text-shadow: rgba(149, 157, 165, 0.7) 0 2px 3px;
+
+	&__background {
+		position: absolute;
+		z-index: -1;
+	}
+
+	&__title {
+		letter-spacing: f.rem(2);
+		font-size: 6vh;
+		font-weight: 400;
+	}
+
+	&__message {
+		letter-spacing: f.rem(4) ;
+		font-size: 5vh;
+		font-weight: 100;
+	}
+}

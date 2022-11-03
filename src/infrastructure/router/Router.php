@@ -34,4 +34,26 @@ class Router {
         $match['target']($this, $match['params']);
     }
 
+	public function getParameter(string $name): string {
+
+		$params = $this->router->match()['params'];
+
+		if (isset($params[$name])) {
+			return $params[$name];
+		}
+
+		return "";
+	}
+
+	public function url(string $name, array $parameters = []): string {
+		try {
+			return $this->router->generate($name, $parameters);
+		} catch (Exception $e) {
+			if ($_ENV['DEBUG']) {
+				dd($e->getMessage());
+			}
+		}
+		return '/';
+	}
+
 }
