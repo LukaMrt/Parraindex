@@ -67,8 +67,16 @@ class Injector {
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 		$router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login');
+		$router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login');
 		$router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup');
+		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
+		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
+		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
+		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 		
+=======
+		$router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup');
+>>>>>>> fix: transfert php files in controllers
 	}
 
 	private function buildTwig(): Environment {

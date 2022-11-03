@@ -1,6 +1,5 @@
 {% extends '/layouts/default.twig' %}
 
-{% set style = style('login.css') %}
 {% set style = style('home.css') %}
 {% set title = 'Parraindex.login' %}
 
@@ -9,7 +8,7 @@
 {% block content %}
 
     <h1>{{title}}</h1>
-    <form>
+    <form action = "/login" method="post">
         <label>login</label>
         <div class="formLogin-group">
             <label for="form-id">Email</label>
@@ -19,10 +18,7 @@
             <label for="password">Password</label>
             <input type="password" id="password" placeholder="Password" name="login-pwd">
         </div>
-        <a href="../infrastructures/database/accountSignUp.php">
-            <input type="submit" class="form-btn" value="Submit">
-        </a>
-
+        <input type="submit" class="form-btn" value="Submit">
     </form>
     <a href="/signup">
         <input type="submit" class="form-btn" id="signUp-btn" value="Sign up">
