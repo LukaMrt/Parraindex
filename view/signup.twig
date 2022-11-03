@@ -13,11 +13,16 @@
             <input type="email" id="email" placeholder="Student Email" name="mail">
         </div>
         <div class="formSignUp-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" name="signUp-pwd">
+            <label for="pwd">Password</label>
+            <input type="password" id="pwd" placeholder="Password" name="signup-pwd">
+            <label for="pwd-confirm">Confirm Password</label>
+            <input type="password" id="pwd-confirm" placeholder="Password" name="signup-pwd-confirm">
         </div>
-        <button type="submit" class="form-btn">Submit</button>
+        <a href="../infrastructures/database/accountSignUp.php">
+            <input type="submit" class="form-btn" value="Submit">
+        </a>
     </form>
+
     <a href="/login">
         <input type="submit" class="form-btn" id="login-btn" value="Already have an account ?">
     </a>
