@@ -1,0 +1,9 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+
+.spinner{
+	height: 100%;
+
+	@include m.flex($direction: row);
+	gap: f.rem(16);
+}

@@ -17,3 +17,15 @@
 <nav class="scrollbar">
 	<input type="range" class="scrollbar__cursor" step=0.01>
 </nav>
+
+<section class="navbar">
+	<div class="navbar__searchbar">
+		<img src="{{icon('magnifier.svg')}}" alt="loupe">
+	</div>
+
+	{% include('components/spinner.twig') %}
+
+	<div class="navbar__filter">
+		<img src="{{icon('gear.svg')}}" alt="parametres">
+	</div>
+</section>

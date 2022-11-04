@@ -1,0 +1,30 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+
+.navbar{
+	box-sizing: border-box;
+	width: f.rem(320);
+	height: f.rem(70);
+
+	padding: f.rem(5);
+
+	border-radius: f.rem(35);
+
+	@include m.hard-box-shadow();
+	@include m.flex($justify: space-between, $direction: row);
+	position: relative;
+
+	&__searchbar,
+	&__filter{
+		height: 100%;
+		aspect-ratio: 1/1;
+		@include m.flex();
+		cursor: pointer;
+
+		img{
+			height: 35%;
+			aspect-ratio: 1/1;
+		}
+	}
+
+}
