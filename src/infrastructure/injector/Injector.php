@@ -52,7 +52,7 @@ class Injector {
 		$twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
 		$twig->addFunction(new TwigFunction('style', function (string $path) {
-			return 'style/' . $path;
+			return 'css/' . $path;
 		}));
 		$twig->addFunction(new TwigFunction('script', function (string $path) {
 			return 'js/' . $path;

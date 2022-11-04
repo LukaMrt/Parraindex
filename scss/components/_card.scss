@@ -12,6 +12,8 @@
 	min-width: max-content;
 
 	height: min(40vh, f.rem(350));
+	min-height: f.rem(210);
+
 	aspect-ratio: 27/40;
 
 	background-color: var(--white);
