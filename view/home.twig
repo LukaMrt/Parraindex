@@ -1,22 +1,12 @@
-{% extends '/layouts/default.twig' %}
-
-{% set style = style('home.css') %}
-{% set title = 'Parraindex - Accueil' %}
+{% set style = style('../scss/home.scss') %}
+{% set title = 'Le Parraindex' %}
 
 {% block content %}
 
-	<h1>{{title}}</h1>
+    {% include 'templates/header.twig' %}
 
-	{% include 'components/button.twig' with {
-		'button_content' : 'first custom button',
-		'priority' : 'primary',
-		}
-	%}
+    <h1>{{ title }}</h1>
 
-	{% include 'components/button.twig' with {
-		'button_content' : 'second custom button',
-		'priority' : 'secondary',
-		}
-	%}
+    {% include 'templates/footer.twig' %}
 
 {% endblock %}

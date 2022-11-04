@@ -1,0 +1,10 @@
+$text_color: red;
+
+* {
+  color: $text_color;
+}
+
+footer div {
+  display: flex;
+  flex-direction: row;
+}

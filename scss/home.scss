@@ -1,7 +1,12 @@
-
 @forward "abstracts";
 @forward "base";
 @forward "components";
 @forward "layout";
 @forward "pages";
 @forward "themes";
+
+h1 {
+  font-size: 6em;
+  font-weight: normal;
+  letter-spacing: 0.2em;
+}
