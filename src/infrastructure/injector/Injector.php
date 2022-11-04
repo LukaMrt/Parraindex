@@ -3,6 +3,7 @@
 namespace App\infrastructure\injector;
 
 use App\application\person\PersonDAO;
+use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\TreeController;
 use App\infrastructure\database\DatabaseConnection;
@@ -45,7 +46,9 @@ class Injector {
 
 		$router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
 		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
-
+		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
+		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
+		
 	}
 
 	private function buildTwig(): Environment {
