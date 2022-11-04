@@ -37,7 +37,6 @@ test:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
     
 deploy_staging:
-  type: deploy
   environment:
     name: staging
     url: dev.lukamaret.com
