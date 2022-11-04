@@ -41,6 +41,6 @@ deploy_staging:
     name: staging
     url: dev.lukamaret.com
   script:
-    - ssh root@lukamaret.com "cd /var/www/dev.lukamaret.com && git checkout develop && git pull && exit"
+    - ssh -p 55 parraindex@lukamaret.com "cd /var/www/dev.lukamaret.com && git checkout develop && git pull && exit"
   only:
     - develop
