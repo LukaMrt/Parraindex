@@ -30,17 +30,23 @@ before_script:
   - mkdir -p ~/.ssh
   - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
 
+stages:
+  - deploy_dev
+  - test
+
 # Run our tests
 # If Xdebug was installed you can generate a coverage report and see code coverage metrics.
 test:
+  stage: test
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
-    
-deploy_staging:
+  
+deploy_dev:
+  stage: deploy_dev
   environment:
-    name: staging
-    url: dev.lukamaret.com
+    name: develop
+    url: https://dev.lukamaret.com
   script:
-    - ssh -p 55 parraindex@lukamaret.com "cd /var/www/dev.lukamaret.com && git checkout develop && git pull && exit"
+    - ssh -i $ID_RSA -p $SERVER_PORT $SERVER_USER@$SERVER_IP "cd /var/www/dev.lukamaret.com && git checkout develop && git pull && exit"
   only:
     - develop
