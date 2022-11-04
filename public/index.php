@@ -14,7 +14,7 @@ $dotenv->load();
 
 if ($_ENV['DEBUG'] === "true") {
 	$whoops = new Run();
-	$whoops->pushHandler(new PrettyPageHandler);
+	$whoops->pushHandler(new PrettyPageHandler());
 	$whoops->register();
 }
 
@@ -26,7 +26,7 @@ try {
 	$injector->setUpRouter($router);
 } catch (DependencyException|NotFoundException $e) {
 	if ($_ENV['DEBUG'] === "true") {
-		dump($e);
+		dd($e);
 	}
 }
 

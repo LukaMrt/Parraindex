@@ -2,11 +2,12 @@
 
 namespace App\infrastructure\injector;
 
-use App\application\UserDAO;
+use App\application\person\PersonDAO;
 use App\controller\ErrorController;
 use App\controller\HomeController;
+use App\controller\TreeController;
 use App\infrastructure\database\DatabaseConnection;
-use App\infrastructure\MySqlPersonDAO;
+use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\router\Router;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -34,7 +35,7 @@ class Injector {
 		$this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
 
-		$this->container->set(UserDAO::class, $userDAO);
+		$this->container->set(PersonDAO::class, $userDAO);
 	}
 
 	/**
@@ -44,22 +45,30 @@ class Injector {
 	public function setUpRouter(Router $router): void {
 
 		$router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
-
+		
 	}
 
 	private function buildTwig(): Environment {
 		$twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
 		$twig->addFunction(new TwigFunction('style', function (string $path) {
-			return 'style/' . $path;
+			return 'css/' . $path;
 		}));
 		$twig->addFunction(new TwigFunction('script', function (string $path) {
 			return 'js/' . $path;
 		}));
+
 		$twig->addFunction(new TwigFunction('image', function (string $path) {
 			return 'img/' . $path;
+		}));
+		$twig->addFunction(new TwigFunction('picture', function (string $path) {
+			return 'img/pictures/' . $path;
+		}));
+		$twig->addFunction(new TwigFunction('icon', function (string $path) {
+			return 'img/icons/' . $path;
 		}));
 
 		return $twig;

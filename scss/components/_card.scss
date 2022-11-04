@@ -1,0 +1,89 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.card{
+	@include m.flex();
+	gap: f.rem(7);
+	margin: f.rem(70) 0;
+
+	user-select: none;
+
+	position: relative;
+	min-width: max-content;
+
+	height: min(40vh, f.rem(350));
+	min-height: f.rem(210);
+
+	aspect-ratio: 27/40;
+
+	background-color: var(--white);
+	@include m.hard-box-shadow();
+
+	padding-bottom: f.rem(25);
+	border-radius: f.rem(35);
+	overflow: hidden;
+	transition: all 200ms ease-in-out;
+
+	&__profil{
+		font-size: f.rem(24);
+		text-align: center;
+		padding: 0 5%;
+	}
+
+	&__last-name{
+		text-transform: uppercase;
+		white-space: nowrap;
+		font-weight: 700
+	}
+
+	&__banner{
+		@include m.flex();
+		height: 33%;
+		width: 100%;
+		background-color: var(--light-grey);
+	}
+
+	&__social-network{
+		@include m.flex($justify: space-between, $direction: row);
+		width: 50%;
+		margin: f.rem(5) 0;
+	}
+
+	&__picture{
+		@include m.flex();
+
+		height: 70%;
+		aspect-ratio: 1/1;
+		
+		object-fit: cover;
+		border-radius: 50%;
+		@include m.hard-box-shadow();
+	}
+	
+	&__description{
+		padding: 0 f.rem(40);
+		margin: 0;
+		font-size: f.rem(14);
+		height: 100%;
+		overflow: hidden;
+		text-align: justify;
+		flex-grow: 1;
+	}
+
+	&::after{
+		content: '';
+		position: absolute;
+		bottom: f.rem(12);
+
+		height: f.rem(4);
+		width: f.rem(40);
+		border-radius: f.rem(2);
+
+		background-color: var(--dark-blue);
+	}
+
+	&--middle{
+		scale: 1.2;
+		margin: 0;
+	}
+}

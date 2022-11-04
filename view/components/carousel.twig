@@ -1,0 +1,19 @@
+<section class="carousel">
+	<div class="carousel__slider">
+
+		{% for person in people %}
+			{% include 'components/card.twig' with {
+				'firstName': person.firstName,
+				'lastName': person.lastName,
+				'picture': person.picture,
+				'description': person.biography,
+				}
+			%}
+		{% endfor %}
+
+	</div>
+</section>
+
+<nav class="scrollbar">
+	<input type="range" class="scrollbar__cursor" step=0.01>
+</nav>

@@ -3,14 +3,13 @@
 namespace App\model\sponsor;
 
 use App\model\person\Person;
-use App\model\utils\Id;
 use DateTime;
 
 class ClassicSponsor extends Sponsor {
 
-    private Description $reason;
+    private string $reason;
 
-    public function __construct(Id $id, Person $godFather, Person $godSon, DateTime $date, Description $description) {
+    public function __construct(int $id, Person $godFather, Person $godSon, DateTime $date, string $description) {
         parent::__construct($id, $godFather, $godSon, $date);
         $this->reason = $description;
     }

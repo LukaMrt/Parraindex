@@ -1,3 +1,4 @@
+@use "../abstracts/functions" as f;
 @import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700&display=swap");
 
 h1,
@@ -15,6 +16,12 @@ a:active {
 	color: inherit ;
 }
 
-p{
+i {
+	font-style: normal;
+	color: var(--dark-grey);
+	font-size: f.rem(10);
+}
+
+p {
 	margin: 0;
 }

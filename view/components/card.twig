@@ -1,0 +1,22 @@
+<article class="card">
+	<div class="card__banner">
+		<img class="card__picture" src={{picture(picture)}} alt="photo"></img>
+	</div>
+
+	<div class="card__profil">
+		<span class="card__first-name">{{ firstName }}</span>
+		<span class="card__last-name">{{ lastName }}</span>
+	</div>
+
+	<i class="card__identifiant">@identifiant</i>
+
+	<div class="card__social-network">
+		{% for i in 1..5 %}
+			{% include 'components/social-network.twig' %}
+		{% endfor %}
+	</div>
+
+	<p class="card__description">
+		{{ description }}
+	</p>
+</article>

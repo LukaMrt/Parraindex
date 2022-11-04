@@ -92,7 +92,5 @@ composer.phar
 
 .env
 
-scss/*.css
-scss/*.css.map
 public/style/*
 public/css/*
