@@ -28,13 +28,14 @@ class SignUpController extends Controller {
 			$firstname = $_POST['firstname'];
 
 			if ($pwd == $pwdConfirm) {
-				$sql = $database->prepare("INSERT INTO Account (email, password, id_person) VALUES (:email, :pwd, (SELECT P.id_person FROM Person P WHERE last_name = :name AND first_name = :firstname))");
+				$sql = $database->prepare(
+					"INSERT INTO Account (email, password, id_person) 
+					VALUES (:email, :pwd, (SELECT P.id_person FROM Person P WHERE last_name = :name AND first_name = :firstname))");
 				$sql->bindParam(':email', $email);
 				$sql->bindParam(':pwd', $pwd);
 				$sql->bindParam(':name', $name);
 				$sql->bindParam(':firstname', $firstname);
-//				$database->exec($sql);
-				$database = null;
+				$sql->execute();
 				header('Location: ' . $router->url('home'));
 			} else {
 				$error = 'Les mots de passe ne correspondent pas';

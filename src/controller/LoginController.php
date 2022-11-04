@@ -19,25 +19,21 @@ class LoginController extends Controller {
 	public function post(Router $router, array $parameters): void {
 
 		if (isset($_POST['login']) && isset($_POST['login-pwd'])) {
-
 			$conn = new DatabaseConnection();
 			$database = $conn->getDatabase();
 			$login = $_POST['login'];
 			$pwd = $_POST['login-pwd']; #we must hash the password before sending it to the database
-			$sql = $database->prepare("SELECT COUNT(*) FROM Account WHERE email = :login AND password = :pwd");
+			$sql = $database->prepare("SELECT * FROM Account WHERE email = :login AND password = :pwd");
 			$sql->bindParam(':login', $login);
 			$sql->bindParam(':pwd', $pwd);
 			$sql->execute();
 			$result = $sql->fetch();
-			$database = null;
-
-			if ($result === 1) {
+			if ($result!= null) {
 				$_SESSION['login'] = $login;
 				header('Location: ' . $router->url('home'));
 			} else {
-				$error = "Mauvais identifiants";
+				$error = 'Identifiants incorrects';
 			}
-
 		} else {
 			$error = "Veuillez remplir tous les champs";
 		}
