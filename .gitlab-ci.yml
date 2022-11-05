@@ -1,52 +1,34 @@
-# This file is a template, and might need editing before it works on your project.
-# You can copy and paste this template into a new `.gitlab-ci.yml` file.
-# You should not add this template to an existing `.gitlab-ci.yml` file by using the `include:` keyword.
-#
-# To contribute improvements to CI/CD templates, please follow the Development guide at:
-# https://docs.gitlab.com/ee/development/cicd/templates.html
-# This specific template is located at:
-# https://gitlab.com/gitlab-org/gitlab/-/blob/master/lib/gitlab/ci/templates/PHP.gitlab-ci.yml
-
-# Select image from https://hub.docker.com/_/php/
-image: php:latest
-
-# Select what we should cache between builds
-cache:
-  paths:
-    - vendor/
-
-before_script:
-  - apt-get update -yqq
-  - apt-get install -yqq git libpq-dev libcurl4-gnutls-dev libicu-dev libvpx-dev libjpeg-dev libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev libxml2-dev libexpat1-dev libbz2-dev libgmp3-dev libldap2-dev unixodbc-dev libsqlite3-dev libaspell-dev libsnmp-dev libpcre3-dev libtidy-dev libonig-dev libzip-dev
-  # Install PHP extensions
-  - docker-php-ext-install mbstring pdo_pgsql curl intl gd xml zip bz2 opcache
-  # Install and run Composer
-  - curl -sS https://getcomposer.org/installer | php
-  - php composer.phar install
-  # Setup SSH deploy keys
-  - 'which ssh-agent || ( apt-get install -qq openssh-client )'
-  - eval $(ssh-agent -s)
-  - ssh-add <(echo "$SSH_PRIVATE_KEY")
-  - mkdir -p ~/.ssh
-  - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
-
 stages:
-  - deploy_dev
   - test
+  - deploy
 
-# Run our tests
-# If Xdebug was installed you can generate a coverage report and see code coverage metrics.
-test:
+run_tests:
   stage: test
+  image: php:latest
+  before_script:
+    - apt update -yqq
+    - apt install -yqq git libpq-dev libcurl4-gnutls-dev libicu-dev libvpx-dev libjpeg-dev
+    - apt install -yqq libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev libxml2-dev libexpat1-dev
+    - apt install -yqq libbz2-dev libgmp3-dev libldap2-dev unixodbc-dev libsqlite3-dev libaspell-dev
+    - apt install -yqq libsnmp-dev libpcre3-dev libtidy-dev libonig-dev libzip-dev
+    - docker-php-ext-install mbstring pdo_pgsql curl intl gd xml zip bz2 opcache
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install
   script:
     - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
-  
-deploy_dev:
-  stage: deploy_dev
+
+run_deploy_dev:
+  stage: deploy
+  image: debian:stable-slim
   environment:
     name: develop
     url: https://dev.lukamaret.com
+  # before_script:
+    # - apt update && apt install -yqq openssh-client
+    # - chmod 400 $SSH_KEY
   script:
-    - ssh -i $ID_RSA -p $SERVER_PORT $SERVER_USER@$SERVER_IP "cd /var/www/dev.lukamaret.com && git checkout develop && git pull && exit"
-  only:
-    - develop
+    - echo "Déploiement"
+    # - ssh -o StrictHostKeyChecking=no -p 55 -i $SSH_KEY parraindex@lukamaret.com "
+        # cd /var/www/test &&
+        # git checkout develop &&
+        # git pull"
