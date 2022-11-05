@@ -19,7 +19,12 @@ body{
 	background-color: var(--white);
 	color: var(--dark-blue);
 }
+
 main{
 	flex-grow: 1;
 	@include m.flex($direction: column, $justify: space-evenly);
+}
+
+select {
+  background-color: white;
 }

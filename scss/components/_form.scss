@@ -1,0 +1,86 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.form {
+
+  width: 70vw;
+  max-width: f.rem(900);
+  border: lightgray 1px solid;
+  border-radius: 40px;
+  padding-top: f.rem(40);
+  padding-bottom: f.rem(40);
+  @include m.flex(center, center, column);
+  @include m.hard-box-shadow;
+
+  &-content {
+	width: 70%;
+	@include m.flex(center, center, column);
+  }
+
+  &-block {
+
+	width: 100%;
+
+	&--row {
+	  @include m.flex(center, space-between, row);
+
+	  .form__element {
+		flex: 1 1 auto;
+
+		margin: 0 f.rem(10);
+
+		&:first-child {
+		  margin-left: 0;
+		}
+
+		&:last-child {
+		  margin-right: 0;
+		}
+
+	  }
+
+	}
+
+  }
+
+  &__element {
+	@include m.flex(flex-start, center, column);
+	width: 100%;
+	margin: f.rem(30) 0;
+
+	&-input {
+	  height: f.rem(40);
+	  width: 100%;
+	  padding: f.rem(10);
+	  box-sizing: border-box;
+	  border-radius: f.rem(20);
+	  border: lightgray solid 1px;
+	  background: transparent;
+	  box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+
+	  &-textarea {
+		height: f.rem(150);
+		resize: none;
+	  }
+
+	}
+
+	&-select {
+	  height: f.rem(40);
+	}
+
+	&-label {
+	  width: 100%;
+	  padding-left: f.rem(10);
+	  padding-bottom: f.rem(6);
+	  letter-spacing: f.rem(1.3);
+	  font-size: f.rem(20);
+	}
+
+	&--invalid {
+	  border: red solid 1px;
+	}
+
+  }
+
+}

@@ -1,18 +1,23 @@
 @use "../abstracts/functions" as f;
 
 .btn{
-	border: 0;
-	border-radius: f.rem(20);
-	padding: f.rem(10) f.rem(20);	
+  border: 0;
+  border-radius: f.rem(30);
+  padding: f.rem(15) f.rem(25);
 
-	&--primary{
-		background-color: var(--dark-blue);
-		color: var(--white);
-	}
+  &--primary {
+	background-color: var(--dark-blue);
+	color: var(--white);
+  }
 
-	&--secondary{
-		border: 1px solid var(--dark-blue);
-		background-color: var(--white);
-		color: var(--dark-blue);
-	}
+  &--secondary {
+	border: 1px solid var(--dark-blue);
+	background-color: var(--white);
+	color: var(--dark-blue);
+  }
+
+  &:hover {
+	cursor: pointer;
+  }
+
 }
