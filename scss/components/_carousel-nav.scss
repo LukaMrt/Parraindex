@@ -9,21 +9,66 @@
 	padding: f.rem(5);
 
 	border-radius: f.rem(35);
+	transition: all 0.3s ease;
 
 	@include m.hard-box-shadow();
 	@include m.flex($justify: space-between, $direction: row);
 	position: relative;
 
+	&__icon{
+		height: 35%;
+		aspect-ratio: 1/1;
+	}
+
 	&__searchbar,
 	&__filter{
 		height: 100%;
 		aspect-ratio: 1/1;
-		@include m.flex();
-		cursor: pointer;
+		@include m.flex($direction: row);
 
-		img{
-			height: 35%;
-			aspect-ratio: 1/1;
+		&--open{
+			width: calc(f.rem(320) + f.rem(100));
+		}
+	}
+
+	&__searchbar{
+		&--open{
+			margin-right: f.rem(100);
+		}
+	}
+
+	&__filter{
+		&--open{
+			margin-left: f.rem(100);
+		}
+	}
+
+	&__input{
+		border: 1px solid var(--dark-blue);
+		border-radius: f.rem(15);
+		@include m.inside-shadow();
+		padding-left: f.rem(10);
+		height: f.rem(20);
+	}
+
+	// Animations
+
+	.open{
+		animation: oppening .3s forwards;
+	
+		@keyframes oppening {
+			from { width: 0; }
+			to { width: 100%; }
+		}
+	}
+	
+	.close{
+		animation: closing .3s forwards;
+		padding: 0;
+	
+		@keyframes closing {
+			from { width: 100%; }
+			to { width: 0; }
 		}
 	}
 

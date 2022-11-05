@@ -11,7 +11,12 @@
 		padding: 0 45%;
 		gap: f.rem(100);
 		
-		overflow-x: hidden;
+		overflow-x: scroll;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
 	}
 	
 	&::after,

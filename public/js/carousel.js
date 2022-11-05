@@ -81,6 +81,11 @@ sliderUI.cursor.addEventListener("input", () => {
 	relocateSlider(sliderUI.cursor.value / 100)
 });
 
+
+sliderUI.slider.addEventListener("scroll", (event) => {
+	relocateScrollbar();
+});
+
 // ------------------ Initialization ----------------- //
 
 relocateSlider(0.5)

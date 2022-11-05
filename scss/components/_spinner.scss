@@ -3,7 +3,25 @@
 
 .spinner{
 	height: 100%;
+	width: f.rem(150);
+	
+	transition: all 6s ease;
 
-	@include m.flex($direction: row);
-	gap: f.rem(16);
+	@include m.flex($direction: row, $align: center, $justify: center);
+	gap: f.rem(16);	
+
+	&__container-date{
+		white-space: nowrap;
+	}
+
+	&__dates{
+
+		&--start{
+			color: var(--dark-grey);
+		}
+
+		&--end{
+			font-weight: 700;
+		}
+	}
 }
