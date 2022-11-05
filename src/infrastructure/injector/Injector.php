@@ -6,6 +6,7 @@ use App\application\person\PersonDAO;
 use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\TreeController;
+use App\controller\UpdateController;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\router\Router;
@@ -46,6 +47,7 @@ class Injector {
 
 		$router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
 		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
+		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'tree');
 		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 		
