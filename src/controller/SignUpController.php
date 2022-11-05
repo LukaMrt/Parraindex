@@ -2,7 +2,7 @@
 
 namespace App\controller;
 
-use App\infrastructure\database\DatabaseConnection;
+use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
@@ -17,15 +17,14 @@ class SignUpController extends Controller {
 
 	public function post(Router $router, array $parameters): void {
 		if (isset($_POST['email'],$_POST['password'],$_POST['password-confirm'])) {
-			$conn = new DatabaseConnection();
-			$database = $conn->getDatabase();
 			$email = $_POST['email'];
-			$password = $_POST['password'];
-			$passwordConfirm = $_POST['password-confirm'];
+			$password =$_POST['password'];
+			$passwordConfirm =$_POST['password-confirm'];
 			$name = $_POST['name'];
 			$firstname = $_POST['firstname'];
+			$accountService = new MysqlAccountDAO();
 			if ($password == $passwordConfirm) {
-				$this->createAccount($router,$database,$email,$password,$name,$firstname);
+				$accountService->createAccount($router,$email,$password,$name,$firstname);
 			} else {
 				$error = 'Les mots de passe ne correspondent pas';
 			}
@@ -35,16 +34,5 @@ class SignUpController extends Controller {
 		$this->render('signup.twig', ['router' => $router, 'error' => $error ?? '']);
 	}
 
-	private function createAccount($router,$database,$email,$password,$name,$firstname) : void {
-		$sql = $database->prepare(
-			"INSERT INTO Account (email, password, id_person) 
-			VALUES (:email, :password, (SELECT P.id_person FROM Person P WHERE last_name = :name AND first_name = :firstname))");
-		$sql->bindParam(':email', $email);
-		$password = password_hash($password, PASSWORD_DEFAULT);
-		$sql->bindParam(':password', $password);
-		$sql->bindParam(':name', $name);
-		$sql->bindParam(':firstname', $firstname);
-		$sql->execute();
-		header('Location: ' . $router->url('home'));
-	}
+
 }
