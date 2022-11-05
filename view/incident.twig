@@ -1,0 +1,51 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('incident.css') %}
+{% set title = 'Parraindex - Incident' %}
+
+{% block javascripts %}
+	<script src="{{ script("incident.js") }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+	<h1>Rapport d'incident</h1>
+
+	<form class="form" action="{{ router.url('incident_post') }}" method="post">
+
+		<div class="form-content">
+
+			<div class="form-block form-block--row">
+
+				{% include "components/form/input.twig" with {
+					'type': 'text',
+					'slug': 'name',
+					'title': 'Votre nom',
+					'placeholder': 'John Doe'
+				} %}
+
+				{% include "components/form/select.twig" with {
+					'slug': 'type',
+					'title': 'Type d\'incident',
+					'options': options
+				} %}
+
+			</div>
+
+			{% include "components/form/textarea.twig" with {
+				'slug': 'description',
+				'title': 'Description de l\'incident',
+				'placeholder': 'Il y a une erreur sur la page ...'
+			} %}
+
+			{% include "components/button.twig" with {
+				'type': 'submit',
+				'button_content': 'Envoyer',
+				'priority': 'primary'
+			} %}
+
+		</div>
+
+	</form>
+
+{% endblock %}
