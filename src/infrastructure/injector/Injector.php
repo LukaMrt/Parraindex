@@ -47,7 +47,7 @@ class Injector {
 
 		$router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
 		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
-		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'tree');
+		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
 		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 		
