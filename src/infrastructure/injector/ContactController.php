@@ -14,9 +14,11 @@ class ContactController extends Controller {
 	}
 
 	public function get(Router $router, array $parameters): void {
+
 		$this->render('contact.twig', [
 			'router' => $router,
-			'options' => ContactType::getValues()
+			'options' => ContactType::getValues(),
+			'error' => $parameters['error'] ?? ''
 		]);
 	}
 

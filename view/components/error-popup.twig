@@ -1,4 +1,4 @@
-<div class="error-popup">
+<div class="error-popup {% if message is not empty %}error-popup--visible{% endif %}">
 	<p class="error-popup__content">{{ message }}</p>
 	<div class="error-popup__close-button">
 		<p>&times;</p>
