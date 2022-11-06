@@ -1,17 +1,18 @@
 {% extends '/layouts/default.twig' %}
 
-{% set style = style('incident.css') %}
+{% set style = style('contact.css') %}
 {% set title = 'Parraindex - Incident' %}
 
 {% block javascripts %}
-	<script src="{{ script("incident.js") }}" defer></script>
+	<script src="{{ script("contact.js") }}" defer></script>
 {% endblock %}
 
 {% block content %}
 
-	<h1>Rapport d'incident</h1>
 
-	<form class="form" action="{{ router.url('incident_post') }}" method="post">
+	<form class="form" action="{{ router.url('contact_post') }}" method="post">
+
+		<h1 class="form__title">Formulaire de contact</h1>
 
 		<div class="form-content">
 
@@ -20,21 +21,28 @@
 				{% include "components/form/input.twig" with {
 					'type': 'text',
 					'slug': 'name',
-					'title': 'Votre nom',
+					'title': 'Nom',
 					'placeholder': 'John Doe'
 				} %}
 
 				{% include "components/form/select.twig" with {
 					'slug': 'type',
-					'title': 'Type d\'incident',
+					'title': 'Objet du message',
 					'options': options
 				} %}
 
 			</div>
 
+			{% include "components/form/input.twig" with {
+				'type': 'email',
+				'slug': 'email',
+				'title': 'Email',
+				'placeholder': 'john.doe@gmail.com'
+			} %}
+
 			{% include "components/form/textarea.twig" with {
 				'slug': 'description',
-				'title': 'Description de l\'incident',
+				'title': 'Message',
 				'placeholder': 'Il y a une erreur sur la page ...'
 			} %}
 

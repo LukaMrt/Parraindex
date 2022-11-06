@@ -43,10 +43,14 @@
 
   }
 
+  &__title {
+	margin-bottom: f.rem(30);
+  }
+
   &__element {
 	@include m.flex(flex-start, center, column);
 	width: 100%;
-	margin: f.rem(30) 0;
+	margin: f.rem(10) 0;
 
 	&-input {
 	  height: f.rem(40);
