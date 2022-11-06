@@ -1,5 +1,6 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
 
 .form {
 
@@ -35,6 +36,17 @@
 
 		&:last-child {
 		  margin-right: 0;
+		}
+
+	  }
+
+	  @include b.breakpoint('small') {
+		@include m.flex(center, center, column);
+
+		.form__element {
+
+		  margin: f.rem(10) 0;
+
 		}
 
 	  }
