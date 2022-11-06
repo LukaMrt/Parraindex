@@ -2,8 +2,10 @@
 
 namespace App\application\contact;
 
+use JetBrains\PhpStorm\NoReturn;
+
 interface Redirect {
 
-	public function redirect(string $url): void;
+	#[NoReturn] public function redirect(string $url): void;
 
 }

@@ -15,6 +15,21 @@ enum ContactType: int {
 	case CHOCKING_CONTENT = 8;
 	case OTHER = 9;
 
+	public function toString(): string {
+		return match ($this) {
+			self::ADD_PERSON => "Add person",
+			self::ADD_LINK => "Add link",
+			self::REMOVE_PERSON => "Remove person",
+			self::REMOVE_LINK => "Remove link",
+			self::UPDATE_PERSON => "Update person",
+			self::UPDATE_LINK => "Update link",
+			self::ACCOUNT => "Account",
+			self::BUG => "Bug",
+			self::CHOCKING_CONTENT => "Chocking content",
+			self::OTHER => "Other",
+		};
+	}
+
 	public static function getValues(): array {
 		return [
 			['id' => 0, 'title' => 'Ajout d\'une personne'],

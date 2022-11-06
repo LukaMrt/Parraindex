@@ -24,8 +24,8 @@ class Contact {
 		return $this->email;
 	}
 
-	public function getType(): ContactType {
-		return $this->type;
+	public function getType(): string {
+		return $this->type->toString();
 	}
 
 	public function getDescription(): string {
