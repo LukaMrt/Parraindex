@@ -1,7 +1,7 @@
 {% extends '/layouts/default.twig' %}
 
 {% set style = style('contact.css') %}
-{% set title = 'Parraindex - Incident' %}
+{% set title = 'Parraindex - Contact' %}
 
 {% block javascripts %}
 	<script src="{{ script("contact.js") }}" defer></script>
@@ -55,5 +55,9 @@
 		</div>
 
 	</form>
+
+	{% include "components/error-popup.twig" with {
+		'message': 'Formulaire invalide'
+	} %}
 
 {% endblock %}
