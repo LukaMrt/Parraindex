@@ -2,16 +2,35 @@
 
 namespace App\infrastructure\injector;
 
+use App\application\contact\ContactService;
 use App\controller\Controller;
 use App\infrastructure\router\Router;
-use App\model\incident\ContactType;
+use App\model\contact\ContactType;
 use Twig\Environment;
 
 class ContactController extends Controller {
 
-	public function __construct(Environment $twig) {
+	private ContactService $contactService;
+
+	public function __construct(Environment $twig, ContactService $contactService) {
 		parent::__construct($twig);
+		$this->contactService = $contactService;
 	}
+
+	public function post(Router $router, array $parameters): void {
+
+		$postParameters = [
+			'name' => $_POST['name'],
+			'email' => $_POST['email'],
+			'type' => $_POST['type'],
+			'description' => $_POST['description'],
+		];
+
+		$error = $this->contactService->registerContact($postParameters);
+
+		$this->get($router, ['error' => $error]);
+	}
+
 
 	public function get(Router $router, array $parameters): void {
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\model\incident;
+namespace App\model\contact;
 
 enum ContactType: int {
 
@@ -28,6 +28,22 @@ enum ContactType: int {
 			['id' => 8, 'title' => 'Contenu choquant'],
 			['id' => 9, 'title' => 'Autre'],
 		];
+	}
+
+	public static function fromId(int $id): ?ContactType {
+		return match ($id) {
+			0 => self::ADD_PERSON,
+			1 => self::ADD_LINK,
+			2 => self::REMOVE_PERSON,
+			3 => self::REMOVE_LINK,
+			4 => self::UPDATE_PERSON,
+			5 => self::UPDATE_LINK,
+			6 => self::ACCOUNT,
+			7 => self::BUG,
+			8 => self::CHOCKING_CONTENT,
+			9 => self::OTHER,
+			default => null
+		};
 	}
 
 }

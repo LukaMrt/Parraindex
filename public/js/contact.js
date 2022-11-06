@@ -52,17 +52,17 @@ function addSubmitListener() {
 let fields = [
 	{
 		name: 'name',
-		error: 'Le nom doit contenir au moins 1 caractères',
+		error: 'Le nom doit contenir au moins 1 caractère',
 		validation: checkInputValidity
 	},
 	{
 		name: 'description',
-		error: 'La description doit contenir au moins 1 caractères',
+		error: 'La description doit contenir au moins 1 caractère',
 		validation: checkInputValidity
 	},
 	{
 		name: 'type',
-		error: 'Le type doit contenir au moins 1 caractères',
+		error: 'Le type doit être valide',
 		validation: checkInputValidity
 	},
 	{
