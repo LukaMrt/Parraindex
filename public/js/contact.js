@@ -1,57 +1,54 @@
-function checkInputValidity(element) {
-	element.classList.add('form__element--invalid');
-	if (element.value.length > 0) {
-		element.classList.remove('form__element--invalid');
-		return true;
-	}
-	return false;
-}
 
-function checkEmailValidity(emailInput) {
-	emailInput.classList.add('form__element--invalid');
-	if (emailInput.value.match(/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/)) {
-		emailInput.classList.remove('form__element--invalid');
+// -------------------------------- functions --------------------------------- //
+
+function checkInputValidity(element) {
+	if (element.checkValidity()) {
+		element.classList?.remove('form__element--invalid');
 		return true;
 	}
+	element.classList.add('form__element--invalid');
 	return false;
 }
 
 function addFieldsListeners() {
-
 	fields.forEach(field => document.getElementById(field.name)
 		.addEventListener('focusout', () => field.validation(document.getElementById(field.name))));
 }
 
-function addPopupCloseListener() {
-	let errorPopup = document.getElementsByClassName('error-popup')[0];
-	document.getElementsByClassName('error-popup__close-button')[0]
-		.addEventListener('click', () => errorPopup.classList.remove('error-popup--visible'));
-}
+function createErrPopup(){
+	let errorPopup = document.querySelector('.error-popup');
+	let errorContent = document.querySelector('.error-popup__content');
 
-function performSubmit(e) {
+	errorContent.replaceChildren();
 
-	if (fields.every(field => field.validation(document.getElementById(field.name)))) {
-		return;
-	}
-
-	e.preventDefault();
-
-	let errorPopup = document.getElementsByClassName('error-popup')[0];
-	errorPopup.getElementsByClassName("error-popup__content")[0].innerHTML = fields.filter(field => !field.validation(document.getElementById(field.name)))
-		.map(field => field.error)
-		.join('<br>');
+	let errors = fields.filter(field => !field.validation(document.getElementById(field.name)))
+					.map(field => field.error)
+	
+	errors.forEach(error => {
+		let errorElement = document.createElement('p');
+		errorElement.textContent = error;
+		errorContent.appendChild(errorElement);
+	});
 
 	errorPopup.classList.add('error-popup--visible');
 	setTimeout(() => errorPopup.classList.remove('error-popup--visible'), 5_000);
+
+	if (errors.length){
+		return true;
+	}
+	return false;
 }
 
-function addSubmitListener() {
-	document.getElementsByClassName('btn')[0].addEventListener('click', (e) => performSubmit(e));
-}
+// ---------------------------------- Fields ---------------------------------- //
 
 let fields = [
 	{
-		name: 'name',
+		name: 'firstname',
+		error: 'Le prénom doit contenir au moins 1 caractère',
+		validation: checkInputValidity
+	},
+	{
+		name: 'lastname',
 		error: 'Le nom doit contenir au moins 1 caractère',
 		validation: checkInputValidity
 	},
@@ -68,10 +65,25 @@ let fields = [
 	{
 		name: 'email',
 		error: 'L\'email doit être valide',
-		validation: checkEmailValidity
+		validation: checkInputValidity
 	}
 ];
 
+// ------------------------------ Event Listener ------------------------------ //
+
+let submitButton = document.querySelector('.btn[type="submit"]');
+submitButton.addEventListener('click', (e) => {
+	if (createErrPopup()){
+		e.preventDefault();
+	}
+});
+
+let closeErrorPopup = document.querySelector('.error-popup');
+
+closeErrorPopup.addEventListener('click', () => {
+	closeErrorPopup.classList.remove('error-popup--visible');
+	console.log('click');
+
+});
+
 addFieldsListeners();
-addPopupCloseListener();
-addSubmitListener();

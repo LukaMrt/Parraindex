@@ -16,19 +16,27 @@
 
 		<div class="form-content">
 
+
+			{% include "components/form/select.twig" with {
+				'slug': 'type',
+				'title': 'Objet du message',
+				'options': options
+			} %}
+
 			<div class="form-block form-block--row">
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
-					'slug': 'name',
-					'title': 'Nom',
-					'placeholder': 'John Doe'
+					'slug': 'firstname',
+					'title': 'Prenom',
+					'placeholder': 'John'
 				} %}
 
-				{% include "components/form/select.twig" with {
-					'slug': 'type',
-					'title': 'Objet du message',
-					'options': options
+				{% include "components/form/input.twig" with {
+					'type': 'text',
+					'slug': 'lastname',
+					'title': 'Nom',
+					'placeholder': 'Doe'
 				} %}
 
 			</div>
@@ -37,7 +45,8 @@
 				'type': 'email',
 				'slug': 'email',
 				'title': 'Email',
-				'placeholder': 'john.doe@gmail.com'
+				'placeholder': 'john.doe@gmail.com',
+				'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
 			} %}
 
 			{% include "components/form/textarea.twig" with {
@@ -58,6 +67,7 @@
 
 	{% include "components/error-popup.twig" with {
 		'message': error
-	} %}
+		} 
+	%}
 
 {% endblock %}

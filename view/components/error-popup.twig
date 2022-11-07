@@ -1,6 +1,9 @@
 <div class="error-popup {% if message is not empty %}error-popup--visible{% endif %}">
-	<p class="error-popup__content">{{ message | raw }}</p>
-	<div class="error-popup__close-button">
-		<p>&times;</p>
+	<div class="error-popup__content">
+		{% if message is not empty %}
+			<p>{{ message | raw }}</p>
+		{% endif %}
+		
 	</div>
+	<img class="error-popup__close-button" src="{{icon('cancel.svg')}}">
 </div>
