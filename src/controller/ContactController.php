@@ -1,9 +1,8 @@
 <?php
 
-namespace App\infrastructure\injector;
+namespace App\controller;
 
 use App\application\contact\ContactService;
-use App\controller\Controller;
 use App\infrastructure\router\Router;
 use App\model\contact\ContactType;
 use Twig\Environment;
@@ -20,7 +19,8 @@ class ContactController extends Controller {
 	public function post(Router $router, array $parameters): void {
 
 		$postParameters = [
-			'name' => $_POST['name'],
+			'firstname' => $_POST['firstname'],
+			'lastname' => $_POST['lastname'],
 			'email' => $_POST['email'],
 			'type' => $_POST['type'],
 			'description' => $_POST['description'],

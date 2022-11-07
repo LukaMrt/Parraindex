@@ -26,22 +26,23 @@ class ContactServiceTest extends TestCase {
 		// Test 1
 		$return = $this->contactService->registerContact(array());
 
-		$this->assertEquals('Le nom doit contenir au moins 1 caractère<br>Le type doit être valide<br>L\'email doit être valide<br>La description doit contenir au moins 1 caractère', $return);
+		$this->assertEquals('Le prénom doit contenir au moins 1 caractère<br>Le nom doit contenir au moins 1 caractère<br>Le type doit être valide<br>L\'email doit être valide<br>La description doit contenir au moins 1 caractère', $return);
 
 		// Test 2
 		$return = $this->contactService->registerContact(array(
-			'name' => 'test',
+			'lastname' => 'test',
 			'type' => '0'
 		));
 
-		$this->assertEquals('L\'email doit être valide<br>La description doit contenir au moins 1 caractère', $return);
+		$this->assertEquals('Le prénom doit contenir au moins 1 caractère<br>L\'email doit être valide<br>La description doit contenir au moins 1 caractère', $return);
 	}
 
 	public function testDetectsInvalidFields(): void {
 
 		// Test 1
 		$return = $this->contactService->registerContact(array(
-			'name' => 'test',
+			'firstname' => 'test',
+			'lastname' => 'test',
 			'email' => 'test',
 			'type' => '0',
 			'description' => ''
@@ -51,7 +52,8 @@ class ContactServiceTest extends TestCase {
 
 		// Test 2
 		$return = $this->contactService->registerContact(array(
-			'name' => 'tes',
+			'firstname' => 'test',
+			'lastname' => 'test',
 			'email' => 'test@test.com',
 			'type' => '-1',
 			'description' => 'test'
@@ -62,22 +64,24 @@ class ContactServiceTest extends TestCase {
 
 	public function testSavesContact(): void {
 
-		$contact = new Contact("testName", "test@email.com", ContactType::BUG, "testDescription");
-		$contact2 = new Contact("testName2", "test2@email.com", ContactType::ADD_PERSON, "testDescription2");
+		$contact = new Contact("test name", "test@email.com", ContactType::BUG, "testDescription");
+		$contact2 = new Contact("test name2", "test2@email.com", ContactType::ADD_PERSON, "testDescription2");
 
 		$this->contactDAO->expects($this->exactly(2))
 			->method('saveContact')
 			->withConsecutive([$contact], [$contact2]);
 
 		$this->contactService->registerContact(array(
-			'name' => 'testName',
+			'firstname' => 'test',
+			'lastname' => 'name',
 			'email' => 'test@email.com',
 			'type' => '7',
 			'description' => 'testDescription'
 		));
 
 		$this->contactService->registerContact(array(
-			'name' => 'testName2',
+			'firstname' => 'test',
+			'lastname' => 'name2',
 			'email' => 'test2@email.com',
 			'type' => '0',
 			'description' => 'testDescription2'
@@ -86,7 +90,8 @@ class ContactServiceTest extends TestCase {
 
 	public function testReturnsNothingOnSuccess(): void {
 		$return = $this->contactService->registerContact(array(
-			'name' => 'testName',
+			'firstname' => 'testName',
+			'lastname' => 'testName',
 			'email' => 'test@email.com',
 			'type' => '7',
 			'description' => 'testDescription'
@@ -103,7 +108,8 @@ class ContactServiceTest extends TestCase {
 
 		// Test 1
 		$this->contactService->registerContact(array(
-			'name' => 'testName',
+			'firstname' => 'testName',
+			'lastname' => 'testName',
 			'email' => 'test@email.com',
 			'type' => '7',
 			'description' => 'testDescription'

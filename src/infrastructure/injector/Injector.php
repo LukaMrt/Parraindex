@@ -5,6 +5,7 @@ namespace App\infrastructure\injector;
 use App\application\contact\ContactDAO;
 use App\application\contact\Redirect;
 use App\application\person\PersonDAO;
+use App\controller\ContactController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\TreeController;
