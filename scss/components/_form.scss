@@ -41,12 +41,10 @@
 	  }
 
 	  @include b.breakpoint('small') {
-		@include m.flex(center, center, column);
+		@include m.flex(center, center, column-reverse);
 
 		.form__element {
-
 		  margin: f.rem(10) 0;
-
 		}
 
 	  }
@@ -96,6 +94,12 @@
 	&--invalid {
 	  border: var(--dark-red) solid 1px;
 	}
+
+  }
+
+  @include b.breakpoint('small') {
+
+	border: none;
 
   }
 
