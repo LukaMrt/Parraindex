@@ -57,24 +57,22 @@ class Injector {
 	 * @throws DependencyException
 	 * @throws NotFoundException
 	 */
-	public function setUpRouter(): void {
-
-		$this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
-		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
-		$this->router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
-		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
-		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
-		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
-		$router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login');
-		$router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login');
-		$router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup');
+		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
+		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
+		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
+		$this->router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
+		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
+		$this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+		$router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
+		$router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
+		$router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
+		$router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
 		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
 		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
-		
-		$router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup');
+
 	}
 
 	private function buildTwig(): Environment {
