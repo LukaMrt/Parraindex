@@ -2,6 +2,7 @@
 
 namespace App\controller;
 
+use App\application\Login;
 use App\infrastructure\accountService\MysqlAccountDAO;
 use App\application\AccountPassword;
 use App\infrastructure\router\Router;
@@ -18,27 +19,8 @@ class LoginController extends Controller {
 	}
 
 	public function post(Router $router, array $parameters): void {
-		if (isset($_POST['login'],$_POST['login-password'])) {
-			$login = $_POST['login'];
-			$password = new AccountPassword($_POST['login-password']);
-			$accountService = new MysqlAccountDAO();
-			$account = $accountService->getAccount($login);
-			if($account!=null){
-				$passwordConfirm = $account->password;
-				if ($password->checkPassword($passwordConfirm)) {
-					$_SESSION['login'] = $login;
-					header('Location: ' . $router->url('home'));
-				}
-				else {
-					$error = 'Mot de passe incorrect';
-				}
-			}
-			else {
-				$error = 'Identifiant incorrect';
-			}
-		} else {
-			$error = "Veuillez remplir tous les champs";
-		}
+		$login = new Login($router);
+		$error = $login->login($router);
 		$this->render('login.twig', ['router' => $router, 'error' => $error ?? '']);
 	}
 
