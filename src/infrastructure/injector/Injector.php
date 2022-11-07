@@ -2,9 +2,12 @@
 
 namespace App\infrastructure\injector;
 
+use App\application\login\AccountDAO;
+use App\application\login\SessionManager;
 use App\application\contact\ContactDAO;
 use App\application\contact\Redirect;
 use App\application\person\PersonDAO;
+use App\application\redirect\Redirect;
 use App\controller\ContactController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
@@ -12,11 +15,14 @@ use App\controller\LoginController;
 use App\controller\SignUpController;
 use App\controller\TreeController;
 use App\controller\UpdateController;
+use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\database\contact\MysqlContactDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\person\MySqlPersonDAO;
+use App\infrastructure\redirect\HttpRedirect;
 use App\infrastructure\redirection\HttpRedirect;
 use App\infrastructure\router\Router;
+use App\infrastructure\session\DefaultSessionManager;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\DependencyException;
@@ -36,19 +42,30 @@ class Injector {
 		$this->router = $router;
 	}
 
-	public function build(): void {
+	public function build(Router $router): void {
 
 		$twig = $this->buildTwig();
 		$databaseConnection = new DatabaseConnection();
+		$userDAO = get(MySqlPersonDAO::class);
+        $accountDAO = get(MySqlAccountDAO::class);
+        $redirect = get(HttpRedirect::class);
+        $sessionManager = get(DefaultSessionManager::class);
 		$redirect = get(HttpRedirect::class);
 		$personDAO = get(MySqlPersonDAO::class);
 		$contactDAO = get(MySqlContactDAO::class);
 
-		$this->container->set(Environment::class, $twig);
+        $this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
+        $this->container->set(Router::class, $router);
 		$this->container->set(Router::class, $this->router);
 		$this->container->set(Redirect::class, $redirect);
 
+        $this->container->set(Redirect::class, $redirect);
+        $this->container->set(SessionManager::class, $sessionManager);
+
+		$this->container->set(PersonDAO::class, $userDAO);
+        $this->container->set(AccountDAO::class, $accountDAO);
+    }
 		$this->container->set(PersonDAO::class, $personDAO);
 		$this->container->set(ContactDAO::class, $contactDAO);
 	}
@@ -72,7 +89,6 @@ class Injector {
 		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
 		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
-
 	}
 
 	private function buildTwig(): Environment {
