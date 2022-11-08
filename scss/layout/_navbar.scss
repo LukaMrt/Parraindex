@@ -3,6 +3,7 @@
 
 nav{
   @include m.flex(center, space-around, row);
+  margin-bottom: f.rem(20);
 }
 
 nav div {
@@ -13,4 +14,6 @@ nav div {
 
 nav div a{
   margin: f.rem(20);
+  font-size: 2.5vh;
+  cursor: pointer;
 }
