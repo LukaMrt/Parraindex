@@ -1,0 +1,16 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+nav{
+  @include m.flex(center, space-around, row);
+}
+
+nav div {
+  width: 70%;
+  @include m.flex(center, space-around, row);
+
+}
+
+nav div a{
+  margin: f.rem(20);
+}

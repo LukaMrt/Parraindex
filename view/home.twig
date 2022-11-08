@@ -1,12 +1,10 @@
-{% set style = style('../scss/home.css') %}
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('home.css') %}
 {% set title = 'Le Parraindex' %}
 
 {% block content %}
 
-    {% include 'templates/header.twig' %}
-
-    <h1>{{ title }}</h1>
-
-    {% include 'templates/footer.twig' %}
+    <h1 class="title">{{title}}</h1>
 
 {% endblock %}

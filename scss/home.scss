@@ -1,3 +1,6 @@
+@use "abstracts/functions" as f;
+@use "abstracts/mixins" as m;
+
 @forward "abstracts";
 @forward "base";
 @forward "components";
@@ -5,6 +8,6 @@
 @forward "pages";
 @forward "themes";
 
-h1 {
-  color:red;
+main{
+  @include m.flex(center, space-around, row);
 }
