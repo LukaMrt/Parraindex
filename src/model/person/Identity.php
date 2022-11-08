@@ -10,7 +10,7 @@ class Identity {
 	private ?string $picture;
 	private ?DateTime $birthdate;
 
-	public function __construct(string $firstName, string $lastName, ?string $picture, ?string $birthdate) {
+	public function __construct(string $firstName, string $lastName, ?string $picture = null, ?string $birthdate = null) {
 		$this->firstName = $firstName;
 		$this->lastName = $lastName;
 		$this->picture = $picture ?? 'no-picture.svg';

@@ -44,4 +44,8 @@ class Person {
 		return $this->identity->getPicture();
 	}
 
+	public function getId(): int {
+		return $this->id;
+	}
+
 }
