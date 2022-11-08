@@ -1,13 +1,19 @@
+//header for all pages
+
+//import mixins and function method
+
 @use "../abstracts/mixins" as m;
 @use "../abstracts/functions" as f;
 
-header{
+//set a flex method
+header {
   @include m.flex(end, end, row);
 }
 
-header a{
-  text-align: end;
-  font-size: 2.5vh;
-  margin: f.rem(20);
-  cursor: pointer;
+//set feature of the header's link
+header a {
+  text-align: end; //align the text with end
+  font-size: 2.5vh; //set font size
+  margin: f.rem(20); //separate the text and the border
+  cursor: pointer; //set the cursor to pointer
 }
