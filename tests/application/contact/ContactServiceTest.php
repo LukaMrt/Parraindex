@@ -4,7 +4,7 @@ namespace application\contact;
 
 use App\application\contact\ContactDAO;
 use App\application\contact\ContactService;
-use App\application\redirect\Redirect;
+use App\application\contact\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
 use PHPUnit\Framework\TestCase;
