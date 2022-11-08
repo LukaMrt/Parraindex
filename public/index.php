@@ -19,11 +19,11 @@ if ($_ENV['DEBUG'] === "true") {
 }
 
 $router = new Router();
-$injector = new Injector();
+$injector = new Injector($router);
 $injector->build();
 
 try {
-	$injector->setUpRouter($router);
+	$injector->setUpRouter();
 } catch (DependencyException|NotFoundException $e) {
 	if ($_ENV['DEBUG'] === "true") {
 		dd($e);

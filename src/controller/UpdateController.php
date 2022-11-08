@@ -12,7 +12,7 @@ class UpdateController extends Controller {
 	}
 
 	public function get(Router $router, array $parameters): void {
-		exec('cd ../ && git pull && sass --update scss:public/css' );
+		exec('cd ../ && git pull && composer update && composer install sass --update scss:public/css' );
 		header('Location: ' . $router->url('home'));
 	}
 

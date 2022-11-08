@@ -1,0 +1,28 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.error-popup {
+  position: absolute;
+  top: f.rem(50);
+  left: -1000px;
+  background: var(--light-red);
+  padding: f.rem(10);
+  gap: f.rem(10);
+  border-radius: f.rem(5);
+  transition: all 0.8s ease-in-out;
+  @include m.flex(center, center, row);
+
+  border-left: var(--dark-red) 5px solid;
+
+  &--visible {
+	left: f.rem(20);
+  }
+
+  &__close-button {
+    width: f.rem(20);
+    height: f.rem(20);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

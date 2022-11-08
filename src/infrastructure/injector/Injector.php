@@ -2,13 +2,18 @@
 
 namespace App\infrastructure\injector;
 
+use App\application\contact\ContactDAO;
+use App\application\contact\Redirect;
 use App\application\person\PersonDAO;
+use App\controller\ContactController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\TreeController;
 use App\controller\UpdateController;
+use App\infrastructure\database\contact\MysqlContactDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\person\MySqlPersonDAO;
+use App\infrastructure\redirection\HttpRedirect;
 use App\infrastructure\router\Router;
 use DI\Container;
 use DI\ContainerBuilder;
@@ -22,34 +27,43 @@ use function DI\get;
 class Injector {
 
 	private Container $container;
+	private Router $router;
 
-	public function __construct() {
+	public function __construct(Router $router) {
 		$this->container = ContainerBuilder::buildDevContainer();
+		$this->router = $router;
 	}
 
 	public function build(): void {
 
 		$twig = $this->buildTwig();
 		$databaseConnection = new DatabaseConnection();
-		$userDAO = get(MySqlPersonDAO::class);
+		$redirect = get(HttpRedirect::class);
+		$personDAO = get(MySqlPersonDAO::class);
+		$contactDAO = get(MySqlContactDAO::class);
 
 		$this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
+		$this->container->set(Router::class, $this->router);
+		$this->container->set(Redirect::class, $redirect);
 
-		$this->container->set(PersonDAO::class, $userDAO);
+		$this->container->set(PersonDAO::class, $personDAO);
+		$this->container->set(ContactDAO::class, $contactDAO);
 	}
 
 	/**
 	 * @throws DependencyException
 	 * @throws NotFoundException
 	 */
-	public function setUpRouter(Router $router): void {
+	public function setUpRouter(): void {
 
-		$router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
-		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
-		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
-		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
-		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
+		$this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
+		$this->router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
+		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
+		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
+		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
+		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 		
 	}
 
