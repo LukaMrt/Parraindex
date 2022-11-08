@@ -1,6 +1,14 @@
 //title of the page home
 
+//import functions method
+@use "../abstracts/functions" as f;
+
 .title {
-  text-align: center; //center the text
-  font-size: 8vw; //set size
+	text-align: center; //center the text
+	font-size: min(f.rem(70), 6vw); //set size min between 70rem and 6vh
+	text-transform: uppercase; //set case to upper
+	color: var(--dark-grey); //set the color
+	font-weight: 400; //set the font size
+	letter-spacing: 15px; //set a letter spacing
+	margin: 0; //remove margin
 }

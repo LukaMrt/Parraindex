@@ -6,14 +6,22 @@
 @use "../abstracts/functions" as f;
 
 //set a flex method
-header {
-  @include m.flex(end, end, row);
-}
+.header {
+	@include m.flex(flex-end, flex-end, row);
 
-//set feature of the header's link
-header a {
-  text-align: end; //align the text with end
-  font-size: 2.5vh; //set font size
-  margin: f.rem(20); //separate the text and the border
-  cursor: pointer; //set the cursor to pointer
+	&__login {
+		@include m.flex($direction: row, $justify: flex-end);
+		gap: f.rem(16); //set a gap
+		flex-wrap: wrap;
+		//set feature of the header's link
+		a {
+			text-align: end; //align the text with end
+			font-size: 2.5vh; //set font size
+			//margin: f.rem(20); //separate the text and the border
+			cursor: pointer; //set the cursor to pointer
+			white-space: nowrap; //remove wrap space
+			color: var(--dark-grey); //set font color
+			font-weight: 200; //set font size
+		}
+	}
 }

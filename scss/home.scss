@@ -14,5 +14,5 @@
 
 //set a flex method
 main {
-  @include m.flex(center, space-around, row);
+	@include m.flex(center, space-around, row);
 }
