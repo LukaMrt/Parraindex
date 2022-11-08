@@ -4,7 +4,7 @@ namespace application\contact;
 
 use App\application\contact\ContactDAO;
 use App\application\contact\ContactService;
-use App\application\contact\Redirect;
+use App\application\redirect\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +21,7 @@ class ContactServiceTest extends TestCase {
 		$this->contactService = new ContactService($this->contactDAO, $this->redirect);
 	}
 
-	public function testDetectsMissingFields(): void {
+	public function testRegistercontactDetectsMissingFields(): void {
 
 		// Test 1
 		$return = $this->contactService->registerContact(array());
@@ -37,7 +37,7 @@ class ContactServiceTest extends TestCase {
 		$this->assertEquals('Le prénom doit contenir au moins 1 caractère<br>L\'email doit être valide<br>La description doit contenir au moins 1 caractère', $return);
 	}
 
-	public function testDetectsInvalidFields(): void {
+	public function testRegistercontactDetectsInvalidFields(): void {
 
 		// Test 1
 		$return = $this->contactService->registerContact(array(
@@ -62,7 +62,7 @@ class ContactServiceTest extends TestCase {
 		$this->assertEquals('Le type doit être valide', $return);
 	}
 
-	public function testSavesContact(): void {
+	public function testRegistercontactSavesContact(): void {
 
 		$contact = new Contact("test name", "test@email.com", ContactType::BUG, "testDescription");
 		$contact2 = new Contact("test name2", "test2@email.com", ContactType::ADD_PERSON, "testDescription2");
@@ -88,7 +88,7 @@ class ContactServiceTest extends TestCase {
 		));
 	}
 
-	public function testReturnsNothingOnSuccess(): void {
+	public function testRegistercontactReturnsNothingOnSuccess(): void {
 		$return = $this->contactService->registerContact(array(
 			'firstname' => 'testName',
 			'lastname' => 'testName',
@@ -100,7 +100,7 @@ class ContactServiceTest extends TestCase {
 		$this->assertEquals('', $return);
 	}
 
-	public function testRedirectsToHomePageOnlyOnSuccess(): void {
+	public function testRegistercontactRedirectsToHomePageOnlyOnSuccess(): void {
 
 		$this->redirect->expects($this->once())
 			->method('redirect')

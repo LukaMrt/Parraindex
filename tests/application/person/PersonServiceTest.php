@@ -1,6 +1,6 @@
 <?php
 
-namespace person;
+namespace application\person;
 
 use App\application\person\PersonDAO;
 use App\application\person\PersonService;
