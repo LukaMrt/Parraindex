@@ -5,7 +5,6 @@ namespace App\infrastructure\injector;
 use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
 use App\application\contact\ContactDAO;
-use App\application\contact\Redirect;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\controller\ContactController;
@@ -20,7 +19,6 @@ use App\infrastructure\database\contact\MysqlContactDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\redirect\HttpRedirect;
-use App\infrastructure\redirection\HttpRedirect;
 use App\infrastructure\router\Router;
 use App\infrastructure\session\DefaultSessionManager;
 use DI\Container;
@@ -42,13 +40,12 @@ class Injector {
 		$this->router = $router;
 	}
 
-	public function build(Router $router): void {
+	public function build(): void {
 
 		$twig = $this->buildTwig();
 		$databaseConnection = new DatabaseConnection();
 		$userDAO = get(MySqlPersonDAO::class);
         $accountDAO = get(MySqlAccountDAO::class);
-        $redirect = get(HttpRedirect::class);
         $sessionManager = get(DefaultSessionManager::class);
 		$redirect = get(HttpRedirect::class);
 		$personDAO = get(MySqlPersonDAO::class);
@@ -56,16 +53,14 @@ class Injector {
 
         $this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
-        $this->container->set(Router::class, $router);
+        $this->container->set(Router::class, $this->router);
 		$this->container->set(Router::class, $this->router);
 		$this->container->set(Redirect::class, $redirect);
 
-        $this->container->set(Redirect::class, $redirect);
         $this->container->set(SessionManager::class, $sessionManager);
 
 		$this->container->set(PersonDAO::class, $userDAO);
         $this->container->set(AccountDAO::class, $accountDAO);
-    }
 		$this->container->set(PersonDAO::class, $personDAO);
 		$this->container->set(ContactDAO::class, $contactDAO);
 	}
@@ -74,21 +69,18 @@ class Injector {
 	 * @throws DependencyException
 	 * @throws NotFoundException
 	 */
-		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
-		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
+	public function setUpRouter(): void {
+		$this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+		$this->router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
+		$this->router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
+		$this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
+		$this->router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
+		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
 		$this->router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
-		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
-		$this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
-		$router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
-		$router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
-		$router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
-		$router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
-		$router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
-		$router->registerRoute('GET', '/update', $this->container->get(UpdateController::class), 'update');
-		$router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
-		$router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
+		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
+		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 	}
 
 	private function buildTwig(): Environment {
