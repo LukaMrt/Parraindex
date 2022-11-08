@@ -5,47 +5,79 @@
 
 {% block content %}
 
-    <h1>Inscription</h1>
+	{% if error %}
 
-    {% if error %}
+		<div class="error" style="background-color: red; margin: 40px 0">
+			<h2>Erreur</h2>
+			{{ error }}
+		</div>
 
-        <div class="error" style="background-color: red; margin: 40px 0">
-            <h2>Erreur</h2>
-            {{ error }}
-        </div>
+	{% endif %}
 
-    {% endif %}
+	<form class="form" action="{{ router.url('signup_post') }}" method="post">
+		<h1 class="form__title">Inscription</h1>
 
-    <form action="{{ router.url("signup_post") }}" method="post">
+		<div class="form-content">
 
-        <div class="formSignUp-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" placeholder="Student Email" name="email">
-        </div>
+			<div class="form-block form-block--row">
 
-        <div class="formSignUp-group">
-            <label for="name">Nom</label>
-            <input type="text" id="name" placeholder="Name" name="lastname">
-        </div>
+				{% include "components/form/input.twig" with {
+					'type': 'text',
+					'slug': 'firstname',
+					'title': 'Prénom',
+					'placeholder': 'John'
+				} %}
 
-        <div class="formSignUp-group">
-            <label for="firstname">Prénom</label>
-            <input type="text" id="firstname" placeholder="Firstname" name="firstname">
-        </div>
+				{% include "components/form/input.twig" with {
+					'type': 'text',
+					'slug': 'lastname',
+					'title': 'Nom',
+					'placeholder': 'Doe'
+				} %}
 
-        <div class="formSignUp-group">
-            <label for="password">Password</label>
-            <input type="password" id="password" placeholder="Password" name="password">
-            <label for="password-confirm">Confirm Password</label>
-            <input type="password" id="password-confirm" placeholder="Password" name="password-confirm">
-        </div>
+			</div>
+			{% include "components/form/input.twig" with {
+				'type': 'email',
+				'slug': 'email',
+				'title': 'Email universitaire',
+				'placeholder': 'john.doe@etu.univ-lyon1.fr',
+				'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+			} %}
 
-        <input type="submit" class="form-btn" value="Submit">
+			<div class="form-block form-block--row">
 
-    </form>
+				{% include "components/form/input.twig" with {
+					'type': 'password',
+					'slug': 'password',
+					'title': 'Mot de passe',
+					'placeholder': '********'
+				} %}
 
-    <a href="{{ router.url("login_get") }}">
-        <input type="submit" class="form-btn" id="login-btn" value="Already have an account ?">
-    </a>
+				{% include "components/form/input.twig" with {
+					'type': 'password',
+					'slug': 'password-confirm',
+					'title': 'Mot de passe',
+					'placeholder': '********'
+				} %}
+
+			</div>
+			<div class="form-block form-block--row form-block--space-around">
+				{% include "components/button.twig" with {
+					'type': 'submit',
+					'button_content': 'Envoyer',
+					'priority': 'primary',
+					'name': 'action',
+					'value': 'register'
+				} %}
+				<a href="{{ router.url("login_get") }}"> J'ai déjà un compte </a>
+			</div>
+		</div>
+
+
+	</form>
+
+	<a href="{{ router.url("login_get") }}">
+		<input type="submit" class="form-btn" id="login-btn" value="Already have an account ?">
+	</a>
 
 {% endblock %}

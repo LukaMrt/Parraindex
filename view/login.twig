@@ -9,8 +9,6 @@
 
 {% block content %}
 
-	<h1>Connexion</h1>
-
 	{% if error %}
 
 		<div class="error" style="background-color: red; margin: 40px 0">
@@ -20,23 +18,34 @@
 
 	{% endif %}
 
-	<form action="{{ router.url("login_post") }}" method="post">
+	<form class="form" action="{{ router.url("login_post") }}" method="post">
+		<h1 class="form__title">Connexion</h1>
+		<div class="form-content">
+			{% include "components/form/input.twig" with {
+				'type': 'email',
+				'slug': 'login',
+				'title': 'Email universitaire',
+				'placeholder': 'john.doe@etu.univ-lyon1.fr',
+				'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+			} %}
 
-		<div class="formLogin-group">
-			<label for="form-id">Email</label>
-			<input type="text" id="form-id" placeholder="login" name="login">
+			{% include "components/form/input.twig" with {
+				'type': 'password',
+				'slug': 'password',
+				'title': 'Mot de passe',
+				'placeholder': 'Mot de passe',
+			} %}
+			<div class="form-block form-block--row form-block--space-around">
+				{% include "components/button.twig" with {
+					'type': 'submit',
+					'button_content': 'Envoyer',
+					'priority': 'primary',
+					'name': 'action',
+					'value': 'login'
+				} %}
+				<a href="{{ router.url("signup_get") }}"> Je n'ai pas encore de compte </a>
+			</div>
 		</div>
-
-		<div class="formLogin-group">
-			<label for="password">Password</label>
-			<input type="password" id="password" placeholder="Password" name="password">
-		</div>
-
-		<input type="submit" class="form-btn" value="Submit">
 	</form>
-
-	<a href="{{ router.url("signup_get") }}">
-		<input type="submit" class="form-btn" id="signUp-btn" value="Sign up">
-	</a>
 
 {% endblock %}

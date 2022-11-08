@@ -8,21 +8,29 @@ use App\model\account\Account;
 use App\model\account\Password;
 use App\model\person\Identity;
 
-class LoginService {
+class LoginService
+{
 
 	private AccountDAO $accountDAO;
 	private PersonDAO $personDAO;
 	private Redirect $redirect;
 	private SessionManager $sessionManager;
 
-	public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, SessionManager $sessionManager) {
+	public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, SessionManager $sessionManager)
+	{
 		$this->accountDAO = $accountDAO;
 		$this->personDAO = $personDAO;
 		$this->redirect = $redirect;
 		$this->sessionManager = $sessionManager;
 	}
 
-	public function login(array $parameters): string {
+	public function login(array $parameters): string
+	{
+		$action = $parameters['action'] ?? 'login';
+		if ($action === 'register') {
+			$this->redirect->redirect('signup_get');
+			return '';
+		}
 
 		$error = $this->checkLogin($parameters);
 
@@ -34,7 +42,8 @@ class LoginService {
 		return $error;
 	}
 
-	private function checkLogin(array $parameters): string {
+	private function checkLogin(array $parameters): string
+	{
 
 		$login = $parameters['login'] ?? '';
 		$password = new Password($parameters['password'] ?? '');
@@ -61,7 +70,8 @@ class LoginService {
 		return array_shift($errors) ?? '';
 	}
 
-	public function signup(array $parameters): string {
+	public function signup(array $parameters): string
+	{
 
 		$error = '';
 		$email = $parameters['email'] ?? '';
@@ -97,7 +107,8 @@ class LoginService {
 		return $error;
 	}
 
-	private function empty(string...$parameters): bool {
+	private function empty(string...$parameters): bool
+	{
 		foreach ($parameters as $parameter) {
 			if (empty($parameter)) {
 				return true;

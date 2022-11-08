@@ -220,4 +220,16 @@ class LoginServiceTest extends TestCase {
 		));
 	}
 
+	public function testLoginRedirectToSignupIfNeeded(){
+
+		$this->redirect->expects($this->once())
+			->method('redirect')
+			->with('signup_get');
+
+		$this->loginService->login(array(
+			'action' => 'register'
+		));
+
+	}
+
 }
