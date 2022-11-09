@@ -1,7 +1,3 @@
-//page home
-
-//import mixins and function method
-
 @use "abstracts/functions" as f;
 @use "abstracts/mixins" as m;
 
@@ -12,7 +8,6 @@
 @forward "pages";
 @forward "themes";
 
-//set a flex method
 main {
 	@include m.flex(center, space-around, row);
 }
