@@ -5,6 +5,10 @@
 
 {% block content %}
 
-    <h1 class="title">{{title}}</h1>
+    <div></div> {# tkt ça marche très bien #}
+
+    <h1 class="title">{{ title }}</h1>
+
+    {% include '/templates/navbar.twig' %}
 
 {% endblock %}

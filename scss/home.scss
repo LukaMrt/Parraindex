@@ -9,5 +9,6 @@
 @forward "themes";
 
 main {
-	@include m.flex(center, space-around, row);
+	width: 100%;
+	@include m.flex(center, space-between, column);
 }
