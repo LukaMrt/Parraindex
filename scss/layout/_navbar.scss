@@ -9,6 +9,7 @@
 nav {
 	@include m.flex(center, space-around, row);
 	margin-bottom: f.rem(40); //separate the navbar and the border
+	width: 100%;
 }
 
 nav div {
@@ -17,15 +18,15 @@ nav div {
 	gap: f.rem(16) 5%; //set a gap
 	flex-wrap: wrap; //set a wrap
 
-		a {
-			font-size: 2.5vh; //set the font size
-			cursor: pointer; //set the cursor to pointer
-			white-space: nowrap; //remove wrap space
-			color: var(--dark-grey); //set font color
-			font-weight: 300; //set font size
-		}
+	a {
+		font-size: 2.5vh; //set the font size
+		cursor: pointer; //set the cursor to pointer
+		white-space: nowrap; //remove wrap space
+		color: var(--dark-grey); //set font color
+		font-weight: 300; //set font size
 	}
 }
+
 
 nav div a {
 	font-size: 2.5vh; //set the font size

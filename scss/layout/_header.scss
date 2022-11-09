@@ -8,6 +8,7 @@
 //set a flex method
 .header {
 	@include m.flex(flex-end, flex-end, row);
+	width: 100%;
 
 	&__login {
 		@include m.flex($direction: row, $justify: flex-end);
