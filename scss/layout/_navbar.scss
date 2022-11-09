@@ -3,8 +3,9 @@
 
 nav {
 	@include m.flex(center, space-around, row);
-	margin-bottom: f.rem(40);
 	width: 100%;
+	position: absolute;
+	bottom: 3vh;
 
 	div {
 		width: 70%;
