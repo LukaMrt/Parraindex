@@ -2,6 +2,8 @@
 
 namespace App\model\person;
 
+use App\model\person\characteristic\Characteristic;
+use App\model\school\promotion\Promotion;
 use DateTime;
 use LogicException;
 
@@ -35,12 +37,15 @@ class PersonBuilder {
 	/** @var array $associations */
 	private array $associations;
 
+	private array $promotions;
+
 	private function __construct() {
 		$this->biography = '';
 		$this->characteristics = array();
 		$this->sponsors = array();
 		$this->families = array();
 		$this->associations = array();
+		$this->promotions = array();
 	}
 
 	public static function aPerson(): PersonBuilder {
@@ -83,6 +88,11 @@ class PersonBuilder {
 		return $this;
 	}
 
+	public function addCharacteristic(Characteristic $characteristic): PersonBuilder {
+		$this->characteristics[] = $characteristic;
+		return $this;
+	}
+
 	/**
 	 * @param array $sponsors Set sponsors property.
 	 * @return $this Builder instance.
@@ -107,6 +117,16 @@ class PersonBuilder {
 	 */
 	public function withAssociations(array $associations): PersonBuilder {
 		$this->associations = $associations;
+		return $this;
+	}
+
+	public function withPromotions(array $promotions): PersonBuilder {
+		$this->promotions = $promotions;
+		return $this;
+	}
+
+	public function addPromotion(Promotion $promotion): PersonBuilder {
+		$this->promotions[] = $promotion;
 		return $this;
 	}
 
@@ -168,6 +188,10 @@ class PersonBuilder {
 	 */
 	public function getAssociations(): array {
 		return $this->associations;
+	}
+
+	public function getPromotions(): array {
+		return $this->promotions;
 	}
 
 }

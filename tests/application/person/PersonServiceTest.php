@@ -17,25 +17,21 @@ class PersonServiceTest extends TestCase {
         $this->personService = new PersonService($this->personDAO);
     }
 
-    public function testCanRetrieveEmptyList() {
+    public function testGetallpeopleRetrievesPeopleList() {
 
-        $this->personDAO->method('getAllPeople')
-            ->willReturn(array());
+		$person = $this->createMock(Person::class);
+		$this->personDAO->method('getAllPeople')
+			->will($this->onConsecutiveCalls(array(), array($person)));
 
-        $allPeople = $this->personService->getAllPeople();
+		// Test 1
+		$allPeople = $this->personService->getAllPeople();
 
-        $this->assertTrue($allPeople == array());
-    }
+		$this->assertTrue($allPeople == array());
 
-    public function testCanRetrieveListWith1Element() {
+		// Test 2
+		$allPeople = $this->personService->getAllPeople();
 
-        $person = $this->createMock(Person::class);
-        $this->personDAO->method('getAllPeople')
-            ->willReturn(array($person));
-
-        $allPeople = $this->personService->getAllPeople();
-
-        $this->assertTrue($allPeople == array($person));
-    }
+		$this->assertTrue($allPeople == array($person));
+	}
 
 }

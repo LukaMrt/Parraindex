@@ -79,7 +79,7 @@ class CharacteristicBuilder {
 	 * @param bool $visible Set visible property.
 	 * @return $this Builder instance.
 	 */
-	public function withVisible(bool $visible): CharacteristicBuilder {
+	public function withVisibility(bool $visible): CharacteristicBuilder {
 		$this->visible = $visible;
 		return $this;
 	}
