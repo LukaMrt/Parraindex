@@ -2,17 +2,18 @@
 @use "../abstracts/functions" as f;
 
 .navbar{
-	box-sizing: border-box;
 	width: f.rem(320);
 	height: f.rem(70);
 
-	padding: f.rem(5);
+	padding: f.rem(5) f.rem(10);
 
-	border-radius: f.rem(35);
+	border-radius: f.rem(40);
 	transition: all 0.3s ease;
 
 	@include m.hard-box-shadow();
-	@include m.flex($justify: space-between, $direction: row);
+	@include m.flex($direction: row);
+	gap: f.rem(5);
+
 	position: relative;
 
 	&__icon{
@@ -51,24 +52,58 @@
 		height: f.rem(20);
 	}
 
+	&__filters{
+		@include m.flex($direction: row, $justify: space-between);
+		gap: f.rem(10);
+		height: 100%;
+	}
+
 	// Animations
 
-	.open{
-		animation: oppening .3s forwards;
-	
-		@keyframes oppening {
-			from { width: 0; }
-			to { width: 100%; }
+	input{
+		&.open{
+			animation: inputOpening .3s forwards;
+		
+			@keyframes inputOpening {
+				from { width: 0; }
+				to { width: 100%; }
+			}
+		}
+		
+		&.close{
+			animation: inputClosing .3s forwards;
+
+			@keyframes inputClosing {
+				from { width: 100%; }
+				to { width: 0; }
+			}
 		}
 	}
-	
-	.close{
-		animation: closing .3s forwards;
-		padding: 0;
-	
-		@keyframes closing {
-			from { width: 100%; }
-			to { width: 0; }
+
+	button{
+		&.open{	
+			animation: buttonOpening .3s forwards;
+		
+			@keyframes buttonOpening {
+				from {
+					padding-left:  0px;
+					padding-right: 0px;
+					border-radius: 0px;
+				}
+				to{}
+			}
+		}
+		
+		&.close{
+			animation: closing .3s forwards;
+
+			@keyframes closing {
+				from {}
+				to {
+					padding: 0px 0px;
+					border-radius: 0px;
+				}
+			}
 		}
 	}
 
