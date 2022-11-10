@@ -44,21 +44,19 @@
 				'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
 			} %}
 
-			<div class="form-block form-block--row">
-				{% include "components/form/input.twig" with {
-					'type': 'password',
-					'slug': 'password',
-					'title': 'Mot de passe',
-					'placeholder': 'Mot de passe'
-				} %}
+			{% include "components/form/input.twig" with {
+				'type': 'password',
+				'slug': 'password',
+				'title': 'Mot de passe',
+				'placeholder': '••••••••••'
+			} %}
 
-				{% include "components/form/input.twig" with {
-					'type': 'password',
-					'slug': 'password-confirm',
-					'title': 'Mot de passe',
-					'placeholder': 'Confirmation'
-				} %}
-			</div>
+			{% include "components/form/input.twig" with {
+				'type': 'password',
+				'slug': 'password-confirm',
+				'title': 'Répétez le mot de passe',
+				'placeholder': '••••••••••'
+			} %}
 
 			<div class="form-block form-block--row form-block--space-around">
 				<div class="link link-block">
