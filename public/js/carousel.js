@@ -17,6 +17,9 @@ const sliderController = {
 const controller = {
 	nav: document.querySelector('.navbar'),
 
+	searchIcon: document.querySelector('.navbar__icon--search'),
+	filterIcon: document.querySelector('.navbar__icon--filter'),
+
 	searchbar: document.querySelector('.navbar__searchbar'),
 	filter: document.querySelector('.navbar__filter'),
 }
@@ -65,7 +68,6 @@ function selectMiddleCard (){
 	sliderUI.middleCards.forEach(card => card.classList.add("card--middle"));
 }
 
-
 // construct an element with the specified tag and classes
 function constructElement(tag, ...classNames) {
 	const element = document.createElement(tag);
@@ -78,68 +80,6 @@ function constructElement(tag, ...classNames) {
 
 	// console.log(element);
 	return element;
-};
-
-// destroy an element
-function destroyElement(input) {
-	if (!input)
-		return;
-
-	for (const child of input.children) {
-		child.classList.remove('open');
-		child.classList.add('close');
-	}
-
-	input.classList.remove('open');
-	input.classList.add('close');
-
-	setTimeout(() => {
-		input.remove();
-	}, 300);
-}
-
-// open the searchbar
-function openSearch() {
-	let input = constructElement('input', 'searchbar--open', 'navbar__input');
-	controller.searchbar.insertAdjacentElement('beforebegin', input);
-};
-
-// close the searchbar
-function closeSearch() {
-	let input = document.querySelector('.searchbar--open');
-	controller.nav.classList.remove("navbar__searchbar--open");
-	destroyElement(input);
-};
-
-// open the filters
-function openFilter() {
-
-	let filter = document.createElement('div');
-	filter.classList.add('navbar__filters');
-
-	for (let i = 0; i < 3; i++) {
-		let button = document.createElement('button');
-
-		button.classList.add('btn');
-		if (i%2 == 1) {
-			button.classList.add('btn--primary');
-		}else{
-			button.classList.add('btn--secondary');
-		}
-		button.classList.add('open');
-
-		filter.appendChild(button);
-	}
-
-	controller.filter.insertAdjacentElement('afterend', filter);
-
-};
-
-//close the filters
-function closeFilter() {
-	let input = document.querySelector('.navbar__filters');
-	controller.nav.classList.remove("navbar__filter--open");
-	destroyElement(input);
 };
 
 // ---------------- Navigation Listeners --------------- //
@@ -188,26 +128,23 @@ sliderUI.slider.addEventListener("scroll", (event) => {
 
 // -- Searchbar events
 
-controller.searchbar.addEventListener('click', (e) => {
-	
-	if(controller.nav.classList.toggle('navbar__searchbar--open')){
-		closeFilter();
-		openSearch();
-	}else{
-		closeSearch();
-	}
+controller.searchIcon.addEventListener('click', (e) => {
+	controller.nav.classList.remove('navbar__filter--open');
+	controller.filter.classList.add('navbar__filter--hidden');
+
+	controller.nav.classList.toggle('navbar__searchbar--open')
+	controller.searchbar.classList.toggle('navbar__searchbar--hidden');
 
 });
 
 // -- Filter events
 
-controller.filter.addEventListener('click', (e) => {
-	if(controller.nav.classList.toggle('navbar__filter--open')){
-		closeSearch();
-		openFilter();
-	}else{
-		closeFilter();
-	}
+controller.filterIcon.addEventListener('click', (e) => {
+	controller.nav.classList.remove('navbar__searchbar--open');
+	controller.searchbar.classList.add('navbar__searchbar--hidden');
+
+	controller.nav.classList.toggle('navbar__filter--open');
+	controller.filter.classList.toggle('navbar__filter--hidden');
 });
 
 // ---------------- Spinner Listeners ---------------- //

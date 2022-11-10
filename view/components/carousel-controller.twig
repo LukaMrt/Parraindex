@@ -1,12 +1,29 @@
 <section class="navbar">
-	<div class="navbar__searchbar">
-		<img src="{{icon('magnifier.svg')}}" alt="loupe" class="navbar__icon">
-		</div>
+
+	<div class="navbar__searchbar navbar__searchbar--hidden">
+		<input type="text">
 	</div>
+
+	<img src="{{icon('magnifier.svg')}}" alt="loupe" class="navbar__icon navbar__icon--search">
 
 	{% include('components/spinner.twig') %}
 
-	<div class="navbar__filter">
-		<img src="{{icon('gear.svg')}}" alt="parametres" class="navbar__icon">
+	<img src="{{icon('gear.svg')}}" alt="parametres" class="navbar__icon navbar__icon--filter">
+
+	<div class="navbar__filter navbar__filter--hidden">
+
+		{% include('components/button.twig') with {
+			'button_content': "NOM",	
+			'priority': 'primary',
+			}
+		%}
+
+		{% include('components/button.twig') with {	
+			'button_content': "DATE",	
+			'priority': 'secondary',
+			}
+		%}	
+
 	</div>
+
 </section>

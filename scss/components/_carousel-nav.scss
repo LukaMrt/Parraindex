@@ -11,100 +11,81 @@
 	transition: all 0.3s ease;
 
 	@include m.hard-box-shadow();
-	@include m.flex($direction: row);
-	gap: f.rem(5);
+	@include m.flex($direction: row, $justify: space-between, $align: center);	
+	gap: f.rem(10);
+
+	overflow: hidden;
 
 	position: relative;
 
 	&__icon{
+		z-index: 1;
 		height: 35%;
 		aspect-ratio: 1/1;
 	}
 
+	$resize : 120;
+
 	&__searchbar,
 	&__filter{
-		height: 100%;
-		aspect-ratio: 1/1;
 		@include m.flex($direction: row);
+		width: 100%;
+		animation: inputOpening 300ms ease;
 
 		&--open{
-			width: calc(f.rem(320) + f.rem(100));
+			width: calc(f.rem(320) + f.rem($resize));
 		}
+
 	}
 
 	&__searchbar{
+
+		input{
+			border: 1px solid var(--dark-blue);
+			border-radius: f.rem(15);
+			@include m.inside-shadow();
+			padding-left: f.rem(10);
+			height: f.rem(20);
+			width: 100%;
+
+		}
+
+		&--hidden{	
+			width: 0;
+			overflow: hidden;
+			animation: inputClosing 300ms ease;
+		}
+		
 		&--open{
-			margin-right: f.rem(100);
+			margin-right: f.rem($resize);
 		}
 	}
 
 	&__filter{
-		&--open{
-			margin-left: f.rem(100);
-		}
-	}
 
-	&__input{
-		border: 1px solid var(--dark-blue);
-		border-radius: f.rem(15);
-		@include m.inside-shadow();
-		padding-left: f.rem(10);
-		height: f.rem(20);
-	}
-
-	&__filters{
-		@include m.flex($direction: row, $justify: space-between);
+		@include m.flex($direction: row);
 		gap: f.rem(10);
-		height: 100%;
-	}
-
-	// Animations
-
-	input{
-		&.open{
-			animation: inputOpening .3s forwards;
+		width: 100%;
 		
-			@keyframes inputOpening {
-				from { width: 0; }
-				to { width: 100%; }
-			}
+		&--hidden{	
+			width: 0;
+			overflow: hidden;
+			animation: inputClosing 300ms ease;
 		}
 		
-		&.close{
-			animation: inputClosing .3s forwards;
-
-			@keyframes inputClosing {
-				from { width: 100%; }
-				to { width: 0; }
-			}
+		&--open{
+			margin-left: f.rem($resize);
 		}
 	}
 
-	button{
-		&.open{	
-			animation: buttonOpening .3s forwards;
-		
-			@keyframes buttonOpening {
-				from {
-					padding-left:  0px;
-					padding-right: 0px;
-					border-radius: 0px;
-				}
-				to{}
-			}
-		}
-		
-		&.close{
-			animation: closing .3s forwards;
+	@keyframes inputOpening {
+		from { width: 0; }
+		to { width: 100%; }
+	}
 
-			@keyframes closing {
-				from {}
-				to {
-					padding: 0px 0px;
-					border-radius: 0px;
-				}
-			}
-		}
+	@keyframes inputClosing {
+		from { width: 100%; }
+		to { width: 0; }
 	}
 
 }
