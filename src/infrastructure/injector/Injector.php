@@ -12,6 +12,7 @@ use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\LoginController;
 use App\controller\SignUpController;
+use App\controller\ResetpasswordController;
 use App\controller\TreeController;
 use App\controller\UpdateController;
 use App\infrastructure\accountService\MysqlAccountDAO;
@@ -75,6 +76,8 @@ class Injector {
 		$this->router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
 		$this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
 		$this->router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
+		$this->router->registerRoute('GET', '/resetpassword', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
+		$this->router->registerRoute('POST', '/resetpassword', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
 		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
