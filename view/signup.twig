@@ -59,13 +59,12 @@
 			} %}
 
 			<div class="form-block form-block--row form-block--space-around">
-				<div class="link link-block">
-					{% include "components/link.twig" with{
-						'prefix': "Vous avez déjà un compte ?",
-						'title': 'Connectez-vous',
-						'href': router.url('login_get')
-						} %}
-				</div>
+				{% include "components/link.twig" with{
+					'option': 'link-wrapper',
+					'prefix': "Vous avez déjà un compte ?",
+					'title': 'Connectez-vous',
+					'href': router.url('login_get')
+					} %}
 				{% include "components/button.twig" with {
 					'type': 'submit',
 					'button_content': 'Envoyer',
