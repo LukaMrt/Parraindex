@@ -35,7 +35,15 @@
 				'title': 'Mot de passe',
 				'placeholder': 'Mot de passe',
 			} %}
+
 			<div class="form-block form-block--row form-block--space-around">
+				<div class="link link-block">
+					{% include "components/link.twig" with{
+						'prefix': "Vous n'avez pas encore de comptes?",
+						'title': 'Cliquez ici',
+						'href': router.url('signup_get')
+					} %}
+				</div>
 				{% include "components/button.twig" with {
 					'type': 'submit',
 					'button_content': 'Envoyer',
@@ -43,7 +51,13 @@
 					'name': 'action',
 					'value': 'login'
 				} %}
-				<a href="{{ router.url("signup_get") }}"> Je n'ai pas encore de compte </a>
+			</div>
+			<div class="link link-block link-block--row">
+				{% include "components/link.twig" with{
+					'prefix': "Mot de passe oublié ?",
+					'title': 'Cliquez ici',
+					'href': router.url('login_get')
+				} %}
 			</div>
 		</div>
 	</form>

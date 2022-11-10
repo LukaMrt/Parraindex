@@ -1,0 +1,31 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+.link {
+
+	&-block {
+		width: 100%;
+		gap: f.rem(20);
+
+		@include m.flex(center, space-between, column);
+
+		&--row {
+			flex-direction: row;
+
+			@include b.breakpoint(small) {
+				@include m.flex($direction: column-reverse);
+				gap: f.rem(10);
+			}
+		}
+	}
+
+	&--prefix {
+		color: var(--grey);
+	}
+
+	&--main {
+		color: var(--dark-blue);
+	}
+
+}
