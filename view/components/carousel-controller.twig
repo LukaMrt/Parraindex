@@ -1,7 +1,7 @@
 <section class="navbar">
 
-	<div class="navbar__searchbar navbar__searchbar--hidden">
-		<input type="text">
+	<div class="searchbar">
+		<input class="name_filter" type="text" placeholder="Recherche">
 	</div>
 
 	<img src="{{icon('magnifier.svg')}}" alt="loupe" class="navbar__icon navbar__icon--search">
@@ -10,19 +10,11 @@
 
 	<img src="{{icon('gear.svg')}}" alt="parametres" class="navbar__icon navbar__icon--filter">
 
-	<div class="navbar__filter navbar__filter--hidden">
+	<div class="filter">
 
-		{% include('components/button.twig') with {
-			'button_content': "NOM",	
-			'priority': 'primary',
-			}
-		%}
-
-		{% include('components/button.twig') with {	
-			'button_content': "DATE",	
-			'priority': 'secondary',
-			}
-		%}	
+		<button class="btn btn--secondary alpha_filter">
+			ALPHABETIQUE
+		</button>
 
 	</div>
 

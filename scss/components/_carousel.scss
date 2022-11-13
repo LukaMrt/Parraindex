@@ -9,7 +9,7 @@
 		@include m.flex($direction: row, $justify: flex-start);
 		box-sizing: border-box;
 		padding: 0 45%;
-		gap: f.rem(100);
+		gap: f.rem(50);
 		
 		overflow-x: scroll;
 		scrollbar-width: none;
@@ -40,8 +40,15 @@
 }
 
 .scrollbar{
-	@include m.flex();
+	@include m.flex($direction : row);
+	gap: f.rem(16);
 	width: 100%;
+
+	&__max,
+	&__min{
+		font-weight: 700;
+		color: var(--dark-grey);
+	}
 
 	&__cursor {
 

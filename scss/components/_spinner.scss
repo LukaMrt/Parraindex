@@ -2,16 +2,12 @@
 @use "../abstracts/functions" as f;
 
 .spinner{
-	height: 100%;
-	width: f.rem(150);
-	
-	transition: all 6s ease;
-
-	@include m.flex($direction: row, $align: center, $justify: center);
-	gap: f.rem(16);	
+	@include m.flex($direction: row);
+	gap: inherit;
 
 	&__container-date{
 		white-space: nowrap;
+		cursor: alias;
 	}
 
 	&__dates{
@@ -23,5 +19,16 @@
 		&--end{
 			font-weight: 700;
 		}
+	}
+
+	&__selector{
+		width: min-content;
+	}
+
+	&__down,
+	&__up{
+		width:	f.rem(20);
+		aspect-ratio: 1/1;
+		cursor: pointer;
 	}
 }

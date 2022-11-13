@@ -5,6 +5,8 @@ const sliderUI = {
 	slider : document.querySelector(".carousel__slider"),
 	cards : document.querySelectorAll(".card"),
 	cursor : document.querySelector(".scrollbar__cursor"),
+	min : document.querySelector(".scrollbar__min"),
+	max : document.querySelector(".scrollbar__max"),
 	middleCards : Array(),
 }
 
@@ -20,15 +22,22 @@ const controller = {
 	searchIcon: document.querySelector('.navbar__icon--search'),
 	filterIcon: document.querySelector('.navbar__icon--filter'),
 
-	searchbar: document.querySelector('.navbar__searchbar'),
-	filter: document.querySelector('.navbar__filter'),
+	searchbar: document.querySelector('.searchbar'),
+	filter: document.querySelector('.filter')
 }
 
 const spinner = {
 	up : document.querySelector('.spinner__up'),
 	down : document.querySelector('.spinner__down'),
 
+	datesContainer : document.querySelector('.spinner__container-date'),
 	dates : document.querySelectorAll('.spinner__dates'),
+}
+
+const filter = {
+	name: controller.searchbar.querySelector('.name_filter'),
+	date: document.querySelector('.spinner__dates--start'),
+	alpha: controller.filter.querySelector('.alpha_filter'),
 }
 
 // --------------------- Functions --------------------- //
@@ -52,7 +61,19 @@ function getHorizontalRatio() {
 
 // give to the middle card the class "card--middle"
 function selectMiddleCard (){
-	let index = getHorizontalRatio() * (sliderUI.cards.length - 1);
+
+	let cards = document.querySelectorAll('.card:not(.card--hidden)')
+
+	if (cards.length==0){
+		sliderUI.min.textContent = "0";
+		sliderUI.max.textContent = "0";
+		return;
+	}
+
+	sliderUI.min.textContent = "1";
+	sliderUI.max.textContent = cards.length;
+
+	let index = getHorizontalRatio() * (cards.length - 1);
 	let roundedIndex = Math.round(index);
 
 	let diff = index - roundedIndex;
@@ -61,26 +82,91 @@ function selectMiddleCard (){
 	sliderUI.middleCards = [];
 
 	if (Math.abs(diff) > 0.4 && roundedIndex > 0) {
-		sliderUI.middleCards.push(sliderUI.cards[roundedIndex + Math.round(diff*2)]);
+		sliderUI.middleCards.push(cards[roundedIndex + Math.round(diff*2)]);
 	}
 
-	sliderUI.middleCards.push(sliderUI.cards[roundedIndex]);
+	sliderUI.middleCards.push(cards[roundedIndex]);
 	sliderUI.middleCards.forEach(card => card.classList.add("card--middle"));
 }
 
-// construct an element with the specified tag and classes
-function constructElement(tag, ...classNames) {
-	const element = document.createElement(tag);
+// filter the cards
+function filterElements(){
 
-	element.classList.add('open');
+	let cards = [];
 
-	classNames.forEach((className) => {
-		element.classList.add(className);
+	for (const card of sliderUI.cards ) {
+
+		let cardName = card.querySelector(".card__first-name").textContent.toLowerCase();
+		cardName += " " + card.querySelector(".card__last-name").textContent.toLowerCase();
+		let searchbarValue = filter.name.value.toLowerCase();
+		
+		let startYear = card.querySelector(".card__start-year").textContent;
+		let selectedYear = spinner.dates[0].textContent;
+
+		if (!isNaN(selectedYear) && controller.searchbar.classList.contains('searchbar--open')) {
+			if (startYear === selectedYear && cardName.includes(searchbarValue)) {
+				cards.push(card);
+			}
+		}
+		else if (!isNaN(selectedYear)){
+			if (startYear === selectedYear) {
+				cards.push(card);
+			}
+		}
+		else if (controller.searchbar.classList.contains('searchbar--open')){
+			if (cardName.includes(searchbarValue)){
+				cards.push(card);
+			}
+		}else{
+			cards.push(card);
+		}
+	}
+
+	if (filter.alpha.classList.contains('btn--primary')){
+		cards.sort(function (a, b) {
+			let aName = a.querySelector(".card__first-name").textContent.toLowerCase();
+			let bName = b.querySelector(".card__first-name").textContent.toLowerCase();
+	
+			if (aName < bName) {
+				return -1;
+			}
+			if (aName >  bName) {
+				return 1;
+			}
+			return 0;
+		});
+	}
+
+	sliderUI.slider.replaceChildren(...cards);
+
+	relocateSlider(0.5)
+	selectMiddleCard()
+
+}
+
+// reset the spinner
+function resetSpinner(){
+	spinner.dates.forEach(element => {
+		element.textContent = "~-~";
 	});
+	filterElements();
+}
 
-	// console.log(element);
-	return element;
-};
+// update the spinner
+function updateSpinnerDate(number){
+	if(isNaN(spinner.dates[0].textContent) || isNaN(spinner.dates[1].textContent)){
+		let date = new Date();
+		spinner.dates[0].textContent = date.getFullYear();
+		spinner.dates[1].textContent = date.getFullYear()+1;
+		filterElements();
+		return;
+	}
+
+	spinner.dates.forEach(element => {
+		element.textContent = parseInt(element.textContent) + number;
+	});
+	filterElements();
+}
 
 // ---------------- Navigation Listeners --------------- //
 
@@ -129,39 +215,43 @@ sliderUI.slider.addEventListener("scroll", (event) => {
 // -- Searchbar events
 
 controller.searchIcon.addEventListener('click', (e) => {
-	controller.nav.classList.remove('navbar__filter--open');
-	controller.filter.classList.add('navbar__filter--hidden');
+	if(controller.nav.classList.toggle('navbar__searchbar--open')){
+		filter.name.focus();
+	}
 
-	controller.nav.classList.toggle('navbar__searchbar--open')
-	controller.searchbar.classList.toggle('navbar__searchbar--hidden');
-
+	controller.searchbar.classList.toggle('searchbar--open');
+	filterElements();
 });
 
 // -- Filter events
 
 controller.filterIcon.addEventListener('click', (e) => {
-	controller.nav.classList.remove('navbar__searchbar--open');
-	controller.searchbar.classList.add('navbar__searchbar--hidden');
-
 	controller.nav.classList.toggle('navbar__filter--open');
-	controller.filter.classList.toggle('navbar__filter--hidden');
+	controller.filter.classList.toggle('filter--open');
 });
+
+filter.name.addEventListener('input', (e) => {
+	filterElements();
+});
+
+for (const filter of controller.filter.children) {
+	filter.addEventListener('click', (e) => {
+		filter.classList.toggle('btn--primary');
+		filter.classList.toggle('btn--secondary');
+		filterElements();
+	});
+}
 
 // ---------------- Spinner Listeners ---------------- //
 
-spinner.up.addEventListener('click', (e) => {
-	spinner.dates.forEach(element => {
-		element.textContent = parseInt(element.textContent) + 1;
-	});
-});
 
-spinner.down.addEventListener('click', (e) => {
-	spinner.dates.forEach(element => {
-		element.textContent = parseInt(element.textContent) - 1;
-	});
-});
+spinner.up.addEventListener('click', (e) => {updateSpinnerDate(1)});
+spinner.down.addEventListener('click', (e) => {updateSpinnerDate(-1)});
+spinner.datesContainer.addEventListener('click', resetSpinner);
+
 
 // ------------------ Initialization ----------------- //
 
 relocateSlider(0.5)
 relocateScrollbar();
+resetSpinner();

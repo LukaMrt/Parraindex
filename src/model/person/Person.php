@@ -46,8 +46,14 @@ class Person {
 		return $this->identity->getPicture();
 	}
 
-	public function getStartYear(): int {
-		return min(array_map(fn($promotion) => $promotion->getYear(), $this->promotions));
+	public function getStartYear(): int|null {
+		$dates = array_map(fn($promotion) => $promotion->getYear(), $this->promotions);
+		
+		if(count($dates) == 0) {
+			return null;
+		}
+
+		return min($dates);
 	}
 
 }
