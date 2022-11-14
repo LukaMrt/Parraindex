@@ -37,7 +37,7 @@
 		margin-left: $resize;
 		margin-right: 0;
 	}
-	&__searchbar--open.navbar__filter--open{
+	&__searchbar--open:is(&__filter--open){
 		width: calc($size + calc($resize * 2));
 		margin: 0;
 	}
@@ -64,10 +64,14 @@
 	.searchbar{
 		input{
 			border: 1px solid var(--dark-blue);
-			border-radius: f.rem(15);
+			border-radius: f.rem(16);
 			padding-left: f.rem(10);
 			height: f.rem(20);
 			width: 90%;
+		}
+		input:focus{
+			outline: none;
+			border-width: 2px;
 		}
 	}
 

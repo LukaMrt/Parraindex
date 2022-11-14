@@ -62,7 +62,7 @@ function getHorizontalRatio() {
 // give to the middle card the class "card--middle"
 function selectMiddleCard (){
 
-	let cards = document.querySelectorAll('.card:not(.card--hidden)')
+	let cards = document.querySelectorAll('.card:not(.card--empty)')
 
 	if (cards.length==0){
 		sliderUI.min.textContent = "0";
@@ -78,7 +78,7 @@ function selectMiddleCard (){
 
 	let diff = index - roundedIndex;
 
-	sliderUI.middleCards.forEach(card => card.classList.remove('card--middle'));
+	sliderUI.middleCards.forEach(card => card?.classList.remove('card--middle'));
 	sliderUI.middleCards = [];
 
 	if (Math.abs(diff) > 0.4 && roundedIndex > 0) {
@@ -94,38 +94,43 @@ function filterElements(){
 
 	let cards = [];
 
+	let selectedYear = document.querySelector(".spinner__dates--start").textContent;
+	let filterByYear = !isNaN(selectedYear);
+	let filterByName = controller.searchbar.classList.contains('searchbar--open');
+	let filterByAlpha = filter.alpha.classList.contains('btn--primary');
+
 	for (const card of sliderUI.cards ) {
 
-		let cardName = card.querySelector(".card__first-name").textContent.toLowerCase();
-		cardName += " " + card.querySelector(".card__last-name").textContent.toLowerCase();
+		let cardName = card.querySelector(".card__last-name").textContent.toLowerCase();
+		cardName += " " +card.querySelector(".card__first-name").textContent.toLowerCase();
 		let searchbarValue = filter.name.value.toLowerCase();
 		
 		let startYear = card.querySelector(".card__start-year").textContent;
-		let selectedYear = spinner.dates[0].textContent;
-
-		if (!isNaN(selectedYear) && controller.searchbar.classList.contains('searchbar--open')) {
+		
+		if (filterByYear && filterByName) {
 			if (startYear === selectedYear && cardName.includes(searchbarValue)) {
 				cards.push(card);
 			}
 		}
-		else if (!isNaN(selectedYear)){
+		else if (filterByYear){
 			if (startYear === selectedYear) {
 				cards.push(card);
 			}
 		}
-		else if (controller.searchbar.classList.contains('searchbar--open')){
+		else if (filterByName){
 			if (cardName.includes(searchbarValue)){
 				cards.push(card);
 			}
 		}else{
 			cards.push(card);
 		}
+
 	}
 
-	if (filter.alpha.classList.contains('btn--primary')){
+	if (filterByAlpha){
 		cards.sort(function (a, b) {
-			let aName = a.querySelector(".card__first-name").textContent.toLowerCase();
-			let bName = b.querySelector(".card__first-name").textContent.toLowerCase();
+			let aName = a.querySelector(".card__last-name").textContent.toLowerCase();
+			let bName = b.querySelector(".card__last-name").textContent.toLowerCase();
 	
 			if (aName < bName) {
 				return -1;
@@ -139,15 +144,26 @@ function filterElements(){
 
 	sliderUI.slider.replaceChildren(...cards);
 
-	relocateSlider(0.5)
-	selectMiddleCard()
+	if (cards.length == 0) {
+		let emptyCard = document.createElement("div");
+		emptyCard.classList.add("card");
+		emptyCard.classList.add("card--empty");
+		emptyCard.classList.add("card--middle");
+		emptyCard.textContent = "Aucun résultat trouvé";
+		sliderUI.slider.appendChild(emptyCard);
+	}
 
+	if (filterByAlpha){
+		relocateSlider(0);
+	}else{
+		relocateSlider(0.5)
+	}
 }
 
 // reset the spinner
 function resetSpinner(){
 	spinner.dates.forEach(element => {
-		element.textContent = "~-~";
+		element.textContent = "—-—";
 	});
 	filterElements();
 }

@@ -6,8 +6,10 @@
 	gap: inherit;
 
 	&__container-date{
+		@include m.flex($direction: row, $justify:space-between);
 		white-space: nowrap;
 		cursor: alias;
+		width: f.rem(80);
 	}
 
 	&__dates{

@@ -4,7 +4,7 @@
 .card{
 	@include m.flex();
 	gap: f.rem(7);
-	margin: 0 5px 25px 5px;
+	margin: 25px 10px;
 
 	user-select: none;
 	scale: 0.8;
