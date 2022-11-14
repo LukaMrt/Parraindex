@@ -1,7 +1,14 @@
-<link rel="stylesheet" href="../../scss/layout/_header.scss"/>
 <header class="header">
+
+    <a class="header__title {% if homePage is not null %}header__title--hidden{% endif %}" href="{{ router.url('home') }}">
+        <img class="header__logo"
+             src="{{ icon('logo.png') }}" alt="Logo">
+        <p>Parraindex</p>
+    </a>
+
     <div class="header__login">
-        <a>Se connecter</a>
-        <a>S'inscrire</a>
+        <a class="header__login-link" href="{{ router.url('home') }}">Se connecter</a>
+        <a class="header__login-link" href="{{ router.url('home') }}">S'inscrire</a>
     </div>
+
 </header>

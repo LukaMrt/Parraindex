@@ -2,14 +2,42 @@
 @use "../abstracts/functions" as f;
 
 .header {
-	@include m.flex(flex-end, flex-end, row);
-	width: 100%;
+	@include m.flex(center, space-between, row);
+	width: 95%;
+	padding-top: f.rem(20);
+
+	&__logo {
+
+		height: 30px;
+		width: 30px;
+
+	}
+
+	&__title {
+		@include m.flex(center, center, row);
+		gap: 10px;
+		text-align: center;
+		font-size: min(f.rem(25), 3vw);
+		text-transform: uppercase;
+		color: var(--dark-grey);
+		font-weight: 300;
+		letter-spacing: 5px;
+		margin: 0;
+
+		&--hidden {
+			display: none;
+		}
+
+	}
 
 	&__login {
+
 		@include m.flex($direction: row, $justify: flex-end);
-		gap: f.rem(16);
+		gap: f.rem(35);
 		flex-wrap: wrap;
-		a {
+		flex-grow: 1;
+
+		&-link {
 			text-align: end;
 			font-size: 2.5vh;
 			cursor: pointer;
@@ -17,5 +45,7 @@
 			color: var(--dark-grey);
 			font-weight: 300;
 		}
+
 	}
+
 }
