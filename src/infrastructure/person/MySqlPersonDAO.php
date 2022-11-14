@@ -51,6 +51,7 @@ class MySqlPersonDAO implements PersonDAO {
 			if ($currentPerson != $row->id_person) {
 				$users[] = $this->buildPerson($buffer);
 				$buffer = array();
+				$currentPerson = $row->id_person;
 			}
 
 			$buffer[] = $row;
