@@ -1,9 +1,18 @@
 @use "../abstracts/mixins" as m;
 @use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
 
 .spinner{
 	@include m.flex($direction: row);
-	gap: inherit;
+	gap: f.rem(5);
+
+	@include b.breakpoint(small){
+		width: max-content;
+		padding: f.rem(10) f.rem(30);
+
+		@include m.inside-shadow();
+		border-radius: f.rem(50);
+	}
 
 	&__container-date{
 		@include m.flex($direction: row, $justify:space-between);
@@ -24,13 +33,22 @@
 	}
 
 	&__selector{
-		width: min-content;
+		@include m.flex();
+		gap: f.rem(5) f.rem(10);
+
+		@include b.breakpoint(small){
+			flex-direction: row;
+		}
 	}
 
 	&__down,
 	&__up{
-		width:	f.rem(20);
+		width: f.rem(20);
 		aspect-ratio: 1/1;
 		cursor: pointer;
+
+		@include b.breakpoint(small){
+			width: f.rem(30);
+		}
 	}
 }

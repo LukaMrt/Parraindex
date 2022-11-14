@@ -96,7 +96,8 @@ function filterElements(){
 
 	let selectedYear = document.querySelector(".spinner__dates--start").textContent;
 	let filterByYear = !isNaN(selectedYear);
-	let filterByName = controller.searchbar.classList.contains('searchbar--open');
+	let filterByName = controller.searchbar.classList.contains('searchbar--open') 
+					   || window.getComputedStyle(controller.searchIcon, null).display == "none";
 	let filterByAlpha = filter.alpha.classList.contains('btn--primary');
 
 	for (const card of sliderUI.cards ) {

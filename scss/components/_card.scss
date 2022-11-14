@@ -1,5 +1,6 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
 
 .card{
 	@include m.flex();
@@ -85,5 +86,8 @@
 
 	&--middle{
 		scale: 1;
+		@include b.breakpoint(small){
+			scale: 0.8;
+		}
 	}
 }
