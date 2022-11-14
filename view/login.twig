@@ -1,22 +1,13 @@
 {% extends '/layouts/default.twig' %}
 
 {% set style = style('login.css') %}
-{% set title = 'Parraindex.login' %}
+{% set title = 'Parraindex - Connexion' %}
 
 {% block javascripts %}
-	<script src="{{ script('login.js') }}" defer></script>
+	<script type="module" src="{{ script('login.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
-
-	{% if error %}
-
-		<div class="error" style="background-color: red; margin: 40px 0">
-			<h2>Erreur</h2>
-			{{ error }}
-		</div>
-
-	{% endif %}
 
 	<form class="form" action="{{ router.url("login_post") }}" method="post">
 		<h1 class="form__title">Connexion</h1>
@@ -26,20 +17,20 @@
 				'slug': 'login',
 				'title': 'Email universitaire',
 				'placeholder': 'john.doe@etu.univ-lyon1.fr',
-				'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+				'pattern' : '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
 			} %}
 
 			{% include "components/form/input.twig" with {
 				'type': 'password',
 				'slug': 'password',
 				'title': 'Mot de passe',
-				'placeholder': 'Mot de passe',
+				'placeholder': '••••••••••',
+				'pattern': '^\S+$',
 			} %}
 
 			<div class="form-block form-block--row form-block--space-around">
 				{% include "components/link.twig" with{
-					'option': 'link-wrapper',
-					'prefix': "Vous n'avez pas encore de comptes?",
+					'prefix': 'Vous n\'avez pas encore de compte ?',
 					'title': 'Cliquez ici',
 					'href': router.url('signup_get')
 				} %}
@@ -51,14 +42,12 @@
 					'value': 'login'
 				} %}
 			</div>
-			<div class="link-wrapper " >
 			{% include "components/link.twig" with{
-				'option': 'link-wrapper--row',
-				'prefix': "Mot de passe oublié ?",
+				'option': 'link--row',
+				'prefix': 'Mot de passe oublié ?',
 				'title': 'Cliquez ici',
 				'href': router.url('resetpassword_get')
 			} %}
-			</div>
 		</div>
 	</form>
 

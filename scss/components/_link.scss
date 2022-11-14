@@ -3,30 +3,27 @@
 @use "../abstracts/breakpoints" as b;
 
 .link {
-	box-sizing: border-box;
-	border-radius: f.rem(40);
+
+	text-align: center;
 	padding: f.rem(10) f.rem(5);
 	font-size: small;
+	@include m.flex(center, center, column);
 
-	&-wrapper {
-		@include m.flex(center, space-between, column);
+	&--row {
+		@include m.flex(center, center, row);
+		gap: f.rem(5);
 
-		&--row {
-			@include m.flex(center, normal, row);
-			span{
-				margin: 0 f.rem(10);
-			}
-			@include b.breakpoint(small) {
-				@include m.flex($direction: column-reverse);
-			}
+		@include b.breakpoint(small) {
+			@include m.flex(center, center, column);
 		}
+
 	}
 
-	&--prefix {
-		color: var(--grey);
+	&__prefix {
+		color: var(--medium-grey);
 	}
 
-	&--main {
+	&__title {
 		color: var(--dark-blue);
 	}
 

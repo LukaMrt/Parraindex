@@ -1,18 +1,13 @@
 {% extends '/layouts/default.twig' %}
 
 {% set style = style('home.css') %}
-{% set title = 'Parraindex.signUp' %}
+{% set title = 'Parraindex - Inscription' %}
+
+{% block javascripts %}
+	<script type="module" src="{{ script('signup.js') }}" defer></script>
+{% endblock %}
 
 {% block content %}
-
-	{% if error %}
-
-		<div class="error" style="background-color: red; margin: 40px 0">
-			<h2>Erreur</h2>
-			{{ error }}
-		</div>
-
-	{% endif %}
 
 	<form class="form" action="{{ router.url('signup_post') }}" method="post">
 		<h1 class="form__title">Inscription</h1>
@@ -41,7 +36,7 @@
 				'slug': 'email',
 				'title': 'Email universitaire',
 				'placeholder': 'john.doe@etu.univ-lyon1.fr',
-				'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+				'pattern' : "^[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+@etu.univ-lyon1.fr$"
 			} %}
 
 			{% include "components/form/input.twig" with {
@@ -61,10 +56,11 @@
 			<div class="form-block form-block--row form-block--space-around">
 				{% include "components/link.twig" with{
 					'option': 'link-wrapper',
-					'prefix': "Vous avez déjà un compte ?",
+					'prefix': 'Vous avez déjà un compte ?',
 					'title': 'Connectez-vous',
 					'href': router.url('login_get')
-					} %}
+				} %}
+
 				{% include "components/button.twig" with {
 					'type': 'submit',
 					'button_content': 'Envoyer',
