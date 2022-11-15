@@ -1,19 +1,20 @@
-# Titre de la Merge Request
+# Title
 
-## Tâches/Issues associées
+## Associated User stories
 
-Liste des tâches/issues associés à cette Merge Request :
+
+List of tasks/issues associated with this Merge Request (id and title) :
 
 * #1
 * #2
 
-## Principaux changements
+## Main changes
 
-Cette Merge Request apporte les modifications/ajouts/suppressions suivants au projet :
+This merge request brings the following modifications/additions/removals to the project :
 
-* Changement 1
-* Changement 2
+* Change 1
+* Change 2
 
-## Remarques et commentaires
+## Comments
 
-Ajouter ici des eventuels remarques ou commentaires au sujet de votre Merge Request
+Add here any remarks or comments about your Merge Request
