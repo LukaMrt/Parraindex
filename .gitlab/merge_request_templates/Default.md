@@ -2,7 +2,6 @@
 
 ## Associated User stories
 
-
 List of tasks/issues associated with this Merge Request (id and title) :
 
 * #1
