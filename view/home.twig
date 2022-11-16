@@ -5,7 +5,9 @@
 
 {% block content %}
 
-    <h1 class="title">{{ title }}</h1>
+    <a href="{{ router.url('tree') }}">
+        <h1 class="title">{{ title }}</h1>
+    </a>
     
     {% include '/templates/navbar.twig' %}
 

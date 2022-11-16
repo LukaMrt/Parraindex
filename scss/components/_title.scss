@@ -1,11 +1,16 @@
 @use "../abstracts/functions" as f;
 
 .title {
-	text-align: center;
+	transition: all 0.3s ease;
+
 	font-size: min(f.rem(70), 6vw);
 	text-transform: uppercase;
 	color: var(--dark-grey);
 	font-weight: 400;
 	letter-spacing: 15px;
-	margin: 0;
+
+	&:hover {
+		color: var(--dark-blue);
+		letter-spacing: 17px;
+	}
 }

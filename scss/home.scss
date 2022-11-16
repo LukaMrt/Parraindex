@@ -1,15 +1,9 @@
-@use "abstracts/functions" as f;
-@use "abstracts/mixins" as m;
-
 @forward "abstracts";
 @forward "base";
-@forward "components";
+
+@forward "components/navbar";
+@forward "components/title";
+
 @forward "layout";
 @forward "pages";
 @forward "themes";
-
-main {
-	width: 100%;
-	@include m.flex(center, center, column);
-	position: relative;
-}

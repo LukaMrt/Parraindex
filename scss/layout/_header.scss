@@ -3,26 +3,29 @@
 
 .header {
 	@include m.flex(center, space-between, row);
+	flex-wrap: wrap;
 	width: 95%;
-	padding-top: f.rem(20);
+	gap: f.rem(20) 0;
+
+
+	position: absolute;
+	top: 3vh;
 
 	&__logo {
-
-		height: 30px;
-		width: 30px;
-
+		height: f.rem(35);
+		width: f.rem(35);
 	}
 
 	&__title {
 		@include m.flex(center, center, row);
-		gap: 10px;
-		text-align: center;
-		font-size: min(f.rem(25), 3vw);
+		gap: f.rem(20);
+
+		font-size: f.rem(22);
 		text-transform: uppercase;
+
 		color: var(--dark-grey);
 		font-weight: 300;
 		letter-spacing: 5px;
-		margin: 0;
 
 		&--hidden {
 			display: none;
@@ -38,12 +41,17 @@
 		flex-grow: 1;
 
 		&-link {
+			transition: color 0.3s ease;
+
 			text-align: end;
-			font-size: 2.5vh;
-			cursor: pointer;
-			white-space: nowrap;
-			color: var(--dark-grey);
+			font-size: f.rem(22);
 			font-weight: 300;
+			color: var(--dark-grey);
+			white-space: nowrap;
+
+			&:hover {
+				color: var(--dark-blue);
+			}
 		}
 
 	}
