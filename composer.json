@@ -35,6 +35,11 @@
     "ext-pdo": "^8.0",
     "vlucas/phpdotenv": "^5.5"
   },
+  "scripts": {
+    "test": "phpunit --testdox",
+    "server": "php -S localhost:8000 -t public",
+    "sass": "sass --watch scss:public/css"
+  },
   "require-dev": {
     "phpunit/phpunit": "^9.5"
   },
@@ -49,3 +54,4 @@
     }
   }
 }
+

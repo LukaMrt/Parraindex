@@ -4,9 +4,6 @@ namespace App\controller;
 
 use App\infrastructure\router\Router;
 use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
 
 abstract class Controller {
 
@@ -48,13 +45,7 @@ abstract class Controller {
     }
 
     protected function render(string $template, array $parameters = []): void {
-        try {
-            echo $this->twig->render($template, $parameters);
-        } catch (LoaderError|RuntimeError|SyntaxError $e) {
-            if ($_ENV['DEBUG'] === "true") {
-                dd($e);
-            }
-        }
+		echo $this->twig->render($template, $parameters);
     }
 
 }

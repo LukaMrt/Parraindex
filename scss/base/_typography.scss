@@ -15,11 +15,11 @@ h1 {
   text-align: center;
 }
 
-a,
-a:visited,
-a:active {
+a{
 	text-decoration: none;
-	color: inherit ;
+	color: inherit;
+	text-align: center;
+	cursor: pointer;
 }
 
 i {

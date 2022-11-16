@@ -12,6 +12,7 @@
 	</title>
 
 	<link rel="stylesheet" href="{{ style }}">
+	<link rel="icon" type="image/x-icon" href="{{ icon('logo-blue.svg') }}">
 
 	{% block javascripts %}{% endblock %}
 	<script src="{{ script('popup/popupInitialize.js') }}" defer></script>
@@ -31,9 +32,11 @@
 
 	{% include '/templates/header.twig' %}
 
-	<main>
-		{% block content %}{% endblock %}
-	</main>
+{% include '/templates/header.twig' %}
+
+<main>
+	{% block content %}{% endblock %}
+</main>
 
 	{% include '/templates/footer.twig' %}
 
