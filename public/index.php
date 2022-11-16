@@ -2,8 +2,6 @@
 
 use App\infrastructure\injector\Injector;
 use App\infrastructure\router\Router;
-use DI\DependencyException;
-use DI\NotFoundException;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 

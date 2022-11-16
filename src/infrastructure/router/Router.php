@@ -16,9 +16,9 @@ class Router {
 
     public function registerRoute(string $method, string $url, Controller $controller, string $name): self {
 
-        $closure = function (Router $router, array $parameters = []) use ($controller, $method): void {
-            $controller->call($method, $router, $parameters);
-        };
+		$closure = function (Router $router, array $parameters = []) use ($controller, $method): void {
+			$controller->call($method, $router, $parameters);
+		};
 
         try {
             $this->router->map($method, $url, $closure, $name);
@@ -26,13 +26,13 @@ class Router {
             dd($e->getMessage());
         }
 
-        return $this;
-    }
+		return $this;
+	}
 
-    public function run(): void {
-        $match = $this->router->match();
-        $match['target']($this, $match['params']);
-    }
+	public function run(): void {
+		$match = $this->router->match();
+		$match['target']($this, $match['params']);
+	}
 
 	public function getParameter(string $name): string {
 

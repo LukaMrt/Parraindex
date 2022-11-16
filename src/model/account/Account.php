@@ -9,13 +9,32 @@ class Account {
 	private int $id;
 	private string $email;
 	private Person $user;
+	private Password $password;
 	private array $privileges;
 
-	public function __construct(int $id, string $email, Person $user, Privilege... $privileges) {
+	public function __construct(int $id, string $email, Person $user, Password $password, Privilege... $privileges) {
 		$this->id = $id;
 		$this->email = $email;
 		$this->user = $user;
+		$this->password = $password;
 		$this->privileges = $privileges;
+	}
+
+	public function getPassword(): string {
+		return $this->password->getPassword();
+	}
+
+	public function getLogin(): string {
+		return $this->email;
+	}
+
+	public function getHashedPassword(): string {
+		$this->password->hashPassword(PASSWORD_DEFAULT);
+		return $this->password->getPassword();
+	}
+
+	public function getPersonId(): int {
+		return $this->user->getId();
 	}
 
 }
