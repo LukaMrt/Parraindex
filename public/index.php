@@ -2,8 +2,6 @@
 
 use App\infrastructure\injector\Injector;
 use App\infrastructure\router\Router;
-use DI\DependencyException;
-use DI\NotFoundException;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
@@ -21,13 +19,6 @@ if ($_ENV['DEBUG'] === "true") {
 $router = new Router();
 $injector = new Injector($router);
 $injector->build();
-
-try {
-	$injector->setUpRouter();
-} catch (DependencyException|NotFoundException $e) {
-	if ($_ENV['DEBUG'] === "true") {
-		dd($e);
-	}
-}
+$injector->setUpRouter();
 
 $router->run();

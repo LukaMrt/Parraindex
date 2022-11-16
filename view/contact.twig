@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Contact' %}
 
 {% block javascripts %}
-	<script src="{{ script("contact.js") }}" defer></script>
+	<script type="module" src="{{ script("contact.js") }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -16,11 +16,11 @@
 
 		<div class="form-content">
 
-
 			{% include "components/form/select.twig" with {
 				'slug': 'type',
 				'title': 'Objet du message',
-				'options': options
+				'options': options,
+				'parent': '^\S+$'
 			} %}
 
 			<div class="form-block form-block--row">
@@ -29,14 +29,16 @@
 					'type': 'text',
 					'slug': 'firstname',
 					'title': 'Prenom',
-					'placeholder': 'John'
+					'placeholder': 'John',
+					'pattern': '^\S+$',
 				} %}
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
 					'slug': 'lastname',
 					'title': 'Nom',
-					'placeholder': 'Doe'
+					'placeholder': 'Doe',
+					'pattern': '^\S+$',
 				} %}
 
 			</div>
@@ -52,7 +54,8 @@
 			{% include "components/form/textarea.twig" with {
 				'slug': 'description',
 				'title': 'Message',
-				'placeholder': 'Il y a une erreur sur la page ...'
+				'placeholder': 'Il y a une erreur sur la page ...',
+				'pattern': '^\S+$',
 			} %}
 
 			{% include "components/button.twig" with {
@@ -64,10 +67,5 @@
 		</div>
 
 	</form>
-
-	{% include "components/error-popup.twig" with {
-		'message': error
-		} 
-	%}
 
 {% endblock %}

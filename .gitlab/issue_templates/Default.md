@@ -1,13 +1,13 @@
-# Titre de la tâche/issue
+# Title
 
-## Objectifs
+## Objectives
 
-Courte description des objectifs de la tâche/issue
+Short description of the issue
 
-## Informations
+## Information
 
-Toutes informations pertinentes pour faciliter la réalisation de la tâche/issue
+All relevant information to facilitate the realization of the task/issue
 
-## Description détaillée
+## Details
 
-Description détaillée, spécifications, expression du besoin
+Detailed description, specifications, need expression
