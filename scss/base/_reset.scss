@@ -20,7 +20,11 @@ body{
 	color: var(--dark-blue);
 }
 
-main{
+main {
 	flex-grow: 1;
 	@include m.flex($direction: column, $justify: space-evenly);
+}
+
+select {
+	background-color: inherit;
 }
