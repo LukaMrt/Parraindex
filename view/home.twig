@@ -1,22 +1,14 @@
 {% extends '/layouts/default.twig' %}
 
 {% set style = style('home.css') %}
-{% set title = 'Parraindex - Accueil' %}
+{% set title = 'Parraindex' %}
 
 {% block content %}
 
-	<h1>{{title}}</h1>
-
-	{% include 'components/button.twig' with {
-		'button_content' : 'first custom button',
-		'priority' : 'primary',
-		}
-	%}
-
-	{% include 'components/button.twig' with {
-		'button_content' : 'second custom button',
-		'priority' : 'secondary',
-		}
-	%}
+    <a href="{{ router.url('tree') }}">
+        <h1 class="title">Le Parraindex</h1>
+    </a>
+    
+    {% include '/templates/navbar.twig' %}
 
 {% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\application\contact;
 
+use App\application\redirect\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
 

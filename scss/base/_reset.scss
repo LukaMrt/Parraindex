@@ -6,7 +6,6 @@ body{
 	@include m.flex($direction: column, $justify: space-between);
 
 	margin: 0;
-	padding: f.rem(16);
 
 	width: 100vw;
 	width: 100dvw;
@@ -26,8 +25,12 @@ body{
 	}
 }
 
-main{
+main {
 	flex-grow: 1;
 	width: 100%;
 	@include m.flex($direction: column, $justify: space-evenly);
+}
+
+select {
+	background-color: inherit;
 }

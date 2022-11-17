@@ -95,4 +95,26 @@ class MySqlPersonDAO implements PersonDAO {
 		return $builder->build();
 	}
 
+	public function getPerson(Identity $identity): ?Person {
+
+		$connection = $this->databaseConnection->getDatabase();
+		$query = $connection->prepare("SELECT * FROM Person WHERE first_name = :first_name AND last_name = :last_name LIMIT 1");
+
+		$query->execute([
+			'first_name' => $identity->getFirstName(),
+			'last_name' => $identity->getLastName()
+		]);
+		$result = $query->fetch();
+
+		$person = null;
+
+		if ($result) {
+			$person = $this->buildPerson($result);
+		}
+
+		$query->closeCursor();
+		$connection = null;
+		return $person;
+	}
+
 }

@@ -1,0 +1,11 @@
+<div class="popup popup--{{ type }} {% if message is not empty %}popup--visible{% endif %}">
+
+	<div class="popup__content">
+		{% if message is not empty %}
+			<p>{{ message | raw }}</p>
+		{% endif %}
+	</div>
+
+	<img class="popup__close-button" src="{{ icon('cancel.svg') }}" alt="Close popup">
+
+</div>

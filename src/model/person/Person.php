@@ -56,4 +56,8 @@ class Person {
 		return min($dates);
 	}
 
+	public function getId(): int {
+		return $this->id;
+	}
+
 }

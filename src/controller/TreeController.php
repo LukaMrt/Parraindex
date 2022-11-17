@@ -17,7 +17,10 @@ class TreeController extends Controller {
 
     public function get(Router $router, array $parameters): void {
         $people = $this->personDAO->getAllPeople();
-		$this->render('tree.twig', ['people' => $people]);
+		$this->render('tree.twig', [
+			'router' => $router,
+			'people' => $people
+		]);
 	}
 
 }
