@@ -11,8 +11,16 @@
 	<i class="card__identifiant">@identifiant</i>
 
 	<div class="card__social-network">
-		{% for i in 1..5 %}
-			{% include 'components/social-network.twig' %}
+		{% for characteristic in characteristics %}
+			{% if characteristic.visible %}
+				{% include 'components/social-network.twig' 
+					with {
+						'network': characteristic.network,
+						'link': characteristic.prefix ~ characteristic.url ~ characteristic.value,
+						'image': characteristic.image
+					}
+				%}
+			{% endif %}
 		{% endfor %}
 	</div>
 

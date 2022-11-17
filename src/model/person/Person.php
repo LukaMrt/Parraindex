@@ -56,6 +56,10 @@ class Person {
 		return min($dates);
 	}
 
+	public function getCharacteristics(): array {
+		return $this->characteristics;
+	}
+
 	public function getId(): int {
 		return $this->id;
 	}

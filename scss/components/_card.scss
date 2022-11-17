@@ -47,7 +47,7 @@
 	}
 
 	&__social-network{
-		@include m.flex($justify: space-between, $direction: row);
+		@include m.flex($justify: space-evenly, $direction: row);
 		width: 50%;
 		margin: f.rem(5) 0;
 	}

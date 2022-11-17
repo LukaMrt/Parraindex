@@ -52,8 +52,8 @@ class CharacteristicBuilder {
 	 * @param CharacteristicType $type Set type property.
 	 * @return $this Builder instance.
 	 */
-	public function withType(CharacteristicType $type): CharacteristicBuilder {
-		$this->type = $type;
+	public function withType(string $typeName): CharacteristicBuilder {
+		$this->type = CharacteristicType::fromName($typeName);
 		return $this;
 	}
 

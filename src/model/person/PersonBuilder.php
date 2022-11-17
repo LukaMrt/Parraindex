@@ -89,7 +89,9 @@ class PersonBuilder {
 	}
 
 	public function addCharacteristic(Characteristic $characteristic): PersonBuilder {
-		$this->characteristics[] = $characteristic;
+		if (!in_Array($characteristic, $this->characteristics)) {
+			$this->characteristics[] = $characteristic;
+		}
 		return $this;
 	}
 
