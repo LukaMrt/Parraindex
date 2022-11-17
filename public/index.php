@@ -21,4 +21,12 @@ $injector = new Injector($router);
 $injector->build();
 $injector->setUpRouter();
 
+$start = microtime(true);
+
 $router->run();
+
+$end = microtime(true);
+
+if ($_ENV['DEBUG'] === "true") {
+	echo "Execution time: " . ($end - $start) . " seconds";
+}

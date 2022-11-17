@@ -24,4 +24,8 @@ class Promotion {
 		$this->students = $students;
 	}
 
+	public function getYear(): int {
+		return $this->year;
+	}
+
 }

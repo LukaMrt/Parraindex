@@ -23,4 +23,28 @@ class Characteristic {
 		$this->value = $builder->getValue();
 	}
 
+	public function getVisible(): bool {
+		return $this->visible;
+	}
+
+	public function getTitle(): string {
+		return $this->title;
+	}
+
+	public function getPrefix(): string {
+		return $this->type->getPrefix();
+	}
+
+	public function getUrl(): string {
+		return $this->url;
+	}
+
+	public function getImage(): string {
+		return $this->image;
+	}
+
+	public function getValue(): string {
+		return $this->value;
+	}
+
 }

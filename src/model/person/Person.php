@@ -13,6 +13,7 @@ class Person {
 	private array $sponsors;
 	private array $families;
 	private array $associations;
+	private array $promotions;
 
 	public function __construct(PersonBuilder $builder) {
 		$this->id = $builder->getId();
@@ -22,6 +23,7 @@ class Person {
 		$this->sponsors = $builder->getSponsors();
 		$this->families = $builder->getFamilies();
 		$this->associations = $builder->getAssociations();
+		$this->promotions = $builder->getPromotions();
 	}
 
 	public function getIdentity(): string {
@@ -42,6 +44,20 @@ class Person {
 
 	public function getPicture(): string {
 		return $this->identity->getPicture();
+	}
+
+	public function getStartYear(): int|null {
+		$dates = array_map(fn($promotion) => $promotion->getYear(), $this->promotions);
+		
+		if(count($dates) == 0) {
+			return null;
+		}
+
+		return min($dates);
+	}
+
+	public function getCharacteristics(): array {
+		return $this->characteristics;
 	}
 
 	public function getId(): int {

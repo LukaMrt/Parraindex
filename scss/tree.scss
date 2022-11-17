@@ -1,7 +1,12 @@
-
-@forward "abstracts";
 @forward "base";
-@forward "components";
+
+@forward "components/card";
+@forward "components/social-network";
+@forward "components/carousel";
+@forward "components/carousel-nav";
+@forward "components/spinner";
+@forward "components/button";
+
 @forward "layout";
 @forward "pages";
 @forward "themes";

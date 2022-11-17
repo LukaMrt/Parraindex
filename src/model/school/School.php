@@ -13,7 +13,7 @@ class School {
 	private DateTime $creationDate;
 	private ?Person $director;
 
-	function __construct(int $id, string $name, SchoolAddress $address, DateTime $creationDate, ?Person $director) {
+	function __construct(int $id, string $name, SchoolAddress $address, DateTime $creationDate, ?Person $director = null) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->address = $address;

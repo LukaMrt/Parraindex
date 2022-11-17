@@ -4,19 +4,29 @@
 	</div>
 
 	<div class="card__profil">
-		<span class="card__first-name">{{ firstName }}</span>
 		<span class="card__last-name">{{ lastName }}</span>
+		<span class="card__first-name">{{ firstName }}</span>
 	</div>
 
 	<i class="card__identifiant">@identifiant</i>
 
 	<div class="card__social-network">
-		{% for i in 1..5 %}
-			{% include 'components/social-network.twig' %}
+		{% for characteristic in characteristics %}
+			{% if characteristic.visible %}
+				{% include 'components/social-network.twig' 
+					with {
+						'network': characteristic.network,
+						'link': characteristic.prefix ~ characteristic.url ~ characteristic.value,
+						'image': characteristic.image
+					}
+				%}
+			{% endif %}
 		{% endfor %}
 	</div>
 
 	<p class="card__description">
 		{{ description }}
 	</p>
+
+	<p class="card__start-year">{{ startYear }}</p>
 </article>

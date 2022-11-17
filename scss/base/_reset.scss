@@ -1,5 +1,6 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
 
 body{
 	@include m.flex($direction: column, $justify: space-between);
@@ -18,10 +19,15 @@ body{
 	font-family: 'lato', Helvetica, sans-serif;
 	background-color: var(--white);
 	color: var(--dark-blue);
+
+	@include b.breakpoint(small){
+		padding: f.rem(16) 0;
+	}
 }
 
 main {
 	flex-grow: 1;
+	width: 100%;
 	@include m.flex($direction: column, $justify: space-evenly);
 }
 

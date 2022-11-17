@@ -2,8 +2,11 @@
 @use "../abstracts/mixins" as m;
 
 .social-network{
-	width: f.rem(20);
-	aspect-ratio: 1/1;
+
+	transition: all 150ms;
+
+	width: f.rem(25);
+	height: f.rem(25);
 
 	background-color: var(--dark-blue);
 	border-radius: 50%;
@@ -11,5 +14,11 @@
 
 	&__icon{
 		width: 50%;
+		aspect-ratio: 1/1;
+	}
+
+	&:hover{
+		filter: invert(1);
+		scale: 1.2;
 	}
 }

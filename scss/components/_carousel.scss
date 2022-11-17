@@ -1,17 +1,27 @@
 @use "../abstracts/mixins" as m;
 @use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
 
 .carousel{
 	position: relative;
-	width: 80vw;
+	width: 80%;
 	
 	&__slider{
 		@include m.flex($direction: row, $justify: flex-start);
 		box-sizing: border-box;
 		padding: 0 45%;
-		gap: f.rem(100);
+		gap: f.rem(50);
 		
-		overflow-x: hidden;
+		overflow-x: scroll;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		@include b.breakpoint(small){
+			gap: 0;
+		}
 	}
 	
 	&::after,
@@ -26,17 +36,33 @@
 
 		background: linear-gradient(to right, transparent 0%, var(--white) 100%);
 		z-index: 1;
+
+		@include b.breakpoint(small){
+			display: none;
+		}
 	}
 	
 	&::before{
 		left: 0;
 		background: linear-gradient(to left, transparent 0%, var(--white) 100%);
 	}
+
+	@include b.breakpoint(small){
+		width: 100%;
+	}
+
 }
 
 .scrollbar{
-	@include m.flex();
-	width: 100%;
+	@include m.flex($direction : row);
+	gap: f.rem(16);
+	width: 90%;
+
+	&__max,
+	&__min{
+		font-weight: 700;
+		color: var(--dark-grey);
+	}
 
 	&__cursor {
 

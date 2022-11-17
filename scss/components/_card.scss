@@ -1,15 +1,18 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
 
 .card{
 	@include m.flex();
 	gap: f.rem(7);
-	margin: f.rem(70) 0;
+	margin: 25px 10px;
 
 	user-select: none;
+	scale: 0.8;
 
 	position: relative;
 	min-width: max-content;
+	text-align: center;
 
 	height: min(40vh, f.rem(350));
 	min-height: f.rem(210);
@@ -44,7 +47,7 @@
 	}
 
 	&__social-network{
-		@include m.flex($justify: space-between, $direction: row);
+		@include m.flex($justify: space-evenly, $direction: row);
 		width: 50%;
 		margin: f.rem(5) 0;
 	}
@@ -83,7 +86,9 @@
 	}
 
 	&--middle{
-		scale: 1.2;
-		margin: 0;
+		scale: 1;
+		@include b.breakpoint(small){
+			scale: 0.8;
+		}
 	}
 }
