@@ -2,9 +2,9 @@
 
 ## Authors
 
-* [Lilian BAUDRY]()
+* [Lilian BAUDRY](https://github.com/Irophin)
 * [Vincent CHAVOT]()
-* [Melvyn DELPREE]()
+* [Melvyn DELPREE](https://github.com/Melvyn27)
 * [Luka MARET](https://github.com/LukaMrt)
 
 ## License
