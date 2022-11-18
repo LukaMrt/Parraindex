@@ -1,5 +1,7 @@
 # Parraindex
 
+Ce projet est un projet scolaire du BUT de l'IUT Lyon 1.
+
 ## Authors
 
 * [Lilian BAUDRY](https://github.com/Irophin)
