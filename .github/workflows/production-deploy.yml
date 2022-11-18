@@ -1,0 +1,18 @@
+name: Production deployment
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy to parraindex.lukamaret.com
+        uses: appleboy/ssh-action@master
+        with:
+          username: parraindex
+          host: lukamaret.com
+          port: 55
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: 'cd /var/www/parraindex.lukamaret.com && git checkout main && git pull && composer update && composer install --no-interaction --prefer-dist --optimize-autoloader && sass --update scss:public/css'
