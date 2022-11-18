@@ -1,14 +1,13 @@
-name: PHP Composer
+name: Test workflow
 
-on:
-  push:
+on: push
 
 permissions:
   contents: read
 
 jobs:
 
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

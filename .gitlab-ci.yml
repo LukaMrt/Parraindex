@@ -28,11 +28,14 @@ run_deploy_dev:
   #    - apt update && apt install -yqq openssh-client
   #    - chmod 400 $SSH_KEY
   script:
-    - curl https://dev.lukamaret.com/update
+    - echo "Deploying to develop"
   #    - ssh -o StrictHostKeyChecking=no -p 55 -i $SSH_KEY parraindex@lukamaret.com "
   #        cd /var/www/dev.lukamaret.com &&
   #        git checkout develop &&
-  #        git pull"
+  #        git pull &&
+  #        composer update &&
+  #        composer install --no-interaction --prefer-dist --optimize-autoloader &&
+  #        sass --update scss:public/css"
   only:
     - develop
     - main
@@ -48,10 +51,13 @@ run_deploy_prod:
   #    - apt update && apt install -yqq openssh-client
   #    - chmod 400 $SSH_KEY
   script:
-    - curl https://parraindex.lukamaret.com/update
+    - echo "Deploying to production"
   #    - ssh -o StrictHostKeyChecking=no -p 55 -i $SSH_KEY parraindex@lukamaret.com "
   #        cd /var/www/parraindex.lukamaret.com &&
   #        git checkout main &&
-  #        git pull"
+  #        git pull &&
+  #        composer update &&
+  #        composer install --no-interaction --prefer-dist --optimize-autoloader &&
+  #        sass --update scss:public/css"
   only:
     - main
