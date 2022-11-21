@@ -21,4 +21,8 @@ class School {
 		$this->director = $director;
 	}
 
+    static function emptySchool(): School {
+        return new School(0, '', SchoolAddress::emptyAddress(), new DateTime());
+    }
+
 }

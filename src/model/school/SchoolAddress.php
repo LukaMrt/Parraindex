@@ -12,4 +12,8 @@ class SchoolAddress {
 		$this->city = $city;
 	}
 
+    public static function emptyAddress() {
+        return new SchoolAddress('', '');
+    }
+
 }

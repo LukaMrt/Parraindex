@@ -37,4 +37,16 @@ class Account {
 		return $this->user->getId();
 	}
 
+    public function getHighestPrivilege(): PrivilegeType {
+        $highest = PrivilegeType::STUDENT;
+
+        foreach ($this->privileges as $privilege) {
+            if ($privilege->isHigherThan($highest)) {
+                $highest = $privilege->getPrivilegeType();
+            }
+        }
+
+        return $highest;
+    }
+
 }

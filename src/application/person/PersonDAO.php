@@ -11,4 +11,6 @@ interface PersonDAO {
 
 	public function getPerson(Identity $identity): ?Person;
 
+	public function getPersonById(int $id): ?Person;
+
 }

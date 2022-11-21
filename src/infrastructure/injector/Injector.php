@@ -8,13 +8,13 @@ use App\application\contact\ContactDAO;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\controller\ContactController;
+use App\controller\EditPersonController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\LoginController;
 use App\controller\SignUpController;
 use App\controller\ResetpasswordController;
 use App\controller\TreeController;
-use App\controller\UpdateController;
 use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\database\contact\MysqlContactDAO;
 use App\infrastructure\database\DatabaseConnection;
@@ -81,6 +81,7 @@ class Injector {
 		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
+		$this->router->registerRoute('GET', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_get');
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 	}
@@ -89,20 +90,20 @@ class Injector {
 		$twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
 		$twig->addFunction(new TwigFunction('style', function (string $path) {
-			return 'css/' . $path;
+			return '/css/' . $path;
 		}));
 		$twig->addFunction(new TwigFunction('script', function (string $path) {
-			return 'js/' . $path;
+			return '/js/' . $path;
 		}));
 
 		$twig->addFunction(new TwigFunction('image', function (string $path) {
-			return 'img/' . $path;
+			return '/img/' . $path;
 		}));
 		$twig->addFunction(new TwigFunction('picture', function (string $path) {
-			return 'img/pictures/' . $path;
+			return '/img/pictures/' . $path;
 		}));
 		$twig->addFunction(new TwigFunction('icon', function (string $path) {
-			return 'img/icons/' . $path;
+			return '/img/icons/' . $path;
 		}));
 
 		return $twig;
