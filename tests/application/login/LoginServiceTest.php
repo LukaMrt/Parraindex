@@ -9,6 +9,7 @@ use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\account\Account;
 use App\model\account\Password;
+use App\model\account\PrivilegeType;
 use App\model\person\Identity;
 use App\model\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
@@ -52,13 +53,28 @@ class LoginServiceTest extends TestCase {
 
 	public function testLoginSavesLoginInSessionOnSuccess(): void {
 
+		$account = $this->createMock(Account::class);
+
+		$account->method('getLogin')
+			->willReturn('test');
+
+		$account->method('getHighestPrivilege')
+			->willReturn(PrivilegeType::ADMIN);
+
 		$this->accountDAO->method('getAccountPassword')
 			->with('test')
 			->will($this->onConsecutiveCalls(new Password(password_hash('test', PASSWORD_DEFAULT)), new Password('')));
 
-		$this->sessionManager->expects($this->once())
+		$this->accountDAO->method('getSimpleAccount')
+			->with('test')
+			->willReturn($account);
+
+		$this->sessionManager->expects($this->exactly(2))
 			->method('set')
-			->with('login', 'test');
+			->withConsecutive(
+				['login', 'test'],
+				['privilege', 'ADMIN']
+			);
 
 		$this->loginService->login(array(
 			'login' => 'test',
@@ -73,9 +89,21 @@ class LoginServiceTest extends TestCase {
 
 	public function testLoginReturnsNothingOnSuccess(): void {
 
+		$account = $this->createMock(Account::class);
+
+		$account->method('getLogin')
+			->willReturn('test');
+
+		$account->method('getHighestPrivilege')
+			->willReturn(PrivilegeType::ADMIN);
+
 		$this->accountDAO->method('getAccountPassword')
 			->with('test')
 			->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
+
+		$this->accountDAO->method('getSimpleAccount')
+			->with('test')
+			->willReturn($account);
 
 		$return = $this->loginService->login(array(
 			'login' => 'test',
@@ -87,9 +115,21 @@ class LoginServiceTest extends TestCase {
 
 	public function testLoginRedirectToHomeOnSuccess(): void {
 
+		$account = $this->createMock(Account::class);
+
+		$account->method('getLogin')
+			->willReturn('test');
+
+		$account->method('getHighestPrivilege')
+			->willReturn(PrivilegeType::ADMIN);
+
 		$this->accountDAO->method('getAccountPassword')
 			->with('test')
 			->will($this->onConsecutiveCalls(new Password(password_hash('test', PASSWORD_DEFAULT)), new Password('')));
+
+		$this->accountDAO->method('getSimpleAccount')
+			->with('test')
+			->willReturn($account);
 
 		$this->redirect->expects($this->once())
 			->method('redirect')
