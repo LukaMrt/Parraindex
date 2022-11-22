@@ -13,4 +13,6 @@ interface PersonDAO {
 
 	public function getPersonById(int $id): ?Person;
 
+	public function updatePerson(array $parameters);
+
 }

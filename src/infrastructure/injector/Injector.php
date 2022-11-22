@@ -82,6 +82,7 @@ class Injector {
 		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
 		$this->router->registerRoute('GET', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_get');
+		$this->router->registerRoute('POST', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_post');
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 	}

@@ -53,4 +53,3 @@ jobs:
             composer update &&
             composer install --no-interaction --prefer-dist --optimize-autoloader &&
             sass --update scss:public/css'
-

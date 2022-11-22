@@ -8,7 +8,7 @@
 
 {% block content %}
 
-    <form class="form" action="{{ router.url('contact_post') }}" method="post">
+    <form class="form" action="{{ router.url('editperson_post', {id: person.id}) }}" method="post">
 
         <h1 class="form__title">Edition de {{ person.firstName }} {{ person.lastName }}</h1>
 
@@ -18,7 +18,7 @@
 
                 {% include "components/form/input.twig" with {
                     'type': 'text',
-                    'slug': 'firstname',
+                    'slug': 'firstName',
                     'title': 'Prenom',
                     'value': person.firstName,
                     'pattern': '.+',
@@ -26,7 +26,7 @@
 
                 {% include "components/form/input.twig" with {
                     'type': 'text',
-                    'slug': 'lastname',
+                    'slug': 'lastName',
                     'title': 'Nom',
                     'value': person.lastName,
                     'pattern': '.+',
@@ -35,8 +35,8 @@
             </div>
 
             {% include "components/form/textarea.twig" with {
+                'title': 'Biographie',
                 'slug': 'biography',
-                'title': 'Biography',
                 'value': person.biography,
                 'pattern': '.+',
             } %}

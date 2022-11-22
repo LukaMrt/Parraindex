@@ -20,4 +20,8 @@ class PersonService {
         return $this->personDAO->getPersonById($id);
     }
 
+	public function updatePerson(array $parameters): void {
+		$this->personDAO->updatePerson($parameters);
+	}
+
 }
