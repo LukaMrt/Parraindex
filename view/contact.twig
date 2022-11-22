@@ -9,7 +9,6 @@
 
 {% block content %}
 
-
 	<form class="form" action="{{ router.url('contact_post') }}" method="post">
 
 		<h1 class="form__title">Formulaire de contact</h1>
@@ -20,7 +19,7 @@
 				'slug': 'type',
 				'title': 'Objet du message',
 				'options': options,
-				'parent': '^\S+$'
+				'parent': '.+'
 			} %}
 
 			<div class="form-block form-block--row">
@@ -30,7 +29,7 @@
 					'slug': 'firstname',
 					'title': 'Prenom',
 					'placeholder': 'John',
-					'pattern': '^\S+$',
+					'pattern': '.+',
 				} %}
 
 				{% include "components/form/input.twig" with {
@@ -38,7 +37,7 @@
 					'slug': 'lastname',
 					'title': 'Nom',
 					'placeholder': 'Doe',
-					'pattern': '^\S+$',
+					'pattern': '.+',
 				} %}
 
 			</div>
@@ -55,7 +54,7 @@
 				'slug': 'description',
 				'title': 'Message',
 				'placeholder': 'Il y a une erreur sur la page ...',
-				'pattern': '^\S+$',
+				'pattern': '.+',
 			} %}
 
 			{% include "components/button.twig" with {

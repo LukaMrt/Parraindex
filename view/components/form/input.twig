@@ -1,15 +1,16 @@
 <div class="form__element">
 
-	<label class="form__element-label" for="{{ slug }}">{{ title }}</label>
+    <label class="form__element-label" for="{{ slug }}">{{ title }}</label>
 
-	<input class="form__element-input form__element-input-{{ type }}"
-		type="{{ type }}"
-		name="{{ slug }}"
-		id="{{ slug }}"
-		placeholder="{{ placeholder }}"
-		{% if pattern is not null %}
-			pattern="{{ pattern }}"
-		{% endif %}
-		required>
+    <input class="form__element-input form__element-input-{{ type }}"
+           type="{{ type }}"
+           name="{{ slug }}"
+           id="{{ slug }}"
+           placeholder="{{ placeholder }}"
+           value="{{ value }}"
+            {% if pattern is not null %}
+                pattern="{{ pattern }}"
+            {% endif %}
+           required>
 
 </div>

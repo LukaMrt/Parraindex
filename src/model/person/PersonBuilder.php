@@ -5,7 +5,6 @@ namespace App\model\person;
 use App\model\person\characteristic\Characteristic;
 use App\model\school\promotion\Promotion;
 use DateTime;
-use LogicException;
 
 /**
  * Builder instance for {@see Person}.
@@ -24,7 +23,6 @@ class PersonBuilder {
 	/** @var string $biography */
 	private string $biography;
 
-
 	/** @var array $characteristics */
 	private array $characteristics;
 
@@ -40,6 +38,9 @@ class PersonBuilder {
 	private array $promotions;
 
 	private function __construct() {
+        $this->id = 0;
+        $this->identity = new Identity('', '', '');
+        $this->birthDate = new DateTime();
 		$this->biography = '';
 		$this->characteristics = array();
 		$this->sponsors = array();
@@ -52,7 +53,7 @@ class PersonBuilder {
 		return new PersonBuilder();
 	}
 
-	/**
+    /**
 	 * @param int $id Set id property.
 	 * @return $this Builder instance.
 	 */
@@ -134,12 +135,8 @@ class PersonBuilder {
 
 	/**
 	 * @return Person New instance from Builder.
-	 * @throws LogicException if Builder does not validate.
 	 */
 	public function build(): Person {
-		if ($this->identity->isEmpty()) {
-			throw new LogicException(__METHOD__ . ' Called with Incomplete or Invalid Properties');
-		}
 		return new Person($this);
 	}
 
@@ -195,5 +192,12 @@ class PersonBuilder {
 	public function getPromotions(): array {
 		return $this->promotions;
 	}
+
+    /**
+     * @return DateTime
+     */
+    public function getBirthDate(): DateTime {
+        return $this->birthDate;
+    }
 
 }

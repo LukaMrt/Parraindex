@@ -1,0 +1,54 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('editperson.css') %}
+{% set title = 'Parraindex - Edition personne' %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block content %}
+
+    <form class="form" action="{{ router.url('editperson_post', {id: person.id}) }}" method="post">
+
+        <h1 class="form__title">Edition de {{ person.firstName }} {{ person.lastName }}</h1>
+
+        <div class="form-content">
+
+            <div class="form-block form-block--row">
+
+                {% include "components/form/input.twig" with {
+                    'type': 'text',
+                    'slug': 'firstName',
+                    'title': 'Prenom',
+                    'value': person.firstName,
+                    'pattern': '.+',
+                } %}
+
+                {% include "components/form/input.twig" with {
+                    'type': 'text',
+                    'slug': 'lastName',
+                    'title': 'Nom',
+                    'value': person.lastName,
+                    'pattern': '.+',
+                } %}
+
+            </div>
+
+            {% include "components/form/textarea.twig" with {
+                'title': 'Biographie',
+                'slug': 'biography',
+                'value': person.biography,
+                'pattern': '.+',
+            } %}
+
+            {% include "components/button.twig" with {
+                'type': 'submit',
+                'button_content': 'Envoyer',
+                'priority': 'primary'
+            } %}
+
+        </div>
+
+    </form>
+
+{% endblock %}

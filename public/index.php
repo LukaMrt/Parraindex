@@ -7,6 +7,8 @@ use Whoops\Run;
 
 require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
+
+session_start();
 $dotenv = Dotenv\Dotenv::createImmutable('../');
 $dotenv->load();
 

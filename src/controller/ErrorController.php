@@ -29,10 +29,10 @@ class ErrorController extends Controller {
 				break;
 			default:
 				header('Location: ' . $router->url('error', ['error' => 404]));
-				break;
+                die();
 		}
 
-		$this->render('error.twig', ['code' => $error['code'], 'message' => $error['message']]);
+		$this->render('error.twig', ['router' => $router, 'code' => $error['code'], 'message' => $error['message']]);
 	}
 
 

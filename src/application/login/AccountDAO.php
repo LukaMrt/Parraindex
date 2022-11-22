@@ -13,4 +13,6 @@ interface AccountDAO {
 
 	public function existsAccount(string $email): bool;
 
+    public function getSimpleAccount(mixed $username): Account;
+
 }
