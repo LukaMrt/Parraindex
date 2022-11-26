@@ -1,0 +1,13 @@
+@use "../../abstracts/functions" as f;
+@use "../../abstracts/mixins" as m;
+
+.person-links {
+
+	width: 10%;
+
+	img {
+		height: f.rem(20);
+		width: f.rem(20);
+		background-color: black;
+	}
+}

@@ -7,11 +7,13 @@ use App\application\login\SessionManager;
 use App\application\contact\ContactDAO;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
+use App\application\sponsor\SponsorDAO;
 use App\controller\ContactController;
 use App\controller\EditPersonController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\LoginController;
+use App\controller\PersonController;
 use App\controller\SignUpController;
 use App\controller\ResetpasswordController;
 use App\controller\TreeController;
@@ -22,6 +24,7 @@ use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\redirect\HttpRedirect;
 use App\infrastructure\router\Router;
 use App\infrastructure\session\DefaultSessionManager;
+use App\infrastructure\sponsor\MySqlSponsorDAO;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\DependencyException;
@@ -51,6 +54,7 @@ class Injector {
 		$redirect = get(HttpRedirect::class);
 		$personDAO = get(MySqlPersonDAO::class);
 		$contactDAO = get(MySqlContactDAO::class);
+		$sponsorDAO = get(MySqlSponsorDAO::class);
 
         $this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
@@ -64,6 +68,7 @@ class Injector {
         $this->container->set(AccountDAO::class, $accountDAO);
 		$this->container->set(PersonDAO::class, $personDAO);
 		$this->container->set(ContactDAO::class, $contactDAO);
+		$this->container->set(SponsorDAO::class, $sponsorDAO);
 	}
 
 	/**
@@ -83,6 +88,7 @@ class Injector {
 		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
 		$this->router->registerRoute('GET', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_get');
 		$this->router->registerRoute('POST', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_post');
+		$this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
 	}

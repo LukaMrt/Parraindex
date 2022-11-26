@@ -34,4 +34,22 @@ class PersonServiceTest extends TestCase {
 		$this->assertTrue($allPeople == array($person));
 	}
 
+	public function testGetPersonByIdRetrievesPerson() {
+
+		$person = $this->createMock(Person::class);
+		$this->personDAO->method('getPersonById')
+			->with($this->equalTo(1))
+			->will($this->onConsecutiveCalls(null, $person));
+
+		// Test 1
+		$return = $this->personService->getPersonById(1);
+
+		$this->assertTrue($return == null);
+
+		// Test 2
+		$return = $this->personService->getPersonById(1);
+
+		$this->assertTrue($return === $person);
+	}
+
 }

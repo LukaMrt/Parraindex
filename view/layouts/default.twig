@@ -30,15 +30,13 @@
 		'type': 'success'
 	} %}
 
-	{% include '/templates/header.twig' %}
+	{% include 'templates/header.twig' %}
 
-{% include '/templates/header.twig' %}
+	<main>
+		{% block content %}{% endblock %}
+	</main>
 
-<main>
-	{% block content %}{% endblock %}
-</main>
-
-	{% include '/templates/footer.twig' %}
+	{% include 'templates/footer.twig' %}
 
 </body>
 

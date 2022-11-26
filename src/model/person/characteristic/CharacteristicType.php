@@ -9,7 +9,6 @@ enum CharacteristicType : string {
 	case ADDRESS = 'https://www.google.fr/maps/place/';
 	case EMAIL = 'mailto:';
 
-
 	public static function fromName(string $name): CharacteristicType {
 		foreach (self::cases() as $status) {
 			if( $name === $status->name ){
