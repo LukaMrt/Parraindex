@@ -1,0 +1,47 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('about.css') %}
+{% set title = 'A propos' %}
+
+
+{% block content %}
+	<h1>{{ title }}</h1>
+	<div class="container-row">
+		<img class="about_logo" src="{{ icon('logo-blue.svg') }}" alt="Logo">
+		<div class="about_text">
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab amet cupiditate, dolorem error laborum nulla perspiciatis sit? Ab, excepturi molestiae odio tempora ut voluptate voluptatem. Adipisci dolore error in laboriosam!</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab amet cupiditate, dolorem error laborum nulla perspiciatis sit? Ab, excepturi molestiae odio tempora ut voluptate voluptatem. Adipisci dolore error in laboriosam!</p>
+			<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab amet cupiditate, dolorem error laborum nulla perspiciatis sit? Ab, excepturi molestiae odio tempora ut voluptate voluptatem. Adipisci dolore error in laboriosam! Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ducimus explicabo illum magni nemo nobis odio officiis perferendis possimus. Eos libero nihil sit voluptates. Deleniti distinctio error inventore, numquam quasi ut. </p>
+		</div>
+	</div>
+	<div class="container-row about_autor">
+		{% include 'components/aboutcard.twig' with {
+			'firstName': 'Lilian',
+			'lastName': 'Baudry',
+			'picture': 'lilian.jpg',
+		}
+		%}
+		{% include 'components/aboutcard.twig' with {
+			'firstName': 'Vincent',
+			'lastName': 'Chavot',
+			'picture': 'vincent.jpg',
+		}
+		%}
+		{% include 'components/aboutcard.twig' with {
+			'firstName': 'Melvyn',
+			'lastName': 'Delpree',
+			'picture': 'melvyn.jpg',
+		}
+		%}
+		{% include 'components/aboutcard.twig' with {
+			'firstName': 'Luka',
+			'lastName': 'Maret',
+			'picture': 'Luka.jpg'
+		}
+		%}
+
+
+	</div>
+
+
+{% endblock %}

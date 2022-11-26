@@ -1,0 +1,43 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+.aboutcard {
+	user-select: none;
+	scale: 0.8;
+	aspect-ratio: 27/40;
+
+	&__banner {
+		@include m.flex();
+		height: 20vh;
+	}
+
+	&__picture {
+		@include m.flex();
+		height: 70%;
+		aspect-ratio: 1/1;
+		object-fit: cover;
+		border-radius: 50%;
+		@include m.hard-box-shadow();
+	}
+
+	&__profil {
+		flex-direction: row;
+		width: 15vw;
+		font-size: f.rem(24);
+		text-align: center;
+		padding: 0 5%;
+
+		background-color: var(--white);
+		@include m.hard-box-shadow();
+
+		margin-top: f.rem(25);
+		border-radius: f.rem(35);
+	}
+
+	&__last-name {
+		text-transform: uppercase;
+		white-space: nowrap;
+		font-weight: 700;
+	}
+}
