@@ -10,23 +10,21 @@
 
 	<div class="person-content">
 
-		<div class="person-content__description">
-			{% include 'components/person/family.twig' with {
-				'person': person,
-				'godFathers': godFathers,
-				'godChildren': godChildren,
-			} %}
+		{% include 'components/person/family.twig' with {
+			'person': person,
+			'godFathers': godFathers,
+			'godChildren': godChildren,
+		} %}
 
-			{% include 'components/person/description.twig' with {
-				'person': person
-			} %}
-		</div>
-
-		{% include 'components/person/actions.twig' with {
+		{% include 'components/person/description.twig' with {
 			'person': person
 		} %}
 
 	</div>
+
+	{% include 'components/person/actions.twig' with {
+		'person': person
+	} %}
 
 	{% include 'components/person/links.twig' with {
 		'person': person

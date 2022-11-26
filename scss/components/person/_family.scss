@@ -2,15 +2,13 @@
 @use "../../abstracts/mixins" as m;
 
 .person-family {
-
 	flex-grow: 1;
-	height: 100%;
-
-	margin: auto;
+	@include m.flex();
 
 	&__wrapper {
+		@include m.flex();
 		width: 90%;
-		height: 90%;
+		aspect-ratio: 1/1;
 		border-radius: 50%;
 		border: solid 1px var(--medium-grey);
 	}
