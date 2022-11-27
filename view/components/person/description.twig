@@ -1,8 +1,10 @@
+{% set time = person.startYear < 2021 ? 2 : 3 %}
+
 <div class="person-description">
 
 	<div class="person-description__header">
 		<p class="person-description__header-name">{{ person.firstName }} <span class="person-description__header--darker">{{ person.lastName }}</span></p>
-		<p class="person-description__header-year">{{ person.startYear }} <span class="person-description__header--darker">{{ person.startYear + 3 }}</span></p>
+		<p class="person-description__header-year">{{ person.startYear }} / <span class="person-description__header--darker">{{ person.startYear + time }}</span></p>
 	</div>
 
 	<div class="person-description__biography">

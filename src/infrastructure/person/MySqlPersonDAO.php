@@ -123,7 +123,7 @@ class MySqlPersonDAO implements PersonDAO {
 		$connection = $this->databaseConnection->getDatabase();
 		$query = $connection->prepare("SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
 													FROM Person Pe
-         											JOIN Student St on Pe.id_person = St.id_person
+         											LEFT JOIN Student St on Pe.id_person = St.id_person
 													LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
 													LEFT JOIN Degree D on D.id_degree = Pr.id_degree
 													LEFT JOIN School Sc on Sc.id_school = Pr.id_school

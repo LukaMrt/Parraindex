@@ -2,12 +2,16 @@
 @use "../../abstracts/mixins" as m;
 
 .person-content {
-	@include m.flex(center, center, row);
-	width: 90%;
-	align-items: stretch;
+	width: 100%;
+	padding-left: 5%;
+	padding-right: 5%;
 	
 	&__description {
 		@include m.flex(center, center, row);
 	}
 
+}
+
+main {
+	flex-direction: row;
 }

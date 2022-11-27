@@ -29,15 +29,16 @@
 
 	&__biography {
 
-		margin-left: f.rem(20);
+		text-indent: 10%;
+		margin: 0 f.rem(25);
 		text-align: justify;
 		letter-spacing: f.rem(0.5);
 
 		&-title {
+			text-indent: 0;
 			text-transform: uppercase;
 			margin-bottom: f.rem(30);
 			letter-spacing: f.rem(2);
-			margin-left: f.rem(10);
 		}
 
 	}

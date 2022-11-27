@@ -5,12 +5,83 @@
 	flex-grow: 1;
 	@include m.flex();
 
+	&__title {
+		margin: f.rem(70) 0;
+		text-align: center;
+		color: var(--medium-grey);
+		text-transform: uppercase;
+		letter-spacing: f.rem(5);
+	}
+
 	&__wrapper {
 		@include m.flex();
-		width: 90%;
+		width: 60%;
 		aspect-ratio: 1/1;
 		border-radius: 50%;
 		border: solid 1px var(--medium-grey);
+		position: relative;
+
+		&:after {
+			content: "";
+			position: absolute;
+			top: 50%;
+			left: 0;
+			width: 100%;
+			border-bottom: dashed 3px var(--light-grey);
+			z-index: -1;
+		}
+
+	}
+
+	&__person {
+
+		@include m.flex(center, center, column);
+		width: f.rem(100);
+		height: f.rem(100);
+
+		&-image {
+			height: 100%;
+			border-radius: 50%;
+			object-fit: cover;
+			border: solid 0.5px var(--medium-grey);
+		}
+
+	}
+
+	&__godfather {
+
+		@include m.flex(center, center, column);
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: f.rem(75);
+		height: f.rem(75);
+
+		&-image {
+			height: 100%;
+			border-radius: 50%;
+			object-fit: cover;
+			border: solid 0.5px var(--medium-grey);
+		}
+
+	}
+
+	&__godchild {
+
+		@include m.flex(center, center, column);
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		width: f.rem(75);
+		height: f.rem(75);
+
+		&-image {
+			height: 100%;
+			border-radius: 50%;
+			object-fit: cover;
+			border: solid 0.5px var(--medium-grey);
+		}
+
 	}
 
 }
