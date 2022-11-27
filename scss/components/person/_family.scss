@@ -38,12 +38,34 @@
 		@include m.flex(center, center, column);
 		width: f.rem(100);
 		height: f.rem(100);
+		position: relative;
 
 		&-image {
 			height: 100%;
 			border-radius: 50%;
 			object-fit: cover;
 			border: solid 0.5px var(--medium-grey);
+			opacity: 1;
+			transition: opacity .5s;
+		}
+
+		&:hover .person-family__person-image {
+			opacity: 0.1;
+		}
+
+		&-name {
+			position: absolute;
+			opacity: 0;
+			transition: opacity .5s;
+			font-size: f.rem(20);
+			text-align: center;
+			text-transform: capitalize;
+			color: var(--dark-blue);
+			z-index: 10;
+		}
+
+		&:hover .person-family__person-name {
+			opacity: 1;
 		}
 
 	}
@@ -62,6 +84,27 @@
 			border-radius: 50%;
 			object-fit: cover;
 			border: solid 0.5px var(--medium-grey);
+			opacity: 1;
+			transition: opacity .5s;
+		}
+
+		&:hover .person-family__godfather-image {
+			opacity: 0.1;
+		}
+
+		&-name {
+			position: absolute;
+			opacity: 0;
+			transition: opacity .5s;
+			font-size: f.rem(20);
+			text-align: center;
+			text-transform: capitalize;
+			color: var(--dark-blue);
+			z-index: 10;
+		}
+
+		&:hover .person-family__godfather-name {
+			opacity: 1;
 		}
 
 	}
@@ -80,6 +123,27 @@
 			border-radius: 50%;
 			object-fit: cover;
 			border: solid 0.5px var(--medium-grey);
+			opacity: 1;
+			transition: opacity .5s;
+		}
+
+		&:hover .person-family__godchild-image {
+			opacity: 0.1;
+		}
+
+		&-name {
+			position: absolute;
+			opacity: 0;
+			transition: opacity .5s;
+			font-size: f.rem(20);
+			text-align: center;
+			text-transform: capitalize;
+			color: var(--dark-blue);
+			z-index: 10;
+		}
+
+		&:hover .person-family__godchild-name {
+			opacity: 1;
 		}
 
 	}

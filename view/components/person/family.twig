@@ -7,16 +7,19 @@
 		{% for godFather in godFathers %}
 			<div class="person-family__godfather">
 				<img src="{{ picture(godFather.picture) }}" alt="{{ godFather.firstName }}" class="person-family__godfather-image">
+				<p class="person-family__godfather-name">{{ godFather.firstName }} <span class="person-family__godfather-name--darker">{{ godFather.lastName }}</span></p>
 			</div>
 		{% endfor %}
 
 		<div class="person-family__person">
 			<img src="{{ picture(person.picture) }}" alt="{{ person.firstName }}" class="person-family__person-image">
+			<p class="person-family__person-name">{{ person.firstName }} <span class="person-family__person-name--darker">{{ person.lastName }}</span></p>
 		</div>
 
 		{% for godChild in godChildren %}
 			<div class="person-family__godchild">
 				<img src="{{ picture(godChild.picture) }}" alt="{{ godChild.firstName }}" class="person-family__godchild-image">
+				<p class="person-family__godchild-name">{{ godChild.firstName }} <span class="person-family__godchild-name--darker">{{ godChild.lastName }}</span></p>
 			</div>
 		{% endfor %}
 	</div>
