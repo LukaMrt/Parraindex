@@ -15,9 +15,11 @@
 	}
 
 	&_text {
-		width: 50vw;
+		width: 75vw;
+		max-height: 50vh;
+		text-overflow: ellipsis;
 		p{
-			padding: 2% 0%;
+			padding: 2% 0;
 			text-indent: 2rem;
 		}
 	}
