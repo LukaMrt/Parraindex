@@ -21,14 +21,14 @@ class PersonController extends Controller {
 	public function get(Router $router, array $parameters): void {
 
 		$person = $this->personService->getPersonById($parameters['id']);
-		$family = $this->sponsorService->getFamily($parameters['id']);
+		$family = $this->sponsorService->getPersonFamily($parameters['id']);
 
 		$this->render('person.twig', [
 			'router' => $router,
-			'person' => $person,
+			'person' => $family['person'],
 			'godFathers' => $family['godFathers'],
 			'godChildren' => $family['godChildren'],
-			'characteristics' => $person->getCharacteristics(),
+			'characteristics' => $family['person']->getCharacteristics(),
 			'admin' => $_SESSION['privilege'] ?? 'STUDENT' == 'ADMIN'
 		]);
 	}
