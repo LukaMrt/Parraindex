@@ -1,4 +1,4 @@
-let wrapperSize = document.querySelector(".person-family__wrapper").clientHeight;
+// Placement of godfathers
 
 let godFathers = document.getElementsByClassName("person-family__godfather");
 let count = godFathers.length + 1;
@@ -23,6 +23,8 @@ for (let i = 0; i < godFathers.length; i++) {
 
 }
 
+// Placement of godchildren
+
 let godChildren = document.getElementsByClassName("person-family__godchild");
 count = godChildren.length + 1;
 
@@ -42,4 +44,16 @@ for (let i = 0; i < godChildren.length; i++) {
 	}
 	godChild.style.left = "calc(" + x + "%" + " - " + (size / 2) + "px)";
 	godChild.style.bottom = "calc(" + y + "%" + " - " + (size / 2) + "px)";
+}
+
+
+// Placement of links
+
+let links = document.getElementsByClassName("person-link__wrapper");
+let linkSize = links[0].clientHeight;
+
+for (let i = 0; i < links.length; i++) {
+
+	let link = links[i];
+	link.style.top = i * (linkSize + 15) + "px";
 }

@@ -6,11 +6,16 @@
 	@include m.flex();
 
 	&__title {
-		margin: f.rem(70) 0;
+		margin: 0 0 f.rem(70);
 		text-align: center;
 		color: var(--medium-grey);
 		text-transform: uppercase;
 		letter-spacing: f.rem(5);
+
+		&--second {
+			margin: f.rem(70) 0 0;
+		}
+
 	}
 
 	&__wrapper {

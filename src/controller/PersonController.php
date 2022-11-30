@@ -27,7 +27,9 @@ class PersonController extends Controller {
 			'router' => $router,
 			'person' => $person,
 			'godFathers' => $family['godFathers'],
-			'godChildren' => $family['godChildren']
+			'godChildren' => $family['godChildren'],
+			'characteristics' => $person->getCharacteristics(),
+			'admin' => $_SESSION['privilege'] ?? 'STUDENT' == 'ADMIN'
 		]);
 	}
 

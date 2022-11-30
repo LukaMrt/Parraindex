@@ -24,13 +24,15 @@
 		</div>
 
 		{% include 'components/person/actions.twig' with {
+			'router': router,
+			'admin': admin,
 			'person': person
 		} %}
 
 	</div>
 
 	{% include 'components/person/links.twig' with {
-		'person': person
+		'characteristics': person.characteristics
 	} %}
 
 {% endblock %}

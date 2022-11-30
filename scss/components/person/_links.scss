@@ -1,13 +1,23 @@
 @use "../../abstracts/functions" as f;
 @use "../../abstracts/mixins" as m;
 
-.person-links {
+.person-link {
 
-	width: 10%;
+	height: 40%;
+	position: absolute;
+	bottom: 0;
+	right: 5%;
+	border-left: solid 5px black;
 
-	img {
-		height: f.rem(20);
-		width: f.rem(20);
+	&__wrapper {
+		position: absolute;
+		top: 0;
+		left: - f.rem(22);
+		height: f.rem(24);
+		width: f.rem(24);
+		padding: f.rem(8);
 		background-color: black;
+		border-radius: 50%;
 	}
+
 }

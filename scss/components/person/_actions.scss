@@ -1,0 +1,19 @@
+@use "../../abstracts/functions" as f;
+@use "../../abstracts/mixins" as m;
+
+.person-actions {
+
+	@include m.flex(center, center, row);
+	gap: f.rem(50);
+
+	&__image {
+		width: f.rem(30);
+		height: f.rem(30);
+
+		&--rotate {
+			transform: rotate(270deg);
+		}
+
+	}
+
+}
