@@ -7,17 +7,24 @@
 	position: absolute;
 	bottom: 0;
 	right: 5%;
-	border-left: solid 5px black;
+	border-left: solid 5px var(--dark-blue);
 
 	&__wrapper {
+		transition: all 150ms;
 		position: absolute;
 		top: 0;
 		left: - f.rem(22);
 		height: f.rem(24);
 		width: f.rem(24);
 		padding: f.rem(8);
-		background-color: black;
+		background-color: var(--dark-blue);
 		border-radius: 50%;
+
+		&:hover{
+			filter: invert(1);
+			scale: 1.2;
+		}
+
 	}
 
 }

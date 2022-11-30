@@ -46,13 +46,13 @@ const filter = {
 function relocateSlider(percentage) {
 	sliderUI.slider.scrollLeft = percentage * (sliderUI.slider.scrollWidth - sliderUI.slider.clientWidth)
 	selectMiddleCard();
-};
+}
 
 // relocate the scrollbar to match the slider position
 function relocateScrollbar() {
 	sliderUI.cursor.value = getHorizontalRatio() * 100;
 	selectMiddleCard();
-};
+}
 
 // get the current position of the slider
 function getHorizontalRatio() {
@@ -64,7 +64,7 @@ function selectMiddleCard (){
 
 	let cards = document.querySelectorAll('.card:not(.card--empty)')
 
-	if (cards.length==0){
+	if (cards.length === 0) {
 		sliderUI.min.textContent = "0";
 		sliderUI.max.textContent = "0";
 		return;
@@ -90,22 +90,22 @@ function selectMiddleCard (){
 }
 
 // filter the cards
-function filterElements(){
+function filterElements() {
 
 	let cards = [];
 
 	let selectedYear = document.querySelector(".spinner__dates--start").textContent;
 	let filterByYear = !isNaN(selectedYear);
-	let filterByName = controller.searchbar.classList.contains('searchbar--open') 
-					   || window.getComputedStyle(controller.searchIcon, null).display == "none";
+	let filterByName = controller.searchbar.classList.contains('searchbar--open')
+		|| window.getComputedStyle(controller.searchIcon, null).display === "none";
 	let filterByAlpha = filter.alpha.classList.contains('btn--primary');
 
-	for (const card of sliderUI.cards ) {
+	for (const card of sliderUI.cards) {
 
 		let cardName = card.querySelector(".card__last-name").textContent.toLowerCase();
-		cardName += " " +card.querySelector(".card__first-name").textContent.toLowerCase();
+		cardName += " " + card.querySelector(".card__first-name").textContent.toLowerCase();
 		let searchbarValue = filter.name.value.toLowerCase();
-		
+
 		let startYear = card.querySelector(".card__start-year").textContent;
 		
 		if (filterByYear && filterByName) {
@@ -145,7 +145,7 @@ function filterElements(){
 
 	sliderUI.slider.replaceChildren(...cards);
 
-	if (cards.length == 0) {
+	if (cards.length === 0) {
 		let emptyCard = document.createElement("div");
 		emptyCard.classList.add("card");
 		emptyCard.classList.add("card--empty");
@@ -174,7 +174,7 @@ function updateSpinnerDate(number){
 	if(isNaN(spinner.dates[0].textContent) || isNaN(spinner.dates[1].textContent)){
 		let date = new Date();
 		spinner.dates[0].textContent = date.getFullYear();
-		spinner.dates[1].textContent = date.getFullYear()+1;
+		spinner.dates[1].textContent = date.getFullYear() + 1;
 		filterElements();
 		return;
 	}
@@ -223,7 +223,7 @@ sliderUI.cursor.addEventListener("input", () => {
 
 // -- Scroll events
 
-sliderUI.slider.addEventListener("scroll", (event) => {
+sliderUI.slider.addEventListener("scroll", () => {
 	relocateScrollbar();
 });
 
@@ -231,8 +231,8 @@ sliderUI.slider.addEventListener("scroll", (event) => {
 
 // -- Searchbar events
 
-controller.searchIcon.addEventListener('click', (e) => {
-	if(controller.nav.classList.toggle('navbar__searchbar--open')){
+controller.searchIcon.addEventListener('click', () => {
+	if (controller.nav.classList.toggle('navbar__searchbar--open')) {
 		filter.name.focus();
 	}
 
@@ -242,28 +242,38 @@ controller.searchIcon.addEventListener('click', (e) => {
 
 // -- Filter events
 
-controller.filterIcon.addEventListener('click', (e) => {
+controller.filterIcon.addEventListener('click', () => {
 	controller.nav.classList.toggle('navbar__filter--open');
 	controller.filter.classList.toggle('filter--open');
 });
 
-filter.name.addEventListener('input', (e) => {
+filter.name.addEventListener('input', () => {
 	filterElements();
 });
 
 for (const filter of controller.filter.children) {
-	filter.addEventListener('click', (e) => {
+	filter.addEventListener('click', () => {
 		filter.classList.toggle('btn--primary');
 		filter.classList.toggle('btn--secondary');
 		filterElements();
 	});
 }
 
+for (let card of sliderUI.cards) {
+	card.addEventListener('mouseenter', () => card.classList.add('card--hover'));
+	card.addEventListener('mouseleave', () => card.classList.remove('card--hover'));
+	card.addEventListener('click', () => window.location.href = "/person/" + card.id);
+}
+
 // ---------------- Spinner Listeners ---------------- //
 
 
-spinner.up.addEventListener('click', (e) => {updateSpinnerDate(1)});
-spinner.down.addEventListener('click', (e) => {updateSpinnerDate(-1)});
+spinner.up.addEventListener('click', () => {
+	updateSpinnerDate(1)
+});
+spinner.down.addEventListener('click', () => {
+	updateSpinnerDate(-1)
+});
 spinner.datesContainer.addEventListener('click', resetSpinner);
 
 

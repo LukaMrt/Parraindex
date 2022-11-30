@@ -3,6 +3,7 @@
 
 		{% for person in people %}
 			{% include 'components/card.twig' with {
+				'id': person.id,
 				'firstName': person.firstName,
 				'lastName': person.lastName,
 				'picture': person.picture,
