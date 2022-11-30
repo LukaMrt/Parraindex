@@ -36,8 +36,9 @@ class PersonBuilder {
 	private array $associations;
 
 	private array $promotions;
+    private int $startYear;
 
-	private function __construct() {
+    private function __construct() {
         $this->id = 0;
         $this->identity = new Identity('', '', '');
         $this->birthDate = new DateTime();
@@ -47,6 +48,7 @@ class PersonBuilder {
 		$this->families = array();
 		$this->associations = array();
 		$this->promotions = array();
+        $this->startYear = 0;
 	}
 
 	public static function aPerson(): PersonBuilder {
@@ -123,17 +125,22 @@ class PersonBuilder {
 		return $this;
 	}
 
-	public function withPromotions(array $promotions): PersonBuilder {
+    public function withStartYear(int $startYear): PersonBuilder {
+        $this->startYear = $startYear;
+        return $this;
+    }
+
+    public function withPromotions(array $promotions): PersonBuilder {
 		$this->promotions = $promotions;
 		return $this;
 	}
 
-	public function addPromotion(Promotion $promotion): PersonBuilder {
+    public function addPromotion(Promotion $promotion): PersonBuilder {
 		$this->promotions[] = $promotion;
 		return $this;
 	}
 
-	/**
+    /**
 	 * @return Person New instance from Builder.
 	 */
 	public function build(): Person {
@@ -147,49 +154,49 @@ class PersonBuilder {
 		return $this->id;
 	}
 
-	/**
+    /**
 	 * @return Identity
 	 */
 	public function getIdentity(): Identity {
 		return $this->identity;
 	}
 
-	/**
+    /**
 	 * @return string
 	 */
 	public function getBiography(): string {
 		return $this->biography;
 	}
 
-	/**
+    /**
 	 * @return array
 	 */
 	public function getCharacteristics(): array {
 		return $this->characteristics;
 	}
 
-	/**
+    /**
 	 * @return array
 	 */
 	public function getSponsors(): array {
 		return $this->sponsors;
 	}
 
-	/**
+    /**
 	 * @return array
 	 */
 	public function getFamilies(): array {
 		return $this->families;
 	}
 
-	/**
+    /**
 	 * @return array
 	 */
 	public function getAssociations(): array {
 		return $this->associations;
 	}
 
-	public function getPromotions(): array {
+    public function getPromotions(): array {
 		return $this->promotions;
 	}
 
@@ -198,6 +205,13 @@ class PersonBuilder {
      */
     public function getBirthDate(): DateTime {
         return $this->birthDate;
+    }
+
+    /**
+     * @return int
+     */
+    public function getStartYear(): int {
+        return $this->startYear;
     }
 
 }

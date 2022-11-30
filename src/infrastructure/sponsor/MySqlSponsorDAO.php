@@ -23,10 +23,14 @@ class MySqlSponsorDAO implements SponsorDAO {
         $connection = $this->databaseConnection->getDatabase();
 
         $personQuery = $connection->prepare(<<<SQL
-            SELECT P.*, C.id_characteristic, C.value, C.visibility, T.*
+            SELECT P.*, C.id_characteristic, C.value, C.visibility, T.*, (SELECT MIN(year)
+                                                                          FROM Promotion
+                                                                              JOIN Student S on Promotion.id_promotion = S.id_promotion
+                                                                              JOIN Person P2 on P2.id_person = S.id_person
+                                                                          WHERE P2.id_person = P.id_person) as startYear
             FROM Person P
-            LEFT JOIN Characteristic C on P.id_person = C.id_person
-            LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+                LEFT JOIN Characteristic C on P.id_person = C.id_person
+                LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
             WHERE P.id_person = :id
 SQL
         );
@@ -88,6 +92,7 @@ SQL
             ->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
             ->withBiography($buffer[0]->biography)
             ->withCharacteristics($characteristics)
+            ->withStartYear(property_exists($buffer[0], 'startYear') ? $buffer[0]->startYear : -1)
             ->build();
 
     }
