@@ -1,5 +1,6 @@
 @use "../../abstracts/functions" as f;
 @use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
 
 .person-link {
 
@@ -8,6 +9,16 @@
 	bottom: 0;
 	right: 5%;
 	border-left: solid 5px var(--dark-blue);
+
+	@include b.breakpoint(medium) {
+		@include m.flex(center, space-around, row);
+		position: relative;
+		width: 80%;
+		margin: f.rem(10) auto f.rem(20);
+		border: none;
+		right: 0;
+		height: auto;
+	}
 
 	&__wrapper {
 		transition: all 150ms;
@@ -19,6 +30,11 @@
 		padding: f.rem(8);
 		background-color: var(--dark-blue);
 		border-radius: 50%;
+
+		@include b.breakpoint(medium) {
+			position: relative;
+			left: 0;
+		}
 
 		&:hover{
 			filter: invert(1);

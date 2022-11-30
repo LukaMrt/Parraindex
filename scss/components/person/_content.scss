@@ -1,5 +1,6 @@
 @use "../../abstracts/functions" as f;
 @use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
 
 .person-content {
 	width: 90%;
@@ -7,10 +8,20 @@
 	flex-grow: 1;
 
 	@include m.flex(center, center, column);
-	
+
+	@include b.breakpoint(medium) {
+		width: 100%;
+		padding-right: 0;
+	}
+
 	&__description {
 		@include m.flex(center, center, row);
 		width: 100%;
+
+		@include b.breakpoint(medium) {
+			@include m.flex(center, center, column-reverse);
+		}
+
 	}
 
 }

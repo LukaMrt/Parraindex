@@ -1,13 +1,19 @@
 @use "../abstracts/mixins" as m;
 @use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
 
 .header {
+
 	@include m.flex(center, space-between, row);
 	flex-wrap: wrap;
 	width: 95%;
 	gap: f.rem(20) 0;
 
 	margin-top: 3vh;
+
+	@include b.breakpoint(small) {
+		@include m.flex(center, center, column);
+	}
 
 	&__logo {
 		height: f.rem(35);

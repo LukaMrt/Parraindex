@@ -1,15 +1,27 @@
 @use "../../abstracts/functions" as f;
 @use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
 
 .person-description {
 	width: 50%;
 
+	@include b.breakpoint(medium) {
+		width: 80%;
+		margin: f.rem(50) 0 f.rem(20);
+	}
+
 	&__header {
 
+		@include m.flex(center, space-between, row);
 		letter-spacing: f.rem(2);
 		font-size: f.rem(25);
-		@include m.flex(center, space-between, row);
 		margin-bottom: f.rem(70);
+
+		@include b.breakpoint(medium) {
+			font-size: f.rem(20);
+			@include m.flex(flex-start, center, column);
+			margin-bottom: f.rem(20);
+		}
 
 		&-name {
 			color: var(--medium-grey);
@@ -33,6 +45,10 @@
 		margin: 0 f.rem(25);
 		text-align: justify;
 		letter-spacing: f.rem(0.5);
+
+		@include b.breakpoint(medium) {
+			margin: 0;
+		}
 
 		&-title {
 			text-indent: 0;

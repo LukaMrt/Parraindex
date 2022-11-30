@@ -1,10 +1,15 @@
 @use "../../abstracts/functions" as f;
 @use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
 
 .person-actions {
 
 	@include m.flex(center, center, row);
 	gap: f.rem(50);
+
+	@include b.breakpoint(medium) {
+		margin: f.rem(10) 0;
+	}
 
 	&__image {
 		transition: all 150ms;

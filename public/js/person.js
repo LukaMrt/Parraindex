@@ -1,6 +1,6 @@
 // Placement of godfathers
 
-let godFathers = document.getElementsByClassName("person-family__godfather");
+let godFathers = document.getElementsByClassName("person-family__portrait--godfather");
 let count = godFathers.length + 1;
 
 for (let i = 0; i < godFathers.length; i++) {
@@ -20,12 +20,11 @@ for (let i = 0; i < godFathers.length; i++) {
 
 	godFather.style.left = "calc(" + x + "%" + " - " + (size / 2) + "px)";
 	godFather.style.top = "calc(" + y + "%" + " - " + (size / 2) + "px)";
-
 }
 
 // Placement of godchildren
 
-let godChildren = document.getElementsByClassName("person-family__godchild");
+let godChildren = document.getElementsByClassName("person-family__portrait--godchild");
 count = godChildren.length + 1;
 
 for (let i = 0; i < godChildren.length; i++) {
@@ -42,18 +41,19 @@ for (let i = 0; i < godChildren.length; i++) {
 		godChild.style.height = size + "px";
 		godChild.style.width = size + "px";
 	}
+
 	godChild.style.left = "calc(" + x + "%" + " - " + (size / 2) + "px)";
 	godChild.style.bottom = "calc(" + y + "%" + " - " + (size / 2) + "px)";
 }
 
-
 // Placement of links
 
-let links = document.getElementsByClassName("person-link__wrapper");
-let linkSize = links[0].clientHeight;
+if (900 < window.innerWidth) {
+	let links = document.getElementsByClassName("person-link__wrapper");
+	let linkSize = links[0].clientHeight;
 
-for (let i = 0; i < links.length; i++) {
-
-	let link = links[i];
-	link.style.top = i * (linkSize + 15) + "px";
+	for (let i = 0; i < links.length; i++) {
+		let link = links[i];
+		link.style.top = i * (linkSize + 15) + "px";
+	}
 }
