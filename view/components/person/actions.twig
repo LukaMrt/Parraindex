@@ -6,12 +6,12 @@
 
 	{% if admin %}
 		<a class="person-action__wrapper" href="{{ router.url('editperson_get', {'id': person.id}) }}">
-			<img class="person-actions__image" src="{{ icon("up.svg") }}" alt="Retour">
+			<img class="person-actions__image" src="{{ icon("pen.svg") }}" alt="Retour">
 		</a>
 	{% endif %}
 
 	<a class="person-action__wrapper" href="{{ router.url('contact_get') }}">
-		<img class="person-actions__image" src="{{ icon("up.svg") }}" alt="Retour">
+		<img class="person-actions__image" src="{{ icon("speaker.svg") }}" alt="Retour">
 	</a>
 
 </div>

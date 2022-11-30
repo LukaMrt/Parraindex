@@ -67,13 +67,6 @@
 
 		&--godfather, &--godchild {
 			position: absolute;
-			width: f.rem(75);
-			height: f.rem(75);
-
-			@include b.breakpoint(medium) {
-				width: f.rem(50);
-				height: f.rem(50);
-			}
 		}
 
 		&-image {
@@ -99,10 +92,11 @@
 			color: var(--dark-blue);
 			z-index: 10;
 
-			&:hover {
-				opacity: 1;
-			}
 
+		}
+
+		&:hover .person-family__portrait-name {
+			opacity: 1;
 		}
 
 	}
