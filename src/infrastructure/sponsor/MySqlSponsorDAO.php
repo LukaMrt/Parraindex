@@ -88,11 +88,11 @@ SQL
         }
 
         return PersonBuilder::aPerson()
-            ->withId($buffer[0]->id_person)
-            ->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
-            ->withBiography($buffer[0]->biography)
-            ->withCharacteristics($characteristics)
-            ->withStartYear(property_exists($buffer[0], 'startYear') ? $buffer[0]->startYear : -1)
+			->withId($buffer[0]->id_person)
+			->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
+			->withBiography($buffer[0]->biography)
+			->withCharacteristics($characteristics)
+			->withStartYear($buffer[0]->startYear ?? -1)
             ->build();
 
     }
@@ -110,17 +110,19 @@ SQL
                 $currentPerson = $row->id_person;
             }
 
-            if ($currentPerson != $row->id_person) {
-                $people[] = $this->buildPerson($buffer);
-                $buffer = array();
-                $currentPerson = $row->id_person;
-            }
+			if ($currentPerson != $row->id_person) {
+				$people[] = $this->buildPerson($buffer);
+				$buffer = array();
+				$currentPerson = $row->id_person;
+			}
 
-            $buffer[] = $row;
-        }
+			$buffer[] = $row;
+		}
 
-        $people[] = $this->buildPerson($buffer);
-        return $people;
-    }
+		if (0 < count($buffer)) {
+			$people[] = $this->buildPerson($buffer);
+		}
+		return $people;
+	}
 
 }
