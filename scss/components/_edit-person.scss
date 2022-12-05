@@ -1,0 +1,69 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+.edit-person{
+	width: 80%;
+	height: 80vh;
+
+	@include m.flex($direction: row, $justify: space-evenly);
+
+	h2{
+		text-align: center;
+	}
+
+	.description{
+		@include m.flex($justify: space-around);
+		height: 100%;
+
+		flex: 1 1 0px;
+
+		&__about,
+		&__biography{
+			@include m.flex($direction: column);
+			gap: f.rem(16);
+		}
+	}
+
+	.public{
+		@include m.flex($justify: space-around);
+		height: 100%;
+
+		flex: 1 1 0px;
+		
+		&__personalization{
+			@include m.flex($direction: column);
+			gap: f.rem(16);
+
+			&__choice{
+				width: 100%;
+				@include m.flex($direction: row, $justify: space-around);
+			}
+		}
+
+	}
+
+	.contact{
+		@include m.flex($direction: column);
+		height: 100%;
+		gap: f.rem(16);
+
+		flex: 1 1 0px;
+
+		&__social{
+			@include m.flex($direction: column);
+			gap: f.rem(16);	
+		}
+
+		.network{
+			@include m.flex($direction: row, $justify: space-around);
+			gap: f.rem(16);
+
+			span{
+				width: 5em;
+				text-align: right;
+			}
+		}
+	}
+
+}

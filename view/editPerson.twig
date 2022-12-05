@@ -8,47 +8,90 @@
 
 {% block content %}
 
-    <form class="form" action="{{ router.url('editperson_post', {id: person.id}) }}" method="post">
+<form action="" class="edit-person">
 
-        <h1 class="form__title">Edition de {{ person.firstName }} {{ person.lastName }}</h1>
+	<div class="description">
 
-        <div class="form-content">
+		<div class="description__about">
 
-            <div class="form-block form-block--row">
+			<h2>A PROPOS</h1>
 
-                {% include "components/form/input.twig" with {
-                    'type': 'text',
-                    'slug': 'firstName',
-                    'title': 'Prenom',
-                    'value': person.firstName,
-                    'pattern': '.+',
-                } %}
+			<textarea name="" id="" cols="30" rows="10">
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. In necessitatibus neque et. Mollitia doloribus veritatis repellat minima. Obcaecati, perspiciatis corrupti voluptatem ipsa, laborum eius, rerum blanditiis minus hic neque repudiandae?
+			</textarea>
+		
+		</div>
 
-                {% include "components/form/input.twig" with {
-                    'type': 'text',
-                    'slug': 'lastName',
-                    'title': 'Nom',
-                    'value': person.lastName,
-                    'pattern': '.+',
-                } %}
+		<div class="description__biography">
 
-            </div>
+			<h2>BIOGRAPHIE</h1>
 
-            {% include "components/form/textarea.twig" with {
-                'title': 'Biographie',
-                'slug': 'biography',
-                'value': person.biography,
-                'pattern': '.+',
-            } %}
+			<textarea name="" id="" cols="30" rows="10">
+				Lorem ipsum dolor sit amet consectetur, adipisicing elit. In necessitatibus neque et. Mollitia doloribus veritatis repellat minima. Obcaecati, perspiciatis corrupti voluptatem ipsa, laborum eius, rerum blanditiis minus hic neque repudiandae?
+			</textarea>
 
-            {% include "components/button.twig" with {
-                'type': 'submit',
-                'button_content': 'Envoyer',
-                'priority': 'primary'
-            } %}
+		</div>
+	
+	</div>
 
-        </div>
+	<div class="public">
 
-    </form>
+		<div class="public__identity">
+
+			<h2>IDENTIFANT</h1>
+
+			<input type="text" name="" id="" value="Parrain 1">
+
+		</div>
+
+
+		{% include 'components/card.twig' with {
+			'firstName': person.firstName,
+			'lastName': person.lastName,
+			'picture': person.picture,
+			'characteristics': person.characteristics,
+			'description': person.biography,
+			'startYear': person.startYear,
+			}
+		%}
+
+		<div class="public__personalization">
+
+			<h2>PERSONALISATIONS</h2>
+
+			<div class="public__personalization__choice">
+				<input default type="radio" name="color" id="">
+				<input type="radio" name="color" id="">
+				<input type="radio" name="color" id="">
+			
+			</div>
+
+		</div>
+
+	</div>
+
+	<div class="contact">
+		<h2>CONTACT</h2>
+
+		<div class="contact__social">
+
+			<div class="network">
+				<img src="" alt="" srcset="">
+				<span> Email : </span>
+				<input disable type="text" name="" id="" value="lilian.baudry@etu.univ-lyon.fr">
+				<button>-</button>
+			</div>
+
+			<div class="network">
+				<img src="" alt="" srcset="">
+				<span> Discord : </span>
+				<input type="text" name="" id="" value="Irophin#4851">
+				<button>-</button>
+			</div>
+		
+		</div>
+	</div>
+
+</form>
 
 {% endblock %}
