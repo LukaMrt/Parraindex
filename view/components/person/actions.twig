@@ -1,0 +1,17 @@
+<div class="person-actions">
+
+	<a class="person-action__wrapper" href="{{ router.url('tree') }}">
+		<img class="person-actions__image person-actions__image--rotate" src="{{ icon("up.svg") }}" alt="Retour">
+	</a>
+
+	{% if admin %}
+		<a class="person-action__wrapper" href="{{ router.url('editperson_get', {'id': person.id}) }}">
+			<img class="person-actions__image" src="{{ icon("pen.svg") }}" alt="Retour">
+		</a>
+	{% endif %}
+
+	<a class="person-action__wrapper" href="{{ router.url('contact_get') }}">
+		<img class="person-actions__image" src="{{ icon("speaker.svg") }}" alt="Retour">
+	</a>
+
+</div>

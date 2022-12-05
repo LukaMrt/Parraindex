@@ -16,7 +16,7 @@ class PersonService {
         return $this->personDAO->getAllPeople();
     }
 
-    public function getPersonById(mixed $id): ?Person {
+    public function getPersonById(int $id): ?Person {
         return $this->personDAO->getPersonById($id);
     }
 

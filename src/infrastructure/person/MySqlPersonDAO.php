@@ -24,38 +24,39 @@ class MySqlPersonDAO implements PersonDAO {
 
     public function getAllPeople(): array {
 
-        $connection = $this->databaseConnection->getDatabase();
+		$connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(
-            "SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
+		$query = $connection->prepare(
+			"SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
 						FROM Person Pe
 								 LEFT JOIN Student St on Pe.id_person = St.id_person
 								 LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
 								 LEFT JOIN Degree D on D.id_degree = Pr.id_degree
 								 LEFT JOIN School Sc on Sc.id_school = Pr.id_school
 								 LEFT JOIN Characteristic C on Pe.id_person = C.id_person
-								 LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network");
-        $query->execute();
+								 LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+						ORDER BY Pe.id_person");
+		$query->execute();
 
-        $users = array();
+		$users = array();
 
-        $currentPerson = null;
-        $buffer = array();
+		$currentPerson = null;
+		$buffer = array();
 
-        while ($row = $query->fetch()) {
+		while ($row = $query->fetch()) {
 
-            if ($currentPerson === null) {
-                $currentPerson = $row->id_person;
-            }
+			if ($currentPerson === null) {
+				$currentPerson = $row->id_person;
+			}
 
-            if ($currentPerson != $row->id_person) {
-                $users[] = $this->buildPerson($buffer);
-                $buffer = array();
-                $currentPerson = $row->id_person;
-            }
+			if ($currentPerson != $row->id_person) {
+				$users[] = $this->buildPerson($buffer);
+				$buffer = array();
+				$currentPerson = $row->id_person;
+			}
 
-            $buffer[] = $row;
-        }
+			$buffer[] = $row;
+		}
 
         $users[] = $this->buildPerson($buffer);
         $query->closeCursor();
@@ -64,25 +65,27 @@ class MySqlPersonDAO implements PersonDAO {
 
     private function buildPerson(array $buffer): Person {
 
-        $builder = PersonBuilder::aPerson()
-            ->withId($buffer[0]->id_person)
-            ->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
-            ->withBiography($buffer[0]->biography);
+		$builder = PersonBuilder::aPerson()
+			->withId($buffer[0]->id_person)
+			->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
+			->withBiography($buffer[0]->biography);
 
-        $promotionBuffer = array_filter($buffer, fn($row) => $row->id_degree != null);
+		$startYear = date("Y");
+		$promotionBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null);
 
-        foreach ($promotionBuffer as $row) {
-            $degree = new Degree($row->id_degree, $row->degree_name, $row->level, $row->total_ects, $row->duration, $row->official);
-            $school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
-            $promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->description);
-            $builder->addPromotion($promotion);
-        }
+		foreach ($promotionBuffer as $row) {
+			$degree = new Degree($row->id_degree, $row->degree_name, $row->level, $row->total_ects, $row->duration, $row->official);
+			$school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
+			$promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->description);
+			$builder->addPromotion($promotion);
+			$startYear = min($startYear, $row->year);
+		}
 
-        $characteristicsBuffer = array_filter($buffer, fn($row) => $row->id_characteristic != null);
+		$characteristicsBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null);
 
-        foreach ($characteristicsBuffer as $row) {
-            $builder->addCharacteristic((new CharacteristicBuilder())
-                ->withId($row->id_characteristic)
+		foreach ($characteristicsBuffer as $row) {
+			$builder->addCharacteristic((new CharacteristicBuilder())
+				->withId($row->id_characteristic)
                 ->withTitle($row->title)
                 ->withType($row->type)
                 ->withUrl($row->url)
@@ -92,7 +95,7 @@ class MySqlPersonDAO implements PersonDAO {
                 ->build());
         }
 
-        return $builder->build();
+        return $builder->withStartYear($startYear)->build();
     }
 
     public function getPerson(Identity $identity): ?Person {
@@ -109,7 +112,7 @@ class MySqlPersonDAO implements PersonDAO {
         $person = null;
 
         if ($result) {
-            $person = $this->buildPerson($result);
+            $person = $this->buildPerson([$result]);
         }
 
         $query->closeCursor();
@@ -119,26 +122,28 @@ class MySqlPersonDAO implements PersonDAO {
 
     public function getPersonById(int $id): ?Person {
 
-        $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT * FROM Person WHERE id_person = :id_person LIMIT 1");
+		$connection = $this->databaseConnection->getDatabase();
+		$query = $connection->prepare("SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
+													FROM Person Pe
+         											LEFT JOIN Student St on Pe.id_person = St.id_person
+													LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+													LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+													LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+													LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+													LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+         											WHERE Pe.id_person = :id_person");
 
-        $query->execute(['id_person' => $id]);
-        $result = $query->fetch();
+		$query->execute(['id_person' => $id]);
+		$buffer = array();
 
-        $person = null;
+		while ($row = $query->fetch()) {
+			$buffer[] = $row;
+		}
 
-        if ($result) {
-            $person = PersonBuilder::aPerson()
-                ->withId($result->id_person)
-                ->withIdentity(new Identity($result->first_name, $result->last_name, $result->picture, $result->birthdate))
-                ->withBiography($result->biography)
-                ->build();
-        }
-
-        $query->closeCursor();
-        $connection = null;
-        return $person;
-    }
+		$query->closeCursor();
+		$connection = null;
+		return $this->buildPerson($buffer);
+	}
 
 	public function updatePerson(array $parameters) {
 

@@ -48,7 +48,11 @@ class MysqlAccountDAO implements AccountDAO {
             'person' => $account->getPersonId()
         ]);
 
+        $query = $connection->prepare("INSERT INTO Privilege (id_account, id_school, privilege_name) VALUES ((SELECT id_account FROM Account WHERE email = :email), 1, 'ADMIN')");
+        $query->execute(['email' => $account->getLogin(),]);
+
         $connection = null;
+		$query->closeCursor();
     }
 
     public function existsAccount(string $email): bool {

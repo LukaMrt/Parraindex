@@ -2,8 +2,6 @@
 
 namespace App\model\person;
 
-use DateTime;
-
 class Person {
 
 	private int $id;
@@ -14,6 +12,7 @@ class Person {
 	private array $families;
 	private array $associations;
 	private array $promotions;
+    private int $startYear;
 
 	public function __construct(PersonBuilder $builder) {
 		$this->id = $builder->getId();
@@ -24,6 +23,7 @@ class Person {
 		$this->families = $builder->getFamilies();
 		$this->associations = $builder->getAssociations();
 		$this->promotions = $builder->getPromotions();
+        $this->startYear = $builder->getStartYear();
 	}
 
 	public function getIdentity(): string {
@@ -47,6 +47,11 @@ class Person {
 	}
 
 	public function getStartYear(): int|null {
+
+        if (0 <= $this->startYear) {
+            return $this->startYear;
+        }
+
 		$dates = array_map(fn($promotion) => $promotion->getYear(), $this->promotions);
 		
 		if(count($dates) == 0) {
@@ -55,6 +60,13 @@ class Person {
 
 		return min($dates);
 	}
+
+    /**
+     * @param int $startYear
+     */
+    public function setStartYear(int $startYear): void {
+        $this->startYear = $startYear;
+    }
 
 	public function getCharacteristics(): array {
 		return $this->characteristics;
