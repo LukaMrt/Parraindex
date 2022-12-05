@@ -50,10 +50,9 @@ for (let i = 0; i < godChildren.length; i++) {
 
 if (900 < window.innerWidth) {
 	let links = document.getElementsByClassName("person-link__wrapper");
-	let linkSize = links[0].clientHeight;
 
 	for (let i = 0; i < links.length; i++) {
 		let link = links[i];
-		link.style.top = i * (linkSize + 15) + "px";
+		link.style.top = i * (link.clientHeight + 15) + "px";
 	}
 }
