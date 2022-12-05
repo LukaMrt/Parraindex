@@ -71,7 +71,7 @@ class MySqlPersonDAO implements PersonDAO {
 			->withBiography($buffer[0]->biography);
 
 		$startYear = date("Y");
-		$promotionBuffer = array_filter($buffer, fn($row) => $row->id_degree != null);
+		$promotionBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null);
 
 		foreach ($promotionBuffer as $row) {
 			$degree = new Degree($row->id_degree, $row->degree_name, $row->level, $row->total_ects, $row->duration, $row->official);
@@ -81,7 +81,7 @@ class MySqlPersonDAO implements PersonDAO {
 			$startYear = min($startYear, $row->year);
 		}
 
-		$characteristicsBuffer = array_filter($buffer, fn($row) => $row->id_characteristic != null);
+		$characteristicsBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null);
 
 		foreach ($characteristicsBuffer as $row) {
 			$builder->addCharacteristic((new CharacteristicBuilder())
@@ -112,7 +112,7 @@ class MySqlPersonDAO implements PersonDAO {
         $person = null;
 
         if ($result) {
-            $person = $this->buildPerson($result);
+            $person = $this->buildPerson([$result]);
         }
 
         $query->closeCursor();
