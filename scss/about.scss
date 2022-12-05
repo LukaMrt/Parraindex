@@ -4,38 +4,3 @@
 @forward "layout";
 @forward "pages";
 @forward "themes";
-
-.about {
-	&_logo {
-		max-width: 30vw;
-		max-height: 30vh;
-		font-size: 2rem;
-		text-align: center;
-		text-transform: uppercase;
-	}
-
-	&_text {
-		width: 75vw;
-		max-height: 50vh;
-		text-overflow: ellipsis;
-		p{
-			padding: 2% 0;
-			text-indent: 2rem;
-		}
-	}
-
-	&_author {
-		font-size: 1.5rem;
-		font-weight: 700;
-	}
-}
-
-.container{
-	&-row{
-		display: flex;
-		flex-direction: row;
-		gap: 10vw;
-		align-items: center;
-	}
-
-}

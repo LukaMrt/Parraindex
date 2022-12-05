@@ -1,10 +1,10 @@
-<div class="aboutcard aboutcard__banner">
-	{% if picture != null %}
-		<img class="card__picture" src={{picture(picture)}} alt="photo">
-	{% endif %}
+<div class="about-card about-card__banner">
 
-	<div class="aboutcard__profil">
-		<span class="aboutcard__first-name">{{ firstName }}</span>
-		<span class="aboutcard__last-name">{{ lastName }}</span>
+	<img class="card__picture" src="{{ picture(picture) }}" alt="photo">
+
+	<div class="about-card__profil">
+		<span class="about-card__first-name">{{ firstName }}</span>
+		<span class="about-card__last-name">{{ lastName }}</span>
 	</div>
+
 </div>

@@ -2,6 +2,7 @@
 
 namespace App\application\person;
 
+use App\model\person\Identity;
 use App\model\person\Person;
 
 class PersonService {
@@ -22,6 +23,10 @@ class PersonService {
 
 	public function updatePerson(array $parameters): void {
 		$this->personDAO->updatePerson($parameters);
+	}
+
+	public function getPersonByIdentity(Identity $identity): ?Person {
+		return $this->personDAO->getPerson($identity);
 	}
 
 }

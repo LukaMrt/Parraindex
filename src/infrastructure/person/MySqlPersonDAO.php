@@ -101,7 +101,7 @@ class MySqlPersonDAO implements PersonDAO {
     public function getPerson(Identity $identity): ?Person {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT * FROM Person WHERE first_name = :first_name AND last_name = :last_name LIMIT 1");
+        $query = $connection->prepare("SELECT * FROM Person WHERE LOWER(first_name) = :first_name AND LOWER(last_name) = :last_name LIMIT 1");
 
         $query->execute([
             'first_name' => $identity->getFirstName(),

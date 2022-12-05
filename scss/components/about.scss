@@ -1,0 +1,49 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.about {
+
+	&__title {
+		margin-top: f.rem(50);
+
+		@include b.breakpoint(medium){
+			margin: f.rem(100) 0 f.rem(20);
+		}
+	}
+
+	&__description {
+
+		@include m.flex(center, center, row);
+		gap: 5%;
+		width: 90%;
+
+		@include b.breakpoint(medium){
+			@include m.flex(center, center, column);
+		}
+
+		&-logo {
+			max-width: f.rem(300);
+			max-height: f.rem(300);
+		}
+
+		&-text {
+
+			p {
+				padding: f.rem(15) 0;
+				text-indent: 2rem;
+			}
+
+		}
+
+	}
+
+	&_authors {
+		@include m.flex(center, center, row);
+		flex-wrap: wrap;
+		gap: f.rem(50);
+		width: 90%;
+		margin: f.rem(50) 0;
+	}
+
+}
