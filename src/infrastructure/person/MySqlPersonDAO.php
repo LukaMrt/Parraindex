@@ -70,6 +70,7 @@ class MySqlPersonDAO implements PersonDAO {
 			->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
 			->withBiography($buffer[0]->biography);
 
+		$startYear = date("Y");
 		$promotionBuffer = array_filter($buffer, fn($row) => $row->id_degree != null);
 
 		foreach ($promotionBuffer as $row) {
@@ -77,6 +78,7 @@ class MySqlPersonDAO implements PersonDAO {
 			$school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
 			$promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->description);
 			$builder->addPromotion($promotion);
+			$startYear = min($startYear, $row->year);
 		}
 
 		$characteristicsBuffer = array_filter($buffer, fn($row) => $row->id_characteristic != null);
@@ -93,7 +95,7 @@ class MySqlPersonDAO implements PersonDAO {
                 ->build());
         }
 
-        return $builder->build();
+        return $builder->withStartYear($startYear)->build();
     }
 
     public function getPerson(Identity $identity): ?Person {
