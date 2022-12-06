@@ -12,26 +12,26 @@
 		<img class="about__description-logo" src="{{ icon('logo-blue.svg') }}" alt="Logo">
 		<div class="about__description-text">
 			<p>
-				Le Parraindex est un site web qui permet de trouver les parrains et les fillots de votre Université. A
-				l'origine, il a été créé pour l'IUT informatique de l'Université Lyon 1, mais nous souhaitons l'étendre
-				à d'autres Universités.
+				Le Parraindex est un site web qui permet de trouver les parrains et les fillots de votre Université. À
+				l'origine, il a été créé pour l'IUT Informatique de l'Université Lyon 1 mais nous souhaitons l'étendre à
+				terme à d'autres universités.
 			</p>
 			<p>
-				Le Parraindex a pour but de recenser les liens de parrainage entre les étudiants, qui montrer des liens
-				fort. Le fait de voir son "arbre généalogique" permet de se rendre compte de la proximité des étudiants,
-				et de la qualité des liens de parrainage. Et procure également une certaine satisfaction de visualiser
-				son arbre généalogique, faire partir du "famille" apporte un sentiment d'appartenance et facilite la
-				socialisation.
+				Le Parraindex a pour but de recenser les liens de parrainage entre les étudiants, ce qui montre des liens
+				fort. Le fait de voir son "arbre généalogique" permet de se rendre compte de la proximité des étudiants
+				et de la qualité des liens de parrainage. Cela procure également une certaine satisfaction de visualiser
+				son arbre généalogique. Faire partir d'une "famille" apporte un sentiment d'appartenance et facilite la
+				sociabilisation.
 			</p>
 			<p>
-				Le Parraindex est un projet étudiant, réalisé par 4 étudiants de l'IUT informatique de l'Université Lyon
-				1. Nous avons réalisé ce site web dans le cadre d'un projet d'étude, et nous avons choisi de le rendre
+				Le Parraindex est un projet étudiant réalisé par 4 étudiants de l'IUT Informatique de l'Université Lyon
+				1. Nous avons réalisé ce site web dans le cadre d'un projet d'étude et nous avons choisi de le rendre
 				public afin de le partager avec le plus grand nombre.
 			</p>
 		</div>
 	</div>
 
-	<div class="container-row about_authors">
+	<div class="about_authors">
 
 		{% for author in authors %}
 			{% include 'components/aboutcard.twig' with {

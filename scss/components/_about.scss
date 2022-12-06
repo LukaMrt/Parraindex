@@ -8,7 +8,7 @@
 		margin-top: f.rem(50);
 
 		@include b.breakpoint(medium){
-			margin: f.rem(100) 0 f.rem(20);
+			margin: f.rem(50) 0 f.rem(20);
 		}
 	}
 
@@ -32,6 +32,7 @@
 			p {
 				padding: f.rem(15) 0;
 				text-indent: 2rem;
+				text-align: justify;
 			}
 
 		}
@@ -39,11 +40,14 @@
 	}
 
 	&_authors {
-		@include m.flex(center, center, row);
+		@include m.flex(center, space-around, row);
+		gap: f.rem(25);
 		flex-wrap: wrap;
-		gap: f.rem(50);
 		width: 90%;
-		margin: f.rem(50) 0;
+
+		@include b.breakpoint(medium){
+			margin: f.rem(20) 0;
+		}
 	}
 
 }

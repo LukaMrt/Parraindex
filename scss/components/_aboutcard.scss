@@ -5,8 +5,8 @@
 .about-card {
 
 	@include m.flex();
-	width: 20%;
-	min-width: f.rem(300);
+	width: 10%;
+	min-width: f.rem(200);
 	height: f.rem(170);
 
 	&__picture {
@@ -16,15 +16,17 @@
 
 	&__profil {
 		@include m.hard-box-shadow();
-		font-size: f.rem(24);
+		font-size: f.rem(20);
 		text-align: center;
 		padding: f.rem(5) f.rem(30);
-		margin-top: f.rem(25);
+		margin-top: f.rem(10);
 		border-radius: f.rem(35);
+		color: var(--medium-grey);
 	}
 
 	&__last-name {
 		text-transform: uppercase;
+		color: var(--dark-blue);
 	}
 
 }
