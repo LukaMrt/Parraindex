@@ -3,7 +3,7 @@
 @use "../abstracts/breakpoints" as b;
 
 .edit-person{
-	width: 80%;
+	width: 90%;
 	height: 80vh;
 
 	@include m.flex($direction: row, $justify: space-evenly);
@@ -16,12 +16,24 @@
 		@include m.flex($justify: space-around);
 		height: 100%;
 
-		flex: 1 1 0px;
+		flex: 2 2 0px;
 
 		&__about,
 		&__biography{
 			@include m.flex($direction: column);
 			gap: f.rem(16);
+			width: 80%;
+		}
+
+		textarea {
+			resize: none;
+			text-align: justify;
+			color: var(--dark-grey);
+			width: 80%;
+			height: f.rem(150);
+			border: 0;
+			font-size: f.rem(16);
+			font-family: inherit;
 		}
 	}
 
@@ -31,6 +43,19 @@
 
 		flex: 1 1 0px;
 		
+		&__identity{
+			@include m.flex($direction: column);
+			gap: f.rem(16);
+
+			 #id-field{
+				letter-spacing: 1px;
+				color: var(--dark-grey);
+				font-size: f.rem(10);
+				border: 0;
+				background-color: transparent;
+			}
+		}
+
 		&__personalization{
 			@include m.flex($direction: column);
 			gap: f.rem(16);
@@ -38,9 +63,39 @@
 			&__choice{
 				width: 100%;
 				@include m.flex($direction: row, $justify: space-around);
+
+				input{
+					visibility: hidden;
+				}
+
+				label{
+					z-index: 10;
+					transition: all 0.2s ease-in-out;
+
+					width: f.rem(50);
+					height: f.rem(70);
+					border-radius: f.rem(10);
+
+					@include m.smooth-box-shadow();
+				}
+
+				label:hover{
+					cursor: pointer;
+				}
+
+				label:active{
+					scale: 0.95;
+				}
+
+				label:has(input:checked){
+					scale: 1.05;
+				}
 			}
 		}
 
+		#id-field{
+			text-align: center;
+		}
 	}
 
 	.contact{
@@ -48,7 +103,7 @@
 		height: 100%;
 		gap: f.rem(16);
 
-		flex: 1 1 0px;
+		flex: 2 2 0px;
 
 		&__social{
 			@include m.flex($direction: column);
@@ -66,4 +121,17 @@
 		}
 	}
 
+}
+
+.confirm{
+	@include m.flex($direction: row, $justify: space-between);
+	width: min(80%, 100em );
+	position: absolute;
+	bottom: 5vh;
+
+	.prev{
+		rotate: -90deg;
+		width: f.rem(40);
+		aspect-ratio: 1/1;
+	}
 }

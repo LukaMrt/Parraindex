@@ -41,6 +41,7 @@
 
 	&__banner{
 		@include m.flex();
+		transition: background-color 200ms ease-in-out;
 		height: 33%;
 		width: 100%;
 		background-color: var(--light-grey);

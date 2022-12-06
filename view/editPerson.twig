@@ -4,6 +4,7 @@
 {% set title = 'Parraindex - Edition personne' %}
 
 {% block javascripts %}
+	<script src="{{script('editPerson.js')}}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -16,7 +17,7 @@
 
 			<h2>A PROPOS</h1>
 
-			<textarea name="" id="" cols="30" rows="10">
+			<textarea name="" id="about-field" cols="30" rows="10">
 				Lorem ipsum dolor sit amet consectetur, adipisicing elit. In necessitatibus neque et. Mollitia doloribus veritatis repellat minima. Obcaecati, perspiciatis corrupti voluptatem ipsa, laborum eius, rerum blanditiis minus hic neque repudiandae?
 			</textarea>
 		
@@ -26,8 +27,8 @@
 
 			<h2>BIOGRAPHIE</h1>
 
-			<textarea name="" id="" cols="30" rows="10">
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. In necessitatibus neque et. Mollitia doloribus veritatis repellat minima. Obcaecati, perspiciatis corrupti voluptatem ipsa, laborum eius, rerum blanditiis minus hic neque repudiandae?
+			<textarea name="" id="bio-field" cols="30" rows="10">
+				{{person.biography}}
 			</textarea>
 
 		</div>
@@ -40,7 +41,7 @@
 
 			<h2>IDENTIFANT</h1>
 
-			<input type="text" name="" id="" value="Parrain 1">
+			<input disabled type="text" name="" id="id-field" value="@{{person.id}}">
 
 		</div>
 
@@ -59,10 +60,19 @@
 
 			<h2>PERSONALISATIONS</h2>
 
-			<div class="public__personalization__choice">
-				<input default type="radio" name="color" id="">
-				<input type="radio" name="color" id="">
-				<input type="radio" name="color" id="">
+			<div class="public__personalization__choice" id="color-field" >
+
+				<label style="background-color : #f0f0f0">
+					<input checked type="radio" name="color" value= "#f0f0f0">
+				</label>
+
+				<label style="background-color : #132035">
+					<input type="radio" name="color"  value= "#132035">
+				</label>
+
+				<label style="background-color : #8a8a8a">
+					<input type="radio" name="color"  value= "#8a8a8a">
+				</label>
 			
 			</div>
 
@@ -73,7 +83,7 @@
 	<div class="contact">
 		<h2>CONTACT</h2>
 
-		<div class="contact__social">
+		<div class="contact__social" id="contact-field">
 
 			<div class="network">
 				<img src="" alt="" srcset="">
@@ -93,5 +103,17 @@
 	</div>
 
 </form>
+
+<nav class='confirm'>
+
+	<a href="#">
+		<img src="{{icon('up.svg')}}" class="prev" alt="retour">
+	</a>
+
+	<button class="btn btn--primary">
+		Enregistrer
+	</button>
+
+</nav>
 
 {% endblock %}
