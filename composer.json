@@ -38,7 +38,7 @@
     "ext-zip": "*"
   },
   "scripts": {
-    "test": [
+    "tests": [
       "Composer\\Config::disableProcessTimeout",
       "phpunit"
     ],

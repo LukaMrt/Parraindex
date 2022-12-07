@@ -48,40 +48,42 @@ class MonologLogger implements Logger {
 
 	private function createLogger(string $className): void {
 
-		if (!file_exists('../logs')) {
-			mkdir('../logs');
+		$logPath = '../var/log';
+		
+		if (!file_exists($logPath)) {
+			mkdir($logPath);
 		}
 
-		if (!file_exists('../logs/archives')) {
-			mkdir('../logs/archives');
+		if (!file_exists($logPath . '/archives')) {
+			mkdir($logPath . '/archives');
 		}
 
-		if (!file_exists('../logs/logs.txt')) {
-			touch('../logs/logs.txt');
+		if (!file_exists($logPath . '/var/log.txt')) {
+			touch($logPath . '/var/log.txt');
 		}
 
-		if (!file_exists('../logs/errors.txt')) {
-			touch('../logs/errors.txt');
+		if (!file_exists($logPath . '/errors.txt')) {
+			touch($logPath . '/errors.txt');
 		}
 
-		$this->zipLoggFile('../logs/logs.txt', 'logs');
-		$this->zipLoggFile('../logs/errors.txt', 'errors');
+		$this->zipLoggFile($logPath . '/var/log.txt', 'logs', $logPath);
+		$this->zipLoggFile($logPath . '/errors.txt', 'errors', $logPath);
 		$logger = new \Monolog\Logger($className);
 		$logger->pushHandler(new StreamHandler('php://stdout', 100));
-		$logger->pushHandler(new StreamHandler('../logs/logs.txt', 200));
-		$logger->pushHandler(new StreamHandler('../logs/errors.txt', 400));
+		$logger->pushHandler(new StreamHandler($logPath . '/var/log.txt', 200));
+		$logger->pushHandler(new StreamHandler($logPath . '/errors.txt', 400));
 		$logger->pushHandler(new NativeMailerHandler('maret.luka@gmail.com', 'Error logged in the parraindex', 'contact@lukamaret.com', 550));
 		$this->loggers[$className] = $logger;
 	}
 
-	private function zipLoggFile(string $logFile, string $name) {
+	private function zipLoggFile(string $logFile, string $name, string $logPath): void {
 
 		if (count(file($logFile)) < 1_000) {
 			return;
 		}
 
 		$zip = new ZipArchive();
-		$zipFileName = '../logs/archives/' . $name . '_' . date('Y-m-d_H-i-s') . '.zip';
+		$zipFileName = $logPath . '/archives/' . $name . '_' . date('Y-m-d_H-i-s') . '.zip';
 		if ($zip->open($zipFileName, ZipArchive::CREATE) === TRUE) {
 			$zip->addFile($logFile, 'log.txt');
 			$zip->close();

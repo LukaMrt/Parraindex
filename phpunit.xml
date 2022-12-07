@@ -22,7 +22,8 @@
             <html outputDirectory="out/tests/coverage/"/>
         </report>
         <include>
-            <directory suffix=".php">src/</directory>
+            <directory suffix=".php">src/application/</directory>
+            <directory suffix=".php">src/model/</directory>
         </include>
     </coverage>
 

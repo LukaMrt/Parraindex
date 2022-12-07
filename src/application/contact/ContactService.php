@@ -46,7 +46,6 @@ class ContactService {
 
     }
 
-
     public function registerContact(array $parameters): string {
 
         $parameters = [
