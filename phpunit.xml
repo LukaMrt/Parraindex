@@ -15,11 +15,14 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <ini name="display_errors" value="On"/>
+        <ini name="xdebug.mode" value="coverage" />
+        <env name="XDEBUG_MODE" value="coverage" />
     </php>
 
     <coverage>
         <report>
             <html outputDirectory="out/tests/coverage/"/>
+            <clover outputFile="out/tests/coverage-report.xml"/>
         </report>
         <include>
             <directory suffix=".php">src/application/</directory>
@@ -35,6 +38,7 @@
 
     <logging>
         <testdoxHtml outputFile="out/tests/report.html"/>
+        <junit outputFile="out/tests/report.xml"/>
     </logging>
 
 </phpunit>
