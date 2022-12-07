@@ -34,7 +34,8 @@
     "twig/twig": "^3.4",
     "ext-pdo": "^8.0",
     "vlucas/phpdotenv": "^5.5",
-    "monolog/monolog": "^3.2"
+    "monolog/monolog": "^3.2",
+    "ext-zip": "*"
   },
   "scripts": {
     "test": [

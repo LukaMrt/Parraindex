@@ -2,6 +2,7 @@
 
 namespace App\infrastructure\injector;
 
+use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
 use App\application\contact\ContactDAO;
@@ -21,6 +22,7 @@ use App\controller\TreeController;
 use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\database\contact\MysqlContactDAO;
 use App\infrastructure\database\DatabaseConnection;
+use App\infrastructure\logging\MonologLogger;
 use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\redirect\HttpRedirect;
 use App\infrastructure\router\Router;
@@ -56,12 +58,14 @@ class Injector {
 		$personDAO = get(MySqlPersonDAO::class);
 		$contactDAO = get(MySqlContactDAO::class);
 		$sponsorDAO = get(MySqlSponsorDAO::class);
+		$logger = get(MonologLogger::class);
 
         $this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
         $this->container->set(Router::class, $this->router);
 		$this->container->set(Router::class, $this->router);
 		$this->container->set(Redirect::class, $redirect);
+		$this->container->set(Logger::class, $logger);
 
         $this->container->set(SessionManager::class, $sessionManager);
 

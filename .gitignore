@@ -93,6 +93,4 @@ composer.phar
 .env
 public/css/*
 public/style/*
-
-public/style/*
-public/css/*
+logs/
