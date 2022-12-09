@@ -94,3 +94,4 @@ composer.phar
 public/css/*
 public/style/*
 var/
+.phpdoc/
