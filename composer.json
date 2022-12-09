@@ -50,6 +50,10 @@
     "sass": [
       "Composer\\Config::disableProcessTimeout",
       "sass --watch scss:public/css"
+    ],
+    "doc": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpDocumentor -d src/ -t var/doc/ --title Parraindoc"
     ]
   },
   "require-dev": {
