@@ -76,7 +76,8 @@ class LoginService {
         $lastname = $parameters['lastname'] ?? '';
         $firstname = $parameters['firstname'] ?? '';
         $person = $this->personDAO->getPerson(new Identity($firstname, $lastname));
-        $existingAccount = $this->accountDAO->existsAccount($email);
+        $emailAccountExists = $this->accountDAO->existsAccount($email);
+        $nameAccountExists = $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
 
         if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
             $error = 'Veuillez remplir tous les champs';
@@ -90,8 +91,12 @@ class LoginService {
             $error = 'Votre nom n\'est pas enregistré, merci de contacter un administrateur';
         }
 
-        if (empty($error) && $existingAccount) {
+        if (empty($error) && $emailAccountExists) {
             $error = 'Un compte existe déjà avec cette adresse email';
+        }
+
+        if (empty($error) && $nameAccountExists) {
+            $error = 'Un compte existe déjà avec ce nom';
         }
 
         if (empty($error)) {

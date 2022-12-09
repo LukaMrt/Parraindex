@@ -4,34 +4,37 @@ namespace unit\application\person;
 
 use App\application\person\PersonDAO;
 use App\application\person\PersonService;
+use App\model\person\Identity;
 use App\model\person\Person;
+use App\model\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
 class PersonServiceTest extends TestCase {
+
+	private Person $person;
 
     private PersonService $personService;
     private PersonDAO $personDAO;
 
     public function setUp(): void {
+		$this->person = PersonBuilder::aPerson()
+			->withId(1)
+			->withIdentity(new Identity('test', 'test'))
+			->withBiography('test')
+			->build();
+
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->personService = new PersonService($this->personDAO);
     }
 
     public function testGetallpeopleRetrievesPeopleList() {
 
-		$person = $this->createMock(Person::class);
 		$this->personDAO->method('getAllPeople')
-			->will($this->onConsecutiveCalls(array(), array($person)));
+			->willReturn(array($this->person));
 
-		// Test 1
-		$allPeople = $this->personService->getAllPeople();
+		$return = $this->personService->getAllPeople();
 
-		$this->assertTrue($allPeople == array());
-
-		// Test 2
-		$allPeople = $this->personService->getAllPeople();
-
-		$this->assertTrue($allPeople == array($person));
+		$this->assertEquals($return, array($this->person));
 	}
 
 	public function testGetPersonByIdRetrievesPerson() {
@@ -39,17 +42,37 @@ class PersonServiceTest extends TestCase {
 		$person = $this->createMock(Person::class);
 		$this->personDAO->method('getPersonById')
 			->with($this->equalTo(1))
-			->will($this->onConsecutiveCalls(null, $person));
+			->willReturn($person);
 
-		// Test 1
 		$return = $this->personService->getPersonById(1);
 
-		$this->assertTrue($return == null);
+		$this->assertEquals($return, $person);
+	}
 
-		// Test 2
-		$return = $this->personService->getPersonById(1);
+	public function testUpdatepersonUpdatesDao() {
 
-		$this->assertTrue($return === $person);
+		$this->personDAO->expects($this->once())
+			->method('updatePerson')
+			->with($this->equalTo($this->person));
+
+		$this->personService->updatePerson(array(
+			'id' => 1,
+			'first_name' => 'test',
+			'last_name' => 'test',
+			'biography' => 'test'
+		));
+
+	}
+
+	public function testGetpersonbyidentityReturnsPerson() {
+
+		$this->personDAO->method('getPerson')
+			->with($this->equalTo(new Identity('test', 'test')))
+			->willReturn($this->person);
+
+		$return = $this->personService->getPersonByIdentity(new Identity('test', 'test'));
+
+		$this->assertEquals($return, $this->person);
 	}
 
 }

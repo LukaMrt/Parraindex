@@ -9,7 +9,6 @@ use App\model\account\Password;
 use App\model\account\Privilege;
 use App\model\account\PrivilegeType;
 use App\model\person\Identity;
-use App\model\person\Person;
 use App\model\person\PersonBuilder;
 use App\model\school\School;
 
@@ -56,15 +55,15 @@ class MysqlAccountDAO implements AccountDAO {
     }
 
     public function existsAccount(string $email): bool {
-        $connection = $this->databaseConnection->getDatabase();
+		$connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT * FROM Account WHERE email = :email");
-        $query->execute(['email' => $email]);
-        $result = $query->fetch();
+		$query = $connection->prepare("SELECT * FROM Account WHERE email = :email");
+		$query->execute(['email' => $email]);
+		$result = $query->fetch();
 
-        $connection = null;
-        return (bool)$result;
-    }
+		$connection = null;
+		return (bool)$result;
+	}
 
     public function getSimpleAccount(mixed $username): Account {
         $connection = $this->databaseConnection->getDatabase();
@@ -84,14 +83,27 @@ class MysqlAccountDAO implements AccountDAO {
             $id = $row->id_account;
             $email = $row->email;
             $password = new Password($row->password);
-        }
+		}
 
-        $account = new Account($id, $email, $person, $password, ...$privileges);
+		$account = new Account($id, $email, $person, $password, ...$privileges);
 
-        $query->closeCursor();
-        $connection = null;
-        return $account;
+		$query->closeCursor();
+		$connection = null;
+		return $account;
 
-    }
+	}
+
+	public function existsAccountByIdentity(Identity $identity): bool {
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("SELECT * FROM Account
+												JOIN Person P on P.id_person = Account.id_person
+											 	WHERE first_name = :first_name AND last_name = :last_name");
+		$query->execute(['first_name' => $identity->getFirstName(), 'last_name' => $identity->getLastName()]);
+		$result = $query->fetch();
+
+		$connection = null;
+		return (bool)$result;
+	}
 
 }

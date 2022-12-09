@@ -4,6 +4,7 @@ namespace App\application\person;
 
 use App\model\person\Identity;
 use App\model\person\Person;
+use App\model\person\PersonBuilder;
 
 class PersonService {
 
@@ -22,7 +23,13 @@ class PersonService {
     }
 
 	public function updatePerson(array $parameters): void {
-		$this->personDAO->updatePerson($parameters);
+		$person = PersonBuilder::aPerson()
+			->withId($parameters['id'])
+			->withIdentity(new Identity($parameters['first_name'], $parameters['last_name']))
+			->withBiography($parameters['biography'])
+			->build();
+
+		$this->personDAO->updatePerson($person);
 	}
 
 	public function getPersonByIdentity(Identity $identity): ?Person {

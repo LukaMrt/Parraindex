@@ -9,12 +9,20 @@ use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\account\Account;
 use App\model\account\Password;
+use App\model\account\Privilege;
 use App\model\account\PrivilegeType;
 use App\model\person\Identity;
+use App\model\person\Person;
 use App\model\person\PersonBuilder;
+use App\model\school\School;
+use App\model\school\SchoolAddress;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class LoginServiceTest extends TestCase {
+
+	private Person $person;
+	private Account $account;
 
 	private LoginService $loginService;
 	private Redirect $redirect;
@@ -23,6 +31,15 @@ class LoginServiceTest extends TestCase {
 	private SessionManager $sessionManager;
 
 	public function setUp(): void {
+
+		$this->person = PersonBuilder::aPerson()
+			->withId(-1)
+			->withIdentity(new Identity('test', 'test'))
+			->build();
+		$school = new School(0, 'school', new SchoolAddress('street', 'city'), new DateTime());
+		$privilege = new Privilege($school, PrivilegeType::ADMIN);
+		$this->account = new Account(0, 'test@test.com', $this->person, new Password('password'), $privilege);
+
 		$this->accountDAO = $this->createMock(AccountDAO::class);
 		$this->personDAO = $this->createMock(PersonDAO::class);
 		$this->redirect = $this->createMock(Redirect::class);
@@ -53,95 +70,61 @@ class LoginServiceTest extends TestCase {
 
 	public function testLoginSavesLoginInSessionOnSuccess(): void {
 
-		$account = $this->createMock(Account::class);
-
-		$account->method('getLogin')
-			->willReturn('test');
-
-		$account->method('getHighestPrivilege')
-			->willReturn(PrivilegeType::ADMIN);
-
 		$this->accountDAO->method('getAccountPassword')
-			->with('test')
-			->will($this->onConsecutiveCalls(new Password(password_hash('test', PASSWORD_DEFAULT)), new Password('')));
+			->with('test@test.com')
+			->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
 		$this->accountDAO->method('getSimpleAccount')
-			->with('test')
-			->willReturn($account);
+			->with('test@test.com')
+			->willReturn($this->account);
 
 		$this->sessionManager->expects($this->exactly(2))
 			->method('set')
 			->withConsecutive(
-				['login', 'test'],
+				['login', 'test@test.com'],
 				['privilege', 'ADMIN']
 			);
 
 		$this->loginService->login(array(
-			'login' => 'test',
-			'password' => 'test',
-		));
-
-		$this->loginService->login(array(
-			'login' => 'test',
+			'login' => 'test@test.com',
 			'password' => 'test',
 		));
     }
 
 	public function testLoginReturnsNothingOnSuccess(): void {
 
-		$account = $this->createMock(Account::class);
-
-		$account->method('getLogin')
-			->willReturn('test');
-
-		$account->method('getHighestPrivilege')
-			->willReturn(PrivilegeType::ADMIN);
-
 		$this->accountDAO->method('getAccountPassword')
-			->with('test')
+			->with('test@test.com')
 			->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
 		$this->accountDAO->method('getSimpleAccount')
-			->with('test')
-			->willReturn($account);
+			->with('test@test.com')
+			->willReturn($this->account);
 
 		$return = $this->loginService->login(array(
-			'login' => 'test',
+			'login' => 'test@test.com',
 			'password' => 'test',
 		));
 
-		$this->assertEquals('', $return);
+		$this->assertEmpty($return);
 	}
 
-	public function testLoginRedirectToHomeOnSuccess(): void {
-
-		$account = $this->createMock(Account::class);
-
-		$account->method('getLogin')
-			->willReturn('test');
-
-		$account->method('getHighestPrivilege')
-			->willReturn(PrivilegeType::ADMIN);
+	public function testLoginRedirectsToHomeOnSuccess(): void {
 
 		$this->accountDAO->method('getAccountPassword')
-			->with('test')
-			->will($this->onConsecutiveCalls(new Password(password_hash('test', PASSWORD_DEFAULT)), new Password('')));
+			->with('test@test.com')
+			->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
 		$this->accountDAO->method('getSimpleAccount')
-			->with('test')
-			->willReturn($account);
+			->with('test@test.com')
+			->willReturn($this->account);
 
 		$this->redirect->expects($this->once())
 			->method('redirect')
 			->with('home');
 
 		$this->loginService->login(array(
-			'login' => 'test',
-			'password' => 'test',
-		));
-
-		$this->loginService->login(array(
-			'login' => 'test',
+			'login' => 'test@test.com',
 			'password' => 'test',
 		));
 	}
@@ -183,15 +166,11 @@ class LoginServiceTest extends TestCase {
 		$this->assertEquals('Votre nom n\'est pas enregistré, merci de contacter un administrateur', $return);
 	}
 
-	public function testSignupDetectsAlreadyExistingAccount(): void {
+	public function testSignupDetectsAlreadyExistingAccountWithEmail(): void {
 
 		$this->personDAO->method('getPerson')
 			->with(new Identity('test', 'test'))
-			->willReturn(PersonBuilder::aPerson()
-				->withId(-1)
-				->withIdentity(new Identity('test', 'test'))
-				->build()
-			);
+			->willReturn($this->person);
 
 		$this->accountDAO->method("existsAccount")
 			->willReturn(true);
@@ -207,17 +186,39 @@ class LoginServiceTest extends TestCase {
 		$this->assertEquals('Un compte existe déjà avec cette adresse email', $return);
 	}
 
+	public function testSignupDetectsAlreadyExistingAccountWithName(): void {
+
+		$this->personDAO->method('getPerson')
+			->with(new Identity('test', 'test'))
+			->willReturn($this->person);
+
+		$this->accountDAO->method("existsAccount")
+			->willReturn(false);
+
+		$this->accountDAO->method("existsAccountByIdentity")
+			->willReturn(true);
+
+		$return = $this->loginService->signup(array(
+			'lastname' => 'test',
+			'firstname' => 'test',
+			'email' => 'test',
+			'password' => 'test',
+			'password-confirm' => 'test'
+		));
+
+		$this->assertEquals('Un compte existe déjà avec ce nom', $return);
+	}
+
 	public function testSignupRedirectToHomePageOnSuccess(): void {
 
 		$this->personDAO->method('getPerson')
 			->with(new Identity('test', 'test'))
-			->willReturn(PersonBuilder::aPerson()
-				->withId(-1)
-				->withIdentity(new Identity('test', 'test'))
-				->build()
-			);
+			->willReturn($this->person);
 
 		$this->accountDAO->method("existsAccount")
+			->willReturn(false);
+
+		$this->accountDAO->method("existsAccountByIdentity")
 			->willReturn(false);
 
 		$this->redirect->expects($this->once())
@@ -269,7 +270,6 @@ class LoginServiceTest extends TestCase {
 		$this->loginService->login(array(
 			'action' => 'register'
 		));
-
 	}
 
 }
