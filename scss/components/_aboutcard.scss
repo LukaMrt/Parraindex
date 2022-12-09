@@ -1,0 +1,45 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+.about-card {
+
+	@include m.flex();
+	width: f.rem(200);
+	height: max(f.rem(100), 20vh);
+	transition: all 0.2s ease-in-out;
+	border-radius: f.rem(16);
+	gap: f.rem(10);
+
+	&__picture {
+		@include m.hard-box-shadow();
+		border-radius: 50%;
+		height: 40%;
+	}
+
+	&__profil {
+		font-size: f.rem(20);
+		text-align: center;
+		color: var(--medium-grey);
+	}
+
+	&__last-name {
+		text-transform: uppercase;
+		color: var(--dark-blue);
+		letter-spacing: 2px;
+		font-weight: 600;
+	}
+
+	&:hover{
+		@include m.hard-box-shadow();
+	}
+
+	&:active{
+		scale: 0.95;
+	}
+	
+	@include b.breakpoint(medium ){
+		@include m.hard-box-shadow();
+	}
+
+}
