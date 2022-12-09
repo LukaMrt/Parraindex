@@ -6,6 +6,7 @@ use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
 use App\application\contact\ContactDAO;
+use App\application\mail\Mailer;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\controller\AboutController;
@@ -23,6 +24,7 @@ use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\database\contact\MysqlContactDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\logging\MonologLogger;
+use App\infrastructure\mail\PhpMailer;
 use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\redirect\HttpRedirect;
 use App\infrastructure\router\Router;
@@ -59,6 +61,7 @@ class Injector {
 		$contactDAO = get(MySqlContactDAO::class);
 		$sponsorDAO = get(MySqlSponsorDAO::class);
 		$logger = get(MonologLogger::class);
+		$mailer = get(PhpMailer::class);
 
         $this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
@@ -66,6 +69,7 @@ class Injector {
 		$this->container->set(Router::class, $this->router);
 		$this->container->set(Redirect::class, $redirect);
 		$this->container->set(Logger::class, $logger);
+		$this->container->set(Mailer::class, $mailer);
 
         $this->container->set(SessionManager::class, $sessionManager);
 
