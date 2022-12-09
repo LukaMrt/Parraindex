@@ -53,7 +53,7 @@
     ],
     "doc": [
       "Composer\\Config::disableProcessTimeout",
-      "phpDocumentor -d src/ -t var/doc/ --title Parraindoc"
+      "phpDocumentor -d src/ -t out/doc/ --title Parraindoc"
     ]
   },
   "require-dev": {
