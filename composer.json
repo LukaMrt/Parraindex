@@ -55,6 +55,11 @@
     "doc": [
       "Composer\\Config::disableProcessTimeout",
       "phpDocumentor -d src/ -t out/doc/ --title Parraindoc"
+    ],
+    "mutating tests": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpunit",
+      "infection"
     ]
   },
   "require-dev": {
