@@ -1,8 +1,45 @@
-<?xml version="1.0" encoding="utf-8" ?>
-<phpunit bootstrap="vendor/autoload.php" colors="true">
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<phpunit bootstrap="vendor/autoload.php" colors="true"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd"
+         executionOrder="random"
+         failOnWarning="true"
+         failOnRisky="true"
+         failOnEmptyTestSuite="true"
+         beStrictAboutOutputDuringTests="true"
+         testdox="true"
+         noInteraction="true"
+         verbose="true">
+
+    <php>
+        <ini name="error_reporting" value="-1"/>
+        <ini name="display_errors" value="On"/>
+        <ini name="xdebug.mode" value="coverage" />
+        <env name="XDEBUG_MODE" value="coverage" />
+    </php>
+
+    <coverage>
+        <report>
+            <html outputDirectory="out/tests/coverage/"/>
+            <clover outputFile="out/tests/coverage-report.xml"/>
+        </report>
+        <include>
+            <directory suffix=".php">src/application/</directory>
+            <directory suffix=".php">src/model/</directory>
+        </include>
+    </coverage>
+
     <testsuites>
-        <testsuite name="Test Suite">
-            <directory>./tests</directory>
+        <testsuite name="Unit tests suit">
+            <directory phpVersion="8.1.1" phpVersionOperator=">=">tests</directory>
         </testsuite>
     </testsuites>
+
+    <logging>
+        <testdoxHtml outputFile="out/tests/report.html"/>
+        <junit outputFile="out/tests/report.xml"/>
+    </logging>
+
 </phpunit>
+

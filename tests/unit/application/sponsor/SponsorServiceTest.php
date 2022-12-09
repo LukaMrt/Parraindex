@@ -1,8 +1,7 @@
 <?php
 
-namespace application\sponsor;
+namespace unit\application\sponsor;
 
-use App\application\person\PersonDAO;
 use App\application\sponsor\SponsorDAO;
 use App\application\sponsor\SponsorService;
 use App\model\person\Person;

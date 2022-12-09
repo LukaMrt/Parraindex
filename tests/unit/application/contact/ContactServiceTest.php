@@ -1,6 +1,6 @@
 <?php
 
-namespace application\contact;
+namespace unit\application\contact;
 
 use App\application\contact\ContactDAO;
 use App\application\contact\ContactService;
