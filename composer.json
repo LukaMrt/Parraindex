@@ -35,8 +35,7 @@
     "ext-pdo": "^8.0",
     "vlucas/phpdotenv": "^5.5",
     "monolog/monolog": "^3.2",
-    "ext-zip": "*"
-    "vlucas/phpdotenv": "^5.5",
+    "ext-zip": "*",
     "phpmailer/phpmailer": "^6.7"
   },
   "scripts": {
