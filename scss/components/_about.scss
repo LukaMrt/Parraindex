@@ -4,50 +4,43 @@
 
 .about {
 
-	&__title {
-		margin-top: f.rem(50);
-
-		@include b.breakpoint(medium){
-			margin: f.rem(50) 0 f.rem(20);
-		}
-	}
-
 	&__description {
-
-		@include m.flex(center, center, row);
-		gap: 5%;
-		width: 90%;
-
+		@include m.flex($direction : row);
+		width: min(90%, f.rem(1500));
+		gap: f.rem(50);
+		
+		
 		@include b.breakpoint(medium){
-			@include m.flex(center, center, column);
+			flex-direction: column;
 		}
 
 		&-logo {
-			max-width: f.rem(300);
-			max-height: f.rem(300);
+			width: min(40vh , 40vw);
+			aspect-ratio: 1/1;
 		}
 
-		&-text {
+		&-text{
+			@include m.flex($direction: column, $justify: space-evenly);
+			align-self: stretch;
+			gap: f.rem(10);
 
-			p {
-				padding: f.rem(15) 0;
-				text-indent: 2rem;
-				text-align: justify;
-			}
-
-		}
-
+			text-align: justify;
+			font-size: f.rem(16);
+			text-indent: f.rem(32);
+			width: min(80ch, 100%);
+		}	
 	}
 
 	&_authors {
-		@include m.flex(center, space-around, row);
+		@include m.flex($justify: space-evenly, $direction: row);
+		width: 95%;
 		gap: f.rem(25);
 		flex-wrap: wrap;
-		width: 90%;
 
 		@include b.breakpoint(medium){
-			margin: f.rem(20) 0;
+			justify-content: center;
 		}
+
 	}
 
 }

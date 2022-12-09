@@ -7,8 +7,6 @@ body{
 
 	margin: 0;
 
-	width: 100vw;
-	width: 100dvw;
 	min-width: 350px;
 
 	min-height: 100vh;
@@ -20,8 +18,8 @@ body{
 	background-color: var(--white);
 	color: var(--dark-blue);
 
-	@include b.breakpoint(small){
-		padding: f.rem(16) 0;
+	@include b.breakpoint(medium){
+		gap: f.rem(25);
 	}
 }
 
@@ -29,6 +27,10 @@ main {
 	flex-grow: 1;
 	width: 100%;
 	@include m.flex($direction: column, $justify: space-evenly);
+
+	@include b.breakpoint(medium){
+		gap: inherit;
+	}
 }
 
 select {

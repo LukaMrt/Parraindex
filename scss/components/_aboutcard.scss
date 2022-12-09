@@ -5,28 +5,41 @@
 .about-card {
 
 	@include m.flex();
-	width: 10%;
-	min-width: f.rem(200);
-	height: f.rem(170);
+	width: f.rem(200);
+	height: max(f.rem(100), 20vh);
+	transition: all 0.2s ease-in-out;
+	border-radius: f.rem(16);
+	gap: f.rem(10);
 
 	&__picture {
 		@include m.hard-box-shadow();
 		border-radius: 50%;
+		height: 40%;
 	}
 
 	&__profil {
-		@include m.hard-box-shadow();
 		font-size: f.rem(20);
 		text-align: center;
-		padding: f.rem(5) f.rem(30);
-		margin-top: f.rem(10);
-		border-radius: f.rem(35);
 		color: var(--medium-grey);
 	}
 
 	&__last-name {
 		text-transform: uppercase;
 		color: var(--dark-blue);
+		letter-spacing: 2px;
+		font-weight: 600;
+	}
+
+	&:hover{
+		@include m.hard-box-shadow();
+	}
+
+	&:active{
+		scale: 0.95;
+	}
+	
+	@include b.breakpoint(medium ){
+		@include m.hard-box-shadow();
 	}
 
 }

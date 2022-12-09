@@ -1,6 +1,7 @@
-@forward "abstracts";
 @forward "base";
-@forward "components";
+
+@forward "components/about";	
+@forward "components/aboutcard";
+@forward "components/popup";
+
 @forward "layout";
-@forward "pages";
-@forward "themes";
