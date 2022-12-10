@@ -101,26 +101,18 @@
 	.contact{
 		@include m.flex($direction: column);
 		height: 100%;
-		gap: f.rem(16);
+		width: 80%;
+		gap: f.rem(42);
 
 		flex: 2 2 0px;
 
-		&__social{
-			@include m.flex($direction: column);
-			gap: f.rem(16);	
-		}
-
-		.network{
-			@include m.flex($direction: row, $justify: space-around);
+		&__characteristics{
+			width: 50%;
+			@include m.flex($direction: column , $justify: normal , $align: flex-start);
 			gap: f.rem(16);
-
-			span{
-				width: 5em;
-				text-align: right;
-			}
 		}
-	}
 
+	}
 }
 
 .confirm{

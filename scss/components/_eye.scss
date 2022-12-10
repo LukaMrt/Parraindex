@@ -1,0 +1,23 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.eye{
+	display: none;
+
+	&__label{
+		@include m.flex();
+	}
+
+	&__img{
+		width: 30px;
+		&--close{display: block;}
+		&--open{display: none;}
+	}
+
+	&:checked + &__label{
+		.eye__img{
+			&--close{display: none;}
+			&--open{display: block;}
+		}
+	}
+}

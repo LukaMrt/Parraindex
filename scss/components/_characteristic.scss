@@ -1,0 +1,24 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.characteristic{
+	@include m.flex($direction: row);
+	width: 100%;
+	gap: f.rem(32);
+
+	.eye__label{
+		flex: 1;
+	}
+
+	&__value{
+		flex: 2;
+		border: 0;
+		color: var(--dark-grey);
+	}
+
+	&__title{
+		flex: 1;
+		font-weight: 600;
+		text-transform: uppercase;
+	}
+}

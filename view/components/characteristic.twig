@@ -1,0 +1,10 @@
+<div class="characteristic">
+	{% include 'components/eye.twig' with {
+		'slug': 'characteristic-visibility-' ~ id,
+		'visibility': visibility,
+		}
+	%}
+	<label class="characteristic__title" for="characteristic-value-{{id}}"> {{title}} </label>
+
+	<input class="characteristic__value" type="text" name="characteristic-value-{{id}}" id="characteristic-value-{{id}}" value="{{value}}">
+</div>

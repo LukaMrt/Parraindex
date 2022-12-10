@@ -83,21 +83,18 @@
 	<div class="contact">
 		<h2>CONTACT</h2>
 
-		<div class="contact__social" id="contact-field">
+		<div class="contact__characteristics" id="contact-field">
 
-			<div class="network">
-				<img src="" alt="" srcset="">
-				<span> Email : </span>
-				<input disable type="text" name="" id="" value="lilian.baudry@etu.univ-lyon.fr">
-				<button>-</button>
-			</div>
+			{% for characteristic in person.characteristics %}
 
-			<div class="network">
-				<img src="" alt="" srcset="">
-				<span> Discord : </span>
-				<input type="text" name="" id="" value="Irophin#4851">
-				<button>-</button>
-			</div>
+				{% include 'components/characteristic.twig' with {
+					'title': characteristic.title,
+					'value': characteristic.value,
+					'id': characteristic.id,
+					'visibility': characteristic.visible,
+					}
+				%}
+			{% endfor %}
 		
 		</div>
 	</div>
