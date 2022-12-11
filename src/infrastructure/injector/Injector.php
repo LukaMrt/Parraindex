@@ -6,8 +6,11 @@ use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
 use App\application\contact\ContactDAO;
+use App\application\login\UrlUtils;
 use App\application\mail\Mailer;
 use App\application\person\PersonDAO;
+use App\application\random\DefaultRandom;
+use App\application\random\Random;
 use App\application\redirect\Redirect;
 use App\controller\AboutController;
 use App\application\sponsor\SponsorDAO;
@@ -24,6 +27,7 @@ use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\database\contact\MysqlContactDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\infrastructure\logging\MonologLogger;
+use App\infrastructure\login\DefaultUrlUtils;
 use App\infrastructure\mail\PhpMailer;
 use App\infrastructure\person\MySqlPersonDAO;
 use App\infrastructure\redirect\HttpRedirect;
@@ -62,6 +66,8 @@ class Injector {
 		$sponsorDAO = get(MySqlSponsorDAO::class);
 		$logger = get(MonologLogger::class);
 		$mailer = get(PhpMailer::class);
+		$random = get(DefaultRandom::class);
+		$urlUtils = get(DefaultUrlUtils::class);
 
         $this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
@@ -70,6 +76,8 @@ class Injector {
 		$this->container->set(Redirect::class, $redirect);
 		$this->container->set(Logger::class, $logger);
 		$this->container->set(Mailer::class, $mailer);
+		$this->container->set(Random::class, $random);
+		$this->container->set(UrlUtils::class, $urlUtils);
 
         $this->container->set(SessionManager::class, $sessionManager);
 

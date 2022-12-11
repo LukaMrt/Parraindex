@@ -5,14 +5,12 @@ namespace unit\application\login;
 use App\application\login\AccountDAO;
 use App\application\login\LoginService;
 use App\application\login\SessionManager;
-use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\account\Account;
 use App\model\account\Password;
 use App\model\account\Privilege;
 use App\model\account\PrivilegeType;
 use App\model\person\Identity;
-use App\model\person\Person;
 use App\model\person\PersonBuilder;
 use App\model\school\School;
 use App\model\school\SchoolAddress;
@@ -21,30 +19,27 @@ use PHPUnit\Framework\TestCase;
 
 class LoginServiceTest extends TestCase {
 
-	private Person $person;
 	private Account $account;
 
 	private LoginService $loginService;
 	private Redirect $redirect;
 	private AccountDAO $accountDAO;
-	private PersonDAO $personDAO;
 	private SessionManager $sessionManager;
 
 	public function setUp(): void {
 
-		$this->person = PersonBuilder::aPerson()
+		$person = PersonBuilder::aPerson()
 			->withId(-1)
 			->withIdentity(new Identity('test', 'test'))
 			->build();
 		$school = new School(0, 'school', new SchoolAddress('street', 'city'), new DateTime());
 		$privilege = new Privilege($school, PrivilegeType::ADMIN);
-		$this->account = new Account(0, 'test@test.com', $this->person, new Password('password'), $privilege);
+		$this->account = new Account(0, 'test@test.com', $person, new Password('password'), $privilege);
 
 		$this->accountDAO = $this->createMock(AccountDAO::class);
-		$this->personDAO = $this->createMock(PersonDAO::class);
 		$this->redirect = $this->createMock(Redirect::class);
 		$this->sessionManager = $this->createMock(SessionManager::class);
-		$this->loginService = new LoginService($this->accountDAO, $this->personDAO, $this->redirect, $this->sessionManager);
+		$this->loginService = new LoginService($this->accountDAO, $this->redirect, $this->sessionManager);
 	}
 
 	public function testLoginDetectsMissingFields(): void {
@@ -126,138 +121,6 @@ class LoginServiceTest extends TestCase {
 		$this->loginService->login(array(
 			'login' => 'test@test.com',
 			'password' => 'test',
-		));
-	}
-
-	public function testSignupDetectsMissingFields(): void {
-
-		$return = $this->loginService->signup(array());
-
-		$this->assertEquals('Veuillez remplir tous les champs', $return);
-	}
-
-	public function testSignupDetectsPasswordsMismatch(): void {
-
-		$return = $this->loginService->signup(array(
-			'lastname' => 'test',
-			'firstname' => 'test',
-			'email' => 'test',
-			'password' => 'test',
-			'password-confirm' => 'test2',
-		));
-
-		$this->assertEquals('Les mots de passe ne correspondent pas', $return);
-	}
-
-	public function testSignupDetectsInvalidNames(): void {
-
-		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn(null);
-
-		$return = $this->loginService->signup(array(
-			'lastname' => 'test',
-			'firstname' => 'test',
-			'email' => 'test',
-			'password' => 'test',
-			'password-confirm' => 'test'
-		));
-
-		$this->assertEquals('Votre nom n\'est pas enregistré, merci de contacter un administrateur', $return);
-	}
-
-	public function testSignupDetectsAlreadyExistingAccountWithEmail(): void {
-
-		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn($this->person);
-
-		$this->accountDAO->method("existsAccount")
-			->willReturn(true);
-
-		$return = $this->loginService->signup(array(
-			'lastname' => 'test',
-			'firstname' => 'test',
-			'email' => 'test',
-			'password' => 'test',
-			'password-confirm' => 'test'
-		));
-
-		$this->assertEquals('Un compte existe déjà avec cette adresse email', $return);
-	}
-
-	public function testSignupDetectsAlreadyExistingAccountWithName(): void {
-
-		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn($this->person);
-
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
-
-		$this->accountDAO->method("existsAccountByIdentity")
-			->willReturn(true);
-
-		$return = $this->loginService->signup(array(
-			'lastname' => 'test',
-			'firstname' => 'test',
-			'email' => 'test',
-			'password' => 'test',
-			'password-confirm' => 'test'
-		));
-
-		$this->assertEquals('Un compte existe déjà avec ce nom', $return);
-	}
-
-	public function testSignupRedirectToHomePageOnSuccess(): void {
-
-		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn($this->person);
-
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
-
-		$this->accountDAO->method("existsAccountByIdentity")
-			->willReturn(false);
-
-		$this->redirect->expects($this->once())
-			->method('redirect')
-			->with('home');
-
-		$this->loginService->signup(array(
-			'lastname' => 'test',
-			'firstname' => 'test',
-			'email' => 'test',
-			'password' => 'test',
-			'password-confirm' => 'test'
-		));
-	}
-
-	public function testSignupCreatesAccountOnSuccess(): void {
-
-		$person = PersonBuilder::aPerson()
-			->withId(-1)
-			->withIdentity(new Identity('test', 'test'))
-			->build();
-
-		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn($person);
-
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
-
-		$this->accountDAO->expects($this->once())
-			->method('createAccount')
-			->with(new Account(-1, 'test', $person, new Password('test')));
-
-		$this->loginService->signup(array(
-			'lastname' => 'test',
-			'firstname' => 'test',
-			'email' => 'test',
-			'password' => 'test',
-			'password-confirm' => 'test'
 		));
 	}
 

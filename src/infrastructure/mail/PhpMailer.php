@@ -21,6 +21,8 @@ class PhpMailer implements Mailer {
 		$this->mailer->Password = $_ENV['MAIL_PASSWORD'];
 		$this->mailer->SMTPSecure = \PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_SMTPS;
 		$this->mailer->Port = 465;
+		$this->mailer->Encoding = 'base64';
+		$this->mailer->CharSet = 'UTF-8';
 	}
 
 	public function send(string $to, string $subject, string $body) {

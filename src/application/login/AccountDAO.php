@@ -18,4 +18,6 @@ interface AccountDAO {
 
     public function getSimpleAccount(mixed $username): Account;
 
+	public function createTemporaryAccount(Account $account, string $link): void;
+
 }

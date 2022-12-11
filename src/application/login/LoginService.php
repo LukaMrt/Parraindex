@@ -11,13 +11,11 @@ use App\model\person\Identity;
 class LoginService {
 
     private AccountDAO $accountDAO;
-    private PersonDAO $personDAO;
     private Redirect $redirect;
     private SessionManager $sessionManager;
 
-    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, SessionManager $sessionManager) {
+    public function __construct(AccountDAO $accountDAO, Redirect $redirect, SessionManager $sessionManager) {
         $this->accountDAO = $accountDAO;
-        $this->personDAO = $personDAO;
         $this->redirect = $redirect;
         $this->sessionManager = $sessionManager;
     }
@@ -65,56 +63,6 @@ class LoginService {
         $errors = array_map(fn($error) => $error['message'], $errors);
 
         return array_shift($errors) ?? '';
-    }
-
-    public function signup(array $parameters): string {
-
-        $error = '';
-        $email = $parameters['email'] ?? '';
-        $password = $parameters['password'] ?? '';
-        $passwordConfirm = $parameters['password-confirm'] ?? '';
-        $lastname = $parameters['lastname'] ?? '';
-        $firstname = $parameters['firstname'] ?? '';
-        $person = $this->personDAO->getPerson(new Identity($firstname, $lastname));
-        $emailAccountExists = $this->accountDAO->existsAccount($email);
-        $nameAccountExists = $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
-
-        if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
-            $error = 'Veuillez remplir tous les champs';
-        }
-
-        if (empty($error) && $password !== $passwordConfirm) {
-            $error = 'Les mots de passe ne correspondent pas';
-        }
-
-        if (empty($error) && $person === null) {
-            $error = 'Votre nom n\'est pas enregistré, merci de contacter un administrateur';
-        }
-
-        if (empty($error) && $emailAccountExists) {
-            $error = 'Un compte existe déjà avec cette adresse email';
-        }
-
-        if (empty($error) && $nameAccountExists) {
-            $error = 'Un compte existe déjà avec ce nom';
-        }
-
-        if (empty($error)) {
-            $account = new Account(-1, $email, $person, new Password($password));
-            $this->redirect->redirect('home');
-            $this->accountDAO->createAccount($account);
-        }
-
-        return $error;
-    }
-
-    private function empty(string...$parameters): bool {
-        foreach ($parameters as $parameter) {
-            if (empty($parameter)) {
-                return true;
-            }
-        }
-        return false;
     }
 
 }

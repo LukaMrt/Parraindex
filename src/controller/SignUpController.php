@@ -2,17 +2,17 @@
 
 namespace App\controller;
 
-use App\application\login\LoginService;
+use App\application\login\SignupService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
 class SignUpController extends Controller {
 
-	private LoginService $loginService;
+	private SignupService $signupService;
 
-	public function __construct(Environment $twig, LoginService $loginService) {
+	public function __construct(Environment $twig, SignupService $signupService) {
 		parent::__construct($twig);
-		$this->loginService = $loginService;
+		$this->signupService = $signupService;
 	}
 
     public function get(Router $router, array $parameters): void {
@@ -29,7 +29,7 @@ class SignUpController extends Controller {
 			'password-confirm' => $_POST['password-confirm'] ?? ''
 		];
 
-		$error = $this->loginService->signUp($postParameters);
+		$error = $this->signupService->signUp($postParameters);
 
 		$this->render('signup.twig', ['router' => $router, 'error' => $error]);
 	}

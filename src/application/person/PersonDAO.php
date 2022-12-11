@@ -15,4 +15,6 @@ interface PersonDAO {
 
 	public function updatePerson(Person $person);
 
+	public function getAllIdentities(): array;
+
 }

@@ -106,4 +106,19 @@ class MysqlAccountDAO implements AccountDAO {
 		return (bool)$result;
 	}
 
+	public function createTemporaryAccount(Account $account, string $link): void {
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("INSERT INTO TemporaryAccount (email, password, id_person, link) VALUES (:email, :password, :person, :link)");
+		$query->execute([
+			'email' => $account->getLogin(),
+			'password' => $account->getHashedPassword(),
+			'person' => $account->getPersonId(),
+			'link' => $link
+		]);
+
+		$connection = null;
+		$query->closeCursor();
+	}
+
 }

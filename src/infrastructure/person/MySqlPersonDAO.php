@@ -160,4 +160,22 @@ class MySqlPersonDAO implements PersonDAO {
 		$connection = null;
 	}
 
+	public function getAllIdentities(): array {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare(
+			"SELECT first_name, last_name FROM Person");
+		$query->execute();
+
+		$identities = array();
+
+		while ($row = $query->fetch()) {
+			$identities[] = new Identity($row->first_name, $row->last_name);
+		}
+
+		$query->closeCursor();
+		return $identities;
+	}
+
 }

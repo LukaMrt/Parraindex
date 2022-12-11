@@ -10,9 +10,9 @@ class LoginController extends Controller {
 
     private LoginService $loginService;
 
-    public function __construct(Environment $twig, LoginService $loginService) {
+    public function __construct(Environment $twig, LoginService $signupService) {
         parent::__construct($twig);
-        $this->loginService = $loginService;
+        $this->loginService = $signupService;
     }
 
     public function get(Router $router, array $parameters): void {
