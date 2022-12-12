@@ -38,21 +38,21 @@ class MysqlAccountDAO implements AccountDAO {
     }
 
     public function createAccount(Account $account): void {
-        $connection = $this->databaseConnection->getDatabase();
+		$connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Account (email, password, id_person) VALUES (:email, :password, :person)");
-        $query->execute([
-            'email' => $account->getLogin(),
-            'password' => $account->getHashedPassword(),
-            'person' => $account->getPersonId()
-        ]);
+		$query = $connection->prepare("INSERT INTO Account (email, password, id_person) VALUES (:email, :password, :person)");
+		$query->execute([
+			'email' => $account->getLogin(),
+			'password' => $account->getHashedPassword(),
+			'person' => $account->getPersonId()
+		]);
 
-        $query = $connection->prepare("INSERT INTO Privilege (id_account, id_school, privilege_name) VALUES ((SELECT id_account FROM Account WHERE email = :email), 1, 'ADMIN')");
-        $query->execute(['email' => $account->getLogin(),]);
+		$query = $connection->prepare("INSERT INTO Privilege (id_account, id_school, privilege_name) VALUES ((SELECT id_account FROM Account WHERE email = :email), 1, 'STUDENT')");
+		$query->execute(['email' => $account->getLogin()]);
 
-        $connection = null;
+		$connection = null;
 		$query->closeCursor();
-    }
+	}
 
     public function existsAccount(string $email): bool {
 		$connection = $this->databaseConnection->getDatabase();
@@ -116,6 +116,33 @@ class MysqlAccountDAO implements AccountDAO {
 			'person' => $account->getPersonId(),
 			'link' => $link
 		]);
+
+		$connection = null;
+		$query->closeCursor();
+	}
+
+	public function getTemporaryAccountByToken(string $token): Account {
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("SELECT * FROM TemporaryAccount WHERE link = :token");
+		$query->execute(['token' => $token]);
+
+		$account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
+
+		if ($result = $query->fetch()) {
+			$account = new Account($result->id_account, $result->email, PersonBuilder::aPerson()->withId($result->id_person)->build(), new Password($result->password));
+		}
+
+		$connection = null;
+		$query->closeCursor();
+		return $account;
+	}
+
+	public function deleteTemporaryAccount(Account $account): void {
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("DELETE FROM TemporaryAccount WHERE id_account = :id");
+		$query->execute(['id' => $account->getId()]);
 
 		$connection = null;
 		$query->closeCursor();

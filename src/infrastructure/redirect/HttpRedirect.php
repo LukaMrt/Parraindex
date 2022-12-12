@@ -17,4 +17,8 @@ class HttpRedirect implements Redirect {
 		header('Location: ' . $this->router->url($url));
 	}
 
+    public function delayedRedirect(string $url, int $secondsDelay): void {
+		header('Refresh: ' . $secondsDelay . '; url=' . $this->router->url($url));
+	}
+
 }

@@ -26,4 +26,8 @@ class Password {
         return empty($this->password);
     }
 
+	public function isHashed(): bool {
+		return password_get_info($this->password)['algoName'] !== 'unknown';
+	}
+
 }

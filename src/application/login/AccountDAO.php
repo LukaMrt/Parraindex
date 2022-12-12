@@ -20,4 +20,8 @@ interface AccountDAO {
 
 	public function createTemporaryAccount(Account $account, string $link): void;
 
+	public function getTemporaryAccountByToken(string $token): Account;
+
+	public function deleteTemporaryAccount(Account $account): void;
+
 }

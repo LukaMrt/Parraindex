@@ -20,8 +20,10 @@ use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\LoginController;
 use App\controller\PersonController;
+use App\controller\SignUpConfirmationController;
 use App\controller\SignUpController;
 use App\controller\ResetpasswordController;
+use App\controller\SignUpValidationController;
 use App\controller\TreeController;
 use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\database\contact\MysqlContactDAO;
@@ -94,15 +96,17 @@ class Injector {
 	 */
 	public function setUpRouter(): void {
 		$this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
-		$this->router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
 		$this->router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
-		$this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
+		$this->router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
+		$this->router->registerRoute('GET', '/signupConfirmation', $this->container->get(SignUpConfirmationController::class), 'signup_confirmation');
+		$this->router->registerRoute('GET', '/signupConfirmation/[*:token]', $this->container->get(SignUpValidationController::class), 'signup_validation');
 		$this->router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
+		$this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
 		$this->router->registerRoute('GET', '/resetpassword', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
 		$this->router->registerRoute('POST', '/resetpassword', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
 		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
-		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
+		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 		$this->router->registerRoute('GET', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_get');
 		$this->router->registerRoute('POST', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_post');
 		$this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');

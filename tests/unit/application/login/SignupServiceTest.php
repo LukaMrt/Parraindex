@@ -25,6 +25,7 @@ class SignupServiceTest extends TestCase {
 		'password' => 'test',
 		'password-confirm' => 'test'
 	);
+	private Account $validAccount;
 	private Person $person;
 
 	private SignupService $signupService;
@@ -41,6 +42,8 @@ class SignupServiceTest extends TestCase {
 			->withId(-1)
 			->withIdentity(new Identity('test', 'test'))
 			->build();
+
+		$this->validAccount = new Account(1, 'test.test@et.univ-lyon1.fr', PersonBuilder::aPerson()->withId(1)->build(), new Password('password'));
 
 		$this->accountDAO = $this->createMock(AccountDAO::class);
 		$this->personDAO = $this->createMock(PersonDAO::class);
@@ -184,7 +187,7 @@ class SignupServiceTest extends TestCase {
 
 		$this->redirect->expects($this->once())
 			->method('redirect')
-			->with('home');
+			->with('signup_confirmation');
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
 	}
@@ -237,9 +240,46 @@ class SignupServiceTest extends TestCase {
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer que ce lien pour valider votre inscription : <a href=\"http://localhost/login/1\">http://localhost/login/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer que ce lien pour valider votre inscription : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
+	}
+
+	public function testValidateDetectsUnknownToken(): void {
+
+		$this->accountDAO->method('getTemporaryAccountByToken')
+			->with('1')
+			->willReturn(new Account(-1, '', PersonBuilder::aPerson()->build(), new Password('')));
+
+		$return = $this->signupService->validate('1');
+
+		$this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
+	}
+
+	public function testValidateCreatesAccountOnSuccess(): void {
+
+		$this->accountDAO->method('getTemporaryAccountByToken')
+			->with('1')
+			->willReturn($this->validAccount);
+
+		$this->accountDAO->expects($this->once())
+			->method('createAccount')
+			->with($this->validAccount);
+
+		$this->signupService->validate('1');
+	}
+
+	public function testValidateDeletesTemporaryAccountOnSuccess(): void {
+
+		$this->accountDAO->method('getTemporaryAccountByToken')
+			->with('1')
+			->willReturn($this->validAccount);
+
+		$this->accountDAO->expects($this->once())
+			->method('deleteTemporaryAccount')
+			->with($this->validAccount);
+
+		$this->signupService->validate('1');
 	}
 
 }

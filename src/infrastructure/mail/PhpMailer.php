@@ -13,7 +13,7 @@ class PhpMailer implements Mailer {
 	public function __construct() {
 		$this->mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
 
-		$this->mailer->SMTPDebug = SMTP::DEBUG_SERVER;
+		$this->mailer->SMTPDebug = $_ENV['DEBUG'] ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
 		$this->mailer->isSMTP();
 		$this->mailer->Host = $_ENV['MAIL_HOST'];
 		$this->mailer->SMTPAuth = true;

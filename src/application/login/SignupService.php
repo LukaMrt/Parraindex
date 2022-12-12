@@ -10,7 +10,6 @@ use App\model\account\Account;
 use App\model\account\Password;
 use App\model\person\Identity;
 use App\model\person\Person;
-use PharIo\Manifest\Url;
 
 class SignupService {
 
@@ -42,12 +41,12 @@ class SignupService {
 		$error = $this->buildError($email, $password, $passwordConfirm, $lastname, $firstname, $person);
 
 		if (empty($error)) {
-			$account = new Account(-1, $email, $person, new Password($password));
-			$link = $this->random->generate(10);
-			$this->accountDAO->createTemporaryAccount($account, $link);
+			$account = new Account($person->getId(), $email, $person, new Password($password));
+			$token = $this->random->generate(10);
+			$this->accountDAO->createTemporaryAccount($account, $token);
 			$url = $this->urlUtils->getBaseUrl();
-			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer que ce lien pour valider votre inscription : <a href=\"$url/login/$link\">$url/login/$link</a><br><br>Cordialement<br>Le Parrainboss");
-			$this->redirect->redirect('home');
+			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer que ce lien pour valider votre inscription : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
+			$this->redirect->redirect('signup_confirmation');
 		}
 
 		return $error;
@@ -108,6 +107,23 @@ class SignupService {
 			}
 		}
 		return false;
+	}
+
+	public function validate(string $token): string {
+		$error = '';
+
+		$account = $this->accountDAO->getTemporaryAccountByToken($token);
+
+		if ($account->getId() === -1) {
+			$error = 'Ce lien n\'est pas ou plus valide.';
+		}
+
+		if (empty($error)) {
+			$this->accountDAO->createAccount($account);
+			$this->accountDAO->deleteTemporaryAccount($account);
+		}
+
+		return $error;
 	}
 
 }
