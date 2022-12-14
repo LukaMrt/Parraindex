@@ -65,7 +65,7 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: 'cd /var/www/dev.lukamaret.com &&
+          script: 'cd /var/www/dev.parraindex.com &&
             git checkout develop &&
             git pull &&
             composer update &&
@@ -85,7 +85,7 @@ jobs:
           host: ${{ secrets.HOST }}
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: 'cd /var/www/parraindex.lukamaret.com &&
+          script: 'cd /var/www/parraindex.com &&
             git checkout main &&
             git pull &&
             composer update && composer install --no-interaction --prefer-dist --optimize-autoloader &&
