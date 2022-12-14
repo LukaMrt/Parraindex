@@ -45,7 +45,7 @@ class SignupService {
 			$token = $this->random->generate(10);
 			$this->accountDAO->createTemporaryAccount($account, $token);
 			$url = $this->urlUtils->getBaseUrl();
-			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer que ce lien pour valider votre inscription : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
+			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour valider votre inscription : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
 			$this->redirect->redirect('signup_confirmation');
 		}
 

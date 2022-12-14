@@ -240,7 +240,7 @@ class SignupServiceTest extends TestCase {
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer que ce lien pour valider votre inscription : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour valider votre inscription : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
 	}

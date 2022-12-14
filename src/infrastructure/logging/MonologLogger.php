@@ -51,26 +51,26 @@ class MonologLogger implements Logger {
 		$logPath = '../var/log';
 		
 		if (!file_exists($logPath)) {
-			mkdir($logPath);
+			mkdir($logPath, 0777, true);
 		}
 
 		if (!file_exists($logPath . '/archives')) {
 			mkdir($logPath . '/archives');
 		}
 
-		if (!file_exists($logPath . '/var/log.txt')) {
-			touch($logPath . '/var/log.txt');
+		if (!file_exists($logPath . '/log.txt')) {
+			touch($logPath . '/log.txt');
 		}
 
 		if (!file_exists($logPath . '/errors.txt')) {
 			touch($logPath . '/errors.txt');
 		}
 
-		$this->zipLoggFile($logPath . '/var/log.txt', 'logs', $logPath);
+		$this->zipLoggFile($logPath . '/log.txt', 'logs', $logPath);
 		$this->zipLoggFile($logPath . '/errors.txt', 'errors', $logPath);
 		$logger = new \Monolog\Logger($className);
 		$logger->pushHandler(new StreamHandler('php://stdout', 100));
-		$logger->pushHandler(new StreamHandler($logPath . '/var/log.txt', 200));
+		$logger->pushHandler(new StreamHandler($logPath . '/log.txt', 200));
 		$logger->pushHandler(new StreamHandler($logPath . '/errors.txt', 400));
 		$logger->pushHandler(new NativeMailerHandler('maret.luka@gmail.com', 'Error logged in the parraindex', 'contact@lukamaret.com', 550));
 		$this->loggers[$className] = $logger;
