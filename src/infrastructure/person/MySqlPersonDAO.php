@@ -145,14 +145,37 @@ class MySqlPersonDAO implements PersonDAO {
 		return $this->buildPerson($buffer);
 	}
 
-	public function updatePerson(array $parameters) {
+	public function updatePerson(Person $person) {
 
 		$connection = $this->databaseConnection->getDatabase();
 		$query = $connection->prepare("UPDATE Person SET first_name = :firstName, last_name = :lastName, biography = :biography WHERE id_person = :id");
 
-		$query->execute($parameters);
+		$query->execute([
+			'firstName' => $person->getFirstName(),
+			'lastName' => $person->getLastName(),
+			'biography' => $person->getBiography(),
+			'id' => $person->getId()
+		]);
 		$query->closeCursor();
 		$connection = null;
+	}
+
+	public function getAllIdentities(): array {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare(
+			"SELECT first_name, last_name FROM Person");
+		$query->execute();
+
+		$identities = array();
+
+		while ($row = $query->fetch()) {
+			$identities[] = new Identity($row->first_name, $row->last_name);
+		}
+
+		$query->closeCursor();
+		return $identities;
 	}
 
 }

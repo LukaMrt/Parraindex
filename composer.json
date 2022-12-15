@@ -35,7 +35,8 @@
     "ext-pdo": "^8.0",
     "vlucas/phpdotenv": "^5.5",
     "monolog/monolog": "^3.2",
-    "ext-zip": "*"
+    "ext-zip": "*",
+    "phpmailer/phpmailer": "^6.7"
   },
   "scripts": {
     "tests": [
@@ -54,6 +55,11 @@
     "doc": [
       "Composer\\Config::disableProcessTimeout",
       "phpDocumentor -d src/ -t out/doc/ --title Parraindoc"
+    ],
+    "mutating tests": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpunit",
+      "infection"
     ]
   },
   "require-dev": {

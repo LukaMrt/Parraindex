@@ -29,7 +29,9 @@ class Account {
 	}
 
 	public function getHashedPassword(): string {
-		$this->password->hashPassword(PASSWORD_DEFAULT);
+		if (!$this->password->isHashed()) {
+			$this->password->hashPassword(PASSWORD_DEFAULT);
+		}
 		return $this->password->getPassword();
 	}
 
@@ -40,13 +42,17 @@ class Account {
     public function getHighestPrivilege(): PrivilegeType {
         $highest = PrivilegeType::STUDENT;
 
-        foreach ($this->privileges as $privilege) {
-            if ($privilege->isHigherThan($highest)) {
-                $highest = $privilege->getPrivilegeType();
-            }
-        }
+		foreach ($this->privileges as $privilege) {
+			if ($privilege->isHigherThan($highest)) {
+				$highest = $privilege->getPrivilegeType();
+			}
+		}
 
-        return $highest;
-    }
+		return $highest;
+	}
+
+	public function getId(): int {
+		return $this->id;
+	}
 
 }

@@ -22,7 +22,7 @@ run_deploy_dev:
   image: debian:stable-slim
   environment:
     name: develop
-    url: https://dev.lukamaret.com
+    url: https://dev.parraindex.com
   before_script:
     - apt update && apt install -yqq curl
   #    - apt update && apt install -yqq openssh-client
@@ -30,7 +30,7 @@ run_deploy_dev:
   script:
     - echo "Deploying to develop"
   #    - ssh -o StrictHostKeyChecking=no -p 55 -i $SSH_KEY parraindex@lukamaret.com "
-  #        cd /var/www/dev.lukamaret.com &&
+  #        cd /var/www/dev.parraindex.com &&
   #        git checkout develop &&
   #        git pull &&
   #        composer update &&
@@ -45,7 +45,7 @@ run_deploy_prod:
   image: debian:stable-slim
   environment:
     name: production
-    url: https://parraindex.lukamaret.com
+    url: https://parraindex.com
   before_script:
     - apt update && apt install -yqq curl
   #    - apt update && apt install -yqq openssh-client
@@ -53,7 +53,7 @@ run_deploy_prod:
   script:
     - echo "Deploying to production"
   #    - ssh -o StrictHostKeyChecking=no -p 55 -i $SSH_KEY parraindex@lukamaret.com "
-  #        cd /var/www/parraindex.lukamaret.com &&
+  #        cd /var/www/parraindex.com &&
   #        git checkout main &&
   #        git pull &&
   #        composer update &&

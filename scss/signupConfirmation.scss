@@ -1,0 +1,17 @@
+@forward "base";
+
+@forward "components/popup";
+
+@forward "layout";
+@forward "pages";
+@forward "themes";
+
+.signup_confirm {
+  text-align: center;
+  font-size: 1.3rem;
+}
+
+.signup_confirm a {
+  color: var(--dark-blue);
+  text-decoration: underline;
+}

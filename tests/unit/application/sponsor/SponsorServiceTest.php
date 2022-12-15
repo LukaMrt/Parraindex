@@ -25,24 +25,21 @@ class SponsorServiceTest extends TestCase {
         $godSon1 = $this->createMock(Person::class);
         $godSon2 = $this->createMock(Person::class);
 
-        $godFathers = [$godFather1, $godFather2];
-        $godChildren = [$godSon1, $godSon2];
-
         $this->sponsorDAO->method('getPersonFamily')
             ->with($this->equalTo(1))
             ->willReturn([
-                'person' => $person,
-                'godFathers' => $godFathers,
-                'godChildren' => $godChildren
-            ]);
+				'person' => $person,
+				'godFathers' => [$godFather1, $godFather2],
+				'godChildren' => [$godSon1, $godSon2]
+			]);
 
         $family = $this->sponsorService->getPersonFamily(1);
 
         $this->assertEquals($family, [
-            'person' => $person,
-            'godFathers' => $godFathers,
-            'godChildren' => $godChildren
-        ]);
+			'person' => $person,
+			'godFathers' => [$godFather1, $godFather2],
+			'godChildren' => [$godSon1, $godSon2]
+		]);
     }
 
 }
