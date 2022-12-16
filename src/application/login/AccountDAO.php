@@ -29,4 +29,10 @@ interface AccountDAO {
 
 	public function createResetpassword(Account $account, string $token): void;
 
+	public function getAccountResetPasswordByToken(string $token): Account;
+
+	public function editAccountPassword(Account $account): void;
+
+	public function deleteResetPassword(Account $account): void;
+
 }

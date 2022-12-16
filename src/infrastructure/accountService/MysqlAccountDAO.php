@@ -9,7 +9,6 @@ use App\model\account\Password;
 use App\model\account\Privilege;
 use App\model\account\PrivilegeType;
 use App\model\person\Identity;
-use App\model\person\Person;
 use App\model\person\PersonBuilder;
 use App\model\school\School;
 
@@ -178,4 +177,45 @@ class MysqlAccountDAO implements AccountDAO {
 		$connection = null;
 		$query->closeCursor();
 	}
+
+	public function getAccountResetPasswordByToken(string $token): Account {
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("SELECT * FROM ResetPassword WHERE link = :token");
+		$query->execute(['token' => $token]);
+
+		$account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
+
+		if ($result = $query->fetch()) {
+			$account = new Account($result->id_account, '', PersonBuilder::aPerson()->build(), new Password($result->password));
+		}
+
+		$connection = null;
+		$query->closeCursor();
+		return $account;
+	}
+
+	public function editAccountPassword(Account $account): void {
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("UPDATE Account SET password = :password WHERE id_account = :id");
+		$query->execute([
+			'password' => $account->getHashedPassword(),
+			'id' => $account->getId()
+		]);
+
+		$connection = null;
+		$query->closeCursor();
+	}
+
+	public function deleteResetPassword(Account $account): void {
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("DELETE FROM ResetPassword WHERE id_account = :id");
+		$query->execute(['id' => $account->getId()]);
+
+		$connection = null;
+		$query->closeCursor();
+	}
+
 }

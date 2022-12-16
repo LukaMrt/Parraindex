@@ -337,7 +337,7 @@ class SignupServiceTest extends TestCase {
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/resetpasswordValidation/1\">http://localhost/resetpasswordValidation/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
 	}
@@ -370,6 +370,43 @@ class SignupServiceTest extends TestCase {
 			->with($account, '1');
 
 		$this->signupService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+	}
+
+	public function testValidateresetpasswordDetectsUnknownToken(): void {
+
+		$this->accountDAO->method('getAccountResetPasswordByToken')
+			->with('1')
+			->willReturn(new Account(-1, '', PersonBuilder::aPerson()->build(), new Password('')));
+
+		$return = $this->signupService->validateResetPassword('1');
+
+		$this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
+	}
+
+	public function testValidateresetpasswordEditsAccountOnSuccess(): void {
+
+		$this->accountDAO->method('getAccountResetPasswordByToken')
+			->with('1')
+			->willReturn($this->validAccount);
+
+		$this->accountDAO->expects($this->once())
+			->method('editAccountPassword')
+			->with($this->validAccount);
+
+		$this->signupService->validateResetPassword('1');
+	}
+
+	public function testValidateresetpasswordDeletesResetPasswordOnSuccess(): void {
+
+		$this->accountDAO->method('getAccountResetPasswordByToken')
+			->with('1')
+			->willReturn($this->validAccount);
+
+		$this->accountDAO->expects($this->once())
+			->method('deleteResetPassword')
+			->with($this->validAccount);
+
+		$this->signupService->validateResetPassword('1');
 	}
 
 }

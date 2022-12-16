@@ -140,11 +140,28 @@ class SignupService {
 
 
 		$token = $this->random->generate(10);
-		$url = $this->urlUtils->getBaseUrl();
-		$this->mailer->send($parameters['email'], 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
+		$url = $this->urlUtils->getBaseUrl() . '/resetpasswordValidation/' . $token;
+		$this->mailer->send($parameters['email'], 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
 		$this->accountDAO->createResetpassword($account, $token);
 		$this->redirect->redirect('resetpassword_confirmation');
 		return '';
+	}
+
+	public function validateResetPassword(string $token): string {
+		$error = '';
+
+		$account = $this->accountDAO->getAccountResetPasswordByToken($token);
+
+		if ($account->getId() === -1) {
+			$error = 'Ce lien n\'est pas ou plus valide.';
+		}
+
+		if (empty($error)) {
+			$this->accountDAO->editAccountPassword($account);
+			$this->accountDAO->deleteResetPassword($account);
+		}
+
+		return $error;
 	}
 
 }
