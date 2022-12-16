@@ -43,7 +43,7 @@ class SignupServiceTest extends TestCase {
 			->withIdentity(new Identity('test', 'test'))
 			->build();
 
-		$this->validAccount = new Account(1, 'test.test@et.univ-lyon1.fr', PersonBuilder::aPerson()->withId(1)->build(), new Password('password'));
+		$this->validAccount = new Account(1, 'test.test@etu.univ-lyon1.fr', $this->person, new Password('password'));
 
 		$this->accountDAO = $this->createMock(AccountDAO::class);
 		$this->personDAO = $this->createMock(PersonDAO::class);
@@ -173,7 +173,7 @@ class SignupServiceTest extends TestCase {
 		$this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
 	}
 
-	public function testSignupRedirectToHomePageOnSuccess(): void {
+	public function testSignupRedirectToConfirmationPageOnSuccess(): void {
 
 		$this->personDAO->method('getPerson')
 			->with(new Identity('test', 'test'))
@@ -240,7 +240,7 @@ class SignupServiceTest extends TestCase {
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour valider votre inscription : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
 	}
@@ -280,6 +280,96 @@ class SignupServiceTest extends TestCase {
 			->with($this->validAccount);
 
 		$this->signupService->validate('1');
+	}
+
+	public function testResetpasswordDetectsUnknownEmail(): void {
+
+		$this->accountDAO->method('existsAccount')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn(false);
+
+		$return = $this->signupService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+
+		$this->assertEquals('Email inconnu.', $return);
+	}
+
+	public function testResetpasswordRedirectsToConfirmationPageOnSuccess(): void {
+
+		$this->accountDAO->method('existsAccount')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn(true);
+
+		$this->redirect->expects($this->once())
+			->method('redirect')
+			->with('resetpassword_confirmation');
+
+		$this->personDAO->method('getPersonById')
+			->with(-1)
+			->willReturn($this->person);
+
+		$this->accountDAO->method('getAccountByLogin')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn($this->validAccount);
+
+		$this->signupService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+	}
+
+	public function testResetpasswordSendsEmailOnSuccess(): void {
+
+		$this->accountDAO->method('existsAccount')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn(true);
+
+		$this->urlUtils->method('getBaseUrl')
+			->willReturn('http://localhost');
+
+		$this->random->method('generate')
+			->with(10)
+			->willReturn('1');
+
+		$this->personDAO->method('getPersonById')
+			->with(-1)
+			->willReturn($this->person);
+
+		$this->accountDAO->method('getAccountByLogin')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn($this->validAccount);
+
+		$this->mailer->expects($this->once())
+			->method('send')
+			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
+
+		$this->signupService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+	}
+
+	public function testResetpasswordCreatesResetpasswordRecordOnSuccess(): void {
+
+		$this->accountDAO->method('existsAccount')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn(true);
+
+		$this->urlUtils->method('getBaseUrl')
+			->willReturn('http://localhost');
+
+		$this->random->method('generate')
+			->with(10)
+			->willReturn('1');
+
+		$this->personDAO->method('getPersonById')
+			->with(-1)
+			->willReturn($this->person);
+
+		$this->accountDAO->method('getAccountByLogin')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn($this->validAccount);
+
+		$account = new Account(1, 'test.test@etu.univ-lyon1.fr', $this->person, new Password('test'));
+
+		$this->accountDAO->expects($this->once())
+			->method('createResetpassword')
+			->with($account, '1');
+
+		$this->signupService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
 	}
 
 }

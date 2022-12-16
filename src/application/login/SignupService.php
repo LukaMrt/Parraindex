@@ -45,7 +45,7 @@ class SignupService {
 			$token = $this->random->generate(10);
 			$this->accountDAO->createTemporaryAccount($account, $token);
 			$url = $this->urlUtils->getBaseUrl();
-			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour valider votre inscription : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
+			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
 			$this->redirect->redirect('signup_confirmation');
 		}
 
@@ -124,6 +124,27 @@ class SignupService {
 		}
 
 		return $error;
+	}
+
+	public function resetPassword(array $parameters): string {
+
+		if (!$this->accountDAO->existsAccount($parameters['email'])) {
+			return 'Email inconnu.';
+		}
+
+		$account = $this->accountDAO->getAccountByLogin($parameters['email']);
+		$person = $this->personDAO->getPersonById($account->getPersonId());
+		$firstname = $person->getFirstname();
+		$lastname = $person->getLastname();
+		$account = new Account($account->getId(), $account->getLogin(), $person, new Password($parameters['password']));
+
+
+		$token = $this->random->generate(10);
+		$url = $this->urlUtils->getBaseUrl();
+		$this->mailer->send($parameters['email'], 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
+		$this->accountDAO->createResetpassword($account, $token);
+		$this->redirect->redirect('resetpassword_confirmation');
+		return '';
 	}
 
 }
