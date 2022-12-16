@@ -2,6 +2,7 @@
 
 namespace App\controller;
 
+use App\application\person\PersonService;
 use App\application\sponsor\SponsorService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
@@ -10,8 +11,8 @@ class PersonController extends Controller {
 
 	private SponsorService $sponsorService;
 
-	public function __construct(Environment $twig, SponsorService $sponsorService) {
-		parent::__construct($twig);
+	public function __construct(Environment $twig, Router $router, PersonService $personService, SponsorService $sponsorService) {
+		parent::__construct($twig, $router, $personService);
 		$this->sponsorService = $sponsorService;
 	}
 
@@ -20,7 +21,6 @@ class PersonController extends Controller {
 		$family = $this->sponsorService->getPersonFamily($parameters['id']);
 
 		$this->render('person.twig', [
-			'router' => $router,
 			'person' => $family['person'],
 			'godFathers' => $family['godFathers'],
 			'godChildren' => $family['godChildren'],

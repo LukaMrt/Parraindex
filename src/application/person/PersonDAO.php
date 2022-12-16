@@ -17,4 +17,6 @@ interface PersonDAO {
 
 	public function getAllIdentities(): array;
 
+	public function getPersonByLogin(string $login): ?Person;
+
 }

@@ -9,10 +9,8 @@ use Twig\Environment;
 
 class AboutController extends Controller {
 
-	private PersonService $personService;
-
-	public function __construct(Environment $twig, PersonService $personService) {
-		parent::__construct($twig);
+	public function __construct(Environment $twig, Router $router, PersonService $personService) {
+		parent::__construct($twig, $router, $personService);
 		$this->personService = $personService;
 	}
 
@@ -25,7 +23,7 @@ class AboutController extends Controller {
 			$this->personService->getPersonByIdentity(new Identity("Luka", "Maret"))
 		];
 
-		$this->render('about.twig', ['router' => $router, 'authors' => $authors]);
+		$this->render('about.twig', ['authors' => $authors]);
 	}
 
 }

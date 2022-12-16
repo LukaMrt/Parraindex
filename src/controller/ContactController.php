@@ -3,6 +3,7 @@
 namespace App\controller;
 
 use App\application\contact\ContactService;
+use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use App\model\contact\ContactType;
 use Twig\Environment;
@@ -11,8 +12,8 @@ class ContactController extends Controller {
 
 	private ContactService $contactService;
 
-	public function __construct(Environment $twig, ContactService $contactService) {
-		parent::__construct($twig);
+	public function __construct(Environment $twig, Router $router, PersonService $personService, ContactService $contactService) {
+		parent::__construct($twig, $router, $personService);
 		$this->contactService = $contactService;
 	}
 
@@ -34,7 +35,6 @@ class ContactController extends Controller {
 	public function get(Router $router, array $parameters): void {
 
 		$this->render('contact.twig', [
-			'router' => $router,
 			'options' => ContactType::getValues(),
 			'error' => $parameters['error'] ?? ''
 		]);

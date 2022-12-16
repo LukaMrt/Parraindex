@@ -2,13 +2,14 @@
 
 namespace App\controller;
 
+use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
 class ErrorController extends Controller {
 
-	public function __construct(Environment $twig) {
-		parent::__construct($twig);
+	public function __construct(Environment $twig, Router $router, PersonService $personService) {
+		parent::__construct($twig, $router, $personService);
 	}
 
 	public function get(Router $router, array $parameters): void {
@@ -32,7 +33,7 @@ class ErrorController extends Controller {
                 die();
 		}
 
-		$this->render('error.twig', ['router' => $router, 'code' => $error['code'], 'message' => $error['message']]);
+		$this->render('error.twig', ['code' => $error['code'], 'message' => $error['message']]);
 	}
 
 

@@ -9,19 +9,14 @@ use Twig\Environment;
 
 class TreeController extends Controller {
 
-    private PersonService $personService;
+	public function __construct(Environment $twig, Router $router, PersonService $personService) {
+		parent::__construct($twig, $router, $personService);
+		$this->personService = $personService;
+	}
 
-    public function __construct(Environment $twig, PersonService $personService) {
-        parent::__construct($twig);
-        $this->personService = $personService;
-    }
-
-    public function get(Router $router, array $parameters): void {
-        $people = $this->personService->getAllPeople();
-		$this->render('tree.twig', [
-			'router' => $router,
-			'people' => $people
-		]);
+	public function get(Router $router, array $parameters): void {
+		$people = $this->personService->getAllPeople();
+		$this->render('tree.twig', ['people' => $people]);
 	}
 
 }

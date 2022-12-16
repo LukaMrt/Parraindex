@@ -178,4 +178,30 @@ class MySqlPersonDAO implements PersonDAO {
 		return $identities;
 	}
 
+	public function getPersonByLogin(string $login): ?Person {
+
+		$connection = $this->databaseConnection->getDatabase();
+		$query = $connection->prepare("SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
+													FROM Person Pe
+         											LEFT JOIN Student St on Pe.id_person = St.id_person
+													LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+													LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+													LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+													LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+													LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+													LEFT JOIN Account A on Pe.id_person = A.id_person
+         											WHERE A.email = :login");
+
+		$query->execute(['login' => $login]);
+		$buffer = array();
+
+		while ($row = $query->fetch()) {
+			$buffer[] = $row;
+		}
+
+		$query->closeCursor();
+		$connection = null;
+		return $this->buildPerson($buffer);
+	}
+
 }

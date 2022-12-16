@@ -9,10 +9,8 @@ use Twig\Environment;
 
 class EditPersonController extends Controller {
 
-    private PersonService $personService;
-
-    public function __construct(Environment $twig, PersonService $personService) {
-        parent::__construct($twig);
+    public function __construct(Environment $twig, Router $router, PersonService $personService) {
+        parent::__construct($twig, $router, $personService);
         $this->personService = $personService;
     }
 
