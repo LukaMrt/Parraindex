@@ -14,4 +14,6 @@ interface SessionManager {
 
     public function set(string $key, $value): void;
 
+	public function exists(string $key): bool;
+
 }

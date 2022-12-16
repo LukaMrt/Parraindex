@@ -2,11 +2,8 @@
 
 namespace App\application\login;
 
-use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
-use App\model\account\Account;
 use App\model\account\Password;
-use App\model\person\Identity;
 
 class LoginService {
 
@@ -45,6 +42,10 @@ class LoginService {
         $realPassword = $this->accountDAO->getAccountPassword($login);
 
         $errors = [
+			[
+				'condition' => $this->sessionManager->exists('login'),
+				'message' => 'Vous êtes déjà connecté'
+			],
             [
                 'condition' => empty($login) || $password->isEmpty(),
                 'message' => 'Veuillez remplir tous les champs'
@@ -64,5 +65,16 @@ class LoginService {
 
         return array_shift($errors) ?? '';
     }
+
+	public function logout(): void {
+
+		if (!$this->sessionManager->exists('login')) {
+			$this->redirect->redirect('home');
+			return;
+		}
+
+		$this->sessionManager->destroySession();
+		$this->redirect->redirect('logout_confirmation');
+	}
 
 }

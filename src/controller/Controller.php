@@ -51,8 +51,8 @@ abstract class Controller {
 
     protected function render(string $template, array $parameters = []): void {
 
-		if (!empty($_SERVER['login'])) {
-			$parameters['login'] = $this->personService->getPersonByLogin($_SERVER['login']);
+		if (!empty($_SESSION['login'])) {
+			$parameters['login'] = $this->personService->getPersonByLogin($_SESSION['login']);
 		}
 
 		$parameters['router'] = $this->router;

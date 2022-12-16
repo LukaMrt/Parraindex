@@ -73,6 +73,10 @@ class LoginServiceTest extends TestCase {
 			->with('test@test.com')
 			->willReturn($this->account);
 
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
+
 		$this->sessionManager->expects($this->exactly(2))
 			->method('set')
 			->withConsecutive(
@@ -84,7 +88,7 @@ class LoginServiceTest extends TestCase {
 			'login' => 'test@test.com',
 			'password' => 'test',
 		));
-    }
+	}
 
 	public function testLoginReturnsNothingOnSuccess(): void {
 
@@ -95,6 +99,10 @@ class LoginServiceTest extends TestCase {
 		$this->accountDAO->method('getSimpleAccount')
 			->with('test@test.com')
 			->willReturn($this->account);
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
 
 		$return = $this->loginService->login(array(
 			'login' => 'test@test.com',
@@ -118,13 +126,17 @@ class LoginServiceTest extends TestCase {
 			->method('redirect')
 			->with('home');
 
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
+
 		$this->loginService->login(array(
 			'login' => 'test@test.com',
 			'password' => 'test',
 		));
 	}
 
-	public function testLoginRedirectToSignupIfNeeded(){
+	public function testLoginRedirectToSignupIfNeeded() {
 
 		$this->redirect->expects($this->once())
 			->method('redirect')
@@ -133,6 +145,20 @@ class LoginServiceTest extends TestCase {
 		$this->loginService->login(array(
 			'action' => 'register'
 		));
+	}
+
+	public function testLoginDetectsAlreadyLoggedIn(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(true);
+
+		$return = $this->loginService->login(array(
+			'login' => 'test@test.com',
+			'password' => 'test',
+		));
+
+		$this->assertEquals('Vous êtes déjà connecté', $return);
 	}
 
 }

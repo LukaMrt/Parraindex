@@ -26,4 +26,8 @@ class DefaultSessionManager implements SessionManager {
         $_SESSION[$key] = $value;
     }
 
+	public function exists(string $key): bool {
+		return isset($_SESSION[$key]);
+	}
+
 }

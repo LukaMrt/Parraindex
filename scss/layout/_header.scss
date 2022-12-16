@@ -11,6 +11,10 @@
 
 	margin-top: 3vh;
 
+	&--logged {
+		margin-top: 2vh;
+	}
+
 	@include b.breakpoint(small) {
 		@include m.flex(center, center, column);
 	}
@@ -32,7 +36,7 @@
 		letter-spacing: 5px;
 
 		&--hidden {
-			display: none;
+			visibility: hidden;
 		}
 
 	}
@@ -43,6 +47,12 @@
 		gap: f.rem(35);
 		flex-wrap: wrap;
 		flex-grow: 1;
+
+		&-picture {
+			@include m.hard-box-shadow();
+			border-radius: 50%;
+			height: f.rem(50);
+		}
 
 		&-link {
 			transition: color 0.3s ease;

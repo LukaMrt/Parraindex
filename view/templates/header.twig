@@ -1,13 +1,21 @@
-<header class="header">
+<header class="header{% if login %} header--logged{% endif %}">
 
-    <a class="header__title {% if homePage is not null %}header__title--hidden{% endif %}" href="{{ router.url('home') }}">
-        <img class="header__logo" src="{{ icon('logo-blue.svg') }}" alt="Logo">
-        <p>Parraindex</p>
-    </a>
+	<a class="header__title {% if homePage is not null %}header__title--hidden{% endif %}"
+	   href="{{ router.url('home') }}">
+		<img class="header__logo" src="{{ icon('logo-blue.svg') }}" alt="Logo">
+		<p>Parraindex</p>
+	</a>
 
-    <div class="header__login">
-        <a class="header__login-link" href="{{ router.url('login_get') }}">Se connecter</a>
-        <a class="header__login-link" href="{{ router.url('signup_get') }}">S'inscrire</a>
-    </div>
+	<div class="header__login">
+		{% if login %}
+			<a class="header__login-link" href="{{ router.url('logout_get') }}">Se déconnecter</a>
+			<a href="{{ router.url('person', {id: login.id}) }}">
+				<img class="header__login-picture" src="{{ picture(login.picture) }}" alt="photo">
+			</a>
+		{% else %}
+			<a class="header__login-link" href="{{ router.url('login_get') }}">Se connecter</a>
+			<a class="header__login-link" href="{{ router.url('signup_get') }}">S'inscrire</a>
+		{% endif %}
+	</div>
 
 </header>

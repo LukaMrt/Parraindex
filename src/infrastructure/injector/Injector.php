@@ -15,6 +15,8 @@ use App\application\redirect\Redirect;
 use App\controller\AboutController;
 use App\application\sponsor\SponsorDAO;
 use App\controller\ContactController;
+use App\controller\LogoutConfirmationController;
+use App\controller\LogoutController;
 use App\controller\EditPersonController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
@@ -102,6 +104,8 @@ class Injector {
 		$this->router->registerRoute('GET', '/signupConfirmation/[*:token]', $this->container->get(SignUpValidationController::class), 'signup_validation');
 		$this->router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
 		$this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
+		$this->router->registerRoute('GET', '/logout', $this->container->get(LogoutController::class), 'logout_get');
+		$this->router->registerRoute('GET', '/logoutConfirmation', $this->container->get(LogoutConfirmationController::class), 'logout_confirmation');
 		$this->router->registerRoute('GET', '/resetpassword', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
 		$this->router->registerRoute('POST', '/resetpassword', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
 		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
