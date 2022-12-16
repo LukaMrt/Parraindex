@@ -8,7 +8,7 @@ enum PrivilegeType {
 	case TEACHER;
 	case STUDENT;
 
-    public static function fromString(mixed $PRIVILEGE): PrivilegeType {
+    public static function fromString(string $PRIVILEGE): PrivilegeType {
         return match ($PRIVILEGE) {
             'ADMIN' => self::ADMIN,
             'TEACHER' => self::TEACHER,
