@@ -161,4 +161,43 @@ class LoginServiceTest extends TestCase {
 		$this->assertEquals('Vous êtes déjà connecté', $return);
 	}
 
+	public function testLogoutRedirectsToHomeWhenUserIsNotLogged(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
+
+		$this->redirect->expects($this->once())
+			->method('redirect')
+			->with('home');
+
+		$this->loginService->logout();
+	}
+
+	public function testLogoutRedirectsToConfirmationWhenUserIsLogged(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(true);
+
+		$this->redirect->expects($this->once())
+			->method('redirect')
+			->with('logout_confirmation');
+
+		$this->loginService->logout();
+	}
+
+	public function testLogoutDestroysSessionsWhenUserIsLogged(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(true);
+
+		$this->sessionManager->expects($this->exactly(1))
+			->method('destroySession')
+			->withConsecutive();
+
+		$this->loginService->logout();
+	}
+
 }
