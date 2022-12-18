@@ -11,6 +11,7 @@ class DefaultSessionManager implements SessionManager {
     }
 
     public function destroySession(): void {
+        session_unset();
         session_destroy();
     }
 

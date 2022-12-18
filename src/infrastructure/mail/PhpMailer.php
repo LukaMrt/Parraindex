@@ -16,7 +16,7 @@ class PhpMailer implements Mailer {
 		$this->logger = $logger;
 		$this->mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
 
-		$this->mailer->SMTPDebug = $_ENV['DEBUG'] ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
+		$this->mailer->SMTPDebug = $_ENV['DEBUG'] === "true" ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
 		$this->mailer->SMTPOptions = array(
 			'ssl' => array(
 				'verify_peer' => false,
@@ -48,6 +48,7 @@ class PhpMailer implements Mailer {
 
 			$this->mailer->send();
 
+			$this->logger->info(PhpMailer::class, "Mailer success: [{$subject}] request, has been sent to {$to}");
 		} catch (Exception) {
 			$this->logger->error(PhpMailer::class, "Mailer error: {$this->mailer->ErrorInfo}");
 			echo "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}";
