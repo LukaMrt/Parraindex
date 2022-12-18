@@ -85,14 +85,18 @@
 		background-color: var(--dark-blue);
 	}
 
-	&--middle{
+	&--middle {
 		scale: 1;
-		@include b.breakpoint(small){
+		@include b.breakpoint(small) {
 			scale: 0.8;
 		}
 	}
 
 	&--hover {
+		cursor: pointer;
+	}
+
+	&:hover {
 		cursor: pointer;
 	}
 
