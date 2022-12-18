@@ -44,34 +44,97 @@ SQL
             JOIN Sponsor S on P.id_person = S.id_godfather
             WHERE S.id_godson = :id
 SQL
-        );
+		);
 
-        $godChildrenQuery = $connection->prepare(<<<SQL
+		$godChildrenQuery = $connection->prepare(<<<SQL
             SELECT P.*
             FROM Person P
             JOIN Sponsor S on P.id_person = S.id_godson
             WHERE S.id_godfather = :id
 SQL
-        );
+		);
 
-        $personQuery->execute(['id' => $personId]);
-        $godFathersQuery->execute(['id' => $personId]);
-        $godChildrenQuery->execute(['id' => $personId]);
+		$godFathersSponsorsQuery = $connection->prepare(<<<SQL
+			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			FROM Sponsor S
+				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
+				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
+			WHERE S.id_godson = :id
+SQL
+		);
 
-        $person = $this->buildPeople($personQuery)[0];
-        $godFathers = $this->buildPeople($godFathersQuery);
-        $godChildren = $this->buildPeople($godChildrenQuery);
+		$godChildrenSponsorsQuery = $connection->prepare(<<<SQL
+			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			FROM Sponsor S
+				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
+				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
+			WHERE S.id_godfather = :id
+SQL
+		);
 
-        $personQuery->closeCursor();
-        $godFathersQuery->closeCursor();
-        $godChildrenQuery->closeCursor();
-        $connection = null;
-        return [
-            'person' => $person,
-            'godFathers' => $godFathers,
-            'godChildren' => $godChildren
-        ];
-    }
+		$personQuery->execute(['id' => $personId]);
+		$godFathersQuery->execute(['id' => $personId]);
+		$godChildrenQuery->execute(['id' => $personId]);
+		$godFathersSponsorsQuery->execute(['id' => $personId]);
+		$godChildrenSponsorsQuery->execute(['id' => $personId]);
+
+		$person = $this->buildPeople($personQuery)[0];
+		$godFathers = $this->buildPeople($godFathersQuery);
+		$godChildren = $this->buildPeople($godChildrenQuery);
+
+		$godFathersSponsors = [];
+		$godChildrenSponsors = [];
+
+		while ($row = $godFathersSponsorsQuery->fetch()) {
+
+			$godChild = $person;
+			$godFather = null;
+
+			for ($i = 0; $i < count($godFathers); $i++) {
+				if ($godFathers[$i]->getId() === $row->id_godfather) {
+					$godFather = $godFathers[$i];
+					break;
+				}
+			}
+
+			if ($row->id_classic_sponsor != null) {
+				$godFathersSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->reason);
+			} else if ($row->id_heart_sponsor != null) {
+				$godFathersSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->description);
+			}
+
+		}
+
+		while ($row = $godChildrenSponsorsQuery->fetch()) {
+
+			$godFather = $person;
+			$godChild = null;
+
+			for ($i = 0; $i < count($godChildren); $i++) {
+				if ($godChildren[$i]->getId() === $row->id_godson) {
+					$godChild = $godChildren[$i];
+					break;
+				}
+			}
+
+			if ($row->id_classic_sponsor != null) {
+				$godChildrenSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->reason);
+			} else if ($row->id_heart_sponsor != null) {
+				$godChildrenSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->description);
+			}
+
+		}
+
+		$personQuery->closeCursor();
+		$godFathersQuery->closeCursor();
+		$godChildrenQuery->closeCursor();
+		$connection = null;
+		return [
+			'person' => $person,
+			'godFathers' => $godFathersSponsors,
+			'godChildren' => $godChildrenSponsors
+		];
+	}
 
     private function buildPerson(array $buffer): Person {
 
@@ -97,7 +160,6 @@ SQL
 			->withCharacteristics($characteristics)
 			->withStartYear($buffer[0]->startYear ?? -1)
             ->build();
-
     }
 
     private function buildPeople(bool|PDOStatement $query): array {

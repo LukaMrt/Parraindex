@@ -3,6 +3,7 @@
 namespace App\application\sponsor;
 
 use App\application\person\PersonDAO;
+use App\model\sponsor\Sponsor;
 
 class SponsorService {
 
@@ -18,18 +19,18 @@ class SponsorService {
 		return $this->sponsorDAO->getPersonFamily($personId);
 	}
 
-	public function getSponsorById(int $int): ?array {
+	public function getSponsorById(int $int): ?Sponsor {
 		$sponsor = $this->sponsorDAO->getSponsorById($int);
 
 		if ($sponsor === null) {
 			return null;
 		}
 
-		return [
-			'sponsor' => $sponsor,
-			'godFather' => $this->personDAO->getPersonById($sponsor->getGodFather()->getId()),
-			'godChild' => $this->personDAO->getPersonById($sponsor->getGodSon()->getId())
-		];
+		$godFather = $this->personDAO->getPersonById($sponsor->getGodFather()->getId());
+		$godSon = $this->personDAO->getPersonById($sponsor->getGodChild()->getId());
+		$sponsor->setGodFather($godFather);
+		$sponsor->setGodSon($godSon);
+		return $sponsor;
 	}
 
 }

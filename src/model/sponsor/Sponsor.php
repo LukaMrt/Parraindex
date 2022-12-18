@@ -30,7 +30,7 @@ abstract class Sponsor {
 		return $this->godFather;
 	}
 
-	public function getGodSon(): Person {
+	public function getGodChild(): Person {
 		return $this->godSon;
 	}
 
@@ -45,5 +45,13 @@ abstract class Sponsor {
 	abstract public function getDescription(): string;
 
 	abstract public function getIcon(): string;
+
+	public function setGodFather(?Person $godFather): void {
+		$this->godFather = $godFather ?? $this->godFather;
+	}
+
+	public function setGodSon(?Person $godSon): void {
+		$this->godSon = $godSon ?? $this->godSon;
+	}
 
 }

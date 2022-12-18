@@ -25,9 +25,9 @@ class SponsorController extends Controller {
 		}
 
 		$this->render('sponsor.twig', [
-			'sponsor' => $sponsor['sponsor'],
-			'godFather' => $sponsor['godFather'],
-			'godChild' => $sponsor['godChild'],
+			'sponsor' => $sponsor,
+			'godFather' => $sponsor->getGodFather(),
+			'godChild' => $sponsor->getGodChild(),
 		]);
 	}
 

@@ -27,7 +27,7 @@ class ClassicSponsor extends Sponsor {
 	}
 
 	public function getIcon(): string {
-		return 'chain.svg';
+		return 'hammers.svg';
 	}
 
 }
