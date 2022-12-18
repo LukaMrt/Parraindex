@@ -14,6 +14,7 @@ use App\application\redirect\Redirect;
 use App\controller\AboutController;
 use App\application\sponsor\SponsorDAO;
 use App\controller\ContactController;
+use App\controller\SponsorController;
 use App\controller\LogoutConfirmationController;
 use App\controller\LogoutController;
 use App\controller\EditPersonController;
@@ -118,6 +119,7 @@ class Injector {
 		$this->router->registerRoute('GET', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_get');
 		$this->router->registerRoute('POST', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_post');
 		$this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
+		$this->router->registerRoute('GET', '/sponsor/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/about', $this->container->get(AboutController::class), 'about');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');

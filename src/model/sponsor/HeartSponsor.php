@@ -9,13 +9,25 @@ class HeartSponsor extends Sponsor {
 
 	private string $description;
 
-	public function __construct(int $id, Person $godFather, Person $godSon, DateTime $date, string $description) {
+	public function __construct(int $id, Person $godFather, Person $godSon, string $date, string $description) {
 		parent::__construct($id, $godFather, $godSon, $date);
 		$this->description = $description;
 	}
 
-	public function describe(): string {
+	public function getDescription(): string {
 		return $this->description;
+	}
+
+	public function getType(): string {
+		return 'Parrainage de coeur';
+	}
+
+	public function getDescriptionTitle(): string {
+		return 'Description';
+	}
+
+	public function getIcon(): string {
+		return 'heart.svg';
 	}
 
 }

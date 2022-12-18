@@ -1,0 +1,24 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('sponsor.css') %}
+{% set title = 'Parraindex - Lien' %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block content %}
+
+    <h1>{{ sponsor.type }}</h1>
+
+    {% include 'components/sponsor.twig' with {
+        'sponsor': sponsor,
+        'godFather': godFather,
+        'godChild': godChild,
+    } %}
+
+    {% include 'components/sponsor-description.twig' with {
+        'sponsor': sponsor
+    } %}
+
+
+{% endblock %}

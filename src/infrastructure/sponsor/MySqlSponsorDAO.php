@@ -8,21 +8,24 @@ use App\model\person\characteristic\CharacteristicBuilder;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
+use App\model\sponsor\ClassicSponsor;
+use App\model\sponsor\HeartSponsor;
+use App\model\sponsor\Sponsor;
 use PDOStatement;
 
 class MySqlSponsorDAO implements SponsorDAO {
 
-    private DatabaseConnection $databaseConnection;
+	private DatabaseConnection $databaseConnection;
 
-    public function __construct(DatabaseConnection $databaseConnection) {
-        $this->databaseConnection = $databaseConnection;
-    }
+	public function __construct(DatabaseConnection $databaseConnection) {
+		$this->databaseConnection = $databaseConnection;
+	}
 
-    public function getPersonFamily(int $personId): array {
+	public function getPersonFamily(int $personId): array {
 
-        $connection = $this->databaseConnection->getDatabase();
+		$connection = $this->databaseConnection->getDatabase();
 
-        $personQuery = $connection->prepare(<<<SQL
+		$personQuery = $connection->prepare(<<<SQL
             SELECT P.*, C.id_characteristic, C.value, C.visibility, T.*, (SELECT MIN(year)
                                                                           FROM Promotion
                                                                               JOIN Student S on Promotion.id_promotion = S.id_promotion
@@ -123,6 +126,40 @@ SQL
 			$people[] = $this->buildPerson($buffer);
 		}
 		return $people;
+	}
+
+	public function getSponsorById(int $id): ?Sponsor {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare(<<<SQL
+			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			FROM Sponsor S
+				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
+				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
+			WHERE S.id_sponsor = :id
+SQL
+		);
+
+		$query->execute(['id' => $id]);
+		$sponsor = null;
+
+		if ($row = $query->fetch()) {
+
+			$godfather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
+			$godson = PersonBuilder::aPerson()->withId($row->id_godson)->build();
+
+			if ($row->id_classic_sponsor != null) {
+				$sponsor = new ClassicSponsor($row->id_sponsor, $godfather, $godson, $row->sponsorDate, $row->reason);
+			} else if ($row->id_heart_sponsor != null) {
+				$sponsor = new HeartSponsor($row->id_sponsor, $godfather, $godson, $row->sponsorDate, $row->description);
+			}
+
+		}
+
+		$query->closeCursor();
+		$connection = null;
+		return $sponsor;
 	}
 
 }

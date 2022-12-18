@@ -2,19 +2,32 @@
 
 namespace unit\application\sponsor;
 
+use App\application\person\PersonDAO;
 use App\application\sponsor\SponsorDAO;
 use App\application\sponsor\SponsorService;
+use App\model\person\Identity;
 use App\model\person\Person;
+use App\model\person\PersonBuilder;
+use App\model\sponsor\ClassicSponsor;
+use App\model\sponsor\Sponsor;
+use DateTime;
 use PHPUnit\Framework\TestCase;
 
 class SponsorServiceTest extends TestCase {
 
+	private Person $person;
+	private Sponsor $sponsor;
     private SponsorService $sponsorService;
     private SponsorDAO $sponsorDAO;
+	private PersonDAO $personDAO;
 
     public function setUp(): void {
+		$person = PersonBuilder::aPerson()->withId(1)->build();
+		$this->person = PersonBuilder::aPerson()->withId(1)->withIdentity(new Identity('test', 'test'))->build();
+		$this->sponsor = new ClassicSponsor(1, $person, $person, '', '');
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
-        $this->sponsorService = new SponsorService($this->sponsorDAO);
+		$this->personDAO = $this->createMock(PersonDAO::class);
+        $this->sponsorService = new SponsorService($this->sponsorDAO, $this->personDAO);
     }
 
     public function testGetpersonfamilyRetrievesGodFathersAndGodSons() {
@@ -41,5 +54,33 @@ class SponsorServiceTest extends TestCase {
 			'godChildren' => [$godSon1, $godSon2]
 		]);
     }
+
+	public function testGetsponsorbyidReturnsNullWhenSponsorDoesNotExist(): void {
+
+		$this->sponsorDAO->method('getSponsorById')->willReturn(null);
+
+		$sponsor = $this->sponsorService->getSponsorById(1);
+
+		$this->assertNull($sponsor);
+	}
+
+	public function testGetsponsorbyidReturnsSponsorWhenSponsorExists(): void {
+
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
+
+		$this->personDAO->method('getPersonById')
+			->with(1)
+			->willReturn($this->person);
+
+		$sponsor = $this->sponsorService->getSponsorById(1);
+
+		$this->assertEquals([
+			'sponsor' => $this->sponsor,
+			'godFather' => $this->person,
+			'godChild' => $this->person
+		], $sponsor);
+	}
 
 }
