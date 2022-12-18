@@ -6,4 +6,5 @@
   @include m.flex(center, center, column);
   gap: f.rem(15);
   width: 70%;
+  text-align: center;
 }

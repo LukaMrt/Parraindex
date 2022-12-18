@@ -7,6 +7,14 @@
   @include m.flex(center, center, row);
   width: 60%;
 
+  @include b.breakpoint(large) {
+    width: 90%;
+  }
+
+  @include b.breakpoint(medium) {
+    flex-direction: column;
+  }
+
   &-link {
     flex-grow: 1;
 

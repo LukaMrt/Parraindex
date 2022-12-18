@@ -27,7 +27,7 @@
 
     <div class="sponsor__content-link">
         <p class="sponsor__content-link-date">
-            {{ sponsor.date | date('j') }} {{ trans_day_hash[sponsor.date | date('F')] }} {{ sponsor.date | date('Y') }}
+            {{ sponsor.formatDate('j') }} {{ trans_day_hash[sponsor.formatDate('F')] }} {{ sponsor.formatDate('Y') }}
         </p>
         <div class="sponsor__content-link-line">
             <img src="{{ icon(sponsor.icon) }}" alt="icon" class="sponsor__content-link-icon">

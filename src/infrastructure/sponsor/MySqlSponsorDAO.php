@@ -11,6 +11,7 @@ use App\model\person\PersonBuilder;
 use App\model\sponsor\ClassicSponsor;
 use App\model\sponsor\HeartSponsor;
 use App\model\sponsor\Sponsor;
+use App\model\sponsor\UnknownSponsor;
 use PDOStatement;
 
 class MySqlSponsorDAO implements SponsorDAO {
@@ -97,10 +98,16 @@ SQL
 				}
 			}
 
-			if ($row->id_classic_sponsor != null) {
-				$godFathersSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->reason);
-			} else if ($row->id_heart_sponsor != null) {
-				$godFathersSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->description);
+			if ($row->id_heart_sponsor != null) {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godFathersSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $date, $row->description);
+			} else if ($row->id_classic_sponsor != null) {
+				$reason = property_exists($row, 'reason') ? $row->reason ?? '' : '';
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godFathersSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $date, $reason);
+			} else {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godFathersSponsors[] = new UnknownSponsor($row->id_sponsor, $godFather, $godChild, $date);
 			}
 
 		}
@@ -117,10 +124,16 @@ SQL
 				}
 			}
 
-			if ($row->id_classic_sponsor != null) {
-				$godChildrenSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->reason);
-			} else if ($row->id_heart_sponsor != null) {
-				$godChildrenSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $row->sponsorDate, $row->description);
+			if ($row->id_heart_sponsor != null) {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godChildrenSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $date, $row->description);
+			} else if ($row->id_classic_sponsor != null) {
+				$reason = property_exists($row, 'reason') ? $row->reason ?? '' : '';
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godChildrenSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $date, $reason);
+			} else {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godChildrenSponsors[] = new UnknownSponsor($row->id_sponsor, $godFather, $godChild, $date);
 			}
 
 		}
@@ -208,13 +221,19 @@ SQL
 
 		if ($row = $query->fetch()) {
 
-			$godfather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
-			$godson = PersonBuilder::aPerson()->withId($row->id_godson)->build();
+			$godFather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
+			$godChild = PersonBuilder::aPerson()->withId($row->id_godson)->build();
 
-			if ($row->id_classic_sponsor != null) {
-				$sponsor = new ClassicSponsor($row->id_sponsor, $godfather, $godson, $row->sponsorDate, $row->reason);
-			} else if ($row->id_heart_sponsor != null) {
-				$sponsor = new HeartSponsor($row->id_sponsor, $godfather, $godson, $row->sponsorDate, $row->description);
+			if ($row->id_heart_sponsor != null) {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $date, $row->description);
+			} else if ($row->id_classic_sponsor != null) {
+				$reason = property_exists($row, 'reason') ? $row->reason ?? '' : '';
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $date, $reason);
+			} else {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new UnknownSponsor($row->id_sponsor, $godFather, $godChild, $date);
 			}
 
 		}

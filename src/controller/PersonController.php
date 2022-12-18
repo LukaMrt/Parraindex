@@ -20,7 +20,6 @@ class PersonController extends Controller {
 
 		$family = $this->sponsorService->getPersonFamily($parameters['id']);
 
-
 		$this->render('person.twig', [
 			'person' => $family['person'],
 			'godFathers' => $family['godFathers'],

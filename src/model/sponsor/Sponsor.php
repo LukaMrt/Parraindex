@@ -10,12 +10,13 @@ abstract class Sponsor {
 	private int $id;
 	private Person $godFather;
 	private Person $godSon;
-	private DateTime $date;
+	private ?DateTime $date;
 
 	protected function __construct(int $id, Person $godFather, Person $godSon, string $date) {
 		$this->id = $id;
 		$this->godFather = $godFather;
 		$this->godSon = $godSon;
+		$this->date = null;
 
 		if ($date) {
 			$this->date = DateTime::createFromFormat("Y-m-d", $date);
@@ -36,6 +37,15 @@ abstract class Sponsor {
 
 	public function getDate(): DateTime {
 		return $this->date;
+	}
+
+	public function formatDate(string $format): string {
+
+		if ($this->date) {
+			return $this->date->format($format);
+		}
+
+		return '';
 	}
 
 	abstract public function getType(): string;
