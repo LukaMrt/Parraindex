@@ -9,8 +9,8 @@
 	<div class="header__login">
 		{% if login %}
 			<a class="header__login-link" href="{{ router.url('logout_get') }}">Se déconnecter</a>
-			<a href="{{ router.url('person', {id: login.id}) }}">
-				<img class="header__login-picture" src="{{ picture(login.picture) }}" alt="photo">
+			<a href="{{ router.url('person', {id: login.user.id}) }}">
+				<img class="header__login-picture" src="{{ picture(login.user.picture) }}" alt="photo">
 			</a>
 		{% else %}
 			<a class="header__login-link" href="{{ router.url('login_get') }}">Se connecter</a>

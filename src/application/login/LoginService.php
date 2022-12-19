@@ -2,6 +2,7 @@
 
 namespace App\application\login;
 
+use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\account\Password;
 
@@ -10,9 +11,11 @@ class LoginService {
     private AccountDAO $accountDAO;
     private Redirect $redirect;
     private SessionManager $sessionManager;
+    private PersonDAO $personDAO;
 
-    public function __construct(AccountDAO $accountDAO, Redirect $redirect, SessionManager $sessionManager) {
+    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, SessionManager $sessionManager) {
         $this->accountDAO = $accountDAO;
+        $this->personDAO = $personDAO;
         $this->redirect = $redirect;
         $this->sessionManager = $sessionManager;
     }
@@ -27,8 +30,11 @@ class LoginService {
         $error = $this->checkLogin($parameters);
         if (empty($error)) {
             $account = $this->accountDAO->getSimpleAccount($parameters['login']);
+            
             $this->sessionManager->set('login', $account->getLogin());
             $this->sessionManager->set('privilege', $account->getHighestPrivilege()->toString());
+            $this->sessionManager->set('user', $this->personDAO->getPersonByLogin($account->getLogin()));
+            
             $this->redirect->redirect('home');
         }
 
