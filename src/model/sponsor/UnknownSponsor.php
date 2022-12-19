@@ -23,7 +23,7 @@ class UnknownSponsor extends Sponsor {
 	}
 
 	public function getIcon(): string {
-		return 'magnifier.svg';
+		return 'interogation.svg';
 	}
 
 }
