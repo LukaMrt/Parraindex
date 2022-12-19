@@ -15,7 +15,7 @@ class SponsorService {
 		$this->personDAO = $personDAO;
 	}
 
-	public function getPersonFamily(int $personId): array {
+	public function getPersonFamily(int $personId): ?array {
 		return $this->sponsorDAO->getPersonFamily($personId);
 	}
 

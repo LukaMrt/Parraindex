@@ -22,7 +22,7 @@ class MySqlSponsorDAO implements SponsorDAO {
 		$this->databaseConnection = $databaseConnection;
 	}
 
-	public function getPersonFamily(int $personId): array {
+	public function getPersonFamily(int $personId): ?array {
 
 		$connection = $this->databaseConnection->getDatabase();
 
@@ -79,7 +79,17 @@ SQL
 		$godFathersSponsorsQuery->execute(['id' => $personId]);
 		$godChildrenSponsorsQuery->execute(['id' => $personId]);
 
-		$person = $this->buildPeople($personQuery)[0];
+		$buildPeople = $this->buildPeople($personQuery);
+
+		if (count($buildPeople) === 0) {
+			$personQuery->closeCursor();
+			$godFathersQuery->closeCursor();
+			$godChildrenQuery->closeCursor();
+			$connection = null;
+			return null;
+		}
+
+		$person = $buildPeople[0];
 		$godFathers = $this->buildPeople($godFathersQuery);
 		$godChildren = $this->buildPeople($godChildrenQuery);
 

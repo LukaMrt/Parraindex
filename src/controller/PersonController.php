@@ -20,6 +20,11 @@ class PersonController extends Controller {
 
 		$family = $this->sponsorService->getPersonFamily($parameters['id']);
 
+		if ($family === null) {
+			header('Location: ' . $router->url('error', ['error' => 404]));
+			die();
+		}
+
 		$this->render('person.twig', [
 			'person' => $family['person'],
 			'godFathers' => $family['godFathers'],

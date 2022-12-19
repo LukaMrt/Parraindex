@@ -8,6 +8,6 @@ interface SponsorDAO {
 
 	public function getSponsorById(int $id): ?Sponsor;
 
-	public function getPersonFamily(int $personId): array;
+	public function getPersonFamily(int $personId): ?array;
 
 }
