@@ -81,8 +81,8 @@ class SignupService {
 		}
 
 		$identities = $this->personDAO->getAllIdentities();
-		$emailLevenshtein = preg_replace("/[^a-z]/", '', explode('@', $email)[0]);
-		$nameLevenshtein = preg_replace("/[^a-z]/", '', $firstname . $lastname);
+		$emailLevenshtein = preg_replace("/[^a-z]/", '', explode('@', strtolower($email))[0]);
+		$nameLevenshtein = preg_replace("/[^a-z]/", '', strtolower($firstname . $lastname));
 		$entryLevenshtein = levenshtein($emailLevenshtein, $nameLevenshtein);
 		$minLevenshtein = $entryLevenshtein;
 

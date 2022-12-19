@@ -47,7 +47,7 @@ class LoginServiceTest extends TestCase {
 
 	public function testLoginDetectsMissingFields(): void {
 
-		$return = $this->loginService->login(array());
+		$return = $this->loginService->login(array('login' => 'test'));
 
 		$this->assertEquals('Veuillez remplir tous les champs', $return);
 	}
