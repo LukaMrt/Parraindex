@@ -18,7 +18,7 @@ class DefaultSessionManager implements SessionManager {
         return session_status() === PHP_SESSION_ACTIVE;
     }
 
-    public function get(string $key): string {
+    public function get(string $key): mixed {
         return $_SESSION[$key];
     }
 

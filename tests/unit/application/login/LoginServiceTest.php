@@ -3,6 +3,7 @@
 namespace unit\application\login;
 
 use App\application\login\AccountDAO;
+use App\application\person\PersonDAO;
 use App\application\login\LoginService;
 use App\application\login\SessionManager;
 use App\application\redirect\Redirect;
@@ -24,6 +25,7 @@ class LoginServiceTest extends TestCase {
 	private LoginService $loginService;
 	private Redirect $redirect;
 	private AccountDAO $accountDAO;
+	private PersonDAO $personDAO;
 	private SessionManager $sessionManager;
 
 	public function setUp(): void {
@@ -37,9 +39,10 @@ class LoginServiceTest extends TestCase {
 		$this->account = new Account(0, 'test@test.com', $person, new Password('password'), $privilege);
 
 		$this->accountDAO = $this->createMock(AccountDAO::class);
+		$this->personDAO = $this->createMock(PersonDAO::class);
 		$this->redirect = $this->createMock(Redirect::class);
 		$this->sessionManager = $this->createMock(SessionManager::class);
-		$this->loginService = new LoginService($this->accountDAO, $this->redirect, $this->sessionManager);
+		$this->loginService = new LoginService($this->accountDAO, $this->personDAO, $this->redirect, $this->sessionManager);
 	}
 
 	public function testLoginDetectsMissingFields(): void {
@@ -77,11 +80,12 @@ class LoginServiceTest extends TestCase {
 			->with('login')
 			->willReturn(false);
 
-		$this->sessionManager->expects($this->exactly(2))
+		$this->sessionManager->expects($this->exactly(3))
 			->method('set')
 			->withConsecutive(
 				['login', 'test@test.com'],
-				['privilege', 'ADMIN']
+				['privilege', 'ADMIN'],
+				['user', null]
 			);
 
 		$this->loginService->login(array(
