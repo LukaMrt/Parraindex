@@ -21,7 +21,7 @@ class MysqlContactDAO implements ContactDAO {
 		$connection->exec("INSERT INTO Ticket (creation_date) VALUES (NOW())");
 
 		$ticketId = $connection->lastInsertId();
-		$statement = $connection->prepare("INSERT INTO Contact (id_ticket, description, name, email, type) VALUES (:id_ticket, :description, :name, :email, :type)");
+		$statement = $connection->prepare("INSERT INTO Contact (id_ticket, description, contacter_name, email, type) VALUES (:id_ticket, :description, :name, :email, :type)");
 		$statement->execute([
 			"id_ticket" => $ticketId,
 			"description" => $contact->getDescription(),

@@ -3,7 +3,8 @@
 
 .popup {
   position: absolute;
-  top: f.rem(70);
+  top: f.rem(90);
+  z-index: 2;
   left: -1000px;
   padding: f.rem(10);
   gap: f.rem(10);

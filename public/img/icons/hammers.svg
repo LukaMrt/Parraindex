@@ -1,0 +1,17 @@
+<svg id="hammers" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25.53 24.84">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #122135;
+      }
+
+      .cls-2 {
+        fill: #7b8890;
+      }
+    </style>
+  </defs>
+  <path id="handle_left" data-name="handle left" class="cls-1" d="M.84,13.73H28.06a1.41,1.41,0,0,1,1.41,1.41v1.19a1.41,1.41,0,0,1-1.41,1.41H.84A.78.78,0,0,1,.06,17V14.51a.78.78,0,0,1,.78-.78Z" transform="translate(34.64 14.3) rotate(135)"/>
+  <path id="handle_right" data-name="handle right" class="cls-1" d="M1.21,13.57H28.43A1.41,1.41,0,0,1,29.83,15v1.19a1.41,1.41,0,0,1-1.41,1.41H1.21a.78.78,0,0,1-.78-.78V14.35a.78.78,0,0,1,.78-.78Z" transform="translate(13.76 -8.26) rotate(45)"/>
+  <rect id="hammer" class="cls-2" x="1.81" y="5.01" width="12.42" height="6.89" rx="1.19" transform="translate(-5.32 6.02) rotate(-45)"/>
+  <path id="hammer-2" data-name="hammer" class="cls-2" d="M26.78,15.63a1.21,1.21,0,0,1-2.05.75L16,7.67a1.22,1.22,0,0,1,0-1.73l3.18-3.18a1.22,1.22,0,0,1,1.73,0l5.32,5.31a3.48,3.48,0,0,1,1,2.75Z" transform="translate(-1.69 -2.12)"/>
+</svg>

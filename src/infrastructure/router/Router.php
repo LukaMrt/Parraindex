@@ -49,7 +49,7 @@ class Router {
 		try {
 			return $this->router->generate($name, $parameters);
 		} catch (Exception $e) {
-			if ($_ENV['DEBUG']) {
+			if ($_ENV['DEBUG'] === "true") {
 				dd($e->getMessage());
 			}
 		}

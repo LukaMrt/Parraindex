@@ -9,13 +9,25 @@ class ClassicSponsor extends Sponsor {
 
     private string $reason;
 
-    public function __construct(int $id, Person $godFather, Person $godSon, DateTime $date, string $description) {
+    public function __construct(int $id, Person $godFather, Person $godSon, string $date, string $description) {
         parent::__construct($id, $godFather, $godSon, $date);
         $this->reason = $description;
     }
 
-    public function describe(): string {
+    public function getDescription(): string {
         return $this->reason;
     }
+
+	public function getType(): string {
+		return 'Parrainage IUT';
+	}
+
+	public function getDescriptionTitle(): string {
+		return 'Raison';
+	}
+
+	public function getIcon(): string {
+		return 'hammers.svg';
+	}
 
 }

@@ -13,6 +13,7 @@
 
 		<div class="person-content__description">
 			{% include 'components/person/family.twig' with {
+				'router': router,
 				'person': person,
 				'godFathers': godFathers,
 				'godChildren': godChildren,

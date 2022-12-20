@@ -7,7 +7,7 @@ use App\application\sponsor\SponsorService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
-class PersonController extends Controller {
+class SponsorController extends Controller {
 
 	private SponsorService $sponsorService;
 
@@ -17,19 +17,17 @@ class PersonController extends Controller {
 	}
 
 	public function get(Router $router, array $parameters): void {
+		$sponsor = $this->sponsorService->getSponsorById($parameters['id']);
 
-		$family = $this->sponsorService->getPersonFamily($parameters['id']);
-
-		if ($family === null) {
+		if ($sponsor === null) {
 			header('Location: ' . $router->url('error', ['error' => 404]));
 			die();
 		}
 
-		$this->render('person.twig', [
-			'person' => $family['person'],
-			'godFathers' => $family['godFathers'],
-			'godChildren' => $family['godChildren'],
-			'characteristics' => $family['person']->getCharacteristics()
+		$this->render('sponsor.twig', [
+			'sponsor' => $sponsor,
+			'godFather' => $sponsor->getGodFather(),
+			'godChild' => $sponsor->getGodChild(),
 		]);
 	}
 

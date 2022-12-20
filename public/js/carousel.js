@@ -132,11 +132,11 @@ function filterElements() {
 		cards.sort(function (a, b) {
 			let aName = a.querySelector(".card__last-name").textContent.toLowerCase();
 			let bName = b.querySelector(".card__last-name").textContent.toLowerCase();
-	
+
 			if (aName < bName) {
 				return -1;
 			}
-			if (aName >  bName) {
+			if (aName > bName) {
 				return 1;
 			}
 			return 0;
@@ -262,7 +262,6 @@ for (const filter of controller.filter.children) {
 for (let card of sliderUI.cards) {
 	card.addEventListener('mouseenter', () => card.classList.add('card--hover'));
 	card.addEventListener('mouseleave', () => card.classList.remove('card--hover'));
-	card.addEventListener('click', () => window.location.href = "/person/" + card.id);
 }
 
 // ---------------- Spinner Listeners ---------------- //
@@ -276,6 +275,18 @@ spinner.down.addEventListener('click', () => {
 });
 spinner.datesContainer.addEventListener('click', resetSpinner);
 
+
+// ------------------- Card clicks ------------------- //
+
+let clickableCards = document.querySelectorAll(".card");
+for (let card of clickableCards) {
+	card.addEventListener('click', () => window.location.href = "/person/" + card.id);
+}
+
+let clickableNetworks = document.querySelectorAll(".social-network");
+for (let network of clickableNetworks) {
+	network.addEventListener('click', (e) => e.cancelBubble = true);
+}
 
 // ------------------ Initialization ----------------- //
 

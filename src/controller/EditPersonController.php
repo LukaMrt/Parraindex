@@ -39,7 +39,7 @@ class EditPersonController extends Controller {
             die();
         }
 
-        $this->render('editPerson.twig', ['router' => $router, 'person' => $person]);
+        $this->render('editPerson.twig', ['person' => $person]);
     }
 
 	public function post(Router $router, array $parameters): void {
@@ -66,9 +66,9 @@ class EditPersonController extends Controller {
 			'biography' => $_POST['biography']
 		];
 
-
 		$this->personService->updatePerson($data);
-		header('Location: ' . $router->url('home'));
+		$person = $this->personService->getPersonById($parameters['id']);
+		$this->render('editPerson.twig', ['success' => 'Modifications enregistrées', 'person' => $person]);
 	}
 
 

@@ -1,0 +1,10 @@
+<svg id="heart" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 28.05 24.46">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #132136;
+      }
+    </style>
+  </defs>
+  <path id="heart-2" data-name="heart" class="cls-1" d="M26.86,5.86a7.37,7.37,0,0,0-10.44,0L15,7.28,13.58,5.86A7.38,7.38,0,0,0,3.14,16.3L15,28.16,25.44,17.72h0l1.42-1.43A7.38,7.38,0,0,0,26.86,5.86Z" transform="translate(-0.98 -3.7)"/>
+</svg>

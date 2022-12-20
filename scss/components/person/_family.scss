@@ -12,7 +12,7 @@
 	}
 
 	&__title {
-		margin: 0 0 f.rem(70);
+		margin: 0 0 f.rem(50);
 		text-align: center;
 		color: var(--medium-grey);
 		text-transform: uppercase;
@@ -23,7 +23,7 @@
 		}
 
 		&--second {
-			margin: f.rem(70) 0 0;
+			margin: f.rem(50) 0 0;
 
 			@include b.breakpoint(medium) {
 				margin: f.rem(40) 0 0;
@@ -56,8 +56,8 @@
 	&__portrait {
 
 		@include m.flex(center, center, column);
-		width: f.rem(100);
-		height: f.rem(100);
+		width: f.rem(80);
+		height: f.rem(80);
 		position: relative;
 
 		@include b.breakpoint(medium) {
@@ -73,6 +73,7 @@
 			height: 100%;
 			border-radius: 50%;
 			object-fit: cover;
+			aspect-ratio: 1/1;
 			border: solid 0.5px var(--medium-grey);
 			opacity: 1;
 			transition: opacity .5s;

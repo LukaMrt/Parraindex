@@ -8,21 +8,25 @@ use App\model\person\characteristic\CharacteristicBuilder;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
+use App\model\sponsor\ClassicSponsor;
+use App\model\sponsor\HeartSponsor;
+use App\model\sponsor\Sponsor;
+use App\model\sponsor\UnknownSponsor;
 use PDOStatement;
 
 class MySqlSponsorDAO implements SponsorDAO {
 
-    private DatabaseConnection $databaseConnection;
+	private DatabaseConnection $databaseConnection;
 
-    public function __construct(DatabaseConnection $databaseConnection) {
-        $this->databaseConnection = $databaseConnection;
-    }
+	public function __construct(DatabaseConnection $databaseConnection) {
+		$this->databaseConnection = $databaseConnection;
+	}
 
-    public function getPersonFamily(int $personId): array {
+	public function getPersonFamily(int $personId): ?array {
 
-        $connection = $this->databaseConnection->getDatabase();
+		$connection = $this->databaseConnection->getDatabase();
 
-        $personQuery = $connection->prepare(<<<SQL
+		$personQuery = $connection->prepare(<<<SQL
             SELECT P.*, C.id_characteristic, C.value, C.visibility, T.*, (SELECT MIN(year)
                                                                           FROM Promotion
                                                                               JOIN Student S on Promotion.id_promotion = S.id_promotion
@@ -41,34 +45,119 @@ SQL
             JOIN Sponsor S on P.id_person = S.id_godfather
             WHERE S.id_godson = :id
 SQL
-        );
+		);
 
-        $godChildrenQuery = $connection->prepare(<<<SQL
+		$godChildrenQuery = $connection->prepare(<<<SQL
             SELECT P.*
             FROM Person P
             JOIN Sponsor S on P.id_person = S.id_godson
             WHERE S.id_godfather = :id
 SQL
-        );
+		);
 
-        $personQuery->execute(['id' => $personId]);
-        $godFathersQuery->execute(['id' => $personId]);
-        $godChildrenQuery->execute(['id' => $personId]);
+		$godFathersSponsorsQuery = $connection->prepare(<<<SQL
+			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			FROM Sponsor S
+				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
+				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
+			WHERE S.id_godson = :id
+SQL
+		);
 
-        $person = $this->buildPeople($personQuery)[0];
-        $godFathers = $this->buildPeople($godFathersQuery);
-        $godChildren = $this->buildPeople($godChildrenQuery);
+		$godChildrenSponsorsQuery = $connection->prepare(<<<SQL
+			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			FROM Sponsor S
+				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
+				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
+			WHERE S.id_godfather = :id
+SQL
+		);
 
-        $personQuery->closeCursor();
-        $godFathersQuery->closeCursor();
-        $godChildrenQuery->closeCursor();
-        $connection = null;
-        return [
-            'person' => $person,
-            'godFathers' => $godFathers,
-            'godChildren' => $godChildren
-        ];
-    }
+		$personQuery->execute(['id' => $personId]);
+		$godFathersQuery->execute(['id' => $personId]);
+		$godChildrenQuery->execute(['id' => $personId]);
+		$godFathersSponsorsQuery->execute(['id' => $personId]);
+		$godChildrenSponsorsQuery->execute(['id' => $personId]);
+
+		$buildPeople = $this->buildPeople($personQuery);
+
+		if (count($buildPeople) === 0) {
+			$personQuery->closeCursor();
+			$godFathersQuery->closeCursor();
+			$godChildrenQuery->closeCursor();
+			$connection = null;
+			return null;
+		}
+
+		$person = $buildPeople[0];
+		$godFathers = $this->buildPeople($godFathersQuery);
+		$godChildren = $this->buildPeople($godChildrenQuery);
+
+		$godFathersSponsors = [];
+		$godChildrenSponsors = [];
+
+		while ($row = $godFathersSponsorsQuery->fetch()) {
+
+			$godChild = $person;
+			$godFather = null;
+
+			for ($i = 0; $i < count($godFathers); $i++) {
+				if ($godFathers[$i]->getId() === $row->id_godfather) {
+					$godFather = $godFathers[$i];
+					break;
+				}
+			}
+
+			if ($row->id_heart_sponsor != null) {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godFathersSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $date, $row->description);
+			} else if ($row->id_classic_sponsor != null) {
+				$reason = property_exists($row, 'reason') ? $row->reason ?? '' : '';
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godFathersSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $date, $reason);
+			} else {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godFathersSponsors[] = new UnknownSponsor($row->id_sponsor, $godFather, $godChild, $date);
+			}
+
+		}
+
+		while ($row = $godChildrenSponsorsQuery->fetch()) {
+
+			$godFather = $person;
+			$godChild = null;
+
+			for ($i = 0; $i < count($godChildren); $i++) {
+				if ($godChildren[$i]->getId() === $row->id_godson) {
+					$godChild = $godChildren[$i];
+					break;
+				}
+			}
+
+			if ($row->id_heart_sponsor != null) {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godChildrenSponsors[] = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $date, $row->description);
+			} else if ($row->id_classic_sponsor != null) {
+				$reason = property_exists($row, 'reason') ? $row->reason ?? '' : '';
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godChildrenSponsors[] = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $date, $reason);
+			} else {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$godChildrenSponsors[] = new UnknownSponsor($row->id_sponsor, $godFather, $godChild, $date);
+			}
+
+		}
+
+		$personQuery->closeCursor();
+		$godFathersQuery->closeCursor();
+		$godChildrenQuery->closeCursor();
+		$connection = null;
+		return [
+			'person' => $person,
+			'godFathers' => $godFathersSponsors,
+			'godChildren' => $godChildrenSponsors
+		];
+	}
 
     private function buildPerson(array $buffer): Person {
 
@@ -94,7 +183,6 @@ SQL
 			->withCharacteristics($characteristics)
 			->withStartYear($buffer[0]->startYear ?? -1)
             ->build();
-
     }
 
     private function buildPeople(bool|PDOStatement $query): array {
@@ -123,6 +211,46 @@ SQL
 			$people[] = $this->buildPerson($buffer);
 		}
 		return $people;
+	}
+
+	public function getSponsorById(int $id): ?Sponsor {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare(<<<SQL
+			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			FROM Sponsor S
+				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
+				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
+			WHERE S.id_sponsor = :id
+SQL
+		);
+
+		$query->execute(['id' => $id]);
+		$sponsor = null;
+
+		if ($row = $query->fetch()) {
+
+			$godFather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
+			$godChild = PersonBuilder::aPerson()->withId($row->id_godson)->build();
+
+			if ($row->id_heart_sponsor != null) {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $date, $row->description);
+			} else if ($row->id_classic_sponsor != null) {
+				$reason = property_exists($row, 'reason') ? $row->reason ?? '' : '';
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $date, $reason);
+			} else {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new UnknownSponsor($row->id_sponsor, $godFather, $godChild, $date);
+			}
+
+		}
+
+		$query->closeCursor();
+		$connection = null;
+		return $sponsor;
 	}
 
 }
