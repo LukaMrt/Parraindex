@@ -7,7 +7,9 @@ use App\application\person\characteristic\CharacteristicTypeService;
 use App\application\person\characteristic\CharacteristicService;
 use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
+use App\model\person\PersonBuilder;
 use Twig\Environment;
+use Exception;
 
 class EditPersonController extends Controller {
 
@@ -22,20 +24,33 @@ class EditPersonController extends Controller {
 
     public function get(Router $router, array $parameters): void {
 
-        $person = $this->personService->getPersonById($parameters['id']);
+        // TODO : use javascript to make advanced requests (POST, PUT, PATCH, DELETE)
+        //$method = "PATCH";
 
-        // throw error if person does not exist
-        if ($person === null) {
-            header('Location: ' . $router->url('error', ['error' => 404]));
-            die();
+        // The only advanced request naturally available in a HTML form
+        $method = "POST";
+
+        // if id is 0, create a new person
+        if ($parameters['id'] === "0") {
+            $method = "POST";
+            $person = PersonBuilder::aPerson()->build();
+
+        }else{
+            $person = $this->personService->getPersonById($parameters['id']);
+    
+            // throw error if person does not exist
+            if ($person === null) {
+                header('Location: ' . $router->url('error', ['error' => 404]));
+                die();
+            }
+    
+            // throw error if user is not logged in
+            if (empty($_SESSION)) {
+                header('Location: ' . $router->url('error', ['error' => 403]));
+                die();
+            }
         }
-
-        // throw error if user is not logged in
-        if (empty($_SESSION)) {
-            header('Location: ' . $router->url('error', ['error' => 403]));
-            die();
-        }
-
+        
         // throw error if user is not admin or the person to edit is not the user
         if ( PrivilegeType::fromString($_SESSION['privilege']) !== PrivilegeType::ADMIN &&
             $_SESSION['user']->getId() !== $person->getId()) {
@@ -43,25 +58,21 @@ class EditPersonController extends Controller {
             die();
         }
 
-        
         $characteristicTypes = $this->characteristicTypeService->getAllCharacteristicTypes();
         
-        // Some code to test the services
-        /* 
-        $characteristic = $this->characteristicService->getCharacteristic(7,"Linkedin");
-        dd($characteristicTypes, $characteristic);
-        */
-
         $this->render('editPerson.twig', 
             [
             'person' => $person,
-            'characteristics' => $characteristicTypes
+            'characteristics' => $characteristicTypes,
+            'method' => $method
             ]
         );
     }
 
 	public function post(Router $router, array $parameters): void {
 
+        throw new Exception('POST method is not implemented yet');
+        
         $person = $this->personService->getPersonById($parameters['id']);
 
         // throw error if user is not logged in

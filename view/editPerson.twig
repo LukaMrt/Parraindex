@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<form action="" class="edit-person">
+<form class="edit-person" method="{{method}}">
 
 	<div class="description">
 
@@ -17,9 +17,7 @@
 
 			<h2>A PROPOS</h1>
 
-			<textarea name="" id="about-field" cols="30" rows="10">
-				Lorem ipsum dolor sit amet consectetur, adipisicing elit. In necessitatibus neque et. Mollitia doloribus veritatis repellat minima. Obcaecati, perspiciatis corrupti voluptatem ipsa, laborum eius, rerum blanditiis minus hic neque repudiandae?
-			</textarea>
+			<textarea name="person-desc" id="about-field" cols="30" rows="10">{{person.description}}</textarea>
 		
 		</div>
 
@@ -27,9 +25,7 @@
 
 			<h2>BIOGRAPHIE</h1>
 
-			<textarea name="" id="bio-field" cols="30" rows="10">
-				{{person.biography}}
-			</textarea>
+			<textarea name="person-bio" id="bio-field" cols="30" rows="10">{{person.biography}}</textarea>
 
 		</div>
 	
@@ -41,7 +37,7 @@
 
 			<h2>IDENTIFANT</h1>
 
-			<input disabled type="text" name="" id="id-field" value="@{{person.id}}">
+			<input type="text" name="person-id" id="id-field" value="@{{person.id}}">
 
 		</div>
 
@@ -85,13 +81,19 @@
 
 		<div class="contact__characteristics" id="contact-field">
 
-			{% for characteristic in person.characteristics %}
+			{% for characteristic in characteristics %}
+
+				{% set value = "" %}
+
+				{% for userCharacteristic in person.characteristics %}
+					{% if characteristic.title == userCharacteristic.title %}
+						{% set value = userCharacteristic.value %}
+					{% endif %}
+				{% endfor %}
 
 				{% include 'components/characteristic.twig' with {
 					'title': characteristic.title,
-					'value': characteristic.value,
-					'id': characteristic.id,
-					'visibility': characteristic.visible,
+					'value': value,
 					}
 				%}
 			{% endfor %}
@@ -99,18 +101,18 @@
 		</div>
 	</div>
 
+	<nav class='confirm'>
+
+		<a href="#">
+			<img src="{{icon('up.svg')}}" class="prev" alt="retour">
+		</a>
+
+		<button class="btn btn--primary" type="submit">
+			Enregistrer
+		</button>
+
+	</nav>
+
 </form>
-
-<nav class='confirm'>
-
-	<a href="#">
-		<img src="{{icon('up.svg')}}" class="prev" alt="retour">
-	</a>
-
-	<button class="btn btn--primary">
-		Enregistrer
-	</button>
-
-</nav>
 
 {% endblock %}
