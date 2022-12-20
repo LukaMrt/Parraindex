@@ -67,6 +67,7 @@ class EditPersonController extends Controller {
 		];
 
 		$this->personService->updatePerson($data);
+		$person = $this->personService->getPersonById($parameters['id']);
 		$this->render('editPerson.twig', ['success' => 'Modifications enregistrées', 'person' => $person]);
 	}
 
