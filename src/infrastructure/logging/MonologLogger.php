@@ -11,37 +11,37 @@ class MonologLogger implements Logger {
 
 	private array $loggers = [];
 
-	public function info(string $className, string $message, array $context = []) {
+	public function info(string $className, string $message, array $context = []): void {
 		$this->createLogger($className);
 		$this->loggers[$className]->info($message, $context);
 	}
 
-	public function debug(string $className, string $message, array $context = []) {
+	public function debug(string $className, string $message, array $context = []): void {
 		$this->createLogger($className);
 		$this->loggers[$className]->debug($message, $context);
 	}
 
-	public function warning(string $className, string $message, array $context = []) {
+	public function warning(string $className, string $message, array $context = []): void {
 		$this->createLogger($className);
 		$this->loggers[$className]->warning($message, $context);
 	}
 
-	public function error(string $className, string $message, array $context = []) {
+	public function error(string $className, string $message, array $context = []): void {
 		$this->createLogger($className);
 		$this->loggers[$className]->error($message, $context);
 	}
 
-	public function alert(string $className, string $message, array $context = []) {
+	public function alert(string $className, string $message, array $context = []): void {
 		$this->createLogger($className);
 		$this->loggers[$className]->alert($message, $context);
 	}
 
-	public function critical(string $className, string $message, array $context = []) {
+	public function critical(string $className, string $message, array $context = []): void {
 		$this->createLogger($className);
 		$this->loggers[$className]->critical($message, $context);
 	}
 
-	public function emergency(string $className, string $message, array $context = []) {
+	public function emergency(string $className, string $message, array $context = []): void {
 		$this->createLogger($className);
 		$this->loggers[$className]->emergency($message, $context);
 	}
