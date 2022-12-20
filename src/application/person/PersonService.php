@@ -22,6 +22,10 @@ class PersonService {
         return $this->personDAO->getPersonById($id);
     }
 
+    public function getPersonByLogin(string $login): ?Person {
+        return $this->personDAO->getPersonByLogin($login);
+    }
+
 	public function updatePerson(array $parameters): void {
 		$person = PersonBuilder::aPerson()
 			->withId($parameters['id'])

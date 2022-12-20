@@ -10,8 +10,10 @@ interface SessionManager {
 
     public function isSessionStarted(): bool;
 
-    public function get(string $key): string;
+    public function get(string $key): mixed;
 
     public function set(string $key, $value): void;
+
+	public function exists(string $key): bool;
 
 }

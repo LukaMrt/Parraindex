@@ -30,5 +30,5 @@ $router->run();
 $end = microtime(true);
 
 if ($_ENV['DEBUG'] === "true") {
-	echo "Execution time: " . ($end - $start) . " seconds";
+	echo "Execution time: " . round(($end - $start) * 1_000) . " ms";
 }

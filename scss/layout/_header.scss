@@ -4,60 +4,74 @@
 
 .header {
 
-	@include m.flex(center, space-between, row);
+	@include m.flex($direction: row, $align: center);
 	flex-wrap: wrap;
-	width: 95%;
-	gap: f.rem(20) 0;
+	gap: f.rem(10) f.rem(35);
 
-	margin-top: 3vh;
+	width: 100%;
+	min-height: f.rem(80);
 
-	@include b.breakpoint(small) {
-		@include m.flex(center, center, column);
-	}
-
-	&__logo {
-		height: f.rem(35);
-		width: f.rem(35);
-	}
+	padding: 0 f.rem(50);
+	box-sizing: border-box;
+	position: relative;
 
 	&__title {
 		@include m.flex(center, center, row);
-		gap: f.rem(20);
+		gap: f.rem(16);
 
-		font-size: f.rem(22);
-		text-transform: uppercase;
-
-		color: var(--dark-grey);
+		font-size: f.rem(16);
 		font-weight: 300;
-		letter-spacing: 5px;
+		letter-spacing: 2px;
+		text-transform: uppercase;
+	}
 
-		&--hidden {
-			display: none;
-		}
-
+	&__logo {
+		height: f.rem(50);
+		aspect-ratio: 1/1;
 	}
 
 	&__login {
-
 		@include m.flex($direction: row, $justify: flex-end);
-		gap: f.rem(35);
+
+		gap: inherit;
 		flex-wrap: wrap;
-		flex-grow: 1;
+		margin-left: auto;
+
+		&-picture {
+			border-radius: 50%;
+			height: f.rem(50);
+			border: 3px solid transparent;
+			@include m.hard-box-shadow();
+			
+			transition: scale 0.15s ease-in-out;
+
+			&:active {
+				scale: 0.95;
+			}
+		}
 
 		&-link {
-			transition: color 0.3s ease;
-
-			text-align: end;
-			font-size: f.rem(22);
-			font-weight: 300;
+			@include m.flex();
+			height: 100%;
 			color: var(--dark-grey);
-			white-space: nowrap;
+			transition: color 0.3s ease;
 
 			&:hover {
 				color: var(--dark-blue);
 			}
 		}
 
+		@include b.breakpoint(small) {
+			justify-content: space-evenly;
+			width: 90%;
+			margin: 0;
+		}
+	}
+
+	@include b.breakpoint(small) {
+		@include m.hard-box-shadow();
+		justify-content: center;
+		padding: f.rem(20) 0;
 	}
 
 }

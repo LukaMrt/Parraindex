@@ -3,6 +3,7 @@
 namespace unit\application\login;
 
 use App\application\login\AccountDAO;
+use App\application\person\PersonDAO;
 use App\application\login\LoginService;
 use App\application\login\SessionManager;
 use App\application\redirect\Redirect;
@@ -24,6 +25,7 @@ class LoginServiceTest extends TestCase {
 	private LoginService $loginService;
 	private Redirect $redirect;
 	private AccountDAO $accountDAO;
+	private PersonDAO $personDAO;
 	private SessionManager $sessionManager;
 
 	public function setUp(): void {
@@ -37,9 +39,10 @@ class LoginServiceTest extends TestCase {
 		$this->account = new Account(0, 'test@test.com', $person, new Password('password'), $privilege);
 
 		$this->accountDAO = $this->createMock(AccountDAO::class);
+		$this->personDAO = $this->createMock(PersonDAO::class);
 		$this->redirect = $this->createMock(Redirect::class);
 		$this->sessionManager = $this->createMock(SessionManager::class);
-		$this->loginService = new LoginService($this->accountDAO, $this->redirect, $this->sessionManager);
+		$this->loginService = new LoginService($this->accountDAO, $this->personDAO, $this->redirect, $this->sessionManager);
 	}
 
 	public function testLoginDetectsMissingFields(): void {
@@ -73,18 +76,23 @@ class LoginServiceTest extends TestCase {
 			->with('test@test.com')
 			->willReturn($this->account);
 
-		$this->sessionManager->expects($this->exactly(2))
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
+
+		$this->sessionManager->expects($this->exactly(3))
 			->method('set')
 			->withConsecutive(
 				['login', 'test@test.com'],
-				['privilege', 'ADMIN']
+				['privilege', 'ADMIN'],
+				['user', null]
 			);
 
 		$this->loginService->login(array(
 			'login' => 'test@test.com',
 			'password' => 'test',
 		));
-    }
+	}
 
 	public function testLoginReturnsNothingOnSuccess(): void {
 
@@ -95,6 +103,10 @@ class LoginServiceTest extends TestCase {
 		$this->accountDAO->method('getSimpleAccount')
 			->with('test@test.com')
 			->willReturn($this->account);
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
 
 		$return = $this->loginService->login(array(
 			'login' => 'test@test.com',
@@ -118,13 +130,17 @@ class LoginServiceTest extends TestCase {
 			->method('redirect')
 			->with('home');
 
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
+
 		$this->loginService->login(array(
 			'login' => 'test@test.com',
 			'password' => 'test',
 		));
 	}
 
-	public function testLoginRedirectToSignupIfNeeded(){
+	public function testLoginRedirectToSignupIfNeeded() {
 
 		$this->redirect->expects($this->once())
 			->method('redirect')
@@ -133,6 +149,59 @@ class LoginServiceTest extends TestCase {
 		$this->loginService->login(array(
 			'action' => 'register'
 		));
+	}
+
+	public function testLoginDetectsAlreadyLoggedIn(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(true);
+
+		$return = $this->loginService->login(array(
+			'login' => 'test@test.com',
+			'password' => 'test',
+		));
+
+		$this->assertEquals('Vous êtes déjà connecté', $return);
+	}
+
+	public function testLogoutRedirectsToHomeWhenUserIsNotLogged(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(false);
+
+		$this->redirect->expects($this->once())
+			->method('redirect')
+			->with('home');
+
+		$this->loginService->logout();
+	}
+
+	public function testLogoutRedirectsToConfirmationWhenUserIsLogged(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(true);
+
+		$this->redirect->expects($this->once())
+			->method('redirect')
+			->with('logout_confirmation');
+
+		$this->loginService->logout();
+	}
+
+	public function testLogoutDestroysSessionsWhenUserIsLogged(): void {
+
+		$this->sessionManager->method('exists')
+			->with('login')
+			->willReturn(true);
+
+		$this->sessionManager->expects($this->exactly(1))
+			->method('destroySession')
+			->withConsecutive();
+
+		$this->loginService->logout();
 	}
 
 }

@@ -3,6 +3,7 @@
 namespace App\controller;
 
 use App\application\login\SignupService;
+use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
@@ -10,8 +11,8 @@ class SignUpController extends Controller {
 
 	private SignupService $signupService;
 
-	public function __construct(Environment $twig, SignupService $signupService) {
-		parent::__construct($twig);
+	public function __construct(Environment $twig, Router $router, PersonService $personService, SignupService $signupService) {
+		parent::__construct($twig, $router, $personService);
 		$this->signupService = $signupService;
 	}
 
@@ -31,7 +32,7 @@ class SignUpController extends Controller {
 
 		$error = $this->signupService->signUp($postParameters);
 
-		$this->render('signup.twig', ['router' => $router, 'error' => $error]);
+		$this->render('signup.twig', ['error' => $error]);
 	}
 
 }

@@ -1,6 +1,8 @@
 <?php
 
-namespace App\application\random;
+namespace App\infrastructure\random;
+
+use App\application\random\Random;
 
 class DefaultRandom implements Random {
 

@@ -20,10 +20,6 @@ class Account {
 		$this->privileges = $privileges;
 	}
 
-	public function getPassword(): string {
-		return $this->password->getPassword();
-	}
-
 	public function getLogin(): string {
 		return $this->email;
 	}

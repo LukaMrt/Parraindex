@@ -41,10 +41,22 @@ class PersonServiceTest extends TestCase {
 
 		$person = $this->createMock(Person::class);
 		$this->personDAO->method('getPersonById')
-			->with($this->equalTo(1))
+			->with(1)
 			->willReturn($person);
 
 		$return = $this->personService->getPersonById(1);
+
+		$this->assertEquals($return, $person);
+	}
+
+	public function testGetPersonByLoginRetrievesPerson() {
+
+		$person = $this->createMock(Person::class);
+		$this->personDAO->method('getPersonByLogin')
+			->with('test.test@etu.univ-lyon1.fr')
+			->willReturn($person);
+
+		$return = $this->personService->getPersonByLogin('test.test@etu.univ-lyon1.fr');
 
 		$this->assertEquals($return, $person);
 	}
@@ -74,5 +86,7 @@ class PersonServiceTest extends TestCase {
 
 		$this->assertEquals($return, $this->person);
 	}
+
+
 
 }
