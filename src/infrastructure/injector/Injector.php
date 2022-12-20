@@ -8,6 +8,10 @@ use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
 use App\application\login\UrlUtils;
 use App\application\mail\Mailer;
+use App\application\person\characteristic\CharacteristicDAO;
+use App\infrastructure\person\characteristic\MysqlCharacteristicDAO;
+use App\application\person\characteristic\CharacteristicTypeDAO;
+use App\infrastructure\person\characteristic\MysqlCharacteristicTypeDAO;
 use App\application\person\PersonDAO;
 use App\application\random\Random;
 use App\application\redirect\Redirect;
@@ -75,6 +79,8 @@ class Injector {
 		$personDAO = get(MySqlPersonDAO::class);
 		$contactDAO = get(MySqlContactDAO::class);
 		$sponsorDAO = get(MySqlSponsorDAO::class);
+		$characteristicDAO = get(MySqlCharacteristicDAO::class);
+		$characteristicTypeDAO = get(MySqlCharacteristicTypeDAO::class);
 		$logger = get(MonologLogger::class);
 		$mailer = get(PhpMailer::class);
 		$random = get(DefaultRandom::class);
@@ -97,6 +103,9 @@ class Injector {
 		$this->container->set(PersonDAO::class, $personDAO);
 		$this->container->set(ContactDAO::class, $contactDAO);
 		$this->container->set(SponsorDAO::class, $sponsorDAO);
+
+		$this->container->set(CharacteristicDAO::class, $characteristicDAO);
+		$this->container->set(CharacteristicTypeDAO::class, $characteristicTypeDAO);
 	}
 
 	/**

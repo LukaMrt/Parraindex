@@ -3,15 +3,21 @@
 namespace App\controller;
 
 use App\application\person\PersonService;
+use App\application\person\characteristic\CharacteristicTypeService;
+use App\application\person\characteristic\CharacteristicService;
 use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
 use Twig\Environment;
 
 class EditPersonController extends Controller {
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService) {
+    private CharacteristicTypeService $characteristicTypeService;
+    private CharacteristicService $characteristicService;
+
+    public function __construct(Environment $twig, Router $router, PersonService $personService, CharacteristicTypeService $characteristicTypeService, CharacteristicService $characteristicService) {
         parent::__construct($twig, $router, $personService);
-        $this->personService = $personService;
+        $this->characteristicTypeService = $characteristicTypeService;
+        $this->characteristicService = $characteristicService;
     }
 
     public function get(Router $router, array $parameters): void {
@@ -30,8 +36,6 @@ class EditPersonController extends Controller {
             die();
         }
 
-        // dd(PrivilegeType::fromString($_SESSION['privilege']));
-
         // throw error if user is not admin or the person to edit is not the user
         if ( PrivilegeType::fromString($_SESSION['privilege']) !== PrivilegeType::ADMIN &&
             $_SESSION['user']->getId() !== $person->getId()) {
@@ -39,7 +43,21 @@ class EditPersonController extends Controller {
             die();
         }
 
-        $this->render('editPerson.twig', ['person' => $person]);
+        
+        $characteristicTypes = $this->characteristicTypeService->getAllCharacteristicTypes();
+        
+        // Some code to test the services
+        /* 
+        $characteristic = $this->characteristicService->getCharacteristic(7,"Linkedin");
+        dd($characteristicTypes, $characteristic);
+        */
+
+        $this->render('editPerson.twig', 
+            [
+            'person' => $person,
+            'characteristics' => $characteristicTypes
+            ]
+        );
     }
 
 	public function post(Router $router, array $parameters): void {
