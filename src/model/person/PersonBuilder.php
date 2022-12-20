@@ -23,6 +23,9 @@ class PersonBuilder {
 	/** @var string $biography */
 	private string $biography;
 
+	/** @var string $description */
+	private string $description;
+
 	/** @var array $characteristics */
 	private array $characteristics;
 
@@ -40,9 +43,10 @@ class PersonBuilder {
 
     private function __construct() {
         $this->id = 0;
-        $this->identity = new Identity('', '', '');
+        $this->identity = new Identity('', '');
         $this->birthDate = new DateTime();
 		$this->biography = '';
+		$this->description = '';
 		$this->characteristics = array();
 		$this->sponsors = array();
 		$this->families = array();
@@ -83,6 +87,15 @@ class PersonBuilder {
 	}
 
 	/**
+	 * @param string|null $description Set description property.
+	 * @return $this Builder instance.
+	 */
+	public function withDescription(?string $description): PersonBuilder {
+		$this->description = $description ?? $this->description;
+		return $this;
+	}
+
+	/**
 	 * @param array $characteristics Set characteristics property.
 	 * @return $this Builder instance.
 	 */
@@ -91,6 +104,10 @@ class PersonBuilder {
 		return $this;
 	}
 
+	/**
+	 * @param Characteristic $characteristic Add a characteristic to the person.
+	 * @return $this Builder instance.
+	 */
 	public function addCharacteristic(Characteristic $characteristic): PersonBuilder {
 		if (!in_Array($characteristic, $this->characteristics)) {
 			$this->characteristics[] = $characteristic;
@@ -125,16 +142,27 @@ class PersonBuilder {
 		return $this;
 	}
 
+	/**
+	 * @param int $startYear Set the entry year of the person.
+	 * @return $this Builder instance.
+	 */
     public function withStartYear(int $startYear): PersonBuilder {
         $this->startYear = $startYear;
         return $this;
     }
 
+	/**
+	 * @param array $promotions Set promotions property.
+	 * @return $this Builder instance.
+	 */
     public function withPromotions(array $promotions): PersonBuilder {
 		$this->promotions = $promotions;
 		return $this;
 	}
 
+	/**
+	 * @param Promotion $promotion Add a promotion to the person.
+	 */
     public function addPromotion(Promotion $promotion): PersonBuilder {
 		$this->promotions[] = $promotion;
 		return $this;
@@ -166,6 +194,13 @@ class PersonBuilder {
 	 */
 	public function getBiography(): string {
 		return $this->biography;
+	}
+
+	/**
+	 * @return string The description of the person.
+	 */
+	public function getDescription(): string {
+		return $this->description;
 	}
 
     /**

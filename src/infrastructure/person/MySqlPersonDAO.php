@@ -68,7 +68,8 @@ class MySqlPersonDAO implements PersonDAO {
 		$builder = PersonBuilder::aPerson()
 			->withId($buffer[0]->id_person)
 			->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
-			->withBiography($buffer[0]->biography);
+			->withBiography($buffer[0]->biography)
+			->withDescription($buffer[0]->description);
 
 		$startYear = date("Y");
 		$promotionBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null);
