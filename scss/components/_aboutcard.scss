@@ -5,7 +5,7 @@
 .about-card {
 
 	@include m.flex();
-	width: f.rem(200);
+	width: f.rem(250);
 	height: max(f.rem(100), 20vh);
 	transition: all 0.2s ease-in-out;
 	border-radius: f.rem(16);
@@ -18,7 +18,9 @@
 	}
 
 	&__profil {
+		@include m.flex();
 		font-size: f.rem(20);
+		height: f.rem(48);
 		text-align: center;
 		color: var(--medium-grey);
 	}
