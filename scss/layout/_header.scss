@@ -83,11 +83,11 @@
 		transition: height 0.3s ease-in-out;
 	}
 
-	//&:hover{
-	//	&::before{
-	//		height: 100%;
-	//	}
-	//}
+	&:hover{
+		&::before{
+			height: 100%;
+		}
+	}
 
 	@include b.breakpoint(small) {
 		justify-content: center;

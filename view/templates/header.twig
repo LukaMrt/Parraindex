@@ -12,9 +12,10 @@
 
 			<a class="header__login-link" href="{{ router.url('person', {id: login.user.id}) }}">Mon compte</a>
 			<a class="header__login-link" href="{{ router.url('editperson_get', {id: login.user.id}) }}">Modifier</a>
-			<a class="header__login-link" href="{{ router.url('logout_get') }}">Déconnexion</a>
 
 			<img class="header__login-picture" src="{{ picture(login.user.picture) }}" alt="photo">
+
+			<a class="header__login-link" href="{{ router.url('logout_get') }}">Déconnexion</a>
 
 		{% else %}
 			<a class="header__login-link" href="{{ router.url('login_get') }}">Se connecter</a>
