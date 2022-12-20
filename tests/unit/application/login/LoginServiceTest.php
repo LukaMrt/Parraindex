@@ -80,12 +80,21 @@ class LoginServiceTest extends TestCase {
 			->with('login')
 			->willReturn(false);
 
+		$person = PersonBuilder::aPerson()
+			->withId(-1)
+			->withIdentity(new Identity('test', 'test'))
+			->build();
+
+		$this->personDAO->method('getPersonByLogin')
+			->with('test@test.com')
+			->willReturn($person);
+
 		$this->sessionManager->expects($this->exactly(3))
 			->method('set')
 			->withConsecutive(
 				['login', 'test@test.com'],
 				['privilege', 'ADMIN'],
-				['user', null]
+				['user', $person]
 			);
 
 		$this->loginService->login(array(

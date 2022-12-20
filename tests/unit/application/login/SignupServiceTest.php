@@ -19,9 +19,9 @@ use PHPUnit\Framework\TestCase;
 class SignupServiceTest extends TestCase {
 
 	const DEFAULT_PARAMETERS = array(
-		'lastname' => 'test',
-		'firstname' => 'test',
-		'email' => 'test.test@etu.univ-lyon1.fr',
+		'firstname' => 'Test',
+		'lastname' => 'testa',
+		'email' => 'Test.testaaa@etu.univ-lyon1.fr',
 		'password' => 'test',
 		'password-confirm' => 'test'
 	);
@@ -86,10 +86,6 @@ class SignupServiceTest extends TestCase {
 
 	public function testSignupDetectsUnknownName(): void {
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn(null);
-
 		$return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
 		$this->assertEquals('Votre nom n\'est pas enregistré, merci de contacter un administrateur', $return);
@@ -98,7 +94,7 @@ class SignupServiceTest extends TestCase {
 	public function testSignupDetectsAlreadyExistingAccountWithEmail(): void {
 
 		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
+			->with(new Identity('Test', 'testa'))
 			->willReturn($this->person);
 
 		$this->accountDAO->method("existsAccount")
@@ -112,7 +108,7 @@ class SignupServiceTest extends TestCase {
 	public function testSignupDetectsAlreadyExistingAccountWithName(): void {
 
 		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
+			->with(new Identity('Test', 'testa'))
 			->willReturn($this->person);
 
 		$this->accountDAO->method("existsAccount")
@@ -129,13 +125,15 @@ class SignupServiceTest extends TestCase {
 	public function testSignupDetectsEmailBelongingToSomeoneElse(): void {
 
 		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
+			->with(new Identity('Test', 'testa'))
 			->willReturn($this->person);
 
 		$this->personDAO->method('getAllIdentities')
 			->willReturn(array(
-				new Identity('test', 'test'),
-				new Identity('testa', 'testa'),
+				new Identity('teSTa', 'testb'),
+				new Identity('testa', 'Test'),
+				new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
+				new Identity('TeSt', 'tEst'),
 			));
 
 		$this->accountDAO->method("existsAccount")
@@ -145,7 +143,7 @@ class SignupServiceTest extends TestCase {
 			->willReturn(false);
 
 		$params = self::DEFAULT_PARAMETERS;
-		$params['email'] = 'testa.testa@etu.univ-lyon1.fr';
+		$params['email'] = 'tEsta.testb@etu.univ-lyon1.fr';
 		$return = $this->signupService->signup($params);
 
 		$this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
@@ -154,7 +152,7 @@ class SignupServiceTest extends TestCase {
 	public function testSignupDetectsEmailTooFarFromName(): void {
 
 		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
+			->with(new Identity('Test', 'testa'))
 			->willReturn($this->person);
 
 		$this->personDAO->method('getAllIdentities')
@@ -176,7 +174,7 @@ class SignupServiceTest extends TestCase {
 	public function testSignupRedirectToConfirmationPageOnSuccess(): void {
 
 		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
+			->with(new Identity('Test', 'testa'))
 			->willReturn($this->person);
 
 		$this->accountDAO->method("existsAccount")
@@ -184,6 +182,12 @@ class SignupServiceTest extends TestCase {
 
 		$this->accountDAO->method("existsAccountByIdentity")
 			->willReturn(false);
+
+		$this->personDAO->method('getAllIdentities')
+			->willReturn(array(
+				new Identity('Test', 'testa'),
+				new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
+			));
 
 		$this->redirect->expects($this->once())
 			->method('redirect')
@@ -194,14 +198,9 @@ class SignupServiceTest extends TestCase {
 
 	public function testSignupCreatesTemporaryAccountOnSuccess(): void {
 
-		$person = PersonBuilder::aPerson()
-			->withId(-1)
-			->withIdentity(new Identity('test', 'test'))
-			->build();
-
 		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn($person);
+			->with(new Identity('Test', 'testa'))
+			->willReturn($this->person);
 
 		$this->accountDAO->method("existsAccount")
 			->willReturn(false);
@@ -212,21 +211,16 @@ class SignupServiceTest extends TestCase {
 
 		$this->accountDAO->expects($this->once())
 			->method('createTemporaryAccount')
-			->with(new Account(-1, 'test.test@etu.univ-lyon1.fr', $person, new Password('test')), '1');
+			->with(new Account(-1, 'test.testaaa@etu.univ-lyon1.fr', $this->person, new Password('test')), '1');
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
 	}
 
 	public function testSignupSendsEmailOnSuccess(): void {
 
-		$person = PersonBuilder::aPerson()
-			->withId(-1)
-			->withIdentity(new Identity('test', 'test'))
-			->build();
-
 		$this->personDAO->method('getPerson')
-			->with(new Identity('test', 'test'))
-			->willReturn($person);
+			->with(new Identity('Test', 'testa'))
+			->willReturn($this->person);
 
 		$this->accountDAO->method("existsAccount")
 			->willReturn(false);
@@ -240,7 +234,7 @@ class SignupServiceTest extends TestCase {
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.testaaa@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
 	}

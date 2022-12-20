@@ -31,11 +31,11 @@ class SignupService {
 
 	public function signup(array $parameters): string {
 
-		$email = $parameters['email'] ?? '';
+		$email = strtolower($parameters['email'] ?? '');
 		$password = $parameters['password'] ?? '';
 		$passwordConfirm = $parameters['password-confirm'] ?? '';
-		$lastname = $parameters['lastname'] ?? '';
 		$firstname = $parameters['firstname'] ?? '';
+		$lastname = $parameters['lastname'] ?? '';
 		$person = $this->personDAO->getPerson(new Identity($firstname, $lastname));
 
 		$error = $this->buildError($email, $password, $passwordConfirm, $lastname, $firstname, $person);
@@ -52,7 +52,7 @@ class SignupService {
 		return $error;
 	}
 
-	private function buildError(mixed $email, mixed $password, mixed $passwordConfirm, mixed $lastname, mixed $firstname, ?Person $person): string {
+	private function buildError(string $email, string $password, string $passwordConfirm, string $lastname, string $firstname, ?Person $person): string {
 
 		if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
 			return 'Veuillez remplir tous les champs';
@@ -81,20 +81,20 @@ class SignupService {
 		}
 
 		$identities = $this->personDAO->getAllIdentities();
-		$emailLevenshtein = preg_replace("/[^a-z]/", '', explode('@', strtolower($email))[0]);
+		$emailLevenshtein = preg_replace("/[^a-z]/", '', explode('@', $email)[0]);
 		$nameLevenshtein = preg_replace("/[^a-z]/", '', strtolower($firstname . $lastname));
 		$entryLevenshtein = levenshtein($emailLevenshtein, $nameLevenshtein);
 		$minLevenshtein = $entryLevenshtein;
 
-		foreach ($identities as $identity) {
-			$levenshtein = levenshtein($emailLevenshtein, preg_replace("/[^a-z]/", '', $identity->getFirstname() . $identity->getLastname()));
-			if ($levenshtein < $minLevenshtein) {
-				$minLevenshtein = $levenshtein;
-			}
+		if (2 < $entryLevenshtein) {
+			return 'D\'après notre recherche, cet email n\'est pas le vôtre';
 		}
 
-		if ($minLevenshtein != $entryLevenshtein || 2 < $entryLevenshtein) {
-			return 'D\'après notre recherche, cet email n\'est pas le vôtre';
+		foreach ($identities as $identity) {
+			$levenshtein = levenshtein($emailLevenshtein, preg_replace("/[^a-z]/", '', strtolower($identity->getFirstname() . $identity->getLastname())));
+			if ($levenshtein < $minLevenshtein) {
+				return 'D\'après notre recherche, cet email n\'est pas le vôtre';
+			}
 		}
 
 		return '';
