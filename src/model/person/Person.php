@@ -7,6 +7,7 @@ class Person {
 	private int $id;
 	private Identity $identity;
 	private string $biography;
+	private string $color;
 	private string $description;
 	private array $characteristics;
 	private array $sponsors;
@@ -19,6 +20,7 @@ class Person {
 		$this->id = $builder->getId();
 		$this->identity = $builder->getIdentity();
 		$this->biography = $builder->getBiography();
+		$this->color = $builder->getColor();
 		$this->description = $builder->getDescription();
 		$this->characteristics = $builder->getCharacteristics();
 		$this->sponsors = $builder->getSponsors();
@@ -83,6 +85,13 @@ class Person {
 		}
 
 		return min($dates);
+	}
+
+	/**
+	 * @return string, the hex representation of the banner color.
+	 */
+	public function getColor(): string {
+		return $this->color;
 	}
 
     /**

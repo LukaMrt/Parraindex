@@ -38,6 +38,9 @@ class PersonBuilder {
 	/** @var array $associations */
 	private array $associations;
 
+	/** @var string $color, hex representation of the banner color. */
+	private string $color;
+
 	private array $promotions;
     private int $startYear;
 
@@ -53,6 +56,7 @@ class PersonBuilder {
 		$this->associations = array();
 		$this->promotions = array();
         $this->startYear = 0;
+		$this->color = '#f0f0f0';
 	}
 
 	public static function aPerson(): PersonBuilder {
@@ -74,6 +78,16 @@ class PersonBuilder {
 	 */
 	public function withIdentity(Identity $identity): PersonBuilder {
 		$this->identity = $identity;
+		return $this;
+	}
+
+
+	/**
+	 * @param string|null $color Set banner color property.
+	 * @return $this Builder instance.
+	 */
+	public function withColor(?string $color): PersonBuilder {
+		$this->color = $color ?? $this->color;
 		return $this;
 	}
 
@@ -194,6 +208,13 @@ class PersonBuilder {
 	 */
 	public function getBiography(): string {
 		return $this->biography;
+	}
+
+	/**
+	 * @return string, the hex representation of the banner-color.
+	 */
+	public function getColor(): string {
+		return $this->color;
 	}
 
 	/**

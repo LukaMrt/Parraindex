@@ -43,6 +43,8 @@
 
 
 		{% include 'components/card.twig' with {
+			'id': person.id,
+			'color': person.color,
 			'firstName': person.firstName,
 			'lastName': person.lastName,
 			'picture': person.picture,
