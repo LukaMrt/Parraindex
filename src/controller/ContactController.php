@@ -34,9 +34,13 @@ class ContactController extends Controller {
 
 	public function get(Router $router, array $parameters): void {
 
+		$people = $this->personService->getAllPeople();
+		$people = array_map(fn ($person) => ['id' => $person->getId(), 'title' => $person->getFirstName() . ' ' . $person->getLastName()], $people);
+
 		$this->render('contact.twig', [
 			'options' => ContactType::getValues(),
-			'error' => $parameters['error'] ?? ''
+			'sponsorTypes' => [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur']],
+			'people' => $people,
 		]);
 	}
 

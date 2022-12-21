@@ -18,8 +18,11 @@ export function registerForm(element, fields) {
 
 function checkFormValidity(event, fields) {
 
-	let errors = fields.filter(field => !field.validation(document.getElementById(field.name)))
-		.map(field => field.error);
+	let errors = fields.filter(field => !field.validation(byId(field.name)));
+
+	errors.forEach(field => byId(field.name).classList.add('form__element--invalid'));
+
+	errors = errors.map(field => field.error);
 
 	if (errors.length !== 0) {
 		event.preventDefault();

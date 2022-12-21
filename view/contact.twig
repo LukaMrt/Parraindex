@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Contact' %}
 
 {% block javascripts %}
-	<script type="module" src="{{ script("contact.js") }}" defer></script>
+	<script type="module" src="{{ script("contact.js") }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -19,23 +19,22 @@
 				'slug': 'type',
 				'title': 'Objet du message',
 				'options': options,
-				'parent': '.+'
 			} %}
 
 			<div class="form-block form-block--row">
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
-					'slug': 'firstname',
-					'title': 'Prenom',
+					'slug': 'senderFirstname',
+					'title': 'Votre prénom',
 					'placeholder': 'John',
 					'pattern': '.+',
 				} %}
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
-					'slug': 'lastname',
-					'title': 'Nom',
+					'slug': 'senderLastname',
+					'title': 'Votre nom',
 					'placeholder': 'Doe',
 					'pattern': '.+',
 				} %}
@@ -44,17 +43,93 @@
 
 			{% include "components/form/input.twig" with {
 				'type': 'email',
-				'slug': 'email',
-				'title': 'Email',
+				'slug': 'senderEmail',
+				'title': 'Votre email',
 				'placeholder': 'john.doe@gmail.com',
 				'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
 			} %}
 
+			<div class="form-block form-block--row option option-0">
+
+				{% include "components/form/input.twig" with {
+					'type': 'text',
+					'slug': 'creationFirstname',
+					'title': 'Prénom de la personne',
+					'placeholder': 'John',
+					'pattern': '.+',
+					'classes': 'option option-0'
+				} %}
+
+				{% include "components/form/input.twig" with {
+					'type': 'text',
+					'slug': 'creationLastname',
+					'title': 'Nom de la personne',
+					'placeholder': 'Doe',
+					'pattern': '.+',
+					'classes': 'option option-0'
+				} %}
+
+			</div>
+
+			{% include "components/form/input.twig" with {
+				'type': 'number',
+				'slug': 'entryYear',
+				'title': 'Année d\'entrée à l\'IUT',
+				'value': '2022',
+				'pattern': '^(19|20)\d{2}$',
+				'classes': 'option option-0'
+			} %}
+
+			{% include "components/form/select.twig" with {
+				'slug': 'personId',
+				'title': 'Personne concernée',
+				'options': people,
+				'parent': '.+',
+				'classes': 'option option-1 option-2 option-7'
+			} %}
+
+			<div class="form-block form-block--row option option-3 option-4 option-5">
+
+				{% include "components/form/select.twig" with {
+					'slug': 'godFatherId',
+					'title': 'Parrain',
+					'options': people,
+					'parent': '.+',
+					'classes': 'option option-3 option-4 option-5'
+				} %}
+
+				{% include "components/form/select.twig" with {
+					'slug': 'godChildId',
+					'title': 'Fillot',
+					'options': people,
+					'parent': '.+',
+					'classes': 'option option-3 option-4 option-5'
+				} %}
+
+			</div>
+
+			{% include "components/form/select.twig" with {
+				'slug': 'sponsorType',
+				'title': 'Type de parrainage',
+				'options': sponsorTypes,
+				'parent': '.+',
+				'classes': 'option option-3'
+			} %}
+
+			{% include "components/form/input.twig" with {
+				'type': 'date',
+				'slug': 'sponsorDate',
+				'title': 'Date du parrainage',
+				'value': '2022-09-01',
+				'pattern': '.+',
+				'classes': 'option option-3'
+			} %}
+
 			{% include "components/form/textarea.twig" with {
-				'slug': 'description',
+				'slug': 'message',
 				'title': 'Message',
 				'placeholder': 'Il y a une erreur sur la page ...',
-				'pattern': '.+',
+				'pattern': '.+'
 			} %}
 
 			{% include "components/button.twig" with {

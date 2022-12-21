@@ -76,7 +76,7 @@ class MySqlPersonDAO implements PersonDAO {
 		foreach ($promotionBuffer as $row) {
 			$degree = new Degree($row->id_degree, $row->degree_name, $row->level, $row->total_ects, $row->duration, $row->official);
 			$school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
-			$promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->description);
+			$promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->desc_promotion);
 			$builder->addPromotion($promotion);
 			$startYear = min($startYear, $row->year);
 		}
