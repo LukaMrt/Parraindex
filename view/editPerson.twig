@@ -85,17 +85,18 @@
 
 			{% for characteristic in characteristics %}
 
-				{% set value = "" %}
+				{% set value = null %}
 
 				{% for userCharacteristic in person.characteristics %}
 					{% if characteristic.title == userCharacteristic.title %}
-						{% set value = userCharacteristic.value %}
+						{% set value = userCharacteristic %}
 					{% endif %}
 				{% endfor %}
 
 				{% include 'components/characteristic.twig' with {
 					'title': characteristic.title,
-					'value': value,
+					'value': value.value,
+					'visibility': value.visible,
 					}
 				%}
 			{% endfor %}

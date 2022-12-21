@@ -2,6 +2,9 @@
 @forward "abstracts";
 @forward "base";
 
+@forward "components/error";
+@forward "components/popup";
+
 @forward "components/edit-person";
 @forward "components/card";
 @forward "components/button";

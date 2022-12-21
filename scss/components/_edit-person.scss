@@ -7,6 +7,7 @@
 	height: 80vh;
 
 	@include m.flex($direction: row, $justify: space-evenly);
+	gap: f.rem(100);
 
 	h2{
 		text-align: center;
@@ -107,8 +108,8 @@
 		flex: 2 2 0px;
 
 		&__characteristics{
-			width: 50%;
-			@include m.flex($direction: column , $justify: normal , $align: flex-start);
+			width: 100%;
+			@include m.flex($direction: column , $justify: space-between , $align: flex-start);
 			gap: f.rem(16);
 		}
 

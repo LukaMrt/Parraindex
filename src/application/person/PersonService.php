@@ -31,6 +31,8 @@ class PersonService {
 			->withId($parameters['id'])
 			->withIdentity(new Identity($parameters['first_name'], $parameters['last_name']))
 			->withBiography($parameters['biography'])
+            ->withDescription($parameters['description'])
+            ->withColor($parameters['color'])
 			->build();
 
 		$this->personDAO->updatePerson($person);

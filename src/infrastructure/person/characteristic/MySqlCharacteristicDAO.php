@@ -15,33 +15,31 @@ class MySqlCharacteristicDAO implements CharacteristicDAO{
 		$this->databaseConnection = $databaseConnection;
 	}
 
-    public function getCharacteristic($idPerson, $title): ?Characteristic {
-        $connection = $this->databaseConnection->getDatabase();
+	public function updateCharacteristic(int $idPerson, Characteristic $characteristic): void{
+		$connection = $this->databaseConnection->getDatabase();
 
-		$statement = $connection->prepare("SELECT * FROM Characteristic
-										JOIN TypeCharacteristic using(id_network)
-										WHERE id_person = :idPerson AND title = :title");
+		$statement = $connection->prepare("UPDATE Characteristic SET 
+											value = :value,
+											visibility = :visibility
+											WHERE id_person = :idPerson AND id_network = :idNetwork");
 		$statement->execute([
 			'idPerson' => $idPerson,
-			'title' => $title
+			'idNetwork' => $characteristic->getId(),
+			'value' => $characteristic->getValue(),
+			'visibility' => $characteristic->getVisible() ? '1' : '0'
 		]);
-		
-		$row = $statement->fetch();
+	}
 
-		if (!$row)
-			return null;
+	public function createCharacteristic(int $idPerson, Characteristic $characteristic): void{
+		$connection = $this->databaseConnection->getDatabase();
 
-		$characteristic = (new CharacteristicBuilder())
-			->withId($row->id_characteristic)
-			->withTitle($row->title)
-			->withType($row->type)
-			->withUrl($row->url)
-			->withImage($row->image)
-			->withVisibility($row->visibility)
-			->withValue($row->value)
-			->build();
-
-		return $characteristic;
-
-    }
+		$statement = $connection->prepare("INSERT INTO Characteristic (id_person, id_network, value, visibility)
+											VALUES (:idPerson, :idNetwork, :value, :visibility)");
+		$statement->execute([
+			'idPerson' => $idPerson,
+			'idNetwork' => $characteristic->getId(),
+			'value' => $characteristic->getValue(),
+			'visibility' => $characteristic->getVisible() ? '1' : '0'
+		]);
+	}
 }

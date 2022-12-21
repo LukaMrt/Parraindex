@@ -71,8 +71,6 @@ class EditPersonController extends Controller {
 
 	public function post(Router $router, array $parameters): void {
 
-        throw new Exception('POST method is not implemented yet');
-        
         $person = $this->personService->getPersonById($parameters['id']);
 
         // throw error if user is not logged in
@@ -89,15 +87,63 @@ class EditPersonController extends Controller {
         }
 
 		$data = [
-			'id' => $parameters['id'],
-			'first_name' => $_POST['firstName'],
-			'last_name' => $_POST['lastName'],
-			'biography' => $_POST['biography']
+			'first_name' => $person->getFirstName(),
+			'last_name' => $person->getLastName(),
+            'id' => $parameters['id'],
+			'biography' => $_POST['person-bio'],
+            'description' => $_POST['person-desc'],
+            'color' => $_POST['color'],
 		];
 
+        if ($parameters['id'] === "0") {
+            //$this->personService->createPerson($data);
+            die("no implemented yet");
+        }
+
 		$this->personService->updatePerson($data);
+
+        $characteristics = $this->characteristicTypeService->getAllCharacteristicAndValues($person);
+
+        foreach ($characteristics as $characteristic) {
+
+            $fieldTitle = "characteristic-" . $characteristic->getTitle();
+            $fieldVisibility = "characteristic-visibility-" . $characteristic->getTitle();
+
+
+            if (!isset($_POST[$fieldTitle])) {
+                throw new Exception($fieldTitle . " is not defined");
+            }
+            
+            $NewValue = $_POST[$fieldTitle];
+            $NewVisibility= isset($_POST[$fieldVisibility]);
+
+            if ($NewValue !== $characteristic->getValue() || $NewVisibility !== $characteristic->getVisible()) {
+                // an update is needed
+
+                $exist = $characteristic->getValue() !== null;
+                
+                $characteristic->setValue($NewValue);
+                $characteristic->setVisible($NewVisibility);
+                
+
+                if($exist) {
+                    // the characteristic already exist, we just need to update it
+                    $this->characteristicService->updateCharacteristic($parameters['id'], $characteristic);
+                }else if ($characteristic->getValue() !== "") {
+                    $this->characteristicService->createCharacteristic($parameters['id'], $characteristic);
+                }
+
+            }
+        }
+       
 		$person = $this->personService->getPersonById($parameters['id']);
-		$this->render('editPerson.twig', ['success' => 'Modifications enregistrées', 'person' => $person]);
+
+		$this->render('editperson.twig', [
+            'success' => 'Modifications enregistrées',
+            'person' => $person,
+            'characteristics' => $characteristics,
+            'method' => "POST"
+        ]);
 	}
 
 

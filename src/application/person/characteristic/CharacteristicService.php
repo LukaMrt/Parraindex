@@ -13,13 +13,23 @@ class CharacteristicService {
 	}
 	
 	/**
-	 * Get the person's characteristic by the person's id and the characteristic's title
+	 * Update the person's characteristic
 	 * 
 	 * @param int $idPerson
-	 * @param int $idCharacteristic
+	 * @param Characteristic $characteristic
 	 */
-	public function getCharacteristic(int $idPerson, String $title): ?Characteristic {
-		return $this->characteristicDAO->getCharacteristic($idPerson, $title);
+	public function updateCharacteristic(int $idPerson, Characteristic $characteristic): void {
+		$this->characteristicDAO->updateCharacteristic($idPerson, $characteristic);
+	}
+
+	/**
+	 * Create the person's characteristic
+	 * 
+	 * @param int $idPerson
+	 * @param Characteristic $characteristic
+	 */
+	public function createCharacteristic(int $idPerson, Characteristic $characteristic): void {
+		$this->characteristicDAO->createCharacteristic($idPerson, $characteristic);
 	}
 
 }
