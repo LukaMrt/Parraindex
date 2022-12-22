@@ -41,6 +41,7 @@
 
 	&__banner{
 		@include m.flex();
+		position: relative;
 		transition: background-color 200ms ease-in-out;
 		height: 33%;
 		width: 100%;
@@ -55,6 +56,7 @@
 
 	&__picture{
 		@include m.flex();
+		transition: filter 0.1s ease-in-out;
 
 		height: 70%;
 		aspect-ratio: 1/1;
@@ -62,6 +64,22 @@
 		object-fit: cover;
 		border-radius: 50%;
 		@include m.hard-box-shadow();
+
+		&.overlay--active{
+			filter: blur(1px) brightness(0.8);
+		}
+
+		&__overlay{
+			position: absolute;
+			pointer-events: none;
+			transition: opacity 0.2s ease-in-out;
+			opacity: 0;
+			height: 30%;
+
+			&.overlay--active{
+				opacity: 1;
+			}
+		}
 	}
 	
 	&__description{
