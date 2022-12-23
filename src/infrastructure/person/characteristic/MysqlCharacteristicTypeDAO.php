@@ -4,11 +4,10 @@ namespace App\infrastructure\person\characteristic;
 
 use App\application\person\characteristic\CharacteristicTypeDAO;
 use App\infrastructure\database\DatabaseConnection;
-
-use App\model\person\characteristic\CharacteristicBuilder;
 use App\model\person\characteristic\Characteristic;
+use App\model\person\characteristic\CharacteristicBuilder;
 
-class MySqlCharacteristicTypeDAO implements CharacteristicTypeDAO {
+class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO {
 
 	private DatabaseConnection $databaseConnection;
 
@@ -60,7 +59,7 @@ class MySqlCharacteristicTypeDAO implements CharacteristicTypeDAO {
 			$characteristics[] = $characteristic;
 
 		}
-	
+
 		return $characteristics;
 	}
 

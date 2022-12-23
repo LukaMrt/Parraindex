@@ -7,7 +7,7 @@ use App\infrastructure\database\DatabaseConnection;
 use App\model\person\characteristic\Characteristic;
 use App\model\person\characteristic\CharacteristicBuilder;
 
-class MySqlCharacteristicDAO implements CharacteristicDAO{
+class MysqlCharacteristicDAO implements CharacteristicDAO{
 	
 	private DatabaseConnection $databaseConnection;
 
