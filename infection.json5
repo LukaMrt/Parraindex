@@ -2,7 +2,8 @@
     "$schema": "https://raw.githubusercontent.com/infection/infection/0.26.15/resources/schema.json",
     "source": {
         "directories": [
-            "src/application"
+            "src/application",
+//            "src/model"
         ]
     },
     "timeout": 10,

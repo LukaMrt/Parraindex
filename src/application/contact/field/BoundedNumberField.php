@@ -9,8 +9,8 @@ class BoundedNumberField extends Field {
 
 	public function __construct(string $name, string $error, int $min, int $max) {
 		parent::__construct($name, $error);
-		$this->min = $min;
-		$this->max = $max;
+		$this->min = min($min, $max);
+		$this->max = max($min, $max);
 	}
 	
 	public function isValid($value): bool {

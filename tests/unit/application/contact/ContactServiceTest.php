@@ -20,7 +20,12 @@ class ContactServiceTest extends TestCase {
 	}
 
 	public function testRegistercontactReturnsErrorWhenTypeIsMissing(): void {
+		$this->contactExecutors->method('getExecutorsById')
+			->with(-1)
+			->willReturn(array());
+
 		$result = $this->contactService->registerContact(array());
+
 		$this->assertEquals('Le type de contact n\'est pas valide.', $result);
 	}
 
@@ -38,7 +43,7 @@ class ContactServiceTest extends TestCase {
 
 		$this->contactExecutors->method('getExecutorsById')
 			->with(1)
-			->willReturn(array($this->contactExecutor));
+			->willReturn([1 => $this->contactExecutor]);
 
 		$this->contactExecutor->method('execute')
 			->with(array('type' => '1'))
@@ -63,7 +68,5 @@ class ContactServiceTest extends TestCase {
 
 		$this->assertEquals('', $result);
 	}
-
-
 
 }
