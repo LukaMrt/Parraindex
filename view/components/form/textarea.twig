@@ -6,6 +6,6 @@
 	          name="{{ slug }}"
 	          id="{{ slug }}"
 	          placeholder="{{ placeholder }}"
-	          required>{{ value }}</textarea>
+	          {% if required is empty %}required{% endif %}>{{ value }}</textarea>
 
 </div>

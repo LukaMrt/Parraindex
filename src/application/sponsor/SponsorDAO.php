@@ -10,4 +10,6 @@ interface SponsorDAO {
 
 	public function getPersonFamily(int $personId): ?array;
 
+	public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor;
+
 }

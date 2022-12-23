@@ -2,32 +2,42 @@
 
 namespace App\infrastructure\injector;
 
+use App\application\contact\ContactDAO;
+use App\application\contact\executor\AddPersonContactExecutor;
+use App\application\contact\executor\AddSponsorContactExecutor;
+use App\application\contact\executor\BugContactExecutor;
+use App\application\contact\executor\ChockingContentContactExecutor;
+use App\application\contact\executor\ContactExecutors;
+use App\application\contact\executor\OtherContactExecutor;
+use App\application\contact\executor\RemovePersonContactExecutor;
+use App\application\contact\executor\RemoveSponsorContactExecutor;
+use App\application\contact\executor\UpdatePersonContactExecutor;
+use App\application\contact\executor\UpdateSponsorContactExecutor;
 use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
-use App\application\contact\ContactDAO;
 use App\application\login\UrlUtils;
 use App\application\mail\Mailer;
 use App\application\person\PersonDAO;
 use App\application\random\Random;
 use App\application\redirect\Redirect;
-use App\controller\AboutController;
 use App\application\sponsor\SponsorDAO;
+use App\controller\AboutController;
 use App\controller\ContactController;
-use App\controller\SponsorController;
-use App\controller\LogoutConfirmationController;
-use App\controller\LogoutController;
 use App\controller\EditPersonController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\LoginController;
+use App\controller\LogoutConfirmationController;
+use App\controller\LogoutController;
 use App\controller\PersonController;
 use App\controller\ResetpasswordConfirmationController;
+use App\controller\ResetpasswordController;
 use App\controller\ResetpasswordValidationController;
 use App\controller\SignUpConfirmationController;
 use App\controller\SignUpController;
-use App\controller\ResetpasswordController;
 use App\controller\SignUpValidationController;
+use App\controller\SponsorController;
 use App\controller\TreeController;
 use App\infrastructure\accountService\MysqlAccountDAO;
 use App\infrastructure\database\contact\MysqlContactDAO;
@@ -65,8 +75,8 @@ class Injector {
 		$twig = $this->buildTwig();
 		$databaseConnection = new DatabaseConnection();
 		$userDAO = get(MySqlPersonDAO::class);
-        $accountDAO = get(MySqlAccountDAO::class);
-        $sessionManager = get(DefaultSessionManager::class);
+		$accountDAO = get(MySqlAccountDAO::class);
+		$sessionManager = get(DefaultSessionManager::class);
 		$redirect = get(HttpRedirect::class);
 		$personDAO = get(MySqlPersonDAO::class);
 		$contactDAO = get(MySqlContactDAO::class);
@@ -76,9 +86,9 @@ class Injector {
 		$random = get(DefaultRandom::class);
 		$urlUtils = get(DefaultUrlUtils::class);
 
-        $this->container->set(Environment::class, $twig);
+		$this->container->set(Environment::class, $twig);
 		$this->container->set(DatabaseConnection::class, $databaseConnection);
-        $this->container->set(Router::class, $this->router);
+		$this->container->set(Router::class, $this->router);
 		$this->container->set(Router::class, $this->router);
 		$this->container->set(Redirect::class, $redirect);
 		$this->container->set(Logger::class, $logger);
@@ -86,10 +96,10 @@ class Injector {
 		$this->container->set(Random::class, $random);
 		$this->container->set(UrlUtils::class, $urlUtils);
 
-        $this->container->set(SessionManager::class, $sessionManager);
+		$this->container->set(SessionManager::class, $sessionManager);
 
 		$this->container->set(PersonDAO::class, $userDAO);
-        $this->container->set(AccountDAO::class, $accountDAO);
+		$this->container->set(AccountDAO::class, $accountDAO);
 		$this->container->set(PersonDAO::class, $personDAO);
 		$this->container->set(ContactDAO::class, $contactDAO);
 		$this->container->set(SponsorDAO::class, $sponsorDAO);

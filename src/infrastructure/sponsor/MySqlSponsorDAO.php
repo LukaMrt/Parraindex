@@ -253,4 +253,44 @@ SQL
 		return $sponsor;
 	}
 
+	public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare(<<<SQL
+			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			FROM Sponsor S
+				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
+				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
+			WHERE S.id_godfather = :godFatherId AND S.id_godson = :godChildId
+SQL
+		);
+
+		$query->execute(['godFatherId' => $godFatherId, 'godChildId' => $godChildId]);
+		$sponsor = null;
+
+		if ($row = $query->fetch()) {
+
+			$godFather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
+			$godChild = PersonBuilder::aPerson()->withId($row->id_godson)->build();
+
+			if ($row->id_heart_sponsor != null) {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new HeartSponsor($row->id_sponsor, $godFather, $godChild, $date, $row->description);
+			} else if ($row->id_classic_sponsor != null) {
+				$reason = property_exists($row, 'reason') ? $row->reason ?? '' : '';
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new ClassicSponsor($row->id_sponsor, $godFather, $godChild, $date, $reason);
+			} else {
+				$date = property_exists($row, 'sponsorDate') ? $row->sponsorDate ?? '' : '';
+				$sponsor = new UnknownSponsor($row->id_sponsor, $godFather, $godChild, $date);
+			}
+
+		}
+
+		$query->closeCursor();
+		$connection = null;
+		return $sponsor;
+	}
+
 }

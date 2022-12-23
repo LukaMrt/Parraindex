@@ -25,7 +25,7 @@
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
-					'slug': 'senderFirstname',
+					'slug': 'senderFirstName',
 					'title': 'Votre prénom',
 					'placeholder': 'John',
 					'pattern': '.+',
@@ -33,7 +33,7 @@
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
-					'slug': 'senderLastname',
+					'slug': 'senderLastName',
 					'title': 'Votre nom',
 					'placeholder': 'Doe',
 					'pattern': '.+',
@@ -53,7 +53,7 @@
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
-					'slug': 'creationFirstname',
+					'slug': 'creationFirstName',
 					'title': 'Prénom de la personne',
 					'placeholder': 'John',
 					'pattern': '.+',
@@ -62,7 +62,7 @@
 
 				{% include "components/form/input.twig" with {
 					'type': 'text',
-					'slug': 'creationLastname',
+					'slug': 'creationLastName',
 					'title': 'Nom de la personne',
 					'placeholder': 'Doe',
 					'pattern': '.+',
@@ -84,7 +84,7 @@
 				'slug': 'personId',
 				'title': 'Personne concernée',
 				'options': people,
-				'parent': '.+',
+				'parent': '^[0-9]+$',
 				'classes': 'option option-1 option-2 option-7'
 			} %}
 
@@ -94,7 +94,7 @@
 					'slug': 'godFatherId',
 					'title': 'Parrain',
 					'options': people,
-					'parent': '.+',
+					'parent': '^[0-9]+$',
 					'classes': 'option option-3 option-4 option-5'
 				} %}
 
@@ -102,7 +102,7 @@
 					'slug': 'godChildId',
 					'title': 'Fillot',
 					'options': people,
-					'parent': '.+',
+					'parent': '^[0-9]+$',
 					'classes': 'option option-3 option-4 option-5'
 				} %}
 
@@ -112,7 +112,7 @@
 				'slug': 'sponsorType',
 				'title': 'Type de parrainage',
 				'options': sponsorTypes,
-				'parent': '.+',
+				'parent': '^[0-9]$',
 				'classes': 'option option-3'
 			} %}
 
@@ -128,8 +128,15 @@
 			{% include "components/form/textarea.twig" with {
 				'slug': 'message',
 				'title': 'Message',
-				'placeholder': 'Il y a une erreur sur la page ...',
-				'pattern': '.+'
+				'pattern': '.+',
+				'classes': 'option option-1 option-2 option-4 option-5 option-6 option-7 option-8'
+			} %}
+
+			{% include "components/form/textarea.twig" with {
+				'slug': 'bonusInformation',
+				'title': 'Informations complémentaires',
+				'classes': 'option option-0 option-3',
+				'required': 'false'
 			} %}
 
 			{% include "components/button.twig" with {

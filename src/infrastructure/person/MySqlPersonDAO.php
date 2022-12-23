@@ -140,9 +140,15 @@ class MySqlPersonDAO implements PersonDAO {
 			$buffer[] = $row;
 		}
 
+		$person = null;
+
+		if (count($buffer) > 0) {
+			$person = $this->buildPerson($buffer);
+		}
+
 		$query->closeCursor();
 		$connection = null;
-		return $this->buildPerson($buffer);
+		return $person;
 	}
 
 	public function updatePerson(Person $person) {

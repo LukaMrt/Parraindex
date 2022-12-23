@@ -2,85 +2,31 @@
 
 namespace App\application\contact;
 
-use App\application\redirect\Redirect;
-use App\model\contact\Contact;
-use App\model\contact\ContactType;
+use App\application\contact\executor\ContactExecutors;
 
 class ContactService {
 
-    private ContactDAO $contactDAO;
-    private Redirect $redirect;
-    private array $fields;
+	private ContactExecutors $contactExecutors;
 
-    public function __construct(ContactDAO $contactDAO, Redirect $redirect) {
+	public function __construct(ContactExecutors $contactExecutors) {
+		$this->contactExecutors = $contactExecutors;
+	}
 
-        $this->contactDAO = $contactDAO;
-        $this->redirect = $redirect;
-        $this->fields = [
-            [
-                'name' => 'firstname',
-                'validation' => fn($value) => strlen($value) > 0,
-                'error' => 'Le prénom doit contenir au moins 1 caractère',
-            ],
-            [
-                'name' => 'lastname',
-                'validation' => fn($value) => strlen($value) > 0,
-                'error' => 'Le nom doit contenir au moins 1 caractère',
-            ],
-            [
-                'name' => 'type',
-                'validation' => fn($value) => ContactType::fromId(intval($value)) !== null,
-                'error' => 'Le type doit être valide',
-            ],
-            [
-                'name' => 'email',
-                'validation' => fn($value) => filter_var($value, FILTER_VALIDATE_EMAIL),
-                'error' => 'L\'email doit être valide',
-            ],
-            [
-                'name' => 'description',
-                'validation' => fn($value) => strlen($value) > 0,
-                'error' => 'La description doit contenir au moins 1 caractère',
-            ]
-        ];
+	public function registerContact(array $parameters): string {
 
-    }
+		$id = -1;
 
-    public function registerContact(array $parameters): string {
+		if (isset($parameters['type']) && is_numeric($parameters['type'])) {
+			$id = $parameters['type'];
+		}
 
-        $parameters = [
-            'firstname' => $parameters['firstname'] ?? '',
-            'lastname' => $parameters['lastname'] ?? '',
-            'email' => $parameters['email'] ?? '',
-            'type' => $parameters['type'] ?? '-1',
-            'description' => $parameters['description'] ?? '',
-        ];
+		$executors = array_values($this->contactExecutors->getExecutorsById($id));
 
-        $error = $this->buildErrorMessage($parameters);
+		if (count($executors) === 0) {
+			return 'Le type de contact n\'est pas valide.';
+		}
 
-        if ($error !== '') {
-            return $error;
-        }
-
-        $contact = new Contact(
-            $parameters['firstname'] . ' ' . $parameters['lastname'],
-            $parameters['email'],
-            ContactType::fromId(intval($parameters['type'])),
-            $parameters['description']
-        );
-
-        $this->contactDAO->saveContact($contact);
-        $this->redirect->redirect('home');
-        return '';
-    }
-
-    public function buildErrorMessage(array $parameters): string {
-
-        $invalidFields = array_filter($this->fields, function (array $field) use ($parameters) {
-            return !$field['validation']($parameters[$field['name']]);
-        });
-
-        return implode('<br>', array_map(fn(array $field) => $field['error'], $invalidFields));
-    }
+		return $executors[0]->execute($parameters);
+	}
 
 }

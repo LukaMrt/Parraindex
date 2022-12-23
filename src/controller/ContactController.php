@@ -17,31 +17,25 @@ class ContactController extends Controller {
 		$this->contactService = $contactService;
 	}
 
-	public function post(Router $router, array $parameters): void {
-
-		$postParameters = [
-			'firstname' => $_POST['firstname'],
-			'lastname' => $_POST['lastname'],
-			'email' => $_POST['email'],
-			'type' => $_POST['type'],
-			'description' => $_POST['description'],
-		];
-
-		$error = $this->contactService->registerContact($postParameters);
-
-		$this->get($router, ['error' => $error]);
-	}
-
 	public function get(Router $router, array $parameters): void {
 
 		$people = $this->personService->getAllPeople();
-		$people = array_map(fn ($person) => ['id' => $person->getId(), 'title' => $person->getFirstName() . ' ' . $person->getLastName()], $people);
+		$closure = fn($person) => ['id' => $person->getId(), 'title' => $person->getFirstName() . ' ' . $person->getLastName()];
+		$people = array_map($closure, $people);
 
 		$this->render('contact.twig', [
 			'options' => ContactType::getValues(),
 			'sponsorTypes' => [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur']],
 			'people' => $people,
+			'error' => $parameters['error'] ?? [],
 		]);
+	}
+
+	public function post(Router $router, array $parameters): void {
+
+		$error = $this->contactService->registerContact($_POST);
+
+		$this->get($router, ['error' => $error]);
 	}
 
 }

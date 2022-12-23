@@ -32,4 +32,8 @@ class Contact {
 		return $this->description;
 	}
 
+	public function getTypeId(): int {
+		return $this->type->value;
+	}
+
 }
