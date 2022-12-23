@@ -6,12 +6,16 @@ use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
 
+use App\application\login\SessionManager;
+
 class PersonService {
 
     private PersonDAO $personDAO;
+    private SessionManager $sessionManager;
 
-    public function __construct(PersonDAO $personDAO) {
+    public function __construct(PersonDAO $personDAO, SessionManager $sessionManager) {
         $this->personDAO = $personDAO;
+        $this->sessionManager = $sessionManager;
     }
 
     public function getAllPeople(): array {
@@ -29,11 +33,15 @@ class PersonService {
 	public function updatePerson(array $parameters): void {
 		$person = PersonBuilder::aPerson()
 			->withId($parameters['id'])
-			->withIdentity(new Identity($parameters['first_name'], $parameters['last_name']))
+			->withIdentity(new Identity($parameters['first_name'], $parameters['last_name'], $parameters['picture']))
 			->withBiography($parameters['biography'])
             ->withDescription($parameters['description'])
             ->withColor($parameters['color'])
 			->build();
+
+        if ($this->sessionManager->get('user')->getId() === $person->getId()) {
+            $this->sessionManager->set('user', $person);
+        }
 
 		$this->personDAO->updatePerson($person);
 	}

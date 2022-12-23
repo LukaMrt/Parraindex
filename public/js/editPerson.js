@@ -1,13 +1,12 @@
 const field = {
-	id : document.querySelector("#id-field"),
 	bio : document.querySelector("#bio-field"),
 	about : document.querySelector("#about-field"),
 	colors : document.querySelector("#color-field"),
 	contact : document.querySelector("#contact-field"),
+	picture : document.querySelector("#img-uploader"),
 }
 
 const preview = {
-	id : document.querySelector(".card__identifiant"),
 	bio : document.querySelector(".card__description"),
 	color : document.querySelector(".card__banner"),
 	contacts : document.querySelector("card__social-network"),
@@ -21,6 +20,8 @@ const pictureModal = {
 	imageUploader : document.querySelector("#img-uploader"),
 	closeButton : document.querySelector(".edit-picture__close"),
 }
+
+const initialPicture = preview.picture.src;
 
 function initColor(){
 
@@ -38,7 +39,6 @@ function initColor(){
  * Update the card preview with the values of the form fields
  */
 function updatePreview(){
-	preview.id.textContent = field.id.value;
 	preview.bio.textContent = field.bio.value;
 
 	let bannerColor = field.colors.querySelector("input:checked").parentElement.style.backgroundColor
@@ -96,9 +96,24 @@ preview.picture.addEventListener("click", (event) => {
 /**
  * Syncronize the picture preview with the picture uploader
  */
-pictureModal.imageUploader.addEventListener("change", e => {
+field.picture.addEventListener("input", e => {
+
 	let reader = new FileReader();
-	reader.readAsDataURL(pictureModal.imageUploader.files[0]);
+	let picture = field.picture.files[0];
+
+	if (picture.size > 5_000 * 1024){
+
+		// temporary alert, will be replaced by a modal
+		alert("La taille de l'image est trop grande !");
+
+		pictureModal.imageUploader.value = "";
+		pictureModal.imagePreview.src = initialPicture;
+		preview.picture.src = initialPicture;
+
+		return;
+	}
+	
+	reader.readAsDataURL(picture);
 	reader.onload = function(e) {
 		pictureModal.imagePreview.src = e.target.result;
 		preview.picture.src = e.target.result;

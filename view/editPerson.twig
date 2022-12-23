@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<form class="edit-person" method="{{method}}">
+<form class="edit-person" method="POST" enctype="multipart/form-data">
 
 	<div class="description">
 
@@ -37,7 +37,7 @@
 
 			<h2>IDENTIFANT</h1>
 
-			<input type="text" name="person-id" id="id-field" value="@{{person.id}}">
+			<p>@{{person.id}}</p>
 
 		</div>
 
@@ -61,15 +61,15 @@
 			<div class="public__personalization__choice" id="color-field" >
 
 				<label style="background-color : #f0f0f0">
-					<input checked type="radio" name="color" value= "#f0f0f0">
+					<input checked type="radio" name="banner-color" value= "#f0f0f0">
 				</label>
 
 				<label style="background-color : #132035">
-					<input type="radio" name="color"  value= "#132035">
+					<input type="radio" name="banner-color"  value= "#132035">
 				</label>
 
 				<label style="background-color : #8a8a8a">
-					<input type="radio" name="color"  value= "#8a8a8a">
+					<input type="radio" name="banner-color"  value= "#8a8a8a">
 				</label>
 			
 			</div>
@@ -78,29 +78,45 @@
 
 	</div>
 
-	<div class="contact">
-		<h2>CONTACT</h2>
+	<div class="information">
 
-		<div class="contact__characteristics" id="contact-field">
+		{% if admin %}
+			<div class="information__personnal">
+				<h2>Information personnel</h2>
+				
+				<label for="lastname-field">Nom</label>
+				<input type="text" name="person-lastname" id="lastname-field" value="{{person.lastName}}">
 
-			{% for characteristic in characteristics %}
+				<label for="">Prénom</label>
+				<input type="text" name="person-firstname" id="firstname-field" value="{{person.firstName}}">
 
-				{% set value = null %}
+			</div>
+		{% endif %}
 
-				{% for userCharacteristic in person.characteristics %}
-					{% if characteristic.title == userCharacteristic.title %}
-						{% set value = userCharacteristic %}
-					{% endif %}
+		<div class="contact">
+			<h2>CONTACT</h2>
+
+			<div class="contact__characteristics" id="contact-field">
+
+				{% for characteristic in characteristics %}
+
+					{% set value = null %}
+
+					{% for userCharacteristic in person.characteristics %}
+						{% if characteristic.title == userCharacteristic.title %}
+							{% set value = userCharacteristic %}
+						{% endif %}
+					{% endfor %}
+
+					{% include 'components/characteristic.twig' with {
+						'title': characteristic.title,
+						'value': value.value,
+						'visibility': value.visible,
+						}
+					%}
 				{% endfor %}
-
-				{% include 'components/characteristic.twig' with {
-					'title': characteristic.title,
-					'value': value.value,
-					'visibility': value.visible,
-					}
-				%}
-			{% endfor %}
-		
+			
+			</div>
 		</div>
 	</div>
 

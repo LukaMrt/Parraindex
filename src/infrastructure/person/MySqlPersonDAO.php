@@ -161,7 +161,8 @@ class MySqlPersonDAO implements PersonDAO {
 			last_name = :lastName,
 			biography = :biography,
 			banner_color = :bannerColor,
-			description = :description
+			description = :description,
+			picture = :picture
 			WHERE id_person = :id");
 
 		$query->execute([
@@ -170,6 +171,7 @@ class MySqlPersonDAO implements PersonDAO {
 			'biography' => $person->getBiography(),
 			'bannerColor' => $person->getColor(),
 			'description' => $person->getDescription(),
+			'picture' => $person->getPicture(),
 			'id' => $person->getId()
 		]);
 		$query->closeCursor();

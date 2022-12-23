@@ -44,4 +44,8 @@ class Identity {
 		return $this->picture;
 	}
 
+	public function setPicture(string $picture): void {
+		$this->picture = $picture;
+	}
+
 }

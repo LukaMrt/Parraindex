@@ -93,6 +93,7 @@ composer.phar
 .env
 public/css/*
 public/style/*
+public/img/pictures/*
 var/
 .phpdoc/
 composer.lock

@@ -99,20 +99,22 @@
 		}
 	}
 
-	.contact{
-		@include m.flex($direction: column);
+	.information{
 		height: 100%;
-		width: 80%;
-		gap: f.rem(42);
-
-		flex: 2 2 0px;
-
-		&__characteristics{
-			width: 100%;
-			@include m.flex($direction: column , $justify: space-between , $align: flex-start);
-			gap: f.rem(16);
+		&__contact{
+			@include m.flex($direction: column);
+			height: 100%;
+			width: 80%;
+			gap: f.rem(42);
+	
+			flex: 2 2 0px;
+	
+			&__characteristics{
+				width: 100%;
+				@include m.flex($direction: column , $justify: space-between , $align: flex-start);
+				gap: f.rem(16);
+			}
 		}
-
 	}
 }
 

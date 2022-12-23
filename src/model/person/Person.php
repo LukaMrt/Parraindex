@@ -94,19 +94,27 @@ class Person {
 		return $this->color;
 	}
 
-    /**
-     * @param int $startYear
-     */
-    public function setStartYear(int $startYear): void {
-        $this->startYear = $startYear;
-    }
-
 	public function getCharacteristics(): array {
 		return $this->characteristics;
 	}
-
+	
 	public function getId(): int {
 		return $this->id;
+	}
+	
+	/**
+	 * @param int $startYear
+	 */
+	public function setStartYear(int $startYear): void {
+		$this->startYear = $startYear;
+	}
+
+	/**
+	 * set the new picture URL of the person.
+	 * @param string $picture URL of the picture.
+	 */
+	public function setPicture(string $picture): void {
+		$this->identity->setPicture($picture);
 	}
 
 }
