@@ -33,7 +33,7 @@ class AddSponsorContactExecutor extends ContactExecutor {
 			new NumberField('godChildId', 'Le fillot doit être valide'),
 			new CustomField('godChildId', 'Le fillot doit exister', fn($value) => $this->personDAO->getPersonById($value) !== null),
 			new NumberField('sponsorType', 'Le type de lien doit être valide'),
-			new BoundedNumberField('sponsorType', 'Le type de lien doit être valideeeeeeeee', 0, 1),
+			new BoundedNumberField('sponsorType', 'Le type de lien doit être valide', 0, 1),
 			new DateField('sponsorDate', 'La date doit être valide'),
 		]);
 		$this->personDAO = $personDAO;

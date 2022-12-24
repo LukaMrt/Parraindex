@@ -135,4 +135,30 @@ class MysqlContactDAO implements ContactDAO {
 		$connection = null;
 	}
 
+	public function saveChockingContentContact(Person $person, Contact $contact): void {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description) VALUES (:type, NOW(), :name, :email, :description)");
+		$query->execute([
+			"type" => $contact->getTypeId(),
+			"name" => $contact->getName(),
+			"email" => $contact->getEmail(),
+			"description" => $contact->getDescription()
+		]);
+
+		$ticketId = $connection->lastInsertId();
+		$query = $connection->prepare("INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year) VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)");
+		$query->execute([
+			"id_ticket" => $ticketId,
+			"id_person" => $person->getId(),
+			"firstname" => $person->getFirstName(),
+			"lastname" => $person->getLastName(),
+			"entry_year" => $person->getStartYear()
+		]);
+
+		$query->closeCursor();
+		$connection = null;
+	}
+
 }

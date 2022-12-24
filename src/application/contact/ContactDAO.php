@@ -16,6 +16,8 @@ interface ContactDAO {
 
 	public function saveSimpleContact(Contact $contact): void;
 
+	public function saveChockingContentContact(Person $person, Contact $contact): void;
+
 	public function saveSponsorContact(Contact $contact, Sponsor $sponsor): void;
 
 }
