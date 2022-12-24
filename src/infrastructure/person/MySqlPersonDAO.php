@@ -222,6 +222,38 @@ class MySqlPersonDAO implements PersonDAO {
 		return $this->buildPerson($buffer);
 	}
 
+	public function createPerson(Person $person): int {
+		
+		$connection = $this->databaseConnection->getDatabase();
+		$query = $connection->prepare("INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture) VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)");
+
+		$query->execute([
+			'firstName' => $person->getFirstName(),
+			'lastName' => $person->getLastName(),
+			'biography' => $person->getBiography(),
+			'bannerColor' => $person->getColor(),
+			'description' => $person->getDescription(),
+			'picture' => $person->getPicture()
+		]);
+
+		$id = $connection->lastInsertId();
+		$query->closeCursor();
+		$connection = null;
+		
+		return $id;
+	}
+
+    public function deletePerson(Person $person): bool {
+        
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
+		$query->execute(['id' => $person->getId()]);
+		$row = $query->rowCount();
+		$query->closeCursor();
+		
+		return $row === 1;
+    }
 	public function addPerson(Person $person): void {
 
 		$connection = $this->databaseConnection->getDatabase();

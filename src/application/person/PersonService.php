@@ -50,6 +50,21 @@ class PersonService {
 		return $this->personDAO->getPerson($identity);
 	}
 
+    public function createPerson(array $parameters): int {
+        $person = PersonBuilder::aPerson()
+            ->withIdentity(new Identity($parameters['first_name'], $parameters['last_name'], $parameters['picture']))
+            ->withBiography($parameters['biography'])
+            ->withDescription($parameters['description'])
+            ->withColor($parameters['color'])
+            ->build();
+
+        return $this->personDAO->createPerson($person);
+    }
+
+    public function deletePerson(Person $person): bool {
+        return $this->personDAO->deletePerson($person);
+    }
+
 	public function addPerson(Person $person): void {
 		$this->personDAO->addPerson($person);
 	}

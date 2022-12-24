@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Edition personne' %}
 
 {% block javascripts %}
-	<script src="{{script('editPerson.js')}}" defer></script>
+	<script src="{{script('editPerson.js')}}" type="module"></script>
 {% endblock %}
 
 {% block content %}
@@ -128,9 +128,18 @@
 			<img src="{{icon('up.svg')}}" class="prev" alt="retour">
 		</a>
 
-		<button class="btn btn--primary" type="submit">
-			Enregistrer
-		</button>
+		<div>
+			{% if admin %}
+				<button class="btn btn--secondary" type="button" id="delete-person">
+					Supprimer
+				</button>
+			{% endif %}
+
+			<button class="btn btn--primary" type="submit">
+				Enregistrer
+			</button>
+
+		</div>
 
 	</nav>
 

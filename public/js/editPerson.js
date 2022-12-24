@@ -1,3 +1,5 @@
+import {triggerErrorPopup , triggerSuccessPopup} from "./popup/popups.js";
+
 const field = {
 	bio : document.querySelector("#bio-field"),
 	about : document.querySelector("#about-field"),
@@ -22,6 +24,7 @@ const pictureModal = {
 }
 
 const initialPicture = preview.picture.src;
+const deleteButton = document.querySelector("#delete-person");
 
 function initColor(){
 
@@ -118,6 +121,34 @@ field.picture.addEventListener("input", e => {
 		pictureModal.imagePreview.src = e.target.result;
 		preview.picture.src = e.target.result;
 	};
+});
+
+
+deleteButton?.addEventListener("click", async e => {
+
+	e.preventDefault();
+	
+	if (confirm("Êtes-vous sûr de vouloir supprimer cette personne ?")){
+		
+		let request = await fetch(window.location.href, { method : "DELETE" });
+
+		if (request.status !== 500){
+			let response = await request.json();
+
+			console.log(response);
+
+			if (response.success){
+				triggerSuccessPopup(response.messages);
+				setTimeout(() => {
+					window.location.href = response.redirect;
+				}, response.redirectDelay);
+			}else{
+				triggerErrorPopup(response.messages);
+			}
+		}else{
+			triggerErrorPopup(["Une erreur est survenue lors de la suppression de la personne"]);
+		}
+	}
 });
 
 initColor();

@@ -128,6 +128,9 @@ class Injector {
 		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
 		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
+		$this->router->registerRoute('GET', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_get');
+		$this->router->registerRoute('POST', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_post');
+		$this->router->registerRoute('DELETE', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_delete');
 		$this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
 		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/', $this->container->get(ContactCloseController::class), 'contact_close');
 		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
