@@ -8,8 +8,8 @@ use App\application\contact\field\EmailField;
 use App\application\contact\field\Field;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
-use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\PersonContact;
 
 class UpdatePersonContactExecutor extends ContactExecutor {
 
@@ -32,14 +32,16 @@ class UpdatePersonContactExecutor extends ContactExecutor {
 
 		$person = $this->personDAO->getPersonById($data['personId']);
 
-		$contact = new Contact(
+		$contact = new PersonContact(
+			-1,
 			$data['senderFirstName'] . ' ' . $data['senderLastName'],
 			$data['senderEmail'],
 			ContactType::UPDATE_PERSON,
 			$data['message'] ?? '',
+			$person
 		);
 
-		$this->contactDAO->savePersonUpdateContact($person, $contact);
+		$this->contactDAO->savePersonUpdateContact($contact);
 		return '';
 	}
 

@@ -20,7 +20,8 @@ class ContactController extends Controller {
 	public function get(Router $router, array $parameters): void {
 
 		$people = $this->personService->getAllPeople();
-		$closure = fn($person) => ['id' => $person->getId(), 'title' => $person->getFirstName() . ' ' . $person->getLastName()];
+		usort($people, fn($a, $b) => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
+		$closure = fn($person) => ['id' => $person->getId(), 'title' => $person->getLastName() . ' ' . $person->getFirstName()];
 		$people = array_map($closure, $people);
 
 		$this->render('contact.twig', [
@@ -33,6 +34,7 @@ class ContactController extends Controller {
 
 	public function post(Router $router, array $parameters): void {
 
+		// TODO : create new array with htmlspecialchars
 		$error = $this->contactService->registerContact($_POST);
 
 		$this->get($router, ['error' => $error]);

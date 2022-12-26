@@ -8,8 +8,8 @@ use App\application\contact\field\EmailField;
 use App\application\contact\field\Field;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
-use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\PersonContact;
 
 class ChockingContentContactExecutor extends ContactExecutor {
 
@@ -33,14 +33,16 @@ class ChockingContentContactExecutor extends ContactExecutor {
 
 		$person = $this->personDAO->getPersonById($data['personId']);
 
-		$contact = new Contact(
+		$contact = new PersonContact(
+			-1,
 			$data['senderFirstName'] . ' ' . $data['senderLastName'],
 			$data['senderEmail'],
 			ContactType::CHOCKING_CONTENT,
 			$data['message'],
+			$person
 		);
 
-		$this->contactDAO->saveChockingContentContact($person, $contact);
+		$this->contactDAO->saveChockingContentContact($contact);
 		return '';
 	}
 

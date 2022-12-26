@@ -10,8 +10,8 @@ use App\application\contact\field\Field;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\application\sponsor\SponsorDAO;
-use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\SponsorContact;
 
 class UpdateSponsorContactExecutor extends ContactExecutor {
 
@@ -42,14 +42,16 @@ class UpdateSponsorContactExecutor extends ContactExecutor {
 			return 'Le lien doit exister';
 		}
 
-		$contact = new Contact(
+		$contact = new SponsorContact(
+			-1,
 			$data['senderFirstName'] . ' ' . $data['senderLastName'],
 			$data['senderEmail'],
 			ContactType::UPDATE_SPONSOR,
 			$data['message'] ?? '',
+			$sponsor
 		);
 
-		$this->contactDAO->saveSponsorContact($contact, $sponsor);
+		$this->contactDAO->saveSponsorContact($contact);
 		return '';
 	}
 

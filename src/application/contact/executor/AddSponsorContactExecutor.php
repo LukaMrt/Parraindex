@@ -12,8 +12,8 @@ use App\application\contact\field\NumberField;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\application\sponsor\SponsorDAO;
-use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\SponsorContact;
 use App\model\sponsor\ClassicSponsor;
 use App\model\sponsor\HeartSponsor;
 
@@ -52,17 +52,19 @@ class AddSponsorContactExecutor extends ContactExecutor {
 		if ($data['sponsorType'] === '0') {
 			$sponsor = new ClassicSponsor(-1, $godFather, $godChild, $data['sponsorDate'], '');
 		} else {
-			$sponsor = new HeartSponsor(-1, $godChild, $godFather, $data['sponsorDate'], '');
+			$sponsor = new HeartSponsor(-1, $godFather, $godChild, $data['sponsorDate'], '');
 		}
 
-		$contact = new Contact(
+		$contact = new SponsorContact(
+			-1,
 			$data['senderFirstName'] . ' ' . $data['senderLastName'],
 			$data['senderEmail'],
 			ContactType::ADD_SPONSOR,
 			$data['bonusInformation'] ?? '',
+			$sponsor
 		);
 
-		$this->contactDAO->saveSponsorContact($contact, $sponsor);
+		$this->contactDAO->saveSponsorContact($contact);
 		return '';
 	}
 

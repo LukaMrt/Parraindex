@@ -18,15 +18,15 @@ enum ContactType: int {
 
 	public function toString(): string {
 		return match ($this) {
-			self::ADD_PERSON => "Add person",
-			self::ADD_SPONSOR => "Add link",
-			self::REMOVE_PERSON => "Remove person",
-			self::REMOVE_SPONSOR => "Remove link",
-			self::UPDATE_PERSON => "Update person",
-			self::UPDATE_SPONSOR => "Update link",
+			self::ADD_PERSON => "Ajout d'une personne",
+			self::REMOVE_PERSON => "Suppression d'une personne",
+			self::UPDATE_PERSON => "Modification d'une personne",
+			self::ADD_SPONSOR => "Ajout d'un lien",
+			self::REMOVE_SPONSOR => "Suppression d'un lien",
+			self::UPDATE_SPONSOR => "Modification d'un lien",
 			self::BUG => "Bug",
-			self::CHOCKING_CONTENT => "Chocking content",
-			self::OTHER => "Other",
+			self::CHOCKING_CONTENT => "Contenu choquant",
+			self::OTHER => "Autre",
 		};
 	}
 

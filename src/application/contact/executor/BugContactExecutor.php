@@ -6,8 +6,8 @@ use App\application\contact\ContactDAO;
 use App\application\contact\field\EmailField;
 use App\application\contact\field\Field;
 use App\application\redirect\Redirect;
-use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\DefaultContact;
 
 class BugContactExecutor extends ContactExecutor {
 
@@ -23,7 +23,8 @@ class BugContactExecutor extends ContactExecutor {
 	}
 
 	public function executeSuccess(array $data): string {
-		$contact = new Contact(
+		$contact = new DefaultContact(
+			-1,
 			$data['senderFirstName'] . ' ' . $data['senderLastName'],
 			$data['senderEmail'],
 			ContactType::BUG,

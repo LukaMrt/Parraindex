@@ -33,4 +33,12 @@ class SponsorService {
 		return $sponsor;
 	}
 
+	public function removeSponsor(int $id): void {
+		$this->sponsorDAO->removeSponsor($id);
+	}
+
+	public function addSponsor(Sponsor $sponsor): void {
+		$this->sponsorDAO->addSponsor($sponsor);
+	}
+
 }

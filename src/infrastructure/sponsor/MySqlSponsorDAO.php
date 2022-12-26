@@ -293,4 +293,44 @@ SQL
 		return $sponsor;
 	}
 
+	public function removeSponsor(int $id): void {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("DELETE FROM Sponsor WHERE id_sponsor = :id");
+		$query->execute(['id' => $id]);
+
+		$query->closeCursor();
+		$connection = null;
+	}
+
+	public function addSponsor(Sponsor $sponsor): void {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("INSERT INTO Sponsor (id_godfather, id_godson, sponsorDate) VALUES (:godFatherId, :godChildId, :date)");
+		$query->execute([
+			'godFatherId' => $sponsor->getGodFather()->getId(),
+			'godChildId' => $sponsor->getGodChild()->getId(),
+			'date' => $sponsor->getDate()->format('Y-m-d')
+		]);
+
+		if ($sponsor instanceof ClassicSponsor) {
+			$query = $connection->prepare("INSERT INTO ClassicSponsor (id_sponsor, reason) VALUES (:id, :reason)");
+			$query->execute([
+				'id' => $connection->lastInsertId(),
+				'reason' => $sponsor->getDescription()
+			]);
+		} else if ($sponsor instanceof HeartSponsor) {
+			$query = $connection->prepare("INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)");
+			$query->execute([
+				'id' => $connection->lastInsertId(),
+				'description' => $sponsor->getDescription()
+			]);
+		}
+
+		$query->closeCursor();
+		$connection = null;
+	}
+
 }

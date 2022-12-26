@@ -12,4 +12,8 @@ interface SponsorDAO {
 
 	public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor;
 
+	public function removeSponsor(int $id): void;
+
+	public function addSponsor(Sponsor $sponsor): void;
+
 }

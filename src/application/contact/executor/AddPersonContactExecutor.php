@@ -8,8 +8,8 @@ use App\application\contact\field\EmailField;
 use App\application\contact\field\Field;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
-use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\PersonContact;
 use App\model\person\Identity;
 use App\model\person\PersonBuilder;
 
@@ -37,18 +37,21 @@ class AddPersonContactExecutor extends ContactExecutor {
 		}
 
 		$person = PersonBuilder::aPerson()
+			->withId(-1)
 			->withIdentity(new Identity($data['creationFirstName'], $data['creationLastName']))
 			->withStartYear($data['entryYear'])
 			->build();
 
-		$contact = new Contact(
+		$contact = new PersonContact(
+			-1,
 			$data['senderFirstName'] . ' ' . $data['senderLastName'],
 			$data['senderEmail'],
 			ContactType::ADD_PERSON,
 			$data['bonusInformation'] ?? '',
+			$person
 		);
 
-		$this->contactDAO->savePersonAddContact($person, $contact);
+		$this->contactDAO->savePersonAddContact($contact);
 		return '';
 	}
 

@@ -11,6 +11,7 @@ use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\PersonContact;
 
 class RemovePersonContactExecutor extends ContactExecutor {
 
@@ -33,14 +34,16 @@ class RemovePersonContactExecutor extends ContactExecutor {
 
 		$person = $this->personDAO->getPersonById($data['personId']);
 
-		$contact = new Contact(
+		$contact = new PersonContact(
+			-1,
 			$data['senderFirstName'] . ' ' . $data['senderLastName'],
 			$data['senderEmail'],
 			ContactType::REMOVE_PERSON,
 			$data['message'],
+			$person
 		);
 
-		$this->contactDAO->savePersonRemoveContact($person, $contact);
+		$this->contactDAO->savePersonRemoveContact($contact);
 		return '';
 	}
 
