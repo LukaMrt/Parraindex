@@ -83,4 +83,22 @@ class SponsorServiceTest extends TestCase {
 		$this->assertEquals($expectedSponsor, $sponsor);
 	}
 
+	public function testAddsponsorCallsAddSponsorOnSponsorDAO(): void {
+
+		$this->sponsorDAO->expects($this->once())
+			->method('addSponsor')
+			->with($this->sponsor);
+
+		$this->sponsorService->addSponsor($this->sponsor);
+	}
+
+	public function testRemovesponsorCallsUpdateSponsorOnSponsorDAO(): void {
+
+		$this->sponsorDAO->expects($this->once())
+			->method('removeSponsor')
+			->with(-1);
+
+		$this->sponsorService->removeSponsor(-1);
+	}
+
 }

@@ -95,3 +95,4 @@ public/css/*
 public/style/*
 var/
 .phpdoc/
+composer.lock

@@ -9,6 +9,7 @@ use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\DefaultContact;
 use App\model\person\Identity;
 use App\model\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
@@ -45,7 +46,8 @@ class BugContactExecutorTest extends TestCase {
 
 	public function testExecuteSuccessSavesContactWithGiveValues(): void {
 
-		$contact = new Contact(
+		$contact = new DefaultContact(
+			-1,
 			'test1 test2',
 			'test.test@test.com',
 			ContactType::BUG,

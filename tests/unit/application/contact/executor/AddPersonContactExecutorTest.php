@@ -8,6 +8,8 @@ use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\DefaultContact;
+use App\model\contact\PersonContact;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
@@ -67,20 +69,23 @@ class AddPersonContactExecutorTest extends TestCase {
 			->willReturn(null);
 
 		$person = PersonBuilder::aPerson()
+			->withId(-1)
 			->withIdentity(new Identity('test3', 'test4'))
 			->withStartYear(2022)
 			->build();
 
-		$contact = new Contact(
+		$contact = new PersonContact(
+			-1,
 			'test1 test2',
 			'test.test@test.com',
 			ContactType::ADD_PERSON,
 			'empty',
+			$person
 		);
 
 		$this->contactDAO->expects($this->once())
 			->method('savePersonAddContact')
-			->with($person, $contact);
+			->with($contact);
 
 		$this->executor->execute($this->defaultArray);
 	}

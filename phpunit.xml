@@ -22,7 +22,7 @@
     <coverage>
         <report>
             <html outputDirectory="out/tests/coverage/"/>
-            <clover outputFile="out/tests/coverage-report.xml"/>
+            <clover outputFile="tests/report/coverage-report.xml"/>
         </report>
         <include>
             <directory suffix=".php">src/application/</directory>
@@ -37,8 +37,8 @@
     </testsuites>
 
     <logging>
-        <testdoxHtml outputFile="out/tests/report.html"/>
-        <junit outputFile="out/tests/report.xml"/>
+        <testdoxHtml outputFile="tests/report/report.html"/>
+        <junit outputFile="tests/report/report.xml"/>
     </logging>
 
 </phpunit>

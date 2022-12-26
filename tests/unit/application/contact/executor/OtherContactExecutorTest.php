@@ -8,6 +8,7 @@ use App\application\contact\executor\OtherContactExecutor;
 use App\application\redirect\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
 class OtherContactExecutorTest extends TestCase {
@@ -42,7 +43,8 @@ class OtherContactExecutorTest extends TestCase {
 
 	public function testExecuteSuccessSavesContactWithGiveValues(): void {
 
-		$contact = new Contact(
+		$contact = new DefaultContact(
+			-1,
 			'test1 test2',
 			'test.test@test.com',
 			ContactType::OTHER,

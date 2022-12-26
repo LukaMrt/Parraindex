@@ -10,6 +10,8 @@ use App\application\redirect\Redirect;
 use App\application\sponsor\SponsorDAO;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\DefaultContact;
+use App\model\contact\SponsorContact;
 use App\model\person\Person;
 use App\model\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
@@ -75,16 +77,18 @@ class UpdateSponsorContactExecutorTest extends TestCase {
 			->with(1, 2)
 			->willReturn($sponsor);
 
-		$contact = new Contact(
+		$contact = new SponsorContact(
+			-1,
 			'test1 test2',
 			'test.test@test.com',
 			ContactType::UPDATE_SPONSOR,
 			'empty',
+			$sponsor
 		);
 
 		$this->contactDAO->expects($this->once())
 			->method('saveSponsorContact')
-			->with($contact, $sponsor);
+			->with($contact);
 
 		$this->executor->executeSuccess($this->defaultArray);
 	}

@@ -9,6 +9,8 @@ use App\application\redirect\Redirect;
 use App\application\sponsor\SponsorDAO;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\DefaultContact;
+use App\model\contact\SponsorContact;
 use App\model\person\Person;
 use App\model\sponsor\ClassicSponsor;
 use App\model\sponsor\HeartSponsor;
@@ -136,16 +138,18 @@ class AddSponsorContactExecutorTest extends TestCase {
 
 		$sponsor = new ClassicSponsor(-1, $godFather, $godChild, '2021-01-01', '');
 
-		$contact = new Contact(
+		$contact = new SponsorContact(
+			-1,
 			'test1 test2',
 			'test.test@test.com',
 			ContactType::ADD_SPONSOR,
 			'empty',
+			$sponsor
 		);
 
 		$this->contactDAO->expects($this->once())
 			->method('saveSponsorContact')
-			->with($contact, $sponsor);
+			->with($contact);
 
 		$this->executor->executeSuccess($this->defaultArray);
 	}
@@ -161,16 +165,18 @@ class AddSponsorContactExecutorTest extends TestCase {
 
 		$sponsor = new HeartSponsor(-1, $godFather, $godChild, '2021-01-01', '');
 
-		$contact = new Contact(
+		$contact = new SponsorContact(
+			-1,
 			'test1 test2',
 			'test.test@test.com',
 			ContactType::ADD_SPONSOR,
 			'empty',
+			$sponsor
 		);
 
 		$this->contactDAO->expects($this->once())
 			->method('saveSponsorContact')
-			->with($contact, $sponsor);
+			->with($contact);
 
 		$this->defaultArray['sponsorType'] = '1';
 

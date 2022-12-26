@@ -8,6 +8,7 @@ use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\PersonContact;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
@@ -61,16 +62,18 @@ class RemovePersonContactExecutorTest extends TestCase {
 			->with(1)
 			->willReturn($person);
 
-		$contact = new Contact(
+		$contact = new PersonContact(
+			-1,
 			'test1 test2',
 			'test.test@test.com',
 			ContactType::REMOVE_PERSON,
 			'empty',
+			$person
 		);
 
 		$this->contactDAO->expects($this->once())
 			->method('savePersonRemoveContact')
-			->with($person, $contact);
+			->with($contact);
 
 		$this->executor->execute($this->defaultArray);
 	}

@@ -87,6 +87,22 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $this->person);
 	}
 
+	public function testAddpersonCallsPersonDAO() {
 
+		$this->personDAO->expects($this->once())
+			->method('addPerson')
+			->with($this->person);
+
+		$this->personService->addPerson($this->person);
+	}
+
+	public function testRemoveepersonCallsPersonDAO() {
+
+		$this->personDAO->expects($this->once())
+			->method('removePerson')
+			->with(-1);
+
+		$this->personService->removePerson(-1);
+	}
 
 }
