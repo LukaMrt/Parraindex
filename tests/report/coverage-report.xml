@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1672090004">
-  <project timestamp="1672090004">
+<coverage generated="1672129139">
+  <project timestamp="1672129139">
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/contact/ContactDAO.php">
       <metrics loc="28" ncloc="28" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>

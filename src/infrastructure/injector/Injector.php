@@ -17,6 +17,7 @@ use App\controller\ContactAdminController;
 use App\controller\ContactCloseController;
 use App\controller\ContactController;
 use App\controller\EditPersonController;
+use App\controller\EditSponsorController;
 use App\controller\ErrorController;
 use App\controller\HomeController;
 use App\controller\LoginController;
@@ -121,10 +122,12 @@ class Injector {
 		$this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
 		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/', $this->container->get(ContactCloseController::class), 'contact_close');
 		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
+		$this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
 		$this->router->registerRoute('GET', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_get');
 		$this->router->registerRoute('POST', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_post');
-		$this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
 		$this->router->registerRoute('GET', '/sponsor/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
+		$this->router->registerRoute('GET', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_get');
+		$this->router->registerRoute('POST', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_post');
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/about', $this->container->get(AboutController::class), 'about');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
@@ -133,22 +136,11 @@ class Injector {
 	private function buildTwig(): Environment {
 		$twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
-		$twig->addFunction(new TwigFunction('style', function (string $path) {
-			return '/css/' . $path;
-		}));
-		$twig->addFunction(new TwigFunction('script', function (string $path) {
-			return '/js/' . $path;
-		}));
-
-		$twig->addFunction(new TwigFunction('image', function (string $path) {
-			return '/img/' . $path;
-		}));
-		$twig->addFunction(new TwigFunction('picture', function (string $path) {
-			return '/img/pictures/' . $path;
-		}));
-		$twig->addFunction(new TwigFunction('icon', function (string $path) {
-			return '/img/icons/' . $path;
-		}));
+		$twig->addFunction(new TwigFunction('style', fn(string $path) => '/css/' . $path));
+		$twig->addFunction(new TwigFunction('script', fn(string $path) => '/js/' . $path));
+		$twig->addFunction(new TwigFunction('image', fn(string $path) => '/img/' . $path));
+		$twig->addFunction(new TwigFunction('picture', fn(string $path) => '/img/pictures/' . $path));
+		$twig->addFunction(new TwigFunction('icon', fn(string $path) => '/img/icons/' . $path));
 
 		return $twig;
 	}

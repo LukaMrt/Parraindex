@@ -41,4 +41,8 @@ class SponsorService {
 		$this->sponsorDAO->addSponsor($sponsor);
 	}
 
+	public function getSponsor(int $id): ?Sponsor {
+		return $this->sponsorDAO->getSponsorById($id);
+	}
+
 }
