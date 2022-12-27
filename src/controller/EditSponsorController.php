@@ -49,4 +49,26 @@ class EditSponsorController extends Controller {
 		]);
 	}
 
+	public function post(Router $router, array $parameters): void {
+
+		if (empty($_SESSION) || PrivilegeType::fromString($_SESSION['privilege']) !== PrivilegeType::ADMIN) {
+			header('Location: ' . $router->url('error', ['error' => 403]));
+			die();
+		}
+
+		$sponsor = $this->sponsorService->getSponsor($parameters['id']);
+
+		// TODO : create new array with htmlspecialchars
+		if ($sponsor === null) {
+			$this->sponsorService->createSponsor($parameters['id'], $_POST);
+		} else {
+			$this->sponsorService->updateSponsor($parameters['id'], $_POST);
+		}
+
+		header('Location: ' . $router->url('home'));
+		die();
+
+	}
+
+
 }

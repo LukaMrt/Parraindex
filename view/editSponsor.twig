@@ -9,7 +9,7 @@
 
 {% block content %}
 
-    <form class="form" action="{{ router.url('editsponsor_post') }}" method="post">
+    <form class="form" action="{{ router.url('editsponsor_post', {id: sponsor.id != null ? sponsor.id : 0}) }}" method="post">
 
         <h1 class="form__title">Gestion de lien</h1>
 
@@ -44,13 +44,15 @@
                 'type': 'date',
                 'slug': 'sponsorDate',
                 'title': 'Date du parrainage',
-                'value': '2022-09-01',
+                'value': sponsor.date | date('Y-m-d'),
                 'pattern': '.+'
             } %}
 
             {% include "components/form/textarea.twig" with {
                 'slug': 'description',
-                'title': 'Raison'
+                'title': 'Raison',
+                'value': sponsor.description,
+                'required': 'false'
             } %}
 
             <div class="form-block form-block--row">

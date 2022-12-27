@@ -333,4 +333,32 @@ SQL
 		$connection = null;
 	}
 
+	public function updateSponsor(Sponsor $sponsor): void {
+
+		$connection = $this->databaseConnection->getDatabase();
+
+		$query = $connection->prepare("UPDATE Sponsor SET sponsorDate = :date WHERE id_sponsor = :id");
+		$query->execute([
+			'id' => $sponsor->getId(),
+			'date' => $sponsor->getDate()->format('Y-m-d')
+		]);
+
+		if ($sponsor instanceof ClassicSponsor) {
+			$query = $connection->prepare("UPDATE ClassicSponsor SET reason = :reason WHERE id_sponsor = :id");
+			$query->execute([
+				'id' => $sponsor->getId(),
+				'reason' => $sponsor->getDescription()
+			]);
+		} else if ($sponsor instanceof HeartSponsor) {
+			$query = $connection->prepare("UPDATE HeartSponsor SET description = :description WHERE id_sponsor = :id");
+			$query->execute([
+				'id' => $sponsor->getId(),
+				'description' => $sponsor->getDescription()
+			]);
+		}
+
+		$query->closeCursor();
+		$connection = null;
+	}
+
 }
