@@ -62,7 +62,7 @@
                 } %}
 
                 {% if (sponsor.id != 0) %}
-                    <a href="{{ router.url('home', {id: sponsor.id}) }}">
+                    <a href="{{ router.url('removesponsor', {id: sponsor.id}) }}">
                         {% include "components/button.twig" with {
                             'type': 'button',
                             'button_content': 'Supprimer',

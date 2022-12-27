@@ -24,6 +24,7 @@ use App\controller\LoginController;
 use App\controller\LogoutConfirmationController;
 use App\controller\LogoutController;
 use App\controller\PersonController;
+use App\controller\RemoveSponsorController;
 use App\controller\ResetpasswordConfirmationController;
 use App\controller\ResetpasswordController;
 use App\controller\ResetpasswordValidationController;
@@ -128,6 +129,7 @@ class Injector {
 		$this->router->registerRoute('GET', '/sponsor/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
 		$this->router->registerRoute('GET', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_get');
 		$this->router->registerRoute('POST', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_post');
+		$this->router->registerRoute('GET', '/sponsor/[i:id]/remove', $this->container->get(RemoveSponsorController::class), 'removesponsor');
 		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
 		$this->router->registerRoute('GET', '/about', $this->container->get(AboutController::class), 'about');
 		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');

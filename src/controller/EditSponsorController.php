@@ -31,14 +31,14 @@ class EditSponsorController extends Controller {
 		$people = array_map($closure, $people);
 		$people2 = $people;
 
-		$sponsorTypes = [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur']];
+		$sponsorTypes = [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur'], ['id' => 2, 'title' => 'Type inconnu']];
 
 		if ($sponsor !== null) {
 			$godFather = $this->personService->getPersonById($sponsor->getGodFather()->getId());
 			$godChild = $this->personService->getPersonById($sponsor->getGodChild()->getId());
 			$people = [['id' => $godFather->getId(), 'title' => $godFather->getLastName() . ' ' . $godFather->getFirstName()]];
 			$people2 = [['id' => $godChild->getId(), 'title' => $godChild->getLastName() . ' ' . $godChild->getFirstName()]];
-			$sponsorTypes = [$sponsorTypes[$sponsor->getTypeId()]];
+			usort($sponsorTypes, fn($a, $b) => $a['id'] == $sponsor->getTypeId() ? -1 : 1);
 		}
 
 		$this->render('editSponsor.twig', [
@@ -48,6 +48,5 @@ class EditSponsorController extends Controller {
 			'sponsorTypes' => $sponsorTypes
 		]);
 	}
-
 
 }
