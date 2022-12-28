@@ -29,6 +29,10 @@
 		@include b.breakpoint(small){
 			display: none;
 		}
+
+		&:hover {
+			cursor: pointer;
+		}
 	}
 
 	&__searchbar--open{

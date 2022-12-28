@@ -4,6 +4,7 @@
 {% set title = 'Parraindex - Contact' %}
 
 {% block javascripts %}
+    <script type="module" src="{{ script('contactAdmin.js') }}"></script>
 {% endblock %}
 
 {% block content %}
@@ -43,7 +44,7 @@
                     {% endif %}
 
                     {% if contact.typeId == 4 %}
-                        <a href="{{ router.url('contact_admin') }}">
+                        <a href="{{ router.url('editsponsor_get', {'id': contact.sponsor.id}) }}">
                             <button class="contact__actions-button contact__actions-button--yellow">Éditer
                             </button>
                         </a>

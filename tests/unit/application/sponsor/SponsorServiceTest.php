@@ -9,6 +9,7 @@ use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
 use App\model\sponsor\ClassicSponsor;
+use App\model\sponsor\HeartSponsor;
 use App\model\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
 
@@ -99,6 +100,161 @@ class SponsorServiceTest extends TestCase {
 			->with(-1);
 
 		$this->sponsorService->removeSponsor(-1);
+	}
+
+	public function testGestsponsorReturnsSponsor(): void {
+
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
+
+		$sponsor = $this->sponsorService->getSponsor(1);
+
+		$this->assertEquals($this->sponsor, $sponsor);
+	}
+
+	public function testCreatesponsorDoesNothingWhenSponsorAlreadyExists(): void {
+
+		$this->personDAO->method('getPersonById')
+			->withConsecutive([1], [1])
+			->willReturnOnConsecutiveCalls($this->person, $this->person);
+
+		$this->sponsorDAO->method('getSponsorByPeopleId')
+			->with(1, 1)
+			->willReturn($this->sponsor);
+
+		$this->sponsorDAO->expects($this->never())
+			->method('addSponsor');
+
+		$this->sponsorService->createSponsor([
+			'godFatherId' => 1,
+			'godChildId' => 1
+		]);
+	}
+
+	public function testCreatesponsorRegistersClassicSponsor(): void {
+
+		$this->personDAO->method('getPersonById')
+			->withConsecutive([1], [1])
+			->willReturnOnConsecutiveCalls($this->person, $this->person);
+
+		$this->sponsorDAO->method('getSponsorByPeopleId')
+			->with(1, 1)
+			->willReturn(null);
+
+		$sponsor = new ClassicSponsor(-1, $this->person, $this->person, '2020-01-01', 'description');
+
+		$this->sponsorDAO->expects($this->once())
+			->method('addSponsor')
+			->with($sponsor);
+
+		$this->sponsorService->createSponsor([
+			'godFatherId' => 1,
+			'godChildId' => 1,
+			'sponsorType' => '0',
+			'sponsorDate' => '2020-01-01',
+			'description' => 'description'
+		]);
+
+	}
+
+	public function testCreatesponsorRegistersHeartSponsor(): void {
+
+		$this->personDAO->method('getPersonById')
+			->withConsecutive([1], [1])
+			->willReturnOnConsecutiveCalls($this->person, $this->person);
+
+		$this->sponsorDAO->method('getSponsorByPeopleId')
+			->with(1, 1)
+			->willReturn(null);
+
+		$sponsor = new HeartSponsor(-1, $this->person, $this->person, '2020-01-01', 'description');
+
+		$this->sponsorDAO->expects($this->once())
+			->method('addSponsor')
+			->with($sponsor);
+
+		$this->sponsorService->createSponsor([
+			'godFatherId' => 1,
+			'godChildId' => 1,
+			'sponsorType' => '1',
+			'sponsorDate' => '2020-01-01',
+			'description' => 'description'
+		]);
+
+	}
+
+	public function testUpdatesponsorDoesNothingWhenSponsorDoesNotExist(): void {
+
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn(null);
+
+		$this->sponsorDAO->expects($this->never())
+			->method('updateSponsor');
+
+		$this->sponsorService->updateSponsor(1, [
+			'godFatherId' => 1,
+			'godChildId' => 1
+		]);
+	}
+
+	public function testUpdatesponsorDoesNothingWhenTypeIsUnknown(): void {
+
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
+
+		$this->sponsorDAO->expects($this->never())
+			->method('updateSponsor');
+
+		$this->sponsorService->updateSponsor(1, [
+			'godFatherId' => 1,
+			'godChildId' => 1,
+			'sponsorType' => '2'
+		]);
+	}
+
+	public function testUpdatesponsorRegistersClassicSponsor(): void {
+
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
+
+		$person = PersonBuilder::aPerson()->withId(1)->build();
+		$sponsor = new ClassicSponsor(1, $person, $person, '2020-01-01', 'description');
+
+		$this->sponsorDAO->expects($this->once())
+			->method('updateSponsor')
+			->with($sponsor);
+
+		$this->sponsorService->updateSponsor(1, [
+			'sponsorType' => '0',
+			'sponsorDate' => '2020-01-01',
+			'description' => 'description'
+		]);
+
+	}
+
+	public function testUpdatesponsorRegistersHeartSponsor(): void {
+
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
+
+		$person = PersonBuilder::aPerson()->withId(1)->build();
+		$sponsor = new HeartSponsor(1, $person, $person, '2020-01-01', 'description');
+
+		$this->sponsorDAO->expects($this->once())
+			->method('updateSponsor')
+			->with($sponsor);
+
+		$this->sponsorService->updateSponsor(1, [
+			'sponsorType' => '1',
+			'sponsorDate' => '2020-01-01',
+			'description' => 'description'
+		]);
+
 	}
 
 }

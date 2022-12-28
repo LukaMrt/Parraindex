@@ -29,7 +29,7 @@
 		width: 100%;
 		gap: f.rem(20);
 
-		@include m.flex(center, space-between, column);
+		@include m.flex(center, space-around, column);
 
 		&--row {
 			flex-direction: row;

@@ -16,4 +16,6 @@ interface SponsorDAO {
 
 	public function addSponsor(Sponsor $sponsor): void;
 
+	public function updateSponsor(Sponsor $sponsor): void;
+
 }

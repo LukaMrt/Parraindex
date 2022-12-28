@@ -129,7 +129,7 @@ class MysqlContactDAO implements ContactDAO {
 		$query = $connection->prepare("INSERT INTO EditSponsor (id_ticket, id_sponsor, id_godfather, id_godson, date, description, type) VALUES (:id_ticket, :id_sponsor, :id_godfather, :id_godson, :date, :description, :type)");
 		$query->execute([
 			"id_ticket" => $ticketId,
-			"id_sponsor" => $contact->getSponsor()->getId(),
+			"id_sponsor" => $contact->getSponsor()->getId() != -1 ? $contact->getSponsor()->getId() : null,
 			"id_godfather" => $contact->getSponsor()->getGodfather()->getId(),
 			"id_godson" => $contact->getSponsor()->getGodChild()->getId(),
 			"date" => $contact->getSponsor()->getDate()->format("Y-m-d"),
@@ -198,7 +198,6 @@ SQL
 		$querySponsor = $connection->prepare(<<<SQL
 						SELECT T.*,
 							ES.date,
-							ES.description,
 							ES.id_sponsor,
 							P.id_person   AS f_id_person,
 							P.last_name   AS f_last_name,

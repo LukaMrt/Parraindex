@@ -1,0 +1,82 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('editSponsor.css') %}
+{% set title = 'Parraindex - Liens' %}
+
+{% block javascripts %}
+    <script type="module" src="{{ script('editSponsor.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <form class="form" action="{{ router.url('editsponsor_post', {id: sponsor.id != null ? sponsor.id : 0}) }}" method="post">
+
+        <h1 class="form__title">Gestion de lien</h1>
+
+        <div class="form-content">
+
+            <div class="form-block form-block--row">
+
+                {% include "components/form/select.twig" with {
+                    'slug': 'godFatherId',
+                    'title': 'Parrain',
+                    'options': people1,
+                    'parent': '^[0-9]+$'
+                } %}
+
+                {% include "components/form/select.twig" with {
+                    'slug': 'godChildId',
+                    'title': 'Fillot',
+                    'options': people2,
+                    'parent': '^[0-9]+$'
+                } %}
+
+            </div>
+
+            {% include "components/form/select.twig" with {
+                'slug': 'sponsorType',
+                'title': 'Type de parrainage',
+                'options': sponsorTypes,
+                'parent': '^[0-9]$'
+            } %}
+
+            {% include "components/form/input.twig" with {
+                'type': 'date',
+                'slug': 'sponsorDate',
+                'title': 'Date du parrainage',
+                'value': sponsor.date | date('Y-m-d'),
+                'pattern': '.+'
+            } %}
+
+            {% include "components/form/textarea.twig" with {
+                'slug': 'description',
+                'title': 'Raison',
+                'value': sponsor.description,
+                'required': 'false'
+            } %}
+
+            <div class="form-block form-block--row">
+
+                {% include "components/button.twig" with {
+                    'type': 'submit',
+                    'button_content': 'Valider',
+                    'priority': 'primary'
+                } %}
+
+                {% if (sponsor.id != 0) %}
+                    <a href="{{ router.url('removesponsor', {id: sponsor.id}) }}">
+                        {% include "components/button.twig" with {
+                            'type': 'button',
+                            'button_content': 'Supprimer',
+                            'priority': 'danger'
+                        } %}
+                    </a>
+                {% endif %}
+
+            </div>
+
+        </div>
+
+    </form>
+
+{% endblock %}

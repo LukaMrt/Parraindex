@@ -21,5 +21,10 @@
         'sponsor': sponsor
     } %}
 
+    {% if login.privilege == 'ADMIN' %}
+        <a class="person-action__wrapper" href="{{ router.url('editsponsor_get', {id: sponsor.id}) }}">
+            <img class="person-actions__image" src="{{ icon("pen.svg") }}" alt="Retour">
+        </a>
+    {% endif %}
 
 {% endblock %}

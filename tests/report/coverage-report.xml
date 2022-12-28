@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1672090004">
-  <project timestamp="1672090004">
+<coverage generated="1672246093">
+  <project timestamp="1672246093">
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/contact/ContactDAO.php">
       <metrics loc="28" ncloc="28" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
@@ -592,7 +592,7 @@
       <metrics loc="168" ncloc="168" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="80" coveredstatements="80" elements="87" coveredelements="87"/>
     </file>
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/login/UrlUtils.php">
-      <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/mail/Mailer.php">
       <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -634,32 +634,54 @@
       <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/sponsor/SponsorDAO.php">
-      <metrics loc="19" ncloc="19" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="21" ncloc="21" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/sponsor/SponsorService.php">
       <class name="App\application\sponsor\SponsorService" namespace="global">
-        <metrics complexity="6" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="13" elements="18" coveredelements="18"/>
+        <metrics complexity="14" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="32" elements="40" coveredelements="40"/>
       </class>
-      <line num="13" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="5"/>
-      <line num="14" type="stmt" count="5"/>
-      <line num="15" type="stmt" count="5"/>
-      <line num="18" type="method" name="getPersonFamily" visibility="public" complexity="1" crap="1" count="1"/>
-      <line num="19" type="stmt" count="1"/>
-      <line num="22" type="method" name="getSponsorById" visibility="public" complexity="2" crap="2" count="2"/>
-      <line num="23" type="stmt" count="2"/>
+      <line num="15" type="method" name="__construct" visibility="public" complexity="1" crap="1" count="13"/>
+      <line num="16" type="stmt" count="13"/>
+      <line num="17" type="stmt" count="13"/>
+      <line num="20" type="method" name="getPersonFamily" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="21" type="stmt" count="1"/>
+      <line num="24" type="method" name="getSponsorById" visibility="public" complexity="2" crap="2" count="2"/>
       <line num="25" type="stmt" count="2"/>
-      <line num="26" type="stmt" count="1"/>
-      <line num="29" type="stmt" count="1"/>
-      <line num="30" type="stmt" count="1"/>
+      <line num="27" type="stmt" count="2"/>
+      <line num="28" type="stmt" count="1"/>
       <line num="31" type="stmt" count="1"/>
       <line num="32" type="stmt" count="1"/>
       <line num="33" type="stmt" count="1"/>
-      <line num="36" type="method" name="removeSponsor" visibility="public" complexity="1" crap="1" count="1"/>
-      <line num="37" type="stmt" count="1"/>
-      <line num="40" type="method" name="addSponsor" visibility="public" complexity="1" crap="1" count="1"/>
-      <line num="41" type="stmt" count="1"/>
-      <metrics loc="44" ncloc="44" classes="1" methods="5" coveredmethods="5" conditionals="0" coveredconditionals="0" statements="13" coveredstatements="13" elements="18" coveredelements="18"/>
+      <line num="34" type="stmt" count="1"/>
+      <line num="35" type="stmt" count="1"/>
+      <line num="38" type="method" name="removeSponsor" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="39" type="stmt" count="1"/>
+      <line num="42" type="method" name="addSponsor" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="43" type="stmt" count="1"/>
+      <line num="46" type="method" name="getSponsor" visibility="public" complexity="1" crap="1" count="1"/>
+      <line num="47" type="stmt" count="1"/>
+      <line num="50" type="method" name="createSponsor" visibility="public" complexity="3" crap="3" count="3"/>
+      <line num="52" type="stmt" count="3"/>
+      <line num="53" type="stmt" count="3"/>
+      <line num="55" type="stmt" count="3"/>
+      <line num="57" type="stmt" count="3"/>
+      <line num="58" type="stmt" count="1"/>
+      <line num="61" type="stmt" count="2"/>
+      <line num="62" type="stmt" count="1"/>
+      <line num="64" type="stmt" count="1"/>
+      <line num="67" type="stmt" count="2"/>
+      <line num="70" type="method" name="updateSponsor" visibility="public" complexity="4" crap="4" count="4"/>
+      <line num="72" type="stmt" count="4"/>
+      <line num="74" type="stmt" count="4"/>
+      <line num="75" type="stmt" count="2"/>
+      <line num="78" type="stmt" count="2"/>
+      <line num="79" type="stmt" count="2"/>
+      <line num="81" type="stmt" count="2"/>
+      <line num="82" type="stmt" count="1"/>
+      <line num="84" type="stmt" count="1"/>
+      <line num="87" type="stmt" count="2"/>
+      <metrics loc="91" ncloc="91" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="32" elements="40" coveredelements="40"/>
     </file>
-    <metrics files="33" loc="1289" ncloc="1289" classes="23" methods="70" coveredmethods="70" conditionals="0" coveredconditionals="0" statements="421" coveredstatements="414" elements="491" coveredelements="484"/>
+    <metrics files="33" loc="1340" ncloc="1340" classes="23" methods="73" coveredmethods="73" conditionals="0" coveredconditionals="0" statements="440" coveredstatements="433" elements="513" coveredelements="506"/>
   </project>
 </coverage>
