@@ -1,8 +1,8 @@
-<div class="form__element">
+<div class="form__element {{ classes }}">
 
     <label class="form__element-label" for="{{ slug }}">{{ title }}</label>
 
-    <input class="form__element-input form__element-input-{{ type }}"
+    <input class="form__element-input form__element-input-{{ type }} {{ classes }}"
            type="{{ type }}"
            name="{{ slug }}"
            id="{{ slug }}"

@@ -50,6 +50,8 @@ abstract class Sponsor {
 
 	abstract public function getType(): string;
 
+	abstract public function getTypeId(): int;
+
 	abstract public function getDescriptionTitle(): string;
 
 	abstract public function getDescription(): string;

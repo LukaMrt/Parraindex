@@ -4,80 +4,98 @@ namespace unit\application\contact;
 
 use App\application\contact\ContactDAO;
 use App\application\contact\ContactService;
-use App\application\redirect\Redirect;
+use App\application\contact\executor\ContactExecutor;
+use App\application\contact\executor\ContactExecutors;
 use App\model\contact\Contact;
 use App\model\contact\ContactType;
+use App\model\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
 class ContactServiceTest extends TestCase {
 
-	const VALID_ARRAY = array(
-		'firstname' => 'test',
-		'lastname' => 'test',
-		'email' => 'test@email.com',
-		'type' => '7',
-		'description' => 'testDescription'
-	);
-
-	private ContactService $contactService;
-	private Redirect $redirect;
+	private ContactExecutors $contactExecutors;
+	private ContactExecutor $contactExecutor;
 	private ContactDAO $contactDAO;
 
+	private ContactService $contactService;
+
 	public function setUp(): void {
+		$this->contactExecutors = $this->createMock(ContactExecutors::class);
+		$this->contactExecutor = $this->createMock(ContactExecutor::class);
 		$this->contactDAO = $this->createMock(ContactDAO::class);
-		$this->redirect = $this->createMock(Redirect::class);
-		$this->contactService = new ContactService($this->contactDAO, $this->redirect);
+		$this->contactService = new ContactService($this->contactExecutors, $this->contactDAO);
 	}
 
-	public function testRegistercontactDetectsMissingFields(): void {
+	public function testRegistercontactReturnsErrorWhenTypeIsMissing(): void {
+		$this->contactExecutors->method('getExecutorsById')
+			->with(-1)
+			->willReturn(array());
 
-		$return = $this->contactService->registerContact(array());
+		$result = $this->contactService->registerContact(array());
 
-		$this->assertEquals('Le prénom doit contenir au moins 1 caractère<br>'
-			. 'Le nom doit contenir au moins 1 caractère<br>Le type doit être valide<br>'
-			. 'L\'email doit être valide<br>La description doit contenir au moins 1 caractère', $return);
+		$this->assertEquals('Le type de contact n\'est pas valide.', $result);
 	}
 
-	public function testRegistercontactDetectsInvalidFields(): void {
+	public function testRegistercontactReturnsErrorWhenTypeIsNotValid(): void {
 
-		$return = $this->contactService->registerContact(array(
-			'firstname' => 'test',
-			'lastname' => 'test',
-			'email' => 'test',
-			'type' => '0',
-			'description' => ''
-		));
+		$this->contactExecutors->method('getExecutorsById')
+			->with(12345678)
+			->willReturn(array());
 
-		$this->assertEquals('L\'email doit être valide<br>La description doit contenir au moins 1 caractère', $return);
+		$result = $this->contactService->registerContact(array('type' => '12345678'));
+		$this->assertEquals('Le type de contact n\'est pas valide.', $result);
 	}
 
-	public function testRegistercontactSavesContact(): void {
+	public function testRegistercontactReturnsErrorWhenExecutorReturnsAnError(): void {
 
-		$contact = new Contact("test test", "test@email.com", ContactType::BUG, "testDescription");
+		$this->contactExecutors->method('getExecutorsById')
+			->with(1)
+			->willReturn([1 => $this->contactExecutor]);
+
+		$this->contactExecutor->method('execute')
+			->with(array('type' => '1'))
+			->willReturn('Une erreur est survenue.');
+
+		$result = $this->contactService->registerContact(array('type' => '1'));
+
+		$this->assertEquals('Une erreur est survenue.', $result);
+	}
+
+	public function testRegistercontactReturnsNothingWhenExecutorReturnsNothing(): void {
+
+		$this->contactExecutors->method('getExecutorsById')
+			->with(1)
+			->willReturn(array($this->contactExecutor));
+
+		$this->contactExecutor->method('execute')
+			->with(array('type' => '1'))
+			->willReturn('');
+
+		$result = $this->contactService->registerContact(array('type' => '1'));
+
+		$this->assertEquals('', $result);
+	}
+
+	public function testClosecontactCallsClosecontactOnDAO(): void {
 
 		$this->contactDAO->expects($this->once())
-			->method('saveContact')
-			->with($contact);
+			->method('closeContact')
+			->with(1, 1);
 
-		$this->contactService->registerContact(self::VALID_ARRAY);
+		$this->contactService->closeContact(1, 1);
 	}
 
-	public function testRegistercontactReturnsNothingOnSuccess(): void {
+	public function testGetcontactReturnsWantendContact(): void {
 
-		$return = $this->contactService->registerContact(self::VALID_ARRAY);
+		$contact = new DefaultContact(1, '', '', ContactType::OTHER, '');
+		$contact2 = new DefaultContact(2, '', '', ContactType::OTHER, '');
 
-		$this->assertEmpty($return);
-	}
+		$this->contactDAO->method('getContactList')
+			->willReturn([$contact, $contact2]);
 
-	public function testRegistercontactRedirectsToHomePageOnlyOnSuccess(): void {
+		$result = $this->contactService->getContact(2);
 
-		$this->redirect->expects($this->once())
-			->method('redirect')
-			->with('home');
-
-		$this->contactService->registerContact(self::VALID_ARRAY);
-
-		$this->contactService->registerContact(array());
+		$this->assertEquals($contact2, $result);
 	}
 
 }

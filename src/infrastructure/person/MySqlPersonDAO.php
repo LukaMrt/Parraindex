@@ -76,7 +76,7 @@ class MySqlPersonDAO implements PersonDAO {
 		foreach ($promotionBuffer as $row) {
 			$degree = new Degree($row->id_degree, $row->degree_name, $row->level, $row->total_ects, $row->duration, $row->official);
 			$school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
-			$promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->description);
+			$promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->desc_promotion);
 			$builder->addPromotion($promotion);
 			$startYear = min($startYear, $row->year);
 		}
@@ -140,9 +140,15 @@ class MySqlPersonDAO implements PersonDAO {
 			$buffer[] = $row;
 		}
 
+		$person = null;
+
+		if (count($buffer) > 0) {
+			$person = $this->buildPerson($buffer);
+		}
+
 		$query->closeCursor();
 		$connection = null;
-		return $this->buildPerson($buffer);
+		return $person;
 	}
 
 	public function updatePerson(Person $person) {
@@ -202,6 +208,54 @@ class MySqlPersonDAO implements PersonDAO {
 		$query->closeCursor();
 		$connection = null;
 		return $this->buildPerson($buffer);
+	}
+
+	public function addPerson(Person $person): void {
+
+		$connection = $this->databaseConnection->getDatabase();
+		$query = $connection->prepare("INSERT INTO Person (first_name, last_name, biography) VALUES (:firstName, :lastName, :biography)");
+
+		$query->execute([
+			'firstName' => $person->getFirstName(),
+			'lastName' => $person->getLastName(),
+			'biography' => $person->getBiography()
+		]);
+
+		$idPerson = $connection->lastInsertId();
+
+		$query = $connection->prepare("SELECT id_promotion FROM Promotion WHERE year = :start_year AND desc_promotion = 'Première année'");
+		$query->execute(['start_year' => $person->getStartYear()]);
+
+		if ($row = $query->fetch()) {
+			$id_promotion = $row->id_promotion;
+		} else {
+			$query = $connection->prepare("INSERT INTO Promotion (year, id_degree, id_school, desc_promotion, speciality) VALUES (:start_year, (SELECT id_degree FROM Degree WHERE degree_name = :degree_name), (SELECT id_school FROM School WHERE school_name = 'IUT Lyon 1'), 'Première année', 'Informatique')");
+			$query->execute([
+				'start_year' => $person->getStartYear(),
+				'degree_name' => $person->getStartYear() < 2021 ? 'DUT' : 'BUT'
+			]);
+			$id_promotion = $connection->lastInsertId();
+		}
+
+		$query = $connection->prepare("INSERT INTO Student (id_person, id_promotion) VALUES (:id_person, :id_promotion)");
+
+		$query->execute([
+			'id_person' => $idPerson,
+			'id_promotion' => $id_promotion
+		]);
+
+		$query->closeCursor();
+		$connection = null;
+	}
+
+	public function removePerson(int $id) {
+
+		$connection = $this->databaseConnection->getDatabase();
+		$query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
+		$query->execute(['id' => $id]);
+
+		$query->closeCursor();
+		$connection = null;
 	}
 
 }

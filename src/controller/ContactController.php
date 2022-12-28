@@ -17,27 +17,27 @@ class ContactController extends Controller {
 		$this->contactService = $contactService;
 	}
 
-	public function post(Router $router, array $parameters): void {
-
-		$postParameters = [
-			'firstname' => $_POST['firstname'],
-			'lastname' => $_POST['lastname'],
-			'email' => $_POST['email'],
-			'type' => $_POST['type'],
-			'description' => $_POST['description'],
-		];
-
-		$error = $this->contactService->registerContact($postParameters);
-
-		$this->get($router, ['error' => $error]);
-	}
-
 	public function get(Router $router, array $parameters): void {
+
+		$people = $this->personService->getAllPeople();
+		usort($people, fn($a, $b) => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
+		$closure = fn($person) => ['id' => $person->getId(), 'title' => $person->getLastName() . ' ' . $person->getFirstName()];
+		$people = array_map($closure, $people);
 
 		$this->render('contact.twig', [
 			'options' => ContactType::getValues(),
-			'error' => $parameters['error'] ?? ''
+			'sponsorTypes' => [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur']],
+			'people' => $people,
+			'error' => $parameters['error'] ?? [],
 		]);
+	}
+
+	public function post(Router $router, array $parameters): void {
+
+		// TODO : create new array with htmlspecialchars
+		$error = $this->contactService->registerContact($_POST);
+
+		$this->get($router, ['error' => $error]);
 	}
 
 }

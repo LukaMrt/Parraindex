@@ -3,7 +3,6 @@
 namespace App\model\sponsor;
 
 use App\model\person\Person;
-use DateTime;
 
 class ClassicSponsor extends Sponsor {
 
@@ -28,6 +27,10 @@ class ClassicSponsor extends Sponsor {
 
 	public function getIcon(): string {
 		return 'hammers.svg';
+	}
+
+	public function getTypeId(): int {
+		return 0;
 	}
 
 }

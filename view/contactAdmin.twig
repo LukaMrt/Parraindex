@@ -1,0 +1,70 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('contactAdmin.css') %}
+{% set title = 'Parraindex - Contact' %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block content %}
+
+    <h1>Liste des demandes de contact</h1>
+
+    <div class="contacts">
+
+        {% for contact in contacts %}
+
+            <div class="contact">
+                <p class="contact__type">{{ contact.type }}</p>
+                <p>de {{ contact.contacterName }}</p>
+                <p class="contact__author"><a
+                            href="mailto:{{ contact.contacterEmail }}">{{ contact.contacterEmail }}</a></p>
+                <p class="contact__message"><span class="contact--bold">Remarques :</span> {{ contact.message | raw }}
+                </p>
+
+                {% for line in contact.description %}
+                    <p><span class="contact--bold">{{ line[0] }} :</span> {{ line[1] }}</p>
+                {% endfor %}
+
+                <div class="contact__actions">
+
+                    {% if contact.typeId == 0 or contact.typeId == 3 %}
+                        <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}">
+                            <button class="contact__actions-button contact__actions-button--green">Créer
+                            </button>
+                        </a>
+                    {% endif %}
+
+                    {% if contact.typeId == 1 %}
+                        <a href="{{ router.url('editperson_get', {'id': contact.person.id}) }}">
+                            <button class="contact__actions-button contact__actions-button--yellow">Éditer
+                            </button>
+                        </a>
+                    {% endif %}
+
+                    {% if contact.typeId == 4 %}
+                        <a href="{{ router.url('contact_admin') }}">
+                            <button class="contact__actions-button contact__actions-button--yellow">Éditer
+                            </button>
+                        </a>
+                    {% endif %}
+
+                    {% if contact.typeId == 2 or contact.typeId == 5 %}
+                        <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}">
+                            <button class="contact__actions-button">Supprimer</button>
+                        </a>
+                    {% endif %}
+
+                    <a href="{{ router.url('contact_close', {'id': contact.id, 'resolve': 'false'}) }}">
+                        <button class="contact__actions-button">Clore</button>
+                    </a>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    </div>
+
+{% endblock %}

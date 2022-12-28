@@ -40,4 +40,12 @@ class PersonService {
 		return $this->personDAO->getPerson($identity);
 	}
 
+	public function addPerson(Person $person): void {
+		$this->personDAO->addPerson($person);
+	}
+
+	public function removePerson(int $id): void {
+		$this->personDAO->removePerson($id);
+	}
+
 }

@@ -1,8 +1,8 @@
-<div class="form__element">
+<div class="form__element {{ classes }}">
 
 	<label class="form__element-label" for="{{ slug }}">{{ title }}</label>
 
-	<select class="form__element-input form__element-input-select" name="{{ slug }}" id="{{ slug }}" required>
+	<select class="form__element-input form__element-input-select {{ classes }}" name="{{ slug }}" id="{{ slug }}" required>
 
 		{% for option in options %}
 

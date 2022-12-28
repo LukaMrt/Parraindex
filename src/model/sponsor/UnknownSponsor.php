@@ -26,4 +26,8 @@ class UnknownSponsor extends Sponsor {
 		return 'interogation.svg';
 	}
 
+	public function getTypeId(): int {
+		return 2;
+	}
+
 }

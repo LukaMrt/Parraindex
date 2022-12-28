@@ -2,34 +2,46 @@
 
 namespace App\model\contact;
 
-class Contact {
+abstract class Contact {
 
-	private string $name;
-	private string $email;
+	private int $id;
+	private string $contacterName;
+	private string $contacterEmail;
 	private ContactType $type;
 	private string $description;
 
-	public function __construct(string $name, string $email, ContactType $type, string $description) {
-		$this->name = $name;
-		$this->email = $email;
+	public function __construct(int $id, string $contacterName, string $contacterEmail, ContactType $type, string $description) {
+		$this->id = $id;
+		$this->contacterName = $contacterName;
+		$this->contacterEmail = $contacterEmail;
 		$this->type = $type;
 		$this->description = $description;
 	}
 
-	public function getName(): string {
-		return $this->name;
+	public function getId(): int {
+		return $this->id;
 	}
 
-	public function getEmail(): string {
-		return $this->email;
+	public function getContacterName(): string {
+		return $this->contacterName;
+	}
+
+	public function getContacterEmail(): string {
+		return $this->contacterEmail;
 	}
 
 	public function getType(): string {
 		return $this->type->toString();
 	}
 
-	public function getDescription(): string {
+	public function getMessage(): string {
 		return $this->description;
 	}
+
+	public function getTypeId(): int {
+		return $this->type->value;
+	}
+
+	public abstract function getDescription(): array;
 
 }

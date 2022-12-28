@@ -19,4 +19,8 @@ interface PersonDAO {
 
 	public function getPersonByLogin(string $login): ?Person;
 
+	public function addPerson(Person $person): void;
+
+	public function removePerson(int $id);
+
 }

@@ -4,6 +4,7 @@ namespace App\infrastructure\redirect;
 
 use App\application\redirect\Redirect;
 use App\infrastructure\router\Router;
+use JetBrains\PhpStorm\NoReturn;
 
 class HttpRedirect implements Redirect {
 
@@ -13,8 +14,9 @@ class HttpRedirect implements Redirect {
 		$this->router = $router;
 	}
 
-    public function redirect(string $url): void {
+    #[NoReturn] public function redirect(string $url): void {
 		header('Location: ' . $this->router->url($url));
+		die();
 	}
 
     public function delayedRedirect(string $url, int $secondsDelay): void {
