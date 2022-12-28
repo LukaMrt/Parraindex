@@ -60,7 +60,7 @@ class EditSponsorController extends Controller {
 
 		// TODO : create new array with htmlspecialchars
 		if ($sponsor === null) {
-			$this->sponsorService->createSponsor($parameters['id'], $_POST);
+			$this->sponsorService->createSponsor($_POST);
 		} else {
 			$this->sponsorService->updateSponsor($parameters['id'], $_POST);
 		}

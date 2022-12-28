@@ -47,7 +47,7 @@ class SponsorService {
 		return $this->sponsorDAO->getSponsorById($id);
 	}
 
-	public function createSponsor(mixed $id, array $parameters): void {
+	public function createSponsor(array $parameters): void {
 
 		$godFather = $this->personDAO->getPersonById($parameters['godFatherId']);
 		$godSon = $this->personDAO->getPersonById($parameters['godChildId']);
@@ -67,25 +67,21 @@ class SponsorService {
 		$this->sponsorDAO->addSponsor($sponsor);
 	}
 
-	public function updateSponsor(mixed $id, array $parameters) {
+	public function updateSponsor(int $id, array $parameters): void {
 
 		$sponsor = $this->sponsorDAO->getSponsorById($id);
 
-		if ($sponsor === null) {
+		if ($sponsor === null || $parameters['sponsorType'] === '2') {
 			return;
 		}
 
 		$godFather = $sponsor->getGodFather();
-		$godSon = $sponsor->getGodChild();
-
-		if ($parameters['sponsorType'] === '2') {
-			return;
-		}
+		$godChild = $sponsor->getGodChild();
 
 		if ($parameters['sponsorType'] === '0') {
-			$sponsor = new ClassicSponsor($id, $godFather, $godSon, $parameters['sponsorDate'], $parameters['description']);
+			$sponsor = new ClassicSponsor($id, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
 		} else {
-			$sponsor = new HeartSponsor($id, $godFather, $godSon, $parameters['sponsorDate'], $parameters['description']);
+			$sponsor = new HeartSponsor($id, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
 		}
 
 		$this->sponsorDAO->updateSponsor($sponsor);
