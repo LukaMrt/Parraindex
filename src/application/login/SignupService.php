@@ -44,8 +44,8 @@ class SignupService {
 			$account = new Account($person->getId(), $email, $person, new Password($password));
 			$token = $this->random->generate(10);
 			$this->accountDAO->createTemporaryAccount($account, $token);
-			$url = $this->urlUtils->getBaseUrl();
-			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url/signupConfirmation/$token\">$url/signupConfirmation/$token</a><br><br>Cordialement<br>Le Parrainboss");
+			$url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('signup_validation', ['token' => $token]);
+			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
 			$this->redirect->redirect('signup_confirmation');
 		}
 
@@ -140,8 +140,8 @@ class SignupService {
 
 
 		$token = $this->random->generate(10);
-		$url = $this->urlUtils->getBaseUrl() . '/resetpasswordValidation/' . $token;
-		$this->mailer->send($parameters['email'], 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
+		$url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('resetpassword_validation', ['token' => $token]);
+		$this->mailer->send($parameters['email'], 'Parraindex : réinitialisation de mot de passe', "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
 		$this->accountDAO->createResetpassword($account, $token);
 		$this->redirect->redirect('resetpassword_confirmation');
 		return '';

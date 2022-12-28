@@ -15,4 +15,11 @@ function updateDescriptionTitle(value) {
 	document.querySelector('#description-label').innerHTML = parseInt(value) === 0 ? 'Raison' : 'Description';
 }
 
+function remove(event) {
+	if (!confirm("Confirmez vous la suppression ?")) {
+		event.preventDefault();
+	}
+}
+
 document.querySelector('#sponsorType').addEventListener('change', (event) => updateDescriptionTitle(event.target.value));
+document.querySelector('.btn--danger').addEventListener('click', remove);

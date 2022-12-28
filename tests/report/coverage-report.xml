@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1672241417">
-  <project timestamp="1672241417">
+<coverage generated="1672246093">
+  <project timestamp="1672246093">
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/contact/ContactDAO.php">
       <metrics loc="28" ncloc="28" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
@@ -592,7 +592,7 @@
       <metrics loc="168" ncloc="168" classes="1" methods="7" coveredmethods="7" conditionals="0" coveredconditionals="0" statements="80" coveredstatements="80" elements="87" coveredelements="87"/>
     </file>
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/login/UrlUtils.php">
-      <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
+      <metrics loc="11" ncloc="11" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
     </file>
     <file name="/Users/lukamaret/Documents/Developpement/web/Parraindex/src/application/mail/Mailer.php">
       <metrics loc="9" ncloc="9" classes="0" methods="0" coveredmethods="0" conditionals="0" coveredconditionals="0" statements="0" coveredstatements="0" elements="0" coveredelements="0"/>
@@ -682,6 +682,6 @@
       <line num="87" type="stmt" count="2"/>
       <metrics loc="91" ncloc="91" classes="1" methods="8" coveredmethods="8" conditionals="0" coveredconditionals="0" statements="32" coveredstatements="32" elements="40" coveredelements="40"/>
     </file>
-    <metrics files="33" loc="1338" ncloc="1338" classes="23" methods="73" coveredmethods="73" conditionals="0" coveredconditionals="0" statements="440" coveredstatements="433" elements="513" coveredelements="506"/>
+    <metrics files="33" loc="1340" ncloc="1340" classes="23" methods="73" coveredmethods="73" conditionals="0" coveredconditionals="0" statements="440" coveredstatements="433" elements="513" coveredelements="506"/>
   </project>
 </coverage>

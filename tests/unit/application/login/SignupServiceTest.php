@@ -232,9 +232,13 @@ class SignupServiceTest extends TestCase {
 		$this->urlUtils->method('getBaseUrl')
 			->willReturn('http://localhost');
 
+		$this->urlUtils->method('buildUrl')
+			->with('signup_validation', ['token' => '1'])
+			->willReturn('/signup/validation/1');
+
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.testaaa@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signupConfirmation/1\">http://localhost/signupConfirmation/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.testaaa@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signup/validation/1\">http://localhost/signup/validation/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
 	}
@@ -317,6 +321,10 @@ class SignupServiceTest extends TestCase {
 		$this->urlUtils->method('getBaseUrl')
 			->willReturn('http://localhost');
 
+		$this->urlUtils->method('buildUrl')
+			->with('resetpassword_validation', ['token' => '1'])
+			->willReturn('/password/reset/1');
+
 		$this->random->method('generate')
 			->with(10)
 			->willReturn('1');
@@ -331,7 +339,7 @@ class SignupServiceTest extends TestCase {
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/resetpasswordValidation/1\">http://localhost/resetpasswordValidation/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : réinitialisation de mot de passe', "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/password/reset/1\">http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
 	}
