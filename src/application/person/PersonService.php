@@ -61,8 +61,8 @@ class PersonService {
         return $this->personDAO->createPerson($person);
     }
 
-    public function deletePerson(Person $person): bool {
-        return $this->personDAO->deletePerson($person);
+    public function deletePerson(Person $person): void {
+        $this->personDAO->deletePerson($person);
     }
 
 	public function addPerson(Person $person): void {

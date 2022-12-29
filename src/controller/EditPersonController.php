@@ -9,7 +9,6 @@ use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
 use App\model\person\PersonBuilder;
 use Twig\Environment;
-use Exception;
 
 class EditPersonController extends Controller {
 
@@ -65,228 +64,293 @@ class EditPersonController extends Controller {
 
 	public function post(Router $router, array $parameters): void {
 
-        $error = "";
-
-        if ($parameters['id'] === "0") {
-            $person = PersonBuilder::aPerson()->build();
-        }else{
-            $person = $this->personService->getPersonById($parameters['id']);
-
-            if ($person === null) {
-                header('Location: ' . $router->url('error', ['error' => 404]));
-                die();
-            }
-        }
-
-        // throw error if user is not logged in
-        if (empty($_SESSION)) {
-            header('Location: ' . $router->url('error', ['error' => 403]));
-            die();
-        }
-
-        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
-
-        // throw error if user is not admin or the person to edit is not the user
-        if ( !$isAdmin && $_SESSION['user']->getId() !== $person->getId()) {
-            header('Location: ' . $router->url('error', ['error' => 403]));
-            die();
-        }
-
-		$data = [
-            'id' => $parameters['id'],
-			'first_name' => $person->getFirstName(),
-			'last_name' => $person->getLastName(),
-            'picture' => $person->getPicture(),
-            'color' => $person->getColor()
-		];
-
-        // --- Check if biography and description are set --- //
-
-        $data['biography'] = $_POST['person-bio'] ?? null;
-        $data['description'] = $_POST['person-desc'] ?? null;
-
-        if (!isset($data['biography'], $data['description'])){
-            $error .=  "<li> Les champs <strong>biographie</strong> et <strong>description</strong> sont indisponibles <br>";
-        }
-        
-        // --- Check if color is set and valid --- //
-
-        if (isset($_POST['banner-color']) && preg_match('/^#[a-f0-9]{6}$/i', $_POST['banner-color'])){
-            $data['color'] = $_POST['banner-color'];
-        }else {
-            $error .=  "<li> La couleur doit être au format <strong>exadecimal</strong> <br>";
-        }
-
-        // --- Check if first and last name are set and the user is admin --- //
-
-        if ($isAdmin){
-            $data['first_name'] = $_POST['person-firstname'] ?? "";
-            $data['last_name'] = $_POST['person-lastname'] ?? "";
-
-            if ($data['first_name'] === "" || $data['last_name'] === ""){
-                $error .=  "<li> Le <strong>nom</strong> et le <strong>prénom</strong> ne peuvent pas être vide <br>";
-            }
-        }
-    
-        // --- Check if picture is set and valid --- //
-
-        $picture = $_FILES['person-picture'] ?? null;
-        if (isset($picture) && $picture['tmp_name'] !== "") {
-
-            $imgPath = "img/pictures/";
-            $extensions = array(IMAGETYPE_GIF, IMAGETYPE_JPEG, IMAGETYPE_PNG);
-            
-            if (!in_array(exif_imagetype($picture['tmp_name']) , $extensions)){
-                $error .= "<li> Le fichier n'est pas une image prise en charge <br>";
-
-            }else if ($picture['size']>5_000 * 1024){
-                $error .= "<li> Le fichier est trop volumineux, il doit faire moins de <strong>5Mo</strong> <br>";
-            }
-
-            else{
-                $oldPicture = $person->getPicture();
-                $newPicture = $parameters['id'] . "." . pathinfo($picture['name'], PATHINFO_EXTENSION);
-    
-                if ($person->getPicture() != "no-picture.svg" && file_exists($imgPath . $oldPicture)) {
-                    unlink($imgPath . $oldPicture);
-                }
-    
-                move_uploaded_file($picture['tmp_name'], $imgPath . $newPicture);
-                
-                $data['picture'] = $newPicture;
-                $person->setPicture($newPicture);
-            }
-        }
-
-        // --- Create person if id is 0 --- //
-
-        if ($parameters['id'] === "0")
-            $personId = $this->personService->createPerson($data);
-        else
-            $personId = $parameters['id'];
-
-
-        $characteristics = $this->characteristicTypeService->getAllCharacteristicAndValues($person);
-
-        // --- Check if characteristics are set and valid --- //
-
-        foreach ($characteristics as $characteristic) {
-
-            $fieldTitle = "characteristic-" . $characteristic->getTitle();
-            $fieldVisibility = "characteristic-visibility-" . $characteristic->getTitle();
-
-            if (!isset($_POST[$fieldTitle])) {
-                $error .= "<li> Le champ <strong>" . $characteristic->getTitle() . "</strong> n'est pas disponible <br>";
-            }
-
-            if ($error){
-                continue;
-            }
-            
-            $NewValue = $_POST[$fieldTitle];
-            $NewVisibility= isset($_POST[$fieldVisibility]);
-
-            if ($NewValue !== $characteristic->getValue() || $NewVisibility !== $characteristic->getVisible()) {
-                // an update is needed
-
-                $exist = $characteristic->getValue() !== null;
-                
-                $characteristic->setValue($NewValue);
-                $characteristic->setVisible($NewVisibility);
-
-                //update the characteristic in the person
-                foreach ($person->getCharacteristics() as $characteristicPerson) {
-                    if ($characteristicPerson->getTitle() === $characteristic->getTitle()) {
-                        $characteristicPerson->setValue($characteristic->getValue());
-                        $characteristicPerson->setVisible($characteristic->getVisible());
-                    }
-                }
-                
-                if($exist) 
-                    $this->characteristicService->updateCharacteristic($personId, $characteristic);
-                else if ($characteristic->getValue() !== "")
-                    $this->characteristicService->createCharacteristic( $personId, $characteristic);
-            }
-        }
-
-        $success = "";
-
-        if (!$error) {
-            $this->personService->updatePerson($data);
-            
-            if ($parameters['id'] === "0"){
-                $success = $data['first_name'] . " <strong>" . strtoupper($data['last_name']) . "</strong> à correctement été ajouté <br>";
-                $success .= "<a href='/person/" . $personId . "'> Cliquez <strong>ici</strong> pour voir la fiche</a><br>";
-
-                $person = PersonBuilder::aPerson()->build();
-            }else{
-                $success = "Modifications enregistrées";
-            }
-        } else {
-            $error = "Les modifications n'ont pas été enregistrées : <br>" . $error;
-        }
-       
-		$this->render('editperson.twig', [
-            'success' => $success,
-            'error' => $error,
-            'person' => $person,
-            'characteristics' => $characteristics,
-            'admin' => $isAdmin
-        ]);
-	}
-
-    public function delete(Router $router, array $parameters): void {
-
-        header('content-type: application/json');
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
 
         $response = [
-            'success' => false,
+            'code' => 200,
             'redirect' => false,
             'redirectDelay' => 0,
             'messages' => []
         ];
 
         if (empty($_SESSION)) {
-            http_response_code(401);
+            $response['code'] = 401;
+            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour ajouter une personne";
+            echo json_encode($data["person-desc"]);
+            exit(0);
+        }
+
+        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+        if (!$isAdmin) {
+            $response['code'] = 403;
+            $response['messages'][] = "Vous n'avez pas les droits pour créer une personne";
+            echo json_encode($response);
+            exit(0);
+        }
+
+        $newValues = $this->getFormValues($data, $response, $isAdmin);
+        $newCharacteristics = $this->getFormCaracteristics($data, $response);
+        
+        if ($response['code'] === 200) {
+            
+            if ($newValues['image']){
+                $imgPath = "img/pictures/";
+                file_put_contents($imgPath . $newValues['picture'], $newValues['image']);
+            }
+
+            $idPerson = $this->personService->createPerson($newValues);
+
+            foreach ($newCharacteristics as $characteristic) {
+                if ($characteristic->getValue() !== "") {
+                    $this->characteristicService->createCharacteristic($idPerson, $characteristic);
+                }
+            }
+
+            $response['messages'][] = "La personne a bien été créée à l'id " . $idPerson;
+        }
+
+        echo json_encode($response);
+
+	}
+
+    public function put(Router $router, array $parameters): void  {
+
+        $json = file_get_contents('php://input');
+        $data = json_decode($json, true);
+        
+        $response = [
+            'code' => 200,
+            'redirect' => false,
+            'redirectDelay' => 0,
+            'messages' => []
+        ];
+
+        if (empty($_SESSION)) {
+            $response['code'] = 401;
+            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour modifier une personne";
+            echo json_encode($data["person-desc"]);
+            exit(0);
+        }
+
+        $person = $this->personService->getPersonById($parameters['id']);
+        if ($person === null) {
+            $response['code'] = 404;
+            $response['messages'][] = "La personne n'existe pas";
+            echo json_encode($response);
+            exit(0);
+        }
+
+        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+        if ( !$isAdmin && $_SESSION['user']->getId() !== $person->getId()) {
+            $response['code'] = 403;
+            $response['messages'][] = "Vous n'avez pas les droits pour modifier cette personne";
+            echo json_encode($response);
+            exit(0);
+        }
+
+        $newValues = $this->getFormValues($data, $response, $isAdmin, $person);
+        $newValues['id'] = $person->getId();
+
+        $newCharacteristics = $this->getFormCaracteristics($data, $response);
+
+        if ($response['code'] === 200) {
+
+            if ($newValues['image']){
+
+                $imgPath = "img/pictures/";
+                if ($person->getPicture() != "no-picture.svg" && file_exists($imgPath . $person->getPicture())) {
+                    unlink($imgPath . $person->getPicture());
+                }
+
+                file_put_contents($imgPath . $newValues['picture'], $newValues['image']);
+            }else {
+                $newValues['picture'] = $person->getPicture();
+            }
+
+            $this->personService->updatePerson($newValues);
+
+            $characteristicPerson = $this->characteristicTypeService->getAllCharacteristicAndValues($person);
+
+            foreach ($newCharacteristics as $characteristic) {
+
+                $lastCharacteristic = array_filter($characteristicPerson, function($c) use ($characteristic) {
+                    return $c->getId() === $characteristic->getId();
+                });
+
+                $lastValue = array_shift($lastCharacteristic);
+                
+                if($lastValue !== null)
+                    $this->characteristicService->updateCharacteristic($person->getId(), $characteristic);
+                else if ($characteristic->getValue() !== "")
+                    $this->characteristicService->createCharacteristic($person->getId(), $characteristic);
+
+            }
+        }
+
+        echo json_encode($response);
+    }
+
+    public function delete(Router $router, array $parameters): void {
+
+        header('content-type: application/json');
+
+        $response = [
+            'code' => 200,
+            'redirect' => false,
+            'redirectDelay' => 0,
+            'messages' => []
+        ];
+
+        if (empty($_SESSION)) {
+            $response['code'] = 401;
             $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour supprimer une personne";
             echo json_encode($response);
             exit(0);
         }
         
         $person = $this->personService->getPersonById($parameters['id']);
-
         if ($person === null) {
-            http_response_code(404);
+            $response['code'] = 404;
             $response['messages'][] = "La personne n°" . $parameters['id'] . " n'existe pas";
             echo json_encode($response);
             exit(0);
         }
 
         $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
-        
         if (!$isAdmin) {
-            http_response_code(403);
+            $response['code'] = 403;
             $response['messages'][] = "Vous devez être Administrateur pour supprimer une personne";
             echo json_encode($response);
             exit(0);
         }
 
-        $suppress = $this->personService->deletePerson($person);
-
-        if ($suppress) {
-            http_response_code(200);
-            $response['success'] = true;
-            $response['redirect'] = $router->url('tree');
-            $response['redirectDelay'] = 5000;
-
-            $response['messages'][] = "La personne " . $person->getFirstName() . " ". strtoupper($person->getLastName()) . " à correctement été supprimée";
-            $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans ". $response['redirectDelay']/1000 . "s";
-
-            echo json_encode($response);
-            exit(0);
+        $imgPath = "img/pictures/";
+        $img = $person->getPicture();
+        if ($img !== "no-picture.svg" && file_exists($imgPath . $img)) {
+            unlink($imgPath . $img);
         }
 
-        http_response_code(500);
+        $this->personService->deletePerson($person);
+
+        $response['redirect'] = $router->url('tree');
+        $response['redirectDelay'] = 5000;
+
+        $response['messages'][] = "La personne " . $person->getFirstName() . " ". strtoupper($person->getLastName()) . " à correctement été supprimée";
+        $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans ". $response['redirectDelay']/1000 . "s";
+
+        echo json_encode($response);
         exit(0);
+    }
+
+    private function getFormValues($data, array &$response, bool $isAdmin) : array {
+
+        $newData = [];
+
+        $newData['biography'] = $data['person-bio'] ?? null;
+        $newData['description'] = $data['person-desc'] ?? null;
+
+        if (!isset($newData['biography'], $newData['description'])){
+            $response['messages'][] = "Les champs biographie et description sont indisponibles";
+            $response['code'] = 400;
+        }
+
+        $newData['color'] = $data['banner-color'] ?? null;
+
+        if(!isset($newData['color'])){
+            $response['messages'][] = "La couleur de la bannière est indisponible";
+            $response['code'] = 400;
+        }else if (!preg_match('/^#[a-f0-9]{6}$/i', $newData['color'])){
+            $response['messages'][] = "La couleur doit être au format exadecimal";
+            $response['code'] = 400;
+        }
+    
+        // the picture in base64
+        $newData['image'] = null ;
+
+        // the picture name
+        $newData['picture'] = null;
+
+        $encodedPictureData = $data['person-picture'] ?? null;
+        
+        if ($encodedPictureData === null){
+            $response['messages'][] = "La photo est indisponible";
+            $response['code'] = 400;
+        }
+
+        else if (!empty($encodedPictureData)){
+
+            // regex to get the base64 encoded picture without the data:image/...;base64 
+            $encodedPicture = preg_replace('/^data:image\/\w+;base64,/', '', $encodedPictureData);
+
+            $extensions = [
+                'image/jpeg' => 'jpg',
+                'image/jpg' => 'jpg',
+                'image/png' => 'png',
+                'image/gif' => 'gif'
+            ];
+
+            $picture = base64_decode($encodedPicture);
+
+            if ($picture === false){
+                $response['messages'][] = "La photo n'est pas correctement encodée";
+                $response['code'] = 400;
+
+            }else {
+                $file = finfo_open();
+                $mime_type = finfo_buffer($file, $picture, FILEINFO_MIME_TYPE);
+
+                if (!array_key_exists($mime_type, $extensions)){
+                    $response['messages'][] = "Le format de la photo n'est pas supporté";
+                    $response['code'] = 400;
+
+                }else{
+                    $newData['image'] = $picture;
+                    $newData['picture'] =  uniqid() . "." . $extensions[$mime_type];
+                }
+            }   
+        }
+
+        if ($isAdmin){
+            
+            $newData['first_name'] = $data['person-firstname'] ?? null;
+            $newData['last_name'] = $data['person-lastname'] ?? null;
+            
+            if (!isset($newData['first_name'], $newData['last_name'])){
+            
+                $response['messages'][] = "Les champs prénom et nom sont indisponibles";
+                $response['code'] = 400;
+                
+            }else if ($newData['first_name'] === "" || $newData['last_name'] === ""){
+                $response['messages'][] = "Les champs prénom et nom ne peuvent pas être vides";
+                $response['code'] = 400;
+            }
+        }
+
+        return $newData;
+    }
+
+    private function getFormCaracteristics($data, array &$response) : array {
+
+        $newCaracteristics = [];
+
+        $characteristics = $this->characteristicTypeService->getAllCharacteristicTypes();
+
+        foreach ($characteristics as $characteristic) {
+
+            $fieldTitle = "characteristic-" . $characteristic->getTitle();
+            $fieldVisibility = "characteristic-visibility-" . $characteristic->getTitle();
+
+            if (!isset($data[$fieldTitle])) {
+                $response['messages'][] = "Le champ " . $characteristic->getTitle() . " n'est pas disponible";
+                $response['code'] = 400;
+            }else{
+                $characteristic->setValue($data[$fieldTitle]);
+                $characteristic->setVisible(isset($data[$fieldVisibility]));
+                $newCaracteristics[] = $characteristic;
+            }
+
+        }
+        return $newCaracteristics;
     }
 }

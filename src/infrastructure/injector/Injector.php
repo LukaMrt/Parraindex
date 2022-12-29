@@ -134,6 +134,7 @@ class Injector {
 		$this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
 		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/', $this->container->get(ContactCloseController::class), 'contact_close');
 		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
+		$this->router->registerRoute('PUT', '/editperson/[i:id]', $this->container->get(EditPersonController::class), 'editperson_put');
 		$this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
 		$this->router->registerRoute('GET', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_get');
 		$this->router->registerRoute('POST', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_post');

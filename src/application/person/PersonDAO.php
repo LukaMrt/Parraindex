@@ -17,7 +17,7 @@ interface PersonDAO {
 
 	public function createPerson(Person $person): int;
 
-	public function deletePerson(Person $person) : bool;
+	public function deletePerson(Person $person) : void;
 
 	public function getAllIdentities(): array;
 

@@ -243,7 +243,7 @@ class MySqlPersonDAO implements PersonDAO {
 		return $id;
 	}
 
-    public function deletePerson(Person $person): bool {
+    public function deletePerson(Person $person): void {
         
 		$connection = $this->databaseConnection->getDatabase();
 
@@ -251,8 +251,6 @@ class MySqlPersonDAO implements PersonDAO {
 		$query->execute(['id' => $person->getId()]);
 		$row = $query->rowCount();
 		$query->closeCursor();
-		
-		return $row === 1;
     }
 	public function addPerson(Person $person): void {
 
