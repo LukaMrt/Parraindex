@@ -1,119 +1,95 @@
-# templategp-agile-sae-s3
+# Parraindex
+
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-Template de base pour gérer (en mode SCRUM-light) les SAE du s3 avec GitLab 🦊
+[![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
+[![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 
-![bannière](.ressources/SAE-s3-logo-bleu.png)
+![GitHub language count](https://img.shields.io/github/languages/count/lukamrt/parraindex)
+![GitHub](https://img.shields.io/github/license/lukamrt/parraindex)
 
-##  1. <a name='Tabledesmatires'></a> Table des matières
-<!-- vscode-markdown-toc -->
-* 1. [ Table des matières](#Tabledesmatires)
-* 2. [Pourquoi ce dépôt ?](#Pourquoicedpt)
-* 3. [Que propose ce dépôt ?](#Queproposecedpt)
-	* 3.1. [Les labels](#Leslabels)
-	* 3.2. [Les Jalons](#Lesjalons)
-	* 3.3. [Le Board](#LeBoard)
-	* 3.4. [Les branches](#Lesbranches)
-	* 3.5. [Modèles pour les issues et les merges requests](#Modlespourlesissuesetlesmergesrequests)
-* 4. [Comment utiliser ce dépôt ?](#Commentutilisercedpt)
-* 5. [Licence](#Licence)
-* 6. [Auteur](#Auteur)
+## About the project
 
-<!-- vscode-markdown-toc-config
-	numbering=true
-	autoSave=true
-	/vscode-markdown-toc-config -->
-<!-- /vscode-markdown-toc -->
+a
 
-##  2. <a name='Pourquoicedpt'></a>Pourquoi ce dépôt ?
+This project is a school project made for the third semester of the Bachelor's degree in Computer Science at the
+University of Lyon 1. The objective of this project is to create a web application with a visual interface and
+an administration interface used to manage the application.
 
-Ce dépot à pour objectif de fournir un outil de démarrage rapide pour organiser et gérer de façon agile un nouveau projet avec GitLab, notamment pour la SAE du s3.
+We decided to create a website which presents the relationship existing between students of the Institute of
+Technology. There are many sponsor relationships between students, and we wanted to create a website that would
+allow students to see all the links between people.
 
-Partant du constat que le démarrage d'un projet est un processus long et complexe, on fournit ici un outil simple pour lancer un projet avec GitLab, que vous pourrez réutiiser et adapter au fil du temps avec votre propre affinité de GiLab.
+## Built with
 
-##  3. <a name='Queproposecedpt'></a>Que propose ce dépôt ?
+The school imposed to not use any framework, so we decided to use the following technologies to create the website:
 
-Ce dépôt fournit un ensemble de modèles, de fichiers et de paramétrages pour vous faciliter le démarrage d'un projet avec GitLab, que vous pouvez modifier à volonté.
-Vous trouverez les éléments suivants :
+* Twig for front-end
+* SCSS for styling
+* JavaScript for front-end interactions
+* PHP with some libraries for back-end
+* MariaDB for database
 
--   Ce fichier README.md
--   Des modèles pour les issues et les merge requests, et un modèle pour la réunion en séance avec le tuteur-SAE 
--   Une collection de labels
--   Une liste de jalons (_milestones_) correspondant aux dates des séances de SAE avec le tuteur
--   Un modèle de Board
--   3 Branches spécifiques à la SAE :
-    -   Main
-    -   Pré-Démonstration
-    -   Démonstration
+## Installation
 
-(Dans un cadre professionnel, ces 2 dernières branches s'appellent _pré-production_ et _production_)
+### Requirements
 
-###  3.1. <a name='Leslabels'></a>Les labels
+To launch the project, you need to have the following software installed on your computer:
 
-Les labels sont des éléments qui sont associés à des _issues_ et _merge requests_ : ils permettent de les classer, les organiser et les identifier simplement. Voici ceux qu'on propose ici, vous pouvez en supprimer ou ajouter d'autres.
+* PHP
+* MariaDB
+* Composer
+* SCSS
 
-On a distingué les labels prioritaires :
+### Launching the project
 
-![label](.ressources/labels.png)
+To launch the project, you need to follow these steps:
 
-Des labels utilisés pour le board :
+1. Clone the repository
+2. Install the dependencies with `composer install`
+3. Create a database and import the `creation.sql` file located in the `database` folder
+4. Create a `.env` file in the root folder of the project and fill it with the following information (follow the
+   example of the `.env.example` file):
 
-![label](.ressources/labels2.png)
+    ```
+    # Environment
+    
+    DEBUG="false"               # Set to "true" to enable debug mode
+    
+    # Database
+    
+    DRIVER="mysql"              # Database driver (mysql, pgsql, sqlite, ...)
+    HOST="host"                 # Host of the database
+    PORT="3306"                 # Port of the database (default: 3306)
+    DATABASE="database"         # Name of the database
+    USERNAME="user"             # Username of the database
+    PASSWORD="password"         # Password of the database
+    
+    # Mail
+    
+    MAIL_USERNAME="username"   # Username of the mail account
+    MAIL_PASSWORD="password"   # Password of the mail account
+    MAIL_HOST="host"           # Host of the mail account
+    MAIL_PORT="587"            # Port of the mail account (default: 587)
+    ```
 
-###  3.2. <a name='Lesjalons'></a>Les Jalons
+5. Build the CSS files with `sass --update scss:public/css'`
+6. Launch the project with `php -S localhost:8000 -t public` or `composer server`
 
-Les jalons (milestones) sont les échéances connues du projet, qu'il faut préparer ou pour lesquelles certaines tâches / livrables doivent être terminées.
-Dans le modèle, on a défini des jalons qui devraient vous aider, notamment pour préparer chaque séance de SAE avec le tuteur.
+## Contributing
 
-Libre à vous de les adapter.
+Feel free to contribute to the project by creating a pull request or by opening an issue. If you want to contribute
+to the project, please read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
-![label](.ressources/jalons.png)
+## Contributors
 
-###  3.3. <a name='LeBoard'></a>Le Board
-
-Le Board est l'outil central de GitLab pour organiser et gérer les tâches afférentes au projet.
-
-Il permet de les visualiser et de suivre leur progression.
-
-La structure de ce board adopte l'approche [Scrumban](https://asana.com/fr/resources/scrumban).
-
-![board](.ressources/theBoard.png)
-
-###  3.4. <a name='Lesbranches'></a>Les branches
-
-Les trois branches proposées dans ce template permettent de gérer de manière simple l'état du votre projet, jusqu'à la revue finale de projet devant un jury de 2 enseignants.
-
-Ce modèle est librement inspiré de l'approche GitLab Flow, pour en savoir plus : [GitLab Flow](https://www.youtube.com/watch?v=ZJuUz5jWb44).
-
-![](.ressources/branches.png)
-
-###  3.5. <a name='Modlespourlesissuesetlesmergesrequests'></a>Modèles pour les issues et les merges requests
-
-Ce template propose des modèles pour les _issues_ et les _merge requests_ afin de simplifier et standardiser leur utilisation par les équipes du projet.
-
-![board](.ressources/issues.png)
-
-![board](.ressources/mr.png)
-
-##  4. <a name='Commentutilisercedpt'></a>Comment utiliser ce dépôt ?
-
-> Vous utilisez ce dépôt comme **base d'inspiration** pour votre gérer votre projet simplement en adaptant les éléments à votre contexte.
-
-> **Vous pouvez également télécharger l'export du dépôt pour l'importer avec tous les éléments dèja présents (labels, issues, merges requests, board, branches, ...)**
-> 1. [Télécharger l'export du dépôt](.ressources/export.tar.gz)
-> 2. [Importer l'export dans GitLab](https://docs.gitlab.com/ee/user/project/settings/import_export.html#import-a-project-and-its-data)
-
-##  5. <a name='Licence'></a>Licence
-
-Ce dépôt est sous licence [MIT](LICENSE)
-
-##  6. <a name='Auteur'></a>Auteur
-Contact : @V.Deslandres
-Ce travail est basé sur le kit starter de projet de [YoanDev](https://yoandev.co)
-
-## Contributors ✨
+* **[Lilian BAUDRY](https://github.com/Irophin)** - *Initial work*
+* **[Vincent CHAVOT]()** - *Initial work*
+* **[Melvyn DELPREE](https://github.com/Melvyn27)** - *Initial work*
+* **[Luka MARET](https://github.com/LukaMrt)** - *Initial work*
 
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
@@ -134,3 +110,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
 This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+
+## License
+
+This repository is under [MIT license](LICENSE).

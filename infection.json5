@@ -1,0 +1,22 @@
+{
+    "$schema": "https://raw.githubusercontent.com/infection/infection/0.26.15/resources/schema.json",
+    "source": {
+        "directories": [
+            "src/application",
+//            "src/model"
+        ]
+    },
+    "timeout": 10,
+    "logs": {
+        "text": "out/tests/mutating/infection.log",
+        "html": "out/tests/mutating/infection.html",
+        "github": true,
+        "stryker": {
+            "badge": "/^release-.*$/"
+        }
+    },
+    "mutators": {
+        "@default": true,
+        "@function_signature": false,
+    },
+}

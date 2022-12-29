@@ -1,0 +1,30 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('sponsor.css') %}
+{% set title = 'Parraindex - Lien' %}
+
+{% block javascripts %}
+    <script src="{{ script('sponsor.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <h1>{{ sponsor.type }}</h1>
+
+    {% include 'components/sponsor.twig' with {
+        'sponsor': sponsor,
+        'godFather': godFather,
+        'godChild': godChild,
+    } %}
+
+    {% include 'components/sponsor-description.twig' with {
+        'sponsor': sponsor
+    } %}
+
+    {% if login.privilege == 'ADMIN' %}
+        <a class="person-action__wrapper" href="{{ router.url('editsponsor_get', {id: sponsor.id}) }}">
+            <img class="person-actions__image" src="{{ icon("pen.svg") }}" alt="Retour">
+        </a>
+    {% endif %}
+
+{% endblock %}

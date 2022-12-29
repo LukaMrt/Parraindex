@@ -1,0 +1,101 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.carousel{
+	position: relative;
+	width: 80%;
+	
+	&__slider{
+		@include m.flex($direction: row, $justify: flex-start);
+		box-sizing: border-box;
+		padding: 0 45%;
+		gap: f.rem(50);
+		
+		overflow-x: scroll;
+		scrollbar-width: none;
+
+		&::-webkit-scrollbar {
+			display: none;
+		}
+
+		@include b.breakpoint(small){
+			gap: 0;
+		}
+	}
+	
+	&::after,
+	&::before{
+		content: '';
+		position: absolute;
+		right: 0;
+		top: 0;
+
+		width: f.rem(40);
+		height: 100%;
+
+		background: linear-gradient(to right, transparent 0%, var(--white) 100%);
+		z-index: 1;
+
+		@include b.breakpoint(small){
+			display: none;
+		}
+	}
+	
+	&::before{
+		left: 0;
+		background: linear-gradient(to left, transparent 0%, var(--white) 100%);
+	}
+
+	@include b.breakpoint(small){
+		width: 100%;
+	}
+
+}
+
+.scrollbar{
+	@include m.flex($direction : row);
+	gap: f.rem(16);
+	width: 90%;
+
+	&__max,
+	&__min{
+		font-weight: 700;
+		color: var(--dark-grey);
+	}
+
+	&__cursor {
+
+		width: 70%;
+		appearance: none;
+		
+		background: var(--light-grey);
+		height: f.rem(8);
+		border-radius: 20px;
+
+		&::-webkit-slider-runnable-track{
+			cursor: pointer;
+			height: f.rem(8);
+			background: var(--light-grey);
+			border-radius: f.rem(4);
+		}
+
+		&::-moz-range-thumb{
+			width: f.rem(20);	
+			height: f.rem(20);
+			background: var(--dark-grey);
+			border-radius: 50%;
+			border: 0;
+		}
+
+		&::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			position: relative;
+			width: f.rem(20);
+			height: f.rem(20);
+			background: var((--dark-grey));
+			border-radius: 50%;
+			top: -50%;
+		}
+	}
+}

@@ -1,0 +1,36 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.popup {
+  position: absolute;
+  top: f.rem(90);
+  z-index: 2;
+  left: -1000px;
+  padding: f.rem(10);
+  gap: f.rem(10);
+  border-radius: f.rem(5);
+  transition: all 0.8s ease-in-out;
+  @include m.flex(center, center, row);
+
+  &--error {
+    background: var(--light-red);
+    border-left: var(--dark-red) 5px solid;
+  }
+
+  &--success {
+    background: var(--light-green);
+    border-left: var(--dark-green) 5px solid;
+  }
+
+  &--visible {
+	left: f.rem(20);
+  }
+
+  &__close-button {
+    width: f.rem(20);
+    height: f.rem(20);
+    &:hover {
+      cursor: pointer;
+    }
+  }
+}

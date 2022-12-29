@@ -1,0 +1,39 @@
+@use "../abstracts/functions" as f;
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@100;400;700&display=swap");
+
+h1,
+h2,
+h3 {
+	font-weight: 400;
+	margin: 0;
+}
+
+h1 {
+	text-transform: uppercase;
+	font-weight: 700;
+	letter-spacing: f.rem(1.5);
+	text-align: center;
+}
+
+h2 {
+	text-transform: uppercase;
+	text-align: center;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+	text-align: center;
+	cursor: pointer;
+}
+
+i {
+	font-style: normal;
+	color: var(--dark-grey);
+	font-size: f.rem(10);
+}
+
+p {
+	margin: 0;
+	font-weight: 300;
+}

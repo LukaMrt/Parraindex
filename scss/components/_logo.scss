@@ -1,0 +1,16 @@
+@use "../abstracts/breakpoints" as b;
+
+.logo {
+	position: absolute;
+	top: -27vw;
+	left: -27vw;
+	width: 70vw;
+	opacity: 0.05;
+	z-index: -1;
+
+	@include b.breakpoint(small){
+		display: none;
+		visibility: hidden;
+	}
+
+}

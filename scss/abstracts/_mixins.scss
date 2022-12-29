@@ -1,0 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;1,100;1,400&display=swap');
+
+@mixin flex($align: center, $justify: center, $direction: column) {
+	display: flex;
+	flex-direction: $direction;
+	align-items: $align;
+	justify-content: $justify;
+}
+
+@mixin smooth-box-shadow {
+	box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+}
+
+@mixin hard-box-shadow {
+	box-shadow: rgba(149, 157, 165, 0.5) 0px 8px 24px
+}
+
+@mixin inside-shadow {
+	box-shadow: rgb(204, 219, 232) 3px 3px 6px 0px inset,
+				rgba(255, 255, 255, 0.5) -3px -3px 6px 1px inset
+}

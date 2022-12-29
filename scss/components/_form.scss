@@ -1,0 +1,87 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+.form {
+
+	width: max(40vw, f.rem(250));
+	height: max-content;
+	box-sizing: border-box;
+	max-width: f.rem(900);
+	border-radius: f.rem(40);
+	padding: f.rem(10) f.rem(5);
+	gap: f.rem(20);
+
+	@include m.flex();
+	@include m.hard-box-shadow;
+
+	&__title {
+		margin: f.rem(10) 0;
+	}
+
+	&-content {
+		@include m.flex($direction: column);
+		width: min(70%, 90vw);
+		gap: f.rem(20);
+	}
+
+	&-block {
+		width: 100%;
+		gap: f.rem(20);
+
+		@include m.flex(center, space-around, column);
+
+		&--row {
+			flex-direction: row;
+
+			@include b.breakpoint(small) {
+				@include m.flex($direction: column-reverse);
+				gap: f.rem(10);
+			}
+		}
+
+		&--space-around {
+			justify-content: space-around;
+		}
+	}
+
+	&__element {
+		@include m.flex(flex-start, center, column);
+		width: 100%;
+		gap: f.rem(7);
+
+		&-input {
+			height: f.rem(40);
+			width: 100%;
+			padding: 0 f.rem(20);
+			box-sizing: border-box;
+			border-radius: f.rem(20);
+			border: var(--light-grey) solid 1px;
+			box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.2);
+
+			&-textarea {
+				padding-top: f.rem(15);
+				height: f.rem(100);
+				resize: none;
+			}
+
+			&-file {
+
+			}
+
+		}
+
+		&-label {
+			box-sizing: border-box;
+			width: 100%;
+			padding: 0 f.rem(10);
+			font-weight: 700;
+		}
+
+		&--invalid {
+			border: var(--dark-red) solid 1px;
+		}
+
+	}
+
+}

@@ -1,0 +1,11 @@
+<div class="form__element {{ classes }}">
+
+	<label class="form__element-label" id="{{ slug }}-label" for="{{ slug }}">{{ title }}</label>
+
+	<textarea class="form__element-input form__element-input-textarea {{ classes }}"
+	          name="{{ slug }}"
+	          id="{{ slug }}"
+	          placeholder="{{ placeholder }}"
+	          {% if required is empty %}required{% endif %}>{{ value }}</textarea>
+
+</div>
