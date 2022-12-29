@@ -1,4 +1,4 @@
-name: Build workflow
+name: CI workflow
 
 on:
   push:
@@ -10,8 +10,8 @@ permissions:
 
 jobs:
 
-  test:
-    name: Tests verification
+  unit-tests:
+    name: Unit tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -36,25 +36,40 @@ jobs:
 
   sonarcloud:
     name: SonarCloud analysis
+    needs: unit-tests
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+
+      - name: Setup PHP with Xdebug
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+          coverage: xdebug
+
+      - name: Install dependencies with composer
+        run: composer update --no-ansi --no-interaction --no-progress
+
+      - name: Run tests with phpunit/phpunit
+        run: XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover=coverage-report.xml --log-junit=phpunit-report.xml
+
+      - name: Fix code coverage paths
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage-report.xml
+
+      - name: Fix phpunit report paths
+        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' phpunit-report.xml
+
       - name: SonarCloud Scan
         uses: SonarSource/sonarcloud-github-action@master
         env:
           GITHUB_TOKEN: ${{ secrets.GITH_TOKEN }}
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args:
-            -Dsonar.projectKey=LukaMrt_Parraindex
-            -Dsonar.organization=lukamrt
-            -Dsonar.sources=.
 
   deploy-develop:
-    name: Deploy to development environment
-    needs: test
+    name: Deploy develop
+    needs: unit-tests
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
@@ -73,8 +88,8 @@ jobs:
             sass --update scss:public/css'
 
   deploy-production:
-    name: Deploy to production environment
-    needs: test
+    name: Deploy production
+    needs: unit-tests
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:
@@ -86,7 +101,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: 'cd /var/www/parraindex.com &&
-            git checkout main &&
+            git checkout master &&
             git pull &&
             composer update && composer install --no-interaction --prefer-dist --optimize-autoloader &&
             sass --update scss:public/css'

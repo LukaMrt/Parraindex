@@ -96,3 +96,5 @@ public/style/*
 var/
 .phpdoc/
 composer.lock
+phpunit-report.xml
+coverage-report.xml

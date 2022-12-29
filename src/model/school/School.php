@@ -13,7 +13,7 @@ class School {
 	private DateTime $creationDate;
 	private ?Person $director;
 
-	function __construct(int $id, string $name, SchoolAddress $address, DateTime $creationDate, ?Person $director = null) {
+	public function __construct(int $id, string $name, SchoolAddress $address, DateTime $creationDate, ?Person $director = null) {
 		$this->id = $id;
 		$this->name = $name;
 		$this->address = $address;
@@ -21,7 +21,7 @@ class School {
 		$this->director = $director;
 	}
 
-    static function emptySchool(): School {
+    public static function emptySchool(): School {
         return new School(0, '', SchoolAddress::emptyAddress(), new DateTime());
     }
 

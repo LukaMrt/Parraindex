@@ -8,25 +8,23 @@
          failOnRisky="true"
          failOnEmptyTestSuite="true"
          beStrictAboutOutputDuringTests="true"
-         testdox="true"
          noInteraction="true"
-         verbose="true">
+         verbose="true"
+         testdox="true">
 
     <php>
         <ini name="error_reporting" value="-1"/>
         <ini name="display_errors" value="On"/>
         <ini name="xdebug.mode" value="coverage" />
-        <env name="XDEBUG_MODE" value="coverage" />
     </php>
 
     <coverage>
         <report>
             <html outputDirectory="out/tests/coverage/"/>
-            <clover outputFile="tests/report/coverage-report.xml"/>
+            <clover outputFile="out/tests/report/coverage-report.xml"/>
         </report>
         <include>
             <directory suffix=".php">src/application/</directory>
-<!--            <directory suffix=".php">src/model/</directory>-->
         </include>
     </coverage>
 
@@ -37,8 +35,8 @@
     </testsuites>
 
     <logging>
-        <testdoxHtml outputFile="tests/report/report.html"/>
-        <junit outputFile="tests/report/report.xml"/>
+        <testdoxHtml outputFile="out/tests/report/phpunit-report.html"/>
+        <junit outputFile="out/tests/report/phpunit-report.xml"/>
     </logging>
 
 </phpunit>
