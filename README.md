@@ -1,13 +1,15 @@
 # Parraindex
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 ![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/lukamrt/parraindex)
 ![GitHub language count](https://img.shields.io/github/languages/count/lukamrt/parraindex)
 ![GitHub](https://img.shields.io/github/license/lukamrt/parraindex)
 
 ## About the project
+
+a
 
 This project is a school project made for the third semester of the Bachelor's degree in Computer Science at the
 University of Lyon 1. The objective of this project is to create a web application with a visual interface and
