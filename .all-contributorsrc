@@ -1,0 +1,52 @@
+{
+  "projectName": "Parraindex",
+  "projectOwner": "Luka Maret",
+  "contributors": [
+    {
+      "login": "LukaMrt",
+      "name": "Luka Maret",
+      "avatar_url": "https://avatars.githubusercontent.com/u/48085295?v=3",
+      "profile": "https://github.com/LukaMrt",
+      "contributions": [
+        "code",
+        "infra",
+        "maintenance",
+        "projectManagement",
+        "test",
+        "review",
+      ]
+    },
+    {
+      "login": "Irophin",
+      "name": "Lilian Baudry",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62310861?v=3",
+      "profile": "https://github.com/Irophin",
+      "contributions": [
+        "code",
+        "infra",
+        "maintenance",
+        "design",
+        "review",
+      ]
+    },
+    {
+      "login": "Melvyn27",
+      "name": "Melvyn Delpree",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93776074?v=3",
+      "profile": "https://github.com/Melvyn27",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "",
+      "name": "Vincent Chavot-Dambrun",
+      "avatar_url": "",
+      "profile": "",
+      "contributions": [
+        "code"
+      ]
+    },
+  ]
+}

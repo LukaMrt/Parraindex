@@ -3,7 +3,11 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
-![GitHub contributors (via allcontributors.org)](https://img.shields.io/github/all-contributors/lukamrt/parraindex)
+
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-13-orange.svg?style=flat)](#contributors)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
+
 ![GitHub language count](https://img.shields.io/github/languages/count/lukamrt/parraindex)
 ![GitHub](https://img.shields.io/github/license/lukamrt/parraindex)
 
@@ -80,12 +84,21 @@ To launch the project, you need to follow these steps:
 Feel free to contribute to the project by creating a pull request or by opening an issue. If you want to contribute
 to the project, please read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
-## Authors
+## Contributors
 
 * **[Lilian BAUDRY](https://github.com/Irophin)** - *Initial work*
 * **[Vincent CHAVOT]()** - *Initial work*
 * **[Melvyn DELPREE](https://github.com/Melvyn27)** - *Initial work*
 * **[Luka MARET](https://github.com/LukaMrt)** - *Initial work*
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
 
 ## License
 
