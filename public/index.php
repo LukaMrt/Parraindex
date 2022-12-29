@@ -5,7 +5,7 @@ use App\infrastructure\router\Router;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 
-require dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
 
 session_start();
 $dotenv = Dotenv\Dotenv::createImmutable('../');
