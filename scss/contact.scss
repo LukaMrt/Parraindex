@@ -1,10 +1,11 @@
-
 @forward "abstracts";
 @forward "base";
-@forward "components";
+@forward "components/contacts";
+@forward "components/form";
+@forward "components/button";
+@forward "components/aboutcard";
+@forward "components/popup";
 @forward "layout";
-@forward "pages";
-@forward "themes";
 
 .hidden {
 	display: none;
