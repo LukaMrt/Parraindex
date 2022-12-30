@@ -1,14 +1,15 @@
 <section class="navbar">
 
 	<div class="searchbar">
-		<input class="name_filter" type="text" placeholder="Recherche">
+		<label for="searchbar-input"></label>
+		<input id="searchbar-input" class="name_filter" type="text" placeholder="Recherche">
 	</div>
 
 	<img src="{{icon('magnifier.svg')}}" alt="loupe" class="navbar__icon navbar__icon--search">
 
 	{% include('components/spinner.twig') %}
 
-	<img src="{{icon('gear.svg')}}" alt="parametres" class="navbar__icon navbar__icon--filter">
+	<img src="{{icon('gear.svg')}}" alt="paramètres" class="navbar__icon navbar__icon--filter">
 
 	<div class="filter">
 
