@@ -91,6 +91,7 @@ fabric.properties
 composer.phar
 
 .env
+
 public/css/*
 public/style/*
 public/img/pictures/*
