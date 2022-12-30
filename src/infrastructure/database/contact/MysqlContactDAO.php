@@ -10,8 +10,7 @@ use App\model\contact\PersonContact;
 use App\model\contact\SponsorContact;
 use App\model\person\Identity;
 use App\model\person\PersonBuilder;
-use App\model\sponsor\ClassicSponsor;
-use App\model\sponsor\HeartSponsor;
+use App\model\sponsor\SponsorFactory;
 
 class MysqlContactDAO implements ContactDAO {
 
@@ -142,29 +141,7 @@ class MysqlContactDAO implements ContactDAO {
 	}
 
 	public function saveChockingContentContact(PersonContact $contact): void {
-
-		$connection = $this->databaseConnection->getDatabase();
-
-		$query = $connection->prepare("INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description) VALUES (:type, NOW(), :name, :email, :description)");
-		$query->execute([
-			"type" => $contact->getTypeId(),
-			"name" => $contact->getContacterName(),
-			"email" => $contact->getContacterEmail(),
-			"description" => $contact->getMessage()
-		]);
-
-		$ticketId = $connection->lastInsertId();
-		$query = $connection->prepare("INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year) VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)");
-		$query->execute([
-			"id_ticket" => $ticketId,
-			"id_person" => $contact->getPerson()->getId(),
-			"firstname" => $contact->getPerson()->getFirstName(),
-			"lastname" => $contact->getPerson()->getLastName(),
-			"entry_year" => $contact->getPerson()->getStartYear()
-		]);
-
-		$query->closeCursor();
-		$connection = null;
+		$this->savePersonUpdateContact($contact);
 	}
 
 	public function getContactList(): array {
@@ -245,12 +222,7 @@ SQL
 				->withIdentity(new Identity($data->c_first_name, $data->c_last_name))
 				->build();
 
-			if ($data->type === 0) {
-				$sponsor = new ClassicSponsor($data->id_sponsor, $godFather, $godChild, $data->date, $data->description);
-			} else {
-				$sponsor = new HeartSponsor($data->id_sponsor ?? -1, $godFather, $godChild, $data->date, $data->description);
-			}
-
+			$sponsor = SponsorFactory::createSponsor($data->type, $data->id_sponsor ?? -1, $godFather, $godChild, $data->date, $data->description);
 
 			$contacts[] = new SponsorContact($data->id_ticket, $data->contacter_name, $data->contacter_email, ContactType::from($data->type), $data->description, $sponsor);
 		}
