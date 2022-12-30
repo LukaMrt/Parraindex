@@ -1,4 +1,7 @@
 # templategp-agile-sae-s3
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 Template de base pour gérer (en mode SCRUM-light) les SAE du s3 avec GitLab 🦊
 
@@ -109,3 +112,25 @@ Ce dépôt est sous licence [MIT](LICENSE)
 ##  6. <a name='Auteur'></a>Auteur
 Contact : @V.Deslandres
 Ce travail est basé sur le kit starter de projet de [YoanDev](https://yoandev.co)
+
+## Contributors ✨
+
+Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
+
+<!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
+<!-- prettier-ignore-start -->
+<!-- markdownlint-disable -->
+<table>
+  <tbody>
+    <tr>
+      <td align="center"><a href="https://github.com/Irophin"><img src="https://avatars.githubusercontent.com/u/62310861?v=4?s=100" width="100px;" alt="Lilian Baudry"/><br /><sub><b>Lilian Baudry</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=Irophin" title="Code">💻</a> <a href="#ideas-Irophin" title="Ideas, Planning, & Feedback">🤔</a> <a href="#design-Irophin" title="Design">🎨</a> <a href="https://github.com/LukaMrt/Parraindex/pulls?q=is%3Apr+reviewed-by%3AIrophin" title="Reviewed Pull Requests">👀</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- markdownlint-restore -->
+<!-- prettier-ignore-end -->
+
+<!-- ALL-CONTRIBUTORS-LIST:END -->
+
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
