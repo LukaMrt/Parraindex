@@ -3,9 +3,8 @@
 namespace App\application\sponsor;
 
 use App\application\person\PersonDAO;
-use App\model\sponsor\ClassicSponsor;
-use App\model\sponsor\HeartSponsor;
 use App\model\sponsor\Sponsor;
+use App\model\sponsor\SponsorFactory;
 
 class SponsorService {
 
@@ -50,19 +49,15 @@ class SponsorService {
 	public function createSponsor(array $parameters): void {
 
 		$godFather = $this->personDAO->getPersonById($parameters['godFatherId']);
-		$godSon = $this->personDAO->getPersonById($parameters['godChildId']);
+		$godChild = $this->personDAO->getPersonById($parameters['godChildId']);
 
-		$sponsor = $this->sponsorDAO->getSponsorByPeopleId($godFather->getId(), $godSon->getId());
+		$sponsor = $this->sponsorDAO->getSponsorByPeopleId($godFather->getId(), $godChild->getId());
 
 		if ($sponsor !== null) {
 			return;
 		}
 
-		if ($parameters['sponsorType'] === '0') {
-			$sponsor = new ClassicSponsor(-1, $godFather, $godSon, $parameters['sponsorDate'], $parameters['description']);
-		} else {
-			$sponsor = new HeartSponsor(-1, $godFather, $godSon, $parameters['sponsorDate'], $parameters['description']);
-		}
+		$sponsor = SponsorFactory::createSponsor($parameters['sponsorType'], -1, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
 
 		$this->sponsorDAO->addSponsor($sponsor);
 	}
@@ -78,11 +73,7 @@ class SponsorService {
 		$godFather = $sponsor->getGodFather();
 		$godChild = $sponsor->getGodChild();
 
-		if ($parameters['sponsorType'] === '0') {
-			$sponsor = new ClassicSponsor($id, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
-		} else {
-			$sponsor = new HeartSponsor($id, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
-		}
+		$sponsor = SponsorFactory::createSponsor($parameters['sponsorType'], $id, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
 
 		$this->sponsorDAO->updateSponsor($sponsor);
 

@@ -54,7 +54,7 @@ class Person {
 
 		$dates = array_map(fn($promotion) => $promotion->getYear(), $this->promotions);
 		
-		if(count($dates) == 0) {
+		if(empty($dates)) {
 			return null;
 		}
 

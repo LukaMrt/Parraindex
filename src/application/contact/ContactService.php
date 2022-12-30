@@ -25,7 +25,7 @@ class ContactService {
 
 		$executors = array_values($this->contactExecutors->getExecutorsById($id));
 
-		if (count($executors) === 0) {
+		if (empty($executors)) {
 			return 'Le type de contact n\'est pas valide.';
 		}
 

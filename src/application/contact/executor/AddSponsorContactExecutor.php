@@ -14,8 +14,7 @@ use App\application\redirect\Redirect;
 use App\application\sponsor\SponsorDAO;
 use App\model\contact\ContactType;
 use App\model\contact\SponsorContact;
-use App\model\sponsor\ClassicSponsor;
-use App\model\sponsor\HeartSponsor;
+use App\model\sponsor\SponsorFactory;
 
 class AddSponsorContactExecutor extends ContactExecutor {
 
@@ -49,11 +48,7 @@ class AddSponsorContactExecutor extends ContactExecutor {
 		$godFather = $this->personDAO->getPersonById($data['godFatherId']);
 		$godChild = $this->personDAO->getPersonById($data['godChildId']);
 
-		if ($data['sponsorType'] === '0') {
-			$sponsor = new ClassicSponsor(-1, $godFather, $godChild, $data['sponsorDate'], '');
-		} else {
-			$sponsor = new HeartSponsor(-1, $godFather, $godChild, $data['sponsorDate'], '');
-		}
+		$sponsor = SponsorFactory::createSponsor($data['sponsorType'], -1, $godFather, $godChild, $data['sponsorDate'], '');
 
 		$contact = new SponsorContact(
 			-1,
