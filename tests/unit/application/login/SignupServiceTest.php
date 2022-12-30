@@ -51,7 +51,12 @@ class SignupServiceTest extends TestCase {
 		$this->mailer = $this->createMock(Mailer::class);
 		$this->random = $this->createMock(Random::class);
 		$this->urlUtils = $this->createMock(UrlUtils::class);
-		$this->signupService = new SignupService($this->accountDAO, $this->personDAO, $this->redirect, $this->mailer, $this->random, $this->urlUtils);
+		$this->signupService = new SignupService($this->accountDAO,
+			$this->personDAO,
+			$this->redirect,
+			$this->mailer,
+			$this->random,
+			$this->urlUtils);
 	}
 
 	public function testSignupDetectsMissingFields(): void {
@@ -238,7 +243,10 @@ class SignupServiceTest extends TestCase {
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.testaaa@etu.univ-lyon1.fr', 'Parraindex : inscription', "Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/signup/validation/1\">http://localhost/signup/validation/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with('test.testaaa@etu.univ-lyon1.fr', 'Parraindex : inscription',
+				"Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer "
+				. "sur ce lien pour la valider : <a href=\"http://localhost/signup/validation/1\">"
+				. "http://localhost/signup/validation/1</a><br><br>Cordialement<br>Le Parrainboss");
 
 		$this->signupService->signup(self::DEFAULT_PARAMETERS);
 	}

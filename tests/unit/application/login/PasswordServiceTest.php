@@ -25,6 +25,7 @@ class PasswordServiceTest extends TestCase {
 		'password' => 'test',
 		'password-confirm' => 'test'
 	);
+	const TEST_EMAIL = 'test.test@etu.univ-lyon1.fr';
 	private Account $validAccount;
 	private Person $person;
 
@@ -43,7 +44,7 @@ class PasswordServiceTest extends TestCase {
 			->withIdentity(new Identity('test', 'test'))
 			->build();
 
-		$this->validAccount = new Account(1, 'test.test@etu.univ-lyon1.fr', $this->person, new Password('password'));
+		$this->validAccount = new Account(1, self::TEST_EMAIL, $this->person, new Password('password'));
 
 		$this->accountDAO = $this->createMock(AccountDAO::class);
 		$this->personDAO = $this->createMock(PersonDAO::class);
@@ -51,16 +52,22 @@ class PasswordServiceTest extends TestCase {
 		$this->mailer = $this->createMock(Mailer::class);
 		$this->random = $this->createMock(Random::class);
 		$this->urlUtils = $this->createMock(UrlUtils::class);
-		$this->passwordService = new PasswordService($this->accountDAO, $this->personDAO, $this->redirect, $this->mailer, $this->random, $this->urlUtils);
+		$this->passwordService = new PasswordService($this->accountDAO,
+			$this->personDAO,
+			$this->redirect,
+			$this->mailer,
+			$this->random,
+			$this->urlUtils);
 	}
 
 	public function testResetpasswordDetectsUnknownEmail(): void {
 
 		$this->accountDAO->method('existsAccount')
-			->with('test.test@etu.univ-lyon1.fr')
+			->with(self::TEST_EMAIL)
 			->willReturn(false);
 
-		$return = $this->passwordService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+		$parameters = ['email' => self::TEST_EMAIL, 'password' => 'test'];
+		$return = $this->passwordService->resetPassword($parameters);
 
 		$this->assertEquals('Email inconnu.', $return);
 	}
@@ -68,7 +75,7 @@ class PasswordServiceTest extends TestCase {
 	public function testResetpasswordRedirectsToConfirmationPageOnSuccess(): void {
 
 		$this->accountDAO->method('existsAccount')
-			->with('test.test@etu.univ-lyon1.fr')
+			->with(self::TEST_EMAIL)
 			->willReturn(true);
 
 		$this->redirect->expects($this->once())
@@ -80,16 +87,16 @@ class PasswordServiceTest extends TestCase {
 			->willReturn($this->person);
 
 		$this->accountDAO->method('getAccountByLogin')
-			->with('test.test@etu.univ-lyon1.fr')
+			->with(self::TEST_EMAIL)
 			->willReturn($this->validAccount);
 
-		$this->passwordService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+		$this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
 	}
 
 	public function testResetpasswordSendsEmailOnSuccess(): void {
 
 		$this->accountDAO->method('existsAccount')
-			->with('test.test@etu.univ-lyon1.fr')
+			->with(self::TEST_EMAIL)
 			->willReturn(true);
 
 		$this->urlUtils->method('getBaseUrl')
@@ -108,20 +115,24 @@ class PasswordServiceTest extends TestCase {
 			->willReturn($this->person);
 
 		$this->accountDAO->method('getAccountByLogin')
-			->with('test.test@etu.univ-lyon1.fr')
+			->with(self::TEST_EMAIL)
 			->willReturn($this->validAccount);
 
 		$this->mailer->expects($this->once())
 			->method('send')
-			->with('test.test@etu.univ-lyon1.fr', 'Parraindex : réinitialisation de mot de passe', "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"http://localhost/password/reset/1\">http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss");
+			->with(self::TEST_EMAIL, 'Parraindex : réinitialisation de mot de passe',
+				"Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe "
+				. "a bien été enregistrée, merci de cliquer sur ce lien pour la valider : "
+				. "<a href=\"http://localhost/password/reset/1\">"
+				. "http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss");
 
-		$this->passwordService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+		$this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
 	}
 
 	public function testResetpasswordCreatesResetpasswordRecordOnSuccess(): void {
 
 		$this->accountDAO->method('existsAccount')
-			->with('test.test@etu.univ-lyon1.fr')
+			->with(self::TEST_EMAIL)
 			->willReturn(true);
 
 		$this->urlUtils->method('getBaseUrl')
@@ -136,16 +147,16 @@ class PasswordServiceTest extends TestCase {
 			->willReturn($this->person);
 
 		$this->accountDAO->method('getAccountByLogin')
-			->with('test.test@etu.univ-lyon1.fr')
+			->with(self::TEST_EMAIL)
 			->willReturn($this->validAccount);
 
-		$account = new Account(1, 'test.test@etu.univ-lyon1.fr', $this->person, new Password('test'));
+		$account = new Account(1, self::TEST_EMAIL, $this->person, new Password('test'));
 
 		$this->accountDAO->expects($this->once())
 			->method('createResetpassword')
 			->with($account, '1');
 
-		$this->passwordService->resetPassword(array('email' => 'test.test@etu.univ-lyon1.fr', 'password' => 'test'));
+		$this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
 	}
 
 	public function testValidateresetpasswordDetectsUnknownToken(): void {
