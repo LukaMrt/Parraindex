@@ -2,18 +2,18 @@
 
 namespace App\controller;
 
-use App\application\login\SignupService;
+use App\application\login\PasswordService;
 use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
 class ResetpasswordController extends Controller {
 
-	private SignupService $signupService;
+	private PasswordService $passwordService;
 
-	public function __construct(Environment $twig, Router $router, PersonService $personService, SignupService $signupService) {
+	public function __construct(Environment $twig, Router $router, PersonService $personService, PasswordService $passwordService) {
 		parent::__construct($twig, $router, $personService);
-		$this->signupService = $signupService;
+		$this->passwordService = $passwordService;
 	}
 
 	public function get(Router $router, array $parameters): void {
@@ -27,7 +27,7 @@ class ResetpasswordController extends Controller {
 			'password' => $_POST['password'] ?? '',
 		];
 
-		$error = $this->signupService->resetPassword($postParameters);
+		$error = $this->passwordService->resetPassword($postParameters);
 
 		$this->render('resetpassword.twig', ['error' => $error]);
 	}

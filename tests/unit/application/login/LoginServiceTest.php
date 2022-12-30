@@ -20,6 +20,7 @@ use PHPUnit\Framework\TestCase;
 
 class LoginServiceTest extends TestCase {
 
+	const TEST_EMAIL = 'test@test.com';
 	private Account $account;
 
 	private LoginService $loginService;
@@ -36,7 +37,7 @@ class LoginServiceTest extends TestCase {
 			->build();
 		$school = new School(0, 'school', new SchoolAddress('street', 'city'), new DateTime());
 		$privilege = new Privilege($school, PrivilegeType::ADMIN);
-		$this->account = new Account(0, 'test@test.com', $person, new Password('password'), $privilege);
+		$this->account = new Account(0, self::TEST_EMAIL, $person, new Password('password'), $privilege);
 
 		$this->accountDAO = $this->createMock(AccountDAO::class);
 		$this->personDAO = $this->createMock(PersonDAO::class);
@@ -69,11 +70,11 @@ class LoginServiceTest extends TestCase {
 	public function testLoginSavesLoginInSessionOnSuccess(): void {
 
 		$this->accountDAO->method('getAccountPassword')
-			->with('test@test.com')
+			->with(self::TEST_EMAIL)
 			->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
 		$this->accountDAO->method('getSimpleAccount')
-			->with('test@test.com')
+			->with(self::TEST_EMAIL)
 			->willReturn($this->account);
 
 		$this->sessionManager->method('exists')
@@ -86,19 +87,15 @@ class LoginServiceTest extends TestCase {
 			->build();
 
 		$this->personDAO->method('getPersonByLogin')
-			->with('test@test.com')
+			->with(self::TEST_EMAIL)
 			->willReturn($person);
 
 		$this->sessionManager->expects($this->exactly(3))
 			->method('set')
-			->withConsecutive(
-				['login', 'test@test.com'],
-				['privilege', 'ADMIN'],
-				['user', $person]
-			);
+			->withConsecutive(['login', self::TEST_EMAIL], ['privilege', 'ADMIN'], ['user', $person]);
 
 		$this->loginService->login(array(
-			'login' => 'test@test.com',
+			'login' => self::TEST_EMAIL,
 			'password' => 'test',
 		));
 	}
@@ -106,11 +103,11 @@ class LoginServiceTest extends TestCase {
 	public function testLoginReturnsNothingOnSuccess(): void {
 
 		$this->accountDAO->method('getAccountPassword')
-			->with('test@test.com')
+			->with(self::TEST_EMAIL)
 			->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
 		$this->accountDAO->method('getSimpleAccount')
-			->with('test@test.com')
+			->with(self::TEST_EMAIL)
 			->willReturn($this->account);
 
 		$this->sessionManager->method('exists')
@@ -118,7 +115,7 @@ class LoginServiceTest extends TestCase {
 			->willReturn(false);
 
 		$return = $this->loginService->login(array(
-			'login' => 'test@test.com',
+			'login' => self::TEST_EMAIL,
 			'password' => 'test',
 		));
 
@@ -128,11 +125,11 @@ class LoginServiceTest extends TestCase {
 	public function testLoginRedirectsToHomeOnSuccess(): void {
 
 		$this->accountDAO->method('getAccountPassword')
-			->with('test@test.com')
+			->with(self::TEST_EMAIL)
 			->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
 		$this->accountDAO->method('getSimpleAccount')
-			->with('test@test.com')
+			->with(self::TEST_EMAIL)
 			->willReturn($this->account);
 
 		$this->redirect->expects($this->once())
@@ -144,7 +141,7 @@ class LoginServiceTest extends TestCase {
 			->willReturn(false);
 
 		$this->loginService->login(array(
-			'login' => 'test@test.com',
+			'login' => self::TEST_EMAIL,
 			'password' => 'test',
 		));
 	}
@@ -167,7 +164,7 @@ class LoginServiceTest extends TestCase {
 			->willReturn(true);
 
 		$return = $this->loginService->login(array(
-			'login' => 'test@test.com',
+			'login' => self::TEST_EMAIL,
 			'password' => 'test',
 		));
 
