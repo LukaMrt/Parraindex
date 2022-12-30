@@ -21,6 +21,8 @@ We decided to create a website which presents the relationship existing between 
 Technology. There are many sponsor relationships between students, and we wanted to create a website that would
 allow students to see all the links between people.
 
+You can visit the final website at this address : [https://parraindex.com](https://parraindex.com)
+
 ## Built with
 
 The school imposed to not use any framework, so we decided to use the following technologies to create the website:
