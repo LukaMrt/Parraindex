@@ -64,6 +64,7 @@ class EditPersonController extends Controller {
 
 	public function post(Router $router, array $parameters): void {
 
+        header('content-type: application/json');
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
 
@@ -117,6 +118,7 @@ class EditPersonController extends Controller {
 
     public function put(Router $router, array $parameters): void  {
 
+        header('content-type: application/json');
         $json = file_get_contents('php://input');
         $data = json_decode($json, true);
         
@@ -151,7 +153,10 @@ class EditPersonController extends Controller {
         }
 
         $newValues = $this->getFormValues($data, $response, $isAdmin, $person);
+
         $newValues['id'] = $person->getId();
+        $newValues['first_name'] = $newValues['first_name'] ?? $person->getFirstName();
+        $newValues['last_name'] = $newValues['last_name'] ?? $person->getLastName();
 
         $newCharacteristics = $this->getFormCaracteristics($data, $response);
 
