@@ -102,9 +102,17 @@ function initColor() {
 	}
 
 	if (!find) {
+
+		let rgb = bannerColor.match(/\d+/g);
+		let bannerColorHex = "#" + rgb.map((x) => {
+			x = parseInt(x).toString(16);
+			return (x.length == 1) ? "0" + x : x;
+		}).join("");
+
 		field.radioColorPicker.checked = true;
-		field.colorPicker.value = bannerColor;
-		field.colorPicker.parentElement.style.backgroundColor = bannerColor;
+		field.radioColorPicker.value = bannerColorHex;
+		field.colorPicker.value = bannerColorHex;
+		field.colorPicker.parentElement.style.backgroundColor = bannerColorHex;
 	}
 
 }
@@ -158,6 +166,13 @@ function updatePreview() {
 	updateCharacteristicPreview();
 
 }
+
+/**
+ * prevent the form to be submitted
+ */
+field.form.addEventListener("submit", (e) => {
+	e.preventDefault();
+})
 
 preview.picture.addEventListener("mouseover", () => {
 	preview.overlayPicture.classList.add("overlay--active");
