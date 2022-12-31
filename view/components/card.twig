@@ -13,7 +13,7 @@
 
 	<div class="card__social-network">
 		{% for characteristic in characteristics %}
-			{% if characteristic.visible %}
+			{% if characteristic.visible or mock %}
 				{% include 'components/social-network.twig' 
 					with {
 						'network': characteristic.network,

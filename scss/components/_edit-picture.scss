@@ -5,6 +5,9 @@
 .edit-picture{
 	position: absolute;
 
+	left: 50%;
+	translate: -50% 0;
+
 	width: min(80%, f.rem(600));
 	height: f.rem(300);
 	@include m.flex($direction: row);

@@ -9,7 +9,7 @@
 
 {% block content %}
 
-<form class="edit-person" method="POST" enctype="multipart/form-data">
+<form class="edit-person">
 
 	<div class="description">
 
@@ -33,24 +33,16 @@
 
 	<div class="public">
 
-		<div class="public__identity">
-
-			<h2>IDENTIFANT</h1>
-
-			<p>@{{person.id}}</p>
-
-		</div>
-
-
 		{% include 'components/card.twig' with {
 			'id': person.id,
 			'color': person.color,
 			'firstName': person.firstName,
 			'lastName': person.lastName,
 			'picture': person.picture,
-			'characteristics': person.characteristics,
+			'characteristics': characteristics,
 			'description': person.biography,
 			'startYear': person.startYear,
+			'mock': true,
 			}
 		%}
 
@@ -60,18 +52,27 @@
 
 			<div class="public__personalization__choice" id="color-field" >
 
-				<label style="background-color : #f0f0f0">
-					<input checked type="radio" name="banner-color" value= "#f0f0f0">
+				<label style="background-color : #053259">
+					<input type="radio" name="banner-color"  value= "#053259">
 				</label>
 
-				<label style="background-color : #132035">
-					<input type="radio" name="banner-color"  value= "#132035">
+				<label style="background-color : #A60303">
+					<input type="radio" name="banner-color"  value= "#A60303">
 				</label>
 
-				<label style="background-color : #8a8a8a">
-					<input type="radio" name="banner-color"  value= "#8a8a8a">
+				<label style="background-color : #03A62C">
+					<input type="radio" name="banner-color"  value= "#03A62C">
 				</label>
-			
+
+				<label style="background-color : #e0e0e0">
+					<input checked type="radio" name="banner-color" value= "#e0e0e0">
+				</label>
+
+				<label for="color-picker" class="user-color" style="background-color : #e0e0e0">
+					<input type="radio" name="banner-color" value="#e0e0e0" id="radio-color-picker">
+					<input type="color" id="color-picker" value="#e0e0e0">
+				</label>
+
 			</div>
 
 		</div>
@@ -81,22 +82,27 @@
 	<div class="information">
 
 		{% if admin %}
-			<div class="information__personnal">
-				<h2>Information personnel</h2>
-				
-				<label for="lastname-field">Nom</label>
-				<input type="text" name="person-lastname" id="lastname-field" value="{{person.lastName}}">
+			<div class="information__personal">
+				<h2>PERSONNEL</h2>
 
-				<label for="">Prénom</label>
-				<input type="text" name="person-firstname" id="firstname-field" value="{{person.firstName}}">
+				<div class="information__personal__data">
+					<div>
+						<label for="firstname-field">PRENOM</label>
+						<input type="text" name="person-firstname" id="firstname-field" value="{{person.firstName}}">
+					</div>
 
+					<div>
+						<label for="lastname-field">NOM</label>
+						<input type="text" name="person-lastname" id="lastname-field" value="{{person.lastName}}">
+					</div>
+				</div>
 			</div>
 		{% endif %}
 
-		<div class="contact">
+		<div class="information__contact">
 			<h2>CONTACT</h2>
 
-			<div class="contact__characteristics" id="contact-field">
+			<div class="information__contact__characteristics" id="contact-field">
 
 				{% for characteristic in characteristics %}
 
@@ -124,18 +130,18 @@
 
 	<nav class='confirm'>
 
-		<a href="#">
-			<img src="{{icon('up.svg')}}" class="prev" alt="retour">
+		<a href="{{router.url('person', {id: person.id})}}" class="confirm__prev">
+			<img src="{{icon('up.svg')}}" alt="retour">
 		</a>
 
-		<div>
+		<div class="confirm__action">
 			{% if admin %}
 				<button class="btn btn--secondary" type="button" id="delete-person">
 					Supprimer
 				</button>
 			{% endif %}
 
-			<button class="btn btn--primary" type="submit">
+			<button class="btn btn--primary" type="submit" id="save-person">
 				Enregistrer
 			</button>
 
