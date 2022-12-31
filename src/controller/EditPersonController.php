@@ -111,6 +111,7 @@ class EditPersonController extends Controller {
         }
 
         echo json_encode($response);
+        exit(0);
 
 	}
 
@@ -178,17 +179,22 @@ class EditPersonController extends Controller {
                     return $c->getId() === $characteristic->getId();
                 });
 
-                $lastValue = array_shift($lastCharacteristic);
+                $lastValue = array_shift($lastCharacteristic)->getValue();
                 
-                if($lastValue !== null)
+                if($lastValue !== null){
                     $this->characteristicService->updateCharacteristic($person->getId(), $characteristic);
-                else if ($characteristic->getValue() !== "")
+                }
+                else if ($characteristic->getValue() !== ""){
                     $this->characteristicService->createCharacteristic($person->getId(), $characteristic);
+                }
 
             }
+
+            $response['messages'][] = "Modiciations corectement enregistrées";
         }
 
         echo json_encode($response);
+        exit(0);
     }
 
     public function delete(Router $router, array $parameters): void {
@@ -336,6 +342,8 @@ class EditPersonController extends Controller {
 
         $characteristics = $this->characteristicTypeService->getAllCharacteristicTypes();
 
+        $characteristicsCounter = 0;
+
         foreach ($characteristics as $characteristic) {
 
             $fieldTitle = "characteristic-" . $characteristic->getTitle();
@@ -345,8 +353,23 @@ class EditPersonController extends Controller {
                 $response['messages'][] = "Le champ " . $characteristic->getTitle() . " n'est pas disponible";
                 $response['code'] = 400;
             }else{
+
+                $visibility = isset($data[$fieldVisibility]);
+
+                if ($visibility){
+                    $characteristicsCounter++;
+                }
+
+                if ($characteristicsCounter === 4){
+                    $response['messages'][] = "Vous ne pouvez pas avoir plus de 3 caractéristiques visibles";
+                    $response['code'] = 400;
+
+                    // increment the counter to avoid the message to be displayed multiple times
+                    $characteristicsCounter++;
+                }
+
                 $characteristic->setValue($data[$fieldTitle]);
-                $characteristic->setVisible(isset($data[$fieldVisibility]));
+                $characteristic->setVisible($visibility);
                 $newCaracteristics[] = $characteristic;
             }
 
