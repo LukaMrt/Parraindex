@@ -40,7 +40,7 @@ class ContactExecutorsTest extends TestCase {
 		$this->chockingContentContactExecutor = $this->createMock(ChockingContentContactExecutor::class);
 		$this->otherContactExecutor = $this->createMock(OtherContactExecutor::class);
 
-		$this->contactExecutors = new ContactExecutors(
+		$this->contactExecutors = new ContactExecutors([
 			$this->addPersonContactExecutor,
 			$this->updatePersonContactExecutor,
 			$this->removePersonContactExecutor,
@@ -50,7 +50,7 @@ class ContactExecutorsTest extends TestCase {
 			$this->bugContactExecutor,
 			$this->removeSponsorContactExecutor,
 			$this->otherContactExecutor
-		);
+		]);
 	}
 
 	public function testGetexecutorsbyidReturnsTheExecutorMatching(): void {

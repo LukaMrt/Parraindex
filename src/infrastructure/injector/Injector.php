@@ -3,6 +3,16 @@
 namespace App\infrastructure\injector;
 
 use App\application\contact\ContactDAO;
+use App\application\contact\executor\AddPersonContactExecutor;
+use App\application\contact\executor\AddSponsorContactExecutor;
+use App\application\contact\executor\BugContactExecutor;
+use App\application\contact\executor\ChockingContentContactExecutor;
+use App\application\contact\executor\ContactExecutors;
+use App\application\contact\executor\OtherContactExecutor;
+use App\application\contact\executor\RemovePersonContactExecutor;
+use App\application\contact\executor\RemoveSponsorContactExecutor;
+use App\application\contact\executor\UpdatePersonContactExecutor;
+use App\application\contact\executor\UpdateSponsorContactExecutor;
 use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
@@ -95,8 +105,19 @@ class Injector {
 		$this->container->set(Mailer::class, $mailer);
 		$this->container->set(Random::class, $random);
 		$this->container->set(UrlUtils::class, $urlUtils);
-
 		$this->container->set(SessionManager::class, $sessionManager);
+
+		$this->container->set(ContactExecutors::class, fn(Container $container) => new ContactExecutors([
+			$container->get(AddPersonContactExecutor::class),
+			$container->get(UpdatePersonContactExecutor::class),
+			$container->get(RemovePersonContactExecutor::class),
+			$container->get(AddSponsorContactExecutor::class),
+			$container->get(UpdateSponsorContactExecutor::class),
+			$container->get(ChockingContentContactExecutor::class),
+			$container->get(BugContactExecutor::class),
+			$container->get(RemoveSponsorContactExecutor::class),
+			$container->get(OtherContactExecutor::class)
+		]));
 
 		$this->container->set(PersonDAO::class, $userDAO);
 		$this->container->set(AccountDAO::class, $accountDAO);
