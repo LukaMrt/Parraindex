@@ -23,6 +23,9 @@ class PersonBuilder {
 	/** @var string $biography */
 	private string $biography;
 
+	/** @var string $description */
+	private string $description;
+
 	/** @var array $characteristics */
 	private array $characteristics;
 
@@ -35,20 +38,25 @@ class PersonBuilder {
 	/** @var array $associations */
 	private array $associations;
 
+	/** @var string $color, hex representation of the banner color. */
+	private string $color;
+
 	private array $promotions;
     private int $startYear;
 
     private function __construct() {
         $this->id = 0;
-        $this->identity = new Identity('', '', '');
+        $this->identity = new Identity('', '');
         $this->birthDate = new DateTime();
 		$this->biography = '';
+		$this->description = '';
 		$this->characteristics = array();
 		$this->sponsors = array();
 		$this->families = array();
 		$this->associations = array();
 		$this->promotions = array();
         $this->startYear = 0;
+		$this->color = '#f0f0f0';
 	}
 
 	public static function aPerson(): PersonBuilder {
@@ -73,12 +81,31 @@ class PersonBuilder {
 		return $this;
 	}
 
+
+	/**
+	 * @param string|null $color Set banner color property.
+	 * @return $this Builder instance.
+	 */
+	public function withColor(?string $color): PersonBuilder {
+		$this->color = $color ?? $this->color;
+		return $this;
+	}
+
     /**
      * @param string|null $biography Set biography property.
      * @return $this Builder instance.
      */
 	public function withBiography(?string $biography): PersonBuilder {
 		$this->biography = $biography ?? $this->biography;
+		return $this;
+	}
+
+	/**
+	 * @param string|null $description Set description property.
+	 * @return $this Builder instance.
+	 */
+	public function withDescription(?string $description): PersonBuilder {
+		$this->description = $description ?? $this->description;
 		return $this;
 	}
 
@@ -91,6 +118,10 @@ class PersonBuilder {
 		return $this;
 	}
 
+	/**
+	 * @param Characteristic $characteristic Add a characteristic to the person.
+	 * @return $this Builder instance.
+	 */
 	public function addCharacteristic(Characteristic $characteristic): PersonBuilder {
 		if (!in_Array($characteristic, $this->characteristics)) {
 			$this->characteristics[] = $characteristic;
@@ -125,16 +156,27 @@ class PersonBuilder {
 		return $this;
 	}
 
+	/**
+	 * @param int $startYear Set the entry year of the person.
+	 * @return $this Builder instance.
+	 */
     public function withStartYear(int $startYear): PersonBuilder {
         $this->startYear = $startYear;
         return $this;
     }
 
+	/**
+	 * @param array $promotions Set promotions property.
+	 * @return $this Builder instance.
+	 */
     public function withPromotions(array $promotions): PersonBuilder {
 		$this->promotions = $promotions;
 		return $this;
 	}
 
+	/**
+	 * @param Promotion $promotion Add a promotion to the person.
+	 */
     public function addPromotion(Promotion $promotion): PersonBuilder {
 		$this->promotions[] = $promotion;
 		return $this;
@@ -166,6 +208,20 @@ class PersonBuilder {
 	 */
 	public function getBiography(): string {
 		return $this->biography;
+	}
+
+	/**
+	 * @return string, the hex representation of the banner-color.
+	 */
+	public function getColor(): string {
+		return $this->color;
+	}
+
+	/**
+	 * @return string The description of the person.
+	 */
+	public function getDescription(): string {
+		return $this->description;
 	}
 
     /**

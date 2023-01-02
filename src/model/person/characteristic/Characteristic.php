@@ -11,7 +11,7 @@ class Characteristic {
 	private string $url;
 	private string $image;
 	private bool $visible;
-	private string $value;
+	private ?string $value;
 
 	public function __construct(CharacteristicBuilder $builder) {
 		$this->id = $builder->getId();
@@ -43,8 +43,32 @@ class Characteristic {
 		return $this->image;
 	}
 
-	public function getValue(): string {
+	public function getValue(): ?string {
 		return $this->value;
+	}
+
+	public function getId(): int {
+		return $this->id;
+	}
+
+	/**
+	 * Set the new value of the characteristic
+	 * 
+	 * @param string $value
+	 * @return void
+	 */
+	public function setValue(?string $value): void {
+		$this->value = $value;
+	}
+
+	/**
+	 * Set the new visibility of the characteristic
+	 * 
+	 * @param bool $visible
+	 * @return void
+	 */
+	public function setVisible(bool $visible): void {
+		$this->visible = $visible;
 	}
 
 }

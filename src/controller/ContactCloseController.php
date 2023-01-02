@@ -7,8 +7,6 @@ use App\application\person\PersonService;
 use App\application\sponsor\SponsorService;
 use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
-use App\model\person\Identity;
-use App\model\person\PersonBuilder;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 
@@ -50,16 +48,21 @@ class ContactCloseController extends Controller {
 		switch ($contact->getTypeId()) {
 
 			case 0:
-				$person = PersonBuilder::aPerson()
-					->withIdentity(new Identity($contact->getPerson()->getFirstName(), $contact->getPerson()->getLastName()))
-					->withStartYear($contact->getPerson()->getStartYear())
-					->build();
-				$this->personService->addPerson($person);
+				$parameters = [
+					'first_name' => $contact->getPerson()->getFirstName(),
+					'last_name' => $contact->getPerson()->getLastName(),
+					'picture' => $contact->getPerson()->getPicture(),
+					'biography' => $contact->getPerson()->getBiography(),
+					'description' => $contact->getPerson()->getDescription(),
+					'color' => $contact->getPerson()->getColor(),
+					'start_year' => $contact->getPerson()->getStartYear(),
+				];
+				$this->personService->createPerson($parameters);
 				break;
 
 
 			case 2:
-				$this->personService->removePerson($contact->getPerson()->getId());
+				$this->personService->deletePerson($contact->getPerson());
 				break;
 
 			case 3:

@@ -180,6 +180,8 @@ SQL
 			->withId($buffer[0]->id_person)
 			->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
 			->withBiography($buffer[0]->biography)
+			->withDescription($buffer[0]->description)
+			->withColor($buffer[0]->banner_color)
 			->withCharacteristics($characteristics)
 			->withStartYear($buffer[0]->startYear ?? -1)
             ->build();

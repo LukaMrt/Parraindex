@@ -15,12 +15,12 @@ interface PersonDAO {
 
 	public function updatePerson(Person $person);
 
+	public function createPerson(Person $person): int;
+
+	public function deletePerson(Person $person) : void;
+
 	public function getAllIdentities(): array;
 
 	public function getPersonByLogin(string $login): ?Person;
-
-	public function addPerson(Person $person): void;
-
-	public function removePerson(int $id);
 
 }

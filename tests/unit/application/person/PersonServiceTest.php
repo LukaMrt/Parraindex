@@ -2,6 +2,7 @@
 
 namespace unit\application\person;
 
+use App\application\login\SessionManager;
 use App\application\person\PersonDAO;
 use App\application\person\PersonService;
 use App\model\person\Identity;
@@ -13,21 +14,26 @@ class PersonServiceTest extends TestCase {
 
 	private Person $person;
 
-    private PersonService $personService;
-    private PersonDAO $personDAO;
+	private PersonService $personService;
+	private SessionManager $sessionManager;
+	private PersonDAO $personDAO;
 
-    public function setUp(): void {
+	public function setUp(): void {
 		$this->person = PersonBuilder::aPerson()
 			->withId(1)
-			->withIdentity(new Identity('test', 'test'))
+			->withIdentity(new Identity('test', 'test', 'test'))
 			->withBiography('test')
+			->withDescription('test')
+			->withColor('test')
 			->build();
 
-        $this->personDAO = $this->createMock(PersonDAO::class);
-        $this->personService = new PersonService($this->personDAO);
-    }
+		$this->personDAO = $this->createMock(PersonDAO::class);
+		$this->sessionManager = $this->createMock(SessionManager::class);
 
-    public function testGetallpeopleRetrievesPeopleList() {
+		$this->personService = new PersonService($this->personDAO, $this->sessionManager);
+	}
+
+	public function testGetallpeopleRetrievesPeopleList(): void {
 
 		$this->personDAO->method('getAllPeople')
 			->willReturn(array($this->person));
@@ -37,7 +43,7 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, array($this->person));
 	}
 
-	public function testGetPersonByIdRetrievesPerson() {
+	public function testGetPersonByIdRetrievesPerson(): void {
 
 		$person = $this->createMock(Person::class);
 		$this->personDAO->method('getPersonById')
@@ -49,7 +55,7 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $person);
 	}
 
-	public function testGetPersonByLoginRetrievesPerson() {
+	public function testGetPersonByLoginRetrievesPerson(): void {
 
 		$person = $this->createMock(Person::class);
 		$this->personDAO->method('getPersonByLogin')
@@ -61,22 +67,66 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $person);
 	}
 
-	public function testUpdatepersonUpdatesDao() {
+	public function testUpdatePersonUpdatesSessionIfTheRequesterIsTheConnectedPerson(): void {
 
-		$this->personDAO->expects($this->once())
-			->method('updatePerson')
-			->with($this->equalTo($this->person));
+		$updatedPerson = PersonBuilder::aPerson()
+			->withId(1)
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->build();
+
+		$this->sessionManager->method('get')
+			->with('user')
+			->willReturn($this->person);
+
+		$this->sessionManager->expects($this->once())
+			->method('set')
+			->with('user', $updatedPerson);
 
 		$this->personService->updatePerson(array(
 			'id' => 1,
-			'first_name' => 'test',
-			'last_name' => 'test',
-			'biography' => 'test'
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor'
 		));
 
 	}
 
-	public function testGetpersonbyidentityReturnsPerson() {
+	public function testUpdatepersonUpdatesDao(): void {
+
+		$updatedPerson = PersonBuilder::aPerson()
+			->withId(1)
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->build();
+
+		$this->sessionManager->method('get')
+			->with('user')
+			->willReturn($this->person);
+
+		$this->personDAO->expects($this->once())
+			->method('updatePerson')
+			->with($updatedPerson);
+
+		$this->personService->updatePerson(array(
+			'id' => 1,
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor'
+		));
+	}
+
+	public function testGetpersonbyidentityReturnsPerson(): void {
 
 		$this->personDAO->method('getPerson')
 			->with($this->equalTo(new Identity('test', 'test')))
@@ -87,22 +137,63 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $this->person);
 	}
 
-	public function testAddpersonCallsPersonDAO() {
+	public function testCreatepersonReturnsIdOfTheCreatedPerson(): void {
+		$createPerson = PersonBuilder::aPerson()
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->withStartYear(2010)
+			->build();
 
-		$this->personDAO->expects($this->once())
-			->method('addPerson')
-			->with($this->person);
+		$this->personDAO->method('createPerson')
+			->with($createPerson)
+			->willReturn(1);
 
-		$this->personService->addPerson($this->person);
+		$return = $this->personService->createPerson(array(
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor',
+			'start_year' => 2010
+		));
+
+		$this->assertEquals(1, $return);
 	}
 
-	public function testRemoveepersonCallsPersonDAO() {
+	public function testCreatepersonUses2022WhenNoStartYearIsProvided(): void {
+		$createPerson = PersonBuilder::aPerson()
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->withStartYear(2022)
+			->build();
 
+		$this->personDAO->method('createPerson')
+			->with($createPerson)
+			->willReturn(1);
+
+		$return = $this->personService->createPerson(array(
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor'
+		));
+
+		$this->assertEquals(1, $return);
+	}
+
+	public function testDeletepersonDeletesPerson(): void {
 		$this->personDAO->expects($this->once())
-			->method('removePerson')
-			->with(-1);
+			->method('deletePerson')
+			->with($this->person);
 
-		$this->personService->removePerson(-1);
+		$this->personService->deletePerson($this->person);
 	}
 
 }

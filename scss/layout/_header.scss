@@ -40,6 +40,9 @@
 		&-picture {
 			border-radius: 50%;
 			height: f.rem(50);
+			aspect-ratio: 1/1;
+			object-fit: cover;
+
 			border: 3px solid transparent;
 			@include m.hard-box-shadow();
 			

@@ -68,7 +68,9 @@ class MySqlPersonDAO implements PersonDAO {
 		$builder = PersonBuilder::aPerson()
 			->withId($buffer[0]->id_person)
 			->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
-			->withBiography($buffer[0]->biography);
+			->withBiography($buffer[0]->biography)
+			->withDescription($buffer[0]->description)
+			->withColor($buffer[0]->banner_color);
 
 		$startYear = date("Y");
 		$promotionBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null);
@@ -154,12 +156,22 @@ class MySqlPersonDAO implements PersonDAO {
 	public function updatePerson(Person $person) {
 
 		$connection = $this->databaseConnection->getDatabase();
-		$query = $connection->prepare("UPDATE Person SET first_name = :firstName, last_name = :lastName, biography = :biography WHERE id_person = :id");
+		$query = $connection->prepare("UPDATE Person SET 
+			first_name = :firstName,
+			last_name = :lastName,
+			biography = :biography,
+			banner_color = :bannerColor,
+			description = :description,
+			picture = :picture
+			WHERE id_person = :id");
 
 		$query->execute([
 			'firstName' => $person->getFirstName(),
 			'lastName' => $person->getLastName(),
 			'biography' => $person->getBiography(),
+			'bannerColor' => $person->getColor(),
+			'description' => $person->getDescription(),
+			'picture' => $person->getPicture(),
 			'id' => $person->getId()
 		]);
 		$query->closeCursor();
@@ -210,15 +222,18 @@ class MySqlPersonDAO implements PersonDAO {
 		return $this->buildPerson($buffer);
 	}
 
-	public function addPerson(Person $person): void {
-
+	public function createPerson(Person $person): int {
+		
 		$connection = $this->databaseConnection->getDatabase();
-		$query = $connection->prepare("INSERT INTO Person (first_name, last_name, biography) VALUES (:firstName, :lastName, :biography)");
+		$query = $connection->prepare("INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture) VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)");
 
 		$query->execute([
 			'firstName' => $person->getFirstName(),
 			'lastName' => $person->getLastName(),
-			'biography' => $person->getBiography()
+			'biography' => $person->getBiography(),
+			'bannerColor' => $person->getColor(),
+			'description' => $person->getDescription(),
+			'picture' => $person->getPicture()
 		]);
 
 		$idPerson = $connection->lastInsertId();
@@ -246,16 +261,18 @@ class MySqlPersonDAO implements PersonDAO {
 
 		$query->closeCursor();
 		$connection = null;
+		
+		return $idPerson;
 	}
 
-	public function removePerson(int $id) {
+	public function deletePerson(Person $person): void {
 
 		$connection = $this->databaseConnection->getDatabase();
-		$query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
-		$query->execute(['id' => $id]);
 
+		$query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
+		$query->execute(['id' => $person->getId()]);
 		$query->closeCursor();
 		$connection = null;
-	}
+    }
 
 }

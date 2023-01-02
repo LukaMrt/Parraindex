@@ -1,0 +1,171 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+.edit-person {
+	width: 90%;
+	height: max(90vh, 100%);
+
+	@include m.flex($direction: row, $justify: space-between);
+	gap: f.rem(40) f.rem(50);
+	
+	h2 {
+		text-align: center;
+	}
+
+	input,
+	textarea {
+		border: 1px solid var(--dark-grey);
+		border-radius: f.rem(5);
+		padding: f.rem(5);
+	}
+
+	.description {
+		@include m.flex($direction: column, $justify: space-evenly);
+
+		gap: f.rem(40) 0;
+		height: 100%;
+
+		flex: 2 2 0px;
+
+		&__about,
+		&__biography {
+			@include m.flex($direction: column);
+			gap: f.rem(16);
+			width: 80%;
+		}
+
+		textarea {
+			resize: none;
+			text-align: justify;
+			width: 80%;
+			height: f.rem(150);
+			font-size: f.rem(16);
+			font-family: inherit;
+		}
+
+		@include b.breakpoint(medium) {
+			flex-direction: row;
+		}
+	}
+
+	.public {
+		@include m.flex($justify: space-around);
+		height: 100%;
+
+		flex: 1 1 0px;
+
+		&__personalization {
+			@include m.flex($direction: column);
+			gap: f.rem(16);
+
+			&__choice {
+				width: 80%;
+				@include m.flex($direction: row);
+				gap: f.rem(15) f.rem(20);
+				flex-wrap: wrap;
+
+				input {
+					visibility: hidden;
+				}
+
+				label {
+					position: relative;
+					overflow: hidden;
+					transition: all 0.2s ease-in-out;
+
+					width: f.rem(50);
+					height: f.rem(70);
+					border-radius: f.rem(10);
+
+					@include m.smooth-box-shadow();
+
+					&.user-color::after {
+						content: "";
+						position: absolute;
+						top: 0;
+						left: 0;
+						width: 100%;
+						height: 100%;
+						background: linear-gradient(125deg, transparent 0%, transparent 50%, rgba(0, 0, 0, 0.15) 50%, rgba(0, 0, 0, 0.15) 100%);
+					}
+
+				}
+
+				label:hover {
+					cursor: pointer;
+				}
+
+				label:active {
+					scale: 0.95;
+				}
+
+
+				label:has(input:checked) {
+					scale: 1.1;
+				}
+			}
+		}
+	}
+
+	.information {
+		height: 100%;
+		flex: 2 2 0px;
+		gap: f.rem(40) 0;
+		@include m.flex($direction: column, $justify: space-evenly);
+
+		&__personal {
+			@include m.flex($direction: column);
+			width: min(100%, f.rem(500));
+			gap: f.rem(16);
+
+			&__data {
+				@include m.flex($direction: column);
+				gap: f.rem(10);
+				width: 100%;
+
+				div {
+					@include m.flex($direction: row, $justify: space-between, $align: flex-start);
+					width: 100%;
+
+					label {
+						font-weight: 600;
+					}
+
+					input {
+						width: 40%;
+					}
+				}
+			}
+
+			@include b.breakpoint(medium) {
+				width: 70%;
+			}
+
+		}
+
+		&__contact {
+			@include m.flex($direction: column, $justify: space-evenly);
+			gap: f.rem(16);
+			width: min(100%, f.rem(500));
+
+			&__characteristics {
+				@include m.flex($direction: column, $justify: space-between, $align: flex-start);
+				gap: f.rem(10);
+				width: 100%;
+			}
+
+			@include b.breakpoint(medium) {
+				width: 70%;
+			}
+		}
+
+		@include b.breakpoint(medium) {
+			width: 100%;
+		}
+	}
+
+	@include b.breakpoint(medium) {
+		flex-direction: column;
+	}
+}

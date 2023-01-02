@@ -6,7 +6,6 @@ enum CharacteristicType : string {
 
 	case URL = '';
 	case PHONE = 'tel:';
-	case ADDRESS = 'https://www.google.fr/maps/place/';
 	case EMAIL = 'mailto:';
 
 	public static function fromName(string $name): CharacteristicType {
