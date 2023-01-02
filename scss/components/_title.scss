@@ -6,6 +6,11 @@
 
 	flex-grow: 1;
 	@include m.flex(center, center, column);
+	margin-bottom: f.rem(100);
+
+	@include b.breakpoint(medium) {
+		margin-bottom: f.rem(0);
+	}
 
 	&__text {
 		transition: all 0.3s ease;
@@ -15,11 +20,6 @@
 		color: var(--dark-grey);
 		font-weight: 400;
 		letter-spacing: 15px;
-		padding-bottom: f.rem(100);
-
-		@include b.breakpoint(medium) {
-			padding-bottom: f.rem(0);
-		}
 
 		&:hover {
 			color: var(--dark-blue);
