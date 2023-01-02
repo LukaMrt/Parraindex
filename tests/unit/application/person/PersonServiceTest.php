@@ -14,26 +14,26 @@ class PersonServiceTest extends TestCase {
 
 	private Person $person;
 
-    private PersonService $personService;
+	private PersonService $personService;
 	private SessionManager $sessionManager;
-    private PersonDAO $personDAO;
+	private PersonDAO $personDAO;
 
-    public function setUp(): void {
+	public function setUp(): void {
 		$this->person = PersonBuilder::aPerson()
-            ->withId(1)
+			->withId(1)
 			->withIdentity(new Identity('test', 'test', 'test'))
 			->withBiography('test')
 			->withDescription('test')
 			->withColor('test')
 			->build();
 
-        $this->personDAO = $this->createMock(PersonDAO::class);
+		$this->personDAO = $this->createMock(PersonDAO::class);
 		$this->sessionManager = $this->createMock(SessionManager::class);
 
-        $this->personService = new PersonService($this->personDAO, $this->sessionManager);
-    }
+		$this->personService = new PersonService($this->personDAO, $this->sessionManager);
+	}
 
-    public function testGetallpeopleRetrievesPeopleList() {
+	public function testGetallpeopleRetrievesPeopleList(): void {
 
 		$this->personDAO->method('getAllPeople')
 			->willReturn(array($this->person));
@@ -43,7 +43,7 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, array($this->person));
 	}
 
-	public function testGetPersonByIdRetrievesPerson() {
+	public function testGetPersonByIdRetrievesPerson(): void {
 
 		$person = $this->createMock(Person::class);
 		$this->personDAO->method('getPersonById')
@@ -55,7 +55,7 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $person);
 	}
 
-	public function testGetPersonByLoginRetrievesPerson() {
+	public function testGetPersonByLoginRetrievesPerson(): void {
 
 		$person = $this->createMock(Person::class);
 		$this->personDAO->method('getPersonByLogin')
@@ -67,7 +67,7 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $person);
 	}
 
-	public function testUpdatepersonUpdatesDao() {
+	public function testUpdatePersonUpdatesSessionIfTheRequesterIsTheConnectedPerson(): void {
 
 		$updatedPerson = PersonBuilder::aPerson()
 			->withId(1)
@@ -77,9 +77,39 @@ class PersonServiceTest extends TestCase {
 			->withColor('newColor')
 			->build();
 
-        $this->sessionManager->method('get')
-            ->with('user')
-            ->willReturn($this->person);
+		$this->sessionManager->method('get')
+			->with('user')
+			->willReturn($this->person);
+
+		$this->sessionManager->expects($this->once())
+			->method('set')
+			->with('user', $updatedPerson);
+
+		$this->personService->updatePerson(array(
+			'id' => 1,
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor'
+		));
+
+	}
+
+	public function testUpdatepersonUpdatesDao(): void {
+
+		$updatedPerson = PersonBuilder::aPerson()
+			->withId(1)
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->build();
+
+		$this->sessionManager->method('get')
+			->with('user')
+			->willReturn($this->person);
 
 		$this->personDAO->expects($this->once())
 			->method('updatePerson')
@@ -96,7 +126,7 @@ class PersonServiceTest extends TestCase {
 		));
 	}
 
-	public function testGetpersonbyidentityReturnsPerson() {
+	public function testGetpersonbyidentityReturnsPerson(): void {
 
 		$this->personDAO->method('getPerson')
 			->with($this->equalTo(new Identity('test', 'test')))
@@ -107,6 +137,13 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $this->person);
 	}
 
+	public function testCreatepersonCreatesPerson(): void {
+		$createPerson = PersonBuilder::aPerson()
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->build();
     public function testCreatepersonCreatesPerson() {
         $createPerson = PersonBuilder::aPerson()
             ->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
@@ -116,6 +153,9 @@ class PersonServiceTest extends TestCase {
             ->build();
 	public function testAddpersonCallsPersonDAO() {
 
+		$this->personDAO->expects($this->once())
+			->method('createPerson')
+			->with($createPerson);
         $this->personDAO->expects($this->once())
             ->method('createPerson')
             ->with($createPerson);
@@ -123,45 +163,47 @@ class PersonServiceTest extends TestCase {
 			->method('addPerson')
 			->with($this->person);
 
-        $this->personService->createPerson(array(
-            'first_name' => 'newFirstName',
-            'last_name' => 'newLastName',
-            'picture' => 'newPicture',
-            'biography' => 'newBio',
-            'description' => 'NewDesc',
-            'color' => 'newColor'
-        ));
-    }
+		$this->personService->createPerson(array(
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor'
+		));
+	}
 
-    public function testCreatepersonReturnsIdOfTheCreatedPerson(){
-        $createPerson = PersonBuilder::aPerson()
-            ->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
-            ->withBiography('newBio')
-            ->withDescription('NewDesc')
-            ->withColor('newColor')
-            ->build();
+	public function testCreatepersonReturnsIdOfTheCreatedPerson(): void {
+		$createPerson = PersonBuilder::aPerson()
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->build();
 
-        $this->personDAO->method('createPerson')
-            ->with($createPerson)
-            ->willReturn(1);
+		$this->personDAO->method('createPerson')
+			->with($createPerson)
+			->willReturn(1);
 
-        $return = $this->personService->createPerson(array(
-            'first_name' => 'newFirstName',
-            'last_name' => 'newLastName',
-            'picture' => 'newPicture',
-            'biography' => 'newBio',
-            'description' => 'NewDesc',
-            'color' => 'newColor'
-        ));
+		$return = $this->personService->createPerson(array(
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor'
+		));
 
-        $this->assertEquals($return, 1);
-    }
+		$this->assertEquals(1, $return);
+	}
 
-    public function testDeletepersonDeletesPerson() {
-        $this->personDAO->expects($this->once())
-            ->method('deletePerson')
-            ->with($this->person);
+	public function testDeletepersonDeletesPerson(): void {
+		$this->personDAO->expects($this->once())
+			->method('deletePerson')
+			->with($this->person);
 
+		$this->personService->deletePerson($this->person);
+	}
         $this->personService->deletePerson($this->person);
     }
 		$this->personService->addPerson($this->person);
