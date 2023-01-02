@@ -18,17 +18,17 @@ class Person
 
     public function __construct(PersonBuilder $builder)
     {
-        $this->id = $builder->getId();
-        $this->identity = $builder->getIdentity();
-        $this->biography = $builder->getBiography();
-        $this->color = $builder->getColor();
-        $this->description = $builder->getDescription();
-        $this->characteristics = $builder->getCharacteristics();
-        $this->sponsors = $builder->getSponsors();
-        $this->families = $builder->getFamilies();
-        $this->associations = $builder->getAssociations();
-        $this->promotions = $builder->getPromotions();
-        $this->startYear = $builder->getStartYear();
+        $this->id = $builder->id;
+        $this->identity = $builder->identity;
+        $this->biography = $builder->biography;
+        $this->color = $builder->color;
+        $this->description = $builder->description;
+        $this->characteristics = $builder->characteristics;
+        $this->sponsors = $builder->sponsors;
+        $this->families = $builder->families;
+        $this->associations = $builder->associations;
+        $this->promotions = $builder->promotions;
+        $this->startYear = $builder->startYear;
     }
 
     public function getId(): int

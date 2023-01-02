@@ -15,7 +15,13 @@ class Promotion
     private string $description;
     private array $students;
 
-    public function __construct(int $id, Degree $degree, School $school, int $year, string $description, Person ...$students)
+    public function __construct(
+        int    $id,
+        Degree $degree,
+        School $school, int $year,
+        string $description,
+        Person ...$students
+    )
     {
         $this->id = $id;
         $this->degree = $degree;

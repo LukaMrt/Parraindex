@@ -6,7 +6,14 @@ use App\model\person\Person;
 
 class SponsorFactory
 {
-    public static function createSponsor(int $type, int $id, Person $godFather, Person $godChild, string $date, string $description): Sponsor
+    public static function createSponsor(
+        int    $type,
+        int    $id,
+        Person $godFather,
+        Person $godChild,
+        string $date,
+        string $description
+    ): Sponsor
     {
 
         return match ($type) {

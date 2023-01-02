@@ -8,9 +8,9 @@ enum PrivilegeType
     case TEACHER;
     case STUDENT;
 
-    public static function fromString(string $PRIVILEGE): PrivilegeType
+    public static function fromString(string $type): PrivilegeType
     {
-        return match ($PRIVILEGE) {
+        return match ($type) {
             'ADMIN' => self::ADMIN,
             'TEACHER' => self::TEACHER,
             'STUDENT' => self::STUDENT,

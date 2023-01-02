@@ -11,38 +11,40 @@ use DateTime;
  */
 class PersonBuilder
 {
+
     /** @var int $id */
-    private int $id;
+    public int $id;
 
     /** @var Identity $name */
-    private Identity $identity;
+    public Identity $identity;
 
     /** @var DateTime $birthDate */
-    private DateTime $birthDate;
+    public DateTime $birthDate;
 
     /** @var string $biography */
-    private string $biography;
+    public string $biography;
 
     /** @var string $description */
-    private string $description;
+    public string $description;
 
     /** @var array $characteristics */
-    private array $characteristics;
+    public array $characteristics;
 
     /** @var array $sponsors */
-    private array $sponsors;
+    public array $sponsors;
 
     /** @var array $families */
-    private array $families;
+    public array $families;
 
     /** @var array $associations */
-    private array $associations;
+    public array $associations;
 
     /** @var string $color , hex representation of the banner color. */
-    private string $color;
+    public string $color;
 
-    private array $promotions;
-    private int $startYear;
+    public array $promotions;
+
+    public int $startYear;
 
     private function __construct()
     {
@@ -139,52 +141,12 @@ class PersonBuilder
     }
 
     /**
-     * @param array $sponsors Set sponsors property.
-     * @return $this Builder instance.
-     */
-    public function withSponsors(array $sponsors): PersonBuilder
-    {
-        $this->sponsors = $sponsors;
-        return $this;
-    }
-
-    /**
-     * @param array $families Set families property.
-     * @return $this Builder instance.
-     */
-    public function withFamilies(array $families): PersonBuilder
-    {
-        $this->families = $families;
-        return $this;
-    }
-
-    /**
-     * @param array $associations Set associations property.
-     * @return $this Builder instance.
-     */
-    public function withAssociations(array $associations): PersonBuilder
-    {
-        $this->associations = $associations;
-        return $this;
-    }
-
-    /**
      * @param int $startYear Set the entry year of the person.
      * @return $this Builder instance.
      */
     public function withStartYear(int $startYear): PersonBuilder
     {
         $this->startYear = $startYear;
-        return $this;
-    }
-
-    /**
-     * @param array $promotions Set promotions property.
-     * @return $this Builder instance.
-     */
-    public function withPromotions(array $promotions): PersonBuilder
-    {
-        $this->promotions = $promotions;
         return $this;
     }
 
@@ -205,96 +167,4 @@ class PersonBuilder
         return new Person($this);
     }
 
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return Identity
-     */
-    public function getIdentity(): Identity
-    {
-        return $this->identity;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBiography(): string
-    {
-        return $this->biography;
-    }
-
-    /**
-     * @return string, the hex representation of the banner-color.
-     */
-    public function getColor(): string
-    {
-        return $this->color;
-    }
-
-    /**
-     * @return string The description of the person.
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCharacteristics(): array
-    {
-        return $this->characteristics;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSponsors(): array
-    {
-        return $this->sponsors;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFamilies(): array
-    {
-        return $this->families;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAssociations(): array
-    {
-        return $this->associations;
-    }
-
-    public function getPromotions(): array
-    {
-        return $this->promotions;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getBirthDate(): DateTime
-    {
-        return $this->birthDate;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStartYear(): int
-    {
-        return $this->startYear;
-    }
 }
