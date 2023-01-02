@@ -236,33 +236,6 @@ class MySqlPersonDAO implements PersonDAO {
 			'picture' => $person->getPicture()
 		]);
 
-		$id = $connection->lastInsertId();
-		$query->closeCursor();
-		$connection = null;
-		
-		return $id;
-	}
-
-    public function deletePerson(Person $person): void {
-        
-		$connection = $this->databaseConnection->getDatabase();
-
-		$query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
-		$query->execute(['id' => $person->getId()]);
-		$row = $query->rowCount();
-		$query->closeCursor();
-    }
-	public function addPerson(Person $person): void {
-
-		$connection = $this->databaseConnection->getDatabase();
-		$query = $connection->prepare("INSERT INTO Person (first_name, last_name, biography) VALUES (:firstName, :lastName, :biography)");
-
-		$query->execute([
-			'firstName' => $person->getFirstName(),
-			'lastName' => $person->getLastName(),
-			'biography' => $person->getBiography()
-		]);
-
 		$idPerson = $connection->lastInsertId();
 
 		$query = $connection->prepare("SELECT id_promotion FROM Promotion WHERE year = :start_year AND desc_promotion = 'Première année'");
@@ -288,16 +261,18 @@ class MySqlPersonDAO implements PersonDAO {
 
 		$query->closeCursor();
 		$connection = null;
+		
+		return $idPerson;
 	}
 
-	public function removePerson(int $id) {
+	public function deletePerson(Person $person): void {
 
 		$connection = $this->databaseConnection->getDatabase();
-		$query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
-		$query->execute(['id' => $id]);
 
+		$query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
+		$query->execute(['id' => $person->getId()]);
 		$query->closeCursor();
 		$connection = null;
-	}
+    }
 
 }

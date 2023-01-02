@@ -137,34 +137,39 @@ class PersonServiceTest extends TestCase {
 		$this->assertEquals($return, $this->person);
 	}
 
-	public function testCreatepersonCreatesPerson(): void {
-		$createPerson = PersonBuilder::aPerson()
-			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
-			->withBiography('newBio')
-			->withDescription('NewDesc')
-			->withColor('newColor')
-			->build();
-
-		$this->personDAO->expects($this->once())
-			->method('createPerson')
-			->with($createPerson);
-
-		$this->personService->createPerson(array(
-			'first_name' => 'newFirstName',
-			'last_name' => 'newLastName',
-			'picture' => 'newPicture',
-			'biography' => 'newBio',
-			'description' => 'NewDesc',
-			'color' => 'newColor'
-		));
-	}
-
 	public function testCreatepersonReturnsIdOfTheCreatedPerson(): void {
 		$createPerson = PersonBuilder::aPerson()
 			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
 			->withBiography('newBio')
 			->withDescription('NewDesc')
 			->withColor('newColor')
+			->withStartYear(2010)
+			->build();
+
+		$this->personDAO->method('createPerson')
+			->with($createPerson)
+			->willReturn(1);
+
+		$return = $this->personService->createPerson(array(
+			'first_name' => 'newFirstName',
+			'last_name' => 'newLastName',
+			'picture' => 'newPicture',
+			'biography' => 'newBio',
+			'description' => 'NewDesc',
+			'color' => 'newColor',
+			'start_year' => 2010
+		));
+
+		$this->assertEquals(1, $return);
+	}
+
+	public function testCreatepersonUses2022WhenNoStartYearIsProvided(): void {
+		$createPerson = PersonBuilder::aPerson()
+			->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
+			->withBiography('newBio')
+			->withDescription('NewDesc')
+			->withColor('newColor')
+			->withStartYear(2022)
 			->build();
 
 		$this->personDAO->method('createPerson')
@@ -189,23 +194,6 @@ class PersonServiceTest extends TestCase {
 			->with($this->person);
 
 		$this->personService->deletePerson($this->person);
-	}
-
-	public function testAddpersonCallsPersonDAO() {
-
-		$this->personDAO->expects($this->once())
-			->method('addPerson')
-			->with($this->person);
-		$this->personService->addPerson($this->person);
-	}
-
-	public function testRemoveepersonCallsPersonDAO() {
-
-		$this->personDAO->expects($this->once())
-			->method('removePerson')
-			->with(-1);
-
-		$this->personService->removePerson(-1);
 	}
 
 }

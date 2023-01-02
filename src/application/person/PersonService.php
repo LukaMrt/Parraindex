@@ -56,21 +56,14 @@ class PersonService {
             ->withBiography($parameters['biography'])
             ->withDescription($parameters['description'])
             ->withColor($parameters['color'])
+			->withStartYear($parameters['start_year'] ?? 2022)
             ->build();
 
         return $this->personDAO->createPerson($person);
     }
 
-    public function deletePerson(Person $person): void {
-        $this->personDAO->deletePerson($person);
-    }
-
-	public function addPerson(Person $person): void {
-		$this->personDAO->addPerson($person);
-	}
-
-	public function removePerson(int $id): void {
-		$this->personDAO->removePerson($id);
+	public function deletePerson(Person $person): void {
+		$this->personDAO->deletePerson($person);
 	}
 
 }
