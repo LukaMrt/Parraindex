@@ -144,24 +144,10 @@ class PersonServiceTest extends TestCase {
 			->withDescription('NewDesc')
 			->withColor('newColor')
 			->build();
-    public function testCreatepersonCreatesPerson() {
-        $createPerson = PersonBuilder::aPerson()
-            ->withIdentity(new Identity('newFirstName', 'newLastName', 'newPicture'))
-            ->withBiography('newBio')
-            ->withDescription('NewDesc')
-            ->withColor('newColor')
-            ->build();
-	public function testAddpersonCallsPersonDAO() {
 
 		$this->personDAO->expects($this->once())
 			->method('createPerson')
 			->with($createPerson);
-        $this->personDAO->expects($this->once())
-            ->method('createPerson')
-            ->with($createPerson);
-		$this->personDAO->expects($this->once())
-			->method('addPerson')
-			->with($this->person);
 
 		$this->personService->createPerson(array(
 			'first_name' => 'newFirstName',
@@ -204,8 +190,12 @@ class PersonServiceTest extends TestCase {
 
 		$this->personService->deletePerson($this->person);
 	}
-        $this->personService->deletePerson($this->person);
-    }
+
+	public function testAddpersonCallsPersonDAO() {
+
+		$this->personDAO->expects($this->once())
+			->method('addPerson')
+			->with($this->person);
 		$this->personService->addPerson($this->person);
 	}
 
