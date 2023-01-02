@@ -18,7 +18,8 @@ class Promotion
     public function __construct(
         int    $id,
         Degree $degree,
-        School $school, int $year,
+        School $school,
+        int    $year,
         string $description,
         Person ...$students
     )
