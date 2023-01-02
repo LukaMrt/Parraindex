@@ -18,12 +18,12 @@ use PHPUnit\Framework\TestCase;
 class AddSponsorContactExecutorTest extends TestCase
 {
 
-	const TEST_EMAIL = 'test.test@test.com';
-	const TEST_DATE = '2021-01-01';
-	private AddSponsorContactExecutor $executor;
+    const TEST_EMAIL = 'test.test@test.com';
+    const TEST_DATE = '2021-01-01';
+    private AddSponsorContactExecutor $executor;
 
     private ContactDAO $contactDAO;
-	private PersonDAO $personDAO;
+    private PersonDAO $personDAO;
     private SponsorDAO $sponsorDAO;
 
     private array $defaultArray = [
@@ -45,11 +45,11 @@ class AddSponsorContactExecutorTest extends TestCase
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
         $this->executor = new AddSponsorContactExecutor(
-			$this->contactDAO,
-			$redirect,
-			$this->personDAO,
-			$this->sponsorDAO
-		);
+            $this->contactDAO,
+            $redirect,
+            $this->personDAO,
+            $this->sponsorDAO
+        );
     }
 
     public function testExecuteReturnsErrorWhenSenderFirstNameIsMissing()
@@ -155,7 +155,7 @@ class AddSponsorContactExecutorTest extends TestCase
         $contact = new SponsorContact(
             -1,
             'test1 test2',
-			self::TEST_EMAIL,
+            self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,
             'empty',
             $sponsor
@@ -183,7 +183,7 @@ class AddSponsorContactExecutorTest extends TestCase
         $contact = new SponsorContact(
             -1,
             'test1 test2',
-			self::TEST_EMAIL,
+            self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,
             'empty',
             $sponsor

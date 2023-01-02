@@ -16,282 +16,298 @@ use App\model\person\Person;
 use App\model\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
-class SignupServiceTest extends TestCase {
+class SignupServiceTest extends TestCase
+{
+
+    const DEFAULT_PARAMETERS = array(
+        'firstname' => 'Test',
+        'lastname' => 'testa',
+        'email' => 'Test.testaaa@etu.univ-lyon1.fr',
+        'password' => 'test',
+        'password-confirm' => 'test'
+    );
+    private Account $validAccount;
+    private Person $person;
+
+    private SignupService $signupService;
+    private Redirect $redirect;
+    private AccountDAO $accountDAO;
+    private PersonDAO $personDAO;
+    private Mailer $mailer;
+    private Random $random;
+    private UrlUtils $urlUtils;
 
-	const DEFAULT_PARAMETERS = array(
-		'firstname' => 'Test',
-		'lastname' => 'testa',
-		'email' => 'Test.testaaa@etu.univ-lyon1.fr',
-		'password' => 'test',
-		'password-confirm' => 'test'
-	);
-	private Account $validAccount;
-	private Person $person;
+    public function setUp(): void
+    {
 
-	private SignupService $signupService;
-	private Redirect $redirect;
-	private AccountDAO $accountDAO;
-	private PersonDAO $personDAO;
-	private Mailer $mailer;
-	private Random $random;
-	private UrlUtils $urlUtils;
+        $this->person = PersonBuilder::aPerson()
+            ->withId(-1)
+            ->withIdentity(new Identity('test', 'test'))
+            ->build();
 
-	public function setUp(): void {
+        $this->validAccount = new Account(1, 'test.test@etu.univ-lyon1.fr', $this->person, new Password('password'));
 
-		$this->person = PersonBuilder::aPerson()
-			->withId(-1)
-			->withIdentity(new Identity('test', 'test'))
-			->build();
+        $this->accountDAO = $this->createMock(AccountDAO::class);
+        $this->personDAO = $this->createMock(PersonDAO::class);
+        $this->redirect = $this->createMock(Redirect::class);
+        $this->mailer = $this->createMock(Mailer::class);
+        $this->random = $this->createMock(Random::class);
+        $this->urlUtils = $this->createMock(UrlUtils::class);
+        $this->signupService = new SignupService(
+            $this->accountDAO,
+            $this->personDAO,
+            $this->redirect,
+            $this->mailer,
+            $this->random,
+            $this->urlUtils
+        );
+    }
 
-		$this->validAccount = new Account(1, 'test.test@etu.univ-lyon1.fr', $this->person, new Password('password'));
+    public function testSignupDetectsMissingFields(): void
+    {
 
-		$this->accountDAO = $this->createMock(AccountDAO::class);
-		$this->personDAO = $this->createMock(PersonDAO::class);
-		$this->redirect = $this->createMock(Redirect::class);
-		$this->mailer = $this->createMock(Mailer::class);
-		$this->random = $this->createMock(Random::class);
-		$this->urlUtils = $this->createMock(UrlUtils::class);
-		$this->signupService = new SignupService(
-			$this->accountDAO,
-			$this->personDAO,
-			$this->redirect,
-			$this->mailer,
-			$this->random,
-			$this->urlUtils
-		);
-	}
+        $return = $this->signupService->signup(array());
 
-	public function testSignupDetectsMissingFields(): void {
+        $this->assertEquals('Veuillez remplir tous les champs', $return);
+    }
 
-		$return = $this->signupService->signup(array());
+    public function testSignupDetectsInvalidEmail(): void
+    {
 
-		$this->assertEquals('Veuillez remplir tous les champs', $return);
-	}
+        $parameters = self::DEFAULT_PARAMETERS;
+        $parameters['email'] = 'test';
 
-	public function testSignupDetectsInvalidEmail(): void {
+        $return = $this->signupService->signup($parameters);
 
-		$parameters = self::DEFAULT_PARAMETERS;
-		$parameters['email'] = 'test';
+        $this->assertEquals('L\'email doit doit être votre email universitaire', $return);
+    }
 
-		$return = $this->signupService->signup($parameters);
+    public function testSignupDetectsPasswordsMismatch(): void
+    {
 
-		$this->assertEquals('L\'email doit doit être votre email universitaire', $return);
-	}
+        $return = $this->signupService->signup(array(
+            'lastname' => 'test',
+            'firstname' => 'test',
+            'email' => 'test.test@etu.univ-lyon1.fr',
+            'password' => 'test',
+            'password-confirm' => 'test2',
+        ));
 
-	public function testSignupDetectsPasswordsMismatch(): void {
+        $this->assertEquals('Les mots de passe ne correspondent pas', $return);
+    }
 
-		$return = $this->signupService->signup(array(
-			'lastname' => 'test',
-			'firstname' => 'test',
-			'email' => 'test.test@etu.univ-lyon1.fr',
-			'password' => 'test',
-			'password-confirm' => 'test2',
-		));
+    public function testSignupDetectsUnknownName(): void
+    {
 
-		$this->assertEquals('Les mots de passe ne correspondent pas', $return);
-	}
+        $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
-	public function testSignupDetectsUnknownName(): void {
+        $this->assertEquals('Votre nom n\'est pas enregistré, merci de contacter un administrateur', $return);
+    }
 
-		$return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
+    public function testSignupDetectsAlreadyExistingAccountWithEmail(): void
+    {
 
-		$this->assertEquals('Votre nom n\'est pas enregistré, merci de contacter un administrateur', $return);
-	}
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('Test', 'testa'))
+            ->willReturn($this->person);
 
-	public function testSignupDetectsAlreadyExistingAccountWithEmail(): void {
+        $this->accountDAO->method("existsAccount")
+            ->willReturn(true);
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('Test', 'testa'))
-			->willReturn($this->person);
+        $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
-		$this->accountDAO->method("existsAccount")
-			->willReturn(true);
+        $this->assertEquals('Un compte existe déjà avec cette adresse email', $return);
+    }
 
-		$return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
+    public function testSignupDetectsAlreadyExistingAccountWithName(): void
+    {
 
-		$this->assertEquals('Un compte existe déjà avec cette adresse email', $return);
-	}
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('Test', 'testa'))
+            ->willReturn($this->person);
 
-	public function testSignupDetectsAlreadyExistingAccountWithName(): void {
+        $this->accountDAO->method("existsAccount")
+            ->willReturn(false);
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('Test', 'testa'))
-			->willReturn($this->person);
+        $this->accountDAO->method("existsAccountByIdentity")
+            ->willReturn(true);
 
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
+        $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
-		$this->accountDAO->method("existsAccountByIdentity")
-			->willReturn(true);
+        $this->assertEquals('Un compte existe déjà avec ce nom', $return);
+    }
 
-		$return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
+    public function testSignupDetectsEmailBelongingToSomeoneElse(): void
+    {
 
-		$this->assertEquals('Un compte existe déjà avec ce nom', $return);
-	}
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('Test', 'testa'))
+            ->willReturn($this->person);
 
-	public function testSignupDetectsEmailBelongingToSomeoneElse(): void {
+        $this->personDAO->method('getAllIdentities')
+            ->willReturn(array(
+                new Identity('teSTa', 'testb'),
+                new Identity('testa', 'Test'),
+                new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
+                new Identity('TeSt', 'tEst'),
+            ));
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('Test', 'testa'))
-			->willReturn($this->person);
+        $this->accountDAO->method("existsAccount")
+            ->willReturn(false);
 
-		$this->personDAO->method('getAllIdentities')
-			->willReturn(array(
-				new Identity('teSTa', 'testb'),
-				new Identity('testa', 'Test'),
-				new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
-				new Identity('TeSt', 'tEst'),
-			));
+        $this->accountDAO->method("existsAccountByIdentity")
+            ->willReturn(false);
 
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
+        $params = self::DEFAULT_PARAMETERS;
+        $params['email'] = 'tEsta.testb@etu.univ-lyon1.fr';
+        $return = $this->signupService->signup($params);
 
-		$this->accountDAO->method("existsAccountByIdentity")
-			->willReturn(false);
+        $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
+    }
 
-		$params = self::DEFAULT_PARAMETERS;
-		$params['email'] = 'tEsta.testb@etu.univ-lyon1.fr';
-		$return = $this->signupService->signup($params);
+    public function testSignupDetectsEmailTooFarFromName(): void
+    {
 
-		$this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
-	}
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('Test', 'testa'))
+            ->willReturn($this->person);
 
-	public function testSignupDetectsEmailTooFarFromName(): void {
+        $this->personDAO->method('getAllIdentities')
+            ->willReturn(array());
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('Test', 'testa'))
-			->willReturn($this->person);
+        $this->accountDAO->method("existsAccount")
+            ->willReturn(false);
 
-		$this->personDAO->method('getAllIdentities')
-			->willReturn(array());
+        $this->accountDAO->method("existsAccountByIdentity")
+            ->willReturn(false);
 
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
+        $params = self::DEFAULT_PARAMETERS;
+        $params['email'] = 'amkfjsqdmfkjqsdf.qsdùfkjqsdfkljsqdf@etu.univ-lyon1.fr';
+        $return = $this->signupService->signup($params);
 
-		$this->accountDAO->method("existsAccountByIdentity")
-			->willReturn(false);
+        $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
+    }
 
-		$params = self::DEFAULT_PARAMETERS;
-		$params['email'] = 'amkfjsqdmfkjqsdf.qsdùfkjqsdfkljsqdf@etu.univ-lyon1.fr';
-		$return = $this->signupService->signup($params);
+    public function testSignupRedirectToConfirmationPageOnSuccess(): void
+    {
 
-		$this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
-	}
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('Test', 'testa'))
+            ->willReturn($this->person);
 
-	public function testSignupRedirectToConfirmationPageOnSuccess(): void {
+        $this->accountDAO->method("existsAccount")
+            ->willReturn(false);
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('Test', 'testa'))
-			->willReturn($this->person);
+        $this->accountDAO->method("existsAccountByIdentity")
+            ->willReturn(false);
 
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
+        $this->personDAO->method('getAllIdentities')
+            ->willReturn(array(
+                new Identity('Test', 'testa'),
+                new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
+            ));
 
-		$this->accountDAO->method("existsAccountByIdentity")
-			->willReturn(false);
+        $this->redirect->expects($this->once())
+            ->method('redirect')
+            ->with('signup_confirmation');
 
-		$this->personDAO->method('getAllIdentities')
-			->willReturn(array(
-				new Identity('Test', 'testa'),
-				new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
-			));
+        $this->signupService->signup(self::DEFAULT_PARAMETERS);
+    }
 
-		$this->redirect->expects($this->once())
-			->method('redirect')
-			->with('signup_confirmation');
+    public function testSignupCreatesTemporaryAccountOnSuccess(): void
+    {
 
-		$this->signupService->signup(self::DEFAULT_PARAMETERS);
-	}
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('Test', 'testa'))
+            ->willReturn($this->person);
 
-	public function testSignupCreatesTemporaryAccountOnSuccess(): void {
+        $this->accountDAO->method("existsAccount")
+            ->willReturn(false);
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('Test', 'testa'))
-			->willReturn($this->person);
+        $this->random->method('generate')
+            ->with(10)
+            ->willReturn('1');
 
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
+        $this->accountDAO->expects($this->once())
+            ->method('createTemporaryAccount')
+            ->with(new Account(-1, 'test.testaaa@etu.univ-lyon1.fr', $this->person, new Password('test')), '1');
 
-		$this->random->method('generate')
-			->with(10)
-			->willReturn('1');
+        $this->signupService->signup(self::DEFAULT_PARAMETERS);
+    }
 
-		$this->accountDAO->expects($this->once())
-			->method('createTemporaryAccount')
-			->with(new Account(-1, 'test.testaaa@etu.univ-lyon1.fr', $this->person, new Password('test')), '1');
+    public function testSignupSendsEmailOnSuccess(): void
+    {
 
-		$this->signupService->signup(self::DEFAULT_PARAMETERS);
-	}
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('Test', 'testa'))
+            ->willReturn($this->person);
 
-	public function testSignupSendsEmailOnSuccess(): void {
+        $this->accountDAO->method("existsAccount")
+            ->willReturn(false);
 
-		$this->personDAO->method('getPerson')
-			->with(new Identity('Test', 'testa'))
-			->willReturn($this->person);
+        $this->random->method('generate')
+            ->with(10)
+            ->willReturn('1');
 
-		$this->accountDAO->method("existsAccount")
-			->willReturn(false);
+        $this->urlUtils->method('getBaseUrl')
+            ->willReturn('http://localhost');
 
-		$this->random->method('generate')
-			->with(10)
-			->willReturn('1');
+        $this->urlUtils->method('buildUrl')
+            ->with('signup_validation', ['token' => '1'])
+            ->willReturn('/signup/validation/1');
 
-		$this->urlUtils->method('getBaseUrl')
-			->willReturn('http://localhost');
+        $this->mailer->expects($this->once())
+            ->method('send')
+            ->with(
+                'test.testaaa@etu.univ-lyon1.fr',
+                'Parraindex : inscription',
+                "Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer "
+                . "sur ce lien pour la valider : <a href=\"http://localhost/signup/validation/1\">"
+                . "http://localhost/signup/validation/1</a><br><br>Cordialement<br>Le Parrainboss"
+            );
 
-		$this->urlUtils->method('buildUrl')
-			->with('signup_validation', ['token' => '1'])
-			->willReturn('/signup/validation/1');
+        $this->signupService->signup(self::DEFAULT_PARAMETERS);
+    }
 
-		$this->mailer->expects($this->once())
-			->method('send')
-			->with(
-				'test.testaaa@etu.univ-lyon1.fr',
-				'Parraindex : inscription',
-				"Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer "
-				. "sur ce lien pour la valider : <a href=\"http://localhost/signup/validation/1\">"
-				. "http://localhost/signup/validation/1</a><br><br>Cordialement<br>Le Parrainboss"
-			);
+    public function testValidateDetectsUnknownToken(): void
+    {
 
-		$this->signupService->signup(self::DEFAULT_PARAMETERS);
-	}
+        $this->accountDAO->method('getTemporaryAccountByToken')
+            ->with('1')
+            ->willReturn(new Account(-1, '', PersonBuilder::aPerson()->build(), new Password('')));
 
-	public function testValidateDetectsUnknownToken(): void {
+        $return = $this->signupService->validate('1');
 
-		$this->accountDAO->method('getTemporaryAccountByToken')
-			->with('1')
-			->willReturn(new Account(-1, '', PersonBuilder::aPerson()->build(), new Password('')));
+        $this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
+    }
 
-		$return = $this->signupService->validate('1');
+    public function testValidateCreatesAccountOnSuccess(): void
+    {
 
-		$this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
-	}
+        $this->accountDAO->method('getTemporaryAccountByToken')
+            ->with('1')
+            ->willReturn($this->validAccount);
 
-	public function testValidateCreatesAccountOnSuccess(): void {
+        $this->accountDAO->expects($this->once())
+            ->method('createAccount')
+            ->with($this->validAccount);
 
-		$this->accountDAO->method('getTemporaryAccountByToken')
-			->with('1')
-			->willReturn($this->validAccount);
+        $this->signupService->validate('1');
+    }
 
-		$this->accountDAO->expects($this->once())
-			->method('createAccount')
-			->with($this->validAccount);
+    public function testValidateDeletesTemporaryAccountOnSuccess(): void
+    {
 
-		$this->signupService->validate('1');
-	}
+        $this->accountDAO->method('getTemporaryAccountByToken')
+            ->with('1')
+            ->willReturn($this->validAccount);
 
-	public function testValidateDeletesTemporaryAccountOnSuccess(): void {
+        $this->accountDAO->expects($this->once())
+            ->method('deleteTemporaryAccount')
+            ->with($this->validAccount);
 
-		$this->accountDAO->method('getTemporaryAccountByToken')
-			->with('1')
-			->willReturn($this->validAccount);
-
-		$this->accountDAO->expects($this->once())
-			->method('deleteTemporaryAccount')
-			->with($this->validAccount);
-
-		$this->signupService->validate('1');
-	}
+        $this->signupService->validate('1');
+    }
 
 }
 
