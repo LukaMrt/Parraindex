@@ -15,7 +15,7 @@
     <php>
         <ini name="error_reporting" value="-1"/>
         <ini name="display_errors" value="On"/>
-        <ini name="xdebug.mode" value="coverage" />
+        <ini name="xdebug.mode" value="coverage"/>
     </php>
 
     <coverage>

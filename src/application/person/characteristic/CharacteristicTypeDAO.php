@@ -2,9 +2,9 @@
 
 namespace App\application\person\characteristic;
 
-interface CharacteristicTypeDAO {
+interface CharacteristicTypeDAO
+{
+    public function getAllCharacteristicTypes(): array;
 
-	public function getAllCharacteristicTypes(): array;
-	
-	public function getAllCharacteristicAndValues(int $idPerson): array;
+    public function getAllCharacteristicAndValues(int $idPerson): array;
 }

@@ -4,79 +4,88 @@
 
 
 .confirm {
-	@include m.flex($direction: row, $justify: space-between);
-	pointer-events: none;
-	position: absolute;
-	gap: f.rem(10) f.rem(20);
-	
-	left: 10%;
-	right: 10%;
-	bottom: 1vh;
+  @include m.flex($direction: row, $justify: space-between);
+  pointer-events: none;
+  position: absolute;
+  gap: f.rem(10) f.rem(20);
 
-	&__prev {
-		pointer-events: all;
-		img{
-			rotate: -90deg;
-			width: f.rem(40);
-			aspect-ratio: 1/1;
-		}
-	}
+  left: 10%;
+  right: 10%;
+  bottom: 1vh;
 
-	&__action{
-		@include m.flex($direction: row);
-		gap: inherit;
-		pointer-events: all;
+  &__prev {
+    pointer-events: all;
 
-		#delete-person{
-			background-color: all 0.2s ease-in-out;
-			position: relative;
-			overflow: hidden;
-			width: f.rem(150);
-			z-index: 10;
+    img {
+      rotate: -90deg;
+      width: f.rem(40);
+      aspect-ratio: 1/1;
+    }
+  }
 
-			&::before{
-				transition: width 0.8s ease;
-				content: "";
-				position: absolute;
-				top: 0;
-				left: 0;
-				width: 0px;
-				height: 100%;
-				background-color: #ec5757;
-				z-index: -1;
-			}
+  &__action {
+    @include m.flex($direction: row);
+    gap: inherit;
+    pointer-events: all;
 
-			&.sure{
+    #delete-person {
+      background-color: all 0.2s ease-in-out;
+      position: relative;
+      overflow: hidden;
+      width: f.rem(150);
+      z-index: 10;
 
-				animation: forwards suppression 1.2s ease;
+      &::before {
+        transition: width 0.8s ease;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0px;
+        height: 100%;
+        background-color: #ec5757;
+        z-index: -1;
+      }
 
-				&::before{
-					width: 100%;
-				}
-				
-			}
+      &.sure {
 
-			@keyframes suppression {
-				0% {color: var(--dark-blue);}
-				20% {color: transparent;}
-				70% {color: transparent;}
-				100% {color: white;}
-			}
-		}
+        animation: forwards suppression 1.2s ease;
 
-		@include b.breakpoint(small) {
-			flex-wrap: wrap;
-		}
+        &::before {
+          width: 100%;
+        }
 
-	}
+      }
 
-	@include b.breakpoint(medium) {
-		position: relative;
-		justify-content: center;
-		width: 100%;
-		flex-wrap: wrap;
-		bottom: 0;
-		left: 0;
-		right: 0;
-	}
+      @keyframes suppression {
+        0% {
+          color: var(--dark-blue);
+        }
+        20% {
+          color: transparent;
+        }
+        70% {
+          color: transparent;
+        }
+        100% {
+          color: white;
+        }
+      }
+    }
+
+    @include b.breakpoint(small) {
+      flex-wrap: wrap;
+    }
+
+  }
+
+  @include b.breakpoint(medium) {
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
 }

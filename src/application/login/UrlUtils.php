@@ -2,10 +2,9 @@
 
 namespace App\application\login;
 
-interface UrlUtils {
+interface UrlUtils
+{
+    public function getBaseUrl(): string;
 
-	public function getBaseUrl(): string;
-
-	public function buildUrl(string $route, array $parameters);
-
+    public function buildUrl(string $route, array $parameters);
 }

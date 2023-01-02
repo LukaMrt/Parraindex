@@ -7,14 +7,16 @@ use App\model\person\characteristic\CharacteristicBuilder;
 use App\model\person\PersonBuilder;
 use Monolog\Test\TestCase;
 
-class CharacteristicTypeServiceTest extends TestCase {
+class CharacteristicTypeServiceTest extends TestCase
+{
 
     private CharacteristicTypeDAO $characteristicDAO;
     private CharacteristicTypeService $characteristicTypeService;
 
     private Characteristic $characteristic;
 
-    public function setUp(): void {
+    public function setUp(): void
+    {
 
         $this->characteristicDAO = $this->createMock(CharacteristicTypeDAO::class);
         $this->characteristicTypeService = new CharacteristicTypeService($this->characteristicDAO);
@@ -30,7 +32,8 @@ class CharacteristicTypeServiceTest extends TestCase {
             ->build();
     }
 
-    public function testGetallcharacteristictypesReturnsAllTypes() {
+    public function testGetallcharacteristictypesReturnsAllTypes()
+    {
 
         $this->characteristicDAO
             ->method('getAllCharacteristicTypes')
@@ -41,10 +44,11 @@ class CharacteristicTypeServiceTest extends TestCase {
         $this->assertEquals([$this->characteristic], $characteristics);
     }
 
-    public function testGetCharacteristicTypeAndValuesReturnsTypeAndValues() {
+    public function testGetCharacteristicTypeAndValuesReturnsTypeAndValues()
+    {
 
         $person = PersonBuilder::aPerson()
-                ->build();
+            ->build();
 
         $this->characteristicDAO->method('getAllCharacteristicAndValues')
             ->with($person->getId())

@@ -4,27 +4,27 @@
 
 .link {
 
-	text-align: center;
-	padding: f.rem(10) f.rem(5);
-	font-size: small;
-	@include m.flex(center, center, column);
+  text-align: center;
+  padding: f.rem(10) f.rem(5);
+  font-size: small;
+  @include m.flex(center, center, column);
 
-	&--row {
-		@include m.flex(center, center, row);
-		gap: f.rem(5);
+  &--row {
+    @include m.flex(center, center, row);
+    gap: f.rem(5);
 
-		@include b.breakpoint(small) {
-			@include m.flex(center, center, column);
-		}
+    @include b.breakpoint(small) {
+      @include m.flex(center, center, column);
+    }
 
-	}
+  }
 
-	&__prefix {
-		color: var(--medium-grey);
-	}
+  &__prefix {
+    color: var(--medium-grey);
+  }
 
-	&__title {
-		color: var(--dark-blue);
-	}
+  &__title {
+    color: var(--dark-blue);
+  }
 
 }

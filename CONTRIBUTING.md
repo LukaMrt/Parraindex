@@ -37,7 +37,7 @@ If you want to implement a feature, please follow these steps:
 
 The PHP code must follow the [PSR-12](https://www.php-fig.org/psr/psr-12/) standard.
 
-###  Commit messages
+### Commit messages
 
 The commit messages must follow the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) standard.
 

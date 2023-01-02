@@ -7,35 +7,53 @@ use App\infrastructure\database\DatabaseConnection;
 use App\model\person\characteristic\Characteristic;
 use App\model\person\characteristic\CharacteristicBuilder;
 
-class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO {
+class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
+{
+    private DatabaseConnection $databaseConnection;
 
-	private DatabaseConnection $databaseConnection;
+    public function __construct(DatabaseConnection $databaseConnection)
+    {
+        $this->databaseConnection = $databaseConnection;
+    }
 
-	public function __construct(DatabaseConnection $databaseConnection) {
-		$this->databaseConnection = $databaseConnection;
-	}
+    public function getAllCharacteristicTypes(): array
+    {
+        $connection = $this->databaseConnection->getDatabase();
 
-	public function getAllCharacteristicTypes(): array {
-		$connection = $this->databaseConnection->getDatabase();
+        $statement = $connection->prepare("SELECT * FROM TypeCharacteristic");
+        $statement->execute();
 
-		$statement = $connection->prepare("SELECT * FROM TypeCharacteristic");
-		$statement->execute();
+        $characteristics = array();
 
-		$characteristics = array();
+        while ($row = $statement->fetch()) {
+            $characteristics[] = $this->buildCharacteristic($row);
+        }
 
-		while ($row = $statement->fetch()) {
-			$characteristics[] = $this->buildCharacteristic($row);
-		}
+        $statement->closeCursor();
 
-		$statement->closeCursor();
+        return $characteristics;
+    }
 
-		return $characteristics;
-	}
+    public function buildCharacteristic($buffer): Characteristic
+    {
+        $characteristic = (new CharacteristicBuilder())
+            ->withId($buffer->id_network)
+            ->withType($buffer->type)
+            ->withTitle($buffer->title)
+            ->withUrl($buffer->url)
+            ->withImage($buffer->image)
+            ->withVisibility($buffer->visibility ?? false)
+            ->withValue($buffer->value ?? false)
+            ->build();
 
-	public function getAllCharacteristicAndValues(int $idPeron): array{
-		$connection = $this->databaseConnection->getDatabase();
+        return $characteristic;
+    }
 
-		$statement = $connection->prepare(" SELECT *
+    public function getAllCharacteristicAndValues(int $idPeron): array
+    {
+        $connection = $this->databaseConnection->getDatabase();
+
+        $statement = $connection->prepare(" SELECT *
 											FROM TypeCharacteristic
 											LEFT JOIN  (
 												SELECT *
@@ -45,35 +63,21 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO {
 											AS c USING (id_network)
 		");
 
-		$statement->execute(array(
-			':id_person' => $idPeron
-		));
+        $statement->execute(array(
+            ':id_person' => $idPeron
+        ));
 
-		$characteristics = array();
+        $characteristics = array();
 
-		while ($row = $statement->fetch()) {
-			$characteristic = $this->buildCharacteristic($row);
-			if ($row->id_characteristic == null)
-				$characteristic->setValue(null);
+        while ($row = $statement->fetch()) {
+            $characteristic = $this->buildCharacteristic($row);
+            if ($row->id_characteristic == null) {
+                $characteristic->setValue(null);
+            }
 
-			$characteristics[] = $characteristic;
+            $characteristics[] = $characteristic;
+        }
 
-		}
-
-		return $characteristics;
-	}
-
-	public function buildCharacteristic($buffer): Characteristic {
-		$characteristic = (new CharacteristicBuilder())
-			->withId($buffer->id_network)
-			->withType($buffer->type)
-			->withTitle($buffer->title)
-			->withUrl($buffer->url)
-			->withImage($buffer->image)
-			->withVisibility($buffer->visibility ?? False)
-			->withValue($buffer->value ?? false)
-			->build();
-
-		return $characteristic;
-	}
+        return $characteristics;
+    }
 }

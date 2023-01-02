@@ -2,38 +2,38 @@
 @use "../abstracts/mixins" as m;
 @use "../abstracts/breakpoints" as b;
 
-body{
-	@include m.flex($direction: column, $justify: space-between);
+body {
+  @include m.flex($direction: column, $justify: space-between);
 
-	margin: 0;
+  margin: 0;
 
-	min-width: 350px;
+  min-width: 350px;
 
-	min-height: 100vh;
-	min-height: 100dvh;
+  min-height: 100vh;
+  min-height: 100dvh;
 
-	box-sizing: border-box;
+  box-sizing: border-box;
 
-	font-family: 'lato', Helvetica, sans-serif;
-	background-color: var(--white);
-	color: var(--dark-blue);
+  font-family: 'lato', Helvetica, sans-serif;
+  background-color: var(--white);
+  color: var(--dark-blue);
 
-	@include b.breakpoint(medium){
-		gap: f.rem(25);
-	}
+  @include b.breakpoint(medium) {
+    gap: f.rem(25);
+  }
 }
 
 main {
-	flex-grow: 1;
-	width: 100%;
-	@include m.flex($direction: column, $justify: space-evenly);
+  flex-grow: 1;
+  width: 100%;
+  @include m.flex($direction: column, $justify: space-evenly);
 
-	@include b.breakpoint(medium){
-		gap: inherit;
-	}
+  @include b.breakpoint(medium) {
+    gap: inherit;
+  }
 
 }
 
 select {
-	background-color: inherit;
+  background-color: inherit;
 }

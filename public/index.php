@@ -11,7 +11,7 @@ $dotenv = Dotenv\Dotenv::createImmutable('../');
 $dotenv->load();
 
 if ($_ENV['DEBUG'] === "true") {
-	(new Whoops\Run())->pushHandler(new PrettyPageHandler())->register();
+    (new Whoops\Run())->pushHandler(new PrettyPageHandler())->register();
 }
 
 $router = new Router();
@@ -26,5 +26,5 @@ $router->run();
 $end = microtime(true);
 
 if ($_ENV['DEBUG'] === "true") {
-	echo "Execution time: " . round(($end - $start) * 1_000) . " ms";
+    echo "Execution time: " . round(($end - $start) * 1_000) . " ms";
 }

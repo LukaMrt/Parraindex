@@ -1,25 +1,25 @@
 <div class="edit-picture">
 
-	<div class="edit-picture__preview">
-		<img class="edit-picture__preview__picture" src="{{picture(person.picture)}}" alt="image">
-	</div>
+    <div class="edit-picture__preview">
+        <img class="edit-picture__preview__picture" src="{{ picture(person.picture) }}" alt="image">
+    </div>
 
-	<hr>
+    <hr>
 
-	<div class="edit-picture__form">
-		<h2>
-			Choisissez une image
-		</h2>
-		
-		<p>
-			Cette image sera utilisée pour représenter votre profil sur le site.
-		</p>
+    <div class="edit-picture__form">
+        <h2>
+            Choisissez une image
+        </h2>
 
-		<input type="file" name="person-picture" id="img-uploader" accept="image/png, image/jpeg, image/gif">
-		<label for="img-uploader" class="btn btn--secondary">Sélectionner une image</label>
-	</div>
+        <p>
+            Cette image sera utilisée pour représenter votre profil sur le site.
+        </p>
 
-	<button class="edit-picture__close">
-		Fermer
-	</button>
+        <input type="file" name="person-picture" id="img-uploader" accept="image/png, image/jpeg, image/gif">
+        <label for="img-uploader" class="btn btn--secondary">Sélectionner une image</label>
+    </div>
+
+    <button class="edit-picture__close">
+        Fermer
+    </button>
 </div>

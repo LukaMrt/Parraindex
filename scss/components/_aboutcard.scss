@@ -4,44 +4,44 @@
 
 .about-card {
 
-	@include m.flex();
-	width: f.rem(250);
-	height: max(f.rem(100), 20vh);
-	transition: all 0.2s ease-in-out;
-	border-radius: f.rem(16);
-	gap: f.rem(10);
+  @include m.flex();
+  width: f.rem(250);
+  height: max(f.rem(100), 20vh);
+  transition: all 0.2s ease-in-out;
+  border-radius: f.rem(16);
+  gap: f.rem(10);
 
-	&__picture {
-		@include m.hard-box-shadow();
-		border-radius: 50%;
-		height: 40%;
-	}
+  &__picture {
+    @include m.hard-box-shadow();
+    border-radius: 50%;
+    height: 40%;
+  }
 
-	&__profil {
-		@include m.flex();
-		font-size: f.rem(20);
-		height: f.rem(48);
-		text-align: center;
-		color: var(--medium-grey);
-	}
+  &__profil {
+    @include m.flex();
+    font-size: f.rem(20);
+    height: f.rem(48);
+    text-align: center;
+    color: var(--medium-grey);
+  }
 
-	&__last-name {
-		text-transform: uppercase;
-		color: var(--dark-blue);
-		letter-spacing: 2px;
-		font-weight: 600;
-	}
+  &__last-name {
+    text-transform: uppercase;
+    color: var(--dark-blue);
+    letter-spacing: 2px;
+    font-weight: 600;
+  }
 
-	&:hover{
-		@include m.hard-box-shadow();
-	}
+  &:hover {
+    @include m.hard-box-shadow();
+  }
 
-	&:active{
-		scale: 0.95;
-	}
-	
-	@include b.breakpoint(medium ){
-		@include m.hard-box-shadow();
-	}
+  &:active {
+    scale: 0.95;
+  }
+
+  @include b.breakpoint(medium) {
+    @include m.hard-box-shadow();
+  }
 
 }

@@ -6,21 +6,23 @@ use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\account\Password;
 
-class LoginService {
-
+class LoginService
+{
     private AccountDAO $accountDAO;
     private Redirect $redirect;
     private SessionManager $sessionManager;
     private PersonDAO $personDAO;
 
-    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, SessionManager $sessionManager) {
+    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, SessionManager $sessionManager)
+    {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
         $this->redirect = $redirect;
         $this->sessionManager = $sessionManager;
     }
 
-    public function login(array $parameters): string {
+    public function login(array $parameters): string
+    {
         $action = $parameters['action'] ?? 'login';
         if ($action === 'register') {
             $this->redirect->redirect('signup_get');
@@ -30,28 +32,29 @@ class LoginService {
         $error = $this->checkLogin($parameters);
         if (empty($error)) {
             $account = $this->accountDAO->getSimpleAccount($parameters['login']);
-            
+
             $this->sessionManager->set('login', $account->getLogin());
             $this->sessionManager->set('privilege', $account->getHighestPrivilege()->toString());
             $this->sessionManager->set('user', $this->personDAO->getPersonByLogin($account->getLogin()));
-            
+
             $this->redirect->redirect('home');
         }
 
         return $error;
     }
 
-    private function checkLogin(array $parameters): string {
+    private function checkLogin(array $parameters): string
+    {
 
         $login = $parameters['login'] ?? '';
         $password = new Password($parameters['password'] ?? '');
         $realPassword = $this->accountDAO->getAccountPassword($login);
 
         $errors = [
-			[
-				'condition' => $this->sessionManager->exists('login'),
-				'message' => 'Vous êtes déjà connecté'
-			],
+            [
+                'condition' => $this->sessionManager->exists('login'),
+                'message' => 'Vous êtes déjà connecté'
+            ],
             [
                 'condition' => empty($login) || $password->isEmpty(),
                 'message' => 'Veuillez remplir tous les champs'
@@ -72,15 +75,15 @@ class LoginService {
         return array_shift($errors) ?? '';
     }
 
-	public function logout(): void {
+    public function logout(): void
+    {
 
-		if (!$this->sessionManager->exists('login')) {
-			$this->redirect->redirect('home');
-			return;
-		}
+        if (!$this->sessionManager->exists('login')) {
+            $this->redirect->redirect('home');
+            return;
+        }
 
-		$this->sessionManager->destroySession();
-		$this->redirect->redirect('logout_confirmation');
-	}
-
+        $this->sessionManager->destroySession();
+        $this->redirect->redirect('logout_confirmation');
+    }
 }

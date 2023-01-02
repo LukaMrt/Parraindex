@@ -4,27 +4,27 @@
 
 .person-actions {
 
-	@include m.flex(center, center, row);
-	gap: f.rem(50);
+  @include m.flex(center, center, row);
+  gap: f.rem(50);
 
-	@include b.breakpoint(medium) {
-		margin: f.rem(10) 0;
-	}
+  @include b.breakpoint(medium) {
+    margin: f.rem(10) 0;
+  }
 
-	&__image {
-		transition: all 150ms;
-		width: f.rem(40);
-		height: f.rem(40);
+  &__image {
+    transition: all 150ms;
+    width: f.rem(40);
+    height: f.rem(40);
 
-		&--rotate {
-			transform: rotate(270deg);
-		}
+    &--rotate {
+      transform: rotate(270deg);
+    }
 
-		&:hover{
-			filter: invert(1);
-			scale: 1.2;
-		}
+    &:hover {
+      filter: invert(1);
+      scale: 1.2;
+    }
 
-	}
+  }
 
 }

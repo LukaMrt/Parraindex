@@ -7,17 +7,18 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
-class LogoutController extends Controller {
+class LogoutController extends Controller
+{
+    private LoginService $loginService;
 
-	private LoginService $loginService;
+    public function __construct(Environment $twig, Router $router, PersonService $personService, LoginService $loginService)
+    {
+        parent::__construct($twig, $router, $personService);
+        $this->loginService = $loginService;
+    }
 
-	public function __construct(Environment $twig, Router $router, PersonService $personService, LoginService $loginService) {
-		parent::__construct($twig, $router, $personService);
-		$this->loginService = $loginService;
-	}
-
-	public function get(Router $router, array $parameters): void {
-		$this->loginService->logout();
-	}
-
+    public function get(Router $router, array $parameters): void
+    {
+        $this->loginService->logout();
+    }
 }

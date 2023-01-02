@@ -2,128 +2,138 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/breakpoints" as b;
 
-.navbar{
-	$resize : f.rem(200);
-	$size : f.rem(250);
+.navbar {
+  $resize: f.rem(200);
+  $size: f.rem(250);
 
-	width: $size;
-	height: f.rem(70);
-	box-sizing: border-box;
+  width: $size;
+  height: f.rem(70);
+  box-sizing: border-box;
 
-	padding: f.rem(5) f.rem(20);
-	margin: 0 $resize;
+  padding: f.rem(5) f.rem(20);
+  margin: 0 $resize;
 
-	border-radius: f.rem(40);
-	transition: all 0.7s;
+  border-radius: f.rem(40);
+  transition: all 0.7s;
 
-	@include m.hard-box-shadow();
-	@include m.flex($direction: row, $justify: space-between);	
+  @include m.hard-box-shadow();
+  @include m.flex($direction: row, $justify: space-between);
 
-	gap: f.rem(16);
+  gap: f.rem(16);
 
-	&__icon{
-		z-index: 1;
-		height: f.rem(20);	
-		aspect-ratio: 1/1;
+  &__icon {
+    z-index: 1;
+    height: f.rem(20);
+    aspect-ratio: 1/1;
 
-		@include b.breakpoint(small){
-			display: none;
-		}
+    @include b.breakpoint(small) {
+      display: none;
+    }
 
-		&:hover {
-			cursor: pointer;
-		}
-	}
+    &:hover {
+      cursor: pointer;
+    }
+  }
 
-	&__searchbar--open{
-		width: calc($size + $resize);
-		margin-right: $resize;
-		margin-left: 0;
+  &__searchbar--open {
+    width: calc($size + $resize);
+    margin-right: $resize;
+    margin-left: 0;
 
-		@include b.breakpoint(small){
-			width: 90%;
-			margin: 0;
-		}
-	}
+    @include b.breakpoint(small) {
+      width: 90%;
+      margin: 0;
+    }
+  }
 
-	&__filter--open{
-		width: calc($size + $resize);
-		margin-left: $resize;
-		margin-right: 0;
+  &__filter--open {
+    width: calc($size + $resize);
+    margin-left: $resize;
+    margin-right: 0;
 
-		@include b.breakpoint(small){
-			width: 90%;
-			margin: 0;
-		}
-	}
-	&__searchbar--open:is(&__filter--open){
-		width: calc($size + calc($resize * 2));
-		margin: 0;
+    @include b.breakpoint(small) {
+      width: 90%;
+      margin: 0;
+    }
+  }
 
-		@include b.breakpoint(small){
-			width: 90%;
-			margin: 0;
-		}
-	}
+  &__searchbar--open:is(&__filter--open) {
+    width: calc($size + calc($resize * 2));
+    margin: 0;
 
-	.searchbar,
-	.filter{
-		@include m.flex($direction: row, $justify: center);
-		width: 0px;
-		overflow: hidden;
-		box-sizing: border-box;
+    @include b.breakpoint(small) {
+      width: 90%;
+      margin: 0;
+    }
+  }
 
-		animation-name: inputClosing;
-		animation-duration: 0.7s;
-		animation-fill-mode: forwards;
+  .searchbar,
+  .filter {
+    @include m.flex($direction: row, $justify: center);
+    width: 0px;
+    overflow: hidden;
+    box-sizing: border-box;
 
-		&--open{
-			animation-name: inputOpening;
-		}
+    animation-name: inputClosing;
+    animation-duration: 0.7s;
+    animation-fill-mode: forwards;
 
-		@include b.breakpoint(small){
-			width: 80%;
-			animation: 0;
-		}
-	}
+    &--open {
+      animation-name: inputOpening;
+    }
 
-	.searchbar{
-		input{
-			border: 1px solid var(--dark-blue);
-			border-radius: f.rem(30);
-			padding-left: f.rem(10);
-			height: f.rem(37);
-			width: 90%;
+    @include b.breakpoint(small) {
+      width: 80%;
+      animation: 0;
+    }
+  }
 
-			@include b.breakpoint(small){
-				&.placeholder{
-					text-align: center;
-				}
-				text-align: center;
-			}
-		}
-		input:focus{
-			outline: none;
-			border-width: 2px;
-		}
-	}
+  .searchbar {
+    input {
+      border: 1px solid var(--dark-blue);
+      border-radius: f.rem(30);
+      padding-left: f.rem(10);
+      height: f.rem(37);
+      width: 90%;
 
-	@include b.breakpoint(small){
-		width: 90%;
-		flex-direction: column;
-		box-shadow: 0;
-		height: max-content;
-		padding: f.rem(10) 0;
-	}
+      @include b.breakpoint(small) {
+        &.placeholder {
+          text-align: center;
+        }
+        text-align: center;
+      }
+    }
 
-	@keyframes inputOpening {
-		from { width: 0; }
-		to { width: 100%; }
-	}
+    input:focus {
+      outline: none;
+      border-width: 2px;
+    }
+  }
 
-	@keyframes inputClosing {
-		from { width: 100%; }
-		to { width: 0; }
-	}
+  @include b.breakpoint(small) {
+    width: 90%;
+    flex-direction: column;
+    box-shadow: 0;
+    height: max-content;
+    padding: f.rem(10) 0;
+  }
+
+  @keyframes inputOpening {
+    from {
+      width: 0;
+    }
+    to {
+      width: 100%;
+    }
+  }
+
+  @keyframes inputClosing {
+    from {
+      width: 100%;
+    }
+    to {
+      width: 0;
+    }
+  }
 
 }

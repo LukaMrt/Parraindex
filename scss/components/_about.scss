@@ -4,43 +4,43 @@
 
 .about {
 
-	&__description {
-		@include m.flex($direction : row);
-		width: min(90%, f.rem(1500));
-		gap: f.rem(50);
-		
-		
-		@include b.breakpoint(medium){
-			flex-direction: column;
-		}
+  &__description {
+    @include m.flex($direction: row);
+    width: min(90%, f.rem(1500));
+    gap: f.rem(50);
 
-		&-logo {
-			width: min(40vh , 40vw);
-			aspect-ratio: 1/1;
-		}
 
-		&-text{
-			@include m.flex($direction: column, $justify: space-evenly);
-			align-self: stretch;
-			gap: f.rem(10);
+    @include b.breakpoint(medium) {
+      flex-direction: column;
+    }
 
-			text-align: justify;
-			font-size: f.rem(16);
-			text-indent: f.rem(32);
-			width: min(80ch, 100%);
-		}	
-	}
+    &-logo {
+      width: min(40vh, 40vw);
+      aspect-ratio: 1/1;
+    }
 
-	&_authors {
-		@include m.flex($justify: space-evenly, $direction: row);
-		width: 95%;
-		gap: f.rem(25);
-		flex-wrap: wrap;
+    &-text {
+      @include m.flex($direction: column, $justify: space-evenly);
+      align-self: stretch;
+      gap: f.rem(10);
 
-		@include b.breakpoint(medium){
-			justify-content: center;
-		}
+      text-align: justify;
+      font-size: f.rem(16);
+      text-indent: f.rem(32);
+      width: min(80ch, 100%);
+    }
+  }
 
-	}
+  &_authors {
+    @include m.flex($justify: space-evenly, $direction: row);
+    width: 95%;
+    gap: f.rem(25);
+    flex-wrap: wrap;
+
+    @include b.breakpoint(medium) {
+      justify-content: center;
+    }
+
+  }
 
 }
