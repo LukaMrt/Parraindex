@@ -1,7 +1,7 @@
 # Parraindex
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
@@ -10,6 +10,7 @@
 [![Codacy Badge](https://app.codacy.com/project/badge/Grade/260c12aab9b34cdf82ffe5996e1391ae)](https://www.codacy.com/gh/LukaMrt/Parraindex/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LukaMrt/Parraindex&amp;utm_campaign=Badge_Grade)
 ![GitHub language count](https://img.shields.io/github/languages/count/lukamrt/parraindex)
 ![GitHub](https://img.shields.io/github/license/lukamrt/parraindex)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2FLukaMrt%2FParraindex%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/LukaMrt/Parraindex/master)
 
 ## About the project
 

@@ -1,5 +1,5 @@
 {
-    "$schema": "https://raw.githubusercontent.com/infection/infection/0.26.15/resources/schema.json",
+    "$schema": "https://raw.githubusercontent.com/infection/infection/0.26.16/resources/schema.json",
     "source": {
         "directories": [
             "src/application",
@@ -8,8 +8,8 @@
     },
     "timeout": 10,
     "logs": {
-        "text": "out/tests/mutating/infection.log",
         "html": "out/tests/mutating/infection.html",
+        "json": "out/tests/mutating/infection.json",
         "github": true,
         "stryker": {
             "badge": "/^release-.*$/"

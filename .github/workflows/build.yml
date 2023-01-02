@@ -34,6 +34,16 @@ jobs:
       - name: Run test suite
         run: composer tests
 
+      - name: Rune mutation tests
+        run: vendor/bin/infection --threads=4 --min-msi=75
+
+      - name: Send mutation report
+        run: "curl -X PUT https://dashboard.stryker-mutator.io/api/reports/Parraindex/${{ github.event.head_commit.message }} \
+              -H 'Content-Type: application/json' \
+              -H 'Host: dashboard.stryker-mutator.io' \
+              -H 'X-Api-Key: $STRYKER_DASHBOARD_API_KEY' \
+              -d @out/tests/mutating/infection.json"
+
   sonarcloud:
     name: SonarCloud analysis
     needs: unit-tests
