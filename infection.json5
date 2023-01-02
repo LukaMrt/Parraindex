@@ -9,7 +9,6 @@
     "timeout": 10,
     "logs": {
         "html": "out/tests/mutating/infection.html",
-        "json": "out/tests/mutating/infection.json",
         "github": true,
         "stryker": {
             "badge": "/^release-.*$/"

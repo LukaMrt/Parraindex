@@ -37,13 +37,6 @@ jobs:
       - name: Run mutation tests
         run: vendor/bin/infection --threads=4 --min-msi=75
 
-      - name: Send mutation report
-        run: "curl -X PUT https://dashboard.stryker-mutator.io/api/reports/github/LukaMrt/Parraindex/mutants \
-              -H 'Content-Type: application/json' \
-              -H 'Host: dashboard.stryker-mutator.io' \
-              -H 'X-Api-Key: ${{ secrets.STRYKER_DASHBOARD_API_KEY }}' \
-              -d @out/tests/mutating/infection.json"
-
   sonarcloud:
     name: SonarCloud analysis
     runs-on: ubuntu-latest
