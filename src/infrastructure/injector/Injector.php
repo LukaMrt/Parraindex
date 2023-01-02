@@ -3,6 +3,16 @@
 namespace App\infrastructure\injector;
 
 use App\application\contact\ContactDAO;
+use App\application\contact\executor\AddPersonContactExecutor;
+use App\application\contact\executor\AddSponsorContactExecutor;
+use App\application\contact\executor\BugContactExecutor;
+use App\application\contact\executor\ChockingContentContactExecutor;
+use App\application\contact\executor\ContactExecutors;
+use App\application\contact\executor\OtherContactExecutor;
+use App\application\contact\executor\RemovePersonContactExecutor;
+use App\application\contact\executor\RemoveSponsorContactExecutor;
+use App\application\contact\executor\UpdatePersonContactExecutor;
+use App\application\contact\executor\UpdateSponsorContactExecutor;
 use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\SessionManager;
@@ -58,113 +68,127 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 use function DI\get;
 
-class Injector {
+class Injector
+{
+    private Container $container;
+    private Router $router;
 
-	private Container $container;
-	private Router $router;
+    public function __construct(Router $router)
+    {
+        $this->container = ContainerBuilder::buildDevContainer();
+        $this->router = $router;
+    }
 
-	public function __construct(Router $router) {
-		$this->container = ContainerBuilder::buildDevContainer();
-		$this->router = $router;
-	}
+    public function build(): void
+    {
 
-	public function build(): void {
+        $twig = $this->buildTwig();
+        $databaseConnection = new DatabaseConnection();
+        $userDAO = get(MySqlPersonDAO::class);
+        $accountDAO = get(MySqlAccountDAO::class);
+        $sessionManager = get(DefaultSessionManager::class);
+        $redirect = get(HttpRedirect::class);
+        $personDAO = get(MySqlPersonDAO::class);
+        $contactDAO = get(MySqlContactDAO::class);
+        $sponsorDAO = get(MySqlSponsorDAO::class);
+        $characteristicDAO = get(MysqlCharacteristicDAO::class);
+        $characteristicTypeDAO = get(MysqlCharacteristicTypeDAO::class);
+        $logger = get(MonologLogger::class);
+        $mailer = get(PhpMailer::class);
+        $random = get(DefaultRandom::class);
+        $urlUtils = get(DefaultUrlUtils::class);
 
-		$twig = $this->buildTwig();
-		$databaseConnection = new DatabaseConnection();
-		$userDAO = get(MySqlPersonDAO::class);
-		$accountDAO = get(MySqlAccountDAO::class);
-		$sessionManager = get(DefaultSessionManager::class);
-		$redirect = get(HttpRedirect::class);
-		$personDAO = get(MySqlPersonDAO::class);
-		$contactDAO = get(MySqlContactDAO::class);
-		$sponsorDAO = get(MySqlSponsorDAO::class);
-		$characteristicDAO = get(MysqlCharacteristicDAO::class);
-		$characteristicTypeDAO = get(MysqlCharacteristicTypeDAO::class);
-		$logger = get(MonologLogger::class);
-		$mailer = get(PhpMailer::class);
-		$random = get(DefaultRandom::class);
-		$urlUtils = get(DefaultUrlUtils::class);
+        $this->container->set(Environment::class, $twig);
+        $this->container->set(DatabaseConnection::class, $databaseConnection);
+        $this->container->set(Router::class, $this->router);
+        $this->container->set(Router::class, $this->router);
+        $this->container->set(Redirect::class, $redirect);
+        $this->container->set(Logger::class, $logger);
+        $this->container->set(Mailer::class, $mailer);
+        $this->container->set(Random::class, $random);
+        $this->container->set(UrlUtils::class, $urlUtils);
+        $this->container->set(SessionManager::class, $sessionManager);
 
-		$this->container->set(Environment::class, $twig);
-		$this->container->set(DatabaseConnection::class, $databaseConnection);
-		$this->container->set(Router::class, $this->router);
-		$this->container->set(Router::class, $this->router);
-		$this->container->set(Redirect::class, $redirect);
-		$this->container->set(Logger::class, $logger);
-		$this->container->set(Mailer::class, $mailer);
-		$this->container->set(Random::class, $random);
-		$this->container->set(UrlUtils::class, $urlUtils);
+        $this->container->set(ContactExecutors::class, fn(Container $container) => new ContactExecutors([
+            $container->get(AddPersonContactExecutor::class),
+            $container->get(UpdatePersonContactExecutor::class),
+            $container->get(RemovePersonContactExecutor::class),
+            $container->get(AddSponsorContactExecutor::class),
+            $container->get(UpdateSponsorContactExecutor::class),
+            $container->get(ChockingContentContactExecutor::class),
+            $container->get(BugContactExecutor::class),
+            $container->get(RemoveSponsorContactExecutor::class),
+            $container->get(OtherContactExecutor::class)
+        ]));
 
-		$this->container->set(SessionManager::class, $sessionManager);
+        $this->container->set(PersonDAO::class, $userDAO);
+        $this->container->set(AccountDAO::class, $accountDAO);
+        $this->container->set(PersonDAO::class, $personDAO);
+        $this->container->set(ContactDAO::class, $contactDAO);
+        $this->container->set(SponsorDAO::class, $sponsorDAO);
+        $this->container->set(CharacteristicDAO::class, $characteristicDAO);
+        $this->container->set(CharacteristicTypeDAO::class, $characteristicTypeDAO);
+    }
 
-		$this->container->set(PersonDAO::class, $userDAO);
-		$this->container->set(AccountDAO::class, $accountDAO);
-		$this->container->set(PersonDAO::class, $personDAO);
-		$this->container->set(ContactDAO::class, $contactDAO);
-		$this->container->set(SponsorDAO::class, $sponsorDAO);
-		$this->container->set(CharacteristicDAO::class, $characteristicDAO);
-		$this->container->set(CharacteristicTypeDAO::class, $characteristicTypeDAO);
-	}
+    private function buildTwig(): Environment
+    {
+        $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
-	/**
-	 * @throws DependencyException
-	 * @throws NotFoundException
-	 */
-	public function setUpRouter(): void {
-		$this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
-		$this->router->registerRoute('GET', '/about', $this->container->get(AboutController::class), 'about');
+        $twig->addFunction(new TwigFunction('style', fn(string $path) => '/css/' . $path));
+        $twig->addFunction(new TwigFunction('script', fn(string $path) => '/js/' . $path));
+        $twig->addFunction(new TwigFunction('image', fn(string $path) => '/img/' . $path));
+        $twig->addFunction(new TwigFunction('picture', fn(string $path) => '/img/pictures/' . $path));
+        $twig->addFunction(new TwigFunction('icon', fn(string $path) => '/img/icons/' . $path));
 
-		$this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
-		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/', $this->container->get(ContactCloseController::class), 'contact_close');
-		$this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
+        return $twig;
+    }
 
-		$this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
-		$this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
+    /**
+     * @throws DependencyException
+     * @throws NotFoundException
+     */
+    public function setUpRouter(): void
+    {
+        $this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
+        $this->router->registerRoute('GET', '/about', $this->container->get(AboutController::class), 'about');
 
-		$this->router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
-		$this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
-		$this->router->registerRoute('GET', '/logout', $this->container->get(LogoutController::class), 'logout_get');
-		$this->router->registerRoute('GET', '/logout/confirmation', $this->container->get(LogoutConfirmationController::class), 'logout_confirmation');
+        $this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
+        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/', $this->container->get(ContactCloseController::class), 'contact_close');
+        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
 
-		$this->router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
-		$this->router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
-		$this->router->registerRoute('GET', '/signup/confirmation', $this->container->get(SignUpConfirmationController::class), 'signup_confirmation');
-		$this->router->registerRoute('GET', '/signup/validation/[*:token]', $this->container->get(SignUpValidationController::class), 'signup_validation');
+        $this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
+        $this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 
-		$this->router->registerRoute('GET', '/password/reset', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
-		$this->router->registerRoute('POST', '/password/reset', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
-		$this->router->registerRoute('GET', '/password/reset/confirmation', $this->container->get(ResetpasswordConfirmationController::class), 'resetpassword_confirmation');
-		$this->router->registerRoute('GET', '/password/reset/validation/[*:token]', $this->container->get(ResetpasswordValidationController::class), 'resetpassword_validation');
+        $this->router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
+        $this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
+        $this->router->registerRoute('GET', '/logout', $this->container->get(LogoutController::class), 'logout_get');
+        $this->router->registerRoute('GET', '/logout/confirmation', $this->container->get(LogoutConfirmationController::class), 'logout_confirmation');
+
+        $this->router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
+        $this->router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
+        $this->router->registerRoute('GET', '/signup/confirmation', $this->container->get(SignUpConfirmationController::class), 'signup_confirmation');
+        $this->router->registerRoute('GET', '/signup/validation/[*:token]', $this->container->get(SignUpValidationController::class), 'signup_validation');
+
+        $this->router->registerRoute('GET', '/password/reset', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
+        $this->router->registerRoute('POST', '/password/reset', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
+        $this->router->registerRoute('GET', '/password/reset/confirmation', $this->container->get(ResetpasswordConfirmationController::class), 'resetpassword_confirmation');
+        $this->router->registerRoute('GET', '/password/reset/validation/[*:token]', $this->container->get(ResetpasswordValidationController::class), 'resetpassword_validation');
 
 
-		$this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
-		$this->router->registerRoute('GET', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_get');
-		$this->router->registerRoute('POST', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_post');
-		$this->router->registerRoute('PUT', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_put');
-		$this->router->registerRoute('DELETE', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_delete');
+        $this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
+        $this->router->registerRoute('GET', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_get');
+        $this->router->registerRoute('POST', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_post');
+        $this->router->registerRoute('PUT', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_put');
+        $this->router->registerRoute('DELETE', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_delete');
 
-		$this->router->registerRoute('GET', '/sponsor/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
-		$this->router->registerRoute('GET', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_get');
-		$this->router->registerRoute('POST', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_post');
-		$this->router->registerRoute('GET', '/sponsor/[i:id]/remove', $this->container->get(RemoveSponsorController::class), 'removesponsor');
+        $this->router->registerRoute('GET', '/sponsor/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
+        $this->router->registerRoute('GET', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_get');
+        $this->router->registerRoute('POST', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_post');
+        $this->router->registerRoute('GET', '/sponsor/[i:id]/remove', $this->container->get(RemoveSponsorController::class), 'removesponsor');
 
-		$this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
+        $this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
 
-		$this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
-		$this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
-	}
-
-	private function buildTwig(): Environment {
-		$twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
-
-		$twig->addFunction(new TwigFunction('style', fn(string $path) => '/css/' . $path));
-		$twig->addFunction(new TwigFunction('script', fn(string $path) => '/js/' . $path));
-		$twig->addFunction(new TwigFunction('image', fn(string $path) => '/img/' . $path));
-		$twig->addFunction(new TwigFunction('picture', fn(string $path) => '/img/pictures/' . $path));
-		$twig->addFunction(new TwigFunction('icon', fn(string $path) => '/img/icons/' . $path));
-
-		return $twig;
-	}
-
+        $this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
+        $this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
+    }
 }

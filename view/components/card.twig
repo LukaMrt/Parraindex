@@ -1,33 +1,32 @@
 <article class="card" id="{{ id }}">
-	<div class="card__banner" style="background-color:{{color}}">
-		<img class="card__picture" src="{{ picture(picture) }}" alt="photo">
-		<img class="card__picture__overlay" src="{{ icon('camera.svg') }}" alt="modifier photo">
-	</div>
+    <div class="card__banner" style="background-color:{{ color }}">
+        <img class="card__picture" src="{{ picture(picture) }}" alt="photo">
+        <img class="card__picture__overlay" src="{{ icon('camera.svg') }}" alt="modifier photo">
+    </div>
 
-	<div class="card__profil">
-		<span class="card__last-name">{{ lastName }}</span>
-		<span class="card__first-name">{{ firstName }}</span>
-	</div>
+    <div class="card__profil">
+        <span class="card__last-name">{{ lastName }}</span>
+        <span class="card__first-name">{{ firstName }}</span>
+    </div>
 
-	<i class="card__identifiant">{{ id }}</i>
+    <i class="card__identifiant">{{ id }}</i>
 
-	<div class="card__social-network">
-		{% for characteristic in characteristics %}
-			{% if characteristic.visible or mock %}
-				{% include 'components/social-network.twig' 
-					with {
-						'network': characteristic.network,
-						'link': characteristic.prefix ~ characteristic.url ~ characteristic.value,
-						'image': characteristic.image
-					}
-				%}
-			{% endif %}
-		{% endfor %}
-	</div>
+    <div class="card__social-network">
+        {% for characteristic in characteristics %}
+            {% if characteristic.visible or mock %}
+                {% include 'components/social-network.twig'
+                    with {
+                    'network': characteristic.network,
+                    'link': characteristic.prefix ~ characteristic.url ~ characteristic.value,
+                    'image': characteristic.image
+                } %}
+            {% endif %}
+        {% endfor %}
+    </div>
 
-	<p class="card__description">
-		{{ description }}
-	</p>
+    <p class="card__description">
+        {{ description }}
+    </p>
 
-	<p class="card__start-year">{{ startYear }}</p>
+    <p class="card__start-year">{{ startYear }}</p>
 </article>

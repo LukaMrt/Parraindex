@@ -4,66 +4,66 @@
 
 .contacts {
 
-	@include m.flex(flex-start, flex-start, row);
-	width: 90%;
-	flex-wrap: wrap;
-	font-size: 1.1em;
-	color: var(--dark-blue)
+  @include m.flex(flex-start, flex-start, row);
+  width: 90%;
+  flex-wrap: wrap;
+  font-size: 1.1em;
+  color: var(--dark-blue)
 
 }
 
 .contact {
 
-	border: 1px solid lightgray;
-	min-width: 300px;
-	border-radius: 10px;
-	padding: 20px;
-	margin: 20px 20px;
+  border: 1px solid lightgray;
+  min-width: 300px;
+  border-radius: 10px;
+  padding: 20px;
+  margin: 20px 20px;
 
-	&__type {
-		font-size: 1.2em;
-		font-weight: 400;
-	}
+  &__type {
+    font-size: 1.2em;
+    font-weight: 400;
+  }
 
-	&__author {
-		text-decoration: underline;
-	}
+  &__author {
+    text-decoration: underline;
+  }
 
-	&__message {
-		margin: 20px 0;
-	}
+  &__message {
+    margin: 20px 0;
+  }
 
-	&__actions {
-		margin: 20px 0 0;
+  &__actions {
+    margin: 20px 0 0;
 
-		&-button {
-			box-shadow: none;
-			border: 1px solid var(--dark-red);
-			padding: 5px 10px;
-			border-radius: 20px;
-			font-size: 1em;
-			background-color: var(--medium-red);
+    &-button {
+      box-shadow: none;
+      border: 1px solid var(--dark-red);
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 1em;
+      background-color: var(--medium-red);
 
-			&:hover {
-				cursor: pointer;
-			}
+      &:hover {
+        cursor: pointer;
+      }
 
-			&--yellow {
-				background-color: var(--medium-yellow);
-				border: 1px solid var(--dark-yellow);
-			}
+      &--yellow {
+        background-color: var(--medium-yellow);
+        border: 1px solid var(--dark-yellow);
+      }
 
-			&--green {
-				background-color: var(--medium-green);
-				border: 1px solid var(--dark-green);
-			}
+      &--green {
+        background-color: var(--medium-green);
+        border: 1px solid var(--dark-green);
+      }
 
-		}
+    }
 
-	}
+  }
 
-	&--bold {
-		font-weight: 400;
-	}
+  &--bold {
+    font-weight: 400;
+  }
 
 }

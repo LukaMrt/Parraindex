@@ -5,36 +5,42 @@ namespace unit\application\contact\field;
 use App\application\contact\field\NumberField;
 use PHPUnit\Framework\TestCase;
 
-class NumberFieldTest extends TestCase {
+class NumberFieldTest extends TestCase
+{
 
-	private NumberField $numberField;
+    private NumberField $numberField;
 
-	public function setUp(): void {
-		$this->numberField = new NumberField('number', 'error');
-	}
+    public function setUp(): void
+    {
+        $this->numberField = new NumberField('number', 'error');
+    }
 
-	public function testGetnameReturnsNumber() {
-		$result = $this->numberField->getName();
+    public function testGetnameReturnsNumber()
+    {
+        $result = $this->numberField->getName();
 
-		$this->assertEquals('number', $result);
-	}
+        $this->assertEquals('number', $result);
+    }
 
-	public function testIsvalidReturnsTrueWhenValueIsNumeric(): void {
-		$result = $this->numberField->isValid('123');
+    public function testIsvalidReturnsTrueWhenValueIsNumeric(): void
+    {
+        $result = $this->numberField->isValid('123');
 
-		$this->assertTrue($result);
-	}
+        $this->assertTrue($result);
+    }
 
-	public function testIsvalidReturnsFalseWhenValueIsNotNumeric(): void {
-		$result = $this->numberField->isValid('not a number');
+    public function testIsvalidReturnsFalseWhenValueIsNotNumeric(): void
+    {
+        $result = $this->numberField->isValid('not a number');
 
-		$this->assertFalse($result);
-	}
+        $this->assertFalse($result);
+    }
 
-	public function testIsvalidReturnsFalseWhenValueIsEmpty(): void {
-		$result = $this->numberField->isValid('');
+    public function testIsvalidReturnsFalseWhenValueIsEmpty(): void
+    {
+        $result = $this->numberField->isValid('');
 
-		$this->assertFalse($result);
-	}
+        $this->assertFalse($result);
+    }
 
 }

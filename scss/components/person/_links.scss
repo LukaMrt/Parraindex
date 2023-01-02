@@ -4,43 +4,43 @@
 
 .person-link {
 
-	height: 40%;
-	position: absolute;
-	bottom: 0;
-	right: 5%;
-	border-left: solid 5px var(--dark-blue);
+  height: 40%;
+  position: absolute;
+  bottom: 0;
+  right: 5%;
+  border-left: solid 5px var(--dark-blue);
 
-	@include b.breakpoint(medium) {
-		@include m.flex(center, space-around, row);
-		position: relative;
-		width: 80%;
-		margin: f.rem(10) auto f.rem(20);
-		border: none;
-		right: 0;
-		height: auto;
-	}
+  @include b.breakpoint(medium) {
+    @include m.flex(center, space-around, row);
+    position: relative;
+    width: 80%;
+    margin: f.rem(10) auto f.rem(20);
+    border: none;
+    right: 0;
+    height: auto;
+  }
 
-	&__wrapper {
-		transition: all 150ms;
-		position: absolute;
-		top: 0;
-		left: - f.rem(22);
-		height: f.rem(24);
-		width: f.rem(24);
-		padding: f.rem(8);
-		background-color: var(--dark-blue);
-		border-radius: 50%;
+  &__wrapper {
+    transition: all 150ms;
+    position: absolute;
+    top: 0;
+    left: - f.rem(22);
+    height: f.rem(24);
+    width: f.rem(24);
+    padding: f.rem(8);
+    background-color: var(--dark-blue);
+    border-radius: 50%;
 
-		@include b.breakpoint(medium) {
-			position: relative;
-			left: 0;
-		}
+    @include b.breakpoint(medium) {
+      position: relative;
+      left: 0;
+    }
 
-		&:hover{
-			filter: invert(1);
-			scale: 1.2;
-		}
+    &:hover {
+      filter: invert(1);
+      scale: 1.2;
+    }
 
-	}
+  }
 
 }

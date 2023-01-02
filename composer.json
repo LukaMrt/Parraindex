@@ -61,9 +61,18 @@
       "Composer\\Config::disableProcessTimeout",
       "phpunit",
       "infection --threads=4"
+    ],
+    "sniffer": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpcs --standard=PSR12 src/"
+    ],
+    "sniffer-fix": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpcbf --standard=PSR12 src/"
     ]
   },
   "require-dev": {
+    "squizlabs/php_codesniffer": "^3.7",
     "phpunit/phpunit": "^9.5",
     "infection/infection": "^0.26.16"
   },

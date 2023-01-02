@@ -1,25 +1,25 @@
 <section class="carousel">
-	<div class="carousel__slider">
+    <div class="carousel__slider">
 
-		{% for person in people %}
-			{% include 'components/card.twig' with {
-				'id': person.id,
-				'color': person.color,
-				'firstName': person.firstName,
-				'lastName': person.lastName,
-				'picture': person.picture,
-				'characteristics': person.characteristics,
-				'description': person.biography,
-				'startYear': person.startYear,
-				}
-			%}
-		{% endfor %}
+        {% for person in people %}
+            {% include 'components/card.twig' with {
+                'id': person.id,
+                'color': person.color,
+                'firstName': person.firstName,
+                'lastName': person.lastName,
+                'picture': person.picture,
+                'characteristics': person.characteristics,
+                'description': person.biography,
+                'startYear': person.startYear,
+            } %}
+        {% endfor %}
 
-	</div>
+    </div>
 </section>
 
 <nav class="scrollbar">
-	<span class="scrollbar__min">1</span>
-	<input type="range" class="scrollbar__cursor" step=0.01>
-	<span class="scrollbar__max">1</span>
+    <span class="scrollbar__min">1</span>
+    <label for="scrollbar-input"></label>
+    <input id="scrollbar-input" type="range" class="scrollbar__cursor" step=0.01>
+    <span class="scrollbar__max">1</span>
 </nav>

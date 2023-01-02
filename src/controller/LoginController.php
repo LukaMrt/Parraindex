@@ -7,20 +7,23 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
-class LoginController extends Controller {
-
+class LoginController extends Controller
+{
     private LoginService $loginService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, LoginService $signupService) {
+    public function __construct(Environment $twig, Router $router, PersonService $personService, LoginService $passwordService)
+    {
         parent::__construct($twig, $router, $personService);
-        $this->loginService = $signupService;
+        $this->loginService = $passwordService;
     }
 
-    public function get(Router $router, array $parameters): void {
+    public function get(Router $router, array $parameters): void
+    {
         $this->render('login.twig', ['router' => $router]);
     }
 
-    public function post(Router $router, array $parameters): void {
+    public function post(Router $router, array $parameters): void
+    {
 
         $formParameters = [
             'login' => $_POST['login'] ?? '',
@@ -31,5 +34,4 @@ class LoginController extends Controller {
 
         $this->render('login.twig', ['error' => $error ?? '']);
     }
-
 }

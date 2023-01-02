@@ -4,8 +4,8 @@ namespace App\application\person\characteristic;
 
 use App\model\person\Person;
 
-class CharacteristicTypeService {
-
+class CharacteristicTypeService
+{
     private CharacteristicTypeDAO $characteristicDAO;
 
     public function __construct(CharacteristicTypeDAO $characteristicDAO)
@@ -30,9 +30,8 @@ class CharacteristicTypeService {
      * @param Person $person
      * @return array of CharacteristicType
      */
-    public function getAllCharacteristicAndValues(Person $person): array 
+    public function getAllCharacteristicAndValues(Person $person): array
     {
         return $this->characteristicDAO->getAllCharacteristicAndValues($person->getId());
     }
-
 }

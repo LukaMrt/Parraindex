@@ -4,17 +4,18 @@ namespace App\application\contact\field;
 
 use DateTime;
 
-class DateField extends Field {
+class DateField extends Field
+{
+    public function __construct(string $name, string $error)
+    {
+        parent::__construct($name, $error);
+    }
 
-	public function __construct(string $name, string $error) {
-		parent::__construct($name, $error);
-	}
-
-	public function isValid(string $value): bool {
-		$date = DateTime::createFromFormat('Y-m-d', $value);
-		return $date
-			&& $date->format('Y-m-d') === $value
-			&& DateTime::createFromFormat('Y-m-d', '2010-01-01') <= $date;
-	}
-
+    public function isValid(string $value): bool
+    {
+        $date = DateTime::createFromFormat('Y-m-d', $value);
+        return $date
+            && $date->format('Y-m-d') === $value
+            && DateTime::createFromFormat('Y-m-d', '2010-01-01') <= $date;
+    }
 }

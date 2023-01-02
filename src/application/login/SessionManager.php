@@ -2,8 +2,8 @@
 
 namespace App\application\login;
 
-interface SessionManager {
-
+interface SessionManager
+{
     public function startSession(): void;
 
     public function destroySession(): void;
@@ -14,6 +14,5 @@ interface SessionManager {
 
     public function set(string $key, $value): void;
 
-	public function exists(string $key): bool;
-
+    public function exists(string $key): bool;
 }

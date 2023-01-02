@@ -10,8 +10,8 @@ permissions:
 
 jobs:
 
-  unit-tests:
-    name: Unit tests
+  tests:
+    name: Tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -34,9 +34,11 @@ jobs:
       - name: Run test suite
         run: composer tests
 
+      - name: Run mutation tests
+        run: vendor/bin/infection --threads=4 --min-msi=75
+
   sonarcloud:
     name: SonarCloud analysis
-    needs: unit-tests
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -69,7 +71,7 @@ jobs:
 
   deploy-develop:
     name: Deploy develop
-    needs: unit-tests
+    needs: tests
     if: github.ref == 'refs/heads/develop'
     runs-on: ubuntu-latest
     steps:
@@ -89,7 +91,7 @@ jobs:
 
   deploy-production:
     name: Deploy production
-    needs: unit-tests
+    needs: tests
     if: github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
     steps:

@@ -7,21 +7,21 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
-class SignUpValidationController extends Controller {
+class SignUpValidationController extends Controller
+{
+    private SignupService $signupService;
 
-	private SignupService $signupService;
+    public function __construct(Environment $twig, Router $router, PersonService $personService, SignupService $passwordService)
+    {
+        parent::__construct($twig, $router, $personService);
+        $this->signupService = $passwordService;
+    }
 
-	public function __construct(Environment $twig, Router $router, PersonService $personService, SignupService $signupService) {
-		parent::__construct($twig, $router, $personService);
-		$this->signupService = $signupService;
-	}
+    public function get(Router $router, array $parameters): void
+    {
 
-	public function get(Router $router, array $parameters): void {
+        $error = $this->signupService->validate($parameters['token']);
 
-		$error = $this->signupService->validate($parameters['token']);
-
-		$this->render('signupValidation.twig', ['error' => $error]);
-	}
-
-
+        $this->render('signupValidation.twig', ['error' => $error]);
+    }
 }

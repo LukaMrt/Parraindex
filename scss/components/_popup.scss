@@ -23,12 +23,13 @@
   }
 
   &--visible {
-	left: f.rem(20);
+    left: f.rem(20);
   }
 
   &__close-button {
     width: f.rem(20);
     height: f.rem(20);
+
     &:hover {
       cursor: pointer;
     }

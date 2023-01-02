@@ -11,157 +11,123 @@ use App\model\account\Password;
 use App\model\person\Identity;
 use App\model\person\Person;
 
-class SignupService {
+class SignupService
+{
+    private AccountDAO $accountDAO;
+    private PersonDAO $personDAO;
+    private Redirect $redirect;
+    private Mailer $mailer;
+    private Random $random;
+    private UrlUtils $urlUtils;
 
-	private AccountDAO $accountDAO;
-	private PersonDAO $personDAO;
-	private Redirect $redirect;
-	private Mailer $mailer;
-	private Random $random;
-	private UrlUtils $urlUtils;
+    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, Mailer $mailer, Random $random, UrlUtils $urlUtils)
+    {
+        $this->accountDAO = $accountDAO;
+        $this->personDAO = $personDAO;
+        $this->redirect = $redirect;
+        $this->mailer = $mailer;
+        $this->random = $random;
+        $this->urlUtils = $urlUtils;
+    }
 
-	public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, Mailer $mailer, Random $random, UrlUtils $urlUtils) {
-		$this->accountDAO = $accountDAO;
-		$this->personDAO = $personDAO;
-		$this->redirect = $redirect;
-		$this->mailer = $mailer;
-		$this->random = $random;
-		$this->urlUtils = $urlUtils;
-	}
+    public function signup(array $parameters): string
+    {
 
-	public function signup(array $parameters): string {
+        $email = strtolower($parameters['email'] ?? '');
+        $password = $parameters['password'] ?? '';
+        $passwordConfirm = $parameters['password-confirm'] ?? '';
+        $firstname = $parameters['firstname'] ?? '';
+        $lastname = $parameters['lastname'] ?? '';
+        $person = $this->personDAO->getPerson(new Identity($firstname, $lastname));
 
-		$email = strtolower($parameters['email'] ?? '');
-		$password = $parameters['password'] ?? '';
-		$passwordConfirm = $parameters['password-confirm'] ?? '';
-		$firstname = $parameters['firstname'] ?? '';
-		$lastname = $parameters['lastname'] ?? '';
-		$person = $this->personDAO->getPerson(new Identity($firstname, $lastname));
+        $error = $this->buildError($email, $password, $passwordConfirm, $lastname, $firstname, $person);
 
-		$error = $this->buildError($email, $password, $passwordConfirm, $lastname, $firstname, $person);
+        if (empty($error)) {
+            $account = new Account($person->getId(), $email, $person, new Password($password));
+            $token = $this->random->generate(10);
+            $this->accountDAO->createTemporaryAccount($account, $token);
+            $url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('signup_validation', ['token' => $token]);
+            $this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
+            $this->redirect->redirect('signup_confirmation');
+        }
 
-		if (empty($error)) {
-			$account = new Account($person->getId(), $email, $person, new Password($password));
-			$token = $this->random->generate(10);
-			$this->accountDAO->createTemporaryAccount($account, $token);
-			$url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('signup_validation', ['token' => $token]);
-			$this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
-			$this->redirect->redirect('signup_confirmation');
-		}
+        return $error;
+    }
 
-		return $error;
-	}
+    private function buildError(string $email, string $password, string $passwordConfirm, string $lastname, string $firstname, ?Person $person): string
+    {
 
-	private function buildError(string $email, string $password, string $passwordConfirm, string $lastname, string $firstname, ?Person $person): string {
+        if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
+            return 'Veuillez remplir tous les champs';
+        }
 
-		if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
-			return 'Veuillez remplir tous les champs';
-		}
+        if (!str_ends_with($email, '@etu.univ-lyon1.fr')) {
+            return 'L\'email doit doit être votre email universitaire';
+        }
 
-		if (!str_ends_with($email, '@etu.univ-lyon1.fr')) {
-			return 'L\'email doit doit être votre email universitaire';
-		}
+        if ($password !== $passwordConfirm) {
+            return 'Les mots de passe ne correspondent pas';
+        }
 
-		if ($password !== $passwordConfirm) {
-			return 'Les mots de passe ne correspondent pas';
-		}
+        if ($person === null) {
+            return 'Votre nom n\'est pas enregistré, merci de contacter un administrateur';
+        }
 
-		if ($person === null) {
-			return 'Votre nom n\'est pas enregistré, merci de contacter un administrateur';
-		}
+        $emailAccountExists = $this->accountDAO->existsAccount($email);
+        if ($emailAccountExists) {
+            return 'Un compte existe déjà avec cette adresse email';
+        }
 
-		$emailAccountExists = $this->accountDAO->existsAccount($email);
-		if ($emailAccountExists) {
-			return 'Un compte existe déjà avec cette adresse email';
-		}
+        $nameAccountExists = $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
+        if ($nameAccountExists) {
+            return 'Un compte existe déjà avec ce nom';
+        }
 
-		$nameAccountExists = $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
-		if ($nameAccountExists) {
-			return 'Un compte existe déjà avec ce nom';
-		}
+        $identities = $this->personDAO->getAllIdentities();
+        $emailLevenshtein = preg_replace("/[^a-z]/", '', explode('@', $email)[0]);
+        $nameLevenshtein = preg_replace("/[^a-z]/", '', strtolower($firstname . $lastname));
+        $entryLevenshtein = levenshtein($emailLevenshtein, $nameLevenshtein);
+        $minLevenshtein = $entryLevenshtein;
 
-		$identities = $this->personDAO->getAllIdentities();
-		$emailLevenshtein = preg_replace("/[^a-z]/", '', explode('@', $email)[0]);
-		$nameLevenshtein = preg_replace("/[^a-z]/", '', strtolower($firstname . $lastname));
-		$entryLevenshtein = levenshtein($emailLevenshtein, $nameLevenshtein);
-		$minLevenshtein = $entryLevenshtein;
+        if (2 < $entryLevenshtein) {
+            return 'D\'après notre recherche, cet email n\'est pas le vôtre';
+        }
 
-		if (2 < $entryLevenshtein) {
-			return 'D\'après notre recherche, cet email n\'est pas le vôtre';
-		}
+        foreach ($identities as $identity) {
+            $levenshtein = levenshtein($emailLevenshtein, preg_replace("/[^a-z]/", '', strtolower($identity->getFirstname() . $identity->getLastname())));
+            if ($levenshtein < $minLevenshtein) {
+                return 'D\'après notre recherche, cet email n\'est pas le vôtre';
+            }
+        }
 
-		foreach ($identities as $identity) {
-			$levenshtein = levenshtein($emailLevenshtein, preg_replace("/[^a-z]/", '', strtolower($identity->getFirstname() . $identity->getLastname())));
-			if ($levenshtein < $minLevenshtein) {
-				return 'D\'après notre recherche, cet email n\'est pas le vôtre';
-			}
-		}
+        return '';
+    }
 
-		return '';
-	}
+    private function empty(string ...$parameters): bool
+    {
+        foreach ($parameters as $parameter) {
+            if (empty($parameter)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
-	private function empty(string...$parameters): bool {
-		foreach ($parameters as $parameter) {
-			if (empty($parameter)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    public function validate(string $token): string
+    {
+        $error = '';
 
-	public function validate(string $token): string {
-		$error = '';
+        $account = $this->accountDAO->getTemporaryAccountByToken($token);
 
-		$account = $this->accountDAO->getTemporaryAccountByToken($token);
+        if ($account->getId() === -1) {
+            $error = 'Ce lien n\'est pas ou plus valide.';
+        }
 
-		if ($account->getId() === -1) {
-			$error = 'Ce lien n\'est pas ou plus valide.';
-		}
+        if (empty($error)) {
+            $this->accountDAO->createAccount($account);
+            $this->accountDAO->deleteTemporaryAccount($account);
+        }
 
-		if (empty($error)) {
-			$this->accountDAO->createAccount($account);
-			$this->accountDAO->deleteTemporaryAccount($account);
-		}
-
-		return $error;
-	}
-
-	public function resetPassword(array $parameters): string {
-
-		if (!$this->accountDAO->existsAccount($parameters['email'])) {
-			return 'Email inconnu.';
-		}
-
-		$account = $this->accountDAO->getAccountByLogin($parameters['email']);
-		$person = $this->personDAO->getPersonById($account->getPersonId());
-		$firstname = $person->getFirstname();
-		$lastname = $person->getLastname();
-		$account = new Account($account->getId(), $account->getLogin(), $person, new Password($parameters['password']));
-
-
-		$token = $this->random->generate(10);
-		$url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('resetpassword_validation', ['token' => $token]);
-		$this->mailer->send($parameters['email'], 'Parraindex : réinitialisation de mot de passe', "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
-		$this->accountDAO->createResetpassword($account, $token);
-		$this->redirect->redirect('resetpassword_confirmation');
-		return '';
-	}
-
-	public function validateResetPassword(string $token): string {
-		$error = '';
-
-		$account = $this->accountDAO->getAccountResetPasswordByToken($token);
-
-		if ($account->getId() === -1) {
-			$error = 'Ce lien n\'est pas ou plus valide.';
-		}
-
-		if (empty($error)) {
-			$this->accountDAO->editAccountPassword($account);
-			$this->accountDAO->deleteResetPassword($account);
-		}
-
-		return $error;
-	}
-
+        return $error;
+    }
 }

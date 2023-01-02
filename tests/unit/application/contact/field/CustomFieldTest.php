@@ -5,32 +5,36 @@ namespace unit\application\contact\field;
 use App\application\contact\field\CustomField;
 use PHPUnit\Framework\TestCase;
 
-class CustomFieldTest extends TestCase {
+class CustomFieldTest extends TestCase
+{
 
-	private CustomField $customField;
+    private CustomField $customField;
 
-	public function testGetnameReturnsCustom() {
-		$this->customField = new CustomField('custom', 'error', fn() => true);
+    public function testGetnameReturnsCustom()
+    {
+        $this->customField = new CustomField('custom', 'error', fn() => true);
 
-		$result = $this->customField->getName();
+        $result = $this->customField->getName();
 
-		$this->assertEquals('custom', $result);
-	}
+        $this->assertEquals('custom', $result);
+    }
 
-	public function testIsvalidReturnsTrueWhenCustomTestReturnsTrue() {
-		$this->customField = new CustomField('custom', 'error', fn() => true);
+    public function testIsvalidReturnsTrueWhenCustomTestReturnsTrue()
+    {
+        $this->customField = new CustomField('custom', 'error', fn() => true);
 
-		$result = $this->customField->isValid('test');
+        $result = $this->customField->isValid('test');
 
-		$this->assertTrue($result);
-	}
+        $this->assertTrue($result);
+    }
 
-	public function testIsvalidReturnsFalseWhenCustomTestReturnsFalse() {
-		$this->customField = new CustomField('custom', 'error', fn() => false);
+    public function testIsvalidReturnsFalseWhenCustomTestReturnsFalse()
+    {
+        $this->customField = new CustomField('custom', 'error', fn() => false);
 
-		$result = $this->customField->isValid('test');
+        $result = $this->customField->isValid('test');
 
-		$this->assertFalse($result);
-	}
+        $this->assertFalse($result);
+    }
 
 }

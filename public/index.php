@@ -3,18 +3,15 @@
 use App\infrastructure\injector\Injector;
 use App\infrastructure\router\Router;
 use Whoops\Handler\PrettyPageHandler;
-use Whoops\Run;
 
-require_once dirname(__DIR__) . DIRECTORY_SEPARATOR . 'vendor' . DIRECTORY_SEPARATOR . 'autoload.php';
+require_once('../vendor/autoload.php');
 
 session_start();
 $dotenv = Dotenv\Dotenv::createImmutable('../');
 $dotenv->load();
 
 if ($_ENV['DEBUG'] === "true") {
-	$whoops = new Run();
-	$whoops->pushHandler(new PrettyPageHandler());
-	$whoops->register();
+    (new Whoops\Run())->pushHandler(new PrettyPageHandler())->register();
 }
 
 $router = new Router();
@@ -29,5 +26,5 @@ $router->run();
 $end = microtime(true);
 
 if ($_ENV['DEBUG'] === "true") {
-	echo "Execution time: " . round(($end - $start) * 1_000) . " ms";
+    echo "Execution time: " . round(($end - $start) * 1_000) . " ms";
 }

@@ -3,48 +3,48 @@
 @use "../abstracts/breakpoints" as b;
 
 .navbar {
-	@include m.flex(center, space-evenly, row);
-	width: 95%;
-	position: absolute;
-	bottom: 3vh;
+  @include m.flex(center, space-evenly, row);
+  width: 95%;
+  bottom: 3vh;
+  min-height: 5rem;
 
-	a {
-		font-size: f.rem(30);
-		color: var(--dark-grey);
-		font-weight: 300;
+  a {
+    font-size: f.rem(30);
+    color: var(--dark-grey);
+    font-weight: 300;
 
-		transition: color 0.3s ease;
+    transition: color 0.3s ease;
 
-		@include b.breakpoint(large){
-			&:nth-child(even) {
-				text-align: left;
-			}
-			&:nth-child(odd) {
-				text-align: right;
-			}
-		}
+    @include b.breakpoint(large) {
+      &:nth-child(even) {
+        text-align: left;
+      }
+      &:nth-child(odd) {
+        text-align: right;
+      }
+    }
 
-		@include b.breakpoint(small) {
-			&:nth-child(n){
-				text-align: center;
-			}
-			grid-template-columns: repeat(1, 1fr);
-		}
+    @include b.breakpoint(small) {
+      &:nth-child(n) {
+        text-align: center;
+      }
+      grid-template-columns: repeat(1, 1fr);
+    }
 
-		&:hover {
-			color: var(--dark-blue);
-		}	
-	}
+    &:hover {
+      color: var(--dark-blue);
+    }
+  }
 
-	@include b.breakpoint(large) {
-		display: grid;
-		gap: f.rem(10) f.rem(60);
-		grid-template-columns: repeat(2, 1fr);
-	}
+  @include b.breakpoint(large) {
+    display: grid;
+    gap: f.rem(10) f.rem(60);
+    grid-template-columns: repeat(2, 1fr);
+  }
 
-	@include b.breakpoint(small) {
-		gap: f.rem(10) 0;
-		grid-template-columns: 1fr;
-	}
+  @include b.breakpoint(small) {
+    gap: f.rem(10) 0;
+    grid-template-columns: 1fr;
+  }
 
 }

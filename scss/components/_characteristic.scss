@@ -1,18 +1,18 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/mixins" as m;
 
-.characteristic{
-	@include m.flex($direction: row, $justify: space-between);
-	width: 100%;
+.characteristic {
+  @include m.flex($direction: row, $justify: space-between);
+  width: 100%;
 
 
-	&__title{
-		font-weight: 600;
-		text-transform: uppercase;
-		width: 7em;
-	}
+  &__title {
+    font-weight: 600;
+    text-transform: uppercase;
+    width: 7em;
+  }
 
-	input{
-		width: 40%;
-	}
+  input {
+    width: 40%;
+  }
 }

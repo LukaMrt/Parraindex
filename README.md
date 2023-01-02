@@ -1,19 +1,17 @@
 # Parraindex
 
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-1-orange.svg?style=flat-square)](#contributors-)
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
-
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/260c12aab9b34cdf82ffe5996e1391ae)](https://www.codacy.com/gh/LukaMrt/Parraindex/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LukaMrt/Parraindex&amp;utm_campaign=Badge_Grade)
 ![GitHub language count](https://img.shields.io/github/languages/count/lukamrt/parraindex)
 ![GitHub](https://img.shields.io/github/license/lukamrt/parraindex)
 
 ## About the project
-
-a
 
 This project is a school project made for the third semester of the Bachelor's degree in Computer Science at the
 University of Lyon 1. The objective of this project is to create a web application with a visual interface and
@@ -22,6 +20,8 @@ an administration interface used to manage the application.
 We decided to create a website which presents the relationship existing between students of the Institute of
 Technology. There are many sponsor relationships between students, and we wanted to create a website that would
 allow students to see all the links between people.
+
+You can visit the final website at this address : [https://parraindex.com](https://parraindex.com)
 
 ## Built with
 
@@ -54,7 +54,7 @@ To launch the project, you need to follow these steps:
 4. Create a `.env` file in the root folder of the project and fill it with the following information (follow the
    example of the `.env.example` file):
 
-    ```
+    ```properties
     # Environment
     
     DEBUG="false"               # Set to "true" to enable debug mode
@@ -76,7 +76,7 @@ To launch the project, you need to follow these steps:
     MAIL_PORT="587"            # Port of the mail account (default: 587)
     ```
 
-5. Build the CSS files with `sass --update scss:public/css'`
+5. Build the CSS files with `sass --update scss:public/css`
 6. Launch the project with `php -S localhost:8000 -t public` or `composer server`
 
 ## Contributing
@@ -86,11 +86,6 @@ to the project, please read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
 
 ## Contributors
 
-* **[Lilian BAUDRY](https://github.com/Irophin)** - *Initial work*
-* **[Vincent CHAVOT]()** - *Initial work*
-* **[Melvyn DELPREE](https://github.com/Melvyn27)** - *Initial work*
-* **[Luka MARET](https://github.com/LukaMrt)** - *Initial work*
-
 Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/docs/en/emoji-key)):
 
 <!-- ALL-CONTRIBUTORS-LIST:START - Do not remove or modify this section -->
@@ -99,7 +94,10 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 <table>
   <tbody>
     <tr>
-      <td align="center"><a href="http://lukamaret.com"><img src="https://avatars.githubusercontent.com/u/48085295?v=4?s=100" width="100px;" alt="LukaMrt"/><br /><sub><b>LukaMrt</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=LukaMrt" title="Code">💻</a> <a href="#infra-LukaMrt" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#projectManagement-LukaMrt" title="Project Management">📆</a> <a href="https://github.com/LukaMrt/Parraindex/commits?author=LukaMrt" title="Tests">⚠️</a></td>
+      <td align="center"><a href="https://lukamaret.com"><img src="https://avatars.githubusercontent.com/u/48085295?v=4?s=100" width="100px;" alt="Luka Maret"/><br /><sub><b>Luka Maret</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=LukaMrt" title="Code">💻</a> <a href="#infra-LukaMrt" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#projectManagement-LukaMrt" title="Project Management">📆</a> <a href="https://github.com/LukaMrt/Parraindex/commits?author=LukaMrt" title="Tests">⚠️</a></td>
+      <td align="center"><a href="https://irophin.github.io/CV-Web/"><img src="https://avatars.githubusercontent.com/u/62310861?v=4?s=100" width="100px;" alt="Lilian Baudry"/><br /><sub><b>Lilian Baudry</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=Irophin" title="Code">💻</a> <a title="Review">👀</a> <a title="Ideas">🤔</a> <a title="Design">🎨</a>
+      <td align="center"><a href="https://github.com/Melvyn27"><img src="https://avatars.githubusercontent.com/u/93776074?v=4?s=100" width="100px;" alt="Melvyn Delpree"/><br /><sub><b>Melvyn Delpree</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=Melvyn27" title="Code">💻</a> <a title="Design">🎨</a>
+      <td align="center"><a href="https://github.com/415K7467"><img src="https://avatars.githubusercontent.com/u/93972726?v=4?s=100" width="100px;" alt="Vincent Chavot-Dambrun"/><br /><sub><b>Vincent Chavot-Dambrun</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=415K7467" title="Code">💻</a>
     </tr>
   </tbody>
 </table>
@@ -109,8 +107,9 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
 
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
+Contributions of any kind welcome!
 
 ## License
 
-This repository is under [MIT license](LICENSE).
+The Parraindex is licensed under the [MIT License](LICENSE).

@@ -9,30 +9,30 @@ use App\application\redirect\Redirect;
 use App\model\contact\ContactType;
 use App\model\contact\DefaultContact;
 
-class OtherContactExecutor extends ContactExecutor {
+class OtherContactExecutor extends ContactExecutor
+{
+    public function __construct(ContactDAO $contactDAO, Redirect $redirect)
+    {
 
-	public function __construct(ContactDAO $contactDAO, Redirect $redirect) {
+        parent::__construct($contactDAO, $redirect, ContactType::OTHER, [
+            new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
+            new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
+            new EmailField('senderEmail', 'Votre email doit être valide'),
+            new Field('message', 'La description doit contenir au moins 1 caractère'),
+        ]);
+    }
 
-		parent::__construct($contactDAO, $redirect, ContactType::OTHER, [
-			new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
-			new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
-			new EmailField('senderEmail', 'Votre email doit être valide'),
-			new Field('message', 'La description doit contenir au moins 1 caractère'),
-		]);
+    public function executeSuccess(array $data): string
+    {
+        $contact = new DefaultContact(
+            -1,
+            $data['senderFirstName'] . ' ' . $data['senderLastName'],
+            $data['senderEmail'],
+            ContactType::OTHER,
+            $data['message'],
+        );
 
-	}
-
-	public function executeSuccess(array $data): string {
-		$contact = new DefaultContact(
-			-1,
-			$data['senderFirstName'] . ' ' . $data['senderLastName'],
-			$data['senderEmail'],
-			ContactType::OTHER,
-			$data['message'],
-		);
-
-		$this->contactDAO->saveSimpleContact($contact);
-		return '';
-	}
-
+        $this->contactDAO->saveSimpleContact($contact);
+        return '';
+    }
 }

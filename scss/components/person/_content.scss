@@ -3,25 +3,25 @@
 @use "../../abstracts/breakpoints" as b;
 
 .person-content {
-	width: 90%;
-	padding-right: 10%;
-	flex-grow: 1;
+  width: 90%;
+  padding-right: 10%;
+  flex-grow: 1;
 
-	@include m.flex(center, center, column);
+  @include m.flex(center, center, column);
 
-	@include b.breakpoint(medium) {
-		width: 100%;
-		padding-right: 0;
-	}
+  @include b.breakpoint(medium) {
+    width: 100%;
+    padding-right: 0;
+  }
 
-	&__description {
-		@include m.flex(center, center, row);
-		width: 100%;
+  &__description {
+    @include m.flex(center, center, row);
+    width: 100%;
 
-		@include b.breakpoint(medium) {
-			@include m.flex(center, center, column-reverse);
-		}
+    @include b.breakpoint(medium) {
+      @include m.flex(center, center, column-reverse);
+    }
 
-	}
+  }
 
 }

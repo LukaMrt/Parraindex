@@ -4,151 +4,151 @@
 {% set title = 'Parraindex - Edition personne' %}
 
 {% block javascripts %}
-	<script src="{{script('editPerson.js')}}" type="module"></script>
+    <script src="{{ script('editPerson.js') }}" type="module"></script>
 {% endblock %}
 
 {% block content %}
 
-<form class="edit-person">
+    <form class="edit-person">
 
-	<div class="description">
+        <div class="description">
 
-		<div class="description__about">
+            <div class="description__about">
 
-			<h2>A PROPOS</h1>
+                <h2>A PROPOS</h1>
 
-			<textarea name="person-desc" id="about-field" cols="30" rows="10">{{person.description}}</textarea>
-		
-		</div>
+                    <textarea name="person-desc" id="about-field" cols="30"
+                              rows="10">{{ person.description }}</textarea>
 
-		<div class="description__biography">
+            </div>
 
-			<h2>BIOGRAPHIE</h1>
+            <div class="description__biography">
 
-			<textarea name="person-bio" id="bio-field" cols="30" rows="10">{{person.biography}}</textarea>
+                <h2>BIOGRAPHIE</h1>
 
-		</div>
-	
-	</div>
+                    <textarea name="person-bio" id="bio-field" cols="30" rows="10">{{ person.biography }}</textarea>
 
-	<div class="public">
+            </div>
 
-		{% include 'components/card.twig' with {
-			'id': person.id,
-			'color': person.color,
-			'firstName': person.firstName,
-			'lastName': person.lastName,
-			'picture': person.picture,
-			'characteristics': characteristics,
-			'description': person.biography,
-			'startYear': person.startYear,
-			'mock': true,
-			}
-		%}
+        </div>
 
-		<div class="public__personalization">
+        <div class="public">
 
-			<h2>PERSONNALISATIONS</h2>
+            {% include 'components/card.twig' with {
+                'id': person.id,
+                'color': person.color,
+                'firstName': person.firstName,
+                'lastName': person.lastName,
+                'picture': person.picture,
+                'characteristics': characteristics,
+                'description': person.biography,
+                'startYear': person.startYear,
+                'mock': true,
+            } %}
 
-			<div class="public__personalization__choice" id="color-field" >
+            <div class="public__personalization">
 
-				<label style="background-color : #053259">
-					<input type="radio" name="banner-color"  value= "#053259">
-				</label>
+                <h2>PERSONNALISATIONS</h2>
 
-				<label style="background-color : #A60303">
-					<input type="radio" name="banner-color"  value= "#A60303">
-				</label>
+                <div class="public__personalization__choice" id="color-field">
 
-				<label style="background-color : #03A62C">
-					<input type="radio" name="banner-color"  value= "#03A62C">
-				</label>
+                    <label style="background-color : #053259">
+                        <input type="radio" name="banner-color" value="#053259">
+                    </label>
 
-				<label style="background-color : #e0e0e0">
-					<input checked type="radio" name="banner-color" value= "#e0e0e0">
-				</label>
+                    <label style="background-color : #A60303">
+                        <input type="radio" name="banner-color" value="#A60303">
+                    </label>
 
-				<label for="color-picker" class="user-color" style="background-color : #e0e0e0">
-					<input type="radio" name="banner-color" value="#e0e0e0" id="radio-color-picker">
-					<input type="color" id="color-picker" value="#e0e0e0">
-				</label>
+                    <label style="background-color : #03A62C">
+                        <input type="radio" name="banner-color" value="#03A62C">
+                    </label>
 
-			</div>
+                    <label style="background-color : #e0e0e0">
+                        <input checked type="radio" name="banner-color" value="#e0e0e0">
+                    </label>
 
-		</div>
+                    <label for="color-picker" class="user-color" style="background-color : #e0e0e0">
+                        <input type="radio" name="banner-color" value="#e0e0e0" id="radio-color-picker">
+                        <input type="color" id="color-picker" value="#e0e0e0">
+                    </label>
 
-	</div>
+                </div>
 
-	<div class="information">
+            </div>
 
-		{% if admin %}
-			<div class="information__personal">
-				<h2>PERSONNEL</h2>
+        </div>
 
-				<div class="information__personal__data">
-					<div>
-						<label for="firstname-field">PRENOM</label>
-						<input type="text" name="person-firstname" id="firstname-field" value="{{person.firstName}}">
-					</div>
+        <div class="information">
 
-					<div>
-						<label for="lastname-field">NOM</label>
-						<input type="text" name="person-lastname" id="lastname-field" value="{{person.lastName}}">
-					</div>
-				</div>
-			</div>
-		{% endif %}
+            {% if admin %}
+                <div class="information__personal">
+                    <h2>PERSONNEL</h2>
 
-		<div class="information__contact">
-			<h2>CONTACT</h2>
+                    <div class="information__personal__data">
+                        <div>
+                            <label for="firstname-field">PRENOM</label>
+                            <input type="text" name="person-firstname" id="firstname-field"
+                                   value="{{ person.firstName }}">
+                        </div>
 
-			<div class="information__contact__characteristics" id="contact-field">
+                        <div>
+                            <label for="lastname-field">NOM</label>
+                            <input type="text" name="person-lastname" id="lastname-field" value="{{ person.lastName }}">
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
 
-				{% for characteristic in characteristics %}
+            <div class="information__contact">
+                <h2>CONTACT</h2>
 
-					{% set value = null %}
+                <div class="information__contact__characteristics" id="contact-field">
 
-					{% for userCharacteristic in person.characteristics %}
-						{% if characteristic.title == userCharacteristic.title %}
-							{% set value = userCharacteristic %}
-						{% endif %}
-					{% endfor %}
+                    {% for characteristic in characteristics %}
 
-					{% include 'components/characteristic.twig' with {
-						'title': characteristic.title,
-						'value': value.value,
-						'visibility': value.visible,
-						}
-					%}
-				{% endfor %}
-			
-			</div>
-		</div>
-	</div>
+                        {% set value = null %}
 
-	{{ include('components/modal-picture.twig') }}
+                        {% for userCharacteristic in person.characteristics %}
+                            {% if characteristic.title == userCharacteristic.title %}
+                                {% set value = userCharacteristic %}
+                            {% endif %}
+                        {% endfor %}
 
-	<nav class='confirm'>
+                        {% include 'components/characteristic.twig' with {
+                            'title': characteristic.title,
+                            'value': value.value,
+                            'visibility': value.visible,
+                        } %}
+                    {% endfor %}
 
-		<a href="{{router.url('person', {id: person.id})}}" class="confirm__prev">
-			<img src="{{icon('up.svg')}}" alt="retour">
-		</a>
+                </div>
+            </div>
+        </div>
 
-		<div class="confirm__action">
-			{% if admin %}
-				<button class="btn btn--secondary" type="button" id="delete-person">
-					Supprimer
-				</button>
-			{% endif %}
+        {{ include('components/modal-picture.twig') }}
 
-			<button class="btn btn--primary" type="submit" id="save-person">
-				Enregistrer
-			</button>
+        <nav class='confirm'>
 
-		</div>
+            <a href="{{ router.url('person', {id: person.id}) }}" class="confirm__prev">
+                <img src="{{ icon('up.svg') }}" alt="retour">
+            </a>
 
-	</nav>
+            <div class="confirm__action">
+                {% if admin %}
+                    <button class="btn btn--secondary" type="button" id="delete-person">
+                        Supprimer
+                    </button>
+                {% endif %}
 
-</form>
+                <button class="btn btn--primary" type="submit" id="save-person">
+                    Enregistrer
+                </button>
+
+            </div>
+
+        </nav>
+
+    </form>
 
 {% endblock %}

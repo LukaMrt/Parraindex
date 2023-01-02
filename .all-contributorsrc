@@ -10,16 +10,47 @@
   "contributors": [
     {
       "login": "LukaMrt",
-      "name": "LukaMrt",
+      "name": "Luka Maret",
       "avatar_url": "https://avatars.githubusercontent.com/u/48085295?v=4",
-      "profile": "http://lukamaret.com",
+      "profile": "https://lukamaret.com",
       "contributions": [
         "code",
         "infra",
         "projectManagement",
         "test"
       ]
-    }
+    },
+    {
+      "login": "Irophin",
+      "name": "Lilian Baudry",
+      "avatar_url": "https://avatars.githubusercontent.com/u/62310861?v=4",
+      "profile": "https://irophin.github.io/CV-Web/",
+      "contributions": [
+        "code",
+        "review",
+        "ideas",
+        "design"
+      ]
+    },
+    {
+      "login": "Melvyn27",
+      "name": "Melvyn Delpree",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93776074?v=4",
+      "profile": "https://github.com/Melvyn27",
+      "contributions": [
+        "code",
+        "design"
+      ]
+    },
+    {
+      "login": "415K7467",
+      "name": "Vincent Chavot-Dambrun",
+      "avatar_url": "https://avatars.githubusercontent.com/u/93972726?v=4",
+      "profile": "https://github.com/415K7467",
+      "contributions": [
+        "code"
+      ]
+    },
   ],
   "contributorsPerLine": 7,
   "skipCi": true,

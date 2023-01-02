@@ -9,7 +9,8 @@
 
 {% block content %}
 
-    <form class="form" action="{{ router.url('editsponsor_post', {id: sponsor.id != null ? sponsor.id : 0}) }}" method="post">
+    <form class="form" action="{{ router.url('editsponsor_post', {id: sponsor.id != null ? sponsor.id : 0}) }}"
+          method="post">
 
         <h1 class="form__title">Gestion de lien</h1>
 

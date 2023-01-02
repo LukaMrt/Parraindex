@@ -1,16 +1,29 @@
 @use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
 
 .title {
-	transition: all 0.3s ease;
 
-	font-size: min(f.rem(70), 6vw);
-	text-transform: uppercase;
-	color: var(--dark-grey);
-	font-weight: 400;
-	letter-spacing: 15px;
+  flex-grow: 1;
+  @include m.flex(center, center, column);
+  margin-bottom: f.rem(100);
 
-	&:hover {
-		color: var(--dark-blue);
-		letter-spacing: 17px;
-	}
+  @include b.breakpoint(medium) {
+    margin-bottom: f.rem(0);
+  }
+
+  &__text {
+    transition: all 0.3s ease;
+
+    font-size: min(f.rem(70), 6vw);
+    text-transform: uppercase;
+    color: var(--dark-grey);
+    font-weight: 400;
+    letter-spacing: 15px;
+
+    &:hover {
+      color: var(--dark-blue);
+      letter-spacing: 17px;
+    }
+  }
 }

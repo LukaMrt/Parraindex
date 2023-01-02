@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Generator: Adobe Illustrator 26.0.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
-<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
-	 viewBox="0 0 128 128" style="enable-background:new 0 0 128 128;" xml:space="preserve">
+<svg version="1.1" id="Livello_1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"
+     viewBox="0 0 128 128" style="enable-background:new 0 0 128 128;" xml:space="preserve">
 <style type="text/css">
 	.st0{fill:#15253C;}
 </style>
-<path class="st0" d="M64,0C28.7,0,0,28.7,0,64s28.7,64,64,64s64-28.7,64-64C128,28.7,99.3,0,64,0z M64,122C32,122,6,96,6,64
+    <path class="st0" d="M64,0C28.7,0,0,28.7,0,64s28.7,64,64,64s64-28.7,64-64C128,28.7,99.3,0,64,0z M64,122C32,122,6,96,6,64
 	S32,6,64,6s58,26,58,58C122,96,96,122,64,122z"/>
-<path class="st0" d="M92.1,35.8c-1.2-1.2-3.1-1.2-4.2,0L64,59.7l-23.9-24c-1.2-1.2-3.1-1.2-4.2,0c-1.2,1.2-1.2,3.1,0,4.2l23.9,24
+    <path class="st0" d="M92.1,35.8c-1.2-1.2-3.1-1.2-4.2,0L64,59.7l-23.9-24c-1.2-1.2-3.1-1.2-4.2,0c-1.2,1.2-1.2,3.1,0,4.2l23.9,24
 	L35.9,88c-1.2,1.2-1.2,3.1,0,4.2c1.2,1.2,3.1,1.2,4.2,0l23.9-24l23.9,24c1.2,1.2,3.1,1.2,4.2,0s1.2-3.1,0-4.2L68.2,64l23.9-24
 	C93.3,38.8,93.3,37,92.1,35.8z"/>
 </svg>

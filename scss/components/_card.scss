@@ -2,122 +2,122 @@
 @use "../abstracts/mixins" as m;
 @use "../abstracts/breakpoints" as b;
 
-.card{
-	@include m.flex();
-	gap: f.rem(7);
-	margin: 25px 10px;
+.card {
+  @include m.flex();
+  gap: f.rem(7);
+  margin: 25px 10px;
 
-	user-select: none;
-	scale: 0.8;
+  user-select: none;
+  scale: 0.8;
 
-	position: relative;
-	min-width: max-content;
-	text-align: center;
+  position: relative;
+  min-width: max-content;
+  text-align: center;
 
-	height: min(40vh, f.rem(350));
-	min-height: f.rem(210);
+  height: min(40vh, f.rem(350));
+  min-height: f.rem(210);
 
-	aspect-ratio: 27/40;
+  aspect-ratio: 27/40;
 
-	background-color: var(--white);
-	@include m.hard-box-shadow();
+  background-color: var(--white);
+  @include m.hard-box-shadow();
 
-	padding-bottom: f.rem(25);
-	border-radius: f.rem(35);
-	overflow: hidden;
-	transition: all 200ms ease-in-out;
+  padding-bottom: f.rem(25);
+  border-radius: f.rem(35);
+  overflow: hidden;
+  transition: all 200ms ease-in-out;
 
-	&__profil{
-		font-size: f.rem(24);
-		text-align: center;
-		padding: 0 5%;
-	}
+  &__profil {
+    font-size: f.rem(24);
+    text-align: center;
+    padding: 0 5%;
+  }
 
-	&__last-name{
-		text-transform: uppercase;
-		white-space: nowrap;
-		font-weight: 700
-	}
+  &__last-name {
+    text-transform: uppercase;
+    white-space: nowrap;
+    font-weight: 700
+  }
 
-	&__banner{
-		@include m.flex();
-		position: relative;
-		transition: background-color 200ms ease-in-out;
-		height: 33%;
-		width: 100%;
-		background-color: var(--light-grey);
-	}
+  &__banner {
+    @include m.flex();
+    position: relative;
+    transition: background-color 200ms ease-in-out;
+    height: 33%;
+    width: 100%;
+    background-color: var(--light-grey);
+  }
 
-	&__social-network{
-		@include m.flex($justify: space-evenly, $direction: row);
-		width: 50%;
-		margin: f.rem(5) 0;
-	}
+  &__social-network {
+    @include m.flex($justify: space-evenly, $direction: row);
+    width: 50%;
+    margin: f.rem(5) 0;
+  }
 
-	&__picture{
-		@include m.flex();
-		transition: filter 0.1s ease-in-out;
+  &__picture {
+    @include m.flex();
+    transition: filter 0.1s ease-in-out;
 
-		height: 70%;
-		aspect-ratio: 1/1;
-		
-		object-fit: cover;
-		border-radius: 50%;
-		@include m.hard-box-shadow();
+    height: 70%;
+    aspect-ratio: 1/1;
 
-		&.overlay--active{
-			filter: blur(1px) brightness(0.8);
-		}
+    object-fit: cover;
+    border-radius: 50%;
+    @include m.hard-box-shadow();
 
-		&__overlay{
-			position: absolute;
-			pointer-events: none;
-			transition: opacity 0.2s ease-in-out;
-			opacity: 0;
-			height: 30%;
+    &.overlay--active {
+      filter: blur(1px) brightness(0.8);
+    }
 
-			&.overlay--active{
-				opacity: 1;
-			}
-		}
-	}
-	
-	&__description{
-		padding: 0 f.rem(40);
-		margin: 0;
-		font-size: f.rem(14);
-		width: 75%;
-		overflow: hidden;
-		text-align: justify;
-		word-wrap: break-word;
-		flex-grow: 1;
-	}
+    &__overlay {
+      position: absolute;
+      pointer-events: none;
+      transition: opacity 0.2s ease-in-out;
+      opacity: 0;
+      height: 30%;
 
-	&::after{
-		content: '';
-		position: absolute;
-		bottom: f.rem(12);
+      &.overlay--active {
+        opacity: 1;
+      }
+    }
+  }
 
-		height: f.rem(4);
-		width: f.rem(40);
-		border-radius: f.rem(2);
+  &__description {
+    padding: 0 f.rem(40);
+    margin: 0;
+    font-size: f.rem(14);
+    width: 75%;
+    overflow: hidden;
+    text-align: justify;
+    word-wrap: break-word;
+    flex-grow: 1;
+  }
 
-		background-color: var(--dark-blue);
-	}
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: f.rem(12);
 
-	&--middle {
-		scale: 1;
-		@include b.breakpoint(small) {
-			scale: 0.8;
-		}
-	}
+    height: f.rem(4);
+    width: f.rem(40);
+    border-radius: f.rem(2);
 
-	&--hover {
-		cursor: pointer;
-	}
+    background-color: var(--dark-blue);
+  }
 
-	&:hover {
-		cursor: pointer;
-	}
+  &--middle {
+    scale: 1;
+    @include b.breakpoint(small) {
+      scale: 0.8;
+    }
+  }
+
+  &--hover {
+    cursor: pointer;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
 
 }

@@ -2,97 +2,97 @@
 @use "../abstracts/mixins" as m;
 @use "../abstracts/breakpoints" as b;
 
-.edit-picture{
-	position: absolute;
+.edit-picture {
+  position: absolute;
 
-	left: 50%;
-	translate: -50% 0;
+  left: 50%;
+  translate: -50% 0;
 
-	width: min(80%, f.rem(600));
-	height: f.rem(300);
-	@include m.flex($direction: row);
-	gap: f.rem(20);
+  width: min(80%, f.rem(600));
+  height: f.rem(300);
+  @include m.flex($direction: row);
+  gap: f.rem(20);
 
-	@include m.smooth-box-shadow();
-	background-color: rgba(255,255,255,0.8);
-	backdrop-filter: blur(4px);
-	border-radius: f.rem(20);
-	padding: f.rem(20);
+  @include m.smooth-box-shadow();
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(4px);
+  border-radius: f.rem(20);
+  padding: f.rem(20);
 
-	scale: 0;
-	transition: scale 0.2s ease-in-out;
+  scale: 0;
+  transition: scale 0.2s ease-in-out;
 
-	hr{
-		height: 50%;
-		width: 2px;
+  hr {
+    height: 50%;
+    width: 2px;
 
-		border: 0;
-		border-radius: 1px;
-		background-color: var(--dark-blue);
+    border: 0;
+    border-radius: 1px;
+    background-color: var(--dark-blue);
 
-		@include b.breakpoint(small) {
-			width: 50%;
-			height: 2px;
-		}
-	}
+    @include b.breakpoint(small) {
+      width: 50%;
+      height: 2px;
+    }
+  }
 
-	&__preview{
-		width: 40%;
-		height: 90%;
-		@include m.flex($justify: space-evenly);
+  &__preview {
+    width: 40%;
+    height: 90%;
+    @include m.flex($justify: space-evenly);
 
-		img{
-			max-height: f.rem(150);
-			@include m.smooth-box-shadow();
+    img {
+      max-height: f.rem(150);
+      @include m.smooth-box-shadow();
 
-			aspect-ratio: 1/1;
-			border-radius: 100%;
-			object-fit: cover;
-			border: 10px solid white;
-			padding: 5px;
-		}
-	}
+      aspect-ratio: 1/1;
+      border-radius: 100%;
+      object-fit: cover;
+      border: 10px solid white;
+      padding: 5px;
+    }
+  }
 
-	&__form{
-		width: 40%;
-		height: 70%;
-		@include m.flex($justify: space-between);
+  &__form {
+    width: 40%;
+    height: 70%;
+    @include m.flex($justify: space-between);
 
-		p{
-			text-align: center;
-		}
+    p {
+      text-align: center;
+    }
 
-		input[type="file"]{
-			display: none;
-		}
+    input[type="file"] {
+      display: none;
+    }
 
-		@include b.breakpoint(small) {
-			width: 90%;
-			gap: f.rem(16);
-			flex-direction: column;
-			height: auto;
-		}
-	}
-	
-	&__close{
-		position: absolute;
+    @include b.breakpoint(small) {
+      width: 90%;
+      gap: f.rem(16);
+      flex-direction: column;
+      height: auto;
+    }
+  }
 
-		top: f.rem(16);
-		right: f.rem(16);
-		
-		padding: f.rem(10);	
-		background-color: transparent;
-		border: 0;
-		cursor: pointer;
-	}
+  &__close {
+    position: absolute;
 
-	&--active{
-		scale: 1;
-	}
-	
-	@include b.breakpoint(small) {
-		flex-direction: column;
-		height: auto;
-	}
+    top: f.rem(16);
+    right: f.rem(16);
+
+    padding: f.rem(10);
+    background-color: transparent;
+    border: 0;
+    cursor: pointer;
+  }
+
+  &--active {
+    scale: 1;
+  }
+
+  @include b.breakpoint(small) {
+    flex-direction: column;
+    height: auto;
+  }
 
 }

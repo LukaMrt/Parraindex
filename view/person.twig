@@ -4,36 +4,36 @@
 {% set title = 'Parraindex -  ' ~ person.firstName %}
 
 {% block javascripts %}
-	<script src="{{ script("person.js") }}" defer></script>
+    <script src="{{ script("person.js") }}" defer></script>
 {% endblock %}
 
 {% block content %}
 
-	<div class="person-content">
+    <div class="person-content">
 
-		<div class="person-content__description">
-			{% include 'components/person/family.twig' with {
-				'router': router,
-				'person': person,
-				'godFathers': godFathers,
-				'godChildren': godChildren,
-			} %}
+        <div class="person-content__description">
+            {% include 'components/person/family.twig' with {
+                'router': router,
+                'person': person,
+                'godFathers': godFathers,
+                'godChildren': godChildren,
+            } %}
 
-			{% include 'components/person/description.twig' with {
-				'person': person
-			} %}
-		</div>
+            {% include 'components/person/description.twig' with {
+                'person': person
+            } %}
+        </div>
 
-		{% include 'components/person/actions.twig' with {
-			'router': router,
-			'admin': admin,
-			'person': person
-		} %}
+        {% include 'components/person/actions.twig' with {
+            'router': router,
+            'admin': admin,
+            'person': person
+        } %}
 
-	</div>
+    </div>
 
-	{% include 'components/person/links.twig' with {
-		'characteristics': person.characteristics
-	} %}
+    {% include 'components/person/links.twig' with {
+        'characteristics': person.characteristics
+    } %}
 
 {% endblock %}

@@ -6,19 +6,21 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
-abstract class Controller {
-
+abstract class Controller
+{
+    protected PersonService $personService;
     private Environment $twig;
-	private Router $router;
-	protected PersonService $personService;
+    private Router $router;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService) {
+    public function __construct(Environment $twig, Router $router, PersonService $personService)
+    {
         $this->twig = $twig;
-		$this->router = $router;
-		$this->personService = $personService;
+        $this->router = $router;
+        $this->personService = $personService;
     }
 
-    public function call(string $method, Router $router, array $parameters): void {
+    public function call(string $method, Router $router, array $parameters): void
+    {
 
         switch ($method) {
             case 'GET':
@@ -34,30 +36,33 @@ abstract class Controller {
                 $this->delete($router, $parameters);
                 break;
         }
-
     }
 
-    public function get(Router $router, array $parameters): void {
+    public function get(Router $router, array $parameters): void
+    {
     }
 
-    public function post(Router $router, array $parameters): void {
+    public function post(Router $router, array $parameters): void
+    {
     }
 
-    public function put(Router $router, array $parameters): void {
+    public function put(Router $router, array $parameters): void
+    {
     }
 
-    public function delete(Router $router, array $parameters): void {
+    public function delete(Router $router, array $parameters): void
+    {
     }
 
-    protected function render(string $template, array $parameters = []): void {
+    protected function render(string $template, array $parameters = []): void
+    {
 
-		if (!empty($_SESSION)) {
-			$parameters['login'] = $_SESSION;
-		}
+        if (!empty($_SESSION)) {
+            $parameters['login'] = $_SESSION;
+        }
 
-		$parameters['router'] = $this->router;
+        $parameters['router'] = $this->router;
 
-		echo $this->twig->render($template, $parameters);
+        echo $this->twig->render($template, $parameters);
     }
-
 }
