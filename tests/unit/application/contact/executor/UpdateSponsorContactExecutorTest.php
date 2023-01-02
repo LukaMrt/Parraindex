@@ -36,13 +36,18 @@ class UpdateSponsorContactExecutorTest extends TestCase
 
     public function setUp(): void
     {
-        $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
-        $this->sponsorDAO = $this->createMock(SponsorDAO::class);
+		$this->contactDAO = $this->createMock(ContactDAO::class);
+		$this->redirect = $this->createMock(Redirect::class);
+		$this->personDAO = $this->createMock(PersonDAO::class);
+		$this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
-        $this->executor = new UpdateSponsorContactExecutor($this->contactDAO, $this->personDAO, $this->sponsorDAO, $this->redirect);
-    }
+		$this->executor = new UpdateSponsorContactExecutor(
+			$this->contactDAO,
+			$this->personDAO,
+			$this->sponsorDAO,
+			$this->redirect
+		);
+	}
 
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {

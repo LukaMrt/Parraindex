@@ -18,32 +18,38 @@ use PHPUnit\Framework\TestCase;
 class AddSponsorContactExecutorTest extends TestCase
 {
 
-    private AddSponsorContactExecutor $executor;
+	const TEST_EMAIL = 'test.test@test.com';
+	const TEST_DATE = '2021-01-01';
+	private AddSponsorContactExecutor $executor;
 
     private ContactDAO $contactDAO;
-    private Redirect $redirect;
-    private PersonDAO $personDAO;
+	private PersonDAO $personDAO;
     private SponsorDAO $sponsorDAO;
 
     private array $defaultArray = [
         'senderFirstName' => 'test1',
         'senderLastName' => 'test2',
-        'senderEmail' => 'test.test@test.com',
+        'senderEmail' => self::TEST_EMAIL,
         'godFatherId' => 1,
         'godChildId' => 2,
         'sponsorType' => '0',
-        'sponsorDate' => '2021-01-01',
+        'sponsorDate' => self::TEST_DATE,
         'bonusInformation' => 'empty'
     ];
 
     public function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
+        $redirect = $this->createMock(Redirect::class);
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
-        $this->executor = new AddSponsorContactExecutor($this->contactDAO, $this->redirect, $this->personDAO, $this->sponsorDAO);
+        $this->executor = new AddSponsorContactExecutor(
+			$this->contactDAO,
+			$redirect,
+			$this->personDAO,
+			$this->sponsorDAO
+		);
     }
 
     public function testExecuteReturnsErrorWhenSenderFirstNameIsMissing()
@@ -144,12 +150,12 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturnOnConsecutiveCalls($godFather, $godChild);
 
-        $sponsor = new ClassicSponsor(-1, $godFather, $godChild, '2021-01-01', '');
+        $sponsor = new ClassicSponsor(-1, $godFather, $godChild, self::TEST_DATE, '');
 
         $contact = new SponsorContact(
             -1,
             'test1 test2',
-            'test.test@test.com',
+			self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,
             'empty',
             $sponsor
@@ -172,12 +178,12 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturnOnConsecutiveCalls($godFather, $godChild);
 
-        $sponsor = new HeartSponsor(-1, $godFather, $godChild, '2021-01-01', '');
+        $sponsor = new HeartSponsor(-1, $godFather, $godChild, self::TEST_DATE, '');
 
         $contact = new SponsorContact(
             -1,
             'test1 test2',
-            'test.test@test.com',
+			self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,
             'empty',
             $sponsor

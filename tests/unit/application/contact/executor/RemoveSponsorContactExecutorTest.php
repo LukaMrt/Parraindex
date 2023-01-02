@@ -19,8 +19,7 @@ class RemoveSponsorContactExecutorTest extends TestCase
     private RemoveSponsorContactExecutor $executor;
 
     private ContactDAO $contactDAO;
-    private Redirect $redirect;
-    private PersonDAO $personDAO;
+	private PersonDAO $personDAO;
     private SponsorDAO $sponsorDAO;
 
     private array $defaultArray = [
@@ -37,11 +36,16 @@ class RemoveSponsorContactExecutorTest extends TestCase
     public function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
+        $redirect = $this->createMock(Redirect::class);
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
-        $this->executor = new RemoveSponsorContactExecutor($this->contactDAO, $this->personDAO, $this->sponsorDAO, $this->redirect);
+        $this->executor = new RemoveSponsorContactExecutor(
+			$this->contactDAO,
+			$this->personDAO,
+			$this->sponsorDAO,
+			$redirect
+		);
     }
 
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()

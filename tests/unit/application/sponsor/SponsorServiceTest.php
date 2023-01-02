@@ -13,263 +13,249 @@ use App\model\sponsor\HeartSponsor;
 use App\model\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
 
-class SponsorServiceTest extends TestCase
-{
+class SponsorServiceTest extends TestCase {
 
-    private Person $person;
-    private Sponsor $sponsor;
-    private SponsorService $sponsorService;
-    private SponsorDAO $sponsorDAO;
-    private PersonDAO $personDAO;
+	const TEST_DATE = '2020-01-01';
+	private Person $person;
+	private Sponsor $sponsor;
+	private SponsorService $sponsorService;
+	private SponsorDAO $sponsorDAO;
+	private PersonDAO $personDAO;
 
-    public function setUp(): void
-    {
-        $person = PersonBuilder::aPerson()->withId(1)->build();
-        $this->sponsor = new ClassicSponsor(1, $person, $person, '', '');
-        $this->person = PersonBuilder::aPerson()->withId(1)->withIdentity(new Identity('test', 'test'))->build();
-        $this->sponsorDAO = $this->createMock(SponsorDAO::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
-        $this->sponsorService = new SponsorService($this->sponsorDAO, $this->personDAO);
-    }
+	public function setUp(): void {
+		$person = PersonBuilder::aPerson()->withId(1)->build();
+		$this->sponsor = new ClassicSponsor(1, $person, $person, '', '');
+		$this->person = PersonBuilder::aPerson()->withId(1)->withIdentity(new Identity('test', 'test'))->build();
+		$this->sponsorDAO = $this->createMock(SponsorDAO::class);
+		$this->personDAO = $this->createMock(PersonDAO::class);
+		$this->sponsorService = new SponsorService($this->sponsorDAO, $this->personDAO);
+	}
 
-    public function testGetpersonfamilyRetrievesGodFathersAndGodSons()
-    {
+	public function testGetpersonfamilyRetrievesGodFathersAndGodSons() {
 
-        $person = PersonBuilder::aPerson()->withId(1)->withIdentity(new Identity('test', 'test'))->build();
-        $person2 = PersonBuilder::aPerson()->withId(2)->withIdentity(new Identity('test2', 'test2'))->build();
-        $person3 = PersonBuilder::aPerson()->withId(3)->withIdentity(new Identity('test3', 'test3'))->build();
+		$person = PersonBuilder::aPerson()->withId(1)->withIdentity(new Identity('test', 'test'))->build();
+		$person2 = PersonBuilder::aPerson()->withId(2)->withIdentity(new Identity('test2', 'test2'))->build();
+		$person3 = PersonBuilder::aPerson()->withId(3)->withIdentity(new Identity('test3', 'test3'))->build();
 
-        $godFather1 = new ClassicSponsor(1, $person2, $person, '', '');
-        $godFather2 = new ClassicSponsor(2, $person3, $person, '', '');
+		$godFather1 = new ClassicSponsor(1, $person2, $person, '', '');
+		$godFather2 = new ClassicSponsor(2, $person3, $person, '', '');
 
-        $godSon1 = new ClassicSponsor(3, $person, $person2, '', '');
-        $godSon2 = new ClassicSponsor(4, $person, $person3, '', '');
+		$godSon1 = new ClassicSponsor(3, $person, $person2, '', '');
+		$godSon2 = new ClassicSponsor(4, $person, $person3, '', '');
 
-        $this->sponsorDAO->method('getPersonFamily')
-            ->with($this->equalTo(1))
-            ->willReturn([
-                'person' => $person,
-                'godFathers' => [$godFather1, $godFather2],
-                'godChildren' => [$godSon1, $godSon2]
-            ]);
+		$this->sponsorDAO->method('getPersonFamily')
+			->with($this->equalTo(1))
+			->willReturn([
+				'person' => $person,
+				'godFathers' => [$godFather1, $godFather2],
+				'godChildren' => [$godSon1, $godSon2]
+			]);
 
-        $family = $this->sponsorService->getPersonFamily(1);
+		$family = $this->sponsorService->getPersonFamily(1);
 
-        $this->assertEquals($family, [
-            'person' => $person,
-            'godFathers' => [$godFather1, $godFather2],
-            'godChildren' => [$godSon1, $godSon2]
-        ]);
-    }
+		$this->assertEquals($family, [
+			'person' => $person,
+			'godFathers' => [$godFather1, $godFather2],
+			'godChildren' => [$godSon1, $godSon2]
+		]);
+	}
 
-    public function testGetsponsorbyidReturnsNullWhenSponsorDoesNotExist(): void
-    {
+	public function testGetsponsorbyidReturnsNullWhenSponsorDoesNotExist(): void {
 
-        $this->sponsorDAO->method('getSponsorById')->willReturn(null);
+		$this->sponsorDAO->method('getSponsorById')->willReturn(null);
 
-        $sponsor = $this->sponsorService->getSponsorById(1);
+		$sponsor = $this->sponsorService->getSponsorById(1);
 
-        $this->assertNull($sponsor);
-    }
+		$this->assertNull($sponsor);
+	}
 
-    public function testGetsponsorbyidReturnsSponsorWhenSponsorExists(): void
-    {
+	public function testGetsponsorbyidReturnsSponsorWhenSponsorExists(): void {
 
-        $this->sponsorDAO->method('getSponsorById')
-            ->with(1)
-            ->willReturn($this->sponsor);
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
 
-        $this->personDAO->method('getPersonById')
-            ->with(1)
-            ->willReturn($this->person);
+		$this->personDAO->method('getPersonById')
+			->with(1)
+			->willReturn($this->person);
 
-        $sponsor = $this->sponsorService->getSponsorById(1);
+		$sponsor = $this->sponsorService->getSponsorById(1);
 
-        $expectedSponsor = new ClassicSponsor(1, $this->person, $this->person, '', '');
-        $this->assertEquals($expectedSponsor, $sponsor);
-    }
+		$expectedSponsor = new ClassicSponsor(1, $this->person, $this->person, '', '');
+		$this->assertEquals($expectedSponsor, $sponsor);
+	}
 
-    public function testAddsponsorCallsAddSponsorOnSponsorDAO(): void
-    {
+	public function testAddsponsorCallsAddSponsorOnSponsorDAO(): void {
 
-        $this->sponsorDAO->expects($this->once())
-            ->method('addSponsor')
-            ->with($this->sponsor);
+		$this->sponsorDAO->expects($this->once())
+			->method('addSponsor')
+			->with($this->sponsor);
 
-        $this->sponsorService->addSponsor($this->sponsor);
-    }
+		$this->sponsorService->addSponsor($this->sponsor);
+	}
 
-    public function testRemovesponsorCallsUpdateSponsorOnSponsorDAO(): void
-    {
+	public function testRemovesponsorCallsUpdateSponsorOnSponsorDAO(): void {
 
-        $this->sponsorDAO->expects($this->once())
-            ->method('removeSponsor')
-            ->with(-1);
+		$this->sponsorDAO->expects($this->once())
+			->method('removeSponsor')
+			->with(-1);
 
-        $this->sponsorService->removeSponsor(-1);
-    }
+		$this->sponsorService->removeSponsor(-1);
+	}
 
-    public function testGestsponsorReturnsSponsor(): void
-    {
+	public function testGestsponsorReturnsSponsor(): void {
 
-        $this->sponsorDAO->method('getSponsorById')
-            ->with(1)
-            ->willReturn($this->sponsor);
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
 
-        $sponsor = $this->sponsorService->getSponsor(1);
+		$sponsor = $this->sponsorService->getSponsor(1);
 
-        $this->assertEquals($this->sponsor, $sponsor);
-    }
+		$this->assertEquals($this->sponsor, $sponsor);
+	}
 
-    public function testCreatesponsorDoesNothingWhenSponsorAlreadyExists(): void
-    {
+	public function testCreatesponsorDoesNothingWhenSponsorAlreadyExists(): void {
 
-        $this->personDAO->method('getPersonById')
-            ->withConsecutive([1], [1])
-            ->willReturnOnConsecutiveCalls($this->person, $this->person);
+		$this->personDAO->method('getPersonById')
+			->withConsecutive([1], [1])
+			->willReturnOnConsecutiveCalls($this->person, $this->person);
 
-        $this->sponsorDAO->method('getSponsorByPeopleId')
-            ->with(1, 1)
-            ->willReturn($this->sponsor);
+		$this->sponsorDAO->method('getSponsorByPeopleId')
+			->with(1, 1)
+			->willReturn($this->sponsor);
 
-        $this->sponsorDAO->expects($this->never())
-            ->method('addSponsor');
+		$this->sponsorDAO->expects($this->never())
+			->method('addSponsor');
 
-        $this->sponsorService->createSponsor([
-            'godFatherId' => 1,
-            'godChildId' => 1
-        ]);
-    }
+		$this->sponsorService->createSponsor([
+			'godFatherId' => 1,
+			'godChildId' => 1
+		]);
+	}
 
-    public function testCreatesponsorRegistersClassicSponsor(): void
-    {
+	public function testCreatesponsorRegistersClassicSponsor(): void {
 
-        $this->personDAO->method('getPersonById')
-            ->withConsecutive([1], [1])
-            ->willReturnOnConsecutiveCalls($this->person, $this->person);
+		$this->personDAO->method('getPersonById')
+			->withConsecutive([1], [1])
+			->willReturnOnConsecutiveCalls($this->person, $this->person);
 
-        $this->sponsorDAO->method('getSponsorByPeopleId')
-            ->with(1, 1)
-            ->willReturn(null);
+		$this->sponsorDAO->method('getSponsorByPeopleId')
+			->with(1, 1)
+			->willReturn(null);
 
-        $sponsor = new ClassicSponsor(-1, $this->person, $this->person, '2020-01-01', 'description');
+		$sponsor = new ClassicSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
 
-        $this->sponsorDAO->expects($this->once())
-            ->method('addSponsor')
-            ->with($sponsor);
+		$this->sponsorDAO->expects($this->once())
+			->method('addSponsor')
+			->with($sponsor);
 
-        $this->sponsorService->createSponsor([
-            'godFatherId' => 1,
-            'godChildId' => 1,
-            'sponsorType' => '0',
-            'sponsorDate' => '2020-01-01',
-            'description' => 'description'
-        ]);
+		$this->sponsorService->createSponsor([
+			'godFatherId' => 1,
+			'godChildId' => 1,
+			'sponsorType' => '0',
+			'sponsorDate' => self::TEST_DATE,
+			'description' => 'description'
+		]);
 
-    }
+	}
 
-    public function testCreatesponsorRegistersHeartSponsor(): void
-    {
+	public function testCreatesponsorRegistersHeartSponsor(): void {
 
-        $this->personDAO->method('getPersonById')
-            ->withConsecutive([1], [1])
-            ->willReturnOnConsecutiveCalls($this->person, $this->person);
+		$this->personDAO->method('getPersonById')
+			->withConsecutive([1], [1])
+			->willReturnOnConsecutiveCalls($this->person, $this->person);
 
-        $this->sponsorDAO->method('getSponsorByPeopleId')
-            ->with(1, 1)
-            ->willReturn(null);
+		$this->sponsorDAO->method('getSponsorByPeopleId')
+			->with(1, 1)
+			->willReturn(null);
 
-        $sponsor = new HeartSponsor(-1, $this->person, $this->person, '2020-01-01', 'description');
+		$sponsor = new HeartSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
 
-        $this->sponsorDAO->expects($this->once())
-            ->method('addSponsor')
-            ->with($sponsor);
+		$this->sponsorDAO->expects($this->once())
+			->method('addSponsor')
+			->with($sponsor);
 
-        $this->sponsorService->createSponsor([
-            'godFatherId' => 1,
-            'godChildId' => 1,
-            'sponsorType' => '1',
-            'sponsorDate' => '2020-01-01',
-            'description' => 'description'
-        ]);
+		$this->sponsorService->createSponsor([
+			'godFatherId' => 1,
+			'godChildId' => 1,
+			'sponsorType' => '1',
+			'sponsorDate' => self::TEST_DATE,
+			'description' => 'description'
+		]);
 
-    }
+	}
 
-    public function testUpdatesponsorDoesNothingWhenSponsorDoesNotExist(): void
-    {
+	public function testUpdatesponsorDoesNothingWhenSponsorDoesNotExist(): void {
 
-        $this->sponsorDAO->method('getSponsorById')
-            ->with(1)
-            ->willReturn(null);
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn(null);
 
-        $this->sponsorDAO->expects($this->never())
-            ->method('updateSponsor');
+		$this->sponsorDAO->expects($this->never())
+			->method('updateSponsor');
 
-        $this->sponsorService->updateSponsor(1, [
-            'godFatherId' => 1,
-            'godChildId' => 1
-        ]);
-    }
+		$this->sponsorService->updateSponsor(1, [
+			'godFatherId' => 1,
+			'godChildId' => 1
+		]);
+	}
 
-    public function testUpdatesponsorDoesNothingWhenTypeIsUnknown(): void
-    {
+	public function testUpdatesponsorDoesNothingWhenTypeIsUnknown(): void {
 
-        $this->sponsorDAO->method('getSponsorById')
-            ->with(1)
-            ->willReturn($this->sponsor);
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
 
-        $this->sponsorDAO->expects($this->never())
-            ->method('updateSponsor');
+		$this->sponsorDAO->expects($this->never())
+			->method('updateSponsor');
 
-        $this->sponsorService->updateSponsor(1, [
-            'godFatherId' => 1,
-            'godChildId' => 1,
-            'sponsorType' => '2'
-        ]);
-    }
+		$this->sponsorService->updateSponsor(1, [
+			'godFatherId' => 1,
+			'godChildId' => 1,
+			'sponsorType' => '2'
+		]);
+	}
 
-    public function testUpdatesponsorRegistersClassicSponsor(): void
-    {
+	public function testUpdatesponsorRegistersClassicSponsor(): void {
 
-        $this->sponsorDAO->method('getSponsorById')
-            ->with(1)
-            ->willReturn($this->sponsor);
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
 
-        $person = PersonBuilder::aPerson()->withId(1)->build();
-        $sponsor = new ClassicSponsor(1, $person, $person, '2020-01-01', 'description');
+		$person = PersonBuilder::aPerson()->withId(1)->build();
+		$sponsor = new ClassicSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
-        $this->sponsorDAO->expects($this->once())
-            ->method('updateSponsor')
-            ->with($sponsor);
+		$this->sponsorDAO->expects($this->once())
+			->method('updateSponsor')
+			->with($sponsor);
 
-        $this->sponsorService->updateSponsor(1, [
-            'sponsorType' => '0',
-            'sponsorDate' => '2020-01-01',
-            'description' => 'description'
-        ]);
+		$this->sponsorService->updateSponsor(1, [
+			'sponsorType' => '0',
+			'sponsorDate' => self::TEST_DATE,
+			'description' => 'description'
+		]);
 
-    }
+	}
 
-    public function testUpdatesponsorRegistersHeartSponsor(): void
-    {
+	public function testUpdatesponsorRegistersHeartSponsor(): void {
 
-        $this->sponsorDAO->method('getSponsorById')
-            ->with(1)
-            ->willReturn($this->sponsor);
+		$this->sponsorDAO->method('getSponsorById')
+			->with(1)
+			->willReturn($this->sponsor);
 
-        $person = PersonBuilder::aPerson()->withId(1)->build();
-        $sponsor = new HeartSponsor(1, $person, $person, '2020-01-01', 'description');
+		$person = PersonBuilder::aPerson()->withId(1)->build();
+		$sponsor = new HeartSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
-        $this->sponsorDAO->expects($this->once())
-            ->method('updateSponsor')
-            ->with($sponsor);
+		$this->sponsorDAO->expects($this->once())
+			->method('updateSponsor')
+			->with($sponsor);
 
-        $this->sponsorService->updateSponsor(1, [
-            'sponsorType' => '1',
-            'sponsorDate' => '2020-01-01',
-            'description' => 'description'
-        ]);
+		$this->sponsorService->updateSponsor(1, [
+			'sponsorType' => '1',
+			'sponsorDate' => self::TEST_DATE,
+			'description' => 'description'
+		]);
 
-    }
+	}
 
 }
