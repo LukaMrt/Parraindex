@@ -25,7 +25,11 @@ class DatabaseConnection
             'PASSWORD' => $password,
         ] = $_ENV;
 
-        $this->database = new PDO("$driver:host=$host; dbname=$database; port=$port; charset=utf8", $username, $password);
+        $this->database = new PDO(
+            "$driver:host=$host; dbname=$database; port=$port; charset=utf8",
+            $username,
+            $password
+        );
 
         $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         $this->database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);

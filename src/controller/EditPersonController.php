@@ -339,7 +339,8 @@ class EditPersonController extends Controller
 
         if (empty($_SESSION)) {
             $response['code'] = 401;
-            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour supprimer une personne";
+            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur "
+                . "pour supprimer une personne";
             echo json_encode($response);
             exit(0);
         }
@@ -372,7 +373,7 @@ class EditPersonController extends Controller
         $response['redirectDelay'] = 5000;
 
         $response['messages'][] = 'La personne ' . $person->getFirstName() . ' '
-            . strtoupper($person->getLastName()) . ' à correctement été supprimée';
+            . strtoupper($person->getLastName()) . ' a correctement été supprimée';
 
         $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans "
             . ($response['redirectDelay'] / 1000) . 's';

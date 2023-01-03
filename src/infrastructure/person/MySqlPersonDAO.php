@@ -28,16 +28,24 @@ class MySqlPersonDAO implements PersonDAO
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(
-            "SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
-						FROM Person Pe
-								 LEFT JOIN Student St on Pe.id_person = St.id_person
-								 LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
-								 LEFT JOIN Degree D on D.id_degree = Pr.id_degree
-								 LEFT JOIN School Sc on Sc.id_school = Pr.id_school
-								 LEFT JOIN Characteristic C on Pe.id_person = C.id_person
-								 LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
-						ORDER BY Pe.id_person"
+        $query = $connection->prepare(<<<SQL
+                            SELECT Pe.*,
+                                   Pr.*,
+                                   D.*,
+                                   Sc.*,
+                                   C.id_characteristic,
+                                   C.value,
+                                   C.visibility,
+                                   T.*
+                            FROM Person Pe
+                                LEFT JOIN Student St on Pe.id_person = St.id_person
+                                LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+                                LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+                                LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+                                LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+                                LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+                            ORDER BY Pe.id_person
+SQL
         );
         $query->execute();
 
@@ -70,16 +78,29 @@ class MySqlPersonDAO implements PersonDAO
 
         $builder = PersonBuilder::aPerson()
             ->withId($buffer[0]->id_person)
-            ->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
+            ->withIdentity(new Identity(
+                $buffer[0]->first_name,
+                $buffer[0]->last_name,
+                $buffer[0]->picture,
+                $buffer[0]->birthdate
+            ))
             ->withBiography($buffer[0]->biography)
             ->withDescription($buffer[0]->description)
             ->withColor($buffer[0]->banner_color);
 
         $startYear = date("Y");
-        $promotionBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null);
+        $filterClosure = fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null;
+        $promotionBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($promotionBuffer as $row) {
-            $degree = new Degree($row->id_degree, $row->degree_name, $row->level, $row->total_ects, $row->duration, $row->official);
+            $degree = new Degree(
+                $row->id_degree,
+                $row->degree_name,
+                $row->level,
+                $row->total_ects,
+                $row->duration,
+                $row->official
+            );
             $school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
             $promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->desc_promotion);
             $builder->addPromotion($promotion);
