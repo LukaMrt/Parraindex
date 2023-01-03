@@ -101,13 +101,19 @@ SQL
                 $row->duration,
                 $row->official
             );
-            $school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
+            $school = new School(
+                $row->id_school,
+                $row->school_name,
+                new SchoolAddress($row->address, $row->city),
+                DateTime::createFromFormat('Y-m-d', $row->creation)
+            );
             $promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->desc_promotion);
             $builder->addPromotion($promotion);
             $startYear = min($startYear, $row->year);
         }
 
-        $characteristicsBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null);
+        $filterClosure = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
+        $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($characteristicsBuffer as $row) {
             $builder->addCharacteristic((new CharacteristicBuilder())
@@ -128,7 +134,14 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT * FROM Person WHERE LOWER(first_name) = :first_name AND LOWER(last_name) = :last_name LIMIT 1");
+        $query = $connection->prepare(<<<SQL
+                        SELECT *
+                        FROM Person
+                        WHERE LOWER(first_name) = :first_name
+                          AND LOWER(last_name) = :last_name
+                        LIMIT 1
+SQL
+        );
 
         $query->execute([
             'first_name' => $identity->getFirstName(),
@@ -151,15 +164,25 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
-													FROM Person Pe
-         											LEFT JOIN Student St on Pe.id_person = St.id_person
-													LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
-													LEFT JOIN Degree D on D.id_degree = Pr.id_degree
-													LEFT JOIN School Sc on Sc.id_school = Pr.id_school
-													LEFT JOIN Characteristic C on Pe.id_person = C.id_person
-													LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
-         											WHERE Pe.id_person = :id_person");
+        $query = $connection->prepare(<<<SQL
+                                SELECT Pe.*,
+                                       Pr.*,
+                                       D.*,
+                                       Sc.*,
+                                       C.id_characteristic,
+                                       C.value,
+                                       C.visibility,
+                                       T.*
+                                FROM Person Pe
+                                    LEFT JOIN Student St on Pe.id_person = St.id_person
+                                    LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+                                    LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+                                    LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+                                    LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+                                    LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+                                WHERE Pe.id_person = :id_person
+SQL
+);
 
         $query->execute(['id_person' => $id]);
         $buffer = array();
@@ -229,16 +252,26 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
-													FROM Person Pe
-         											LEFT JOIN Student St on Pe.id_person = St.id_person
-													LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
-													LEFT JOIN Degree D on D.id_degree = Pr.id_degree
-													LEFT JOIN School Sc on Sc.id_school = Pr.id_school
-													LEFT JOIN Characteristic C on Pe.id_person = C.id_person
-													LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
-													LEFT JOIN Account A on Pe.id_person = A.id_person
-         											WHERE A.email = :login");
+        $query = $connection->prepare(<<<SQL
+                                SELECT Pe.*,
+                                       Pr.*,
+                                       D.*,
+                                       Sc.*,
+                                       C.id_characteristic,
+                                       C.value,
+                                       C.visibility,
+                                       T.*
+                                FROM Person Pe
+                                    LEFT JOIN Student St on Pe.id_person = St.id_person
+                                    LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+                                    LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+                                    LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+                                    LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+                                    LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+                                    LEFT JOIN Account A on Pe.id_person = A.id_person
+                                WHERE A.email = :login
+SQL
+);
 
         $query->execute(['login' => $login]);
         $buffer = array();
@@ -256,7 +289,11 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture) VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)");
+        $query = $connection->prepare(<<<SQL
+                                INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture)
+                                VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)
+SQL
+);
 
         $query->execute([
             'firstName' => $person->getFirstName(),
@@ -269,13 +306,27 @@ SQL
 
         $idPerson = $connection->lastInsertId();
 
-        $query = $connection->prepare("SELECT id_promotion FROM Promotion WHERE year = :start_year AND desc_promotion = 'Première année'");
+        $query = $connection->prepare(<<<SQL
+                                SELECT id_promotion
+                                FROM Promotion
+                                WHERE year = :start_year
+                                  AND desc_promotion = 'Première année'
+SQL
+);
         $query->execute(['start_year' => $person->getStartYear()]);
 
         if ($row = $query->fetch()) {
             $id_promotion = $row->id_promotion;
         } else {
-            $query = $connection->prepare("INSERT INTO Promotion (year, id_degree, id_school, desc_promotion, speciality) VALUES (:start_year, (SELECT id_degree FROM Degree WHERE degree_name = :degree_name), (SELECT id_school FROM School WHERE school_name = 'IUT Lyon 1'), 'Première année', 'Informatique')");
+            $query = $connection->prepare(<<<SQL
+                                INSERT INTO Promotion (year, id_degree, id_school, desc_promotion, speciality)
+                                VALUES (:start_year,
+                                        (SELECT id_degree FROM Degree WHERE degree_name = :degree_name),
+                                        (SELECT id_school FROM School WHERE school_name = 'IUT Lyon 1'),
+                                        'Première année',
+                                        'Informatique')
+SQL
+);
             $query->execute([
                 'start_year' => $person->getStartYear(),
                 'degree_name' => $person->getStartYear() < 2021 ? 'DUT' : 'BUT'
@@ -283,7 +334,11 @@ SQL
             $id_promotion = $connection->lastInsertId();
         }
 
-        $query = $connection->prepare("INSERT INTO Student (id_person, id_promotion) VALUES (:id_person, :id_promotion)");
+        $query = $connection->prepare(<<<SQL
+                                INSERT INTO Student (id_person, id_promotion)
+                                VALUES (:id_person, :id_promotion)
+SQL
+);
 
         $query->execute([
             'id_person' => $idPerson,
