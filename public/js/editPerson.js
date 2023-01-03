@@ -104,7 +104,7 @@ function initColor() {
 
     let rgb = bannerColor.match(/\d+/g);
     let bannerColorHex = "#" + rgb.map((x) => {
-      x = parseInt(x).toString(16);
+      x = parseInt(x, 10).toString(16);
       return (x.length === 1) ? "0" + x : x;
     }).join("");
 

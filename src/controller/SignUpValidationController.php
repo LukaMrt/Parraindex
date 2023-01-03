@@ -11,6 +11,7 @@ class SignUpValidationController extends Controller
 {
     private SignupService $signupService;
 
+
     public function __construct(
         Environment   $twig,
         Router        $router,
@@ -21,6 +22,7 @@ class SignUpValidationController extends Controller
         parent::__construct($twig, $router, $personService);
         $this->signupService = $passwordService;
     }
+
 
     public function get(Router $router, array $parameters): void
     {

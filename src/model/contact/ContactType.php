@@ -16,6 +16,7 @@ enum ContactType: int
     case CHOCKING_CONTENT = 7;
     case OTHER = 8;
 
+
     public static function getValues(): array
     {
         return [
@@ -30,6 +31,7 @@ enum ContactType: int
             ['id' => 8, 'title' => 'Autre'],
         ];
     }
+
 
     public static function fromId(int $id): ?ContactType
     {
@@ -46,6 +48,7 @@ enum ContactType: int
             default => null
         };
     }
+
 
     public function toString(): string
     {

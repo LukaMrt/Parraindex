@@ -11,6 +11,7 @@ class Degree
     private int $duration;
     private bool $official;
 
+
     public function __construct(int $id, string $name, int $level, int $ects, int $duration, bool $official)
     {
         $this->id = $id;

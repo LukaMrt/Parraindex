@@ -14,6 +14,7 @@ abstract class ContactExecutor
     private ContactType $contactType;
     private array $fields;
 
+
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, ContactType $contactType, array $fields)
     {
         $this->contactDAO = $contactDAO;
@@ -22,10 +23,12 @@ abstract class ContactExecutor
         $this->fields = $fields;
     }
 
+
     public function getId(): int
     {
         return $this->contactType->value;
     }
+
 
     public function execute(array $data): string
     {
@@ -42,6 +45,7 @@ abstract class ContactExecutor
         return $errors;
     }
 
+
     protected function validate(array $data): string
     {
 
@@ -56,6 +60,7 @@ abstract class ContactExecutor
         return implode('<br>', $errors);
     }
 
+
     private function validateField(Field $field, array $data): string
     {
 
@@ -67,6 +72,7 @@ abstract class ContactExecutor
 
         return $error;
     }
+
 
     abstract public function executeSuccess(array $data): string;
 }

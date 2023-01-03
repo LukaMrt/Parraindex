@@ -16,10 +16,12 @@ class MysqlAccountDAO implements AccountDAO
 {
     private DatabaseConnection $databaseConnection;
 
+
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
+
 
     public function getAccountPassword(string $login): Password
     {
@@ -38,6 +40,7 @@ class MysqlAccountDAO implements AccountDAO
         $connection = null;
         return $password;
     }
+
 
     public function createAccount(Account $account): void
     {
@@ -65,6 +68,7 @@ SQL
         $query->closeCursor();
     }
 
+
     public function existsAccount(string $email): bool
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -76,6 +80,7 @@ SQL
         $connection = null;
         return (bool)$result;
     }
+
 
     public function getSimpleAccount(mixed $username): Account
     {
@@ -111,6 +116,7 @@ SQL
         return $account;
     }
 
+
     public function existsAccountByIdentity(Identity $identity): bool
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -129,6 +135,7 @@ SQL
         $connection = null;
         return (bool)$result;
     }
+
 
     public function createTemporaryAccount(Account $account, string $link): void
     {
@@ -149,6 +156,7 @@ SQL
         $connection = null;
         $query->closeCursor();
     }
+
 
     public function getTemporaryAccountByToken(string $token): Account
     {
@@ -173,6 +181,7 @@ SQL
         return $account;
     }
 
+
     public function deleteTemporaryAccount(Account $account): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -183,6 +192,7 @@ SQL
         $connection = null;
         $query->closeCursor();
     }
+
 
     public function getAccountByLogin(string $email): ?Account
     {
@@ -206,6 +216,7 @@ SQL
         return $account;
     }
 
+
     public function createResetpassword(Account $account, string $token): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -224,6 +235,7 @@ SQL
         $connection = null;
         $query->closeCursor();
     }
+
 
     public function getAccountResetPasswordByToken(string $token): Account
     {
@@ -248,6 +260,7 @@ SQL
         return $account;
     }
 
+
     public function editAccountPassword(Account $account): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -261,6 +274,7 @@ SQL
         $connection = null;
         $query->closeCursor();
     }
+
 
     public function deleteResetPassword(Account $account): void
     {

@@ -73,11 +73,13 @@ class Injector
     private Container $container;
     private Router $router;
 
+
     public function __construct(Router $router)
     {
         $this->container = ContainerBuilder::buildDevContainer();
         $this->router = $router;
     }
+
 
     public function build(): void
     {
@@ -130,6 +132,7 @@ class Injector
         $this->container->set(CharacteristicTypeDAO::class, $characteristicTypeDAO);
     }
 
+
     private function buildTwig(): Environment
     {
         $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
@@ -142,6 +145,7 @@ class Injector
 
         return $twig;
     }
+
 
     /**
      * @throws DependencyException

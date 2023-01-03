@@ -10,16 +10,19 @@ class HttpRedirect implements Redirect
 {
     private Router $router;
 
+
     public function __construct(Router $router)
     {
         $this->router = $router;
     }
+
 
     #[NoReturn] public function redirect(string $url): void
     {
         header('Location: ' . $this->router->url($url));
         die();
     }
+
 
     public function delayedRedirect(string $url, int $secondsDelay): void
     {

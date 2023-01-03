@@ -12,6 +12,7 @@ class Account
     private Password $password;
     private array $privileges;
 
+
     public function __construct(int $id, string $email, Person $user, Password $password, Privilege ...$privileges)
     {
         $this->id = $id;
@@ -21,10 +22,12 @@ class Account
         $this->privileges = $privileges;
     }
 
+
     public function getLogin(): string
     {
         return $this->email;
     }
+
 
     public function getHashedPassword(): string
     {
@@ -34,15 +37,18 @@ class Account
         return $this->password->getPassword();
     }
 
+
     public function getPersonId(): int
     {
         return $this->user->getId();
     }
 
+
     public function getId(): int
     {
         return $this->id;
     }
+
 
     public function getHighestPrivilege(): PrivilegeType
     {

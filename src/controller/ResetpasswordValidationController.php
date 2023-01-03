@@ -11,6 +11,7 @@ class ResetpasswordValidationController extends Controller
 {
     private PasswordService $passwordService;
 
+
     public function __construct(
         Environment     $twig,
         Router          $router,
@@ -21,6 +22,7 @@ class ResetpasswordValidationController extends Controller
         parent::__construct($twig, $router, $personService);
         $this->passwordService = $passwordService;
     }
+
 
     public function get(Router $router, array $parameters): void
     {

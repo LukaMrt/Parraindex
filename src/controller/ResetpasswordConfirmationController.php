@@ -2,9 +2,7 @@
 
 namespace App\controller;
 
-use App\application\person\PersonService;
 use App\infrastructure\router\Router;
-use Twig\Environment;
 
 class ResetpasswordConfirmationController extends Controller
 {

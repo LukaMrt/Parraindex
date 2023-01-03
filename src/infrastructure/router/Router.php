@@ -10,10 +10,12 @@ class Router
 {
     private AltoRouter $router;
 
+
     public function __construct()
     {
         $this->router = new AltoRouter();
     }
+
 
     public function registerRoute(string $method, string $url, Controller $controller, string $name): self
     {
@@ -31,11 +33,13 @@ class Router
         return $this;
     }
 
+
     public function run(): void
     {
         $match = $this->router->match();
         $match['target']($this, $match['params']);
     }
+
 
     public function getParameter(string $name): string
     {
@@ -48,6 +52,7 @@ class Router
 
         return "";
     }
+
 
     public function url(string $name, array $parameters = []): string
     {

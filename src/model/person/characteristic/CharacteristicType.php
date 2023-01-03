@@ -10,6 +10,7 @@ enum CharacteristicType: string
     case PHONE = 'tel:';
     case EMAIL = 'mailto:';
 
+
     public static function fromName(string $name): CharacteristicType
     {
         foreach (self::cases() as $status) {
@@ -19,6 +20,7 @@ enum CharacteristicType: string
         }
         throw new ValueError("$name is not a valid backing value for enum " . self::class);
     }
+
 
     public function getPrefix(): string
     {

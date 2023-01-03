@@ -10,6 +10,7 @@ abstract class Contact
     private ContactType $type;
     private string $description;
 
+
     public function __construct(
         int         $id,
         string      $contacterName,
@@ -25,35 +26,42 @@ abstract class Contact
         $this->description = $description;
     }
 
+
     public function getId(): int
     {
         return $this->id;
     }
+
 
     public function getContacterName(): string
     {
         return $this->contacterName;
     }
 
+
     public function getContacterEmail(): string
     {
         return $this->contacterEmail;
     }
+
 
     public function getType(): string
     {
         return $this->type->toString();
     }
 
+
     public function getMessage(): string
     {
         return $this->description;
     }
 
+
     public function getTypeId(): int
     {
         return $this->type->value;
     }
+
 
     abstract public function getDescription(): array;
 }

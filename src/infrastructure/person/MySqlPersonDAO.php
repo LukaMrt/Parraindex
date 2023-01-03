@@ -18,10 +18,12 @@ class MySqlPersonDAO implements PersonDAO
 {
     private DatabaseConnection $databaseConnection;
 
+
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
+
 
     public function getAllPeople(): array
     {
@@ -72,6 +74,7 @@ SQL
         $query->closeCursor();
         return $users;
     }
+
 
     private function buildPerson(array $buffer): Person
     {
@@ -130,6 +133,7 @@ SQL
         return $builder->withStartYear($startYear)->build();
     }
 
+
     public function getPerson(Identity $identity): ?Person
     {
 
@@ -159,6 +163,7 @@ SQL
         $connection = null;
         return $person;
     }
+
 
     public function getPersonById(int $id): ?Person
     {
@@ -202,6 +207,7 @@ SQL
         return $person;
     }
 
+
     public function updatePerson(Person $person)
     {
 
@@ -227,6 +233,7 @@ SQL
         $connection = null;
     }
 
+
     public function getAllIdentities(): array
     {
 
@@ -246,6 +253,7 @@ SQL
         $query->closeCursor();
         return $identities;
     }
+
 
     public function getPersonByLogin(string $login): ?Person
     {
@@ -283,6 +291,7 @@ SQL
         $connection = null;
         return $this->buildPerson($buffer);
     }
+
 
     public function createPerson(Person $person): int
     {
@@ -349,6 +358,7 @@ SQL
 
         return $idPerson;
     }
+
 
     public function deletePerson(Person $person): void
     {

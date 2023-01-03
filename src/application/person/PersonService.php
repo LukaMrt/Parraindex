@@ -12,26 +12,31 @@ class PersonService
     private PersonDAO $personDAO;
     private SessionManager $sessionManager;
 
+
     public function __construct(PersonDAO $personDAO, SessionManager $sessionManager)
     {
         $this->personDAO = $personDAO;
         $this->sessionManager = $sessionManager;
     }
 
+
     public function getAllPeople(): array
     {
         return $this->personDAO->getAllPeople();
     }
+
 
     public function getPersonById(int $id): ?Person
     {
         return $this->personDAO->getPersonById($id);
     }
 
+
     public function getPersonByLogin(string $login): ?Person
     {
         return $this->personDAO->getPersonByLogin($login);
     }
+
 
     public function updatePerson(array $parameters): void
     {
@@ -50,10 +55,12 @@ class PersonService
         $this->personDAO->updatePerson($person);
     }
 
+
     public function getPersonByIdentity(Identity $identity): ?Person
     {
         return $this->personDAO->getPerson($identity);
     }
+
 
     public function createPerson(array $parameters): int
     {
@@ -67,6 +74,7 @@ class PersonService
 
         return $this->personDAO->createPerson($person);
     }
+
 
     public function deletePerson(Person $person): void
     {

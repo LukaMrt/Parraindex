@@ -21,6 +21,7 @@ class SignupService
     private Random $random;
     private UrlUtils $urlUtils;
 
+
     public function __construct(
         AccountDAO $accountDAO,
         PersonDAO  $personDAO,
@@ -37,6 +38,7 @@ class SignupService
         $this->random = $random;
         $this->urlUtils = $urlUtils;
     }
+
 
     public function signup(array $parameters): string
     {
@@ -67,6 +69,7 @@ class SignupService
 
         return $error;
     }
+
 
     private function buildError(
         string  $email,
@@ -129,6 +132,7 @@ class SignupService
         return '';
     }
 
+
     private function empty(string ...$parameters): bool
     {
         foreach ($parameters as $parameter) {
@@ -138,6 +142,7 @@ class SignupService
         }
         return false;
     }
+
 
     public function validate(string $token): string
     {

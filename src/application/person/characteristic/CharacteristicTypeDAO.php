@@ -6,5 +6,6 @@ interface CharacteristicTypeDAO
 {
     public function getAllCharacteristicTypes(): array;
 
+
     public function getAllCharacteristicAndValues(int $idPerson): array;
 }

@@ -15,6 +15,7 @@ class ChockingContentContactExecutor extends ContactExecutor
 {
     private PersonDAO $personDAO;
 
+
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, PersonDAO $personDAO)
     {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
@@ -29,6 +30,7 @@ class ChockingContentContactExecutor extends ContactExecutor
         ]);
         $this->personDAO = $personDAO;
     }
+
 
     public function executeSuccess(array $data): string
     {

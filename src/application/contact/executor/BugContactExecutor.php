@@ -22,6 +22,7 @@ class BugContactExecutor extends ContactExecutor
         ]);
     }
 
+
     public function executeSuccess(array $data): string
     {
         $contact = new DefaultContact(

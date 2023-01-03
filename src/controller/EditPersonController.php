@@ -16,6 +16,7 @@ class EditPersonController extends Controller
 
     private CharacteristicService $characteristicService;
 
+
     public function __construct(
         Environment               $twig,
         Router                    $router,
@@ -28,6 +29,7 @@ class EditPersonController extends Controller
         $this->characteristicTypeService = $characteristicTypeService;
         $this->characteristicService = $characteristicService;
     }
+
 
     public function get(Router $router, array $parameters): void
     {
@@ -69,6 +71,7 @@ class EditPersonController extends Controller
             ]
         );
     }
+
 
     public function post(Router $router, array $parameters): void
     {
@@ -122,6 +125,7 @@ class EditPersonController extends Controller
         echo json_encode($response);
         exit(0);
     }
+
 
     private function getFormValues($data, array &$response, bool $isAdmin): array
     {
@@ -202,6 +206,7 @@ class EditPersonController extends Controller
         return $newData;
     }
 
+
     private function getFormCharacteristics($data, array &$response): array
     {
         $newCharacteristics = [];
@@ -240,6 +245,7 @@ class EditPersonController extends Controller
 
         return $newCharacteristics;
     }
+
 
     public function put(Router $router, array $parameters): void
     {
@@ -325,6 +331,7 @@ class EditPersonController extends Controller
         echo json_encode($response);
         exit(0);
     }
+
 
     public function delete(Router $router, array $parameters): void
     {

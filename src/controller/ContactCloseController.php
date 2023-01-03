@@ -15,6 +15,7 @@ class ContactCloseController extends Controller
     private ContactService $contactService;
     private SponsorService $sponsorService;
 
+
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -27,6 +28,7 @@ class ContactCloseController extends Controller
         $this->contactService = $contactService;
         $this->sponsorService = $sponsorService;
     }
+
 
     #[NoReturn] public function get(Router $router, array $parameters): void
     {
@@ -48,6 +50,7 @@ class ContactCloseController extends Controller
         header('Location: ' . $router->url('contact_admin'));
         die();
     }
+
 
     private function resolve(int $id)
     {

@@ -13,6 +13,7 @@ class School
     private DateTime $creationDate;
     private ?Person $director;
 
+
     public function __construct(
         int           $id,
         string        $name,
@@ -27,6 +28,7 @@ class School
         $this->creationDate = $creationDate;
         $this->director = $director;
     }
+
 
     public static function emptySchool(): School
     {

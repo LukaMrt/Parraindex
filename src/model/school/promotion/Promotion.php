@@ -15,6 +15,7 @@ class Promotion
     private string $description;
     private array $students;
 
+
     public function __construct(
         int    $id,
         Degree $degree,
@@ -31,6 +32,7 @@ class Promotion
         $this->description = $description;
         $this->students = $students;
     }
+
 
     public function getYear(): int
     {

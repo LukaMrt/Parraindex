@@ -30,6 +30,7 @@ class CharacteristicBuilder
     /** @var string $value */
     private string $value;
 
+
     /**
      * @param int $id Set id property.
      * @return $this Builder instance.
@@ -39,6 +40,7 @@ class CharacteristicBuilder
         $this->id = $id;
         return $this;
     }
+
 
     /**
      * @param string $title Set title property.
@@ -50,6 +52,7 @@ class CharacteristicBuilder
         return $this;
     }
 
+
     /**
      * @param CharacteristicType $type Set type property.
      * @return $this Builder instance.
@@ -59,6 +62,7 @@ class CharacteristicBuilder
         $this->type = CharacteristicType::fromName($typeName);
         return $this;
     }
+
 
     /**
      * @param string $url Set url property.
@@ -70,6 +74,7 @@ class CharacteristicBuilder
         return $this;
     }
 
+
     /**
      * @param string $image Set image property.
      * @return $this Builder instance.
@@ -79,6 +84,7 @@ class CharacteristicBuilder
         $this->image = $image;
         return $this;
     }
+
 
     /**
      * @param bool $visible Set visible property.
@@ -90,6 +96,7 @@ class CharacteristicBuilder
         return $this;
     }
 
+
     /**
      * @param string $value Set value property.
      * @return $this Builder instance.
@@ -100,6 +107,7 @@ class CharacteristicBuilder
         return $this;
     }
 
+
     /**
      * @return int
      */
@@ -107,6 +115,7 @@ class CharacteristicBuilder
     {
         return $this->id;
     }
+
 
     /**
      * @return string
@@ -116,6 +125,7 @@ class CharacteristicBuilder
         return $this->title;
     }
 
+
     /**
      * @return CharacteristicType
      */
@@ -123,6 +133,7 @@ class CharacteristicBuilder
     {
         return $this->type;
     }
+
 
     /**
      * @return string
@@ -132,6 +143,7 @@ class CharacteristicBuilder
         return $this->url;
     }
 
+
     /**
      * @return string
      */
@@ -139,6 +151,7 @@ class CharacteristicBuilder
     {
         return $this->image;
     }
+
 
     /**
      * @return bool
@@ -148,6 +161,7 @@ class CharacteristicBuilder
         return $this->visible;
     }
 
+
     /**
      * @return string
      */
@@ -155,6 +169,7 @@ class CharacteristicBuilder
     {
         return $this->value;
     }
+
 
     /**
      * @return Characteristic New instance from Builder.

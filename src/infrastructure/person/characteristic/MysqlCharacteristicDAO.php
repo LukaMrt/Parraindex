@@ -10,10 +10,12 @@ class MysqlCharacteristicDAO implements CharacteristicDAO
 {
     private DatabaseConnection $databaseConnection;
 
+
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
+
 
     public function updateCharacteristic(int $idPerson, Characteristic $characteristic): void
     {
@@ -33,6 +35,7 @@ SQL
             'visibility' => $characteristic->getVisible() ? '1' : '0'
         ]);
     }
+
 
     public function createCharacteristic(int $idPerson, Characteristic $characteristic): void
     {

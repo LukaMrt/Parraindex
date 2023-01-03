@@ -11,6 +11,7 @@ class LoginController extends Controller
 {
     private LoginService $loginService;
 
+
     public function __construct(
         Environment   $twig,
         Router        $router,
@@ -22,10 +23,12 @@ class LoginController extends Controller
         $this->loginService = $passwordService;
     }
 
+
     public function get(Router $router, array $parameters): void
     {
         $this->render('login.twig', ['router' => $router]);
     }
+
 
     public function post(Router $router, array $parameters): void
     {

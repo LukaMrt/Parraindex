@@ -9,6 +9,7 @@ class SponsorContact extends Contact
 
     private Sponsor $sponsor;
 
+
     public function __construct(
         int         $id,
         string      $contacterName,
@@ -21,6 +22,7 @@ class SponsorContact extends Contact
         parent::__construct($id, $contacterName, $contacterEmail, $type, $description);
         $this->sponsor = $sponsor;
     }
+
 
     public function getDescription(): array
     {
@@ -35,6 +37,7 @@ class SponsorContact extends Contact
             ['Date du parrainage', $this->sponsor->getDate()->format('d/m/Y')]
         ];
     }
+
 
     public function getSponsor(): Sponsor
     {

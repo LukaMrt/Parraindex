@@ -12,26 +12,31 @@ class SponsorService
     private SponsorDAO $sponsorDAO;
     private PersonDAO $personDAO;
 
+
     public function __construct(SponsorDAO $sponsorDAO, PersonDAO $personDAO)
     {
         $this->sponsorDAO = $sponsorDAO;
         $this->personDAO = $personDAO;
     }
 
+
     public function getPersonFamily(int $personId): ?array
     {
         return $this->sponsorDAO->getPersonFamily($personId);
     }
+
 
     public function removeSponsor(int $id): void
     {
         $this->sponsorDAO->removeSponsor($id);
     }
 
+
     public function getSponsor(int $id): ?Sponsor
     {
         return $this->sponsorDAO->getSponsorById($id);
     }
+
 
     public function getSponsorById(int $int): ?Sponsor
     {
@@ -47,6 +52,7 @@ class SponsorService
         $sponsor->setGodSon($godSon);
         return $sponsor;
     }
+
 
     public function updateSponsor(int $id, array $parameters): void
     {
@@ -72,6 +78,7 @@ class SponsorService
         $this->sponsorDAO->updateSponsor($sponsor);
     }
 
+
     public function createSponsor(array $parameters): void
     {
 
@@ -95,6 +102,7 @@ class SponsorService
 
         $this->sponsorDAO->addSponsor($sponsor);
     }
+
 
     public function addSponsor(Sponsor $sponsor): void
     {

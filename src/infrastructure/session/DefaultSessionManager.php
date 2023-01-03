@@ -11,26 +11,31 @@ class DefaultSessionManager implements SessionManager
         session_start();
     }
 
+
     public function destroySession(): void
     {
         session_unset();
         session_destroy();
     }
 
+
     public function isSessionStarted(): bool
     {
         return session_status() === PHP_SESSION_ACTIVE;
     }
+
 
     public function get(string $key): mixed
     {
         return $_SESSION[$key];
     }
 
+
     public function set(string $key, $value): void
     {
         $_SESSION[$key] = $value;
     }
+
 
     public function exists(string $key): bool
     {

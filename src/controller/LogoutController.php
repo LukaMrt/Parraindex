@@ -12,6 +12,7 @@ class LogoutController extends Controller
 {
     private LoginService $loginService;
 
+
     public function __construct(
         Environment   $twig,
         Router        $router,
@@ -22,6 +23,7 @@ class LogoutController extends Controller
         parent::__construct($twig, $router, $personService);
         $this->loginService = $loginService;
     }
+
 
     #[NoReturn] public function get(Router $router, array $parameters): void
     {

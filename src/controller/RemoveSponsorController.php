@@ -13,6 +13,7 @@ class RemoveSponsorController extends Controller
 {
     private SponsorService $sponsorService;
 
+
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -23,6 +24,7 @@ class RemoveSponsorController extends Controller
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
+
 
     #[NoReturn] public function get(Router $router, array $parameters): void
     {

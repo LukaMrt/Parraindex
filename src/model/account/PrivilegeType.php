@@ -8,6 +8,7 @@ enum PrivilegeType
     case TEACHER;
     case STUDENT;
 
+
     public static function fromString(string $type): PrivilegeType
     {
         return match ($type) {
@@ -17,10 +18,12 @@ enum PrivilegeType
         };
     }
 
+
     public function isHigherThan(PrivilegeType $highest): bool
     {
         return $this->ordinal() < $highest->ordinal();
     }
+
 
     private function ordinal(): int
     {
@@ -30,6 +33,7 @@ enum PrivilegeType
             self::STUDENT => 2,
         };
     }
+
 
     public function toString(): string
     {

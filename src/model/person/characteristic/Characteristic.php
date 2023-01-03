@@ -12,6 +12,7 @@ class Characteristic
     private bool $visible;
     private ?string $value;
 
+
     public function __construct(CharacteristicBuilder $builder)
     {
         $this->id = $builder->getId();
@@ -23,30 +24,36 @@ class Characteristic
         $this->value = $builder->getValue();
     }
 
+
     public function getId(): int
     {
         return $this->id;
     }
+
 
     public function getTitle(): string
     {
         return $this->title;
     }
 
+
     public function getUrl(): string
     {
         return $this->url;
     }
+
 
     public function getImage(): string
     {
         return $this->image;
     }
 
+
     public function getValue(): ?string
     {
         return $this->value;
     }
+
 
     /**
      * Set the new value of the characteristic
@@ -59,10 +66,12 @@ class Characteristic
         $this->value = $value;
     }
 
+
     public function getVisible(): bool
     {
         return $this->visible;
     }
+
 
     /**
      * Set the new visibility of the characteristic
@@ -74,6 +83,7 @@ class Characteristic
     {
         $this->visible = $visible;
     }
+
 
     public function getPrefix(): string
     {

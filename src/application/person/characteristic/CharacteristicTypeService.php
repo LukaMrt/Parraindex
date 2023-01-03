@@ -8,10 +8,12 @@ class CharacteristicTypeService
 {
     private CharacteristicTypeDAO $characteristicDAO;
 
+
     public function __construct(CharacteristicTypeDAO $characteristicDAO)
     {
         $this->characteristicDAO = $characteristicDAO;
     }
+
 
     /**
      * Get all the characteristic types
@@ -22,6 +24,7 @@ class CharacteristicTypeService
     {
         return $this->characteristicDAO->getAllCharacteristicTypes();
     }
+
 
     /**
      * Get all the characteristic types and values

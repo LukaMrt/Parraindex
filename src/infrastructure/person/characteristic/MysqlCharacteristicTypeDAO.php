@@ -11,10 +11,12 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 {
     private DatabaseConnection $databaseConnection;
 
+
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
+
 
     public function getAllCharacteristicTypes(): array
     {
@@ -34,6 +36,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
         return $characteristics;
     }
 
+
     public function buildCharacteristic($buffer): Characteristic
     {
         return (new CharacteristicBuilder())
@@ -46,6 +49,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
             ->withValue($buffer->value ?? false)
             ->build();
     }
+
 
     public function getAllCharacteristicAndValues(int $idPerson): array
     {

@@ -8,10 +8,12 @@ class CharacteristicService
 {
     private CharacteristicDAO $characteristicDAO;
 
+
     public function __construct(CharacteristicDAO $characteristicDAO)
     {
         $this->characteristicDAO = $characteristicDAO;
     }
+
 
     /**
      * Update the person's characteristic
@@ -23,6 +25,7 @@ class CharacteristicService
     {
         $this->characteristicDAO->updateCharacteristic($idPerson, $characteristic);
     }
+
 
     /**
      * Create the person's characteristic

@@ -16,6 +16,7 @@ class Person
     private array $promotions;
     private int $startYear;
 
+
     public function __construct(PersonBuilder $builder)
     {
         $this->id = $builder->id;
@@ -31,10 +32,12 @@ class Person
         $this->startYear = $builder->startYear;
     }
 
+
     public function getId(): int
     {
         return $this->id;
     }
+
 
     /**
      * @return Identity, an object containing personal information (lastName, fisrtName, photo, birthdate).
@@ -44,6 +47,7 @@ class Person
         return $this->identity;
     }
 
+
     /**
      * @return string the short description of the person.
      */
@@ -51,6 +55,7 @@ class Person
     {
         return $this->biography;
     }
+
 
     /**
      * @return string, the hex representation of the banner color.
@@ -60,6 +65,7 @@ class Person
         return $this->color;
     }
 
+
     /**
      * @return string The description of the person.
      */
@@ -68,10 +74,12 @@ class Person
         return $this->description;
     }
 
+
     public function getCharacteristics(): array
     {
         return $this->characteristics;
     }
+
 
     public function getStartYear(): int|null
     {
@@ -89,6 +97,7 @@ class Person
         return min($dates);
     }
 
+
     /**
      * @param int $startYear
      */
@@ -96,6 +105,7 @@ class Person
     {
         $this->startYear = $startYear;
     }
+
 
     /**
      * @return string the first name of the person.
@@ -105,6 +115,7 @@ class Person
         return $this->identity->getFirstName();
     }
 
+
     /**
      * @return string the last name of the person.
      */
@@ -113,6 +124,7 @@ class Person
         return $this->identity->getLastName();
     }
 
+
     /**
      * @return string The picture URL of the person.
      */
@@ -120,6 +132,7 @@ class Person
     {
         return $this->identity->getPicture();
     }
+
 
     /**
      * set the new picture URL of the person.

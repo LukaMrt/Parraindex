@@ -12,6 +12,7 @@ class ContactController extends Controller
 {
     private ContactService $contactService;
 
+
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -23,6 +24,7 @@ class ContactController extends Controller
         $this->contactService = $contactService;
     }
 
+
     public function post(Router $router, array $parameters): void
     {
 
@@ -31,6 +33,7 @@ class ContactController extends Controller
 
         $this->get($router, ['error' => $error]);
     }
+
 
     public function get(Router $router, array $parameters): void
     {

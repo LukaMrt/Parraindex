@@ -14,6 +14,7 @@ class LoginService
     private SessionManager $sessionManager;
     private PersonDAO $personDAO;
 
+
     public function __construct(
         AccountDAO     $accountDAO,
         PersonDAO      $personDAO,
@@ -26,6 +27,7 @@ class LoginService
         $this->redirect = $redirect;
         $this->sessionManager = $sessionManager;
     }
+
 
     public function login(array $parameters): string
     {
@@ -48,6 +50,7 @@ class LoginService
 
         return $error;
     }
+
 
     private function checkLogin(array $parameters): string
     {
@@ -80,6 +83,7 @@ class LoginService
 
         return array_shift($errors) ?? '';
     }
+
 
     #[NoReturn] public function logout(): void
     {

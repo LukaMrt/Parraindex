@@ -15,6 +15,7 @@ class AboutController extends Controller
         $this->personService = $personService;
     }
 
+
     public function get(Router $router, array $parameters): void
     {
 

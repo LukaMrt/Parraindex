@@ -16,10 +16,12 @@ class MysqlContactDAO implements ContactDAO
 {
     private DatabaseConnection $databaseConnection;
 
+
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
+
 
     public function savePersonAddContact(PersonContact $contact): void
     {
@@ -55,6 +57,7 @@ SQL
         $connection = null;
     }
 
+
     public function savePersonRemoveContact(PersonContact $contact): void
     {
 
@@ -89,6 +92,7 @@ SQL
         $connection = null;
     }
 
+
     public function saveSimpleContact(DefaultContact $contact): void
     {
 
@@ -109,6 +113,7 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
+
 
     public function saveSponsorContact(SponsorContact $contact): void
     {
@@ -148,10 +153,12 @@ SQL
         $connection = null;
     }
 
+
     public function saveChockingContentContact(PersonContact $contact): void
     {
         $this->savePersonUpdateContact($contact);
     }
+
 
     public function savePersonUpdateContact(PersonContact $contact): void
     {
@@ -187,6 +194,7 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
+
 
     public function getContactList(): array
     {
@@ -307,6 +315,7 @@ SQL
         return $contacts;
     }
 
+
     public function closeContact(int $contactId, int $resolverId)
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -316,7 +325,7 @@ SQL
                             SET id_resolver = :id_resolver, resolution_date = NOW()
                             WHERE id_ticket = :id_ticket
 SQL
-);
+        );
         $query->execute([
             "id_resolver" => $resolverId,
             "id_ticket" => $contactId

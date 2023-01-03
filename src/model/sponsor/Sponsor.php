@@ -12,6 +12,7 @@ abstract class Sponsor
     private Person $godSon;
     private ?DateTime $date;
 
+
     protected function __construct(int $id, Person $godFather, Person $godSon, string $date)
     {
         $this->id = $id;
@@ -24,30 +25,36 @@ abstract class Sponsor
         }
     }
 
+
     public function getId(): int
     {
         return $this->id;
     }
+
 
     public function getGodFather(): Person
     {
         return $this->godFather;
     }
 
+
     public function setGodFather(?Person $godFather): void
     {
         $this->godFather = $godFather ?? $this->godFather;
     }
+
 
     public function getGodChild(): Person
     {
         return $this->godSon;
     }
 
+
     public function getDate(): DateTime
     {
         return $this->date;
     }
+
 
     public function formatDate(string $format): string
     {
@@ -59,15 +66,21 @@ abstract class Sponsor
         return '';
     }
 
+
     abstract public function getType(): string;
+
 
     abstract public function getTypeId(): int;
 
+
     abstract public function getDescriptionTitle(): string;
+
 
     abstract public function getDescription(): string;
 
+
     abstract public function getIcon(): string;
+
 
     public function setGodSon(?Person $godSon): void
     {

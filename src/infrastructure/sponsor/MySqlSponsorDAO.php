@@ -18,10 +18,12 @@ class MySqlSponsorDAO implements SponsorDAO
 {
     private DatabaseConnection $databaseConnection;
 
+
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
+
 
     public function getPersonFamily(int $personId): ?array
     {
@@ -154,6 +156,7 @@ SQL
         ];
     }
 
+
     private function buildPeople(bool|PDOStatement $query): array
     {
 
@@ -181,6 +184,7 @@ SQL
         }
         return $people;
     }
+
 
     private function buildPerson(array $buffer): Person
     {
@@ -216,6 +220,7 @@ SQL
             ->withStartYear($buffer[0]->startYear ?? -1)
             ->build();
     }
+
 
     public function getSponsorById(int $id): ?Sponsor
     {
@@ -255,6 +260,7 @@ SQL
         return $sponsor;
     }
 
+
     public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor
     {
 
@@ -293,6 +299,7 @@ SQL
         return $sponsor;
     }
 
+
     public function removeSponsor(int $id): void
     {
 
@@ -304,6 +311,7 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
+
 
     public function addSponsor(Sponsor $sponsor): void
     {
@@ -334,6 +342,7 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
+
 
     public function updateSponsor(Sponsor $sponsor): void
     {

@@ -12,7 +12,7 @@ let fields = [
 registerForm(document.querySelector('.form'), fields);
 
 function updateDescriptionTitle(value) {
-  document.querySelector('#description-label').innerHTML = parseInt(value) === 0 ? 'Raison' : 'Description';
+  document.querySelector('#description-label').innerHTML = parseInt(value, 10) === 0 ? 'Raison' : 'Description';
 }
 
 function remove(event) {

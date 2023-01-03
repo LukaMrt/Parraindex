@@ -9,6 +9,7 @@ class PersonContact extends Contact
 
     private Person $person;
 
+
     public function __construct(
         int         $id,
         string      $contacterName,
@@ -22,6 +23,7 @@ class PersonContact extends Contact
         $this->person = $person;
     }
 
+
     public function getDescription(): array
     {
 
@@ -30,6 +32,7 @@ class PersonContact extends Contact
             ['Année d\'entrée à l\'IUT', $this->person->getStartYear()]
         ];
     }
+
 
     public function getPerson(): Person
     {

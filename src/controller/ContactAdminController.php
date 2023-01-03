@@ -12,6 +12,7 @@ class ContactAdminController extends Controller
 {
     private ContactService $contactService;
 
+
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -22,6 +23,7 @@ class ContactAdminController extends Controller
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
     }
+
 
     public function get(Router $router, array $parameters): void
     {

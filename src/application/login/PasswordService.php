@@ -18,6 +18,7 @@ class PasswordService
     private Random $random;
     private UrlUtils $urlUtils;
 
+
     public function __construct(
         AccountDAO $accountDAO,
         PersonDAO  $personDAO,
@@ -34,6 +35,7 @@ class PasswordService
         $this->random = $random;
         $this->urlUtils = $urlUtils;
     }
+
 
     public function resetPassword(array $parameters): string
     {
@@ -63,6 +65,7 @@ class PasswordService
         $this->redirect->redirect('resetpassword_confirmation');
         return '';
     }
+
 
     public function validateResetPassword(string $token): string
     {

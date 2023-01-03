@@ -11,25 +11,30 @@ class UnknownSponsor extends Sponsor
         parent::__construct($id, $godFather, $godChild, $date);
     }
 
+
     public function getDescription(): string
     {
         return $this->getDescriptionTitle();
     }
+
 
     public function getDescriptionTitle(): string
     {
         return $this->getType();
     }
 
+
     public function getType(): string
     {
         return '';
     }
 
+
     public function getIcon(): string
     {
         return 'interrogation.svg';
     }
+
 
     public function getTypeId(): int
     {

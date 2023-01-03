@@ -13,6 +13,7 @@ class EditSponsorController extends Controller
 {
     private SponsorService $sponsorService;
 
+
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -23,6 +24,7 @@ class EditSponsorController extends Controller
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
+
 
     public function get(Router $router, array $parameters): void
     {
@@ -69,6 +71,7 @@ class EditSponsorController extends Controller
             'sponsorTypes' => $sponsorTypes
         ]);
     }
+
 
     #[NoReturn] public function post(Router $router, array $parameters): void
     {

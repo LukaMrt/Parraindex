@@ -10,17 +10,24 @@ interface ContactDAO
 {
     public function savePersonAddContact(PersonContact $contact): void;
 
+
     public function savePersonRemoveContact(PersonContact $contact): void;
+
 
     public function savePersonUpdateContact(PersonContact $contact): void;
 
+
     public function saveSimpleContact(DefaultContact $contact): void;
+
 
     public function saveChockingContentContact(PersonContact $contact): void;
 
+
     public function saveSponsorContact(SponsorContact $contact): void;
 
+
     public function getContactList(): array;
+
 
     public function closeContact(int $contactId, int $resolverId);
 }

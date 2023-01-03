@@ -12,6 +12,7 @@ class PhpMailer implements Mailer
     private Logger $logger;
     private \PHPMailer\PHPMailer\PHPMailer $mailer;
 
+
     public function __construct(Logger $logger)
     {
         $this->logger = $logger;
@@ -35,6 +36,7 @@ class PhpMailer implements Mailer
         $this->mailer->Encoding = 'base64';
         $this->mailer->CharSet = 'UTF-8';
     }
+
 
     public function send(string $to, string $subject, string $body)
     {

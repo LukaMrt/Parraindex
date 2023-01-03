@@ -8,10 +8,12 @@ class DatabaseConnection
 {
     private PDO $database;
 
+
     public function __construct()
     {
         $this->connect();
     }
+
 
     private function connect(): void
     {
@@ -35,6 +37,7 @@ class DatabaseConnection
         $this->database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
         $this->database->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
     }
+
 
     public function getDatabase(): PDO
     {

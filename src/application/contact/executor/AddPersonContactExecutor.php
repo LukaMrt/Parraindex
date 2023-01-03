@@ -17,6 +17,7 @@ class AddPersonContactExecutor extends ContactExecutor
 {
     private PersonDAO $personDAO;
 
+
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, PersonDAO $personDAO)
     {
 
@@ -30,6 +31,7 @@ class AddPersonContactExecutor extends ContactExecutor
         ]);
         $this->personDAO = $personDAO;
     }
+
 
     public function executeSuccess(array $data): string
     {

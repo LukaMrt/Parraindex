@@ -46,6 +46,7 @@ class PersonBuilder
 
     public int $startYear;
 
+
     private function __construct()
     {
         $this->id = 0;
@@ -62,10 +63,12 @@ class PersonBuilder
         $this->color = '#f0f0f0';
     }
 
+
     public static function aPerson(): PersonBuilder
     {
         return new PersonBuilder();
     }
+
 
     /**
      * @param int $id Set id property.
@@ -76,6 +79,7 @@ class PersonBuilder
         $this->id = $id;
         return $this;
     }
+
 
     /**
      * @param Identity $identity Set name property.
@@ -98,6 +102,7 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
      * @param string|null $biography Set biography property.
      * @return $this Builder instance.
@@ -107,6 +112,7 @@ class PersonBuilder
         $this->biography = $biography ?? $this->biography;
         return $this;
     }
+
 
     /**
      * @param string|null $description Set description property.
@@ -118,6 +124,7 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
      * @param array $characteristics Set characteristics property.
      * @return $this Builder instance.
@@ -127,6 +134,7 @@ class PersonBuilder
         $this->characteristics = $characteristics;
         return $this;
     }
+
 
     /**
      * @param Characteristic $characteristic Add a characteristic to the person.
@@ -140,6 +148,7 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
      * @param int $startYear Set the entry year of the person.
      * @return $this Builder instance.
@@ -150,6 +159,7 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
      * @param Promotion $promotion Add a promotion to the person.
      */
@@ -158,6 +168,7 @@ class PersonBuilder
         $this->promotions[] = $promotion;
         return $this;
     }
+
 
     /**
      * @return Person New instance from Builder.
