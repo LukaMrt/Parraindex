@@ -24,6 +24,10 @@ class ErrorController extends Controller
                 $error['code'] = 404;
                 $error['message'] = 'page non trouvée';
                 break;
+            case 500:
+                $error['code'] = 500;
+                $error['message'] = 'erreur serveur';
+                break;
             default:
                 header('Location: ' . $router->url('error', ['error' => 404]));
                 die();

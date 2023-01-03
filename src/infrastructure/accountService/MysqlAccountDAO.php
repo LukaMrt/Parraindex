@@ -43,14 +43,22 @@ class MysqlAccountDAO implements AccountDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Account (email, password, id_person) VALUES (:email, :password, :person)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Account (email, password, id_person)
+                            VALUES (:email, :password, :person)
+SQL
+        );
         $query->execute([
             'email' => $account->getLogin(),
             'password' => $account->getHashedPassword(),
             'person' => $account->getPersonId()
         ]);
 
-        $query = $connection->prepare("INSERT INTO Privilege (id_account, id_school, privilege_name) VALUES ((SELECT id_account FROM Account WHERE email = :email), 1, 'STUDENT')");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Privilege (id_account, id_school, privilege_name)
+                            VALUES ((SELECT id_account FROM Account WHERE email = :email), 1, 'STUDENT')
+SQL
+        );
         $query->execute(['email' => $account->getLogin()]);
 
         $connection = null;
@@ -73,7 +81,13 @@ class MysqlAccountDAO implements AccountDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT * FROM Account A LEFT JOIN Privilege P on A.id_account = P.id_account WHERE email = :login");
+        $query = $connection->prepare(<<<SQL
+                            SELECT *
+                            FROM Account A
+                                LEFT JOIN Privilege P on A.id_account = P.id_account
+                            WHERE email = :login
+SQL
+        );
         $query->execute(['login' => $username]);
 
         $school = School::emptySchool();
@@ -101,9 +115,14 @@ class MysqlAccountDAO implements AccountDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT * FROM Account
-												JOIN Person P on P.id_person = Account.id_person
-											 	WHERE first_name = :first_name AND last_name = :last_name");
+        $query = $connection->prepare(<<<SQL
+                                SELECT *
+                                FROM Account
+                                    JOIN Person P on P.id_person = Account.id_person
+                                WHERE first_name = :first_name
+                                  AND last_name = :last_name
+SQL
+        );
         $query->execute(['first_name' => $identity->getFirstName(), 'last_name' => $identity->getLastName()]);
         $result = $query->fetch();
 
@@ -115,7 +134,11 @@ class MysqlAccountDAO implements AccountDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO TemporaryAccount (email, password, id_person, link) VALUES (:email, :password, :person, :link)");
+        $query = $connection->prepare(<<<SQL
+                                INSERT INTO TemporaryAccount (email, password, id_person, link)
+                                VALUES (:email, :password, :person, :link)
+SQL
+        );
         $query->execute([
             'email' => $account->getLogin(),
             'password' => $account->getHashedPassword(),
@@ -137,7 +160,12 @@ class MysqlAccountDAO implements AccountDAO
         $account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
 
         if ($result = $query->fetch()) {
-            $account = new Account(-2, $result->email, PersonBuilder::aPerson()->withId($result->id_person)->build(), new Password($result->password));
+            $account = new Account(
+                -2,
+                $result->email,
+                PersonBuilder::aPerson()->withId($result->id_person)->build(),
+                new Password($result->password)
+            );
         }
 
         $connection = null;
@@ -165,7 +193,12 @@ class MysqlAccountDAO implements AccountDAO
         $account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
 
         if ($result = $query->fetch()) {
-            $account = new Account($result->id_account, $result->email, PersonBuilder::aPerson()->withId($result->id_person)->build(), new Password($result->password));
+            $account = new Account(
+                $result->id_account,
+                $result->email,
+                PersonBuilder::aPerson()->withId($result->id_person)->build(),
+                new Password($result->password)
+            );
         }
 
         $query->closeCursor();
@@ -177,7 +210,11 @@ class MysqlAccountDAO implements AccountDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO ResetPassword (id_account, password, link) VALUES (:id, :password, :link)");
+        $query = $connection->prepare(<<<SQL
+                                INSERT INTO ResetPassword (id_account, password, link)
+                                VALUES (:id, :password, :link)
+SQL
+        );
         $query->execute([
             'id' => $account->getId(),
             'password' => $account->getHashedPassword(),
@@ -198,7 +235,12 @@ class MysqlAccountDAO implements AccountDAO
         $account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
 
         if ($result = $query->fetch()) {
-            $account = new Account($result->id_account, '', PersonBuilder::aPerson()->build(), new Password($result->password));
+            $account = new Account(
+                $result->id_account,
+                '',
+                PersonBuilder::aPerson()->build(),
+                new Password($result->password)
+            );
         }
 
         $connection = null;

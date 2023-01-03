@@ -9,6 +9,8 @@ use ZipArchive;
 
 class MonologLogger implements Logger
 {
+    const DEFAULT_LOG_FILE = '/log.txt';
+    const ERROR_FILE = '/errors.txt';
     private array $loggers = [];
 
     public function info(string $className, string $message, array $context = []): void
@@ -30,21 +32,26 @@ class MonologLogger implements Logger
             mkdir($logPath . '/archives');
         }
 
-        if (!file_exists($logPath . '/log.txt')) {
-            touch($logPath . '/log.txt');
+        if (!file_exists($logPath . self::DEFAULT_LOG_FILE)) {
+            touch($logPath . self::DEFAULT_LOG_FILE);
         }
 
-        if (!file_exists($logPath . '/errors.txt')) {
-            touch($logPath . '/errors.txt');
+        if (!file_exists($logPath . self::ERROR_FILE)) {
+            touch($logPath . self::ERROR_FILE);
         }
 
-        $this->zipLoggFile($logPath . '/log.txt', 'logs', $logPath);
-        $this->zipLoggFile($logPath . '/errors.txt', 'errors', $logPath);
+        $this->zipLoggFile($logPath . self::DEFAULT_LOG_FILE, 'logs', $logPath);
+        $this->zipLoggFile($logPath . self::ERROR_FILE, 'errors', $logPath);
         $logger = new \Monolog\Logger($className);
         $logger->pushHandler(new StreamHandler('php://stdout', 100));
-        $logger->pushHandler(new StreamHandler($logPath . '/log.txt', 200));
-        $logger->pushHandler(new StreamHandler($logPath . '/errors.txt', 400));
-        $logger->pushHandler(new NativeMailerHandler('maret.luka@gmail.com', 'Error logged in the parraindex', 'contact@lukamaret.com', 550));
+        $logger->pushHandler(new StreamHandler($logPath . self::DEFAULT_LOG_FILE, 200));
+        $logger->pushHandler(new StreamHandler($logPath . self::ERROR_FILE, 400));
+        $logger->pushHandler(new NativeMailerHandler(
+            'maret.luka@gmail.com',
+            'Error logged in the parraindex',
+            'contact@lukamaret.com',
+            550
+        ));
         $this->loggers[$className] = $logger;
     }
 

@@ -19,10 +19,13 @@ class MysqlCharacteristicDAO implements CharacteristicDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare("UPDATE Characteristic SET 
-											value = :value,
-											visibility = :visibility
-											WHERE id_person = :idPerson AND id_network = :idNetwork");
+        $statement = $connection->prepare(<<<SQL
+                                    UPDATE Characteristic
+                                    SET value = :value, visibility = :visibility
+									WHERE id_person = :idPerson
+									  AND id_network = :idNetwork
+SQL
+        );
         $statement->execute([
             'idPerson' => $idPerson,
             'idNetwork' => $characteristic->getId(),
@@ -35,8 +38,11 @@ class MysqlCharacteristicDAO implements CharacteristicDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare("INSERT INTO Characteristic (id_person, id_network, value, visibility)
-											VALUES (:idPerson, :idNetwork, :value, :visibility)");
+        $statement = $connection->prepare(<<<SQL
+                                    INSERT INTO Characteristic (id_person, id_network, value, visibility)
+									VALUES (:idPerson, :idNetwork, :value, :visibility)
+SQL
+        );
         $statement->execute([
             'idPerson' => $idPerson,
             'idNetwork' => $characteristic->getId(),

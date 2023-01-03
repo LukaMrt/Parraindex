@@ -191,4 +191,5 @@ class Injector
         $this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
         $this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
     }
+
 }

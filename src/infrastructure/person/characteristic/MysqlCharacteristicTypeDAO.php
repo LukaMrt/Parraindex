@@ -36,7 +36,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 
     public function buildCharacteristic($buffer): Characteristic
     {
-        $characteristic = (new CharacteristicBuilder())
+        return (new CharacteristicBuilder())
             ->withId($buffer->id_network)
             ->withType($buffer->type)
             ->withTitle($buffer->title)
@@ -45,26 +45,22 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
             ->withVisibility($buffer->visibility ?? false)
             ->withValue($buffer->value ?? false)
             ->build();
-
-        return $characteristic;
     }
 
-    public function getAllCharacteristicAndValues(int $idPeron): array
+    public function getAllCharacteristicAndValues(int $idPerson): array
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare(" SELECT *
-											FROM TypeCharacteristic
-											LEFT JOIN  (
-												SELECT *
-												FROM Characteristic
-												WHERE id_person = :id_person
-											) 
-											AS c USING (id_network)
-		");
+        $statement = $connection->prepare(<<<SQL
+                                    SELECT *
+									FROM TypeCharacteristic
+									    LEFT JOIN (SELECT * FROM Characteristic WHERE id_person = :id_person)
+									        AS C USING (id_network);
+SQL
+        );
 
         $statement->execute(array(
-            ':id_person' => $idPeron
+            ':id_person' => $idPerson
         ));
 
         $characteristics = array();
