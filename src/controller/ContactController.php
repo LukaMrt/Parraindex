@@ -8,12 +8,27 @@ use App\infrastructure\router\Router;
 use App\model\contact\ContactType;
 use Twig\Environment;
 
+/**
+ * class ContactController
+ * the contact page, it's the page to contact the team and the admin
+ */
 class ContactController extends Controller
 {
 
+    /**
+     * @var ContactService the contact service
+     */
     private ContactService $contactService;
 
 
+    /**
+     * ContactController constructor
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * @param ContactService $contactService the contact service
+     * initialize the controller
+     */
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -26,6 +41,12 @@ class ContactController extends Controller
     }
 
 
+    /**
+     * function post
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void the function return nothing
+     */
     public function post(Router $router, array $parameters): void
     {
 
@@ -36,6 +57,12 @@ class ContactController extends Controller
     }
 
 
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void the function return nothing
+     */
     public function get(Router $router, array $parameters): void
     {
 

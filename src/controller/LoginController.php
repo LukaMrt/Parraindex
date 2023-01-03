@@ -7,12 +7,27 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
+/**
+ * class LoginController
+ * the login page, it's the page where the user can login
+ */
 class LoginController extends Controller
 {
 
+    /**
+     * @var LoginService the login service
+     */
     private LoginService $loginService;
 
 
+    /**
+     * LoginController constructor
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * @param LoginService $passwordService the password service
+     * initialize the controller
+     */
     public function __construct(
         Environment   $twig,
         Router        $router,
@@ -25,12 +40,24 @@ class LoginController extends Controller
     }
 
 
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function get(Router $router, array $parameters): void
     {
         $this->render('login.twig', ['router' => $router]);
     }
 
 
+    /**
+     * function post
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function post(Router $router, array $parameters): void
     {
 

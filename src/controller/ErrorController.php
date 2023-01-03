@@ -4,9 +4,23 @@ namespace App\controller;
 
 use App\infrastructure\router\Router;
 
+/**
+ * ErrorController class
+ * the error page, it's the page that explain the error
+ */
 class ErrorController extends Controller
 {
+    public function __construct(Environment $twig, Router $router, PersonService $personService)
+    {
+        parent::__construct($twig, $router, $personService);
+    }
 
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function get(Router $router, array $parameters): void
     {
 

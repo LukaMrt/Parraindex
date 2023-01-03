@@ -9,12 +9,27 @@ use App\model\account\PrivilegeType;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 
+/**
+ * class EditSponsorController
+ * the edit sponsor page, it's the page to edit a sponsor
+ */
 class EditSponsorController extends Controller
 {
 
+    /**
+     * @var SponsorService the sponsor service
+     */
     private SponsorService $sponsorService;
 
 
+    /**
+     * EditSponsorController constructor
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * @param SponsorService $sponsorService the sponsor service
+     * initialize the controller
+     */
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -27,6 +42,12 @@ class EditSponsorController extends Controller
     }
 
 
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function get(Router $router, array $parameters): void
     {
 
@@ -74,6 +95,12 @@ class EditSponsorController extends Controller
     }
 
 
+    /**
+     * function post
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     #[NoReturn] public function post(Router $router, array $parameters): void
     {
 

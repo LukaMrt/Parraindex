@@ -7,9 +7,20 @@ use App\infrastructure\router\Router;
 use App\model\person\Identity;
 use Twig\Environment;
 
+/**
+ * class AboutController
+ * the about page, it's the page that explain the project and the team
+ */
 class AboutController extends Controller
 {
 
+    /**
+     * AboutController constructor
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * initialize the controller
+     */
     public function __construct(Environment $twig, Router $router, PersonService $personService)
     {
         parent::__construct($twig, $router, $personService);
@@ -17,6 +28,12 @@ class AboutController extends Controller
     }
 
 
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function get(Router $router, array $parameters): void
     {
 

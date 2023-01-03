@@ -10,14 +10,33 @@ use App\model\account\PrivilegeType;
 use App\model\person\PersonBuilder;
 use Twig\Environment;
 
+/**
+ * class EditPersonController
+ * the edit person page, it's the page to edit a person and his characteristics
+ */
 class EditPersonController extends Controller
 {
 
+    /**
+     * @var CharacteristicTypeService the characteristic type service
+     */
     private CharacteristicTypeService $characteristicTypeService;
 
+    /**
+     * @var CharacteristicService the characteristic service
+     */
     private CharacteristicService $characteristicService;
 
 
+    /**
+     * EditPersonController constructor
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * @param CharacteristicTypeService $characteristicTypeService the characteristic type service
+     * @param CharacteristicService $characteristicService the characteristic service
+     * initialize the controller
+     */
     public function __construct(
         Environment               $twig,
         Router                    $router,
@@ -32,6 +51,12 @@ class EditPersonController extends Controller
     }
 
 
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function get(Router $router, array $parameters): void
     {
         // if id is 0, create a new person
@@ -74,6 +99,12 @@ class EditPersonController extends Controller
     }
 
 
+    /**
+     * function post
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function post(Router $router, array $parameters): void
     {
         header('content-type: application/json');
@@ -128,6 +159,14 @@ class EditPersonController extends Controller
     }
 
 
+    /**
+     * function getFormValues
+     * @param $data
+     * @param array $response
+     * @param bool $isAdmin
+     * @return array
+     * get the form values
+     */
     private function getFormValues($data, array &$response, bool $isAdmin): array
     {
         $newData = [];
@@ -208,6 +247,13 @@ class EditPersonController extends Controller
     }
 
 
+    /**
+     * function getFormCharacteristics
+     * @param $data the data
+     * @param array $response the response
+     * @return array the characteristics
+     * get the form characteristics
+     */
     private function getFormCharacteristics($data, array &$response): array
     {
         $newCharacteristics = [];
@@ -248,6 +294,12 @@ class EditPersonController extends Controller
     }
 
 
+    /**
+     * function put
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function put(Router $router, array $parameters): void
     {
         header('content-type: application/json');
@@ -334,6 +386,12 @@ class EditPersonController extends Controller
     }
 
 
+    /**
+     * function delete
+     * @param Router $router
+     * @param array $parameters
+     * @return void
+     */
     public function delete(Router $router, array $parameters): void
     {
         header('content-type: application/json');

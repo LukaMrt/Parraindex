@@ -7,12 +7,27 @@ use App\application\sponsor\SponsorService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
 
+/**
+ * class SponsorController
+ * the sponsor page, it's the page where the user can see the sponsor
+ */
 class SponsorController extends Controller
 {
 
+    /**
+     * @var SponsorService the sponsor service
+     */
     private SponsorService $sponsorService;
 
 
+    /**
+     * SponsorController constructor
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * @param SponsorService $sponsorService the sponsor service
+     * initialize the controller
+     */
     public function __construct(
         Environment    $twig,
         Router         $router,
@@ -25,6 +40,12 @@ class SponsorController extends Controller
     }
 
 
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     public function get(Router $router, array $parameters): void
     {
         $sponsor = $this->sponsorService->getSponsorById($parameters['id']);
