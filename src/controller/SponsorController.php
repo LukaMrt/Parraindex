@@ -11,7 +11,12 @@ class SponsorController extends Controller
 {
     private SponsorService $sponsorService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, SponsorService $sponsorService)
+    public function __construct(
+        Environment    $twig,
+        Router         $router,
+        PersonService  $personService,
+        SponsorService $sponsorService
+    )
     {
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;

@@ -15,7 +15,13 @@ class ContactCloseController extends Controller
     private ContactService $contactService;
     private SponsorService $sponsorService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, ContactService $contactService, SponsorService $sponsorService)
+    public function __construct(
+        Environment    $twig,
+        Router         $router,
+        PersonService  $personService,
+        ContactService $contactService,
+        SponsorService $sponsorService
+    )
     {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;

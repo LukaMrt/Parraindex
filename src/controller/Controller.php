@@ -23,9 +23,6 @@ abstract class Controller
     {
 
         switch ($method) {
-            case 'GET':
-                $this->get($router, $parameters);
-                break;
             case 'POST':
                 $this->post($router, $parameters);
                 break;
@@ -35,11 +32,10 @@ abstract class Controller
             case 'DELETE':
                 $this->delete($router, $parameters);
                 break;
+            case 'GET':
+            default:
+                $this->get($router, $parameters);
         }
-    }
-
-    public function get(Router $router, array $parameters): void
-    {
     }
 
     public function post(Router $router, array $parameters): void
@@ -51,6 +47,10 @@ abstract class Controller
     }
 
     public function delete(Router $router, array $parameters): void
+    {
+    }
+
+    public function get(Router $router, array $parameters): void
     {
     }
 

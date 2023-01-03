@@ -12,7 +12,12 @@ class ContactController extends Controller
 {
     private ContactService $contactService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, ContactService $contactService)
+    public function __construct(
+        Environment    $twig,
+        Router         $router,
+        PersonService  $personService,
+        ContactService $contactService
+    )
     {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
@@ -32,7 +37,10 @@ class ContactController extends Controller
 
         $people = $this->personService->getAllPeople();
         usort($people, fn($a, $b) => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
-        $closure = fn($person) => ['id' => $person->getId(), 'title' => $person->getLastName() . ' ' . $person->getFirstName()];
+        $closure = fn($person) => [
+            'id' => $person->getId(),
+            'title' => $person->getLastName() . ' ' . $person->getFirstName()
+        ];
         $people = array_map($closure, $people);
 
         $this->render('contact.twig', [

@@ -11,7 +11,12 @@ class SignUpValidationController extends Controller
 {
     private SignupService $signupService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, SignupService $passwordService)
+    public function __construct(
+        Environment   $twig,
+        Router        $router,
+        PersonService $personService,
+        SignupService $passwordService
+    )
     {
         parent::__construct($twig, $router, $personService);
         $this->signupService = $passwordService;
