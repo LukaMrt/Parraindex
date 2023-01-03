@@ -13,6 +13,7 @@ use App\model\person\Person;
 
 class SignupService
 {
+    const NON_LETTER_REGEX = "/[^a-z]/";
     private AccountDAO $accountDAO;
     private PersonDAO $personDAO;
     private Redirect $redirect;
@@ -20,7 +21,14 @@ class SignupService
     private Random $random;
     private UrlUtils $urlUtils;
 
-    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, Mailer $mailer, Random $random, UrlUtils $urlUtils)
+    public function __construct(
+        AccountDAO $accountDAO,
+        PersonDAO  $personDAO,
+        Redirect   $redirect,
+        Mailer     $mailer,
+        Random     $random,
+        UrlUtils   $urlUtils
+    )
     {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
@@ -47,14 +55,26 @@ class SignupService
             $token = $this->random->generate(10);
             $this->accountDAO->createTemporaryAccount($account, $token);
             $url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('signup_validation', ['token' => $token]);
-            $this->mailer->send($email, 'Parraindex : inscription', "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
+            $this->mailer->send(
+                $email,
+                'Parraindex : inscription',
+                "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de "
+                . "cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement"
+                . "<br>Le Parrainboss");
             $this->redirect->redirect('signup_confirmation');
         }
 
         return $error;
     }
 
-    private function buildError(string $email, string $password, string $passwordConfirm, string $lastname, string $firstname, ?Person $person): string
+    private function buildError(
+        string  $email,
+        string  $password,
+        string  $passwordConfirm,
+        string  $lastname,
+        string  $firstname,
+        ?Person $person
+    ): string
     {
 
         if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
@@ -84,8 +104,8 @@ class SignupService
         }
 
         $identities = $this->personDAO->getAllIdentities();
-        $emailLevenshtein = preg_replace("/[^a-z]/", '', explode('@', $email)[0]);
-        $nameLevenshtein = preg_replace("/[^a-z]/", '', strtolower($firstname . $lastname));
+        $emailLevenshtein = preg_replace(self::NON_LETTER_REGEX, '', explode('@', $email)[0]);
+        $nameLevenshtein = preg_replace(self::NON_LETTER_REGEX, '', strtolower($firstname . $lastname));
         $entryLevenshtein = levenshtein($emailLevenshtein, $nameLevenshtein);
         $minLevenshtein = $entryLevenshtein;
 
@@ -94,7 +114,12 @@ class SignupService
         }
 
         foreach ($identities as $identity) {
-            $levenshtein = levenshtein($emailLevenshtein, preg_replace("/[^a-z]/", '', strtolower($identity->getFirstname() . $identity->getLastname())));
+            $preg_replace = preg_replace(
+                self::NON_LETTER_REGEX,
+                '',
+                strtolower($identity->getFirstname() . $identity->getLastname())
+            );
+            $levenshtein = levenshtein($emailLevenshtein, $preg_replace);
             if ($levenshtein < $minLevenshtein) {
                 return 'D\'après notre recherche, cet email n\'est pas le vôtre';
             }

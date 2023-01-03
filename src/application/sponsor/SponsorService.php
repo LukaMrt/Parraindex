@@ -8,6 +8,7 @@ use App\model\sponsor\SponsorFactory;
 
 class SponsorService
 {
+
     private SponsorDAO $sponsorDAO;
     private PersonDAO $personDAO;
 
@@ -59,7 +60,14 @@ class SponsorService
         $godFather = $sponsor->getGodFather();
         $godChild = $sponsor->getGodChild();
 
-        $sponsor = SponsorFactory::createSponsor($parameters['sponsorType'], $id, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
+        $sponsor = SponsorFactory::createSponsor(
+            $parameters['sponsorType'],
+            $id,
+            $godFather,
+            $godChild,
+            $parameters['sponsorDate'],
+            $parameters['description']
+        );
 
         $this->sponsorDAO->updateSponsor($sponsor);
     }
@@ -76,7 +84,14 @@ class SponsorService
             return;
         }
 
-        $sponsor = SponsorFactory::createSponsor($parameters['sponsorType'], -1, $godFather, $godChild, $parameters['sponsorDate'], $parameters['description']);
+        $sponsor = SponsorFactory::createSponsor(
+            $parameters['sponsorType'],
+            -1,
+            $godFather,
+            $godChild,
+            $parameters['sponsorDate'],
+            $parameters['description']
+        );
 
         $this->sponsorDAO->addSponsor($sponsor);
     }
@@ -85,4 +100,5 @@ class SponsorService
     {
         $this->sponsorDAO->addSponsor($sponsor);
     }
+
 }

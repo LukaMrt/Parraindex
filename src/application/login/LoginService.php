@@ -5,6 +5,7 @@ namespace App\application\login;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\account\Password;
+use JetBrains\PhpStorm\NoReturn;
 
 class LoginService
 {
@@ -13,7 +14,12 @@ class LoginService
     private SessionManager $sessionManager;
     private PersonDAO $personDAO;
 
-    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, SessionManager $sessionManager)
+    public function __construct(
+        AccountDAO     $accountDAO,
+        PersonDAO      $personDAO,
+        Redirect       $redirect,
+        SessionManager $sessionManager
+    )
     {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
@@ -75,15 +81,16 @@ class LoginService
         return array_shift($errors) ?? '';
     }
 
-    public function logout(): void
+    #[NoReturn] public function logout(): void
     {
 
-        if (!$this->sessionManager->exists('login')) {
-            $this->redirect->redirect('home');
-            return;
+        $destination = 'home';
+
+        if ($this->sessionManager->exists('login')) {
+            $destination = 'logout_confirmation';
+            $this->sessionManager->destroySession();
         }
 
-        $this->sessionManager->destroySession();
-        $this->redirect->redirect('logout_confirmation');
+        $this->redirect->redirect($destination);
     }
 }

@@ -18,7 +18,14 @@ class PasswordService
     private Random $random;
     private UrlUtils $urlUtils;
 
-    public function __construct(AccountDAO $accountDAO, PersonDAO $personDAO, Redirect $redirect, Mailer $mailer, Random $random, UrlUtils $urlUtils)
+    public function __construct(
+        AccountDAO $accountDAO,
+        PersonDAO  $personDAO,
+        Redirect   $redirect,
+        Mailer     $mailer,
+        Random     $random,
+        UrlUtils   $urlUtils
+    )
     {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
@@ -43,8 +50,14 @@ class PasswordService
 
 
         $token = $this->random->generate(10);
-        $url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('resetpassword_validation', ['token' => $token]);
-        $this->mailer->send($parameters['email'], 'Parraindex : réinitialisation de mot de passe', "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement<br>Le Parrainboss");
+        $url = $this->urlUtils->getBaseUrl();
+        $url .= $this->urlUtils->buildUrl('resetpassword_validation', ['token' => $token]);
+        $this->mailer->send(
+            $parameters['email'],
+            'Parraindex : réinitialisation de mot de passe',
+            "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été "
+            . "enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>"
+            . "Cordialement<br>Le Parrainboss");
         $this->accountDAO->createResetpassword($account, $token);
         $this->redirect->redirect('resetpassword_confirmation');
         return '';
