@@ -16,6 +16,7 @@ use DateTime;
 
 class MySqlPersonDAO implements PersonDAO
 {
+
     private DatabaseConnection $databaseConnection;
 
 
@@ -51,10 +52,10 @@ SQL
         );
         $query->execute();
 
-        $users = array();
+        $users = [];
 
         $currentPerson = null;
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             if ($currentPerson === null) {
@@ -63,7 +64,7 @@ SQL
 
             if ($currentPerson != $row->id_person) {
                 $users[] = $this->buildPerson($buffer);
-                $buffer = array();
+                $buffer = [];
                 $currentPerson = $row->id_person;
             }
 
@@ -190,7 +191,7 @@ SQL
         );
 
         $query->execute(['id_person' => $id]);
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             $buffer[] = $row;
@@ -244,7 +245,7 @@ SQL
         );
         $query->execute();
 
-        $identities = array();
+        $identities = [];
 
         while ($row = $query->fetch()) {
             $identities[] = new Identity($row->first_name, $row->last_name);
@@ -281,7 +282,7 @@ SQL
         );
 
         $query->execute(['login' => $login]);
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             $buffer[] = $row;
@@ -324,7 +325,7 @@ SQL
         $query->execute(['start_year' => $person->getStartYear()]);
 
         if ($row = $query->fetch()) {
-            $id_promotion = $row->id_promotion;
+            $idPromotion = $row->id_promotion;
         } else {
             $query = $connection->prepare(<<<SQL
                                 INSERT INTO Promotion (year, id_degree, id_school, desc_promotion, speciality)
@@ -339,7 +340,7 @@ SQL
                 'start_year' => $person->getStartYear(),
                 'degree_name' => $person->getStartYear() < 2021 ? 'DUT' : 'BUT'
             ]);
-            $id_promotion = $connection->lastInsertId();
+            $idPromotion = $connection->lastInsertId();
         }
 
         $query = $connection->prepare(<<<SQL
@@ -350,7 +351,7 @@ SQL
 
         $query->execute([
             'id_person' => $idPerson,
-            'id_promotion' => $id_promotion
+            'id_promotion' => $idPromotion
         ]);
 
         $query->closeCursor();
@@ -370,4 +371,5 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
+
 }

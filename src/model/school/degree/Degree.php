@@ -4,6 +4,7 @@ namespace App\model\school\degree;
 
 class Degree
 {
+
     private int $id;
     private string $name;
     private int $level;
@@ -21,4 +22,5 @@ class Degree
         $this->duration = $duration;
         $this->official = $official;
     }
+
 }

@@ -6,6 +6,7 @@ use App\infrastructure\router\Router;
 
 class ErrorController extends Controller
 {
+
     public function get(Router $router, array $parameters): void
     {
 
@@ -34,4 +35,5 @@ class ErrorController extends Controller
 
         $this->render('error.twig', ['code' => $error['code'], 'message' => $error['message']]);
     }
+
 }

@@ -14,6 +14,7 @@ use App\model\school\School;
 
 class MysqlAccountDAO implements AccountDAO
 {
+
     private DatabaseConnection $databaseConnection;
 
 
@@ -286,4 +287,5 @@ SQL
         $connection = null;
         $query->closeCursor();
     }
+
 }

@@ -9,6 +9,7 @@ use App\model\person\PersonBuilder;
 
 class PersonService
 {
+
     private PersonDAO $personDAO;
     private SessionManager $sessionManager;
 
@@ -80,4 +81,5 @@ class PersonService
     {
         $this->personDAO->deletePerson($person);
     }
+
 }

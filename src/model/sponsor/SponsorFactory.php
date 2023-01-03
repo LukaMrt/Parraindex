@@ -6,14 +6,16 @@ use App\model\person\Person;
 
 class SponsorFactory
 {
+
     public static function createSponsor(
-        int $type,
-        int $id,
+        int    $type,
+        int    $id,
         Person $godFather,
         Person $godChild,
         string $date,
         string $description
-    ): Sponsor {
+    ): Sponsor
+    {
 
         return match ($type) {
             0 => new ClassicSponsor($id, $godFather, $godChild, $date, $description),
@@ -21,4 +23,5 @@ class SponsorFactory
             default => new UnknownSponsor($id, $godFather, $godChild, $date),
         };
     }
+
 }

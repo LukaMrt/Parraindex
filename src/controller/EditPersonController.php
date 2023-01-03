@@ -12,18 +12,20 @@ use Twig\Environment;
 
 class EditPersonController extends Controller
 {
+
     private CharacteristicTypeService $characteristicTypeService;
 
     private CharacteristicService $characteristicService;
 
 
     public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
+        Environment               $twig,
+        Router                    $router,
+        PersonService             $personService,
         CharacteristicTypeService $characteristicTypeService,
-        CharacteristicService $characteristicService
-    ) {
+        CharacteristicService     $characteristicService
+    )
+    {
         parent::__construct($twig, $router, $personService);
         $this->characteristicTypeService = $characteristicTypeService;
         $this->characteristicService = $characteristicService;
@@ -387,4 +389,5 @@ class EditPersonController extends Controller
         echo json_encode($response);
         exit(0);
     }
+
 }

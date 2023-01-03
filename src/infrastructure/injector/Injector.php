@@ -66,11 +66,11 @@ use DI\NotFoundException;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
-
 use function DI\get;
 
 class Injector
 {
+
     private Container $container;
     private Router $router;
 
@@ -196,4 +196,5 @@ class Injector
         $this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
         $this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
     }
+
 }

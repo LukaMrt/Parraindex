@@ -4,6 +4,7 @@ namespace App\application\login;
 
 interface SessionManager
 {
+
     public function startSession(): void;
 
 
@@ -20,4 +21,5 @@ interface SessionManager
 
 
     public function exists(string $key): bool;
+
 }

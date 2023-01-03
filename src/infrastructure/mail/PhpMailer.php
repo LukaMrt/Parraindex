@@ -9,6 +9,7 @@ use PHPMailer\PHPMailer\SMTP;
 
 class PhpMailer implements Mailer
 {
+
     private Logger $logger;
     private \PHPMailer\PHPMailer\PHPMailer $mailer;
 
@@ -19,13 +20,13 @@ class PhpMailer implements Mailer
         $this->mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
 
         $this->mailer->SMTPDebug = $_ENV['DEBUG'] === "true" ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
-        $this->mailer->SMTPOptions = array(
-            'ssl' => array(
+        $this->mailer->SMTPOptions = [
+            'ssl' => [
                 'verify_peer' => false,
                 'verify_peer_name' => false,
                 'allow_self_signed' => true
-            )
-        );
+            ]
+        ];
         $this->mailer->isSMTP();
         $this->mailer->Host = $_ENV['MAIL_HOST'];
         $this->mailer->SMTPAuth = true;
@@ -55,7 +56,7 @@ class PhpMailer implements Mailer
             $this->logger->info(PhpMailer::class, "Mailer success: [{$subject}] request, has been sent to {$to}");
         } catch (Exception) {
             $this->logger->error(PhpMailer::class, "Mailer error: {$this->mailer->ErrorInfo}");
-            echo "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}";
         }
     }
+
 }

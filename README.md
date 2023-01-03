@@ -7,7 +7,6 @@
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
-[![Codacy Badge](https://app.codacy.com/project/badge/Grade/260c12aab9b34cdf82ffe5996e1391ae)](https://www.codacy.com/gh/LukaMrt/Parraindex/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=LukaMrt/Parraindex&amp;utm_campaign=Badge_Grade)
 ![GitHub language count](https://img.shields.io/github/languages/count/lukamrt/parraindex)
 ![GitHub](https://img.shields.io/github/license/lukamrt/parraindex)
 
@@ -54,27 +53,24 @@ To launch the project, you need to follow these steps:
 4. Create a `.env` file in the root folder of the project and fill it with the following information (follow the
    example of the `.env.example` file):
 
-    ```properties
-    # Environment
-    
-    DEBUG="false"               # Set to "true" to enable debug mode
-    
-    # Database
-    
-    DRIVER="mysql"              # Database driver (mysql, pgsql, sqlite, ...)
-    HOST="host"                 # Host of the database
-    PORT="3306"                 # Port of the database (default: 3306)
-    DATABASE="database"         # Name of the database
-    USERNAME="user"             # Username of the database
-    PASSWORD="password"         # Password of the database
-    
-    # Mail
-    
-    MAIL_USERNAME="username"   # Username of the mail account
-    MAIL_PASSWORD="password"   # Password of the mail account
-    MAIL_HOST="host"           # Host of the mail account
-    MAIL_PORT="587"            # Port of the mail account (default: 587)
-    ```
+```properties
+ # Environment
+DEBUG="false"               # Set to "true" to enable debug mode
+
+# Database
+DRIVER="mysql"              # Database driver (mysql, pgsql, sqlite, ...)
+HOST="host"                 # Host of the database
+PORT="3306"                 # Port of the database (default: 3306)
+DATABASE="database"         # Name of the database
+USERNAME="user"             # Username of the database
+PASSWORD="password"         # Password of the database
+
+# Mail
+MAIL_USERNAME="username"    # Username of the mail account
+MAIL_PASSWORD="password"    # Password of the mail account
+MAIL_HOST="host"            # Host of the mail account
+MAIL_PORT="587"             # Port of the mail account (default: 587)
+```
 
 5. Build the CSS files with `sass --update scss:public/css`
 6. Launch the project with `php -S localhost:8000 -t public` or `composer server`

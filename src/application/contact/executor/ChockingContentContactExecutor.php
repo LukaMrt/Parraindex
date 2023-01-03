@@ -13,6 +13,7 @@ use App\model\contact\PersonContact;
 
 class ChockingContentContactExecutor extends ContactExecutor
 {
+
     private PersonDAO $personDAO;
 
 
@@ -49,4 +50,5 @@ class ChockingContentContactExecutor extends ContactExecutor
         $this->contactDAO->saveChockingContentContact($contact);
         return '';
     }
+
 }

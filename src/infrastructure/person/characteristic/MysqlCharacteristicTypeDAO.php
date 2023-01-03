@@ -9,6 +9,7 @@ use App\model\person\characteristic\CharacteristicBuilder;
 
 class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 {
+
     private DatabaseConnection $databaseConnection;
 
 
@@ -25,7 +26,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
         $statement = $connection->prepare("SELECT * FROM TypeCharacteristic");
         $statement->execute();
 
-        $characteristics = array();
+        $characteristics = [];
 
         while ($row = $statement->fetch()) {
             $characteristics[] = $this->buildCharacteristic($row);
@@ -63,11 +64,11 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 SQL
         );
 
-        $statement->execute(array(
+        $statement->execute([
             ':id_person' => $idPerson
-        ));
+        ]);
 
-        $characteristics = array();
+        $characteristics = [];
 
         while ($row = $statement->fetch()) {
             $characteristic = $this->buildCharacteristic($row);
@@ -80,4 +81,5 @@ SQL
 
         return $characteristics;
     }
+
 }

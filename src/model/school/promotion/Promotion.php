@@ -8,6 +8,7 @@ use App\model\school\School;
 
 class Promotion
 {
+
     private int $id;
     private Degree $degree;
     private School $school;
@@ -17,13 +18,14 @@ class Promotion
 
 
     public function __construct(
-        int $id,
+        int    $id,
         Degree $degree,
         School $school,
-        int $year,
+        int    $year,
         string $description,
         Person ...$students
-    ) {
+    )
+    {
         $this->id = $id;
         $this->degree = $degree;
         $this->school = $school;
@@ -37,4 +39,5 @@ class Promotion
     {
         return $this->year;
     }
+
 }

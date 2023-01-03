@@ -9,6 +9,7 @@ use App\model\contact\ContactType;
 
 abstract class ContactExecutor
 {
+
     protected ContactDAO $contactDAO;
     private Redirect $redirect;
     private ContactType $contactType;
@@ -75,4 +76,5 @@ abstract class ContactExecutor
 
 
     abstract public function executeSuccess(array $data): string;
+
 }

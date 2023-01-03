@@ -4,6 +4,7 @@ namespace App\application\contact\field;
 
 class BoundedNumberField extends Field
 {
+
     private int $min;
     private int $max;
 
@@ -20,4 +21,5 @@ class BoundedNumberField extends Field
     {
         return $this->min <= $value && $value <= $this->max;
     }
+
 }

@@ -6,6 +6,7 @@ namespace App\model\contact;
 
 enum ContactType: int
 {
+
     case ADD_PERSON = 0;
     case UPDATE_PERSON = 1;
     case REMOVE_PERSON = 2;
@@ -64,4 +65,5 @@ enum ContactType: int
             self::OTHER => "Autre",
         };
     }
+
 }

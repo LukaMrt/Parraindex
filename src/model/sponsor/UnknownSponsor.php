@@ -6,6 +6,7 @@ use App\model\person\Person;
 
 class UnknownSponsor extends Sponsor
 {
+
     public function __construct(int $id, Person $godFather, Person $godChild, string $date = '')
     {
         parent::__construct($id, $godFather, $godChild, $date);
@@ -40,4 +41,5 @@ class UnknownSponsor extends Sponsor
     {
         return 2;
     }
+
 }

@@ -6,6 +6,7 @@ use ValueError;
 
 enum CharacteristicType: string
 {
+
     case URL = '';
     case PHONE = 'tel:';
     case EMAIL = 'mailto:';
@@ -26,4 +27,5 @@ enum CharacteristicType: string
     {
         return $this->value;
     }
+
 }

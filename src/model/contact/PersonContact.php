@@ -6,17 +6,19 @@ use App\model\person\Person;
 
 class PersonContact extends Contact
 {
+
     private Person $person;
 
 
     public function __construct(
-        int $id,
-        string $contacterName,
-        string $contacterEmail,
+        int         $id,
+        string      $contacterName,
+        string      $contacterEmail,
         ContactType $type,
-        string $description,
-        Person $person
-    ) {
+        string      $description,
+        Person      $person
+    )
+    {
         parent::__construct($id, $contacterName, $contacterEmail, $type, $description);
         $this->person = $person;
     }
@@ -36,4 +38,5 @@ class PersonContact extends Contact
     {
         return $this->person;
     }
+
 }

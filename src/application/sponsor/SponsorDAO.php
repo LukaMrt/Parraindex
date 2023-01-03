@@ -6,6 +6,7 @@ use App\model\sponsor\Sponsor;
 
 interface SponsorDAO
 {
+
     public function getSponsorById(int $id): ?Sponsor;
 
 
@@ -22,4 +23,5 @@ interface SponsorDAO
 
 
     public function updateSponsor(Sponsor $sponsor): void;
+
 }

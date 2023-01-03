@@ -6,6 +6,7 @@ use App\model\person\Person;
 
 class HeartSponsor extends Sponsor
 {
+
     private string $description;
 
 
@@ -44,4 +45,5 @@ class HeartSponsor extends Sponsor
     {
         return 1;
     }
+
 }

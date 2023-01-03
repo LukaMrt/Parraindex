@@ -9,15 +9,17 @@ use Twig\Environment;
 
 class SignUpController extends Controller
 {
+
     private SignupService $signupService;
 
 
     public function __construct(
-        Environment $twig,
-        Router $router,
+        Environment   $twig,
+        Router        $router,
         PersonService $personService,
         SignupService $passwordService
-    ) {
+    )
+    {
         parent::__construct($twig, $router, $personService);
         $this->signupService = $passwordService;
     }
@@ -44,4 +46,5 @@ class SignUpController extends Controller
 
         $this->render('signup.twig', ['error' => $error]);
     }
+
 }

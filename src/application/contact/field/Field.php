@@ -4,6 +4,7 @@ namespace App\application\contact\field;
 
 class Field
 {
+
     private string $name;
     private string $error;
 
@@ -31,4 +32,5 @@ class Field
     {
         return !empty(trim($value));
     }
+
 }

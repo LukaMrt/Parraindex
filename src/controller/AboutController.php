@@ -9,6 +9,7 @@ use Twig\Environment;
 
 class AboutController extends Controller
 {
+
     public function __construct(Environment $twig, Router $router, PersonService $personService)
     {
         parent::__construct($twig, $router, $personService);
@@ -28,4 +29,5 @@ class AboutController extends Controller
 
         $this->render('about.twig', ['authors' => $authors]);
     }
+
 }

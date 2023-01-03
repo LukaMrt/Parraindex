@@ -4,6 +4,7 @@ namespace App\model\account;
 
 class Password
 {
+
     private string $password;
 
 
@@ -41,4 +42,5 @@ class Password
     {
         return password_get_info($this->password)['algoName'] !== 'unknown';
     }
+
 }

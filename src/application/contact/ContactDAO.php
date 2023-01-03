@@ -8,6 +8,7 @@ use App\model\contact\SponsorContact;
 
 interface ContactDAO
 {
+
     public function savePersonAddContact(PersonContact $contact): void;
 
 
@@ -30,4 +31,5 @@ interface ContactDAO
 
 
     public function closeContact(int $contactId, int $resolverId);
+
 }

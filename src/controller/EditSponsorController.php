@@ -11,15 +11,17 @@ use Twig\Environment;
 
 class EditSponsorController extends Controller
 {
+
     private SponsorService $sponsorService;
 
 
     public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
+        Environment    $twig,
+        Router         $router,
+        PersonService  $personService,
         SponsorService $sponsorService
-    ) {
+    )
+    {
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
@@ -92,4 +94,5 @@ class EditSponsorController extends Controller
         header('Location: ' . $router->url('home'));
         die();
     }
+
 }

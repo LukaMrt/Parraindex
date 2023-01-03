@@ -4,6 +4,7 @@ namespace App\model\person;
 
 class Person
 {
+
     private int $id;
     private Identity $identity;
     private string $biography;
@@ -136,10 +137,12 @@ class Person
 
     /**
      * set the new picture URL of the person.
+     *
      * @param string $picture URL of the picture.
      */
     public function setPicture(string $picture): void
     {
         $this->identity->setPicture($picture);
     }
+
 }

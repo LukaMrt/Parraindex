@@ -9,6 +9,7 @@ use ZipArchive;
 
 class MonologLogger implements Logger
 {
+
     private const DEFAULT_LOG_FILE = '/log.txt';
     private const ERROR_FILE = '/errors.txt';
     private array $loggers = [];
@@ -116,4 +117,5 @@ class MonologLogger implements Logger
         $this->createLogger($className);
         $this->loggers[$className]->emergency($message, $context);
     }
+
 }

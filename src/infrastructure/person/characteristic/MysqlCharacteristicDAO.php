@@ -8,6 +8,7 @@ use App\model\person\characteristic\Characteristic;
 
 class MysqlCharacteristicDAO implements CharacteristicDAO
 {
+
     private DatabaseConnection $databaseConnection;
 
 
@@ -53,4 +54,5 @@ SQL
             'visibility' => $characteristic->getVisible() ? '1' : '0'
         ]);
     }
+
 }

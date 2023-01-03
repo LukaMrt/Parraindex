@@ -9,6 +9,7 @@ use JetBrains\PhpStorm\NoReturn;
 
 class LoginService
 {
+
     private AccountDAO $accountDAO;
     private Redirect $redirect;
     private SessionManager $sessionManager;
@@ -16,11 +17,12 @@ class LoginService
 
 
     public function __construct(
-        AccountDAO $accountDAO,
-        PersonDAO $personDAO,
-        Redirect $redirect,
+        AccountDAO     $accountDAO,
+        PersonDAO      $personDAO,
+        Redirect       $redirect,
         SessionManager $sessionManager
-    ) {
+    )
+    {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
         $this->redirect = $redirect;
@@ -96,4 +98,5 @@ class LoginService
 
         $this->redirect->redirect($destination);
     }
+
 }

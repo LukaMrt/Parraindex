@@ -14,6 +14,7 @@ use App\model\contact\PersonContact;
 
 class RemovePersonContactExecutor extends ContactExecutor
 {
+
     private PersonDAO $personDAO;
 
 
@@ -50,4 +51,5 @@ class RemovePersonContactExecutor extends ContactExecutor
         $this->contactDAO->savePersonRemoveContact($contact);
         return '';
     }
+
 }

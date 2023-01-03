@@ -9,15 +9,17 @@ use Twig\Environment;
 
 class ResetpasswordValidationController extends Controller
 {
+
     private PasswordService $passwordService;
 
 
     public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
+        Environment     $twig,
+        Router          $router,
+        PersonService   $personService,
         PasswordService $passwordService
-    ) {
+    )
+    {
         parent::__construct($twig, $router, $personService);
         $this->passwordService = $passwordService;
     }
@@ -30,4 +32,5 @@ class ResetpasswordValidationController extends Controller
 
         $this->render('resetpasswordValidation.twig', ['error' => $error]);
     }
+
 }

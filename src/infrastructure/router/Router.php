@@ -8,6 +8,7 @@ use Exception;
 
 class Router
 {
+
     private AltoRouter $router;
 
 
@@ -65,4 +66,5 @@ class Router
         }
         return '/';
     }
+
 }

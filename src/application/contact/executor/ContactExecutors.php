@@ -4,6 +4,7 @@ namespace App\application\contact\executor;
 
 class ContactExecutors
 {
+
     private array $executors;
 
 
@@ -17,4 +18,5 @@ class ContactExecutors
     {
         return array_filter($this->executors, fn($executor) => $executor->getId() === $id);
     }
+
 }

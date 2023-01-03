@@ -13,6 +13,7 @@ use App\model\person\Person;
 
 class SignupService
 {
+
     private const NON_LETTER_REGEX = "/[^a-z]/";
     private AccountDAO $accountDAO;
     private PersonDAO $personDAO;
@@ -24,12 +25,13 @@ class SignupService
 
     public function __construct(
         AccountDAO $accountDAO,
-        PersonDAO $personDAO,
-        Redirect $redirect,
-        Mailer $mailer,
-        Random $random,
-        UrlUtils $urlUtils
-    ) {
+        PersonDAO  $personDAO,
+        Redirect   $redirect,
+        Mailer     $mailer,
+        Random     $random,
+        UrlUtils   $urlUtils
+    )
+    {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
         $this->redirect = $redirect;
@@ -71,13 +73,14 @@ class SignupService
 
 
     private function buildError(
-        string $email,
-        string $password,
-        string $passwordConfirm,
-        string $lastname,
-        string $firstname,
+        string  $email,
+        string  $password,
+        string  $passwordConfirm,
+        string  $lastname,
+        string  $firstname,
         ?Person $person
-    ): string {
+    ): string
+    {
 
         if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
             return 'Veuillez remplir tous les champs';
@@ -159,4 +162,5 @@ class SignupService
 
         return $error;
     }
+
 }

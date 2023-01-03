@@ -7,6 +7,7 @@ use App\model\contact\Contact;
 
 class ContactService
 {
+
     private ContactExecutors $contactExecutors;
     private ContactDAO $contactDAO;
 
@@ -53,4 +54,5 @@ class ContactService
     {
         return $this->contactDAO->getContactList();
     }
+
 }

@@ -7,6 +7,7 @@ use App\infrastructure\router\Router;
 
 class DefaultUrlUtils implements UrlUtils
 {
+
     private Router $router;
 
 
@@ -33,4 +34,5 @@ class DefaultUrlUtils implements UrlUtils
     {
         return $this->router->url($route, $parameters);
     }
+
 }

@@ -11,15 +11,17 @@ use Twig\Environment;
 
 class RemoveSponsorController extends Controller
 {
+
     private SponsorService $sponsorService;
 
 
     public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
+        Environment    $twig,
+        Router         $router,
+        PersonService  $personService,
         SponsorService $sponsorService
-    ) {
+    )
+    {
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
@@ -37,4 +39,5 @@ class RemoveSponsorController extends Controller
         header('Location: ' . $router->url('home'));
         die();
     }
+
 }

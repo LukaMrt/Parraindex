@@ -11,6 +11,7 @@ use DateTime;
  */
 class PersonBuilder
 {
+
     /** @var int $id */
     public int $id;
 
@@ -53,11 +54,11 @@ class PersonBuilder
         $this->birthDate = new DateTime();
         $this->biography = '';
         $this->description = '';
-        $this->characteristics = array();
-        $this->sponsors = array();
-        $this->families = array();
-        $this->associations = array();
-        $this->promotions = array();
+        $this->characteristics = [];
+        $this->sponsors = [];
+        $this->families = [];
+        $this->associations = [];
+        $this->promotions = [];
         $this->startYear = 0;
         $this->color = '#f0f0f0';
     }
@@ -176,4 +177,5 @@ class PersonBuilder
     {
         return new Person($this);
     }
+
 }

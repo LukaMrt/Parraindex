@@ -6,6 +6,7 @@ use Closure;
 
 class CustomField extends Field
 {
+
     private Closure $validator;
 
 
@@ -20,4 +21,5 @@ class CustomField extends Field
     {
         return ($this->validator)($value);
     }
+
 }

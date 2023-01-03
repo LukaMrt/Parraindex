@@ -18,16 +18,18 @@ use App\model\sponsor\SponsorFactory;
 
 class AddSponsorContactExecutor extends ContactExecutor
 {
+
     private PersonDAO $personDAO;
     private SponsorDAO $sponsorDAO;
 
 
     public function __construct(
         ContactDAO $contactDAO,
-        Redirect $redirect,
-        PersonDAO $personDAO,
+        Redirect   $redirect,
+        PersonDAO  $personDAO,
         SponsorDAO $sponsorDAO
-    ) {
+    )
+    {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
 
         parent::__construct($contactDAO, $redirect, ContactType::ADD_SPONSOR, [
@@ -78,4 +80,5 @@ class AddSponsorContactExecutor extends ContactExecutor
         $this->contactDAO->saveSponsorContact($contact);
         return '';
     }
+
 }

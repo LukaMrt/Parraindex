@@ -8,6 +8,7 @@ use Twig\Environment;
 
 abstract class Controller
 {
+
     protected PersonService $personService;
     private Environment $twig;
     private Router $router;
@@ -72,4 +73,5 @@ abstract class Controller
 
         echo $this->twig->render($template, $parameters);
     }
+
 }

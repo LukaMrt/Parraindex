@@ -9,15 +9,17 @@ use Twig\Environment;
 
 class PersonController extends Controller
 {
+
     private SponsorService $sponsorService;
 
 
     public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
+        Environment    $twig,
+        Router         $router,
+        PersonService  $personService,
         SponsorService $sponsorService
-    ) {
+    )
+    {
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
@@ -40,4 +42,5 @@ class PersonController extends Controller
             'characteristics' => $family['person']->getCharacteristics()
         ]);
     }
+
 }

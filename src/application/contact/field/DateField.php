@@ -6,6 +6,7 @@ use DateTime;
 
 class DateField extends Field
 {
+
     public function isValid(string $value): bool
     {
         $date = DateTime::createFromFormat('Y-m-d', $value);
@@ -13,4 +14,5 @@ class DateField extends Field
             && $date->format('Y-m-d') === $value
             && DateTime::createFromFormat('Y-m-d', '2010-01-01') <= $date;
     }
+
 }

@@ -15,16 +15,18 @@ use App\model\contact\SponsorContact;
 
 class RemoveSponsorContactExecutor extends ContactExecutor
 {
+
     private PersonDAO $personDAO;
     private SponsorDAO $sponsorDAO;
 
 
     public function __construct(
         ContactDAO $contactDAO,
-        PersonDAO $personDAO,
+        PersonDAO  $personDAO,
         SponsorDAO $sponsorDAO,
-        Redirect $redirect
-    ) {
+        Redirect   $redirect
+    )
+    {
 
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
         parent::__construct($contactDAO, $redirect, ContactType::REMOVE_SPONSOR, [
@@ -63,4 +65,5 @@ class RemoveSponsorContactExecutor extends ContactExecutor
         $this->contactDAO->saveSponsorContact($contact);
         return '';
     }
+
 }

@@ -6,6 +6,7 @@ use App\application\login\SessionManager;
 
 class DefaultSessionManager implements SessionManager
 {
+
     public function startSession(): void
     {
         session_start();
@@ -41,4 +42,5 @@ class DefaultSessionManager implements SessionManager
     {
         return isset($_SESSION[$key]);
     }
+
 }

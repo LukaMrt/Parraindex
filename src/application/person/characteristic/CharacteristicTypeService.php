@@ -6,6 +6,7 @@ use App\model\person\Person;
 
 class CharacteristicTypeService
 {
+
     private CharacteristicTypeDAO $characteristicDAO;
 
 
@@ -37,4 +38,5 @@ class CharacteristicTypeService
     {
         return $this->characteristicDAO->getAllCharacteristicAndValues($person->getId());
     }
+
 }

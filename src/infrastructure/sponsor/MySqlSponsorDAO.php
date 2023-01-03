@@ -16,6 +16,7 @@ use PDOStatement;
 
 class MySqlSponsorDAO implements SponsorDAO
 {
+
     private DatabaseConnection $databaseConnection;
 
 
@@ -174,10 +175,10 @@ SQL
     private function buildPeople(bool|PDOStatement $query): array
     {
 
-        $people = array();
+        $people = [];
 
         $currentPerson = null;
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             if ($currentPerson === null) {
@@ -186,7 +187,7 @@ SQL
 
             if ($currentPerson != $row->id_person) {
                 $people[] = $this->buildPerson($buffer);
-                $buffer = array();
+                $buffer = [];
                 $currentPerson = $row->id_person;
             }
 
@@ -203,7 +204,7 @@ SQL
     private function buildPerson(array $buffer): Person
     {
 
-        $characteristics = array();
+        $characteristics = [];
         $filterClosure = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
         $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
@@ -399,4 +400,5 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
+
 }

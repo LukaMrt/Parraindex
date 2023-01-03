@@ -6,6 +6,7 @@ use App\model\school\School;
 
 class Privilege
 {
+
     private School $school;
     private PrivilegeType $type;
 
@@ -27,4 +28,5 @@ class Privilege
     {
         return $this->type;
     }
+
 }
