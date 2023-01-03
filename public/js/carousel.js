@@ -228,6 +228,16 @@ sliderUI.slider.addEventListener("scroll", () => {
 
 // -- Searchbar events
 
+document.addEventListener('keydown', (event) => {
+
+  if ( controller.nav.classList.toggle('navbar__searchbar--open', event.key !== 'Escape')) {
+    filter.name.focus();
+  }
+
+  controller.searchbar.classList.toggle('searchbar--open', event.key !== 'Escape');
+  filterElements();
+});
+
 controller.searchIcon.addEventListener('click', () => {
   if (controller.nav.classList.toggle('navbar__searchbar--open')) {
     filter.name.focus();
@@ -277,12 +287,20 @@ spinner.datesContainer.addEventListener('click', resetSpinner);
 
 let clickableCards = document.querySelectorAll(".card");
 for (let card of clickableCards) {
-  card.addEventListener('click', () => window.location.href = "/person/" + card.id);
+  card.addEventListener('click', (e) => {
+     
+    if (sliderController.startPosX !== e.pageX - sliderUI.slider.offsetLeft) {
+      return;
+    }
+    
+    window.location.href = "/person/" + card.id
+
+  });
 }
 
 let clickableNetworks = document.querySelectorAll(".social-network");
 for (let network of clickableNetworks) {
-  network.addEventListener('click', (e) => e.cancelBubble = true);
+  network.addEventListener('click', (e) => e.stopPropagation());
 }
 
 // ------------------ Initialization ----------------- //
