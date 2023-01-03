@@ -189,7 +189,8 @@ SQL
 							P.first_name  AS f_first_name,
 							P2.id_person  AS c_id_person,
 							P2.last_name  AS c_last_name,
-							P2.first_name AS c_first_name
+							P2.first_name AS c_first_name,
+							ES.type AS sponsor_type
 						FROM Ticket T
 							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
 							JOIN Person P on ES.id_godfather = P.id_person
@@ -229,7 +230,7 @@ SQL
                 ->withIdentity(new Identity($data->c_first_name, $data->c_last_name))
                 ->build();
 
-            $sponsor = SponsorFactory::createSponsor($data->type, $data->id_sponsor ?? -1, $godFather, $godChild, $data->date, $data->description);
+            $sponsor = SponsorFactory::createSponsor($data->sponsor_type, $data->id_sponsor ?? -1, $godFather, $godChild, $data->date, $data->description);
 
             $contacts[] = new SponsorContact($data->id_ticket, $data->contacter_name, $data->contacter_email, ContactType::from($data->type), $data->description, $sponsor);
         }

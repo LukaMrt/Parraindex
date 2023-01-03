@@ -16,7 +16,13 @@ class EditPersonController extends Controller
 
     private CharacteristicService $characteristicService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, CharacteristicTypeService $characteristicTypeService, CharacteristicService $characteristicService)
+    public function __construct(
+        Environment               $twig,
+        Router                    $router,
+        PersonService             $personService,
+        CharacteristicTypeService $characteristicTypeService,
+        CharacteristicService     $characteristicService
+    )
     {
         parent::__construct($twig, $router, $personService);
         $this->characteristicTypeService = $characteristicTypeService;
@@ -78,10 +84,10 @@ class EditPersonController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            // TODO: remove this 2 lines
             $response['code'] = 401;
-            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour ajouter une personne";
-            echo json_encode($data['person-desc']);
+            $response['messages'][] = "Vous devez être connecté et avoir les "
+                . "droits d'administrateur pour ajouter une personne";
+            echo json_encode($response);
             exit(0);
         }
 
@@ -168,14 +174,14 @@ class EditPersonController extends Controller
                 $response['code'] = 400;
             } else {
                 $file = finfo_open();
-                $mime_type = finfo_buffer($file, $picture, FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($file, $picture, FILEINFO_MIME_TYPE);
 
-                if (!array_key_exists($mime_type, $extensions)) {
+                if (!array_key_exists($mimeType, $extensions)) {
                     $response['messages'][] = "Le format de la photo n'est pas supporté";
                     $response['code'] = 400;
                 } else {
                     $newData['image'] = $picture;
-                    $newData['picture'] = uniqid() . '.' . $extensions[$mime_type];
+                    $newData['picture'] = uniqid() . '.' . $extensions[$mimeType];
                 }
             }
         }
@@ -249,10 +255,10 @@ class EditPersonController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            // TODO: remove this 2 lines
             $response['code'] = 401;
-            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour modifier une personne";
-            echo json_encode($data['person-desc']);
+            $response['messages'][] = "Vous devez être connecté et avoir les droits "
+                . "d'administrateur pour modifier une personne";
+            echo json_encode($response);
             exit(0);
         }
 
@@ -365,8 +371,11 @@ class EditPersonController extends Controller
         $response['redirect'] = $router->url('tree');
         $response['redirectDelay'] = 5000;
 
-        $response['messages'][] = 'La personne ' . $person->getFirstName() . ' ' . strtoupper($person->getLastName()) . ' à correctement été supprimée';
-        $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans " . ($response['redirectDelay'] / 1000) . 's';
+        $response['messages'][] = 'La personne ' . $person->getFirstName() . ' '
+            . strtoupper($person->getLastName()) . ' à correctement été supprimée';
+
+        $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans "
+            . ($response['redirectDelay'] / 1000) . 's';
 
         echo json_encode($response);
         exit(0);
