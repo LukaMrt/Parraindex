@@ -126,7 +126,14 @@ SQL
 
             $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
             $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
-            $godFathersSponsors[] = SponsorFactory::createSponsor($sponsorType, $row->id_sponsor, $godFather, $godChild, $row->sponsorDate ?? '', $row->reason ?? $row->description ?? '');
+            $godFathersSponsors[] = SponsorFactory::createSponsor(
+                $sponsorType,
+                $row->id_sponsor,
+                $godFather,
+                $godChild,
+                $row->sponsorDate ?? '',
+                $row->reason ?? $row->description ?? ''
+            );
         }
 
         while ($row = $godChildrenSponsorsQuery->fetch()) {
@@ -142,7 +149,14 @@ SQL
 
             $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
             $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
-            $godChildrenSponsors[] = SponsorFactory::createSponsor($sponsorType, $row->id_sponsor, $godFather, $godChild, $row->sponsorDate ?? '', $row->reason ?? $row->description ?? '');
+            $godChildrenSponsors[] = SponsorFactory::createSponsor(
+                $sponsorType,
+                $row->id_sponsor,
+                $godFather,
+                $godChild,
+                $row->sponsorDate ?? '',
+                $row->reason ?? $row->description ?? ''
+            );
         }
 
         $personQuery->closeCursor();
@@ -228,7 +242,11 @@ SQL
         $connection = $this->databaseConnection->getDatabase();
 
         $query = $connection->prepare(<<<SQL
-			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			SELECT S.*,
+			       CS.reason,
+			       CS.id_sponsor AS id_classic_sponsor,
+			       HS.description,
+			       HS.id_sponsor AS id_heart_sponsor
 			FROM Sponsor S
 				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
 				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
@@ -267,7 +285,11 @@ SQL
         $connection = $this->databaseConnection->getDatabase();
 
         $query = $connection->prepare(<<<SQL
-			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			SELECT S.*,
+			       CS.reason,
+			       CS.id_sponsor AS id_classic_sponsor,
+			       HS.description,
+			       HS.id_sponsor AS id_heart_sponsor
 			FROM Sponsor S
 				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
 				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
@@ -318,7 +340,11 @@ SQL
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Sponsor (id_godfather, id_godson, sponsorDate) VALUES (:godFatherId, :godChildId, :date)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Sponsor (id_godfather, id_godson, sponsorDate)
+                            VALUES (:godFatherId, :godChildId, :date)
+SQL
+        );
         $query->execute([
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId' => $sponsor->getGodChild()->getId(),
@@ -332,7 +358,8 @@ SQL
                 'reason' => $sponsor->getDescription()
             ]);
         } elseif ($sponsor instanceof HeartSponsor) {
-            $query = $connection->prepare("INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)");
+            $sql = "INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)";
+            $query = $connection->prepare($sql);
             $query->execute([
                 'id' => $connection->lastInsertId(),
                 'description' => $sponsor->getDescription()

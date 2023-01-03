@@ -9,8 +9,8 @@ use ZipArchive;
 
 class MonologLogger implements Logger
 {
-    const DEFAULT_LOG_FILE = '/log.txt';
-    const ERROR_FILE = '/errors.txt';
+    private const DEFAULT_LOG_FILE = '/log.txt';
+    private const ERROR_FILE = '/errors.txt';
     private array $loggers = [];
 
 

@@ -6,7 +6,6 @@ use DateTime;
 
 class DateField extends Field
 {
-
     public function isValid(string $value): bool
     {
         $date = DateTime::createFromFormat('Y-m-d', $value);

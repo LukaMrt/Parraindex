@@ -13,12 +13,11 @@ class SignUpController extends Controller
 
 
     public function __construct(
-        Environment   $twig,
-        Router        $router,
+        Environment $twig,
+        Router $router,
         PersonService $personService,
         SignupService $passwordService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->signupService = $passwordService;
     }

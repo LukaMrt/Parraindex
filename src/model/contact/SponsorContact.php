@@ -6,19 +6,17 @@ use App\model\sponsor\Sponsor;
 
 class SponsorContact extends Contact
 {
-
     private Sponsor $sponsor;
 
 
     public function __construct(
-        int         $id,
-        string      $contacterName,
-        string      $contacterEmail,
+        int $id,
+        string $contacterName,
+        string $contacterEmail,
         ContactType $type,
-        string      $description,
-        Sponsor     $sponsor
-    )
-    {
+        string $description,
+        Sponsor $sponsor
+    ) {
         parent::__construct($id, $contacterName, $contacterEmail, $type, $description);
         $this->sponsor = $sponsor;
     }

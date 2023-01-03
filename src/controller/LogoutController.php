@@ -14,12 +14,11 @@ class LogoutController extends Controller
 
 
     public function __construct(
-        Environment   $twig,
-        Router        $router,
+        Environment $twig,
+        Router $router,
         PersonService $personService,
-        LoginService  $loginService
-    )
-    {
+        LoginService $loginService
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->loginService = $loginService;
     }

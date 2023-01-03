@@ -14,12 +14,11 @@ class ContactAdminController extends Controller
 
 
     public function __construct(
-        Environment    $twig,
-        Router         $router,
-        PersonService  $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         ContactService $contactService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
     }

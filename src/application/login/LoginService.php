@@ -16,12 +16,11 @@ class LoginService
 
 
     public function __construct(
-        AccountDAO     $accountDAO,
-        PersonDAO      $personDAO,
-        Redirect       $redirect,
+        AccountDAO $accountDAO,
+        PersonDAO $personDAO,
+        Redirect $redirect,
         SessionManager $sessionManager
-    )
-    {
+    ) {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
         $this->redirect = $redirect;

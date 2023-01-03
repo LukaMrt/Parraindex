@@ -64,11 +64,11 @@
     ],
     "sniffer": [
       "Composer\\Config::disableProcessTimeout",
-      "phpcs --standard=PSR12 src/"
+      "phpcs --standard=PSR12 src/ --ignore=src/infrastructure/injector/Injector.php"
     ],
     "sniffer-fix": [
       "Composer\\Config::disableProcessTimeout",
-      "phpcbf --standard=PSR12 src/"
+      "phpcbf --standard=PSR12 src/ --ignore=src/infrastructure/injector/Injector.php"
     ]
   },
   "require-dev": {

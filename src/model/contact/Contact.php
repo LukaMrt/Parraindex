@@ -12,13 +12,12 @@ abstract class Contact
 
 
     public function __construct(
-        int         $id,
-        string      $contacterName,
-        string      $contacterEmail,
+        int $id,
+        string $contacterName,
+        string $contacterEmail,
         ContactType $type,
-        string      $description
-    )
-    {
+        string $description
+    ) {
         $this->id = $id;
         $this->contacterName = $contacterName;
         $this->contacterEmail = $contacterEmail;

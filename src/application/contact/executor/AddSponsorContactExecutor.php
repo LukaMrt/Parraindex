@@ -24,11 +24,10 @@ class AddSponsorContactExecutor extends ContactExecutor
 
     public function __construct(
         ContactDAO $contactDAO,
-        Redirect   $redirect,
-        PersonDAO  $personDAO,
+        Redirect $redirect,
+        PersonDAO $personDAO,
         SponsorDAO $sponsorDAO
-    )
-    {
+    ) {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
 
         parent::__construct($contactDAO, $redirect, ContactType::ADD_SPONSOR, [

@@ -17,14 +17,13 @@ class Promotion
 
 
     public function __construct(
-        int    $id,
+        int $id,
         Degree $degree,
         School $school,
-        int    $year,
+        int $year,
         string $description,
         Person ...$students
-    )
-    {
+    ) {
         $this->id = $id;
         $this->degree = $degree;
         $this->school = $school;

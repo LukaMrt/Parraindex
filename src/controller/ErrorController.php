@@ -6,7 +6,6 @@ use App\infrastructure\router\Router;
 
 class ErrorController extends Controller
 {
-
     public function get(Router $router, array $parameters): void
     {
 

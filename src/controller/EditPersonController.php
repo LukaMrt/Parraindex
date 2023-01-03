@@ -18,13 +18,12 @@ class EditPersonController extends Controller
 
 
     public function __construct(
-        Environment               $twig,
-        Router                    $router,
-        PersonService             $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         CharacteristicTypeService $characteristicTypeService,
-        CharacteristicService     $characteristicService
-    )
-    {
+        CharacteristicService $characteristicService
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->characteristicTypeService = $characteristicTypeService;
         $this->characteristicService = $characteristicService;

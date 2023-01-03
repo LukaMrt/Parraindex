@@ -11,7 +11,6 @@ use DateTime;
  */
 class PersonBuilder
 {
-
     /** @var int $id */
     public int $id;
 
@@ -177,5 +176,4 @@ class PersonBuilder
     {
         return new Person($this);
     }
-
 }

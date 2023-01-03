@@ -13,12 +13,11 @@ class LoginController extends Controller
 
 
     public function __construct(
-        Environment   $twig,
-        Router        $router,
+        Environment $twig,
+        Router $router,
         PersonService $personService,
-        LoginService  $passwordService
-    )
-    {
+        LoginService $passwordService
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->loginService = $passwordService;
     }
