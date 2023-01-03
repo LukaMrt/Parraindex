@@ -182,7 +182,7 @@ SQL
                                     LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
                                 WHERE Pe.id_person = :id_person
 SQL
-);
+        );
 
         $query->execute(['id_person' => $id]);
         $buffer = array();
@@ -193,7 +193,7 @@ SQL
 
         $person = null;
 
-        if (count($buffer) > 0) {
+        if (!empty($buffer)) {
             $person = $this->buildPerson($buffer);
         }
 
@@ -206,14 +206,13 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("UPDATE Person SET 
-			first_name = :firstName,
-			last_name = :lastName,
-			biography = :biography,
-			banner_color = :bannerColor,
-			description = :description,
-			picture = :picture
-			WHERE id_person = :id");
+        $query = $connection->prepare(<<<SQL
+            UPDATE Person
+            SET first_name = :firstName, last_name = :lastName, biography = :biography,
+			    banner_color = :bannerColor, description = :description, picture = :picture
+			WHERE id_person = :id
+SQL
+        );
 
         $query->execute([
             'firstName' => $person->getFirstName(),
@@ -271,7 +270,7 @@ SQL
                                     LEFT JOIN Account A on Pe.id_person = A.id_person
                                 WHERE A.email = :login
 SQL
-);
+        );
 
         $query->execute(['login' => $login]);
         $buffer = array();
@@ -290,10 +289,10 @@ SQL
 
         $connection = $this->databaseConnection->getDatabase();
         $query = $connection->prepare(<<<SQL
-                                INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture)
-                                VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)
+                            INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture)
+                            VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)
 SQL
-);
+        );
 
         $query->execute([
             'firstName' => $person->getFirstName(),
@@ -312,7 +311,7 @@ SQL
                                 WHERE year = :start_year
                                   AND desc_promotion = 'Première année'
 SQL
-);
+        );
         $query->execute(['start_year' => $person->getStartYear()]);
 
         if ($row = $query->fetch()) {
@@ -326,7 +325,7 @@ SQL
                                         'Première année',
                                         'Informatique')
 SQL
-);
+            );
             $query->execute([
                 'start_year' => $person->getStartYear(),
                 'degree_name' => $person->getStartYear() < 2021 ? 'DUT' : 'BUT'
@@ -338,7 +337,7 @@ SQL
                                 INSERT INTO Student (id_person, id_promotion)
                                 VALUES (:id_person, :id_promotion)
 SQL
-);
+        );
 
         $query->execute([
             'id_person' => $idPerson,
