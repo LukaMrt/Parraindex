@@ -57,7 +57,8 @@ class PasswordService
             'Parraindex : réinitialisation de mot de passe',
             "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été "
             . "enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>"
-            . "Cordialement<br>Le Parrainboss");
+            . "Cordialement<br>Le Parrainboss"
+        );
         $this->accountDAO->createResetpassword($account, $token);
         $this->redirect->redirect('resetpassword_confirmation');
         return '';

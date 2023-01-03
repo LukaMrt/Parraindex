@@ -60,7 +60,8 @@ class SignupService
                 'Parraindex : inscription',
                 "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de "
                 . "cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement"
-                . "<br>Le Parrainboss");
+                . "<br>Le Parrainboss"
+            );
             $this->redirect->redirect('signup_confirmation');
         }
 
@@ -114,12 +115,12 @@ class SignupService
         }
 
         foreach ($identities as $identity) {
-            $preg_replace = preg_replace(
+            $pregReplace = preg_replace(
                 self::NON_LETTER_REGEX,
                 '',
                 strtolower($identity->getFirstname() . $identity->getLastname())
             );
-            $levenshtein = levenshtein($emailLevenshtein, $preg_replace);
+            $levenshtein = levenshtein($emailLevenshtein, $pregReplace);
             if ($levenshtein < $minLevenshtein) {
                 return 'D\'après notre recherche, cet email n\'est pas le vôtre';
             }
