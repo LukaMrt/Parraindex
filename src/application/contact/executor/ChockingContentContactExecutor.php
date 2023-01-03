@@ -17,16 +17,16 @@ class ChockingContentContactExecutor extends ContactExecutor
 
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, PersonDAO $personDAO)
     {
+        $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
 
         parent::__construct($contactDAO, $redirect, ContactType::CHOCKING_CONTENT, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
             new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
             new EmailField('senderEmail', 'Votre email doit être valide'),
             new Field('personId', 'La personne doit être valide'),
-            new CustomField('personId', 'La personne doit exister', fn($value) => $this->personDAO->getPersonById($value) !== null),
+            new CustomField('personId', 'La personne doit exister', $personExistsClosure),
             new Field('message', 'La description doit contenir au moins 1 caractère'),
         ]);
-        @
         $this->personDAO = $personDAO;
     }
 
