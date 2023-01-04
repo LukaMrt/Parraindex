@@ -100,3 +100,5 @@ var/
 composer.lock
 phpunit-report.xml
 coverage-report.xml
+
+**/.DS_Store
