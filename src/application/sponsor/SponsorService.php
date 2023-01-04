@@ -6,12 +6,25 @@ use App\application\person\PersonDAO;
 use App\model\sponsor\Sponsor;
 use App\model\sponsor\SponsorFactory;
 
+/**
+ * Do sponsor relate actions
+ */
 class SponsorService
 {
+    /**
+     * @var SponsorDAO Sponsor data access object
+     */
     private SponsorDAO $sponsorDAO;
+    /**
+     * @var PersonDAO Person data access object
+     */
     private PersonDAO $personDAO;
 
 
+    /**
+     * @param SponsorDAO $sponsorDAO Sponsor data access object
+     * @param PersonDAO $personDAO Person data access object
+     */
     public function __construct(SponsorDAO $sponsorDAO, PersonDAO $personDAO)
     {
         $this->sponsorDAO = $sponsorDAO;
@@ -19,24 +32,44 @@ class SponsorService
     }
 
 
+    /**
+     * Get person family by id
+     * @param int $personId Person id
+     * @return array|null
+     */
     public function getPersonFamily(int $personId): ?array
     {
         return $this->sponsorDAO->getPersonFamily($personId);
     }
 
 
+    /**
+     * Remove sponsor by id
+     * @param int $id Id
+     * @return void
+     */
     public function removeSponsor(int $id): void
     {
         $this->sponsorDAO->removeSponsor($id);
     }
 
 
+    /**
+     * Get sponsor by id
+     * @param int $id Id
+     * @return Sponsor|null
+     */
     public function getSponsor(int $id): ?Sponsor
     {
         return $this->sponsorDAO->getSponsorById($id);
     }
 
 
+    /**
+     * Get sponsor by id
+     * @param int $int God father id
+     * @return Sponsor|null
+     */
     public function getSponsorById(int $int): ?Sponsor
     {
         $sponsor = $this->sponsorDAO->getSponsorById($int);
@@ -53,6 +86,12 @@ class SponsorService
     }
 
 
+    /**
+     * Update sponsor by id
+     * @param int $id Id
+     * @param array $parameters Parameters
+     * @return void
+     */
     public function updateSponsor(int $id, array $parameters): void
     {
 
@@ -78,6 +117,11 @@ class SponsorService
     }
 
 
+    /**
+     * Create sponsor
+     * @param array $parameters Parameters
+     * @return void
+     */
     public function createSponsor(array $parameters): void
     {
 
@@ -103,6 +147,11 @@ class SponsorService
     }
 
 
+    /**
+     * Get sponsor by people id
+     * @param Sponsor $sponsor Sponsor
+     * @return void
+     */
     public function addSponsor(Sponsor $sponsor): void
     {
         $this->sponsorDAO->addSponsor($sponsor);
