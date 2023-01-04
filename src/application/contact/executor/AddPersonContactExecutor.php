@@ -13,11 +13,22 @@ use App\model\contact\PersonContact;
 use App\model\person\Identity;
 use App\model\person\PersonBuilder;
 
+/**
+ * Contact executor for the adding of a person
+ */
 class AddPersonContactExecutor extends ContactExecutor
 {
+    /**
+     * @var PersonDAO $personDAO DAO for person
+     */
     private PersonDAO $personDAO;
 
 
+    /**
+     * @param ContactDAO $contactDAO DAO for contact
+     * @param Redirect $redirect Redirect service
+     * @param PersonDAO $personDAO DAO for person
+     */
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, PersonDAO $personDAO)
     {
 
@@ -33,6 +44,11 @@ class AddPersonContactExecutor extends ContactExecutor
     }
 
 
+    /**
+     * Executes actions for adding a sponsor. I basically store the request through the DAO
+     * @param array $data Form data
+     * @return string Error message or empty string if no error
+     */
     public function executeSuccess(array $data): string
     {
 

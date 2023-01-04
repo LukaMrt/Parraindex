@@ -11,11 +11,22 @@ use App\application\redirect\Redirect;
 use App\model\contact\ContactType;
 use App\model\contact\PersonContact;
 
+/**
+ * Contact executor for the updating of a person
+ */
 class UpdatePersonContactExecutor extends ContactExecutor
 {
+    /**
+     * @var PersonDAO DAO for persons
+     */
     private PersonDAO $personDAO;
 
 
+    /**
+     * @param PersonDAO $personDAO DAO for persons
+     * @param ContactDAO $contactDAO DAO for contacts
+     * @param Redirect $redirect Redirect service
+     */
     public function __construct(PersonDAO $personDAO, ContactDAO $contactDAO, Redirect $redirect)
     {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
@@ -32,6 +43,10 @@ class UpdatePersonContactExecutor extends ContactExecutor
     }
 
 
+    /**
+     * @param array $data Form data
+     * @return string Error message or empty string if no error
+     */
     public function executeSuccess(array $data): string
     {
 

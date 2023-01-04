@@ -17,6 +17,10 @@ class HttpRedirect implements Redirect
     }
 
 
+    /**
+     * @param string $url
+     * @return void
+     */
     #[NoReturn] public function redirect(string $url): void
     {
         header('Location: ' . $this->router->url($url));

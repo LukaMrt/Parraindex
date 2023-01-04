@@ -7,14 +7,38 @@ use App\application\contact\field\Field;
 use App\application\redirect\Redirect;
 use App\model\contact\ContactType;
 
+/**
+ * Represents an executor of a contact which perform contact form validation
+ */
 abstract class ContactExecutor
 {
+    /**
+     * @var ContactDAO $contactDAO DAO to save the contact
+     */
     protected ContactDAO $contactDAO;
+
+    /**
+     * @var Redirect $redirect The redirect service to redirect the user
+     */
     private Redirect $redirect;
-    private ContactType $contactType;
+
+    /**
+     * @var ContactType $contactType Type of the contact
+     */
+    protected ContactType $contactType;
+
+    /**
+     * @var array $fields Fields of the contact form
+     */
     private array $fields;
 
 
+    /**
+     * @param ContactDAO $contactDAO DAO to save the contact
+     * @param Redirect $redirect The redirect service to redirect the user
+     * @param ContactType $contactType Type of the contact
+     * @param array $fields Fields of the contact form
+     */
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, ContactType $contactType, array $fields)
     {
         $this->contactDAO = $contactDAO;
@@ -24,12 +48,20 @@ abstract class ContactExecutor
     }
 
 
+    /**
+     * @return int The number of fields
+     */
     public function getId(): int
     {
         return $this->contactType->value;
     }
 
 
+    /**
+     * Performs the analysis of the contact form
+     * @param array $data The data of the contact form
+     * @return string The error message if the contact form is invalid, an empty string otherwise
+     */
     public function execute(array $data): string
     {
         $errors = $this->validate($data);
@@ -46,6 +78,11 @@ abstract class ContactExecutor
     }
 
 
+    /**
+     * Verifies if the contact form fields are valid
+     * @param array $data The data of the contact form
+     * @return string The error message if the contact form is invalid, an empty string otherwise
+     */
     protected function validate(array $data): string
     {
 
@@ -61,6 +98,12 @@ abstract class ContactExecutor
     }
 
 
+    /**
+     * Verifies if a field of the contact form is valid
+     * @param Field $field The field validator
+     * @param array $data The data of the contact form
+     * @return string The error message if the field is invalid, an empty string otherwise
+     */
     private function validateField(Field $field, array $data): string
     {
 
@@ -74,5 +117,10 @@ abstract class ContactExecutor
     }
 
 
+    /**
+     * Performs the actions to execute if the contact form is valid
+     * @param array $data The data of the contact form
+     * @return string The error message if the contact form is invalid, an empty string otherwise
+     */
     abstract public function executeSuccess(array $data): string;
 }

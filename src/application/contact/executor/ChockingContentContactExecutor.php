@@ -11,11 +11,22 @@ use App\application\redirect\Redirect;
 use App\model\contact\ContactType;
 use App\model\contact\PersonContact;
 
+/**
+ * Contact executor for the reporting of a chocking content
+ */
 class ChockingContentContactExecutor extends ContactExecutor
 {
+    /**
+     * @var PersonDAO $personDAO DAO for person
+     */
     private PersonDAO $personDAO;
 
 
+    /**
+     * @param ContactDAO $contactDAO DAO for contact
+     * @param Redirect $redirect Redirect service
+     * @param PersonDAO $personDAO DAO for person
+     */
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, PersonDAO $personDAO)
     {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
@@ -32,6 +43,11 @@ class ChockingContentContactExecutor extends ContactExecutor
     }
 
 
+    /**
+     * Performs the actions when the form is valid
+     * @param array $data
+     * @return string
+     */
     public function executeSuccess(array $data): string
     {
 

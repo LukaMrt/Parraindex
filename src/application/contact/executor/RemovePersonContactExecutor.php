@@ -12,11 +12,22 @@ use App\application\redirect\Redirect;
 use App\model\contact\ContactType;
 use App\model\contact\PersonContact;
 
+/**
+ * Contact executor for the removing of a person
+ */
 class RemovePersonContactExecutor extends ContactExecutor
 {
+    /**
+     * @var PersonDAO $personDAO DAO for person
+     */
     private PersonDAO $personDAO;
 
 
+    /**
+     * @param PersonDAO $personDAO DAO for person
+     * @param ContactDAO $contactDAO DAO for contact
+     * @param Redirect $redirect Redirect service
+     */
     public function __construct(PersonDAO $personDAO, ContactDAO $contactDAO, Redirect $redirect)
     {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
@@ -33,6 +44,11 @@ class RemovePersonContactExecutor extends ContactExecutor
     }
 
 
+    /**
+     * Execute the actions when the form is valid
+     * @param array $data form data
+     * @return string error message or empty string if no error
+     */
     public function executeSuccess(array $data): string
     {
 
