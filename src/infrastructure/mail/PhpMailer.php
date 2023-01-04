@@ -7,12 +7,24 @@ use App\application\mail\Mailer;
 use Exception;
 use PHPMailer\PHPMailer\SMTP;
 
+/**
+ * Mailer implementation using PHPMailer
+ */
 class PhpMailer implements Mailer
 {
+    /**
+     * @var Logger $logger Logger instance
+     */
     private Logger $logger;
+    /**
+     * @var \PHPMailer\PHPMailer\PHPMailer $mailer Mailer instance
+     */
     private \PHPMailer\PHPMailer\PHPMailer $mailer;
 
 
+    /**
+     * @param Logger $logger Logger instance
+     */
     public function __construct(Logger $logger)
     {
         $this->logger = $logger;
@@ -38,7 +50,14 @@ class PhpMailer implements Mailer
     }
 
 
-    public function send(string $to, string $subject, string $body)
+    /**
+     * send a mail
+     * @param string $to To
+     * @param string $subject Subject
+     * @param string $body Body
+     * @return void
+     */
+    public function send(string $to, string $subject, string $body): void
     {
 
         try {

@@ -14,17 +14,30 @@ use App\model\school\School;
 use App\model\school\SchoolAddress;
 use DateTime;
 
+/**
+ * Mysql Person DAO
+ */
 class MySqlPersonDAO implements PersonDAO
 {
+    /**
+     * @var DatabaseConnection $databaseConnection Database connection
+     */
     private DatabaseConnection $databaseConnection;
 
 
+    /**
+     * @param DatabaseConnection $databaseConnection Database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
 
+    /**
+     * Get all the persons
+     * @return array
+     */
     public function getAllPeople(): array
     {
 
@@ -76,6 +89,11 @@ SQL
     }
 
 
+    /**
+     * Build a person
+     * @param array $buffer Buffer of the person
+     * @return Person
+     */
     private function buildPerson(array $buffer): Person
     {
 
@@ -134,6 +152,11 @@ SQL
     }
 
 
+    /**
+     * Get a person
+     * @param Identity $identity Identity of the person
+     * @return Person|null
+     */
     public function getPerson(Identity $identity): ?Person
     {
 
@@ -165,6 +188,11 @@ SQL
     }
 
 
+    /**
+     * Get a person by id
+     * @param int $id Id of the person
+     * @return Person|null
+     */
     public function getPersonById(int $id): ?Person
     {
 
@@ -208,6 +236,11 @@ SQL
     }
 
 
+    /**
+     * Update de person
+     * @param Person $person Person to update
+     * @return void
+     */
     public function updatePerson(Person $person)
     {
 
@@ -234,6 +267,10 @@ SQL
     }
 
 
+    /**
+     * Get all identities
+     * @return array
+     */
     public function getAllIdentities(): array
     {
 
@@ -255,6 +292,11 @@ SQL
     }
 
 
+    /**
+     * Get person by login
+     * @param string $login Login of the person
+     * @return Person|null
+     */
     public function getPersonByLogin(string $login): ?Person
     {
 
@@ -293,6 +335,11 @@ SQL
     }
 
 
+    /**
+     * Create a person
+     * @param Person $person Person to create
+     * @return int
+     */
     public function createPerson(Person $person): int
     {
 
@@ -360,6 +407,11 @@ SQL
     }
 
 
+    /**
+     * Delete a person
+     * @param Person $person Person to delete
+     * @return void
+     */
     public function deletePerson(Person $person): void
     {
 

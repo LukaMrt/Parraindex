@@ -68,13 +68,25 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 use function DI\get;
 
+/**
+ * Inject dependencies into controllers and services
+ */
 class Injector
 {
 
+    /**
+     * @var Container $container Container
+     */
     private Container $container;
+    /**
+     * @var Router $router Router
+     */
     private Router $router;
 
 
+    /**
+     * @param Router $router Router
+     */
     public function __construct(Router $router)
     {
         $this->container = ContainerBuilder::buildDevContainer();
@@ -82,6 +94,10 @@ class Injector
     }
 
 
+    /**
+     * Inject dependencies into controllers
+     * @return void
+     */
     public function build(): void
     {
 
@@ -134,6 +150,10 @@ class Injector
     }
 
 
+    /**
+     * Build twig environment
+     * @return Environment Twig environment
+     */
     private function buildTwig(): Environment
     {
         $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));

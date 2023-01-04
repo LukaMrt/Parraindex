@@ -4,17 +4,30 @@ namespace App\infrastructure\database;
 
 use PDO;
 
+/**
+ * Database Connection
+ */
 class DatabaseConnection
 {
+    /**
+     * @var PDO $pdo PDO instance
+     */
     private PDO $database;
 
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->connect();
     }
 
 
+    /**
+     * Connect to database
+     * @return void
+     */
     private function connect(): void
     {
 
@@ -39,6 +52,10 @@ class DatabaseConnection
     }
 
 
+    /**
+     * Get PDO instance
+     * @return PDO
+     */
     public function getDatabase(): PDO
     {
         return $this->database;

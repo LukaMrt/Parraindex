@@ -7,13 +7,32 @@ use Monolog\Handler\NativeMailerHandler;
 use Monolog\Handler\StreamHandler;
 use ZipArchive;
 
+/**
+ * Send log
+ */
 class MonologLogger implements Logger
 {
+    /**
+     * @var \Monolog\Logger $logger Logger instance
+     */
     private const DEFAULT_LOG_FILE = '/log.txt';
+    /**
+     * @var \Monolog\Logger $logger Logger instance
+     */
     private const ERROR_FILE = '/errors.txt';
+    /**
+     * @var array $logFiles Log files
+     */
     private array $loggers = [];
 
 
+    /**
+     * info constructor
+     * @param string $className Class name
+     * @param string $message Message
+     * @param array $context Context
+     * @return void
+     */
     public function info(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className);
@@ -21,6 +40,11 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Create a logger
+     * @param string $className Class name
+     * @return void
+     */
     private function createLogger(string $className): void
     {
 
@@ -58,6 +82,13 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Zip the log file
+     * @param string $logFile Log file
+     * @param string $name Name of the zip file
+     * @param string $logPath Log path
+     * @return void
+     */
     private function zipLoggFile(string $logFile, string $name, string $logPath): void
     {
 
@@ -76,6 +107,13 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Send a debug message
+     * @param string $className Class name
+     * @param string $message Message
+     * @param array $context Context
+     * @return void
+     */
     public function debug(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className);
@@ -83,6 +121,13 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Send a warning message
+     * @param string $className Class name
+     * @param string $message Message
+     * @param array $context Context
+     * @return void
+     */
     public function warning(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className);
@@ -90,6 +135,13 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Send a error message
+     * @param string $className Class name
+     * @param string $message Message
+     * @param array $context Context
+     * @return void
+     */
     public function error(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className);
@@ -97,6 +149,13 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Send a alert message
+     * @param string $className Class name
+     * @param string $message Message
+     * @param array $context Context
+     * @return void
+     */
     public function alert(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className);
@@ -104,6 +163,13 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Send a critical message
+     * @param string $className Class name
+     * @param string $message Message
+     * @param array $context Context
+     * @return void
+     */
     public function critical(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className);
@@ -111,6 +177,13 @@ class MonologLogger implements Logger
     }
 
 
+    /**
+     * Send an emergency message
+     * @param string $className Class name
+     * @param string $message Message
+     * @param array $context Context
+     * @return void
+     */
     public function emergency(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className);

@@ -7,17 +7,30 @@ use App\infrastructure\database\DatabaseConnection;
 use App\model\person\characteristic\Characteristic;
 use App\model\person\characteristic\CharacteristicBuilder;
 
+/**
+ * Mysql Characteristic Type DAO
+ */
 class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 {
+    /**
+     * @var DatabaseConnection $databaseConnection Database connection
+     */
     private DatabaseConnection $databaseConnection;
 
 
+    /**
+     * @param DatabaseConnection $databaseConnection Database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
 
+    /**
+     * Get all the characteristics types
+     * @return array
+     */
     public function getAllCharacteristicTypes(): array
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -37,6 +50,11 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
     }
 
 
+    /**
+     * Build a characteristic
+     * @param $buffer Buffer of the characteristic
+     * @return Characteristic
+     */
     public function buildCharacteristic($buffer): Characteristic
     {
         return (new CharacteristicBuilder())
@@ -51,6 +69,11 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
     }
 
 
+    /**
+     * Get all characteristics types and values
+     * @param int $idPerson Id of the person
+     * @return array
+     */
     public function getAllCharacteristicAndValues(int $idPerson): array
     {
         $connection = $this->databaseConnection->getDatabase();

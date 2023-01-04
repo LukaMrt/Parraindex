@@ -14,17 +14,31 @@ use App\model\sponsor\Sponsor;
 use App\model\sponsor\SponsorFactory;
 use PDOStatement;
 
+/**
+ * Mysql Sponsor DAO
+ */
 class MySqlSponsorDAO implements SponsorDAO
 {
+    /**
+     * @var DatabaseConnection $databaseConnection Database connection
+     */
     private DatabaseConnection $databaseConnection;
 
 
+    /**
+     * @param DatabaseConnection $databaseConnection Database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
 
+    /**
+     * Get a person family
+     * @param int $personId Id of the person
+     * @return array|null
+     */
     public function getPersonFamily(int $personId): ?array
     {
 
@@ -171,6 +185,11 @@ SQL
     }
 
 
+    /**
+     * Build a person
+     * @param bool|PDOStatement $query Query
+     * @return array
+     */
     private function buildPeople(bool|PDOStatement $query): array
     {
 
@@ -200,6 +219,11 @@ SQL
     }
 
 
+    /**
+     * Build a person
+     * @param array $buffer Buffer
+     * @return Person
+     */
     private function buildPerson(array $buffer): Person
     {
 
@@ -236,6 +260,11 @@ SQL
     }
 
 
+    /**
+     * Get a sponsor with id
+     * @param int $id Id
+     * @return Sponsor|null
+     */
     public function getSponsorById(int $id): ?Sponsor
     {
 
@@ -279,6 +308,12 @@ SQL
     }
 
 
+    /**
+     * Get sponsor by people id
+     * @param int $godFatherId God father id
+     * @param int $godChildId God child id
+     * @return Sponsor|null
+     */
     public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor
     {
 
@@ -322,6 +357,11 @@ SQL
     }
 
 
+    /**
+     * Remove a sponsor
+     * @param int $id Id
+     * @return void
+     */
     public function removeSponsor(int $id): void
     {
 
@@ -335,6 +375,11 @@ SQL
     }
 
 
+    /**
+     * Add a sponsor
+     * @param Sponsor $sponsor Sponsor
+     * @return void
+     */
     public function addSponsor(Sponsor $sponsor): void
     {
 
@@ -371,6 +416,11 @@ SQL
     }
 
 
+    /**
+     * Update a sponsor
+     * @param Sponsor $sponsor Sponsor
+     * @return void
+     */
     public function updateSponsor(Sponsor $sponsor): void
     {
 

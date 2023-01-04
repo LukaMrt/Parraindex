@@ -6,17 +6,34 @@ use AltoRouter;
 use App\controller\Controller;
 use Exception;
 
+/**
+ * Router for the application
+ */
 class Router
 {
+    /**
+     * @var AltoRouter $router Router instance
+     */
     private AltoRouter $router;
 
 
+    /**
+     * Constructor
+     */
     public function __construct()
     {
         $this->router = new AltoRouter();
     }
 
 
+    /**
+     * Register a route
+     * @param string $method HTTP method
+     * @param string $url Url
+     * @param Controller $controller Controller instance
+     * @param string $name Route name
+     * @return $this
+     */
     public function registerRoute(string $method, string $url, Controller $controller, string $name): self
     {
 
@@ -34,6 +51,10 @@ class Router
     }
 
 
+    /**
+     * Run the router
+     * @return void
+     */
     public function run(): void
     {
         $match = $this->router->match();
@@ -41,6 +62,11 @@ class Router
     }
 
 
+    /**
+     * Get parameters from the url
+     * @param string $name Parameter name
+     * @return string
+     */
     public function getParameter(string $name): string
     {
 
@@ -54,6 +80,12 @@ class Router
     }
 
 
+    /**
+     * Get the url of a route
+     * @param string $name Route name
+     * @param array $parameters Parameters
+     * @return string
+     */
     public function url(string $name, array $parameters = []): string
     {
         try {

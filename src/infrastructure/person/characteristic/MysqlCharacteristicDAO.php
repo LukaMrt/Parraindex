@@ -6,17 +6,32 @@ use App\application\person\characteristic\CharacteristicDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\model\person\characteristic\Characteristic;
 
+/**
+ * Mysql Characteristic DAO
+ */
 class MysqlCharacteristicDAO implements CharacteristicDAO
 {
+    /**
+     * @var DatabaseConnection $databaseConnection Database connection
+     */
     private DatabaseConnection $databaseConnection;
 
 
+    /**
+     * @param DatabaseConnection $databaseConnection Database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
 
+    /**
+     * Update a characteristic
+     * @param int $idPerson Id of the person
+     * @param Characteristic $characteristic Characteristic
+     * @return void
+     */
     public function updateCharacteristic(int $idPerson, Characteristic $characteristic): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -37,6 +52,12 @@ SQL
     }
 
 
+    /**
+     * Create a characteristic
+     * @param int $idPerson Id of the person
+     * @param Characteristic $characteristic Characteristic
+     * @return void
+     */
     public function createCharacteristic(int $idPerson, Characteristic $characteristic): void
     {
         $connection = $this->databaseConnection->getDatabase();

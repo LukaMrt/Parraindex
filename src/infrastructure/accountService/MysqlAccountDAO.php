@@ -12,17 +12,30 @@ use App\model\person\Identity;
 use App\model\person\PersonBuilder;
 use App\model\school\School;
 
+/**
+ * MySQL implementation of the AccountDAO interface.
+ */
 class MysqlAccountDAO implements AccountDAO
 {
+    /**
+     * @var DatabaseConnection The database connection.
+     */
     private DatabaseConnection $databaseConnection;
 
 
+    /**
+     * @param DatabaseConnection $databaseConnection The database connection.
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
 
+    /**
+     * @param string $login The login.
+     * @return Password
+     */
     public function getAccountPassword(string $login): Password
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -42,6 +55,10 @@ class MysqlAccountDAO implements AccountDAO
     }
 
 
+    /**
+     * @param Account $account The account
+     * @return void
+     */
     public function createAccount(Account $account): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -69,6 +86,10 @@ SQL
     }
 
 
+    /**
+     * @param string $email The email
+     * @return bool
+     */
     public function existsAccount(string $email): bool
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -82,6 +103,10 @@ SQL
     }
 
 
+    /**
+     * @param mixed $username The username
+     * @return Account
+     */
     public function getSimpleAccount(mixed $username): Account
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -117,6 +142,10 @@ SQL
     }
 
 
+    /**
+     * @param Identity $identity The identity
+     * @return bool
+     */
     public function existsAccountByIdentity(Identity $identity): bool
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -137,6 +166,11 @@ SQL
     }
 
 
+    /**
+     * @param Account $account The account
+     * @param string $link The link
+     * @return void
+     */
     public function createTemporaryAccount(Account $account, string $link): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -158,6 +192,10 @@ SQL
     }
 
 
+    /**
+     * @param string $token The token
+     * @return Account
+     */
     public function getTemporaryAccountByToken(string $token): Account
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -182,6 +220,10 @@ SQL
     }
 
 
+    /**
+     * @param Account $account The account
+     * @return void
+     */
     public function deleteTemporaryAccount(Account $account): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -194,6 +236,10 @@ SQL
     }
 
 
+    /**
+     * @param string $email The email
+     * @return Account|null
+     */
     public function getAccountByLogin(string $email): ?Account
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -217,6 +263,11 @@ SQL
     }
 
 
+    /**
+     * @param Account $account The account
+     * @param string $token The token
+     * @return void
+     */
     public function createResetpassword(Account $account, string $token): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -237,6 +288,10 @@ SQL
     }
 
 
+    /**
+     * @param string $token The token
+     * @return Account
+     */
     public function getAccountResetPasswordByToken(string $token): Account
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -261,6 +316,10 @@ SQL
     }
 
 
+    /**
+     * @param Account $account The account
+     * @return void
+     */
     public function editAccountPassword(Account $account): void
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -276,6 +335,10 @@ SQL
     }
 
 
+    /**
+     * @param Account $account The account
+     * @return void
+     */
     public function deleteResetPassword(Account $account): void
     {
         $connection = $this->databaseConnection->getDatabase();
