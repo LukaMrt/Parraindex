@@ -3,19 +3,24 @@
 namespace App\controller;
 
 use App\infrastructure\router\Router;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class ResetpasswordConfirmationController
- * the reset password confirmation page, it's the page where the user can confirm his password reset
+ * The reset password confirmation page, it's the page where the user can confirm his password reset
  */
 class ResetpasswordConfirmationController extends Controller
 {
 
     /**
-     * function get
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template cannot be found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function get(Router $router, array $parameters): void
     {

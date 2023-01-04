@@ -8,11 +8,14 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
 use App\model\person\PersonBuilder;
+use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class EditPersonController
- * the edit person page, it's the page to edit a person and his characteristics
+ * The edit person page, it's the page to edit a person and his characteristics
  */
 class EditPersonController extends Controller
 {
@@ -29,13 +32,11 @@ class EditPersonController extends Controller
 
 
     /**
-     * EditPersonController constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param CharacteristicTypeService $characteristicTypeService the characteristic type service
      * @param CharacteristicService $characteristicService the characteristic service
-     * initialize the controller
      */
     public function __construct(
         Environment               $twig,
@@ -52,10 +53,12 @@ class EditPersonController extends Controller
 
 
     /**
-     * function get
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function get(Router $router, array $parameters): void
     {
@@ -100,12 +103,11 @@ class EditPersonController extends Controller
 
 
     /**
-     * function post
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
      */
-    public function post(Router $router, array $parameters): void
+    #[NoReturn] public function post(Router $router, array $parameters): void
     {
         header('content-type: application/json');
         $json = file_get_contents('php://input');
@@ -160,14 +162,13 @@ class EditPersonController extends Controller
 
 
     /**
-     * function getFormValues
-     * @param $data
-     * @param array $response
-     * @param bool $isAdmin
-     * @return array
-     * get the form values
+     * Get the form values
+     * @param $data array the form data
+     * @param array $response the response if an error occurs
+     * @param bool $isAdmin if the user is admin
+     * @return array the validated values
      */
-    private function getFormValues($data, array &$response, bool $isAdmin): array
+    private function getFormValues(array $data, array &$response, bool $isAdmin): array
     {
         $newData = [];
 
@@ -248,13 +249,12 @@ class EditPersonController extends Controller
 
 
     /**
-     * function getFormCharacteristics
-     * @param $data the data
-     * @param array $response the response
+     * Get the form characteristics
+     * @param $data array the data
+     * @param array $response the response if an error occurs
      * @return array the characteristics
-     * get the form characteristics
      */
-    private function getFormCharacteristics($data, array &$response): array
+    private function getFormCharacteristics(array $data, array &$response): array
     {
         $newCharacteristics = [];
 
@@ -295,12 +295,11 @@ class EditPersonController extends Controller
 
 
     /**
-     * function put
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
      */
-    public function put(Router $router, array $parameters): void
+    #[NoReturn] public function put(Router $router, array $parameters): void
     {
         header('content-type: application/json');
         $json = file_get_contents('php://input');
@@ -387,12 +386,11 @@ class EditPersonController extends Controller
 
 
     /**
-     * function delete
      * @param Router $router
      * @param array $parameters
      * @return void
      */
-    public function delete(Router $router, array $parameters): void
+    #[NoReturn] public function delete(Router $router, array $parameters): void
     {
         header('content-type: application/json');
 

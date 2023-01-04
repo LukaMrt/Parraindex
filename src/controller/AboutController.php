@@ -6,10 +6,12 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use App\model\person\Identity;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class AboutController
- * the about page, it's the page that explain the project and the team
+ * The about page, it's the page that explain the project and the team
  */
 class AboutController extends Controller
 {
@@ -33,6 +35,9 @@ class AboutController extends Controller
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function get(Router $router, array $parameters): void
     {

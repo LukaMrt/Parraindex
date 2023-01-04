@@ -6,10 +6,12 @@ use App\application\login\SignupService;
 use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class SignUpController
- * the sign up page, it's the page where the user can sign up
+ * The signup page, it's the page where the user can signup
  */
 class SignUpController extends Controller
 {
@@ -21,12 +23,10 @@ class SignUpController extends Controller
 
 
     /**
-     * SignUpController constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param SignupService $passwordService the password service
-     * initialize the controller
      */
     public function __construct(Environment $twig, Router $router, PersonService $personService, SignupService $passwordService)
     public function __construct(
@@ -42,10 +42,12 @@ class SignUpController extends Controller
 
 
     /**
-     * function get
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurs during the rendering
+     * @throws SyntaxError if an error occurs during the rendering
      */
     public function get(Router $router, array $parameters): void
     {
@@ -54,10 +56,12 @@ class SignUpController extends Controller
 
 
     /**
-     * function post
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurs during the rendering
+     * @throws SyntaxError if an error occurs during the rendering
      */
     public function post(Router $router, array $parameters): void
     {

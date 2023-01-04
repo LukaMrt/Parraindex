@@ -10,8 +10,8 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 /**
- * abstract class Controller
- * the controller is the link between the view and the domain
+ * The controller is the link between the view and the domain. It handles the request and uses the appropriate service
+ * to perform the requested actions and then returns the appropriate view.
  */
 abstract class Controller
 {
@@ -31,11 +31,9 @@ abstract class Controller
 
 
     /**
-     * Controller constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
-     * initialize the controller
      */
     public function __construct(Environment $twig, Router $router, PersonService $personService)
     {
@@ -46,12 +44,11 @@ abstract class Controller
 
 
     /**
-     * function call
+     * Looks the method parameter to redirect to the right method
      * @param string $method the method to call
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
-     * look the method parameter to redirect to the right method
      */
     public function call(string $method, Router $router, array $parameters): void
     {
@@ -73,22 +70,20 @@ abstract class Controller
     }
 
     /**
-     * function get
+     * Called when the HTTP method is GET
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
-     * called when the HTTP method is GET
      */
     public function get(Router $router, array $parameters): void
     {
     }
 
     /**
-     * function post
+     * Called when the HTTP method is POST
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
-     * called when the HTTP method is POST
      */
     public function post(Router $router, array $parameters): void
     {
@@ -96,11 +91,10 @@ abstract class Controller
 
 
     /**
-     * function put
+     * Called when the HTTP method is PUT
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
-     * called when the HTTP method is PUT
      */
     public function put(Router $router, array $parameters): void
     {
@@ -108,25 +102,23 @@ abstract class Controller
 
 
     /**
-     * function delete
+     * Called when the HTTP method is DELETE
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
-     * called when the HTTP method is DELETE
      */
     public function delete(Router $router, array $parameters): void
     {
     }
 
     /**
-     * function render
+     * Renders the twig template with the given parameters
      * @param string $template the template
      * @param array $parameters the parameters
      * @return void
-     * @throws LoaderError the loader error
-     * @throws RuntimeError the runtime error
-     * @throws SyntaxError the syntax error
-     * render the twig template with the given parameters
+     * @throws LoaderError if the template cannot be found
+     * @throws RuntimeError if an error occurs during the rendering
+     * @throws SyntaxError if an error occurs during the rendering
      */
     protected function render(string $template, array $parameters = []): void
     {

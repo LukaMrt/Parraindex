@@ -6,10 +6,12 @@ use App\application\login\LoginService;
 use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class LoginController
- * the login page, it's the page where the user can login
+ * The login page, it's the page where the user can log in
  */
 class LoginController extends Controller
 {
@@ -21,12 +23,10 @@ class LoginController extends Controller
 
 
     /**
-     * LoginController constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param LoginService $passwordService the password service
-     * initialize the controller
      */
     public function __construct(
         Environment   $twig,
@@ -41,10 +41,12 @@ class LoginController extends Controller
 
 
     /**
-     * function get
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurs during the rendering
+     * @throws SyntaxError if an error occurs during the rendering
      */
     public function get(Router $router, array $parameters): void
     {
@@ -53,10 +55,12 @@ class LoginController extends Controller
 
 
     /**
-     * function post
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurs during the rendering
+     * @throws SyntaxError if an error occurs during the rendering
      */
     public function post(Router $router, array $parameters): void
     {

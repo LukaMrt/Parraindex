@@ -8,10 +8,12 @@ use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class EditSponsorController
- * the edit sponsor page, it's the page to edit a sponsor
+ * The edit sponsor page, it's the page to edit a sponsor
  */
 class EditSponsorController extends Controller
 {
@@ -23,12 +25,10 @@ class EditSponsorController extends Controller
 
 
     /**
-     * EditSponsorController constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param SponsorService $sponsorService the sponsor service
-     * initialize the controller
      */
     public function __construct(
         Environment    $twig,
@@ -47,6 +47,9 @@ class EditSponsorController extends Controller
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function get(Router $router, array $parameters): void
     {
@@ -96,7 +99,6 @@ class EditSponsorController extends Controller
 
 
     /**
-     * function post
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void

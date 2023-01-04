@@ -6,10 +6,12 @@ use App\application\person\PersonService;
 use App\application\sponsor\SponsorService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class PersonController
- * the person page, it's the page where the user can see his person
+ * The person page, it's the page where the user can see his person
  */
 class PersonController extends Controller
 {
@@ -21,12 +23,10 @@ class PersonController extends Controller
 
 
     /**
-     * PersonController constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param SponsorService $sponsorService the sponsor service
-     * initialize the controller
      */
     public function __construct(
         Environment    $twig,
@@ -45,6 +45,9 @@ class PersonController extends Controller
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function get(Router $router, array $parameters): void
     {

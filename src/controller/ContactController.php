@@ -7,10 +7,12 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use App\model\contact\ContactType;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class ContactController
- * the contact page, it's the page to contact the team and the admin
+ * The contact page, it's the page to contact the team and the admin
  */
 class ContactController extends Controller
 {
@@ -22,12 +24,10 @@ class ContactController extends Controller
 
 
     /**
-     * ContactController constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param ContactService $contactService the contact service
-     * initialize the controller
      */
     public function __construct(
         Environment    $twig,
@@ -42,10 +42,12 @@ class ContactController extends Controller
 
 
     /**
-     * function post
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void the function return nothing
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function post(Router $router, array $parameters): void
     {
@@ -58,10 +60,12 @@ class ContactController extends Controller
 
 
     /**
-     * function get
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void the function return nothing
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function get(Router $router, array $parameters): void
     {

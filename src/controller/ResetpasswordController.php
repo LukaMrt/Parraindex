@@ -6,10 +6,12 @@ use App\application\login\PasswordService;
 use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
- * class ResetpasswordController
- * the reset password page, it's the page where the user can reset his password
+ * The reset password page, it's the page where the user can reset his password
  */
 class ResetpasswordController extends Controller
 {
@@ -21,12 +23,10 @@ class ResetpasswordController extends Controller
 
 
     /**
-     * ResetpasswordController constructor
      * @param Environment $twig the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param PasswordService $passwordService the password service
-     * initialize the controller
      */
     public function __construct(
         Environment     $twig,
@@ -41,10 +41,12 @@ class ResetpasswordController extends Controller
 
 
     /**
-     * function get
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template cannot be found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function get(Router $router, array $parameters): void
     {
@@ -53,10 +55,12 @@ class ResetpasswordController extends Controller
 
 
     /**
-     * function post
      * @param Router $router the router
      * @param array $parameters the parameters
      * @return void
+     * @throws LoaderError if the template cannot be found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
      */
     public function post(Router $router, array $parameters): void
     {
