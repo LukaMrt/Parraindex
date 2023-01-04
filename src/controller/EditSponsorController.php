@@ -111,8 +111,6 @@ class EditSponsorController extends Controller
 
         $sponsor = $this->sponsorService->getSponsor($parameters['id']);
 
-        // TODO : create new array with htmlspecialchars
-
         $formParameters = [
             'godFatherId' => $_POST['godFatherId'],
             'godChildId' => $_POST['godChildId'],
