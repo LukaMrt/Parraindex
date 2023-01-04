@@ -2,9 +2,6 @@
 
 namespace App\application\contact\executor;
 
-use App\application\contact\ContactDAO;
-use App\application\redirect\Redirect;
-use App\model\contact\ContactType;
 use App\model\contact\DefaultContact;
 
 /**
@@ -12,16 +9,6 @@ use App\model\contact\DefaultContact;
  */
 abstract class SimpleContactExecutor extends ContactExecutor
 {
-    /**
-     * @param ContactDAO $contactDAO DAO for contacts
-     * @param Redirect $redirect Redirect service
-     * @param ContactType $contactType Contact type
-     * @param array $fields Fields to check
-     */
-    public function __construct(ContactDAO $contactDAO, Redirect $redirect, ContactType $contactType, array $fields)
-    {
-        parent::__construct($contactDAO, $redirect, $contactType, $fields);
-    }
 
 
     /**

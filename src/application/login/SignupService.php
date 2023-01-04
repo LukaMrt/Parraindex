@@ -108,19 +108,16 @@ class SignupService
             $error = 'Un compte existe déjà avec cette adresse email';
         }
 
-        $nameAccountExists = empty($error) && $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
-        if ($nameAccountExists) {
+        $accountExistsClosure = fn() => $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
+        if (empty($error) && $accountExistsClosure()) {
             $error = 'Un compte existe déjà avec ce nom';
         }
 
         if (!empty($error)) {
-            $this->logger->error(SignupService::class, $error . ' (' . implode(' ', [
-                    $email,
-                    $password,
-                    $passwordConfirm,
-                    $lastname,
-                    $firstname
-                ]) . ')');
+            $this->logger->error(
+                SignupService::class,
+                $error . ' (' . implode(' ', [$email, $password, $passwordConfirm, $lastname, $firstname]) . ')'
+            );
             return $error;
         }
 

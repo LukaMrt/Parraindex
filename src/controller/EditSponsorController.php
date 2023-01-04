@@ -112,10 +112,19 @@ class EditSponsorController extends Controller
         $sponsor = $this->sponsorService->getSponsor($parameters['id']);
 
         // TODO : create new array with htmlspecialchars
+
+        $formParameters = [
+            'godFatherId' => $_POST['godFatherId'],
+            'godChildId' => $_POST['godChildId'],
+            'sponsorType' => $_POST['sponsorType'],
+            'sponsorDate' => $_POST['sponsorDate'],
+            'description' => $_POST['description'],
+        ];
+
         if ($sponsor === null) {
-            $this->sponsorService->createSponsor($_POST);
+            $this->sponsorService->createSponsor($formParameters);
         } else {
-            $this->sponsorService->updateSponsor($parameters['id'], $_POST);
+            $this->sponsorService->updateSponsor($parameters['id'], $formParameters);
         }
 
         header('Location: ' . $router->url('home'));

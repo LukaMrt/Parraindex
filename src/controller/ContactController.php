@@ -50,8 +50,23 @@ class ContactController extends Controller
     public function post(Router $router, array $parameters): void
     {
 
-        // TODO : create new array with htmlspecialchars
-        $error = $this->contactService->registerContact($_POST);
+        $formParameters = [
+            'senderFirstName' => htmlspecialchars($_POST['senderFirstName']),
+            'senderLastName' => htmlspecialchars($_POST['senderLastName']),
+            'senderEmail' => htmlspecialchars($_POST['senderEmail']),
+            'creationFirstName' => htmlspecialchars($_POST['creationFirstName']),
+            'creationLastName' => htmlspecialchars($_POST['creationLastName']),
+            'entryYear' => htmlspecialchars($_POST['entryYear']),
+            'godFatherId' => htmlspecialchars($_POST['godFatherId']),
+            'godChildId' => htmlspecialchars($_POST['godChildId']),
+            'sponsorType' => htmlspecialchars($_POST['sponsorType']),
+            'sponsorDate' => htmlspecialchars($_POST['sponsorDate']),
+            'message' => htmlspecialchars($_POST['message']),
+            'personId' => htmlspecialchars($_POST['personId']),
+            'bonusInformation' => htmlspecialchars($_POST['bonusInformation'])
+        ];
+
+        $error = $this->contactService->registerContact($formParameters);
 
         $this->get($router, ['error' => $error]);
     }
