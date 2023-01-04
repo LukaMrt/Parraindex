@@ -2,6 +2,7 @@
 
 namespace unit\application\login;
 
+use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\SignupService;
 use App\application\login\UrlUtils;
@@ -53,13 +54,15 @@ class SignupServiceTest extends TestCase
         $this->mailer = $this->createMock(Mailer::class);
         $this->random = $this->createMock(Random::class);
         $this->urlUtils = $this->createMock(UrlUtils::class);
+        $logger = $this->createMock(Logger::class);
         $this->signupService = new SignupService(
             $this->accountDAO,
             $this->personDAO,
             $this->redirect,
             $this->mailer,
             $this->random,
-            $this->urlUtils
+            $this->urlUtils,
+            $logger
         );
     }
 

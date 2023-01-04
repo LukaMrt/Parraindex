@@ -2,6 +2,7 @@
 
 namespace App\application\login;
 
+use App\application\logging\Logger;
 use App\application\mail\Mailer;
 use App\application\person\PersonDAO;
 use App\application\random\Random;
@@ -20,6 +21,7 @@ class SignupService
     private Mailer $mailer;
     private Random $random;
     private UrlUtils $urlUtils;
+    private Logger $logger;
 
 
     public function __construct(
@@ -28,7 +30,8 @@ class SignupService
         Redirect $redirect,
         Mailer $mailer,
         Random $random,
-        UrlUtils $urlUtils
+        UrlUtils $urlUtils,
+        Logger $logger
     ) {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
@@ -36,6 +39,7 @@ class SignupService
         $this->mailer = $mailer;
         $this->random = $random;
         $this->urlUtils = $urlUtils;
+        $this->logger = $logger;
     }
 
 
@@ -63,9 +67,11 @@ class SignupService
                 . "cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement"
                 . "<br>Le Parrainboss"
             );
+            $this->logger->info(SignupService::class, 'Signup request sent to ' . $email);
             $this->redirect->redirect('signup_confirmation');
         }
 
+        $this->logger->error(SignupService::class, $error . ' (' . implode(' ', $parameters) . ')');
         return $error;
     }
 
@@ -79,30 +85,43 @@ class SignupService
         ?Person $person
     ): string {
 
-        if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
-            return 'Veuillez remplir tous les champs';
+        $error = '';
+
+        if (empty($error) && $this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
+            $error = 'Veuillez remplir tous les champs';
         }
 
-        if (!str_ends_with($email, '@etu.univ-lyon1.fr')) {
-            return 'L\'email doit doit être votre email universitaire';
+        if (empty($error) && !str_ends_with($email, '@etu.univ-lyon1.fr')) {
+            $error = 'L\'email doit doit être votre email universitaire';
         }
 
-        if ($password !== $passwordConfirm) {
-            return 'Les mots de passe ne correspondent pas';
+        if (empty($error) && $password !== $passwordConfirm) {
+            $error = 'Les mots de passe ne correspondent pas';
         }
 
-        if ($person === null) {
-            return 'Votre nom n\'est pas enregistré, merci de contacter un administrateur';
+        if (empty($error) && $person === null) {
+            $error = 'Votre nom n\'est pas enregistré, merci de contacter un administrateur';
         }
 
-        $emailAccountExists = $this->accountDAO->existsAccount($email);
+        $emailAccountExists = empty($error) && $this->accountDAO->existsAccount($email);
         if ($emailAccountExists) {
-            return 'Un compte existe déjà avec cette adresse email';
+            $error = 'Un compte existe déjà avec cette adresse email';
         }
 
-        $nameAccountExists = $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
+        $nameAccountExists = empty($error) && $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
         if ($nameAccountExists) {
-            return 'Un compte existe déjà avec ce nom';
+            $error = 'Un compte existe déjà avec ce nom';
+        }
+
+        if (!empty($error)) {
+            $this->logger->error(SignupService::class, $error . ' (' . implode(' ', [
+                    $email,
+                    $password,
+                    $passwordConfirm,
+                    $lastname,
+                    $firstname
+                ]) . ')');
+            return $error;
         }
 
         $identities = $this->personDAO->getAllIdentities();
@@ -112,7 +131,7 @@ class SignupService
         $minLevenshtein = $entryLevenshtein;
 
         if (2 < $entryLevenshtein) {
-            return 'D\'après notre recherche, cet email n\'est pas le vôtre';
+            $error = 'D\'après notre recherche, cet email n\'est pas le vôtre';
         }
 
         foreach ($identities as $identity) {
@@ -123,11 +142,11 @@ class SignupService
             );
             $levenshtein = levenshtein($emailLevenshtein, $pregReplace);
             if ($levenshtein < $minLevenshtein) {
-                return 'D\'après notre recherche, cet email n\'est pas le vôtre';
+                $error = 'D\'après notre recherche, cet email n\'est pas le vôtre';
             }
         }
 
-        return '';
+        return $error;
     }
 
 
@@ -149,12 +168,14 @@ class SignupService
         $account = $this->accountDAO->getTemporaryAccountByToken($token);
 
         if ($account->getId() === -1) {
+            $this->logger->error(SignupService::class, 'Token invalid');
             $error = 'Ce lien n\'est pas ou plus valide.';
         }
 
         if (empty($error)) {
             $this->accountDAO->createAccount($account);
             $this->accountDAO->deleteTemporaryAccount($account);
+            $this->logger->info(SignupService::class, 'Account created for ' . $account->getLogin());
         }
 
         return $error;

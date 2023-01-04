@@ -2,6 +2,7 @@
 
 namespace unit\application\login;
 
+use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\LoginService;
 use App\application\login\SessionManager;
@@ -45,11 +46,13 @@ class LoginServiceTest extends TestCase
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->redirect = $this->createMock(Redirect::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
+        $logger = $this->createMock(Logger::class);
         $this->loginService = new LoginService(
             $this->accountDAO,
             $this->personDAO,
             $this->redirect,
-            $this->sessionManager
+            $this->sessionManager,
+            $logger
         );
     }
 

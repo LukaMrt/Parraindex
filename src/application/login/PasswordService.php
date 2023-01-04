@@ -2,6 +2,7 @@
 
 namespace App\application\login;
 
+use App\application\logging\Logger;
 use App\application\mail\Mailer;
 use App\application\person\PersonDAO;
 use App\application\random\Random;
@@ -17,6 +18,7 @@ class PasswordService
     private Mailer $mailer;
     private Random $random;
     private UrlUtils $urlUtils;
+    private Logger $logger;
 
 
     public function __construct(
@@ -25,7 +27,8 @@ class PasswordService
         Redirect $redirect,
         Mailer $mailer,
         Random $random,
-        UrlUtils $urlUtils
+        UrlUtils $urlUtils,
+        Logger $logger
     ) {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
@@ -33,6 +36,7 @@ class PasswordService
         $this->mailer = $mailer;
         $this->random = $random;
         $this->urlUtils = $urlUtils;
+        $this->logger = $logger;
     }
 
 
@@ -40,6 +44,7 @@ class PasswordService
     {
 
         if (!$this->accountDAO->existsAccount($parameters['email'])) {
+            $this->logger->error(PasswordService::class, 'Email not found');
             return 'Email inconnu.';
         }
 
@@ -48,7 +53,6 @@ class PasswordService
         $firstname = $person->getFirstname();
         $lastname = $person->getLastname();
         $account = new Account($account->getId(), $account->getLogin(), $person, new Password($parameters['password']));
-
 
         $token = $this->random->generate(10);
         $url = $this->urlUtils->getBaseUrl();
@@ -61,6 +65,7 @@ class PasswordService
             . "Cordialement<br>Le Parrainboss"
         );
         $this->accountDAO->createResetpassword($account, $token);
+        $this->logger->info(PasswordService::class, 'Reset password email sent to ' . $parameters['email']);
         $this->redirect->redirect('resetpassword_confirmation');
         return '';
     }
@@ -73,12 +78,14 @@ class PasswordService
         $account = $this->accountDAO->getAccountResetPasswordByToken($token);
 
         if ($account->getId() === -1) {
+            $this->logger->error(PasswordService::class, 'Token invalid');
             $error = 'Ce lien n\'est pas ou plus valide.';
         }
 
         if (empty($error)) {
             $this->accountDAO->editAccountPassword($account);
             $this->accountDAO->deleteResetPassword($account);
+            $this->logger->info(PasswordService::class, 'Password reset for ' . $account->getLogin());
         }
 
         return $error;

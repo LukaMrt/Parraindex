@@ -2,6 +2,7 @@
 
 namespace App\application\person;
 
+use App\application\logging\Logger;
 use App\application\login\SessionManager;
 use App\model\person\Identity;
 use App\model\person\Person;
@@ -16,20 +17,28 @@ class PersonService
      * @var PersonDAO Person data access object
      */
     private PersonDAO $personDAO;
+
     /**
      * @var SessionManager Session manager
      */
     private SessionManager $sessionManager;
 
+    /**
+     * @var Logger Logger
+     */
+    private Logger $logger;
+
 
     /**
      * @param PersonDAO $personDAO Person data access object
      * @param SessionManager $sessionManager Session manager
+     * @param Logger $logger Logger
      */
-    public function __construct(PersonDAO $personDAO, SessionManager $sessionManager)
+    public function __construct(PersonDAO $personDAO, SessionManager $sessionManager, Logger $logger)
     {
         $this->personDAO = $personDAO;
         $this->sessionManager = $sessionManager;
+        $this->logger = $logger;
     }
 
 
@@ -80,9 +89,15 @@ class PersonService
             ->withColor($parameters['color'])
             ->build();
 
+        $this->logger->info(
+            PersonService::class,
+            'Person ' . $parameters['first_name'] . ' ' . $parameters['last_name'] . ' updated.'
+        );
+
         if ($this->sessionManager->get('user')->getId() === $person->getId()) {
             $this->sessionManager->set('user', $person);
         }
+
 
         $this->personDAO->updatePerson($person);
     }
@@ -113,6 +128,11 @@ class PersonService
             ->withColor($parameters['color'])
             ->withStartYear($parameters['start_year'] ?? 2022)
             ->build();
+
+        $this->logger->info(
+            PersonService::class,
+            'Person ' . $parameters['first_name'] . ' ' . $parameters['last_name'] . ' created.'
+        );
 
         return $this->personDAO->createPerson($person);
     }

@@ -2,6 +2,7 @@
 
 namespace App\application\login;
 
+use App\application\logging\Logger;
 use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\account\Password;
@@ -13,18 +14,21 @@ class LoginService
     private Redirect $redirect;
     private SessionManager $sessionManager;
     private PersonDAO $personDAO;
+    private Logger $logger;
 
 
     public function __construct(
         AccountDAO $accountDAO,
         PersonDAO $personDAO,
         Redirect $redirect,
-        SessionManager $sessionManager
+        SessionManager $sessionManager,
+        Logger $logger
     ) {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
         $this->redirect = $redirect;
         $this->sessionManager = $sessionManager;
+        $this->logger = $logger;
     }
 
 
@@ -44,9 +48,11 @@ class LoginService
             $this->sessionManager->set('privilege', $account->getHighestPrivilege()->toString());
             $this->sessionManager->set('user', $this->personDAO->getPersonByLogin($account->getLogin()));
 
+            $this->logger->info(LoginService::class, 'User ' . $account->getLogin() . ' logged in');
             $this->redirect->redirect('home');
         }
 
+        $this->logger->error(LoginService::class, $error . ' (' . implode(' ', $parameters) . ')');
         return $error;
     }
 
