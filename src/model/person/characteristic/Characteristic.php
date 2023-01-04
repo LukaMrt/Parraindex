@@ -4,7 +4,6 @@ namespace App\model\person\characteristic;
 
 class Characteristic
 {
-
     private int $id;
     private string $title;
     private CharacteristicType $type;
@@ -90,5 +89,4 @@ class Characteristic
     {
         return $this->type->getPrefix();
     }
-
 }

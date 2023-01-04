@@ -6,7 +6,6 @@ use DateTime;
 
 class Identity
 {
-
     private string $firstName;
     private string $lastName;
     private ?string $picture;
@@ -65,5 +64,4 @@ class Identity
     {
         $this->picture = $picture;
     }
-
 }

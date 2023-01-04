@@ -6,7 +6,6 @@ use App\model\person\Person;
 
 class Account
 {
-
     private int $id;
     private string $email;
     private Person $user;
@@ -63,5 +62,4 @@ class Account
 
         return $highest;
     }
-
 }

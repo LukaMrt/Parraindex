@@ -16,7 +16,6 @@ use DateTime;
 
 class MySqlPersonDAO implements PersonDAO
 {
-
     private DatabaseConnection $databaseConnection;
 
 
@@ -371,5 +370,4 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
-
 }

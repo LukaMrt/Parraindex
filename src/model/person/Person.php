@@ -4,7 +4,6 @@ namespace App\model\person;
 
 class Person
 {
-
     private int $id;
     private Identity $identity;
     private string $biography;
@@ -144,5 +143,4 @@ class Person
     {
         $this->identity->setPicture($picture);
     }
-
 }

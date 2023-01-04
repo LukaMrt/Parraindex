@@ -9,7 +9,6 @@ use LogicException;
  */
 class CharacteristicBuilder
 {
-
     /** @var int $id */
     private int $id;
 
@@ -180,5 +179,4 @@ class CharacteristicBuilder
     {
         return new Characteristic($this);
     }
-
 }

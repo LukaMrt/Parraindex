@@ -13,7 +13,6 @@ use Twig\Environment;
  */
 class LogoutController extends Controller
 {
-
     /**
      * @var LoginService the login service
      */
@@ -27,12 +26,11 @@ class LogoutController extends Controller
      * @param LoginService $loginService the login service
      */
     public function __construct(
-        Environment   $twig,
-        Router        $router,
+        Environment $twig,
+        Router $router,
         PersonService $personService,
-        LoginService  $loginService
-    )
-    {
+        LoginService $loginService
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->loginService = $loginService;
     }
@@ -47,5 +45,4 @@ class LogoutController extends Controller
     {
         $this->loginService->logout();
     }
-
 }

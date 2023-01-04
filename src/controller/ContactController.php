@@ -16,7 +16,6 @@ use Twig\Error\SyntaxError;
  */
 class ContactController extends Controller
 {
-
     /**
      * @var ContactService the contact service
      */
@@ -30,12 +29,11 @@ class ContactController extends Controller
      * @param ContactService $contactService the contact service
      */
     public function __construct(
-        Environment    $twig,
-        Router         $router,
-        PersonService  $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         ContactService $contactService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
     }
@@ -85,5 +83,4 @@ class ContactController extends Controller
             'error' => $parameters['error'] ?? [],
         ]);
     }
-
 }

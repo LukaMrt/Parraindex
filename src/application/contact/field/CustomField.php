@@ -9,7 +9,6 @@ use Closure;
  */
 class CustomField extends Field
 {
-
     /**
      * @var Closure The function that verifies the value
      */
@@ -37,5 +36,4 @@ class CustomField extends Field
     {
         return ($this->validator)($value);
     }
-
 }

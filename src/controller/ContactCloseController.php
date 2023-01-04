@@ -15,7 +15,6 @@ use Twig\Environment;
  */
 class ContactCloseController extends Controller
 {
-
     /**
      * @var ContactService the contact service
      */
@@ -34,13 +33,12 @@ class ContactCloseController extends Controller
      * @param SponsorService $sponsorService the sponsor service
      */
     public function __construct(
-        Environment    $twig,
-        Router         $router,
-        PersonService  $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         ContactService $contactService,
         SponsorService $sponsorService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
         $this->sponsorService = $sponsorService;
@@ -120,5 +118,4 @@ class ContactCloseController extends Controller
                 break;
         }
     }
-
 }

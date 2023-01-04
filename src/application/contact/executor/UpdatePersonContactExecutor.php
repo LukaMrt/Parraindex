@@ -13,7 +13,6 @@ use App\model\contact\PersonContact;
 
 class UpdatePersonContactExecutor extends ContactExecutor
 {
-
     private PersonDAO $personDAO;
 
 
@@ -50,5 +49,4 @@ class UpdatePersonContactExecutor extends ContactExecutor
         $this->contactDAO->savePersonUpdateContact($contact);
         return '';
     }
-
 }

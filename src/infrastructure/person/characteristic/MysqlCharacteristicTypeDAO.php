@@ -9,7 +9,6 @@ use App\model\person\characteristic\CharacteristicBuilder;
 
 class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 {
-
     private DatabaseConnection $databaseConnection;
 
 
@@ -81,5 +80,4 @@ SQL
 
         return $characteristics;
     }
-
 }

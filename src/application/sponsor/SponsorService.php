@@ -8,7 +8,6 @@ use App\model\sponsor\SponsorFactory;
 
 class SponsorService
 {
-
     private SponsorDAO $sponsorDAO;
     private PersonDAO $personDAO;
 
@@ -108,5 +107,4 @@ class SponsorService
     {
         $this->sponsorDAO->addSponsor($sponsor);
     }
-
 }

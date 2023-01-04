@@ -18,7 +18,6 @@ use App\model\sponsor\SponsorFactory;
  */
 class MysqlContactDAO implements ContactDAO
 {
-
     /**
      * @var DatabaseConnection the database connection
      */
@@ -377,5 +376,4 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
-
 }

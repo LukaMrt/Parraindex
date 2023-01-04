@@ -3,12 +3,11 @@
 namespace App\application\contact\field;
 
 /**
- * This class is the bounded number of the Field class. It verifies that the value is a number and that it is between the
- * minimum and maximum values.
+ * This class is the bounded number of the Field class. It verifies that the value is
+ * a number and that it is between the minimum and maximum values.
  */
 class BoundedNumberField extends Field
 {
-
     /**
      * @var int The minimum value
      */
@@ -43,5 +42,4 @@ class BoundedNumberField extends Field
     {
         return is_numeric($value) && $this->min <= $value && $value <= $this->max;
     }
-
 }

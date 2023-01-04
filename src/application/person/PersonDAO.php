@@ -7,7 +7,6 @@ use App\model\person\Person;
 
 interface PersonDAO
 {
-
     public function getAllPeople(): array;
 
 
@@ -30,5 +29,4 @@ interface PersonDAO
 
 
     public function getPersonByLogin(string $login): ?Person;
-
 }

@@ -7,7 +7,6 @@ use DateTime;
 
 abstract class Sponsor
 {
-
     private int $id;
     private Person $godFather;
     private Person $godSon;
@@ -87,5 +86,4 @@ abstract class Sponsor
     {
         $this->godSon = $godSon ?? $this->godSon;
     }
-
 }

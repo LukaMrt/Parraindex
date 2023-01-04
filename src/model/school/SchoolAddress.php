@@ -4,7 +4,6 @@ namespace App\model\school;
 
 class SchoolAddress
 {
-
     private string $street;
     private string $city;
 
@@ -20,5 +19,4 @@ class SchoolAddress
     {
         return new SchoolAddress('', '');
     }
-
 }

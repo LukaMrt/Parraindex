@@ -4,7 +4,6 @@ namespace App\model\contact;
 
 abstract class Contact
 {
-
     private int $id;
     private string $contacterName;
     private string $contacterEmail;
@@ -13,13 +12,12 @@ abstract class Contact
 
 
     public function __construct(
-        int         $id,
-        string      $contacterName,
-        string      $contacterEmail,
+        int $id,
+        string $contacterName,
+        string $contacterEmail,
         ContactType $type,
-        string      $description
-    )
-    {
+        string $description
+    ) {
         $this->id = $id;
         $this->contacterName = $contacterName;
         $this->contacterEmail = $contacterEmail;
@@ -65,5 +63,4 @@ abstract class Contact
 
 
     abstract public function getDescription(): array;
-
 }

@@ -7,7 +7,6 @@ namespace App\application\contact\field;
  */
 class NumberField extends Field
 {
-
     /**
      * Verify that the value is a number
      * @param string $value The value to verify
@@ -17,5 +16,4 @@ class NumberField extends Field
     {
         return is_numeric($value);
     }
-
 }

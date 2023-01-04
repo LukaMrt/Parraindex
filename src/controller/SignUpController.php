@@ -11,11 +11,10 @@ use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
 /**
- * The signup page, it's the page where the user can signup
+ * The signup page, it's the page where the user can sign up
  */
 class SignUpController extends Controller
 {
-
     /**
      * @var SignupService the signup service
      */
@@ -28,14 +27,12 @@ class SignUpController extends Controller
      * @param PersonService $personService the person service
      * @param SignupService $passwordService the password service
      */
-    public function __construct(Environment $twig, Router $router, PersonService $personService, SignupService $passwordService)
     public function __construct(
-        Environment   $twig,
-        Router        $router,
+        Environment $twig,
+        Router $router,
         PersonService $personService,
         SignupService $passwordService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->signupService = $passwordService;
     }
@@ -78,5 +75,4 @@ class SignUpController extends Controller
 
         $this->render('signup.twig', ['error' => $error]);
     }
-
 }

@@ -6,7 +6,6 @@ use PDO;
 
 class DatabaseConnection
 {
-
     private PDO $database;
 
 
@@ -44,5 +43,4 @@ class DatabaseConnection
     {
         return $this->database;
     }
-
 }

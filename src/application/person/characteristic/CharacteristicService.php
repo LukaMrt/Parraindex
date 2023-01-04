@@ -6,7 +6,6 @@ use App\model\person\characteristic\Characteristic;
 
 class CharacteristicService
 {
-
     private CharacteristicDAO $characteristicDAO;
 
 
@@ -19,7 +18,7 @@ class CharacteristicService
     /**
      * Update the person's characteristic
      *
-     * @param int            $idPerson
+     * @param int $idPerson
      * @param Characteristic $characteristic
      */
     public function updateCharacteristic(int $idPerson, Characteristic $characteristic): void
@@ -31,12 +30,11 @@ class CharacteristicService
     /**
      * Create the person's characteristic
      *
-     * @param int            $idPerson
+     * @param int $idPerson
      * @param Characteristic $characteristic
      */
     public function createCharacteristic(int $idPerson, Characteristic $characteristic): void
     {
         $this->characteristicDAO->createCharacteristic($idPerson, $characteristic);
     }
-
 }

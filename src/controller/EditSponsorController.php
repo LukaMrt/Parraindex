@@ -17,7 +17,6 @@ use Twig\Error\SyntaxError;
  */
 class EditSponsorController extends Controller
 {
-
     /**
      * @var SponsorService the sponsor service
      */
@@ -31,12 +30,11 @@ class EditSponsorController extends Controller
      * @param SponsorService $sponsorService the sponsor service
      */
     public function __construct(
-        Environment    $twig,
-        Router         $router,
-        PersonService  $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         SponsorService $sponsorService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
@@ -123,5 +121,4 @@ class EditSponsorController extends Controller
         header('Location: ' . $router->url('home'));
         die();
     }
-
 }

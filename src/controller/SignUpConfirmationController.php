@@ -12,7 +12,6 @@ use Twig\Error\SyntaxError;
  */
 class SignUpConfirmationController extends Controller
 {
-
     /**
      * function get
      * @param Router $router the router
@@ -26,5 +25,4 @@ class SignUpConfirmationController extends Controller
     {
         $this->render('signupConfirmation.twig');
     }
-
 }

@@ -4,7 +4,6 @@ namespace App\application\logging;
 
 interface Logger
 {
-
     public function debug(string $className, string $message, array $context = []): void;
 
 
@@ -24,5 +23,4 @@ interface Logger
 
 
     public function emergency(string $className, string $message, array $context = []): void;
-
 }

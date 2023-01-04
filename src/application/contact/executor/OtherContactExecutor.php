@@ -11,7 +11,6 @@ use App\model\contact\DefaultContact;
 
 class OtherContactExecutor extends ContactExecutor
 {
-
     public function __construct(ContactDAO $contactDAO, Redirect $redirect)
     {
 
@@ -37,5 +36,4 @@ class OtherContactExecutor extends ContactExecutor
         $this->contactDAO->saveSimpleContact($contact);
         return '';
     }
-
 }

@@ -7,7 +7,6 @@ namespace App\application\contact\field;
  */
 class YearField extends Field
 {
-
     /**
      * Verify if the value is a valid year. A year is valid if it is a number between 2010 and now.
      * @param string $value The value to verify.
@@ -17,5 +16,4 @@ class YearField extends Field
     {
         return is_numeric($value) && 2010 <= $value && $value <= date('Y');
     }
-
 }

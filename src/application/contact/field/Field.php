@@ -7,7 +7,6 @@ namespace App\application\contact\field;
  */
 class Field
 {
-
     /**
      * @var string the name of the field
      */
@@ -57,5 +56,4 @@ class Field
     {
         return !empty(trim($value));
     }
-
 }

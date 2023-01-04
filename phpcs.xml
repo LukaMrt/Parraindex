@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<ruleset name="MyProject">
+
+    <arg name="colors" />
+    <arg value="p" />
+
+    <file>src</file>
+    <exclude-pattern>src/infrastructure/injector/Injector.php</exclude-pattern>
+
+    <rule ref="PSR12" />
+
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"></rule>
+
+</ruleset>

@@ -3,7 +3,6 @@
 namespace App\controller;
 
 use App\infrastructure\router\Router;
-use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -13,7 +12,6 @@ use Twig\Error\SyntaxError;
  */
 class TreeController extends Controller
 {
-
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
@@ -28,5 +26,4 @@ class TreeController extends Controller
         shuffle($people);
         $this->render('tree.twig', ['people' => $people]);
     }
-
 }

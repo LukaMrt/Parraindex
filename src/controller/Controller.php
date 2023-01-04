@@ -15,7 +15,6 @@ use Twig\Error\SyntaxError;
  */
 abstract class Controller
 {
-
     /**
      * @var PersonService the person service
      */
@@ -69,15 +68,6 @@ abstract class Controller
         }
     }
 
-    /**
-     * Called when the HTTP method is GET
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     */
-    public function get(Router $router, array $parameters): void
-    {
-    }
 
     /**
      * Called when the HTTP method is POST
@@ -111,6 +101,18 @@ abstract class Controller
     {
     }
 
+
+    /**
+     * Called when the HTTP method is GET
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
+    public function get(Router $router, array $parameters): void
+    {
+    }
+
+
     /**
      * Renders the twig template with the given parameters
      * @param string $template the template
@@ -131,5 +133,4 @@ abstract class Controller
 
         echo $this->twig->render($template, $parameters);
     }
-
 }

@@ -15,7 +15,6 @@ use Twig\Error\SyntaxError;
  */
 class SponsorController extends Controller
 {
-
     /**
      * @var SponsorService the sponsor service
      */
@@ -29,12 +28,11 @@ class SponsorController extends Controller
      * @param SponsorService $sponsorService the sponsor service
      */
     public function __construct(
-        Environment    $twig,
-        Router         $router,
-        PersonService  $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         SponsorService $sponsorService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
@@ -64,5 +62,4 @@ class SponsorController extends Controller
             'godChild' => $sponsor->getGodChild(),
         ]);
     }
-
 }

@@ -15,7 +15,6 @@ use Twig\Error\SyntaxError;
  */
 class LoginController extends Controller
 {
-
     /**
      * @var LoginService the login service
      */
@@ -29,12 +28,11 @@ class LoginController extends Controller
      * @param LoginService $passwordService the password service
      */
     public function __construct(
-        Environment   $twig,
-        Router        $router,
+        Environment $twig,
+        Router $router,
         PersonService $personService,
-        LoginService  $passwordService
-    )
-    {
+        LoginService $passwordService
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->loginService = $passwordService;
     }
@@ -74,5 +72,4 @@ class LoginController extends Controller
 
         $this->render('login.twig', ['error' => $error ?? '']);
     }
-
 }

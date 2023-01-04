@@ -6,7 +6,6 @@ use App\model\person\Person;
 
 class ClassicSponsor extends Sponsor
 {
-
     private string $reason;
 
 
@@ -45,5 +44,4 @@ class ClassicSponsor extends Sponsor
     {
         return 0;
     }
-
 }

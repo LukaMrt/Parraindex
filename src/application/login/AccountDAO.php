@@ -8,7 +8,6 @@ use App\model\person\Identity;
 
 interface AccountDAO
 {
-
     public function getAccountPassword(string $login): Password;
 
 
@@ -46,5 +45,4 @@ interface AccountDAO
 
 
     public function deleteResetPassword(Account $account): void;
-
 }

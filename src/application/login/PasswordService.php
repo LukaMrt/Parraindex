@@ -11,7 +11,6 @@ use App\model\account\Password;
 
 class PasswordService
 {
-
     private AccountDAO $accountDAO;
     private PersonDAO $personDAO;
     private Redirect $redirect;
@@ -22,13 +21,12 @@ class PasswordService
 
     public function __construct(
         AccountDAO $accountDAO,
-        PersonDAO  $personDAO,
-        Redirect   $redirect,
-        Mailer     $mailer,
-        Random     $random,
-        UrlUtils   $urlUtils
-    )
-    {
+        PersonDAO $personDAO,
+        Redirect $redirect,
+        Mailer $mailer,
+        Random $random,
+        UrlUtils $urlUtils
+    ) {
         $this->accountDAO = $accountDAO;
         $this->personDAO = $personDAO;
         $this->redirect = $redirect;
@@ -85,5 +83,4 @@ class PasswordService
 
         return $error;
     }
-
 }

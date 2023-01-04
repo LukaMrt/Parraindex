@@ -14,8 +14,6 @@ use App\model\contact\SponsorContact;
  */
 interface ContactDAO
 {
-
-
     /**
      * Saves a contact representing the adding of a new person
      * @param PersonContact $contact the contact to save
@@ -78,5 +76,4 @@ interface ContactDAO
      * @return void
      */
     public function closeContact(int $contactId, int $resolverId): void;
-
 }

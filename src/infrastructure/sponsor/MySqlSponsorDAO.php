@@ -16,7 +16,6 @@ use PDOStatement;
 
 class MySqlSponsorDAO implements SponsorDAO
 {
-
     private DatabaseConnection $databaseConnection;
 
 
@@ -400,5 +399,4 @@ SQL
         $query->closeCursor();
         $connection = null;
     }
-
 }

@@ -8,7 +8,6 @@ use JetBrains\PhpStorm\NoReturn;
 
 class HttpRedirect implements Redirect
 {
-
     private Router $router;
 
 
@@ -29,5 +28,4 @@ class HttpRedirect implements Redirect
     {
         header('Refresh: ' . $secondsDelay . '; url=' . $this->router->url($url));
     }
-
 }

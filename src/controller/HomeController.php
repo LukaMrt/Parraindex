@@ -12,7 +12,6 @@ use Twig\Error\SyntaxError;
  */
 class HomeController extends Controller
 {
-
     /**
      * function get
      * @param Router $router the router
@@ -26,5 +25,4 @@ class HomeController extends Controller
     {
         $this->render('home.twig', ['homePage' => true]);
     }
-
 }

@@ -15,7 +15,6 @@ use App\model\person\PersonBuilder;
 
 class AddPersonContactExecutor extends ContactExecutor
 {
-
     private PersonDAO $personDAO;
 
 
@@ -59,5 +58,4 @@ class AddPersonContactExecutor extends ContactExecutor
         $this->contactDAO->savePersonAddContact($contact);
         return '';
     }
-
 }

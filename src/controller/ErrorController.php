@@ -12,7 +12,6 @@ use Twig\Error\SyntaxError;
  */
 class ErrorController extends Controller
 {
-
     /**
      * function get
      * @param Router $router the router
@@ -50,5 +49,4 @@ class ErrorController extends Controller
 
         $this->render('error.twig', ['code' => $error['code'], 'message' => $error['message']]);
     }
-
 }

@@ -16,11 +16,11 @@ use Twig\Error\SyntaxError;
  */
 class ContactAdminController extends Controller
 {
-
     /**
      * @var ContactService the contact service
      */
     private ContactService $contactService;
+
 
     /**
      * ContactAdminController constructor
@@ -31,12 +31,11 @@ class ContactAdminController extends Controller
      * initialize the controller
      */
     public function __construct(
-        Environment    $twig,
-        Router         $router,
-        PersonService  $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         ContactService $contactService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
     }
@@ -63,5 +62,4 @@ class ContactAdminController extends Controller
 
         $this->render('contactAdmin.twig', ['contacts' => $list]);
     }
-
 }

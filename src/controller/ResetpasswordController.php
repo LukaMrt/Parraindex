@@ -15,7 +15,6 @@ use Twig\Error\SyntaxError;
  */
 class ResetpasswordController extends Controller
 {
-
     /**
      * @var PasswordService the password service
      */
@@ -29,12 +28,11 @@ class ResetpasswordController extends Controller
      * @param PasswordService $passwordService the password service
      */
     public function __construct(
-        Environment     $twig,
-        Router          $router,
-        PersonService   $personService,
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
         PasswordService $passwordService
-    )
-    {
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->passwordService = $passwordService;
     }
@@ -74,5 +72,4 @@ class ResetpasswordController extends Controller
 
         $this->render('resetpassword.twig', ['error' => $error]);
     }
-
 }

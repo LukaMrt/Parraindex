@@ -9,7 +9,6 @@ use PHPMailer\PHPMailer\SMTP;
 
 class PhpMailer implements Mailer
 {
-
     private Logger $logger;
     private \PHPMailer\PHPMailer\PHPMailer $mailer;
 
@@ -58,5 +57,4 @@ class PhpMailer implements Mailer
             $this->logger->error(PhpMailer::class, "Mailer error: {$this->mailer->ErrorInfo}");
         }
     }
-
 }

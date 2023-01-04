@@ -15,7 +15,6 @@ use Twig\Error\SyntaxError;
  */
 class AboutController extends Controller
 {
-
     /**
      * AboutController constructor
      * @param Environment $twig the twig environment
@@ -51,5 +50,4 @@ class AboutController extends Controller
 
         $this->render('about.twig', ['authors' => $authors]);
     }
-
 }
