@@ -12,18 +12,32 @@ use App\model\person\Identity;
 use App\model\person\PersonBuilder;
 use App\model\sponsor\SponsorFactory;
 
+/**
+ * Class MysqlContactDAO
+ * Implementation of the ContactDAO interface for MySQL
+ */
 class MysqlContactDAO implements ContactDAO
 {
 
+    /**
+     * @var DatabaseConnection the database connection
+     */
     private DatabaseConnection $databaseConnection;
 
 
+    /**
+     * @param DatabaseConnection $databaseConnection the database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
 
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function savePersonAddContact(PersonContact $contact): void
     {
 
@@ -59,6 +73,10 @@ SQL
     }
 
 
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function savePersonRemoveContact(PersonContact $contact): void
     {
 
@@ -94,6 +112,10 @@ SQL
     }
 
 
+    /**
+     * @param DefaultContact $contact the contact to save
+     * @return void
+     */
     public function saveSimpleContact(DefaultContact $contact): void
     {
 
@@ -116,6 +138,10 @@ SQL
     }
 
 
+    /**
+     * @param SponsorContact $contact the contact to save
+     * @return void
+     */
     public function saveSponsorContact(SponsorContact $contact): void
     {
 
@@ -155,12 +181,20 @@ SQL
     }
 
 
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function saveChockingContentContact(PersonContact $contact): void
     {
         $this->savePersonUpdateContact($contact);
     }
 
 
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function savePersonUpdateContact(PersonContact $contact): void
     {
 
@@ -197,6 +231,9 @@ SQL
     }
 
 
+    /**
+     * @return array the list of all the contacts
+     */
     public function getContactList(): array
     {
 
@@ -317,7 +354,12 @@ SQL
     }
 
 
-    public function closeContact(int $contactId, int $resolverId)
+    /**
+     * @param int $contactId the id of the contact to close
+     * @param int $resolverId the id of the person who resolved the contact
+     * @return void
+     */
+    public function closeContact(int $contactId, int $resolverId): void
     {
         $connection = $this->databaseConnection->getDatabase();
 

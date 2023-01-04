@@ -53,9 +53,9 @@
       "Composer\\Config::disableProcessTimeout",
       "sass --watch scss:public/css"
     ],
-    "doc": [
+    "documentation": [
       "Composer\\Config::disableProcessTimeout",
-      "phpDocumentor -d src/ -t out/doc/ --title Parraindoc"
+      "phpDocumentor -d src/ -t out/documentation/ --title Parraindoc"
     ],
     "mutating": [
       "Composer\\Config::disableProcessTimeout",
