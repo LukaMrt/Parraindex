@@ -19,7 +19,6 @@ class DefaultSessionManager implements SessionManager
 
 
     /**
-     * Destroy the session
      * @return void
      */
     public function destroySession(): void
@@ -30,8 +29,7 @@ class DefaultSessionManager implements SessionManager
 
 
     /**
-     * Verify if the session is started
-     * @return bool
+     * @return bool true if the session is started, false otherwise
      */
     public function isSessionStarted(): bool
     {
@@ -40,7 +38,6 @@ class DefaultSessionManager implements SessionManager
 
 
     /**
-     * Get the session id
      * @param string $key Key of the field
      * @return mixed Value of the field
      */
@@ -51,9 +48,8 @@ class DefaultSessionManager implements SessionManager
 
 
     /**
-     * Set the session id
-     * @param string $key Key of the session
-     * @param mixed $value Value of the session
+     * @param string $key Key of the field
+     * @param mixed $value Value of the field
      * @return void
      */
     public function set(string $key, mixed $value): void
@@ -63,7 +59,6 @@ class DefaultSessionManager implements SessionManager
 
 
     /**
-     * Verify if the field exists
      * @param string $key Key of the field
      * @return bool True if the field exists, false otherwise
      */

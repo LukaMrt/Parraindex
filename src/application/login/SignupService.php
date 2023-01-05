@@ -12,18 +12,54 @@ use App\model\account\Password;
 use App\model\person\Identity;
 use App\model\person\Person;
 
+/**
+ * Service for signing up new users
+ */
 class SignupService
 {
+    /**
+     * @var string regex a non letter character
+     */
     private const NON_LETTER_REGEX = "/[^a-z]/";
+    /**
+     * @var AccountDAO DAO for accounts
+     */
     private AccountDAO $accountDAO;
+    /**
+     * @var PersonDAO DAO for persons
+     */
     private PersonDAO $personDAO;
+    /**
+     * @var Redirect redirect service
+     */
     private Redirect $redirect;
+    /**
+     * @var Mailer mailer service
+     */
     private Mailer $mailer;
+    /**
+     * @var Random random generator
+     */
     private Random $random;
+    /**
+     * @var UrlUtils Url utilities
+     */
     private UrlUtils $urlUtils;
+    /**
+     * @var Logger logger
+     */
     private Logger $logger;
 
 
+    /**
+     * @param AccountDAO $accountDAO DAO for accounts
+     * @param PersonDAO $personDAO DAO for persons
+     * @param Redirect $redirect redirect service
+     * @param Mailer $mailer mailer service
+     * @param Random $random random generator
+     * @param UrlUtils $urlUtils Url utilities
+     * @param Logger $logger logger
+     */
     public function __construct(
         AccountDAO $accountDAO,
         PersonDAO $personDAO,
@@ -43,6 +79,11 @@ class SignupService
     }
 
 
+    /**
+     * Signs up a new user. If the data is valid, an email is sent to the user with a link to activate the account.
+     * @param array $parameters the parameters of the request
+     * @return string error message or empty string if no error
+     */
     public function signup(array $parameters): string
     {
 
@@ -76,6 +117,16 @@ class SignupService
     }
 
 
+    /**
+     * Checks if the data is valid and returns an error message if not
+     * @param string $email the email given in data
+     * @param string $password the password given in data
+     * @param string $passwordConfirm the password confirmation given in data
+     * @param string $lastname the lastname given in data
+     * @param string $firstname the firstname given in data
+     * @param Person|null $person the person corresponding to the given name
+     * @return string error message or empty string if no error
+     */
     private function buildError(
         string $email,
         string $password,
@@ -147,6 +198,11 @@ class SignupService
     }
 
 
+    /**
+     * Checks if the given parameters are all not empty
+     * @param string[] $parameters the parameters to check
+     * @return bool true if at least one parameter is empty, false otherwise
+     */
     private function empty(string ...$parameters): bool
     {
         foreach ($parameters as $parameter) {
@@ -158,6 +214,11 @@ class SignupService
     }
 
 
+    /**
+     * Validates the account corresponding to the given token and creates the account if it is valid
+     * @param string $token the token corresponding to the account to validate
+     * @return string error message or empty string if no error
+     */
     public function validate(string $token): string
     {
         $error = '';

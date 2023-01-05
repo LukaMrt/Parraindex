@@ -86,7 +86,7 @@ class LoginServiceTest extends TestCase
             ->with(self::TEST_EMAIL)
             ->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
-        $this->accountDAO->method('getSimpleAccount')
+        $this->accountDAO->method('getAccountByLogin')
             ->with(self::TEST_EMAIL)
             ->willReturn($this->account);
 
@@ -120,7 +120,7 @@ class LoginServiceTest extends TestCase
             ->with(self::TEST_EMAIL)
             ->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
-        $this->accountDAO->method('getSimpleAccount')
+        $this->accountDAO->method('getAccountByLogin')
             ->with(self::TEST_EMAIL)
             ->willReturn($this->account);
 
@@ -143,7 +143,7 @@ class LoginServiceTest extends TestCase
             ->with(self::TEST_EMAIL)
             ->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
-        $this->accountDAO->method('getSimpleAccount')
+        $this->accountDAO->method('getAccountByLogin')
             ->with(self::TEST_EMAIL)
             ->willReturn($this->account);
 

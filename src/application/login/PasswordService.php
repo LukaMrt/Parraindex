@@ -10,17 +10,50 @@ use App\application\redirect\Redirect;
 use App\model\account\Account;
 use App\model\account\Password;
 
+/**
+ * Service for managing passwords (resetting, changing, etc.)
+ */
 class PasswordService
 {
+    /**
+     * @var AccountDAO DAO for accounts
+     */
     private AccountDAO $accountDAO;
+    /**
+     * @var PersonDAO DAO for persons
+     */
     private PersonDAO $personDAO;
+    /**
+     * @var Redirect Redirect service
+     */
     private Redirect $redirect;
+    /**
+     * @var Mailer Mailer service
+     */
     private Mailer $mailer;
+    /**
+     * @var Random Random generator
+     */
     private Random $random;
+    /**
+     * @var UrlUtils URL utilities
+     */
     private UrlUtils $urlUtils;
+    /**
+     * @var Logger Logger
+     */
     private Logger $logger;
 
 
+    /**
+     * @param AccountDAO $accountDAO DAO for accounts
+     * @param PersonDAO $personDAO DAO for persons
+     * @param Redirect $redirect Redirect service
+     * @param Mailer $mailer Mailer service
+     * @param Random $random Random generator
+     * @param UrlUtils $urlUtils URL utilities
+     * @param Logger $logger Logger
+     */
     public function __construct(
         AccountDAO $accountDAO,
         PersonDAO $personDAO,
@@ -40,6 +73,12 @@ class PasswordService
     }
 
 
+    /**
+     * Start the password reset process. It checks if the information provided is valid and sends an email to the user
+     * with a link to reset the password.
+     * @param array $parameters Parameters from the request
+     * @return string Error message if any, empty string otherwise
+     */
     public function resetPassword(array $parameters): string
     {
 
@@ -71,6 +110,12 @@ class PasswordService
     }
 
 
+    /**
+     * Validate the password reset process. It checks if the token is valid and if the password is valid. If so, it
+     * updates the password.
+     * @param string $token Token from the request
+     * @return string Error message if any, empty string otherwise
+     */
     public function validateResetPassword(string $token): string
     {
         $error = '';

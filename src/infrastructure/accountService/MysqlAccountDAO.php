@@ -6,25 +6,22 @@ use App\application\login\AccountDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\model\account\Account;
 use App\model\account\Password;
-use App\model\account\Privilege;
-use App\model\account\PrivilegeType;
 use App\model\person\Identity;
 use App\model\person\PersonBuilder;
-use App\model\school\School;
 
 /**
- * MySQL implementation of the AccountDAO interface.
+ * MySQL implementation of the AccountDAO interface
  */
 class MysqlAccountDAO implements AccountDAO
 {
     /**
-     * @var DatabaseConnection The database connection.
+     * @var DatabaseConnection The database connection
      */
     private DatabaseConnection $databaseConnection;
 
 
     /**
-     * @param DatabaseConnection $databaseConnection The database connection.
+     * @param DatabaseConnection $databaseConnection The database connection
      */
     public function __construct(DatabaseConnection $databaseConnection)
     {
@@ -33,8 +30,8 @@ class MysqlAccountDAO implements AccountDAO
 
 
     /**
-     * @param string $login The login.
-     * @return Password
+     * @param string $login login of the account
+     * @return Password password of the account, em if the account does not exist
      */
     public function getAccountPassword(string $login): Password
     {
@@ -56,7 +53,7 @@ class MysqlAccountDAO implements AccountDAO
 
 
     /**
-     * @param Account $account The account
+     * @param Account $account The account to create
      * @return void
      */
     public function createAccount(Account $account): void
@@ -87,15 +84,15 @@ SQL
 
 
     /**
-     * @param string $email The email
-     * @return bool
+     * @param string $login The login of the account
+     * @return bool true if the account exists, false otherwise
      */
-    public function existsAccount(string $email): bool
+    public function existsAccount(string $login): bool
     {
         $connection = $this->databaseConnection->getDatabase();
 
         $query = $connection->prepare("SELECT * FROM Account WHERE email = :email");
-        $query->execute(['email' => $email]);
+        $query->execute(['email' => $login]);
         $result = $query->fetch();
 
         $connection = null;
@@ -104,47 +101,8 @@ SQL
 
 
     /**
-     * @param mixed $username The username
-     * @return Account
-     */
-    public function getSimpleAccount(mixed $username): Account
-    {
-        $connection = $this->databaseConnection->getDatabase();
-
-        $query = $connection->prepare(<<<SQL
-                            SELECT *
-                            FROM Account A
-                                LEFT JOIN Privilege P on A.id_account = P.id_account
-                            WHERE email = :login
-SQL
-        );
-        $query->execute(['login' => $username]);
-
-        $school = School::emptySchool();
-        $person = PersonBuilder::aPerson()->build();
-        $privileges = [];
-        $id = 0;
-        $email = '';
-        $password = new Password('');
-
-        while ($row = $query->fetch()) {
-            $privileges[] = new Privilege($school, PrivilegeType::fromString($row->privilege_name));
-            $id = $row->id_account;
-            $email = $row->email;
-            $password = new Password($row->password);
-        }
-
-        $account = new Account($id, $email, $person, $password, ...$privileges);
-
-        $query->closeCursor();
-        $connection = null;
-        return $account;
-    }
-
-
-    /**
-     * @param Identity $identity The identity
-     * @return bool
+     * @param Identity $identity The identity of the person
+     * @return bool true if the person exists, false otherwise
      */
     public function existsAccountByIdentity(Identity $identity): bool
     {
@@ -167,11 +125,11 @@ SQL
 
 
     /**
-     * @param Account $account The account
-     * @param string $link The link
+     * @param Account $account The temporary account to create
+     * @param string $token The token to confirm the account creation
      * @return void
      */
-    public function createTemporaryAccount(Account $account, string $link): void
+    public function createTemporaryAccount(Account $account, string $token): void
     {
         $connection = $this->databaseConnection->getDatabase();
 
@@ -184,7 +142,7 @@ SQL
             'email' => $account->getLogin(),
             'password' => $account->getHashedPassword(),
             'person' => $account->getPersonId(),
-            'link' => $link
+            'link' => $token
         ]);
 
         $connection = null;
@@ -193,8 +151,8 @@ SQL
 
 
     /**
-     * @param string $token The token
-     * @return Account
+     * @param string $token The token related to the temporary account
+     * @return Account The temporary account, with id = -1 if the account does not exist
      */
     public function getTemporaryAccountByToken(string $token): Account
     {
@@ -221,7 +179,7 @@ SQL
 
 
     /**
-     * @param Account $account The account
+     * @param Account $account The temporary account to delete
      * @return void
      */
     public function deleteTemporaryAccount(Account $account): void
@@ -237,15 +195,15 @@ SQL
 
 
     /**
-     * @param string $email The email
-     * @return Account|null
+     * @param string $login The login of the account
+     * @return Account|null The account, null if the account does not exist
      */
-    public function getAccountByLogin(string $email): ?Account
+    public function getAccountByLogin(string $login): ?Account
     {
         $connection = $this->databaseConnection->getDatabase();
 
         $query = $connection->prepare("SELECT * FROM Account WHERE email = :email LIMIT 1");
-        $query->execute(['email' => $email]);
+        $query->execute(['email' => $login]);
         $account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
 
         if ($result = $query->fetch()) {
@@ -264,8 +222,8 @@ SQL
 
 
     /**
-     * @param Account $account The account
-     * @param string $token The token
+     * @param Account $account The account which asked for a password reset
+     * @param string $token The token to confirm the password reset
      * @return void
      */
     public function createResetpassword(Account $account, string $token): void
@@ -289,8 +247,8 @@ SQL
 
 
     /**
-     * @param string $token The token
-     * @return Account
+     * @param string $token The token related to the password reset
+     * @return Account The account, with id = -1 if the account does not exist
      */
     public function getAccountResetPasswordByToken(string $token): Account
     {
@@ -317,7 +275,7 @@ SQL
 
 
     /**
-     * @param Account $account The account
+     * @param Account $account The account which asked for a password reset
      * @return void
      */
     public function editAccountPassword(Account $account): void
@@ -336,7 +294,7 @@ SQL
 
 
     /**
-     * @param Account $account The account
+     * @param Account $account The account which asked for a password reset
      * @return void
      */
     public function deleteResetPassword(Account $account): void
