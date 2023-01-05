@@ -3,16 +3,16 @@
 namespace App\application\mail;
 
 /**
- * Send emails
+ * Mail interface for sending emails
  */
 interface Mailer
 {
     /**
-     * Send email
-     * @param string $to Email address
-     * @param string $subject Subject
-     * @param string $body Body
-     * @return mixed
+     * Send an email
+     * @param string $to Recipient email address
+     * @param string $subject Subject of email
+     * @param string $body Content of email
+     * @return void
      */
-    public function send(string $to, string $subject, string $body);
+    public function send(string $to, string $subject, string $body): void;
 }
