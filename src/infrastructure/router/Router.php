@@ -27,12 +27,12 @@ class Router
 
 
     /**
-     * Register a route
-     * @param string $method HTTP method
-     * @param string $url Url
-     * @param Controller $controller Controller instance
+     * Registers a route
+     * @param string $method HTTP method of the route
+     * @param string $url Url of the route
+     * @param Controller $controller Controller instance of the route
      * @param string $name Route name
-     * @return $this
+     * @return Router Return this to allow chaining registering
      */
     public function registerRoute(string $method, string $url, Controller $controller, string $name): self
     {
@@ -52,7 +52,7 @@ class Router
 
 
     /**
-     * Run the router
+     * Run the router to find the route and call the controller
      * @return void
      */
     public function run(): void
@@ -65,7 +65,7 @@ class Router
     /**
      * Get parameters from the url
      * @param string $name Parameter name
-     * @return string
+     * @return string Parameter value
      */
     public function getParameter(string $name): string
     {
@@ -83,8 +83,8 @@ class Router
     /**
      * Get the url of a route
      * @param string $name Route name
-     * @param array $parameters Parameters
-     * @return string
+     * @param array $parameters Parameters to add to the url
+     * @return string Url of the route
      */
     public function url(string $name, array $parameters = []): string
     {

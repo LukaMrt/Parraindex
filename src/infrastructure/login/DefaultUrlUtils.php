@@ -6,7 +6,7 @@ use App\application\login\UrlUtils;
 use App\infrastructure\router\Router;
 
 /**
- *
+ * Default url utils implementation. It uses the php global variables
  */
 class DefaultUrlUtils implements UrlUtils
 {
@@ -26,8 +26,7 @@ class DefaultUrlUtils implements UrlUtils
 
 
     /**
-     * Get the url of the login page
-     * @return string
+     * @return string The base url
      */
     public function getBaseUrl(): string
     {
@@ -43,10 +42,9 @@ class DefaultUrlUtils implements UrlUtils
 
 
     /**
-     * Build the url of the login page
      * @param string $route Route name
-     * @param array $parameters Parameters
-     * @return string
+     * @param array $parameters Parameters to add to the url
+     * @return string The url
      */
     public function buildUrl(string $route, array $parameters): string
     {

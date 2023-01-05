@@ -3,16 +3,17 @@
 namespace App\infrastructure\random;
 
 use App\application\random\Random;
+use Exception;
 
 /**
- * Genaerate random string
+ * Default implementation of Random interface. It uses PHP's built-in functions
  */
 class DefaultRandom implements Random
 {
     /**
-     * Generate a random string
      * @param int $length Length of the string
-     * @return string
+     * @return string Random string
+     * @throws Exception If the length is less than 1
      */
     public function generate(int $length): string
     {

@@ -10,7 +10,7 @@ use PDO;
 class DatabaseConnection
 {
     /**
-     * @var PDO $pdo PDO instance
+     * @var PDO PDO instance
      */
     private PDO $database;
 
@@ -25,7 +25,7 @@ class DatabaseConnection
 
 
     /**
-     * Connect to database
+     * Connect to database using environment variables
      * @return void
      */
     private function connect(): void
@@ -54,7 +54,7 @@ class DatabaseConnection
 
     /**
      * Get PDO instance
-     * @return PDO
+     * @return PDO PDO instance
      */
     public function getDatabase(): PDO
     {

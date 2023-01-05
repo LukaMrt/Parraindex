@@ -7,7 +7,7 @@ use App\infrastructure\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
- * Redirect to a route
+ * Http redirection implementation of Redirect interface
  */
 class HttpRedirect implements Redirect
 {
@@ -27,7 +27,6 @@ class HttpRedirect implements Redirect
 
 
     /**
-     * Redirect to a route
      * @param string $url Url to redirect
      * @return void
      */
@@ -39,7 +38,6 @@ class HttpRedirect implements Redirect
 
 
     /**
-     * Redirect to a route with a delay in seconds
      * @param string $url Url to redirect
      * @param int $secondsDelay Delay in seconds
      * @return void

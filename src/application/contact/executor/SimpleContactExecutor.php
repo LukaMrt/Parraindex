@@ -9,8 +9,6 @@ use App\model\contact\DefaultContact;
  */
 abstract class SimpleContactExecutor extends ContactExecutor
 {
-
-
     /**
      * Performs the actions when the contact is valid
      * @param array $data Data from the form

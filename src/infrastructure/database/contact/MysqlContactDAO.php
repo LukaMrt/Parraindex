@@ -13,7 +13,6 @@ use App\model\person\PersonBuilder;
 use App\model\sponsor\SponsorFactory;
 
 /**
- * Class MysqlContactDAO
  * Implementation of the ContactDAO interface for MySQL
  */
 class MysqlContactDAO implements ContactDAO

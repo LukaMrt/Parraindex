@@ -69,13 +69,12 @@ use Twig\TwigFunction;
 use function DI\get;
 
 /**
- * Inject dependencies into controllers and services
+ * Injector class used to inject dependencies in all classes
  */
 class Injector
 {
-
     /**
-     * @var Container $container Container
+     * @var Container DI container
      */
     private Container $container;
     /**
@@ -95,7 +94,7 @@ class Injector
 
 
     /**
-     * Inject dependencies into controllers
+     * Register all dependencies in the container
      * @return void
      */
     public function build(): void
@@ -169,8 +168,9 @@ class Injector
 
 
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
+     * Sets up all the routes with the controllers
+     * @throws DependencyException when a dependency cannot be resolved
+     * @throws NotFoundException when a dependency cannot be resolved
      */
     public function setUpRouter(): void
     {
@@ -216,5 +216,4 @@ class Injector
         $this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
         $this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
     }
-
 }

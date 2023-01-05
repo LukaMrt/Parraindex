@@ -51,10 +51,9 @@ class PhpMailer implements Mailer
 
 
     /**
-     * send a mail
-     * @param string $to To
-     * @param string $subject Subject
-     * @param string $body Body
+     * @param string $to Recipient email address
+     * @param string $subject Subject of the mail
+     * @param string $body Content of the mail
      * @return void
      */
     public function send(string $to, string $subject, string $body): void

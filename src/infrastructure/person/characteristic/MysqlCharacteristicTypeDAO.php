@@ -29,7 +29,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 
     /**
      * Get all the characteristics types
-     * @return array
+     * @return Characteristic[] The characteristics types
      */
     public function getAllCharacteristicTypes(): array
     {
@@ -52,19 +52,19 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 
     /**
      * Build a characteristic
-     * @param $buffer Buffer of the characteristic
-     * @return Characteristic
+     * @param mixed $row Buffer of the characteristic
+     * @return Characteristic The characteristic
      */
-    public function buildCharacteristic($buffer): Characteristic
+    public function buildCharacteristic(mixed $row): Characteristic
     {
         return (new CharacteristicBuilder())
-            ->withId($buffer->id_network)
-            ->withType($buffer->type)
-            ->withTitle($buffer->title)
-            ->withUrl($buffer->url)
-            ->withImage($buffer->image)
-            ->withVisibility($buffer->visibility ?? false)
-            ->withValue($buffer->value ?? false)
+            ->withId($row->id_network)
+            ->withType($row->type)
+            ->withTitle($row->title)
+            ->withUrl($row->url)
+            ->withImage($row->image)
+            ->withVisibility($row->visibility ?? false)
+            ->withValue($row->value ?? false)
             ->build();
     }
 
@@ -72,7 +72,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
     /**
      * Get all characteristics types and values
      * @param int $idPerson Id of the person
-     * @return array
+     * @return Characteristic[] The characteristics types and values
      */
     public function getAllCharacteristicAndValues(int $idPerson): array
     {

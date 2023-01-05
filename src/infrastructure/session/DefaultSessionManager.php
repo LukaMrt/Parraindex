@@ -5,7 +5,7 @@ namespace App\infrastructure\session;
 use App\application\login\SessionManager;
 
 /**
- * Default session manager to manage session
+ * Default session manager to manage session. It uses PHP session.
  */
 class DefaultSessionManager implements SessionManager
 {
@@ -41,8 +41,8 @@ class DefaultSessionManager implements SessionManager
 
     /**
      * Get the session id
-     * @param string $key Key of the session
-     * @return mixed
+     * @param string $key Key of the field
+     * @return mixed Value of the field
      */
     public function get(string $key): mixed
     {
@@ -53,19 +53,19 @@ class DefaultSessionManager implements SessionManager
     /**
      * Set the session id
      * @param string $key Key of the session
-     * @param $value Value of the session
+     * @param mixed $value Value of the session
      * @return void
      */
-    public function set(string $key, $value): void
+    public function set(string $key, mixed $value): void
     {
         $_SESSION[$key] = $value;
     }
 
 
     /**
-     * Verify if the session id exists
-     * @param string $key Key of the session
-     * @return bool
+     * Verify if the field exists
+     * @param string $key Key of the field
+     * @return bool True if the field exists, false otherwise
      */
     public function exists(string $key): bool
     {
