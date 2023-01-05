@@ -241,7 +241,7 @@ SQL
      * @param Person $person Person to update
      * @return void
      */
-    public function updatePerson(Person $person)
+    public function updatePerson(Person $person): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
