@@ -17,7 +17,8 @@
         "code",
         "infra",
         "projectManagement",
-        "test"
+        "test",
+        "doc"
       ]
     },
     {
@@ -39,7 +40,8 @@
       "profile": "https://github.com/Melvyn27",
       "contributions": [
         "code",
-        "design"
+        "design",
+        "doc"
       ]
     },
     {

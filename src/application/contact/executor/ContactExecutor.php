@@ -16,17 +16,14 @@ abstract class ContactExecutor
      * @var ContactDAO $contactDAO DAO to save the contact
      */
     protected ContactDAO $contactDAO;
-
-    /**
-     * @var Redirect $redirect The redirect service to redirect the user
-     */
-    private Redirect $redirect;
-
     /**
      * @var ContactType $contactType Type of the contact
      */
     protected ContactType $contactType;
-
+    /**
+     * @var Redirect $redirect The redirect service to redirect the user
+     */
+    private Redirect $redirect;
     /**
      * @var array $fields Fields of the contact form
      */
