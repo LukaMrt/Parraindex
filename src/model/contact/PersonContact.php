@@ -4,11 +4,25 @@ namespace App\model\contact;
 
 use App\model\person\Person;
 
+/**
+ * Contact requests related to a person
+ */
 class PersonContact extends Contact
 {
+    /**
+     * @var Person The person related to the contact request
+     */
     private Person $person;
 
 
+    /**
+     * @param int $id The id of the contact request
+     * @param string $contacterName The name of the person who sent the contact request
+     * @param string $contacterEmail The email of the person who sent the contact request
+     * @param ContactType $type The type of the contact request
+     * @param string $description The description of the contact request
+     * @param Person $person The person related to the contact request
+     */
     public function __construct(
         int $id,
         string $contacterName,
@@ -22,6 +36,9 @@ class PersonContact extends Contact
     }
 
 
+    /**
+     * @return array[] The description of the contact request
+     */
     public function getDescription(): array
     {
 
@@ -32,6 +49,9 @@ class PersonContact extends Contact
     }
 
 
+    /**
+     * @return Person The person related to the contact request
+     */
     public function getPerson(): Person
     {
         return $this->person;

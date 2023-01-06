@@ -2,6 +2,9 @@
 
 namespace App\model\account;
 
+/**
+ * Privilege values
+ */
 enum PrivilegeType
 {
     case ADMIN;
@@ -9,6 +12,11 @@ enum PrivilegeType
     case STUDENT;
 
 
+    /**
+     * Get the privilege value from the string
+     * @param string $type value to convert
+     * @return PrivilegeType converted value
+     */
     public static function fromString(string $type): PrivilegeType
     {
         return match ($type) {
@@ -19,12 +27,20 @@ enum PrivilegeType
     }
 
 
-    public function isHigherThan(PrivilegeType $highest): bool
+    /**
+     * Verify if the privilege is higher than the other
+     * @param PrivilegeType $other privilege to compare
+     * @return bool true if the privilege is higher
+     */
+    public function isHigherThan(PrivilegeType $other): bool
     {
-        return $this->ordinal() < $highest->ordinal();
+        return $this->ordinal() < $other->ordinal();
     }
 
 
+    /**
+     * @return int the ordinal value of the privilege
+     */
     private function ordinal(): int
     {
         return match ($this) {
@@ -35,6 +51,9 @@ enum PrivilegeType
     }
 
 
+    /**
+     * @return string the string value of the privilege
+     */
     public function toString(): string
     {
         return match ($this) {
