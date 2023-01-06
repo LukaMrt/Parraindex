@@ -2,21 +2,63 @@
 
 namespace App\model\person;
 
+use App\model\person\characteristic\Characteristic;
+use App\model\sponsor\Sponsor;
+
+/**
+ * Person class to represent a person
+ */
 class Person
 {
+    /**
+     * @var int Id of the person
+     */
     private int $id;
+    /**
+     * @var Identity Identity of the person
+     */
     private Identity $identity;
+    /**
+     * @var string Biography of the person
+     */
     private string $biography;
+    /**
+     * @var string Color of the person (hexadecimal)
+     */
     private string $color;
+    /**
+     * @var string Description of the person
+     */
     private string $description;
+    /**
+     * @var Characteristic[] Characteristics of the person
+     */
     private array $characteristics;
+    /**
+     * @var Sponsor[] Sponsors of the person
+     */
     private array $sponsors;
+    /**
+     * @var array Families of the person
+     */
     private array $families;
+    /**
+     * @var array Associations of the person
+     */
     private array $associations;
+    /**
+     * @var array Promotions of the person
+     */
     private array $promotions;
+    /**
+     * @var int Start year of the person
+     */
     private int $startYear;
 
 
+    /**
+     * @param PersonBuilder $builder Builder to build the person
+     */
     public function __construct(PersonBuilder $builder)
     {
         $this->id = $builder->id;
@@ -33,6 +75,9 @@ class Person
     }
 
 
+    /**
+     * @return int Id of the person
+     */
     public function getId(): int
     {
         return $this->id;
@@ -40,7 +85,7 @@ class Person
 
 
     /**
-     * @return Identity, an object containing personal information (lastName, fisrtName, photo, birthdate).
+     * @return Identity Identity of the person
      */
     public function getIdentity(): string
     {
@@ -49,7 +94,7 @@ class Person
 
 
     /**
-     * @return string the short description of the person.
+     * @return string The short description of the person
      */
     public function getBiography(): string
     {
@@ -58,7 +103,7 @@ class Person
 
 
     /**
-     * @return string, the hex representation of the banner color.
+     * @return string Banner color of the person (hexadecimal)
      */
     public function getColor(): string
     {
@@ -67,7 +112,7 @@ class Person
 
 
     /**
-     * @return string The description of the person.
+     * @return string The description of the person
      */
     public function getDescription(): string
     {
@@ -75,12 +120,18 @@ class Person
     }
 
 
+    /**
+     * @return array Characteristics of the person
+     */
     public function getCharacteristics(): array
     {
         return $this->characteristics;
     }
 
 
+    /**
+     * @return int|null Start year of the person
+     */
     public function getStartYear(): int|null
     {
 
@@ -99,7 +150,7 @@ class Person
 
 
     /**
-     * @param int $startYear
+     * @param int $startYear New start year of the person
      */
     public function setStartYear(int $startYear): void
     {
@@ -108,7 +159,7 @@ class Person
 
 
     /**
-     * @return string the first name of the person.
+     * @return string The first name of the person.
      */
     public function getFirstName(): string
     {
@@ -117,7 +168,7 @@ class Person
 
 
     /**
-     * @return string the last name of the person.
+     * @return string The last name of the person.
      */
     public function getLastName(): string
     {
@@ -135,9 +186,8 @@ class Person
 
 
     /**
-     * set the new picture URL of the person.
-     *
-     * @param string $picture URL of the picture.
+     * Sets the picture URL of the person
+     * @param string $picture New URL of the picture
      */
     public function setPicture(string $picture): void
     {

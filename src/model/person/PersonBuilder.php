@@ -11,41 +11,59 @@ use DateTime;
  */
 class PersonBuilder
 {
-    /** @var int $id */
+    /**
+     * @var int The id of the person
+     */
     public int $id;
-
-    /** @var Identity $name */
+    /**
+     * @var Identity The identity of the person
+     */
     public Identity $identity;
-
-    /** @var DateTime $birthDate */
+    /**
+     * @var DateTime The birthdate of the person
+     */
     public DateTime $birthDate;
-
-    /** @var string $biography */
+    /**
+     * @var string The biography of the person
+     */
     public string $biography;
-
-    /** @var string $description */
+    /**
+     * @var string The description of the person
+     */
     public string $description;
-
-    /** @var array $characteristics */
+    /**
+     * @var array The characteristics of the person
+     */
     public array $characteristics;
-
-    /** @var array $sponsors */
+    /**
+     * @var array The sponsors of the person
+     */
     public array $sponsors;
-
-    /** @var array $families */
+    /**
+     * @var array The families of the person
+     */
     public array $families;
-
-    /** @var array $associations */
+    /**
+     * @var array The associations of the person
+     */
     public array $associations;
-
-    /** @var string $color , hex representation of the banner color. */
+    /**
+     * @var string The color of the person (hexadecimal)
+     */
     public string $color;
-
+    /**
+     * @var array The promotions of the person
+     */
     public array $promotions;
-
+    /**
+     * @var int The year when the person started at the IUT
+     */
     public int $startYear;
 
 
+    /**
+     * Private constructor. Use {@see PersonBuilder::create()} instead.
+     */
     private function __construct()
     {
         $this->id = 0;
@@ -63,6 +81,9 @@ class PersonBuilder
     }
 
 
+    /**
+     * @return PersonBuilder A new instance of PersonBuilder.
+     */
     public static function aPerson(): PersonBuilder
     {
         return new PersonBuilder();
@@ -70,8 +91,9 @@ class PersonBuilder
 
 
     /**
-     * @param int $id Set id property.
-     * @return $this Builder instance.
+     * Sets the id of the person
+     * @param int $id The id of the person
+     * @return $this The builder instance for chaining
      */
     public function withId(int $id): PersonBuilder
     {
@@ -81,8 +103,9 @@ class PersonBuilder
 
 
     /**
-     * @param Identity $identity Set name property.
-     * @return $this Builder instance.
+     * Sets the identity of the person
+     * @param Identity $identity The identity of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withIdentity(Identity $identity): PersonBuilder
     {
@@ -92,8 +115,9 @@ class PersonBuilder
 
 
     /**
-     * @param string|null $color Set banner color property.
-     * @return $this Builder instance.
+     * Sets the banner color of the person
+     * @param string|null $color The banner color of the person (hexadecimal)
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withColor(?string $color): PersonBuilder
     {
@@ -103,8 +127,9 @@ class PersonBuilder
 
 
     /**
-     * @param string|null $biography Set biography property.
-     * @return $this Builder instance.
+     * Sets the biography of the person
+     * @param string|null $biography The biography of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withBiography(?string $biography): PersonBuilder
     {
@@ -114,8 +139,9 @@ class PersonBuilder
 
 
     /**
-     * @param string|null $description Set description property.
-     * @return $this Builder instance.
+     * Sets the description of the person
+     * @param string|null $description The description of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withDescription(?string $description): PersonBuilder
     {
@@ -125,8 +151,9 @@ class PersonBuilder
 
 
     /**
-     * @param array $characteristics Set characteristics property.
-     * @return $this Builder instance.
+     * Sets the characteristics of the person
+     * @param array $characteristics The characteristics of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withCharacteristics(array $characteristics): PersonBuilder
     {
@@ -136,8 +163,9 @@ class PersonBuilder
 
 
     /**
-     * @param Characteristic $characteristic Add a characteristic to the person.
-     * @return $this Builder instance.
+     * Adds a characteristic to the person
+     * @param Characteristic $characteristic The characteristic to add
+     * @return PersonBuilder The builder instance for chaining
      */
     public function addCharacteristic(Characteristic $characteristic): PersonBuilder
     {
@@ -149,8 +177,9 @@ class PersonBuilder
 
 
     /**
-     * @param int $startYear Set the entry year of the person.
-     * @return $this Builder instance.
+     * Sets the start year of the person
+     * @param int $startYear The year when the person started at the IUT
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withStartYear(int $startYear): PersonBuilder
     {
@@ -160,7 +189,9 @@ class PersonBuilder
 
 
     /**
-     * @param Promotion $promotion Add a promotion to the person.
+     * Adds a promotion to the person
+     * @param Promotion $promotion The promotion to add
+     * @return PersonBuilder The builder instance for chaining
      */
     public function addPromotion(Promotion $promotion): PersonBuilder
     {
@@ -170,7 +201,8 @@ class PersonBuilder
 
 
     /**
-     * @return Person New instance from Builder.
+     * Build the {@see Person} instance from the builder data
+     * @return Person The built person
      */
     public function build(): Person
     {

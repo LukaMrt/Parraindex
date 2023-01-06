@@ -2,8 +2,12 @@
 
 namespace App\model\person\characteristic;
 
+
 use ValueError;
 
+/**
+ * Types of characteristics
+ */
 enum CharacteristicType: string
 {
     case URL = '';
@@ -11,6 +15,11 @@ enum CharacteristicType: string
     case EMAIL = 'mailto:';
 
 
+    /**
+     * @param string $name Name of the characteristic type
+     * @return CharacteristicType Characteristic type
+     * @throws ValueError If the characteristic type does not exist
+     */
     public static function fromName(string $name): CharacteristicType
     {
         foreach (self::cases() as $status) {
@@ -22,6 +31,9 @@ enum CharacteristicType: string
     }
 
 
+    /**
+     * @return string Prefix of the characteristic type
+     */
     public function getPrefix(): string
     {
         return $this->value;

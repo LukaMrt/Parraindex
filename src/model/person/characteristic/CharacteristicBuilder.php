@@ -2,38 +2,45 @@
 
 namespace App\model\person\characteristic;
 
-use LogicException;
-
 /**
  * Builder instance for {@see Characteristic}.
  */
 class CharacteristicBuilder
 {
-    /** @var int $id */
+    /**
+     * @var int Id of the characteristic
+     */
     private int $id;
-
-    /** @var string $title */
+    /**
+     * @var string Name of the characteristic
+     */
     private string $title;
-
-    /** @var CharacteristicType $type */
+    /**
+     * @var CharacteristicType Type of the characteristic
+     */
     private CharacteristicType $type;
-
-    /** @var string $url */
+    /**
+     * @var string Target url of the characteristic
+     */
     private string $url;
-
-    /** @var string $image */
+    /**
+     * @var string Image url of the characteristic
+     */
     private string $image;
-
-    /** @var bool $visible */
+    /**
+     * @var bool Is the characteristic visible
+     */
     private bool $visible;
-
-    /** @var string $value */
+    /**
+     * @var string Description of the characteristic
+     */
     private string $value;
 
 
     /**
-     * @param int $id Set id property.
-     * @return $this Builder instance.
+     * Sets the id of the characteristic
+     * @param int $id Id of the characteristic
+     * @return CharacteristicBuilder This to chain calls
      */
     public function withId(int $id): CharacteristicBuilder
     {
@@ -43,8 +50,9 @@ class CharacteristicBuilder
 
 
     /**
-     * @param string $title Set title property.
-     * @return $this Builder instance.
+     * Sets the name of the characteristic
+     * @param string $title Name of the characteristic
+     * @return CharacteristicBuilder This to chain calls
      */
     public function withTitle(string $title): CharacteristicBuilder
     {
@@ -54,8 +62,9 @@ class CharacteristicBuilder
 
 
     /**
-     * @param CharacteristicType $type Set type property.
-     * @return $this Builder instance.
+     * Sets the type of the characteristic
+     * @param string $typeName Type of the characteristic
+     * @return CharacteristicBuilder This to chain calls
      */
     public function withType(string $typeName): CharacteristicBuilder
     {
@@ -65,8 +74,9 @@ class CharacteristicBuilder
 
 
     /**
-     * @param string $url Set url property.
-     * @return $this Builder instance.
+     * Sets the target url of the characteristic
+     * @param string $url Target url of the characteristic
+     * @return CharacteristicBuilder This to chain calls
      */
     public function withUrl(string $url): CharacteristicBuilder
     {
@@ -76,8 +86,9 @@ class CharacteristicBuilder
 
 
     /**
-     * @param string $image Set image property.
-     * @return $this Builder instance.
+     * Sets the image url of the characteristic
+     * @param string $image Image url of the characteristic
+     * @return CharacteristicBuilder This to chain calls
      */
     public function withImage(string $image): CharacteristicBuilder
     {
@@ -87,8 +98,9 @@ class CharacteristicBuilder
 
 
     /**
-     * @param bool $visible Set visible property.
-     * @return $this Builder instance.
+     * Sets the visibility of the characteristic
+     * @param bool $visible Is the characteristic visible
+     * @return CharacteristicBuilder This to chain calls
      */
     public function withVisibility(bool $visible): CharacteristicBuilder
     {
@@ -98,8 +110,9 @@ class CharacteristicBuilder
 
 
     /**
-     * @param string $value Set value property.
-     * @return $this Builder instance.
+     * Sets the description of the characteristic
+     * @param string $value Description of the characteristic
+     * @return CharacteristicBuilder This to chain calls
      */
     public function withValue(string $value): CharacteristicBuilder
     {
@@ -109,7 +122,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return int
+     * @return int Id of the characteristic
      */
     public function getId(): int
     {
@@ -118,7 +131,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return string
+     * @return string Name of the characteristic
      */
     public function getTitle(): string
     {
@@ -127,7 +140,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return CharacteristicType
+     * @return CharacteristicType Type of the characteristic
      */
     public function getType(): CharacteristicType
     {
@@ -136,7 +149,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return string
+     * @return string Target url of the characteristic
      */
     public function getUrl(): string
     {
@@ -145,7 +158,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return string
+     * @return string Image url of the characteristic
      */
     public function getImage(): string
     {
@@ -154,7 +167,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return bool
+     * @return bool Is the characteristic visible
      */
     public function isVisible(): bool
     {
@@ -163,7 +176,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return string
+     * @return string Description of the characteristic
      */
     public function getValue(): string
     {
@@ -172,8 +185,7 @@ class CharacteristicBuilder
 
 
     /**
-     * @return Characteristic New instance from Builder.
-     * @throws LogicException if Builder does not validate.
+     * @return Characteristic Characteristic instance build from the builder
      */
     public function build(): Characteristic
     {
