@@ -2,7 +2,6 @@
 
 namespace App\model\person\characteristic;
 
-
 use ValueError;
 
 /**
