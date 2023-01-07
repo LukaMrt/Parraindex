@@ -44,6 +44,7 @@
                 'firstName': author.firstName,
                 'lastName': author.lastName,
                 'picture': author.picture,
+                'url': router.url('person', {'id': author.id})
             } %}
         {% endfor %}
 
