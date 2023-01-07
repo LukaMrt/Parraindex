@@ -1,29 +1,39 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
 
 .popup {
-  position: absolute;
-  top: f.rem(90);
-  z-index: 2;
-  left: -1000px;
+  @include m.flex(center, center, row);
+  position: fixed;
+  top: 10vh;
+  left: 0;
+  z-index: 10;
+  transform: translateX(-100%);
+
   padding: f.rem(10);
   gap: f.rem(10);
   border-radius: f.rem(5);
-  transition: all 0.8s ease-in-out;
-  @include m.flex(center, center, row);
+  transition: translate 0.8s ease-in-out;
 
   &--error {
     background: var(--light-red);
-    border-left: var(--dark-red) 5px solid;
+    border: var(--dark-red) 5px solid;
+    border-width: 0 0 5px 0;
   }
 
   &--success {
     background: var(--light-green);
-    border-left: var(--dark-green) 5px solid;
+    border: var(--dark-green) 0px solid;
+    border-width: 0 0 0 5px;
   }
 
   &--visible {
     left: f.rem(20);
+    translate: 100% 0;
+
+    @include b.breakpoint(small){
+      translate: 0 100%; 
+    }
   }
 
   &__close-button {
@@ -34,4 +44,16 @@
       cursor: pointer;
     }
   }
+
+  @include b.breakpoint(small){
+    transform: translateY(-100%);
+    top: 0;
+    left: 10%;
+    right: 10%;
+    border-width: 0 0 5px 0;
+
+    flex-direction: column;
+    border-radius: 0 0 f.rem(20) f.rem(20);
+  }
+  
 }

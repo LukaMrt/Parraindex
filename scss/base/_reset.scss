@@ -9,8 +9,8 @@ body {
 
   min-width: 350px;
 
-  min-height: 100vh;
-  min-height: 100dvh;
+  min-height: max(350px, 100vh);
+  min-height: max(350px, 100dvh);
 
   box-sizing: border-box;
 
@@ -24,6 +24,8 @@ body {
 }
 
 main {
+  position: relative;
+
   flex-grow: 1;
   width: 100%;
   @include m.flex($direction: column, $justify: space-evenly);

@@ -3,17 +3,25 @@
 @use "../abstracts/breakpoints" as b;
 
 .title {
+  @include m.flex();
 
-  flex-grow: 1;
-  @include m.flex(center, center, column);
-  margin-bottom: f.rem(100);
+  position: absolute;
+  top: 50%;
+  translate: 0 -50%;
+  width: 90%;
+  height: 20vh; 
 
-  @include b.breakpoint(medium) {
-    margin-bottom: f.rem(0);
+  @include b.breakpoint(small) {
+    &__prefix {
+      display: None;
+    }
   }
 
   &__text {
     transition: all 0.3s ease;
+
+    // due to the font is not monospaced, the letter-spacing is not the same
+    padding-left: 15px;
 
     font-size: min(f.rem(70), 6vw);
     text-transform: uppercase;
@@ -25,5 +33,13 @@
       color: var(--dark-blue);
       letter-spacing: 17px;
     }
+
+    @include b.breakpoint(small) {
+      color: var(--dark-blue);
+      letter-spacing: 17px;
+      font-weight: 600;
+      font-size: 7vw; 
+    }
   }
+
 }

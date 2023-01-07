@@ -3,32 +3,28 @@
 @use "../abstracts/breakpoints" as b;
 
 .navbar {
+  position: absolute;
+  
   @include m.flex(center, space-evenly, row);
-  width: 95%;
+  width: 70%;
   bottom: 3vh;
   min-height: 5rem;
+  flex-wrap: wrap;
+
+  gap: f.rem(16) f.rem(20);
 
   a {
-    font-size: f.rem(30);
+    width: f.rem(300);
+    font-size: f.rem(25);
     color: var(--dark-grey);
     font-weight: 300;
 
     transition: color 0.3s ease;
 
-    @include b.breakpoint(large) {
-      &:nth-child(even) {
-        text-align: left;
+    @include b.breakpoint(medium) {
+      &:nth-child(2) {
+        order: 1;
       }
-      &:nth-child(odd) {
-        text-align: right;
-      }
-    }
-
-    @include b.breakpoint(small) {
-      &:nth-child(n) {
-        text-align: center;
-      }
-      grid-template-columns: repeat(1, 1fr);
     }
 
     &:hover {
@@ -36,15 +32,9 @@
     }
   }
 
-  @include b.breakpoint(large) {
-    display: grid;
-    gap: f.rem(10) f.rem(60);
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include b.breakpoint(small) {
-    gap: f.rem(10) 0;
-    grid-template-columns: 1fr;
+  @include b.breakpoint(medium) {
+    bottom: 0vh;
+    width: 90%;
   }
 
 }

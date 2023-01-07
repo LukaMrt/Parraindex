@@ -4,7 +4,7 @@
 
 .form {
 
-  width: max(40vw, f.rem(250));
+  width: min(80%, f.rem(800));
   height: max-content;
   box-sizing: border-box;
   max-width: f.rem(900);
