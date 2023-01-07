@@ -8,6 +8,11 @@ use App\model\account\Account;
 use App\model\account\Password;
 use App\model\person\Identity;
 use App\model\person\PersonBuilder;
+use App\model\account\Privilege;
+use App\model\account\PrivilegeType;
+use App\model\school\School;
+use App\model\school\SchoolAddress;
+use DateTime;
 
 /**
  * MySQL implementation of the AccountDAO interface
@@ -201,19 +206,46 @@ SQL
     public function getAccountByLogin(string $login): ?Account
     {
         $connection = $this->databaseConnection->getDatabase();
+        
+        $query = $connection->prepare(<<<SQL
+                            SELECT *
+                            FROM Account A
+                            LEFT JOIN Privilege P on A.id_account = P.id_account
+                            JOIN School S on S.id_school = P.id_school
+                            WHERE email = :email
+SQL
+        );
 
-        $query = $connection->prepare("SELECT * FROM Account WHERE email = :email LIMIT 1");
         $query->execute(['email' => $login]);
-        $account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
 
-        if ($result = $query->fetch()) {
-            $account = new Account(
-                $result->id_account,
-                $result->email,
-                PersonBuilder::aPerson()->withId($result->id_person)->build(),
-                new Password($result->password)
-            );
+        if (!$query->rowCount()) {
+            return null;
         }
+
+        $person = PersonBuilder::aPerson()->build();
+
+        while ($row = $query->fetch()) {
+
+            $schoolAddress = new SchoolAddress(
+                $row->address,
+                $row->city
+            );
+
+            $school = new School(
+                $row->id_school,
+                $row->school_name,
+                $schoolAddress,
+                new DateTime($row->creation)
+            );
+
+            $privileges[] = new Privilege($school, PrivilegeType::fromString($row->privilege_name));
+
+            $id = $row->id_account;
+            $email = $row->email;
+            $password = new Password($row->password);
+        }
+
+        $account = new Account($id, $email, $person, $password, ...$privileges);
 
         $query->closeCursor();
         $connection = null;

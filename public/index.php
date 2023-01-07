@@ -32,5 +32,11 @@ try {
 
 } catch (Exception $e) {
     (new MonologLogger())->error('Main', $e->getMessage());
-    header('Location: /error/500');
+
+    if ($_ENV['DEBUG'] !== "true") {
+        header('Location: /500');
+        exit(0);
+    }
+    
+    throw $e;
 }
