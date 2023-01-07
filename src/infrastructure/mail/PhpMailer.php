@@ -7,24 +7,37 @@ use App\application\mail\Mailer;
 use Exception;
 use PHPMailer\PHPMailer\SMTP;
 
+/**
+ * Mailer implementation using PHPMailer
+ */
 class PhpMailer implements Mailer
 {
+    /**
+     * @var Logger $logger Logger instance
+     */
     private Logger $logger;
+    /**
+     * @var \PHPMailer\PHPMailer\PHPMailer $mailer Mailer instance
+     */
     private \PHPMailer\PHPMailer\PHPMailer $mailer;
 
+
+    /**
+     * @param Logger $logger Logger instance
+     */
     public function __construct(Logger $logger)
     {
         $this->logger = $logger;
         $this->mailer = new \PHPMailer\PHPMailer\PHPMailer(true);
 
         $this->mailer->SMTPDebug = $_ENV['DEBUG'] === "true" ? SMTP::DEBUG_SERVER : SMTP::DEBUG_OFF;
-        $this->mailer->SMTPOptions = array(
-            'ssl' => array(
+        $this->mailer->SMTPOptions = [
+            'ssl' => [
                 'verify_peer' => false,
                 'verify_peer_name' => false,
                 'allow_self_signed' => true
-            )
-        );
+            ]
+        ];
         $this->mailer->isSMTP();
         $this->mailer->Host = $_ENV['MAIL_HOST'];
         $this->mailer->SMTPAuth = true;
@@ -36,7 +49,14 @@ class PhpMailer implements Mailer
         $this->mailer->CharSet = 'UTF-8';
     }
 
-    public function send(string $to, string $subject, string $body)
+
+    /**
+     * @param string $to Recipient email address
+     * @param string $subject Subject of the mail
+     * @param string $body Content of the mail
+     * @return void
+     */
+    public function send(string $to, string $subject, string $body): void
     {
 
         try {
@@ -53,7 +73,6 @@ class PhpMailer implements Mailer
             $this->logger->info(PhpMailer::class, "Mailer success: [{$subject}] request, has been sent to {$to}");
         } catch (Exception) {
             $this->logger->error(PhpMailer::class, "Mailer error: {$this->mailer->ErrorInfo}");
-            echo "Message could not be sent. Mailer Error: {$this->mailer->ErrorInfo}";
         }
     }
 }

@@ -177,7 +177,7 @@ function updateSpinnerDate(number) {
   }
 
   spinner.dates.forEach(element => {
-    element.textContent = parseInt(element.textContent) + number;
+    element.textContent = parseInt(element.textContent, 10) + number;
   });
   filterElements();
 }

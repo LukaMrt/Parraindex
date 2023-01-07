@@ -2,13 +2,14 @@
 
 namespace App\model\contact;
 
+/**
+ * Default contact class
+ */
 class DefaultContact extends Contact
 {
-    public function __construct(int $id, string $contacterName, string $contacterEmail, ContactType $type, string $description)
-    {
-        parent::__construct($id, $contacterName, $contacterEmail, $type, $description);
-    }
-
+    /**
+     * @return array[] Description of the contact
+     */
     public function getDescription(): array
     {
         return [];

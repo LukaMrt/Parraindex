@@ -5,7 +5,6 @@ namespace unit\application\contact\executor;
 use App\application\contact\ContactDAO;
 use App\application\contact\executor\ContactExecutor;
 use App\application\contact\executor\OtherContactExecutor;
-use App\application\person\PersonDAO;
 use App\application\redirect\Redirect;
 use App\model\contact\ContactType;
 use PHPUnit\Framework\TestCase;
@@ -15,18 +14,15 @@ class ContactExecutorTest extends TestCase
 
     private ContactExecutor $executor;
 
-    private ContactDAO $contactDAO;
     private Redirect $redirect;
-    private PersonDAO $personDAO;
 
     public function setUp(): void
     {
 
-        $this->contactDAO = $this->createMock(ContactDAO::class);
+        $contactDAO = $this->createMock(ContactDAO::class);
         $this->redirect = $this->createMock(Redirect::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
 
-        $this->executor = new OtherContactExecutor($this->contactDAO, $this->redirect);
+        $this->executor = new OtherContactExecutor($contactDAO, $this->redirect);
     }
 
     public function testGetidReturnsContactTypeId(): void
@@ -39,7 +35,12 @@ class ContactExecutorTest extends TestCase
 
         $result = $this->executor->execute([]);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère<br>Votre nom doit contenir au moins 1 caractère<br>Votre email doit être valide<br>La description doit contenir au moins 1 caractère', $result);
+        $this->assertEquals(
+            'Votre prénom doit contenir au moins 1 caractère'
+            . '<br>Votre nom doit contenir au moins 1 caractère<br>Votre email doit être valide'
+            . '<br>La description doit contenir au moins 1 caractère',
+            $result
+        );
     }
 
     public function testExecuteReturnsErrorWhenFieldIsInvalid(): void

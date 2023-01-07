@@ -4,6 +4,9 @@ namespace App\model\contact;
 
 // WARNING : Don't change the id of the values because it's related to the contact form
 
+/**
+ * Type of contact
+ */
 enum ContactType: int
 {
     case ADD_PERSON = 0;
@@ -16,6 +19,10 @@ enum ContactType: int
     case CHOCKING_CONTENT = 7;
     case OTHER = 8;
 
+
+    /**
+     * @return array[] All the values of the enum as an array with the id as key and the verbose name as value
+     */
     public static function getValues(): array
     {
         return [
@@ -31,22 +38,10 @@ enum ContactType: int
         ];
     }
 
-    public static function fromId(int $id): ?ContactType
-    {
-        return match ($id) {
-            0 => self::ADD_PERSON,
-            1 => self::UPDATE_PERSON,
-            2 => self::REMOVE_PERSON,
-            3 => self::ADD_SPONSOR,
-            4 => self::UPDATE_SPONSOR,
-            5 => self::REMOVE_SPONSOR,
-            6 => self::BUG,
-            7 => self::CHOCKING_CONTENT,
-            8 => self::OTHER,
-            default => null
-        };
-    }
 
+    /**
+     * @return string The verbose name of the enum value
+     */
     public function toString(): string
     {
         return match ($this) {

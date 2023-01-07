@@ -17,7 +17,7 @@ const field = {
 const preview = {
   bio: document.querySelector(".card__description"),
   color: document.querySelector(".card__banner"),
-  contacts: document.querySelector("card__social-network"),
+  contacts: document.querySelector(".card__social-network"),
   picture: document.querySelector(".card__picture"),
   overlayPicture: document.querySelector(".card__picture__overlay"),
   lastName: document.querySelector(".card__last-name"),
@@ -104,8 +104,8 @@ function initColor() {
 
     let rgb = bannerColor.match(/\d+/g);
     let bannerColorHex = "#" + rgb.map((x) => {
-      x = parseInt(x).toString(16);
-      return (x.length == 1) ? "0" + x : x;
+      x = parseInt(x, 10).toString(16);
+      return (x.length === 1) ? "0" + x : x;
     }).join("");
 
     field.radioColorPicker.checked = true;
@@ -124,8 +124,7 @@ function updateCharacteristicPreview() {
   let newCharacteristic = [];
   let characteristicsCounter = 0
 
-  for (var i = 0; i < field.characteristics.children.length; i++) {
-
+  for (let i = 0; i < field.characteristics.children.length; i++) {
 
     let characteristic = field.characteristics.children[i];
     let visibility = characteristic.querySelector("input[type=checkbox]");
@@ -225,7 +224,7 @@ preview.picture.addEventListener("click", (event) => {
 /**
  * Syncronize the picture preview with the picture uploader
  */
-field.picture.addEventListener("input", e => {
+field.picture.addEventListener("input", () => {
 
   let reader = new FileReader();
   let picture = field.picture.files[0];

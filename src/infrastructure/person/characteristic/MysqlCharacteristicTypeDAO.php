@@ -7,15 +7,30 @@ use App\infrastructure\database\DatabaseConnection;
 use App\model\person\characteristic\Characteristic;
 use App\model\person\characteristic\CharacteristicBuilder;
 
+/**
+ * Mysql Characteristic Type DAO
+ */
 class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 {
+    /**
+     * @var DatabaseConnection $databaseConnection Database connection
+     */
     private DatabaseConnection $databaseConnection;
 
+
+    /**
+     * @param DatabaseConnection $databaseConnection Database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
+
+    /**
+     * Get all the characteristics types
+     * @return Characteristic[] The characteristics types
+     */
     public function getAllCharacteristicTypes(): array
     {
         $connection = $this->databaseConnection->getDatabase();
@@ -23,7 +38,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
         $statement = $connection->prepare("SELECT * FROM TypeCharacteristic");
         $statement->execute();
 
-        $characteristics = array();
+        $characteristics = [];
 
         while ($row = $statement->fetch()) {
             $characteristics[] = $this->buildCharacteristic($row);
@@ -34,40 +49,48 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
         return $characteristics;
     }
 
-    public function buildCharacteristic($buffer): Characteristic
-    {
-        $characteristic = (new CharacteristicBuilder())
-            ->withId($buffer->id_network)
-            ->withType($buffer->type)
-            ->withTitle($buffer->title)
-            ->withUrl($buffer->url)
-            ->withImage($buffer->image)
-            ->withVisibility($buffer->visibility ?? false)
-            ->withValue($buffer->value ?? false)
-            ->build();
 
-        return $characteristic;
+    /**
+     * Build a characteristic
+     * @param mixed $row Buffer of the characteristic
+     * @return Characteristic The characteristic
+     */
+    public function buildCharacteristic(mixed $row): Characteristic
+    {
+        return (new CharacteristicBuilder())
+            ->withId($row->id_network)
+            ->withType($row->type)
+            ->withTitle($row->title)
+            ->withUrl($row->url)
+            ->withImage($row->image)
+            ->withVisibility($row->visibility ?? false)
+            ->withValue($row->value ?? false)
+            ->build();
     }
 
-    public function getAllCharacteristicAndValues(int $idPeron): array
+
+    /**
+     * Get all characteristics types and values
+     * @param int $idPerson Id of the person
+     * @return Characteristic[] The characteristics types and values
+     */
+    public function getAllCharacteristicAndValues(int $idPerson): array
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare(" SELECT *
-											FROM TypeCharacteristic
-											LEFT JOIN  (
-												SELECT *
-												FROM Characteristic
-												WHERE id_person = :id_person
-											) 
-											AS c USING (id_network)
-		");
+        $statement = $connection->prepare(<<<SQL
+                                    SELECT *
+									FROM TypeCharacteristic
+									    LEFT JOIN (SELECT * FROM Characteristic WHERE id_person = :id_person)
+									        AS C USING (id_network);
+SQL
+        );
 
-        $statement->execute(array(
-            ':id_person' => $idPeron
-        ));
+        $statement->execute([
+            ':id_person' => $idPerson
+        ]);
 
-        $characteristics = array();
+        $characteristics = [];
 
         while ($row = $statement->fetch()) {
             $characteristic = $this->buildCharacteristic($row);

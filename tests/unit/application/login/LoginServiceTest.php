@@ -2,6 +2,7 @@
 
 namespace unit\application\login;
 
+use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\LoginService;
 use App\application\login\SessionManager;
@@ -45,7 +46,14 @@ class LoginServiceTest extends TestCase
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->redirect = $this->createMock(Redirect::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
-        $this->loginService = new LoginService($this->accountDAO, $this->personDAO, $this->redirect, $this->sessionManager);
+        $logger = $this->createMock(Logger::class);
+        $this->loginService = new LoginService(
+            $this->accountDAO,
+            $this->personDAO,
+            $this->redirect,
+            $this->sessionManager,
+            $logger
+        );
     }
 
     public function testLoginDetectsMissingFields(): void
@@ -78,7 +86,7 @@ class LoginServiceTest extends TestCase
             ->with(self::TEST_EMAIL)
             ->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
-        $this->accountDAO->method('getSimpleAccount')
+        $this->accountDAO->method('getAccountByLogin')
             ->with(self::TEST_EMAIL)
             ->willReturn($this->account);
 
@@ -112,7 +120,7 @@ class LoginServiceTest extends TestCase
             ->with(self::TEST_EMAIL)
             ->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
-        $this->accountDAO->method('getSimpleAccount')
+        $this->accountDAO->method('getAccountByLogin')
             ->with(self::TEST_EMAIL)
             ->willReturn($this->account);
 
@@ -135,7 +143,7 @@ class LoginServiceTest extends TestCase
             ->with(self::TEST_EMAIL)
             ->willReturn(new Password(password_hash('test', PASSWORD_DEFAULT)));
 
-        $this->accountDAO->method('getSimpleAccount')
+        $this->accountDAO->method('getAccountByLogin')
             ->with(self::TEST_EMAIL)
             ->willReturn($this->account);
 

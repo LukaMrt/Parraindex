@@ -1,10 +1,12 @@
 <div class="person-link">
 
     {% for characteristic in characteristics %}
-        <a class="person-link__wrapper" rel="noopener"
-           href="{{ characteristic.prefix ~ characteristic.url ~ characteristic.value }}" target="_blank">
-            <img class="person-link__image" src="{{ icon(characteristic.image) }}" alt="Linkedin">
-        </a>
+        {% if characteristic.visible %}
+            <a class="person-link__wrapper" rel="noopener"
+               href="{{ characteristic.prefix ~ characteristic.url ~ characteristic.value }}" target="_blank">
+                <img class="person-link__image" src="{{ icon(characteristic.image) }}" alt="Linkedin">
+            </a>
+        {% endif %}
     {% endfor %}
 
 </div>

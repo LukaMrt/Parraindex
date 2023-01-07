@@ -2,13 +2,16 @@
 
 namespace App\application\contact\field;
 
+/**
+ * This class is the number version of the field class. It verifies that the value is a number
+ */
 class NumberField extends Field
 {
-    public function __construct(string $name, string $error)
-    {
-        parent::__construct($name, $error);
-    }
-
+    /**
+     * Verify that the value is a number
+     * @param string $value The value to verify
+     * @return bool True if the value is a number, false otherwise
+     */
     public function isValid(string $value): bool
     {
         return is_numeric($value);

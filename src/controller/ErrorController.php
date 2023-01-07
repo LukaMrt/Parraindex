@@ -2,17 +2,25 @@
 
 namespace App\controller;
 
-use App\application\person\PersonService;
 use App\infrastructure\router\Router;
-use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
+/**
+ * The error page, it's the page that explain the error
+ */
 class ErrorController extends Controller
 {
-    public function __construct(Environment $twig, Router $router, PersonService $personService)
-    {
-        parent::__construct($twig, $router, $personService);
-    }
-
+    /**
+     * function get
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
+     */
     public function get(Router $router, array $parameters): void
     {
 
@@ -29,6 +37,10 @@ class ErrorController extends Controller
             case 404:
                 $error['code'] = 404;
                 $error['message'] = 'page non trouvée';
+                break;
+            case 500:
+                $error['code'] = 500;
+                $error['message'] = 'erreur serveur';
                 break;
             default:
                 header('Location: ' . $router->url('error', ['error' => 404]));

@@ -68,17 +68,35 @@ use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
 use function DI\get;
 
+/**
+ * Injector class used to inject dependencies in all classes
+ */
 class Injector
 {
+    /**
+     * @var Container DI container
+     */
     private Container $container;
+    /**
+     * @var Router $router Router
+     */
     private Router $router;
 
+
+    /**
+     * @param Router $router Router
+     */
     public function __construct(Router $router)
     {
         $this->container = ContainerBuilder::buildDevContainer();
         $this->router = $router;
     }
 
+
+    /**
+     * Register all dependencies in the container
+     * @return void
+     */
     public function build(): void
     {
 
@@ -130,6 +148,11 @@ class Injector
         $this->container->set(CharacteristicTypeDAO::class, $characteristicTypeDAO);
     }
 
+
+    /**
+     * Build twig environment
+     * @return Environment Twig environment
+     */
     private function buildTwig(): Environment
     {
         $twig = new Environment(new FilesystemLoader(dirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
@@ -143,9 +166,11 @@ class Injector
         return $twig;
     }
 
+
     /**
-     * @throws DependencyException
-     * @throws NotFoundException
+     * Sets up all the routes with the controllers
+     * @throws DependencyException when a dependency cannot be resolved
+     * @throws NotFoundException when a dependency cannot be resolved
      */
     public function setUpRouter(): void
     {

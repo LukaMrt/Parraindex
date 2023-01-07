@@ -1,6 +1,7 @@
 <?php
 
 use App\infrastructure\injector\Injector;
+use App\infrastructure\logging\MonologLogger;
 use App\infrastructure\router\Router;
 use Whoops\Handler\PrettyPageHandler;
 
@@ -14,17 +15,22 @@ if ($_ENV['DEBUG'] === "true") {
     (new Whoops\Run())->pushHandler(new PrettyPageHandler())->register();
 }
 
-$router = new Router();
-$injector = new Injector($router);
-$injector->build();
-$injector->setUpRouter();
+try {
 
-$start = microtime(true);
+    $router = new Router();
+    $injector = new Injector($router);
+    $injector->build();
+    $injector->setUpRouter();
 
-$router->run();
+    $start = microtime(true);
+    $router->run();
+    $end = microtime(true);
 
-$end = microtime(true);
+    if ($_ENV['DEBUG'] === "true") {
+        echo "Execution time: " . round(($end - $start) * 1_000) . " ms";
+    }
 
-if ($_ENV['DEBUG'] === "true") {
-    echo "Execution time: " . round(($end - $start) * 1_000) . " ms";
+} catch (Exception $e) {
+    (new MonologLogger())->error('Main', $e->getMessage());
+    header('Location: /error/500');
 }

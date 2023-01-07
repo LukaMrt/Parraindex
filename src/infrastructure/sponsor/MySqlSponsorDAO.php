@@ -14,26 +14,47 @@ use App\model\sponsor\Sponsor;
 use App\model\sponsor\SponsorFactory;
 use PDOStatement;
 
+/**
+ * Mysql Sponsor DAO
+ */
 class MySqlSponsorDAO implements SponsorDAO
 {
+    /**
+     * @var DatabaseConnection $databaseConnection Database connection
+     */
     private DatabaseConnection $databaseConnection;
 
+
+    /**
+     * @param DatabaseConnection $databaseConnection Database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
+
+    /**
+     * Get a person family
+     * @param int $personId Id of the person
+     * @return array|null
+     */
     public function getPersonFamily(int $personId): ?array
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
         $personQuery = $connection->prepare(<<<SQL
-            SELECT P.*, C.id_characteristic, C.value, C.visibility, T.*, (SELECT MIN(year)
-                                                                          FROM Promotion
-                                                                              JOIN Student S on Promotion.id_promotion = S.id_promotion
-                                                                              JOIN Person P2 on P2.id_person = S.id_person
-                                                                          WHERE P2.id_person = P.id_person) as startYear
+            SELECT P.*,
+                   C.id_characteristic,
+                   C.value,
+                   C.visibility,
+                   T.*,
+                   (SELECT MIN(year)
+                      FROM Promotion
+                          JOIN Student S on Promotion.id_promotion = S.id_promotion
+                          JOIN Person P2 on P2.id_person = S.id_person
+                      WHERE P2.id_person = P.id_person) as startYear
             FROM Person P
                 LEFT JOIN Characteristic C on P.id_person = C.id_person
                 LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
@@ -58,7 +79,11 @@ SQL
         );
 
         $godFathersSponsorsQuery = $connection->prepare(<<<SQL
-			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			SELECT S.*,
+			       CS.reason,
+			       CS.id_sponsor AS id_classic_sponsor,
+			       HS.description,
+			       HS.id_sponsor AS id_heart_sponsor
 			FROM Sponsor S
 				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
 				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
@@ -67,7 +92,11 @@ SQL
         );
 
         $godChildrenSponsorsQuery = $connection->prepare(<<<SQL
-			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			SELECT S.*,
+			       CS.reason,
+			       CS.id_sponsor AS id_classic_sponsor,
+			       HS.description,
+			       HS.id_sponsor AS id_heart_sponsor
 			FROM Sponsor S
 				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
 				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
@@ -109,8 +138,16 @@ SQL
                 }
             }
 
-            $sponsorType = $row->id_classic_sponsor != null ? 0 : ($row->id_heart_sponsor != null ? 1 : -1);
-            $godFathersSponsors[] = SponsorFactory::createSponsor($sponsorType, $row->id_sponsor, $godFather, $godChild, $row->sponsorDate ?? '', $row->reason ?? $row->description ?? '');
+            $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
+            $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
+            $godFathersSponsors[] = SponsorFactory::createSponsor(
+                $sponsorType,
+                $row->id_sponsor,
+                $godFather,
+                $godChild,
+                $row->sponsorDate ?? '',
+                $row->reason ?? $row->description ?? ''
+            );
         }
 
         while ($row = $godChildrenSponsorsQuery->fetch()) {
@@ -124,8 +161,16 @@ SQL
                 }
             }
 
-            $sponsorType = $row->id_classic_sponsor != null ? 0 : ($row->id_heart_sponsor != null ? 1 : -1);
-            $godChildrenSponsors[] = SponsorFactory::createSponsor($sponsorType, $row->id_sponsor, $godFather, $godChild, $row->sponsorDate ?? '', $row->reason ?? $row->description ?? '');
+            $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
+            $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
+            $godChildrenSponsors[] = SponsorFactory::createSponsor(
+                $sponsorType,
+                $row->id_sponsor,
+                $godFather,
+                $godChild,
+                $row->sponsorDate ?? '',
+                $row->reason ?? $row->description ?? ''
+            );
         }
 
         $personQuery->closeCursor();
@@ -139,13 +184,19 @@ SQL
         ];
     }
 
+
+    /**
+     * Build a person
+     * @param bool|PDOStatement $query Query
+     * @return array
+     */
     private function buildPeople(bool|PDOStatement $query): array
     {
 
-        $people = array();
+        $people = [];
 
         $currentPerson = null;
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             if ($currentPerson === null) {
@@ -154,24 +205,31 @@ SQL
 
             if ($currentPerson != $row->id_person) {
                 $people[] = $this->buildPerson($buffer);
-                $buffer = array();
+                $buffer = [];
                 $currentPerson = $row->id_person;
             }
 
             $buffer[] = $row;
         }
 
-        if (0 < count($buffer)) {
+        if (!empty($buffer)) {
             $people[] = $this->buildPerson($buffer);
         }
         return $people;
     }
 
+
+    /**
+     * Build a person
+     * @param array $buffer Buffer
+     * @return Person
+     */
     private function buildPerson(array $buffer): Person
     {
 
-        $characteristics = array();
-        $characteristicsBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null);
+        $characteristics = [];
+        $filterClosure = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
+        $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($characteristicsBuffer as $row) {
             $characteristics[] = (new CharacteristicBuilder())
@@ -187,7 +245,12 @@ SQL
 
         return PersonBuilder::aPerson()
             ->withId($buffer[0]->id_person)
-            ->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
+            ->withIdentity(new Identity(
+                $buffer[0]->first_name,
+                $buffer[0]->last_name,
+                $buffer[0]->picture,
+                $buffer[0]->birthdate
+            ))
             ->withBiography($buffer[0]->biography)
             ->withDescription($buffer[0]->description)
             ->withColor($buffer[0]->banner_color)
@@ -196,13 +259,23 @@ SQL
             ->build();
     }
 
+
+    /**
+     * Get a sponsor with id
+     * @param int $id Id
+     * @return Sponsor|null
+     */
     public function getSponsorById(int $id): ?Sponsor
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
         $query = $connection->prepare(<<<SQL
-			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			SELECT S.*,
+			       CS.reason,
+			       CS.id_sponsor AS id_classic_sponsor,
+			       HS.description,
+			       HS.id_sponsor AS id_heart_sponsor
 			FROM Sponsor S
 				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
 				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
@@ -217,8 +290,16 @@ SQL
             $godFather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
             $godChild = PersonBuilder::aPerson()->withId($row->id_godson)->build();
 
-            $sponsorType = $row->id_classic_sponsor != null ? 0 : ($row->id_heart_sponsor != null ? 1 : -1);
-            $sponsor = SponsorFactory::createSponsor($sponsorType, $row->id_sponsor, $godFather, $godChild, $row->sponsorDate ?? '', $row->reason ?? $row->description ?? '');
+            $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
+            $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
+            $sponsor = SponsorFactory::createSponsor(
+                $sponsorType,
+                $row->id_sponsor,
+                $godFather,
+                $godChild,
+                $row->sponsorDate ?? '',
+                $row->reason ?? $row->description ?? ''
+            );
         }
 
         $query->closeCursor();
@@ -226,13 +307,24 @@ SQL
         return $sponsor;
     }
 
+
+    /**
+     * Get sponsor by people id
+     * @param int $godFatherId God father id
+     * @param int $godChildId God child id
+     * @return Sponsor|null
+     */
     public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
         $query = $connection->prepare(<<<SQL
-			SELECT S.*, CS.reason, CS.id_sponsor AS id_classic_sponsor, HS.description, HS.id_sponsor AS id_heart_sponsor
+			SELECT S.*,
+			       CS.reason,
+			       CS.id_sponsor AS id_classic_sponsor,
+			       HS.description,
+			       HS.id_sponsor AS id_heart_sponsor
 			FROM Sponsor S
 				LEFT JOIN ClassicSponsor CS on S.id_sponsor = CS.id_sponsor
 				LEFT JOIN HeartSponsor HS on S.id_sponsor = HS.id_sponsor
@@ -247,8 +339,16 @@ SQL
             $godFather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
             $godChild = PersonBuilder::aPerson()->withId($row->id_godson)->build();
 
-            $sponsorType = $row->id_classic_sponsor != null ? 0 : ($row->id_heart_sponsor != null ? 1 : -1);
-            $sponsor = SponsorFactory::createSponsor($sponsorType, $row->id_sponsor, $godFather, $godChild, $row->sponsorDate ?? '', $row->reason ?? $row->description ?? '');
+            $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
+            $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
+            $sponsor = SponsorFactory::createSponsor(
+                $sponsorType,
+                $row->id_sponsor,
+                $godFather,
+                $godChild,
+                $row->sponsorDate ?? '',
+                $row->reason ?? $row->description ?? ''
+            );
         }
 
         $query->closeCursor();
@@ -256,6 +356,12 @@ SQL
         return $sponsor;
     }
 
+
+    /**
+     * Remove a sponsor
+     * @param int $id Id
+     * @return void
+     */
     public function removeSponsor(int $id): void
     {
 
@@ -268,12 +374,22 @@ SQL
         $connection = null;
     }
 
+
+    /**
+     * Add a sponsor
+     * @param Sponsor $sponsor Sponsor
+     * @return void
+     */
     public function addSponsor(Sponsor $sponsor): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Sponsor (id_godfather, id_godson, sponsorDate) VALUES (:godFatherId, :godChildId, :date)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Sponsor (id_godfather, id_godson, sponsorDate)
+                            VALUES (:godFatherId, :godChildId, :date)
+SQL
+        );
         $query->execute([
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId' => $sponsor->getGodChild()->getId(),
@@ -287,7 +403,8 @@ SQL
                 'reason' => $sponsor->getDescription()
             ]);
         } elseif ($sponsor instanceof HeartSponsor) {
-            $query = $connection->prepare("INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)");
+            $sql = "INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)";
+            $query = $connection->prepare($sql);
             $query->execute([
                 'id' => $connection->lastInsertId(),
                 'description' => $sponsor->getDescription()
@@ -298,6 +415,12 @@ SQL
         $connection = null;
     }
 
+
+    /**
+     * Update a sponsor
+     * @param Sponsor $sponsor Sponsor
+     * @return void
+     */
     public function updateSponsor(Sponsor $sponsor): void
     {
 

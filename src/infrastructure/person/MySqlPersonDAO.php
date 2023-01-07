@@ -14,37 +14,60 @@ use App\model\school\School;
 use App\model\school\SchoolAddress;
 use DateTime;
 
+/**
+ * Mysql Person DAO
+ */
 class MySqlPersonDAO implements PersonDAO
 {
+    /**
+     * @var DatabaseConnection $databaseConnection Database connection
+     */
     private DatabaseConnection $databaseConnection;
 
+
+    /**
+     * @param DatabaseConnection $databaseConnection Database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
+
+    /**
+     * Get all the persons
+     * @return array
+     */
     public function getAllPeople(): array
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(
-            "SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
-						FROM Person Pe
-								 LEFT JOIN Student St on Pe.id_person = St.id_person
-								 LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
-								 LEFT JOIN Degree D on D.id_degree = Pr.id_degree
-								 LEFT JOIN School Sc on Sc.id_school = Pr.id_school
-								 LEFT JOIN Characteristic C on Pe.id_person = C.id_person
-								 LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
-						ORDER BY Pe.id_person"
+        $query = $connection->prepare(<<<SQL
+                            SELECT Pe.*,
+                                   Pr.*,
+                                   D.*,
+                                   Sc.*,
+                                   C.id_characteristic,
+                                   C.value,
+                                   C.visibility,
+                                   T.*
+                            FROM Person Pe
+                                LEFT JOIN Student St on Pe.id_person = St.id_person
+                                LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+                                LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+                                LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+                                LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+                                LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+                            ORDER BY Pe.id_person
+SQL
         );
         $query->execute();
 
-        $users = array();
+        $users = [];
 
         $currentPerson = null;
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             if ($currentPerson === null) {
@@ -53,7 +76,7 @@ class MySqlPersonDAO implements PersonDAO
 
             if ($currentPerson != $row->id_person) {
                 $users[] = $this->buildPerson($buffer);
-                $buffer = array();
+                $buffer = [];
                 $currentPerson = $row->id_person;
             }
 
@@ -65,28 +88,53 @@ class MySqlPersonDAO implements PersonDAO
         return $users;
     }
 
+
+    /**
+     * Build a person
+     * @param array $buffer Buffer of the person
+     * @return Person
+     */
     private function buildPerson(array $buffer): Person
     {
 
         $builder = PersonBuilder::aPerson()
             ->withId($buffer[0]->id_person)
-            ->withIdentity(new Identity($buffer[0]->first_name, $buffer[0]->last_name, $buffer[0]->picture, $buffer[0]->birthdate))
+            ->withIdentity(new Identity(
+                $buffer[0]->first_name,
+                $buffer[0]->last_name,
+                $buffer[0]->picture,
+                $buffer[0]->birthdate
+            ))
             ->withBiography($buffer[0]->biography)
             ->withDescription($buffer[0]->description)
             ->withColor($buffer[0]->banner_color);
 
         $startYear = date("Y");
-        $promotionBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null);
+        $filterClosure = fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null;
+        $promotionBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($promotionBuffer as $row) {
-            $degree = new Degree($row->id_degree, $row->degree_name, $row->level, $row->total_ects, $row->duration, $row->official);
-            $school = new School($row->id_school, $row->school_name, new SchoolAddress($row->address, $row->city), DateTime::createFromFormat('Y-m-d', $row->creation));
+            $degree = new Degree(
+                $row->id_degree,
+                $row->degree_name,
+                $row->level,
+                $row->total_ects,
+                $row->duration,
+                $row->official
+            );
+            $school = new School(
+                $row->id_school,
+                $row->school_name,
+                new SchoolAddress($row->address, $row->city),
+                DateTime::createFromFormat('Y-m-d', $row->creation)
+            );
             $promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->desc_promotion);
             $builder->addPromotion($promotion);
             $startYear = min($startYear, $row->year);
         }
 
-        $characteristicsBuffer = array_filter($buffer, fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null);
+        $filterClosure = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
+        $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($characteristicsBuffer as $row) {
             $builder->addCharacteristic((new CharacteristicBuilder())
@@ -103,11 +151,24 @@ class MySqlPersonDAO implements PersonDAO
         return $builder->withStartYear($startYear)->build();
     }
 
+
+    /**
+     * Get a person
+     * @param Identity $identity Identity of the person
+     * @return Person|null
+     */
     public function getPerson(Identity $identity): ?Person
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT * FROM Person WHERE LOWER(first_name) = :first_name AND LOWER(last_name) = :last_name LIMIT 1");
+        $query = $connection->prepare(<<<SQL
+                        SELECT *
+                        FROM Person
+                        WHERE LOWER(first_name) = :first_name
+                          AND LOWER(last_name) = :last_name
+                        LIMIT 1
+SQL
+        );
 
         $query->execute([
             'first_name' => $identity->getFirstName(),
@@ -126,22 +187,38 @@ class MySqlPersonDAO implements PersonDAO
         return $person;
     }
 
+
+    /**
+     * Get a person by id
+     * @param int $id Id of the person
+     * @return Person|null
+     */
     public function getPersonById(int $id): ?Person
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
-													FROM Person Pe
-         											LEFT JOIN Student St on Pe.id_person = St.id_person
-													LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
-													LEFT JOIN Degree D on D.id_degree = Pr.id_degree
-													LEFT JOIN School Sc on Sc.id_school = Pr.id_school
-													LEFT JOIN Characteristic C on Pe.id_person = C.id_person
-													LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
-         											WHERE Pe.id_person = :id_person");
+        $query = $connection->prepare(<<<SQL
+                                SELECT Pe.*,
+                                       Pr.*,
+                                       D.*,
+                                       Sc.*,
+                                       C.id_characteristic,
+                                       C.value,
+                                       C.visibility,
+                                       T.*
+                                FROM Person Pe
+                                    LEFT JOIN Student St on Pe.id_person = St.id_person
+                                    LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+                                    LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+                                    LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+                                    LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+                                    LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+                                WHERE Pe.id_person = :id_person
+SQL
+        );
 
         $query->execute(['id_person' => $id]);
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             $buffer[] = $row;
@@ -149,7 +226,7 @@ class MySqlPersonDAO implements PersonDAO
 
         $person = null;
 
-        if (count($buffer) > 0) {
+        if (!empty($buffer)) {
             $person = $this->buildPerson($buffer);
         }
 
@@ -158,18 +235,23 @@ class MySqlPersonDAO implements PersonDAO
         return $person;
     }
 
-    public function updatePerson(Person $person)
+
+    /**
+     * Update de person
+     * @param Person $person Person to update
+     * @return void
+     */
+    public function updatePerson(Person $person): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("UPDATE Person SET 
-			first_name = :firstName,
-			last_name = :lastName,
-			biography = :biography,
-			banner_color = :bannerColor,
-			description = :description,
-			picture = :picture
-			WHERE id_person = :id");
+        $query = $connection->prepare(<<<SQL
+            UPDATE Person
+            SET first_name = :firstName, last_name = :lastName, biography = :biography,
+			    banner_color = :bannerColor, description = :description, picture = :picture
+			WHERE id_person = :id
+SQL
+        );
 
         $query->execute([
             'firstName' => $person->getFirstName(),
@@ -184,6 +266,11 @@ class MySqlPersonDAO implements PersonDAO
         $connection = null;
     }
 
+
+    /**
+     * Get all identities
+     * @return array
+     */
     public function getAllIdentities(): array
     {
 
@@ -194,7 +281,7 @@ class MySqlPersonDAO implements PersonDAO
         );
         $query->execute();
 
-        $identities = array();
+        $identities = [];
 
         while ($row = $query->fetch()) {
             $identities[] = new Identity($row->first_name, $row->last_name);
@@ -204,23 +291,39 @@ class MySqlPersonDAO implements PersonDAO
         return $identities;
     }
 
+
+    /**
+     * Get person by login
+     * @param string $login Login of the person
+     * @return Person|null
+     */
     public function getPersonByLogin(string $login): ?Person
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("SELECT Pe.*, Pr.*, D.*, Sc.*, C.id_characteristic, C.value, C.visibility, T.*
-													FROM Person Pe
-         											LEFT JOIN Student St on Pe.id_person = St.id_person
-													LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
-													LEFT JOIN Degree D on D.id_degree = Pr.id_degree
-													LEFT JOIN School Sc on Sc.id_school = Pr.id_school
-													LEFT JOIN Characteristic C on Pe.id_person = C.id_person
-													LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
-													LEFT JOIN Account A on Pe.id_person = A.id_person
-         											WHERE A.email = :login");
+        $query = $connection->prepare(<<<SQL
+                                SELECT Pe.*,
+                                       Pr.*,
+                                       D.*,
+                                       Sc.*,
+                                       C.id_characteristic,
+                                       C.value,
+                                       C.visibility,
+                                       T.*
+                                FROM Person Pe
+                                    LEFT JOIN Student St on Pe.id_person = St.id_person
+                                    LEFT JOIN Promotion Pr on St.id_promotion = Pr.id_promotion
+                                    LEFT JOIN Degree D on D.id_degree = Pr.id_degree
+                                    LEFT JOIN School Sc on Sc.id_school = Pr.id_school
+                                    LEFT JOIN Characteristic C on Pe.id_person = C.id_person
+                                    LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
+                                    LEFT JOIN Account A on Pe.id_person = A.id_person
+                                WHERE A.email = :login
+SQL
+        );
 
         $query->execute(['login' => $login]);
-        $buffer = array();
+        $buffer = [];
 
         while ($row = $query->fetch()) {
             $buffer[] = $row;
@@ -231,11 +334,21 @@ class MySqlPersonDAO implements PersonDAO
         return $this->buildPerson($buffer);
     }
 
+
+    /**
+     * Create a person
+     * @param Person $person Person to create
+     * @return int
+     */
     public function createPerson(Person $person): int
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare("INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture) VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture)
+                            VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)
+SQL
+        );
 
         $query->execute([
             'firstName' => $person->getFirstName(),
@@ -248,25 +361,43 @@ class MySqlPersonDAO implements PersonDAO
 
         $idPerson = $connection->lastInsertId();
 
-        $query = $connection->prepare("SELECT id_promotion FROM Promotion WHERE year = :start_year AND desc_promotion = 'Première année'");
+        $query = $connection->prepare(<<<SQL
+                                SELECT id_promotion
+                                FROM Promotion
+                                WHERE year = :start_year
+                                  AND desc_promotion = 'Première année'
+SQL
+        );
         $query->execute(['start_year' => $person->getStartYear()]);
 
         if ($row = $query->fetch()) {
-            $id_promotion = $row->id_promotion;
+            $idPromotion = $row->id_promotion;
         } else {
-            $query = $connection->prepare("INSERT INTO Promotion (year, id_degree, id_school, desc_promotion, speciality) VALUES (:start_year, (SELECT id_degree FROM Degree WHERE degree_name = :degree_name), (SELECT id_school FROM School WHERE school_name = 'IUT Lyon 1'), 'Première année', 'Informatique')");
+            $query = $connection->prepare(<<<SQL
+                                INSERT INTO Promotion (year, id_degree, id_school, desc_promotion, speciality)
+                                VALUES (:start_year,
+                                        (SELECT id_degree FROM Degree WHERE degree_name = :degree_name),
+                                        (SELECT id_school FROM School WHERE school_name = 'IUT Lyon 1'),
+                                        'Première année',
+                                        'Informatique')
+SQL
+            );
             $query->execute([
                 'start_year' => $person->getStartYear(),
                 'degree_name' => $person->getStartYear() < 2021 ? 'DUT' : 'BUT'
             ]);
-            $id_promotion = $connection->lastInsertId();
+            $idPromotion = $connection->lastInsertId();
         }
 
-        $query = $connection->prepare("INSERT INTO Student (id_person, id_promotion) VALUES (:id_person, :id_promotion)");
+        $query = $connection->prepare(<<<SQL
+                                INSERT INTO Student (id_person, id_promotion)
+                                VALUES (:id_person, :id_promotion)
+SQL
+        );
 
         $query->execute([
             'id_person' => $idPerson,
-            'id_promotion' => $id_promotion
+            'id_promotion' => $idPromotion
         ]);
 
         $query->closeCursor();
@@ -275,6 +406,12 @@ class MySqlPersonDAO implements PersonDAO
         return $idPerson;
     }
 
+
+    /**
+     * Delete a person
+     * @param Person $person Person to delete
+     * @return void
+     */
     public function deletePerson(Person $person): void
     {
 

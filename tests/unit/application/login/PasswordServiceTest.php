@@ -2,6 +2,7 @@
 
 namespace unit\application\login;
 
+use App\application\logging\Logger;
 use App\application\login\AccountDAO;
 use App\application\login\PasswordService;
 use App\application\login\UrlUtils;
@@ -54,12 +55,16 @@ class PasswordServiceTest extends TestCase
         $this->mailer = $this->createMock(Mailer::class);
         $this->random = $this->createMock(Random::class);
         $this->urlUtils = $this->createMock(UrlUtils::class);
-        $this->passwordService = new PasswordService($this->accountDAO,
+        $logger = $this->createMock(Logger::class);
+        $this->passwordService = new PasswordService(
+            $this->accountDAO,
             $this->personDAO,
             $this->redirect,
             $this->mailer,
             $this->random,
-            $this->urlUtils);
+            $this->urlUtils,
+            $logger
+        );
     }
 
     public function testResetpasswordDetectsUnknownEmail(): void
@@ -125,11 +130,14 @@ class PasswordServiceTest extends TestCase
 
         $this->mailer->expects($this->once())
             ->method('send')
-            ->with(self::TEST_EMAIL, 'Parraindex : réinitialisation de mot de passe',
+            ->with(
+                self::TEST_EMAIL,
+                'Parraindex : réinitialisation de mot de passe',
                 "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe "
                 . "a bien été enregistrée, merci de cliquer sur ce lien pour la valider : "
                 . "<a href=\"http://localhost/password/reset/1\">"
-                . "http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss");
+                . "http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss"
+            );
 
         $this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
     }

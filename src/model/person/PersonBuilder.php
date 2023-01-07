@@ -11,39 +11,59 @@ use DateTime;
  */
 class PersonBuilder
 {
-    /** @var int $id */
-    private int $id;
+    /**
+     * @var int The id of the person
+     */
+    public int $id;
+    /**
+     * @var Identity The identity of the person
+     */
+    public Identity $identity;
+    /**
+     * @var DateTime The birthdate of the person
+     */
+    public DateTime $birthDate;
+    /**
+     * @var string The biography of the person
+     */
+    public string $biography;
+    /**
+     * @var string The description of the person
+     */
+    public string $description;
+    /**
+     * @var array The characteristics of the person
+     */
+    public array $characteristics;
+    /**
+     * @var array The sponsors of the person
+     */
+    public array $sponsors;
+    /**
+     * @var array The families of the person
+     */
+    public array $families;
+    /**
+     * @var array The associations of the person
+     */
+    public array $associations;
+    /**
+     * @var string The color of the person (hexadecimal)
+     */
+    public string $color;
+    /**
+     * @var array The promotions of the person
+     */
+    public array $promotions;
+    /**
+     * @var int The year when the person started at the IUT
+     */
+    public int $startYear;
 
-    /** @var Identity $name */
-    private Identity $identity;
 
-    /** @var DateTime $birthDate */
-    private DateTime $birthDate;
-
-    /** @var string $biography */
-    private string $biography;
-
-    /** @var string $description */
-    private string $description;
-
-    /** @var array $characteristics */
-    private array $characteristics;
-
-    /** @var array $sponsors */
-    private array $sponsors;
-
-    /** @var array $families */
-    private array $families;
-
-    /** @var array $associations */
-    private array $associations;
-
-    /** @var string $color , hex representation of the banner color. */
-    private string $color;
-
-    private array $promotions;
-    private int $startYear;
-
+    /**
+     * Private constructor. Use {@see PersonBuilder::create()} instead.
+     */
     private function __construct()
     {
         $this->id = 0;
@@ -51,23 +71,29 @@ class PersonBuilder
         $this->birthDate = new DateTime();
         $this->biography = '';
         $this->description = '';
-        $this->characteristics = array();
-        $this->sponsors = array();
-        $this->families = array();
-        $this->associations = array();
-        $this->promotions = array();
+        $this->characteristics = [];
+        $this->sponsors = [];
+        $this->families = [];
+        $this->associations = [];
+        $this->promotions = [];
         $this->startYear = 0;
         $this->color = '#f0f0f0';
     }
 
+
+    /**
+     * @return PersonBuilder A new instance of PersonBuilder.
+     */
     public static function aPerson(): PersonBuilder
     {
         return new PersonBuilder();
     }
 
+
     /**
-     * @param int $id Set id property.
-     * @return $this Builder instance.
+     * Sets the id of the person
+     * @param int $id The id of the person
+     * @return $this The builder instance for chaining
      */
     public function withId(int $id): PersonBuilder
     {
@@ -75,9 +101,11 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
-     * @param Identity $identity Set name property.
-     * @return $this Builder instance.
+     * Sets the identity of the person
+     * @param Identity $identity The identity of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withIdentity(Identity $identity): PersonBuilder
     {
@@ -87,8 +115,9 @@ class PersonBuilder
 
 
     /**
-     * @param string|null $color Set banner color property.
-     * @return $this Builder instance.
+     * Sets the banner color of the person
+     * @param string|null $color The banner color of the person (hexadecimal)
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withColor(?string $color): PersonBuilder
     {
@@ -96,9 +125,11 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
-     * @param string|null $biography Set biography property.
-     * @return $this Builder instance.
+     * Sets the biography of the person
+     * @param string|null $biography The biography of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withBiography(?string $biography): PersonBuilder
     {
@@ -106,9 +137,11 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
-     * @param string|null $description Set description property.
-     * @return $this Builder instance.
+     * Sets the description of the person
+     * @param string|null $description The description of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withDescription(?string $description): PersonBuilder
     {
@@ -116,9 +149,11 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
-     * @param array $characteristics Set characteristics property.
-     * @return $this Builder instance.
+     * Sets the characteristics of the person
+     * @param array $characteristics The characteristics of the person
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withCharacteristics(array $characteristics): PersonBuilder
     {
@@ -126,9 +161,11 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
-     * @param Characteristic $characteristic Add a characteristic to the person.
-     * @return $this Builder instance.
+     * Adds a characteristic to the person
+     * @param Characteristic $characteristic The characteristic to add
+     * @return PersonBuilder The builder instance for chaining
      */
     public function addCharacteristic(Characteristic $characteristic): PersonBuilder
     {
@@ -138,39 +175,11 @@ class PersonBuilder
         return $this;
     }
 
-    /**
-     * @param array $sponsors Set sponsors property.
-     * @return $this Builder instance.
-     */
-    public function withSponsors(array $sponsors): PersonBuilder
-    {
-        $this->sponsors = $sponsors;
-        return $this;
-    }
 
     /**
-     * @param array $families Set families property.
-     * @return $this Builder instance.
-     */
-    public function withFamilies(array $families): PersonBuilder
-    {
-        $this->families = $families;
-        return $this;
-    }
-
-    /**
-     * @param array $associations Set associations property.
-     * @return $this Builder instance.
-     */
-    public function withAssociations(array $associations): PersonBuilder
-    {
-        $this->associations = $associations;
-        return $this;
-    }
-
-    /**
-     * @param int $startYear Set the entry year of the person.
-     * @return $this Builder instance.
+     * Sets the start year of the person
+     * @param int $startYear The year when the person started at the IUT
+     * @return PersonBuilder The builder instance for chaining
      */
     public function withStartYear(int $startYear): PersonBuilder
     {
@@ -178,18 +187,11 @@ class PersonBuilder
         return $this;
     }
 
-    /**
-     * @param array $promotions Set promotions property.
-     * @return $this Builder instance.
-     */
-    public function withPromotions(array $promotions): PersonBuilder
-    {
-        $this->promotions = $promotions;
-        return $this;
-    }
 
     /**
-     * @param Promotion $promotion Add a promotion to the person.
+     * Adds a promotion to the person
+     * @param Promotion $promotion The promotion to add
+     * @return PersonBuilder The builder instance for chaining
      */
     public function addPromotion(Promotion $promotion): PersonBuilder
     {
@@ -197,104 +199,13 @@ class PersonBuilder
         return $this;
     }
 
+
     /**
-     * @return Person New instance from Builder.
+     * Build the {@see Person} instance from the builder data
+     * @return Person The built person
      */
     public function build(): Person
     {
         return new Person($this);
-    }
-
-    /**
-     * @return int
-     */
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    /**
-     * @return Identity
-     */
-    public function getIdentity(): Identity
-    {
-        return $this->identity;
-    }
-
-    /**
-     * @return string
-     */
-    public function getBiography(): string
-    {
-        return $this->biography;
-    }
-
-    /**
-     * @return string, the hex representation of the banner-color.
-     */
-    public function getColor(): string
-    {
-        return $this->color;
-    }
-
-    /**
-     * @return string The description of the person.
-     */
-    public function getDescription(): string
-    {
-        return $this->description;
-    }
-
-    /**
-     * @return array
-     */
-    public function getCharacteristics(): array
-    {
-        return $this->characteristics;
-    }
-
-    /**
-     * @return array
-     */
-    public function getSponsors(): array
-    {
-        return $this->sponsors;
-    }
-
-    /**
-     * @return array
-     */
-    public function getFamilies(): array
-    {
-        return $this->families;
-    }
-
-    /**
-     * @return array
-     */
-    public function getAssociations(): array
-    {
-        return $this->associations;
-    }
-
-    public function getPromotions(): array
-    {
-        return $this->promotions;
-    }
-
-    /**
-     * @return DateTime
-     */
-    public function getBirthDate(): DateTime
-    {
-        return $this->birthDate;
-    }
-
-    /**
-     * @return int
-     */
-    public function getStartYear(): int
-    {
-        return $this->startYear;
     }
 }

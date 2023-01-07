@@ -2,77 +2,136 @@
 
 namespace App\model\person;
 
+use App\model\person\characteristic\Characteristic;
+use App\model\sponsor\Sponsor;
+
+/**
+ * Person class to represent a person
+ */
 class Person
 {
+    /**
+     * @var int Id of the person
+     */
     private int $id;
+    /**
+     * @var Identity Identity of the person
+     */
     private Identity $identity;
+    /**
+     * @var string Biography of the person
+     */
     private string $biography;
+    /**
+     * @var string Color of the person (hexadecimal)
+     */
     private string $color;
+    /**
+     * @var string Description of the person
+     */
     private string $description;
+    /**
+     * @var Characteristic[] Characteristics of the person
+     */
     private array $characteristics;
+    /**
+     * @var Sponsor[] Sponsors of the person
+     */
     private array $sponsors;
+    /**
+     * @var array Families of the person
+     */
     private array $families;
+    /**
+     * @var array Associations of the person
+     */
     private array $associations;
+    /**
+     * @var array Promotions of the person
+     */
     private array $promotions;
+    /**
+     * @var int Start year of the person
+     */
     private int $startYear;
 
+
+    /**
+     * @param PersonBuilder $builder Builder to build the person
+     */
     public function __construct(PersonBuilder $builder)
     {
-        $this->id = $builder->getId();
-        $this->identity = $builder->getIdentity();
-        $this->biography = $builder->getBiography();
-        $this->color = $builder->getColor();
-        $this->description = $builder->getDescription();
-        $this->characteristics = $builder->getCharacteristics();
-        $this->sponsors = $builder->getSponsors();
-        $this->families = $builder->getFamilies();
-        $this->associations = $builder->getAssociations();
-        $this->promotions = $builder->getPromotions();
-        $this->startYear = $builder->getStartYear();
+        $this->id = $builder->id;
+        $this->identity = $builder->identity;
+        $this->biography = $builder->biography;
+        $this->color = $builder->color;
+        $this->description = $builder->description;
+        $this->characteristics = $builder->characteristics;
+        $this->sponsors = $builder->sponsors;
+        $this->families = $builder->families;
+        $this->associations = $builder->associations;
+        $this->promotions = $builder->promotions;
+        $this->startYear = $builder->startYear;
     }
 
+
+    /**
+     * @return int Id of the person
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+
     /**
-     * @return Identity, an object containing personal information (lastName, fisrtName, photo, birthdate).
+     * @return Identity Identity of the person
      */
     public function getIdentity(): string
     {
         return $this->identity;
     }
 
+
     /**
-     * @return string the short description of the person.
+     * @return string The short description of the person
      */
     public function getBiography(): string
     {
         return $this->biography;
     }
 
+
     /**
-     * @return string, the hex representation of the banner color.
+     * @return string Banner color of the person (hexadecimal)
      */
     public function getColor(): string
     {
         return $this->color;
     }
 
+
     /**
-     * @return string The description of the person.
+     * @return string The description of the person
      */
     public function getDescription(): string
     {
         return $this->description;
     }
 
+
+    /**
+     * @return array Characteristics of the person
+     */
     public function getCharacteristics(): array
     {
         return $this->characteristics;
     }
 
+
+    /**
+     * @return int|null Start year of the person
+     */
     public function getStartYear(): int|null
     {
 
@@ -89,29 +148,33 @@ class Person
         return min($dates);
     }
 
+
     /**
-     * @param int $startYear
+     * @param int $startYear New start year of the person
      */
     public function setStartYear(int $startYear): void
     {
         $this->startYear = $startYear;
     }
 
+
     /**
-     * @return string the first name of the person.
+     * @return string The first name of the person.
      */
     public function getFirstName(): string
     {
         return $this->identity->getFirstName();
     }
 
+
     /**
-     * @return string the last name of the person.
+     * @return string The last name of the person.
      */
     public function getLastName(): string
     {
         return $this->identity->getLastName();
     }
+
 
     /**
      * @return string The picture URL of the person.
@@ -121,9 +184,10 @@ class Person
         return $this->identity->getPicture();
     }
 
+
     /**
-     * set the new picture URL of the person.
-     * @param string $picture URL of the picture.
+     * Sets the picture URL of the person
+     * @param string $picture New URL of the picture
      */
     public function setPicture(string $picture): void
     {

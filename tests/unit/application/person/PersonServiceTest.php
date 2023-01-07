@@ -2,6 +2,7 @@
 
 namespace unit\application\person;
 
+use App\application\logging\Logger;
 use App\application\login\SessionManager;
 use App\application\person\PersonDAO;
 use App\application\person\PersonService;
@@ -31,8 +32,9 @@ class PersonServiceTest extends TestCase
 
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
+        $logger = $this->createMock(Logger::class);
 
-        $this->personService = new PersonService($this->personDAO, $this->sessionManager);
+        $this->personService = new PersonService($this->personDAO, $this->sessionManager, $logger);
     }
 
     public function testGetallpeopleRetrievesPeopleList(): void

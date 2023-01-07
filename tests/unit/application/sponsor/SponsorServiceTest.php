@@ -16,6 +16,7 @@ use PHPUnit\Framework\TestCase;
 class SponsorServiceTest extends TestCase
 {
 
+    const TEST_DATE = '2020-01-01';
     private Person $person;
     private Sponsor $sponsor;
     private SponsorService $sponsorService;
@@ -152,7 +153,7 @@ class SponsorServiceTest extends TestCase
             ->with(1, 1)
             ->willReturn(null);
 
-        $sponsor = new ClassicSponsor(-1, $this->person, $this->person, '2020-01-01', 'description');
+        $sponsor = new ClassicSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('addSponsor')
@@ -162,7 +163,7 @@ class SponsorServiceTest extends TestCase
             'godFatherId' => 1,
             'godChildId' => 1,
             'sponsorType' => '0',
-            'sponsorDate' => '2020-01-01',
+            'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
 
@@ -179,7 +180,7 @@ class SponsorServiceTest extends TestCase
             ->with(1, 1)
             ->willReturn(null);
 
-        $sponsor = new HeartSponsor(-1, $this->person, $this->person, '2020-01-01', 'description');
+        $sponsor = new HeartSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('addSponsor')
@@ -189,7 +190,7 @@ class SponsorServiceTest extends TestCase
             'godFatherId' => 1,
             'godChildId' => 1,
             'sponsorType' => '1',
-            'sponsorDate' => '2020-01-01',
+            'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
 
@@ -236,7 +237,7 @@ class SponsorServiceTest extends TestCase
             ->willReturn($this->sponsor);
 
         $person = PersonBuilder::aPerson()->withId(1)->build();
-        $sponsor = new ClassicSponsor(1, $person, $person, '2020-01-01', 'description');
+        $sponsor = new ClassicSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('updateSponsor')
@@ -244,7 +245,7 @@ class SponsorServiceTest extends TestCase
 
         $this->sponsorService->updateSponsor(1, [
             'sponsorType' => '0',
-            'sponsorDate' => '2020-01-01',
+            'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
 
@@ -258,7 +259,7 @@ class SponsorServiceTest extends TestCase
             ->willReturn($this->sponsor);
 
         $person = PersonBuilder::aPerson()->withId(1)->build();
-        $sponsor = new HeartSponsor(1, $person, $person, '2020-01-01', 'description');
+        $sponsor = new HeartSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('updateSponsor')
@@ -266,7 +267,7 @@ class SponsorServiceTest extends TestCase
 
         $this->sponsorService->updateSponsor(1, [
             'sponsorType' => '1',
-            'sponsorDate' => '2020-01-01',
+            'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
 

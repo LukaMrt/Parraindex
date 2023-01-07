@@ -8,21 +8,56 @@ use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
 use App\model\person\PersonBuilder;
+use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
+/**
+ * The edit person page, it's the page to edit a person and his characteristics
+ */
 class EditPersonController extends Controller
 {
+    /**
+     * @var CharacteristicTypeService the characteristic type service
+     */
     private CharacteristicTypeService $characteristicTypeService;
 
+    /**
+     * @var CharacteristicService the characteristic service
+     */
     private CharacteristicService $characteristicService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, CharacteristicTypeService $characteristicTypeService, CharacteristicService $characteristicService)
-    {
+
+    /**
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * @param CharacteristicTypeService $characteristicTypeService the characteristic type service
+     * @param CharacteristicService $characteristicService the characteristic service
+     */
+    public function __construct(
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
+        CharacteristicTypeService $characteristicTypeService,
+        CharacteristicService $characteristicService
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->characteristicTypeService = $characteristicTypeService;
         $this->characteristicService = $characteristicService;
     }
 
+
+    /**
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
+     */
     public function get(Router $router, array $parameters): void
     {
         // if id is 0, create a new person
@@ -64,7 +99,13 @@ class EditPersonController extends Controller
         );
     }
 
-    public function post(Router $router, array $parameters): void
+
+    /**
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
+    #[NoReturn] public function post(Router $router, array $parameters): void
     {
         header('content-type: application/json');
         $json = file_get_contents('php://input');
@@ -78,10 +119,10 @@ class EditPersonController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            // TODO: remove this 2 lines
             $response['code'] = 401;
-            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour ajouter une personne";
-            echo json_encode($data['person-desc']);
+            $response['messages'][] = "Vous devez être connecté et avoir les "
+                . "droits d'administrateur pour ajouter une personne";
+            echo json_encode($response);
             exit(0);
         }
 
@@ -117,7 +158,15 @@ class EditPersonController extends Controller
         exit(0);
     }
 
-    private function getFormValues($data, array &$response, bool $isAdmin): array
+
+    /**
+     * Get the form values
+     * @param $data array the form data
+     * @param array $response the response if an error occurs
+     * @param bool $isAdmin if the user is admin
+     * @return array the validated values
+     */
+    private function getFormValues(array $data, array &$response, bool $isAdmin): array
     {
         $newData = [];
 
@@ -168,14 +217,14 @@ class EditPersonController extends Controller
                 $response['code'] = 400;
             } else {
                 $file = finfo_open();
-                $mime_type = finfo_buffer($file, $picture, FILEINFO_MIME_TYPE);
+                $mimeType = finfo_buffer($file, $picture, FILEINFO_MIME_TYPE);
 
-                if (!array_key_exists($mime_type, $extensions)) {
+                if (!array_key_exists($mimeType, $extensions)) {
                     $response['messages'][] = "Le format de la photo n'est pas supporté";
                     $response['code'] = 400;
                 } else {
                     $newData['image'] = $picture;
-                    $newData['picture'] = uniqid() . '.' . $extensions[$mime_type];
+                    $newData['picture'] = uniqid() . '.' . $extensions[$mimeType];
                 }
             }
         }
@@ -196,7 +245,14 @@ class EditPersonController extends Controller
         return $newData;
     }
 
-    private function getFormCharacteristics($data, array &$response): array
+
+    /**
+     * Get the form characteristics
+     * @param $data array the data
+     * @param array $response the response if an error occurs
+     * @return array the characteristics
+     */
+    private function getFormCharacteristics(array $data, array &$response): array
     {
         $newCharacteristics = [];
 
@@ -235,7 +291,13 @@ class EditPersonController extends Controller
         return $newCharacteristics;
     }
 
-    public function put(Router $router, array $parameters): void
+
+    /**
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
+    #[NoReturn] public function put(Router $router, array $parameters): void
     {
         header('content-type: application/json');
         $json = file_get_contents('php://input');
@@ -249,10 +311,10 @@ class EditPersonController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            // TODO: remove this 2 lines
             $response['code'] = 401;
-            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour modifier une personne";
-            echo json_encode($data['person-desc']);
+            $response['messages'][] = "Vous devez être connecté et avoir les droits "
+                . "d'administrateur pour modifier une personne";
+            echo json_encode($response);
             exit(0);
         }
 
@@ -320,7 +382,13 @@ class EditPersonController extends Controller
         exit(0);
     }
 
-    public function delete(Router $router, array $parameters): void
+
+    /**
+     * @param Router $router
+     * @param array $parameters
+     * @return void
+     */
+    #[NoReturn] public function delete(Router $router, array $parameters): void
     {
         header('content-type: application/json');
 
@@ -333,7 +401,8 @@ class EditPersonController extends Controller
 
         if (empty($_SESSION)) {
             $response['code'] = 401;
-            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur pour supprimer une personne";
+            $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur "
+                . "pour supprimer une personne";
             echo json_encode($response);
             exit(0);
         }
@@ -365,8 +434,11 @@ class EditPersonController extends Controller
         $response['redirect'] = $router->url('tree');
         $response['redirectDelay'] = 5000;
 
-        $response['messages'][] = 'La personne ' . $person->getFirstName() . ' ' . strtoupper($person->getLastName()) . ' à correctement été supprimée';
-        $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans " . ($response['redirectDelay'] / 1000) . 's';
+        $response['messages'][] = 'La personne ' . $person->getFirstName() . ' '
+            . strtoupper($person->getLastName()) . ' a correctement été supprimée';
+
+        $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans "
+            . ($response['redirectDelay'] / 1000) . 's';
 
         echo json_encode($response);
         exit(0);

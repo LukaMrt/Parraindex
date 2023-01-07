@@ -53,9 +53,9 @@
       "Composer\\Config::disableProcessTimeout",
       "sass --watch scss:public/css"
     ],
-    "doc": [
+    "documentation": [
       "Composer\\Config::disableProcessTimeout",
-      "phpDocumentor -d src/ -t out/doc/ --title Parraindoc"
+      "phpDocumentor -d src/ -t out/documentation/ --title Parraindoc"
     ],
     "mutating": [
       "Composer\\Config::disableProcessTimeout",
@@ -64,11 +64,11 @@
     ],
     "sniffer": [
       "Composer\\Config::disableProcessTimeout",
-      "phpcs --standard=PSR12 src/"
+      "phpcs --standard=phpcs.xml"
     ],
     "sniffer-fix": [
       "Composer\\Config::disableProcessTimeout",
-      "phpcbf --standard=PSR12 src/"
+      "phpcbf --standard=phpcs.xml"
     ]
   },
   "require-dev": {

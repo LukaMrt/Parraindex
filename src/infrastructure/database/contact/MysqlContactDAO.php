@@ -12,21 +12,40 @@ use App\model\person\Identity;
 use App\model\person\PersonBuilder;
 use App\model\sponsor\SponsorFactory;
 
+/**
+ * Implementation of the ContactDAO interface for MySQL
+ */
 class MysqlContactDAO implements ContactDAO
 {
+    /**
+     * @var DatabaseConnection the database connection
+     */
     private DatabaseConnection $databaseConnection;
 
+
+    /**
+     * @param DatabaseConnection $databaseConnection the database connection
+     */
     public function __construct(DatabaseConnection $databaseConnection)
     {
         $this->databaseConnection = $databaseConnection;
     }
 
+
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function savePersonAddContact(PersonContact $contact): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description) VALUES (:type, NOW(), :name, :email, :description)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
+                            VALUES (:type, NOW(), :name, :email, :description)
+SQL
+        );
         $query->execute([
             "type" => $contact->getTypeId(),
             "name" => $contact->getContacterName(),
@@ -35,7 +54,11 @@ class MysqlContactDAO implements ContactDAO
         ]);
 
         $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare("INSERT INTO EditPerson (id_ticket, first_name, last_name, entry_year) VALUES (:id_ticket, :firstname, :lastname, :entry_year)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO EditPerson (id_ticket, first_name, last_name, entry_year)
+                            VALUES (:id_ticket, :firstname, :lastname, :entry_year)
+SQL
+        );
         $query->execute([
             "id_ticket" => $ticketId,
             "firstname" => $contact->getPerson()->getFirstName(),
@@ -47,12 +70,21 @@ class MysqlContactDAO implements ContactDAO
         $connection = null;
     }
 
+
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function savePersonRemoveContact(PersonContact $contact): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description) VALUES (:type, NOW(), :name, :email, :description)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
+                            VALUES (:type, NOW(), :name, :email, :description)
+SQL
+        );
         $query->execute([
             "type" => $contact->getTypeId(),
             "name" => $contact->getContacterName(),
@@ -61,7 +93,11 @@ class MysqlContactDAO implements ContactDAO
         ]);
 
         $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare("INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name) VALUES (:id_ticket, :id_person, :firstname, :lastname)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name)
+                            VALUES (:id_ticket, :id_person, :firstname, :lastname)
+SQL
+        );
         $query->execute([
             "id_ticket" => $ticketId,
             "id_person" => $contact->getPerson()->getId(),
@@ -73,12 +109,21 @@ class MysqlContactDAO implements ContactDAO
         $connection = null;
     }
 
+
+    /**
+     * @param DefaultContact $contact the contact to save
+     * @return void
+     */
     public function saveSimpleContact(DefaultContact $contact): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description) VALUES (:type, NOW(), :name, :email, :description)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
+                            VALUES (:type, NOW(), :name, :email, :description)
+SQL
+        );
         $query->execute([
             "type" => $contact->getTypeId(),
             "name" => $contact->getContacterName(),
@@ -90,12 +135,21 @@ class MysqlContactDAO implements ContactDAO
         $connection = null;
     }
 
+
+    /**
+     * @param SponsorContact $contact the contact to save
+     * @return void
+     */
     public function saveSponsorContact(SponsorContact $contact): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description) VALUES (:type, NOW(), :name, :email, :description)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
+                            VALUES (:type, NOW(), :name, :email, :description)
+SQL
+        );
         $query->execute([
             "type" => $contact->getTypeId(),
             "name" => $contact->getContacterName(),
@@ -104,7 +158,12 @@ class MysqlContactDAO implements ContactDAO
         ]);
 
         $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare("INSERT INTO EditSponsor (id_ticket, id_sponsor, id_godfather, id_godson, date, description, type) VALUES (:id_ticket, :id_sponsor, :id_godfather, :id_godson, :date, :description, :type)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO EditSponsor (id_ticket, id_sponsor, id_godfather,
+                                                     id_godson, date, description, type)
+                            VALUES (:id_ticket, :id_sponsor, :id_godfather, :id_godson, :date, :description, :type)
+SQL
+        );
         $query->execute([
             "id_ticket" => $ticketId,
             "id_sponsor" => $contact->getSponsor()->getId() != -1 ? $contact->getSponsor()->getId() : null,
@@ -119,17 +178,31 @@ class MysqlContactDAO implements ContactDAO
         $connection = null;
     }
 
+
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function saveChockingContentContact(PersonContact $contact): void
     {
         $this->savePersonUpdateContact($contact);
     }
 
+
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
     public function savePersonUpdateContact(PersonContact $contact): void
     {
 
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description) VALUES (:type, NOW(), :name, :email, :description)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
+                            VALUES (:type, NOW(), :name, :email, :description)
+SQL
+        );
         $query->execute([
             "type" => $contact->getTypeId(),
             "name" => $contact->getContacterName(),
@@ -138,7 +211,11 @@ class MysqlContactDAO implements ContactDAO
         ]);
 
         $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare("INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year) VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)");
+        $query = $connection->prepare(<<<SQL
+                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
+                            VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)
+SQL
+        );
         $query->execute([
             "id_ticket" => $ticketId,
             "id_person" => $contact->getPerson()->getId(),
@@ -151,6 +228,10 @@ class MysqlContactDAO implements ContactDAO
         $connection = null;
     }
 
+
+    /**
+     * @return array the list of all the contacts
+     */
     public function getContactList(): array
     {
 
@@ -189,7 +270,8 @@ SQL
 							P.first_name  AS f_first_name,
 							P2.id_person  AS c_id_person,
 							P2.last_name  AS c_last_name,
-							P2.first_name AS c_first_name
+							P2.first_name AS c_first_name,
+							ES.type AS sponsor_type
 						FROM Ticket T
 							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
 							JOIN Person P on ES.id_godfather = P.id_person
@@ -206,7 +288,13 @@ SQL
         $contacts = [];
 
         while ($data = $queryDefault->fetch()) {
-            $contacts[] = new DefaultContact($data->id_ticket, $data->contacter_name, $data->contacter_email, ContactType::from($data->type), $data->description);
+            $contacts[] = new DefaultContact(
+                $data->id_ticket,
+                $data->contacter_name,
+                $data->contacter_email,
+                ContactType::from($data->type),
+                $data->description
+            );
         }
 
         while ($data = $queryPerson->fetch()) {
@@ -215,7 +303,14 @@ SQL
                 ->withIdentity(new Identity($data->first_name, $data->last_name))
                 ->withStartYear($data->entry_year ?? -1)
                 ->build();
-            $contacts[] = new PersonContact($data->id_ticket, $data->contacter_name, $data->contacter_email, ContactType::from($data->type), $data->description, $person);
+            $contacts[] = new PersonContact(
+                $data->id_ticket,
+                $data->contacter_name,
+                $data->contacter_email,
+                ContactType::from($data->type),
+                $data->description,
+                $person
+            );
         }
 
         while ($data = $querySponsor->fetch()) {
@@ -229,9 +324,23 @@ SQL
                 ->withIdentity(new Identity($data->c_first_name, $data->c_last_name))
                 ->build();
 
-            $sponsor = SponsorFactory::createSponsor($data->type, $data->id_sponsor ?? -1, $godFather, $godChild, $data->date, $data->description);
+            $sponsor = SponsorFactory::createSponsor(
+                $data->sponsor_type,
+                $data->id_sponsor ?? -1,
+                $godFather,
+                $godChild,
+                $data->date,
+                $data->description
+            );
 
-            $contacts[] = new SponsorContact($data->id_ticket, $data->contacter_name, $data->contacter_email, ContactType::from($data->type), $data->description, $sponsor);
+            $contacts[] = new SponsorContact(
+                $data->id_ticket,
+                $data->contacter_name,
+                $data->contacter_email,
+                ContactType::from($data->type),
+                $data->description,
+                $sponsor
+            );
         }
 
         $queryDefault->closeCursor();
@@ -242,11 +351,22 @@ SQL
         return $contacts;
     }
 
-    public function closeContact(int $contactId, int $resolverId)
+
+    /**
+     * @param int $contactId the id of the contact to close
+     * @param int $resolverId the id of the person who resolved the contact
+     * @return void
+     */
+    public function closeContact(int $contactId, int $resolverId): void
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("UPDATE Ticket SET id_resolver = :id_resolver, resolution_date = NOW() WHERE id_ticket = :id_ticket");
+        $query = $connection->prepare(<<<SQL
+                            UPDATE Ticket
+                            SET id_resolver = :id_resolver, resolution_date = NOW()
+                            WHERE id_ticket = :id_ticket
+SQL
+        );
         $query->execute([
             "id_resolver" => $resolverId,
             "id_ticket" => $contactId

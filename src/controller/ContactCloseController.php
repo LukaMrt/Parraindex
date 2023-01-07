@@ -10,18 +10,46 @@ use App\model\account\PrivilegeType;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 
+/**
+ * The contact close page, it's the page to close a contact and execute the contact action
+ */
 class ContactCloseController extends Controller
 {
+    /**
+     * @var ContactService the contact service
+     */
     private ContactService $contactService;
+    /**
+     * @var SponsorService the sponsor service
+     */
     private SponsorService $sponsorService;
 
-    public function __construct(Environment $twig, Router $router, PersonService $personService, ContactService $contactService, SponsorService $sponsorService)
-    {
+
+    /**
+     * @param Environment $twig the twig environment
+     * @param Router $router the router
+     * @param PersonService $personService the person service
+     * @param ContactService $contactService the contact service
+     * @param SponsorService $sponsorService the sponsor service
+     */
+    public function __construct(
+        Environment $twig,
+        Router $router,
+        PersonService $personService,
+        ContactService $contactService,
+        SponsorService $sponsorService
+    ) {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
         $this->sponsorService = $sponsorService;
     }
 
+
+    /**
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     */
     #[NoReturn] public function get(Router $router, array $parameters): void
     {
 
@@ -43,6 +71,12 @@ class ContactCloseController extends Controller
         die();
     }
 
+
+    /**
+     * Resolves the contact action
+     * @param int $id the contact id
+     * @return void
+     */
     private function resolve(int $id)
     {
 
