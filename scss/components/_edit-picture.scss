@@ -3,7 +3,7 @@
 @use "../abstracts/breakpoints" as b;
 
 .edit-picture {
-  position: absolute;
+  position: fixed;
 
   left: 50%;
   translate: -50% 0;
@@ -88,6 +88,11 @@
 
   &--active {
     scale: 1;
+  }
+
+  @include b.breakpoint(medium) {
+    top: 50%;
+    translate: -50% -50%;
   }
 
   @include b.breakpoint(small) {
