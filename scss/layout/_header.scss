@@ -67,14 +67,14 @@
       }
     }
 
-    @include b.breakpoint(small) {
+    @include b.breakpoint(header) {
       justify-content: space-evenly;
       width: 90%;
       margin: 0;
     }
   }
 
-  @include b.breakpoint(small) {
+  @include b.breakpoint(header) {
     @include m.hard-box-shadow();
     justify-content: center;
     padding: f.rem(20) 0;

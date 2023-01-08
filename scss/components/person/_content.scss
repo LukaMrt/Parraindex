@@ -3,11 +3,10 @@
 @use "../../abstracts/breakpoints" as b;
 
 .person-content {
-  width: 90%;
-  padding-right: 10%;
+  width: 100%;
   flex-grow: 1;
 
-  @include m.flex(center, center, column);
+  @include m.flex();
 
   @include b.breakpoint(medium) {
     width: 100%;
@@ -15,13 +14,13 @@
   }
 
   &__description {
-    @include m.flex(center, center, row);
-    width: 100%;
+    @include m.flex($direction: row, $justify: space-evenly);
+    gap: f.rem(50) 0;
+    width: 90%;
 
     @include b.breakpoint(medium) {
-      @include m.flex(center, center, column-reverse);
+      flex-direction: column;
     }
-
   }
 
 }
