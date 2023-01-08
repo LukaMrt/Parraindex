@@ -85,12 +85,11 @@ class ContactController extends Controller
      */
     public function get(Router $router, array $parameters): void
     {
-
         $people = $this->personService->getAllPeople();
-        usort($people, fn($a, $b) => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
+        usort($people, fn($a, $b) => $a->getFirstName() !== '?' && $a->getFirstName() < $b->getFirstName() ? -1 : 1);
         $closure = fn($person) => [
             'id' => $person->getId(),
-            'title' => $person->getLastName() . ' ' . $person->getFirstName()
+            'title' => ucfirst($person->getFirstName()) . ' ' . strtoupper($person->getLastName())
         ];
         $people = array_map($closure, $people);
 
