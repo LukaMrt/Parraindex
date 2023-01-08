@@ -210,8 +210,8 @@ SQL
         $query = $connection->prepare(<<<SQL
                             SELECT *
                             FROM Account A
-                            LEFT JOIN Privilege P on A.id_account = P.id_account
-                            JOIN School S on S.id_school = P.id_school
+                                LEFT JOIN Privilege P on A.id_account = P.id_account
+                                JOIN School S on S.id_school = P.id_school
                             WHERE email = :email
 SQL
         );
@@ -222,7 +222,7 @@ SQL
             return null;
         }
 
-        $person = PersonBuilder::aPerson()->build();
+        $person = PersonBuilder::aPerson();
 
         while ($row = $query->fetch()) {
 
@@ -242,10 +242,11 @@ SQL
 
             $id = $row->id_account;
             $email = $row->email;
+            $person->withId($row->id_person);
             $password = new Password($row->password);
         }
 
-        $account = new Account($id, $email, $person, $password, ...$privileges);
+        $account = new Account($id, $email, $person->build(), $password, ...$privileges);
 
         $query->closeCursor();
         $connection = null;
