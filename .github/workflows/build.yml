@@ -83,7 +83,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: 'cd /var/www/dev.parraindex.com &&
-            git add * &&
+            git add . &&
             git reset --hard &&
             git checkout develop &&
             git pull &&
@@ -105,7 +105,7 @@ jobs:
           port: ${{ secrets.PORT }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: 'cd /var/www/parraindex.com &&
-            git add * &&
+            git add . &&
             git reset --hard &&
             git checkout master &&
             git pull &&
