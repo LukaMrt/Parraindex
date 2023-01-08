@@ -17,23 +17,24 @@
                 'person': person,
                 'godFathers': godFathers,
                 'godChildren': godChildren,
-            } %}
+                } 
+            %}
 
             {% include 'components/person/description.twig' with {
-                'person': person
-            } %}
+                'person': person,
+                'characteristics': person.characteristics
+                } 
+            %}
         </div>
 
         {% include 'components/person/actions.twig' with {
             'router': router,
             'admin': admin,
             'person': person
-        } %}
+            } 
+        %}
 
     </div>
 
-    {% include 'components/person/links.twig' with {
-        'characteristics': person.characteristics
-    } %}
 
 {% endblock %}
