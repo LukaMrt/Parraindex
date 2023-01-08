@@ -164,12 +164,13 @@ SQL
                             VALUES (:id_ticket, :id_sponsor, :id_godfather, :id_godson, :date, :description, :type)
 SQL
         );
+        $date = $contact->getSponsor()->formatDate("Y-m-d");
         $query->execute([
             "id_ticket" => $ticketId,
             "id_sponsor" => $contact->getSponsor()->getId() != -1 ? $contact->getSponsor()->getId() : null,
             "id_godfather" => $contact->getSponsor()->getGodfather()->getId(),
             "id_godson" => $contact->getSponsor()->getGodChild()->getId(),
-            "date" => $contact->getSponsor()->getDate()->format("Y-m-d"),
+            "date" => !empty($date) ? $date : null,
             "description" => $contact->getSponsor()->getDescription(),
             "type" => $contact->getSponsor()->getTypeId()
         ]);
@@ -329,7 +330,7 @@ SQL
                 $data->id_sponsor ?? -1,
                 $godFather,
                 $godChild,
-                $data->date,
+                $data->date ?? '',
                 $data->description
             );
 

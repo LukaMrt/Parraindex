@@ -49,7 +49,7 @@ class SponsorContact extends Contact
             ['Parrain', $godFather->getFirstName() . ' ' . $godFather->getLastName()],
             ['Fillot', $godChild->getFirstName() . ' ' . $godChild->getLastName()],
             ['Type de parrainage', $this->sponsor->getType()],
-            ['Date du parrainage', $this->sponsor->getDate()->format('d/m/Y')]
+            ['Date du parrainage', $this->sponsor->formatDate('d/m/Y')]
         ];
     }
 

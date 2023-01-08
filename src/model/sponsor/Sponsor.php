@@ -97,9 +97,9 @@ abstract class Sponsor
 
 
     /**
-     * @return DateTime The date of the sponsor
+     * @return ?DateTime The date of the sponsor
      */
-    public function getDate(): DateTime
+    public function getDate(): ?DateTime
     {
         return $this->date;
     }
