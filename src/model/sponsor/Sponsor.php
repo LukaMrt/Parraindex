@@ -106,6 +106,23 @@ abstract class Sponsor
 
 
     /**
+     * Formats the date of the sponsor
+     * Used in the twig view
+     * @param string $format The format to use
+     * @return string The formatted date of the sponsor
+     */
+    public function formatDate(string $format): string
+    {
+
+        if ($this->date) {
+            return $this->date->format($format);
+        }
+
+        return '';
+    }
+
+
+    /**
      * @return string The type of the sponsor
      */
     abstract public function getType(): string;
