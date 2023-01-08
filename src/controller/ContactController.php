@@ -51,7 +51,7 @@ class ContactController extends Controller
     {
 
         $formParameters = [
-            'type' => htmlspecialchars($parameters['type']),
+            'type' => htmlspecialchars($_POST['type']),
             'senderFirstName' => htmlspecialchars($_POST['senderFirstName']),
             'senderLastName' => htmlspecialchars($_POST['senderLastName']),
             'senderEmail' => htmlspecialchars($_POST['senderEmail']),
