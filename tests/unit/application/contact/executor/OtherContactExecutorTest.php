@@ -42,7 +42,7 @@ class OtherContactExecutorTest extends TestCase
         $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
-    public function testExecuteSuccessSavesContactWithGiveValues(): void
+    public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
 
         $contact = new DefaultContact(

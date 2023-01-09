@@ -19,6 +19,8 @@ class PersonServiceTest extends TestCase
     private PersonService $personService;
     private SessionManager $sessionManager;
     private PersonDAO $personDAO;
+    private Logger $logger;
+
 
     public function setUp(): void
     {
@@ -32,21 +34,23 @@ class PersonServiceTest extends TestCase
 
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
-        $logger = $this->createMock(Logger::class);
+        $this->logger = $this->createMock(Logger::class);
 
-        $this->personService = new PersonService($this->personDAO, $this->sessionManager, $logger);
+        $this->personService = new PersonService($this->personDAO, $this->sessionManager, $this->logger);
     }
+
 
     public function testGetallpeopleRetrievesPeopleList(): void
     {
 
         $this->personDAO->method('getAllPeople')
-            ->willReturn(array($this->person));
+            ->willReturn([$this->person]);
 
         $return = $this->personService->getAllPeople();
 
-        $this->assertEquals($return, array($this->person));
+        $this->assertEquals($return, [$this->person]);
     }
+
 
     public function testGetPersonByIdRetrievesPerson(): void
     {
@@ -61,6 +65,7 @@ class PersonServiceTest extends TestCase
         $this->assertEquals($return, $person);
     }
 
+
     public function testGetPersonByLoginRetrievesPerson(): void
     {
 
@@ -73,6 +78,7 @@ class PersonServiceTest extends TestCase
 
         $this->assertEquals($return, $person);
     }
+
 
     public function testUpdatePersonUpdatesSessionIfTheRequesterIsTheConnectedPerson(): void
     {
@@ -93,7 +99,7 @@ class PersonServiceTest extends TestCase
             ->method('set')
             ->with('user', $updatedPerson);
 
-        $this->personService->updatePerson(array(
+        $this->personService->updatePerson([
             'id' => 1,
             'first_name' => 'newFirstName',
             'last_name' => 'newLastName',
@@ -101,9 +107,10 @@ class PersonServiceTest extends TestCase
             'biography' => 'newBio',
             'description' => 'NewDesc',
             'color' => 'newColor'
-        ));
+        ]);
 
     }
+
 
     public function testUpdatepersonUpdatesDao(): void
     {
@@ -124,7 +131,11 @@ class PersonServiceTest extends TestCase
             ->method('updatePerson')
             ->with($updatedPerson);
 
-        $this->personService->updatePerson(array(
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with(PersonService::class, 'Person newFirstName newLastName updated.');
+
+        $this->personService->updatePerson([
             'id' => 1,
             'first_name' => 'newFirstName',
             'last_name' => 'newLastName',
@@ -132,8 +143,9 @@ class PersonServiceTest extends TestCase
             'biography' => 'newBio',
             'description' => 'NewDesc',
             'color' => 'newColor'
-        ));
+        ]);
     }
+
 
     public function testGetpersonbyidentityReturnsPerson(): void
     {
@@ -146,6 +158,7 @@ class PersonServiceTest extends TestCase
 
         $this->assertEquals($return, $this->person);
     }
+
 
     public function testCreatepersonReturnsIdOfTheCreatedPerson(): void
     {
@@ -161,7 +174,11 @@ class PersonServiceTest extends TestCase
             ->with($createPerson)
             ->willReturn(1);
 
-        $return = $this->personService->createPerson(array(
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with(PersonService::class, 'Person newFirstName newLastName created.');
+
+        $return = $this->personService->createPerson([
             'first_name' => 'newFirstName',
             'last_name' => 'newLastName',
             'picture' => 'newPicture',
@@ -169,10 +186,11 @@ class PersonServiceTest extends TestCase
             'description' => 'NewDesc',
             'color' => 'newColor',
             'start_year' => 2010
-        ));
+        ]);
 
         $this->assertEquals(1, $return);
     }
+
 
     public function testCreatepersonUses2022WhenNoStartYearIsProvided(): void
     {
@@ -188,17 +206,18 @@ class PersonServiceTest extends TestCase
             ->with($createPerson)
             ->willReturn(1);
 
-        $return = $this->personService->createPerson(array(
+        $return = $this->personService->createPerson([
             'first_name' => 'newFirstName',
             'last_name' => 'newLastName',
             'picture' => 'newPicture',
             'biography' => 'newBio',
             'description' => 'NewDesc',
             'color' => 'newColor'
-        ));
+        ]);
 
         $this->assertEquals(1, $return);
     }
+
 
     public function testDeletepersonDeletesPerson(): void
     {

@@ -64,7 +64,7 @@ class AddPersonContactExecutorTest extends TestCase
         $this->assertEquals('La personne ne doit pas exister', $result);
     }
 
-    public function testExecuteSuccessSavesContactWithGiveValues(): void
+    public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
 
         $this->personDAO->method('getPerson')

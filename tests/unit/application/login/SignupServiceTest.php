@@ -20,13 +20,13 @@ use PHPUnit\Framework\TestCase;
 class SignupServiceTest extends TestCase
 {
 
-    const DEFAULT_PARAMETERS = array(
+    const DEFAULT_PARAMETERS = [
         'firstname' => 'Test',
         'lastname' => 'testa',
         'email' => 'Test.testaaa@etu.univ-lyon1.fr',
         'password' => 'test',
         'password-confirm' => 'test'
-    );
+    ];
     private Account $validAccount;
     private Person $person;
 
@@ -37,6 +37,7 @@ class SignupServiceTest extends TestCase
     private Mailer $mailer;
     private Random $random;
     private UrlUtils $urlUtils;
+    private Logger $logger;
 
     public function setUp(): void
     {
@@ -54,7 +55,7 @@ class SignupServiceTest extends TestCase
         $this->mailer = $this->createMock(Mailer::class);
         $this->random = $this->createMock(Random::class);
         $this->urlUtils = $this->createMock(UrlUtils::class);
-        $logger = $this->createMock(Logger::class);
+        $this->logger = $this->createMock(Logger::class);
         $this->signupService = new SignupService(
             $this->accountDAO,
             $this->personDAO,
@@ -62,7 +63,7 @@ class SignupServiceTest extends TestCase
             $this->mailer,
             $this->random,
             $this->urlUtils,
-            $logger
+            $this->logger
         );
     }
 
@@ -79,6 +80,10 @@ class SignupServiceTest extends TestCase
 
         $parameters = self::DEFAULT_PARAMETERS;
         $parameters['email'] = 'test';
+
+        $this->logger->expects($this->exactly(2))
+            ->method('error')
+            ->with(SignupService::class, 'L\'email doit doit être votre email universitaire (' . implode(' ', $parameters) . ')');
 
         $return = $this->signupService->signup($parameters);
 
@@ -214,6 +219,10 @@ class SignupServiceTest extends TestCase
             ->method('redirect')
             ->with('signup_confirmation');
 
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with(SignupService::class, 'Signup request sent to ' . strtolower(self::DEFAULT_PARAMETERS['email']));
+
         $this->signupService->signup(self::DEFAULT_PARAMETERS);
     }
 
@@ -279,6 +288,10 @@ class SignupServiceTest extends TestCase
             ->with('1')
             ->willReturn(new Account(-1, '', PersonBuilder::aPerson()->build(), new Password('')));
 
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with(SignupService::class, 'Token invalid');
+
         $return = $this->signupService->validate('1');
 
         $this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
@@ -308,6 +321,10 @@ class SignupServiceTest extends TestCase
         $this->accountDAO->expects($this->once())
             ->method('deleteTemporaryAccount')
             ->with($this->validAccount);
+
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with(SignupService::class, 'Account created for test.test@etu.univ-lyon1.fr');
 
         $this->signupService->validate('1');
     }

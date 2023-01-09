@@ -30,6 +30,7 @@ class LoginServiceTest extends TestCase
     private AccountDAO $accountDAO;
     private PersonDAO $personDAO;
     private SessionManager $sessionManager;
+    private Logger $logger;
 
     public function setUp(): void
     {
@@ -46,20 +47,24 @@ class LoginServiceTest extends TestCase
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->redirect = $this->createMock(Redirect::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
-        $logger = $this->createMock(Logger::class);
+        $this->logger = $this->createMock(Logger::class);
         $this->loginService = new LoginService(
             $this->accountDAO,
             $this->personDAO,
             $this->redirect,
             $this->sessionManager,
-            $logger
+            $this->logger
         );
     }
 
     public function testLoginDetectsMissingFields(): void
     {
 
-        $return = $this->loginService->login(array('login' => 'test'));
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with(LoginService::class, 'Veuillez remplir tous les champs (' . implode(' ', ['login' => 'test']) . ')');
+
+        $return = $this->loginService->login(['login' => 'test']);
 
         $this->assertEquals('Veuillez remplir tous les champs', $return);
     }
@@ -106,6 +111,10 @@ class LoginServiceTest extends TestCase
         $this->sessionManager->expects($this->exactly(3))
             ->method('set')
             ->withConsecutive(['login', self::TEST_EMAIL], ['privilege', 'ADMIN'], ['user', $person]);
+
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with(LoginService::class, 'User ' . self::TEST_EMAIL . ' logged in');
 
         $this->loginService->login(array(
             'login' => self::TEST_EMAIL,

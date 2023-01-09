@@ -110,6 +110,7 @@ class SignupService
             );
             $this->logger->info(SignupService::class, 'Signup request sent to ' . $email);
             $this->redirect->redirect('signup_confirmation');
+            return '';
         }
 
         $this->logger->error(SignupService::class, $error . ' (' . implode(' ', $parameters) . ')');
@@ -167,7 +168,7 @@ class SignupService
         if (!empty($error)) {
             $this->logger->error(
                 SignupService::class,
-                $error . ' (' . implode(' ', [$email, $password, $passwordConfirm, $lastname, $firstname]) . ')'
+                $error . ' (' . implode(' ', [$firstname, $lastname, $email, $password, $passwordConfirm]) . ')'
             );
             return $error;
         }

@@ -80,6 +80,7 @@ class LoginService
 
             $this->logger->info(LoginService::class, 'User ' . $account->getLogin() . ' logged in');
             $this->redirect->redirect('home');
+            return '';
         }
 
         $this->logger->error(LoginService::class, $error . ' (' . implode(' ', $parameters) . ')');

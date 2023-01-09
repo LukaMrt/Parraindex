@@ -38,6 +38,7 @@ class PasswordServiceTest extends TestCase
     private Mailer $mailer;
     private Random $random;
     private UrlUtils $urlUtils;
+    private Logger $logger;
 
     public function setUp(): void
     {
@@ -55,7 +56,7 @@ class PasswordServiceTest extends TestCase
         $this->mailer = $this->createMock(Mailer::class);
         $this->random = $this->createMock(Random::class);
         $this->urlUtils = $this->createMock(UrlUtils::class);
-        $logger = $this->createMock(Logger::class);
+        $this->logger = $this->createMock(Logger::class);
         $this->passwordService = new PasswordService(
             $this->accountDAO,
             $this->personDAO,
@@ -63,7 +64,7 @@ class PasswordServiceTest extends TestCase
             $this->mailer,
             $this->random,
             $this->urlUtils,
-            $logger
+            $this->logger
         );
     }
 
@@ -74,8 +75,11 @@ class PasswordServiceTest extends TestCase
             ->with(self::TEST_EMAIL)
             ->willReturn(false);
 
-        $parameters = ['email' => self::TEST_EMAIL, 'password' => 'test'];
-        $return = $this->passwordService->resetPassword($parameters);
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with(PasswordService::class, 'Email not found');
+
+        $return = $this->passwordService->resetPassword(['email' => self::TEST_EMAIL, 'password' => 'test']);
 
         $this->assertEquals('Email inconnu.', $return);
     }
@@ -98,6 +102,10 @@ class PasswordServiceTest extends TestCase
         $this->accountDAO->method('getAccountByLogin')
             ->with(self::TEST_EMAIL)
             ->willReturn($this->validAccount);
+
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with(PasswordService::class, 'Reset password email sent to ' . self::TEST_EMAIL);
 
         $this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
     }
@@ -180,6 +188,10 @@ class PasswordServiceTest extends TestCase
             ->with('1')
             ->willReturn(new Account(-1, '', PersonBuilder::aPerson()->build(), new Password('')));
 
+        $this->logger->expects($this->once())
+            ->method('error')
+            ->with(PasswordService::class, 'Token invalid');
+
         $return = $this->passwordService->validateResetPassword('1');
 
         $this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
@@ -195,6 +207,10 @@ class PasswordServiceTest extends TestCase
         $this->accountDAO->expects($this->once())
             ->method('editAccountPassword')
             ->with($this->validAccount);
+
+        $this->logger->expects($this->once())
+            ->method('info')
+            ->with(PasswordService::class, 'Password reset for ' . self::TEST_EMAIL);
 
         $this->passwordService->validateResetPassword('1');
     }
