@@ -310,8 +310,8 @@ SQL
 
     /**
      * Get sponsor by people id
-     * @param int $godFatherId God father id
-     * @param int $godChildId God child id
+     * @param int $godFatherId Godfather id
+     * @param int $godChildId Godchild id
      * @return Sponsor|null
      */
     public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor
@@ -433,16 +433,34 @@ SQL
         ]);
 
         if ($sponsor instanceof ClassicSponsor) {
+            $query = $connection->prepare("INSERT IGNORE INTO ClassicSponsor VALUES (:id, :reason)");
+            $query->execute([
+                'id' => $sponsor->getId(),
+                'reason' => $sponsor->getDescription()
+            ]);
             $query = $connection->prepare("UPDATE ClassicSponsor SET reason = :reason WHERE id_sponsor = :id");
             $query->execute([
                 'id' => $sponsor->getId(),
                 'reason' => $sponsor->getDescription()
             ]);
+            $query = $connection->prepare("DELETE FROM HeartSponsor WHERE id_sponsor = :id");
+            $query->execute([
+                'id' => $sponsor->getId()
+            ]);
         } elseif ($sponsor instanceof HeartSponsor) {
+            $query = $connection->prepare("INSERT IGNORE INTO HeartSponsor VALUES (:id, :description)");
+            $query->execute([
+                'id' => $sponsor->getId(),
+                'description' => $sponsor->getDescription()
+            ]);
             $query = $connection->prepare("UPDATE HeartSponsor SET description = :description WHERE id_sponsor = :id");
             $query->execute([
                 'id' => $sponsor->getId(),
                 'description' => $sponsor->getDescription()
+            ]);
+            $query = $connection->prepare("DELETE FROM ClassicSponsor WHERE id_sponsor = :id");
+            $query->execute([
+                'id' => $sponsor->getId()
             ]);
         }
 
