@@ -10,6 +10,7 @@
 
   &__img {
     width: 30px;
+    transition: filter 0.15s ease-in-out;
 
     &--close {
       display: block;
@@ -17,6 +18,11 @@
 
     &--open {
       display: none;
+    }
+
+    &:hover{
+      filter: invert(1);
+      cursor: pointer;
     }
   }
 

@@ -274,8 +274,8 @@ class EditPersonController extends Controller
                     $characteristicsCounter++;
                 }
 
-                if ($characteristicsCounter === 4) {
-                    $response['messages'][] = 'Vous ne pouvez pas avoir plus de 3 caractéristiques visibles';
+                if ($characteristicsCounter === 5) {
+                    $response['messages'][] = 'Vous ne pouvez pas avoir plus de 4 caractéristiques visibles';
                     $response['code'] = 400;
 
                     // increment the counter to avoid the message to be displayed multiple times
