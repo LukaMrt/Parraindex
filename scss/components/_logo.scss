@@ -13,12 +13,13 @@
 
   opacity: 0.05;
 
-  @include b.breakpoint(small) {
+  @include b.breakpoint(header) {
     translate: 0;
-    top : 50%;
+    top : 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 50%;
+    height: auto;
   }
 
 }
