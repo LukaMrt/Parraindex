@@ -6,16 +6,17 @@ use App\application\login\AccountDAO;
 use App\infrastructure\database\DatabaseConnection;
 use App\model\account\Account;
 use App\model\account\Password;
-use App\model\person\Identity;
-use App\model\person\PersonBuilder;
 use App\model\account\Privilege;
 use App\model\account\PrivilegeType;
+use App\model\person\Identity;
+use App\model\person\PersonBuilder;
 use App\model\school\School;
 use App\model\school\SchoolAddress;
 use DateTime;
+use Exception;
 
 /**
- * MySQL implementation of the AccountDAO interface
+ * MySQL's implementation of the AccountDAO interface
  */
 class MysqlAccountDAO implements AccountDAO
 {
@@ -202,11 +203,12 @@ SQL
     /**
      * @param string $login The login of the account
      * @return Account|null The account, null if the account does not exist
+     * @throws Exception if the account exists but the person does not
      */
     public function getAccountByLogin(string $login): ?Account
     {
         $connection = $this->databaseConnection->getDatabase();
-        
+
         $query = $connection->prepare(<<<SQL
                             SELECT *
                             FROM Account A
@@ -223,6 +225,7 @@ SQL
         }
 
         $person = PersonBuilder::aPerson();
+        $account = null;
 
         while ($row = $query->fetch()) {
 
@@ -244,9 +247,8 @@ SQL
             $email = $row->email;
             $person->withId($row->id_person);
             $password = new Password($row->password);
+            $account = new Account($id, $email, $person->build(), $password, ...$privileges);
         }
-
-        $account = new Account($id, $email, $person->build(), $password, ...$privileges);
 
         $query->closeCursor();
         $connection = null;

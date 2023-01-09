@@ -62,6 +62,8 @@ class ContactController extends Controller
             'godChildId' => htmlspecialchars($_POST['godChildId']),
             'sponsorType' => htmlspecialchars($_POST['sponsorType']),
             'sponsorDate' => htmlspecialchars($_POST['sponsorDate']),
+            'password' => htmlspecialchars($_POST['password']),
+            'passwordConfirm' => htmlspecialchars($_POST['passwordConfirm']),
             'message' => htmlspecialchars($_POST['message']),
             'personId' => htmlspecialchars($_POST['personId']),
             'bonusInformation' => htmlspecialchars($_POST['bonusInformation'])

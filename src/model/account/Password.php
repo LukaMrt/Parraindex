@@ -29,7 +29,7 @@ class Password
      */
     public function hashPassword(string $algorithm): void
     {
-        $this->password = password_hash($this->password, $algorithm);
+        $this->password = $this->isHashed() ? $this->password : password_hash($this->password, $algorithm);
     }
 
 

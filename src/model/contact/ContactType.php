@@ -18,6 +18,7 @@ enum ContactType: int
     case BUG = 6;
     case CHOCKING_CONTENT = 7;
     case OTHER = 8;
+    case PASSWORD = 9;
 
 
     /**
@@ -35,6 +36,7 @@ enum ContactType: int
             ['id' => 6, 'title' => 'Bug'],
             ['id' => 7, 'title' => 'Contenu choquant'],
             ['id' => 8, 'title' => 'Autre'],
+            ['id' => 9, 'title' => 'Création d\'un compte'],
         ];
     }
 
@@ -54,6 +56,7 @@ enum ContactType: int
             self::BUG => "Bug",
             self::CHOCKING_CONTENT => "Contenu choquant",
             self::OTHER => "Autre",
+            self::PASSWORD => "Création d\'un compte",
         };
     }
 }

@@ -37,7 +37,7 @@
                     {% endif %}
 
                     {% if contact.typeId == 1 %}
-                        <a href="{{ router.url('editperson_get', {'id': contact.person.id}) }}">
+                        <a rel="noopener" target="_blank" href="{{ router.url('editperson_get', {'id': contact.person.id}) }}">
                             <button class="contact__actions-button contact__actions-button--yellow">Éditer
                             </button>
                         </a>

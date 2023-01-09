@@ -1,9 +1,10 @@
 import {Field, registerForm} from "./formValidator.js";
+import {byId} from "./utils.js";
 
 let defaultValidation = (element) => element.classList.contains('hidden') || element.checkValidity();
 
 let fields = [
-  new Field('type', 'Le type doit être valide', element => 0 <= element.value && element.value <= 8),
+  new Field('type', 'Le type doit être valide', element => 0 <= element.value && element.value <= 9),
   new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère', defaultValidation),
   new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère', defaultValidation),
   new Field('senderEmail', 'L\'email doit être valide', defaultValidation),
@@ -15,6 +16,8 @@ let fields = [
   new Field('godChildId', 'Le fillot doit être valide', defaultValidation),
   new Field('sponsorType', 'Le type de parrainage doit être valide', (element) => element.classList.contains('hidden') || 0 <= element.value && element.value <= 1),
   new Field('sponsorDate', 'La date doit être valide', defaultValidation),
+  new Field('password', 'Le mot de passe doit contenir au moins 1 caractère', defaultValidation),
+  new Field('passwordConfirm', 'Les mots de passe doivent être identiques', (element) => element.classList.contains('hidden') || element.value === byId('password').value),
   new Field('message', 'Le message doit contenir au moins 1 caractère', (element) => element.classList.contains('hidden') || element.value.trim().length > 0),
 ];
 
