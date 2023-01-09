@@ -35,7 +35,11 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare("SELECT * FROM TypeCharacteristic");
+        $statement = $connection->prepare(<<<SQL
+                                SELECT * FROM TypeCharacteristic
+                                ORDER BY characteristic_order
+SQL
+        );
         $statement->execute();
 
         $characteristics = [];
@@ -83,6 +87,7 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
 									FROM TypeCharacteristic
 									    LEFT JOIN (SELECT * FROM Characteristic WHERE id_person = :id_person)
 									        AS C USING (id_network);
+                                    ORDER BY characteristic_order
 SQL
         );
 
