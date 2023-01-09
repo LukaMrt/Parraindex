@@ -21,12 +21,13 @@
   }
 
   .description {
+    position: relative;
     @include m.flex($direction: column, $justify: space-evenly);
 
-    gap: f.rem(40) 0;
+    gap: f.rem(20) 0;
     height: 100%;
 
-    flex: 2 2 0px;
+    flex: 3 3 0px;
 
     &__about,
     &__biography {
@@ -36,12 +37,57 @@
     }
 
     textarea {
+      transition: all 0.2s ease-in-out;
+
       resize: none;
       text-align: justify;
       width: 80%;
       height: f.rem(150);
       font-size: f.rem(16);
       font-family: inherit;
+
+      &:read-only{
+        background-color: var(--light-grey);
+        opacity : 0.80;
+      }
+    }
+
+    &__actions{
+      position: absolute;
+      left:0;
+
+      @include m.flex();
+      gap: f.rem(16);
+
+      img{
+        transition: box-shadow 0.2s ease-in-out,
+                    filter 0.2s ease-in-out;
+        width: f.rem(20);
+        padding: f.rem(10);
+        @include m.smooth-box-shadow();
+        border-radius: f.rem(10);
+
+        &.active{
+          filter:invert(1); 
+          box-shadow: none;
+        }
+
+        &:active{
+          filter:invert(1); 
+          box-shadow: none;
+        }
+
+        &:hover{
+          cursor: pointer;
+        }
+      }
+
+      @include b.breakpoint(medium) {
+        flex-direction: column;
+        width: auto;
+        height: 100%;
+        position: relative;
+      }
     }
 
     @include b.breakpoint(medium) {
@@ -52,15 +98,18 @@
   .public {
     @include m.flex($justify: space-around);
     height: 100%;
+    flex: 2 2 0px;
 
-    flex: 1 1 0px;
+    .card {
+      cursor : auto;
+    }
 
     &__personalization {
       @include m.flex($direction: column);
       gap: f.rem(16);
 
       &__choice {
-        width: 80%;
+        width: 100%;
         @include m.flex($direction: row);
         gap: f.rem(15) f.rem(20);
         flex-wrap: wrap;
@@ -110,7 +159,7 @@
 
   .information {
     height: 100%;
-    flex: 2 2 0px;
+    flex: 3 3 0px;
     gap: f.rem(40) 0;
     @include m.flex($direction: column, $justify: space-evenly);
 

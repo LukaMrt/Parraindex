@@ -12,6 +12,7 @@ const field = {
   colorPicker: document.querySelector("#color-picker"),
   radioColorPicker: document.querySelector("#radio-color-picker"),
   characteristics: document.querySelector(".information__contact__characteristics"),
+  sync: () => action.sync.classList.contains("active")
 }
 
 const preview = {
@@ -37,6 +38,8 @@ const pictureModal = {
 const action = {
   delete: document.querySelector("#delete-person"),
   save: document.querySelector("#save-person"),
+  sync: document.querySelector(".sync"),
+  invert: document.querySelector(".invert")
 }
 
 const initialPicture = preview.picture.src;
@@ -130,9 +133,9 @@ function updateCharacteristicPreview() {
     let visibility = characteristic.querySelector("input[type=checkbox]");
     let value = characteristic.querySelector(".characteristic__value").value;
 
-    if (visibility.checked && characteristicsCounter >= 3) {
+    if (visibility.checked && characteristicsCounter >= 4) {
       visibility.checked = false;
-      triggerErrorPopup(["Vous ne pouvez pas avoir plus de 3 réseaux sociaux affichés"]);
+      triggerErrorPopup(["Vous ne pouvez pas avoir plus de 4 réseaux sociaux affichés"]);
     } else if (visibility.checked) {
       let previewCharacteristic = preview.characteristicType[i].cloneNode(true);
       previewCharacteristic.href += value;
@@ -150,6 +153,10 @@ function updateCharacteristicPreview() {
 function updatePreview() {
   preview.bio.textContent = field.bio.value;
 
+  if(field.sync()){
+    field.about.value = field.bio.value;
+  }
+
   let bannerColor = field.colors.querySelector("input:checked").parentElement.style.backgroundColor
 
   preview.color.style.backgroundColor = bannerColor;
@@ -161,7 +168,6 @@ function updatePreview() {
   }
 
   updateCharacteristicPreview();
-
 }
 
 /**
@@ -326,6 +332,34 @@ action.delete?.addEventListener("click", async e => {
   }
 });
 
+action.invert.addEventListener("click", () => {
+  let tmp = field.bio.value;
+  field.bio.value = field.about.value;
+  field.about.value = tmp;
+
+  updatePreview();
+});
+
+action.sync.addEventListener("click", async () => {
+  if(action.sync.classList.toggle("active")){
+
+    const isEmpty = field.about.value === "";
+    const isSimilar = field.about.value === field.bio.value;
+
+    console.log(isEmpty, isSimilar);
+
+    if (!(isEmpty || isSimilar) && !confirm("Attention ! Vous risquez de perdre le contenu du champ 'A PROPOS'")){
+      action.sync.classList.remove("active");
+      return;
+    }
+
+    field.about.readOnly = true;
+    updatePreview();
+    return;
+  }
+
+  field.about.readOnly = false;
+});
 
 init();
 
