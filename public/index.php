@@ -38,5 +38,4 @@ try {
         exit(0);
     }
     
-    throw $e;
 }

@@ -77,7 +77,7 @@ class ContactCloseController extends Controller
      * @param int $id the contact id
      * @return void
      */
-    private function resolve(int $id)
+    private function resolve(int $id): void
     {
 
         $contact = $this->contactService->getContact($id);
@@ -114,6 +114,7 @@ class ContactCloseController extends Controller
             case 6:
             case 7:
             case 8:
+            case 9:
             default:
                 break;
         }

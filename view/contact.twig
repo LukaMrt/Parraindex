@@ -125,6 +125,24 @@
                 'classes': 'option option-3'
             } %}
 
+            {% include "components/form/input.twig" with {
+                'type': 'password',
+                'slug': 'password',
+                'title': 'Mot de passe',
+                'placeholder': '••••••••••',
+                'pattern': '.+',
+                'classes': 'option option-9'
+            } %}
+
+            {% include "components/form/input.twig" with {
+                'type': 'password',
+                'slug': 'passwordConfirm',
+                'title': 'Confirmation du mot de passe',
+                'placeholder': '••••••••••',
+                'pattern': '.+',
+                'classes': 'option option-9'
+            } %}
+
             {% include "components/form/textarea.twig" with {
                 'slug': 'message',
                 'title': 'Message',
@@ -135,7 +153,7 @@
             {% include "components/form/textarea.twig" with {
                 'slug': 'bonusInformation',
                 'title': 'Informations complémentaires',
-                'classes': 'option option-0 option-3',
+                'classes': 'option option-0 option-3 option-9',
                 'required': 'false'
             } %}
 

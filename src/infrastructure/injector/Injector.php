@@ -9,6 +9,7 @@ use App\application\contact\executor\BugContactExecutor;
 use App\application\contact\executor\ChockingContentContactExecutor;
 use App\application\contact\executor\ContactExecutors;
 use App\application\contact\executor\OtherContactExecutor;
+use App\application\contact\executor\PasswordContactExecutor;
 use App\application\contact\executor\RemovePersonContactExecutor;
 use App\application\contact\executor\RemoveSponsorContactExecutor;
 use App\application\contact\executor\UpdatePersonContactExecutor;
@@ -136,7 +137,8 @@ class Injector
             $container->get(ChockingContentContactExecutor::class),
             $container->get(BugContactExecutor::class),
             $container->get(RemoveSponsorContactExecutor::class),
-            $container->get(OtherContactExecutor::class)
+            $container->get(OtherContactExecutor::class),
+            $container->get(PasswordContactExecutor::class)
         ]));
 
         $this->container->set(PersonDAO::class, $userDAO);
