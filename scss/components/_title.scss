@@ -11,7 +11,9 @@
   width: 90%;
   height: 20vh; 
 
-  @include b.breakpoint(small) {
+  @include b.breakpoint(header) {
+    top: 40%;
+
     &__prefix {
       display: None;
     }
