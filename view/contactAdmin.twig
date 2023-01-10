@@ -9,6 +9,11 @@
 
 {% block content %}
 
+    <div style="width: 50%; display: flex; flex-direction: row; justify-content: space-between">
+        <a class="header__login-link" href="{{ router.url('editperson_get', {'id': 0}) }}">Ajouter une personne</a>
+        <a class="header__login-link" href="{{ router.url('editsponsor_get', {'id': 0}) }}">Ajouter un lien</a>
+    </div>
+
     <h1>Liste des demandes de contact</h1>
 
     <div class="contacts">
