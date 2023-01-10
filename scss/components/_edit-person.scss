@@ -37,6 +37,7 @@
     }
 
     textarea {
+      position: relative;
       transition: all 0.2s ease-in-out;
 
       resize: none;
@@ -49,6 +50,14 @@
       &:read-only{
         background-color: var(--light-grey);
         opacity : 0.80;
+      }
+
+      &::placeholder{
+        position: absolute;
+        text-align: center;
+        vertical-align: middle;
+        top: 50%;
+        translate: 0 -50%;
       }
     }
 

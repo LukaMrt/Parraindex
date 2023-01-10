@@ -43,7 +43,7 @@ const action = {
 }
 
 const initialPicture = preview.picture.src;
-const personId = Number(document.querySelector(".card__identifiant").textContent);
+const personId = Number(document.querySelector(".card").id);
 
 /**
  * Encode every field of the form in JSON

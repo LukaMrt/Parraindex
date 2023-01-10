@@ -59,7 +59,7 @@ class MySqlPersonDAO implements PersonDAO
                                 LEFT JOIN School Sc on Sc.id_school = Pr.id_school
                                 LEFT JOIN Characteristic C on Pe.id_person = C.id_person
                                 LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
-                            ORDER BY Pe.id_person
+                            ORDER BY Pe.id_person, characteristic_order
 SQL
         );
         $query->execute();
@@ -214,6 +214,7 @@ SQL
                                     LEFT JOIN Characteristic C on Pe.id_person = C.id_person
                                     LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
                                 WHERE Pe.id_person = :id_person
+                                ORDER BY characteristic_order
 SQL
         );
 
