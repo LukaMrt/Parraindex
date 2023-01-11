@@ -30,13 +30,14 @@
   &__profil {
     font-size: f.rem(24);
     text-align: center;
-    padding: 0 5%;
+    width: 90%;
+    box-sizing: border-box;
+    overflow-wrap: break-word;
   }
 
   &__last-name {
     text-transform: uppercase;
-    white-space: nowrap;
-    font-weight: 700
+    font-weight: 700;
   }
 
   &__banner {
@@ -83,7 +84,6 @@
   }
 
   &__description {
-    padding: 0 f.rem(40);
     margin: 0;
     font-size: f.rem(14);
     width: 75%;
@@ -91,6 +91,7 @@
     text-align: justify;
     word-wrap: break-word;
     flex-grow: 1;
+    box-sizing: border-box;
   }
 
   &::after {

@@ -2,16 +2,6 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/breakpoints" as b;
 
-.contacts {
-
-  @include m.flex(flex-start, flex-start, row);
-  width: 90%;
-  flex-wrap: wrap;
-  font-size: 1.1em;
-  color: var(--dark-blue)
-
-}
-
 .contact {
 
   border: 1px solid lightgray;

@@ -1,0 +1,52 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+
+.admin{
+	@include m.flex($justify: space-evenly);
+	flex-grow: 1;
+	width: 90%;
+	flex-wrap: wrap;
+	gap: f.rem(32);
+
+	&__header{
+		@include m.flex($direction: row, $justify: space-evenly	);
+		flex-grow: 1;
+		width: 100%;
+		flex-wrap: wrap;
+
+		div{
+			@include m.flex($direction: row);
+			flex-wrap: wrap;
+			gap: 0 f.rem(16);
+		}
+	}
+
+	&__filter{
+		@include m.flex();
+		width: 50%;
+		gap: f.rem(16);
+
+		ul{
+			@include m.flex($direction: row, $justify: space-evenly);
+			width: 100%;
+			margin: 0;
+			padding: 0;
+
+			li{
+				list-style: none;
+			}
+		}
+	}
+
+	&__contacts{
+		@include m.flex(flex-start, flex-start, row);
+		width: 100%;
+		flex-grow: 3;
+		flex-wrap: wrap;
+		font-size: 1.1em;
+		color: var(--dark-blue)
+	}
+
+}

@@ -9,68 +9,102 @@
 
 {% block content %}
 
-    <div style="width: 50%; display: flex; flex-direction: row; justify-content: space-between">
-        <a class="header__login-link" href="{{ router.url('editperson_get', {'id': 0}) }}">Ajouter une personne</a>
-        <a class="header__login-link" href="{{ router.url('editsponsor_get', {'id': 0}) }}">Ajouter un lien</a>
-    </div>
+    <div class="admin">
 
-    <h1>Liste des demandes de contact</h1>
+        <div class = "admin__header">
+            <h1>Liste des demandes de contact</h1>
+            <div>
+                <a class="btn btn--primary" href="{{ router.url('editperson_get', {'id': 0}) }}">Ajouter une personne</a>
+                <a class="btn btn--primary" href="{{ router.url('editsponsor_get', {'id': 0}) }}">Ajouter un lien</a>
+            </div>
+        </div>
 
-    <div class="contacts">
+        <div class="admin__filter">
+            <h2>Filtres</h2>
+            <ul>
+                <li>
+                    <input checked type="radio" name="admin_filter">
+                    <label>Tous</label>
+                </li>
 
-        {% for contact in contacts %}
+                <li>
+                    <input type="radio" name="admin_filter">
+                    <label>Ajout</label>
+                </li>
 
-            <div class="contact">
-                <p class="contact__type">{{ contact.type }}</p>
-                <p>de {{ contact.contacterName }}</p>
-                <p class="contact__author"><a
-                            href="mailto:{{ contact.contacterEmail }}">{{ contact.contacterEmail }}</a></p>
-                <p class="contact__message"><span class="contact--bold">Remarques :</span> {{ contact.message | raw }}
-                </p>
+                <li>
+                    <input type="radio" name="admin_filter">
+                    <label>Modification</label>
+                </li>
 
-                {% for line in contact.description %}
-                    <p><span class="contact--bold">{{ line[0] }} :</span> {{ line[1] }}</p>
-                {% endfor %}
+                <li>
+                    <input type="radio" name="admin_filter">
+                    <label>Suppression</label>
+                </li>
 
-                <div class="contact__actions">
+                <li>
+                    <input type="radio" name="admin_filter">
+                    <label>Résolus</label>
+                </li>
+            </ul>
+        </div>
 
-                    {% if contact.typeId == 0 or contact.typeId == 3 %}
-                        <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}">
-                            <button class="contact__actions-button contact__actions-button--green">Créer
-                            </button>
+        <div class="admin__contacts">
+
+            {% for contact in contacts %}
+
+                <div class="contact">
+                    <p class="contact__type">{{ contact.type }}</p>
+                    <p>de {{ contact.contacterName }}</p>
+                    <p class="contact__author"><a
+                                href="mailto:{{ contact.contacterEmail }}">{{ contact.contacterEmail }}</a></p>
+                    <p class="contact__message"><span class="contact--bold">Remarques :</span> {{ contact.message | raw }}
+                    </p>
+
+                    {% for line in contact.description %}
+                        <p><span class="contact--bold">{{ line[0] }} :</span> {{ line[1] }}</p>
+                    {% endfor %}
+
+                    <div class="contact__actions">
+
+                        {% if contact.typeId == 0 or contact.typeId == 3 %}
+                            <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}">
+                                <button class="contact__actions-button contact__actions-button--green">Créer
+                                </button>
+                            </a>
+                        {% endif %}
+
+                        {% if contact.typeId == 1 %}
+                            <a rel="noopener" target="_blank" href="{{ router.url('editperson_get', {'id': contact.person.id}) }}">
+                                <button class="contact__actions-button contact__actions-button--yellow">Éditer
+                                </button>
+                            </a>
+                        {% endif %}
+
+                        {% if contact.typeId == 4 %}
+                            <a rel="noopener" target="_blank" href="{{ router.url('editsponsor_get', {'id': contact.sponsor.id}) }}">
+                                <button class="contact__actions-button contact__actions-button--yellow">Éditer
+                                </button>
+                            </a>
+                        {% endif %}
+
+                        {% if contact.typeId == 2 or contact.typeId == 5 %}
+                            <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}">
+                                <button class="contact__actions-button">Supprimer</button>
+                            </a>
+                        {% endif %}
+
+                        <a href="{{ router.url('contact_close', {'id': contact.id, 'resolve': 'false'}) }}">
+                            <button class="contact__actions-button">Clore</button>
                         </a>
-                    {% endif %}
 
-                    {% if contact.typeId == 1 %}
-                        <a rel="noopener" target="_blank" href="{{ router.url('editperson_get', {'id': contact.person.id}) }}">
-                            <button class="contact__actions-button contact__actions-button--yellow">Éditer
-                            </button>
-                        </a>
-                    {% endif %}
-
-                    {% if contact.typeId == 4 %}
-                        <a rel="noopener" target="_blank" href="{{ router.url('editsponsor_get', {'id': contact.sponsor.id}) }}">
-                            <button class="contact__actions-button contact__actions-button--yellow">Éditer
-                            </button>
-                        </a>
-                    {% endif %}
-
-                    {% if contact.typeId == 2 or contact.typeId == 5 %}
-                        <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}">
-                            <button class="contact__actions-button">Supprimer</button>
-                        </a>
-                    {% endif %}
-
-                    <a href="{{ router.url('contact_close', {'id': contact.id, 'resolve': 'false'}) }}">
-                        <button class="contact__actions-button">Clore</button>
-                    </a>
+                    </div>
 
                 </div>
 
-            </div>
+            {% endfor %}
 
-        {% endfor %}
-
+        </div>
     </div>
 
 {% endblock %}
