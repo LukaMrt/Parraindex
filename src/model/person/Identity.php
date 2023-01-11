@@ -3,11 +3,12 @@
 namespace App\model\person;
 
 use DateTime;
+use JsonSerializable;
 
 /**
  * Identity of a person
  */
-class Identity
+class Identity implements JsonSerializable
 {
     /**
      * @var string First name of the person
@@ -106,5 +107,11 @@ class Identity
     public function setPicture(string $picture): void
     {
         $this->picture = $picture;
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return get_object_vars($this);
     }
 }

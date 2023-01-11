@@ -4,11 +4,12 @@ namespace App\model\person;
 
 use App\model\person\characteristic\Characteristic;
 use App\model\sponsor\Sponsor;
+use JsonSerializable;
 
 /**
  * Person class to represent a person
  */
-class Person
+class Person implements JsonSerializable
 {
     /**
      * @var int Id of the person
@@ -192,5 +193,31 @@ class Person
     public function setPicture(string $picture): void
     {
         $this->identity->setPicture($picture);
+    }
+
+
+	/**
+	 * Sets characteristics of the person
+	 * @param Characteristic[] $characteristics New characteristics of the person
+	 */
+	public function setCharacteristics(array $characteristics): void
+	{
+		$this->characteristics = $characteristics;
+	}
+
+
+	/**
+	 * Add Sponsors to the person
+	 * @param array $sponsors New sponsors of the person
+	 */
+	function addSponsor(array $sponsors): void
+	{
+		$this->sponsors = array_merge($this->sponsors, $sponsors);
+	}
+
+
+    public function jsonSerialize(): array
+    {
+        return get_object_vars($this);
     }
 }

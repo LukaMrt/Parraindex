@@ -4,6 +4,7 @@ namespace App\application\person;
 
 use App\application\logging\Logger;
 use App\application\login\SessionManager;
+use App\application\sponsor\SponsorDAO;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
@@ -17,6 +18,11 @@ class PersonService
      * @var PersonDAO Person data access object
      */
     private PersonDAO $personDAO;
+
+	/**
+	 * @var SponsorDAO Sponsor data access object
+	 */
+	private SponsorDAO $sponsorDAO;
 
     /**
      * @var SessionManager Session manager
@@ -34,9 +40,14 @@ class PersonService
      * @param SessionManager $sessionManager Session manager
      * @param Logger $logger Logger
      */
-    public function __construct(PersonDAO $personDAO, SessionManager $sessionManager, Logger $logger)
-    {
+    public function __construct(
+		PersonDAO $personDAO,
+		SessionManager $sessionManager,
+		Logger $logger,
+		SponsorDAO $sponsorDAO
+    ){
         $this->personDAO = $personDAO;
+		$this->sponsorDAO = $sponsorDAO;
         $this->sessionManager = $sessionManager;
         $this->logger = $logger;
     }
@@ -147,4 +158,21 @@ class PersonService
     {
         $this->personDAO->deletePerson($person);
     }
+
+
+	/**
+	 * Add all data from a person to an JSON array
+	 * @param int $personId Person
+	 * @return String JSON array
+	 */
+	public function getPersonData(int $personId): string
+	{
+		$data = $this->sponsorDAO->getPersonFamily($personId);
+		$person = $this->personDAO->getPersonById($personId);
+		$person->setCharacteristics($data["person"]->getCharacteristics());
+		$person->addSponsor($data["godFathers"]);
+		$person->addSponsor($data["godChildren"]);
+
+		return json_encode($person);
+	}
 }
