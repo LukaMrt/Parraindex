@@ -3,24 +3,53 @@
 namespace App\controller;
 
 use App\infrastructure\router\Router;
+use App\model\account\PrivilegeType;
 
 /**
  * Controller to download data
  */
 class DataDownloadController extends Controller
 {
-	public function get(Router $router, array $parameters): void
-	{
-		if (empty($_SESSION)) {
-			header('Location: ' . $router->url('error', ['error' => 403]));
-			die();
-		}
 
-        header('Content-Type: application/json');
+    /**
+     * @param Router $router the router
+     * @param array $parameters the parameters
+     * @return void
+     * @throws LoaderError if the template is not found
+     * @throws RuntimeError if an error occurred during the rendering
+     * @throws SyntaxError if an error occurred during the rendering
+     */
+    public function get(Router $router, array $parameters): void
+    {
+        header('content-type: application/json');
 
-		$id = $_SESSION['user']->getId();
-		echo $this->personService->getPersonData($id);
+        $response = [
+            'code' => 200,
+            'content' => '',
+            'messages' => [],
+        ];
+
+        if (empty($_SESSION)) {
+            $response['code'] = 401;
+            $response['messages'][] = "Vous devez être connecté pour téléchargé des données";
+            echo json_encode($response);
+            die();
+        }
+
+        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+
+        $id = $_SESSION['user']->getId();
+        $response['content'] = $this->personService->getPersonData($isAdmin ? $parameters['id'] : $id);
+
+        if (empty($response['content'])) {
+            $response['code'] = 404;
+            $response['messages'][] = "Aucune donnée n'a été trouvée";
+        }else {
+            $response['messages'][] = "Données téléchargées";
+        }
+
+        echo json_encode($response);
         die();
-	}
+    }
 
 }

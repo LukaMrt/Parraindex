@@ -38,6 +38,7 @@ const pictureModal = {
 const action = {
   delete: document.querySelector("#delete-person"),
   save: document.querySelector("#save-person"),
+  download: document.querySelector("#download-person"),
   sync: document.querySelector(".sync"),
   invert: document.querySelector(".invert")
 }
@@ -291,6 +292,39 @@ action.save.addEventListener("click", async e => {
     }
 
 
+  } else {
+    triggerErrorPopup(["Une erreur est survenue lors de la requête au serveur"]);
+  }
+});
+
+action.download.addEventListener("click", async e => {
+
+  e.preventDefault();
+
+  let request = await fetch(action.download.href, {
+    method: "GET",
+  });
+
+  if (request.ok) {
+
+    let response = await request.json();
+
+    if (response.code === 200) {
+
+      const file = new Blob([response.content], {type: 'application/json'});
+
+      let content = JSON.parse(response.content);
+
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(file);
+      link.download = `${content.identity.firstName} ${content.identity.lastName} - ${Date.now()}.json`;
+      link.click();
+
+      triggerSuccessPopup(response.messages);
+    } else {
+      triggerErrorPopup(response.messages);
+    }
+      
   } else {
     triggerErrorPopup(["Une erreur est survenue lors de la requête au serveur"]);
   }

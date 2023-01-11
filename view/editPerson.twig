@@ -156,6 +156,13 @@
                     Enregistrer
                 </button>
 
+                <a id="download-person" href={{router.url('person_data', {id:person.id})}}>
+                    <img src="{{icon('download.svg')}}"
+                        alt="Telechargement de toutes les données" 
+                        title="Télécharge toutes les données relative a cette personne"
+                    > 
+                </a>
+
             </div>
 
         </nav>

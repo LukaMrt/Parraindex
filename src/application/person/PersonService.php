@@ -163,16 +163,21 @@ class PersonService
 	/**
 	 * Add all data from a person to an JSON array
 	 * @param int $personId Person
-	 * @return String JSON array
+	 * @return String|null a JSON array with all data from a person
 	 */
-	public function getPersonData(int $personId): string
+	public function getPersonData(int $personId): ?string
 	{
-		$data = $this->sponsorDAO->getPersonFamily($personId);
 		$person = $this->personDAO->getPersonById($personId);
+        
+        if ($person === null) {
+            return null;
+        }
+
+		$data = $this->sponsorDAO->getPersonFamily($personId);
 		$person->setCharacteristics($data["person"]->getCharacteristics());
 		$person->addSponsor($data["godFathers"]);
 		$person->addSponsor($data["godChildren"]);
 
-		return json_encode($person);
+		return json_encode($person, JSON_PRETTY_PRINT);
 	}
 }
