@@ -23,6 +23,7 @@ class SponsorServiceTest extends TestCase
     private SponsorDAO $sponsorDAO;
     private PersonDAO $personDAO;
 
+
     public function setUp(): void
     {
         $person = PersonBuilder::aPerson()->withId(1)->build();
@@ -32,6 +33,7 @@ class SponsorServiceTest extends TestCase
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->sponsorService = new SponsorService($this->sponsorDAO, $this->personDAO);
     }
+
 
     public function testGetpersonfamilyRetrievesGodFathersAndGodSons()
     {
@@ -63,6 +65,7 @@ class SponsorServiceTest extends TestCase
         ]);
     }
 
+
     public function testGetsponsorbyidReturnsNullWhenSponsorDoesNotExist(): void
     {
 
@@ -72,6 +75,7 @@ class SponsorServiceTest extends TestCase
 
         $this->assertNull($sponsor);
     }
+
 
     public function testGetsponsorbyidReturnsSponsorWhenSponsorExists(): void
     {
@@ -90,6 +94,7 @@ class SponsorServiceTest extends TestCase
         $this->assertEquals($expectedSponsor, $sponsor);
     }
 
+
     public function testAddsponsorCallsAddSponsorOnSponsorDAO(): void
     {
 
@@ -100,6 +105,7 @@ class SponsorServiceTest extends TestCase
         $this->sponsorService->addSponsor($this->sponsor);
     }
 
+
     public function testRemovesponsorCallsUpdateSponsorOnSponsorDAO(): void
     {
 
@@ -109,6 +115,7 @@ class SponsorServiceTest extends TestCase
 
         $this->sponsorService->removeSponsor(-1);
     }
+
 
     public function testGestsponsorReturnsSponsor(): void
     {
@@ -121,6 +128,7 @@ class SponsorServiceTest extends TestCase
 
         $this->assertEquals($this->sponsor, $sponsor);
     }
+
 
     public function testCreatesponsorDoesNothingWhenSponsorAlreadyExists(): void
     {
@@ -141,6 +149,7 @@ class SponsorServiceTest extends TestCase
             'godChildId' => 1
         ]);
     }
+
 
     public function testCreatesponsorRegistersClassicSponsor(): void
     {
@@ -169,6 +178,7 @@ class SponsorServiceTest extends TestCase
 
     }
 
+
     public function testCreatesponsorRegistersHeartSponsor(): void
     {
 
@@ -196,6 +206,7 @@ class SponsorServiceTest extends TestCase
 
     }
 
+
     public function testUpdatesponsorDoesNothingWhenSponsorDoesNotExist(): void
     {
 
@@ -211,6 +222,7 @@ class SponsorServiceTest extends TestCase
             'godChildId' => 1
         ]);
     }
+
 
     public function testUpdatesponsorDoesNothingWhenTypeIsUnknown(): void
     {
@@ -228,6 +240,7 @@ class SponsorServiceTest extends TestCase
             'sponsorType' => '2'
         ]);
     }
+
 
     public function testUpdatesponsorRegistersClassicSponsor(): void
     {
@@ -250,6 +263,7 @@ class SponsorServiceTest extends TestCase
         ]);
 
     }
+
 
     public function testUpdatesponsorRegistersHeartSponsor(): void
     {

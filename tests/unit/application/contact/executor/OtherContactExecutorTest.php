@@ -23,6 +23,7 @@ class OtherContactExecutorTest extends TestCase
         'message' => 'empty'
     ];
 
+
     public function setUp(): void
     {
 
@@ -31,6 +32,7 @@ class OtherContactExecutorTest extends TestCase
 
         $this->executor = new OtherContactExecutor($this->contactDAO, $redirect);
     }
+
 
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {
@@ -41,6 +43,7 @@ class OtherContactExecutorTest extends TestCase
 
         $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
     }
+
 
     public function testExecuteSuccessSavesContactWithGivenValues(): void
     {

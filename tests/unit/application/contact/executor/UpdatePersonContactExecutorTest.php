@@ -29,6 +29,7 @@ class UpdatePersonContactExecutorTest extends TestCase
         'message' => 'empty'
     ];
 
+
     public function setUp(): void
     {
 
@@ -38,6 +39,7 @@ class UpdatePersonContactExecutorTest extends TestCase
 
         $this->executor = new UpdatePersonContactExecutor($this->personDAO, $this->contactDAO, $redirect);
     }
+
 
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {

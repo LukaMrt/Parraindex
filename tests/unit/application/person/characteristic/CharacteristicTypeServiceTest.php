@@ -15,6 +15,7 @@ class CharacteristicTypeServiceTest extends TestCase
 
     private Characteristic $characteristic;
 
+
     public function setUp(): void
     {
 
@@ -32,6 +33,7 @@ class CharacteristicTypeServiceTest extends TestCase
             ->build();
     }
 
+
     public function testGetallcharacteristictypesReturnsAllTypes()
     {
 
@@ -43,6 +45,7 @@ class CharacteristicTypeServiceTest extends TestCase
 
         $this->assertEquals([$this->characteristic], $characteristics);
     }
+
 
     public function testGetCharacteristicTypeAndValuesReturnsTypeAndValues()
     {

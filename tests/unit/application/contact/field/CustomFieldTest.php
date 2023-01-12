@@ -10,6 +10,7 @@ class CustomFieldTest extends TestCase
 
     private CustomField $customField;
 
+
     public function testGetnameReturnsCustom()
     {
         $this->customField = new CustomField('custom', 'error', fn() => true);
@@ -19,6 +20,7 @@ class CustomFieldTest extends TestCase
         $this->assertEquals('custom', $result);
     }
 
+
     public function testIsvalidReturnsTrueWhenCustomTestReturnsTrue()
     {
         $this->customField = new CustomField('custom', 'error', fn() => true);
@@ -27,6 +29,7 @@ class CustomFieldTest extends TestCase
 
         $this->assertTrue($result);
     }
+
 
     public function testIsvalidReturnsFalseWhenCustomTestReturnsFalse()
     {

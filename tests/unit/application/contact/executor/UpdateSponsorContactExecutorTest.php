@@ -34,6 +34,7 @@ class UpdateSponsorContactExecutorTest extends TestCase
         'message' => 'empty'
     ];
 
+
     public function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
@@ -49,6 +50,7 @@ class UpdateSponsorContactExecutorTest extends TestCase
         );
     }
 
+
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {
 
@@ -63,6 +65,7 @@ class UpdateSponsorContactExecutorTest extends TestCase
         $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
+
     public function testExecutesuccessReturnsErrorWhenSponsorAlreadyExists(): void
     {
 
@@ -74,6 +77,7 @@ class UpdateSponsorContactExecutorTest extends TestCase
 
         $this->assertEquals('Le lien doit exister', $result);
     }
+
 
     public function testExecutesuccessSavesClassicSponsorWhenTypeIs0(): void
     {

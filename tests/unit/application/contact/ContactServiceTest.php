@@ -19,6 +19,7 @@ class ContactServiceTest extends TestCase
 
     private ContactService $contactService;
 
+
     public function setUp(): void
     {
         $this->contactExecutors = $this->createMock(ContactExecutors::class);
@@ -27,27 +28,30 @@ class ContactServiceTest extends TestCase
         $this->contactService = new ContactService($this->contactExecutors, $this->contactDAO);
     }
 
+
     public function testRegistercontactReturnsErrorWhenTypeIsMissing(): void
     {
         $this->contactExecutors->method('getExecutorsById')
             ->with(-1)
-            ->willReturn(array());
+            ->willReturn([]);
 
-        $result = $this->contactService->registerContact(array());
+        $result = $this->contactService->registerContact([]);
 
         $this->assertEquals('Le type de contact n\'est pas valide.', $result);
     }
+
 
     public function testRegistercontactReturnsErrorWhenTypeIsNotValid(): void
     {
 
         $this->contactExecutors->method('getExecutorsById')
             ->with(12345678)
-            ->willReturn(array());
+            ->willReturn([]);
 
-        $result = $this->contactService->registerContact(array('type' => '12345678'));
+        $result = $this->contactService->registerContact(['type' => '12345678']);
         $this->assertEquals('Le type de contact n\'est pas valide.', $result);
     }
+
 
     public function testRegistercontactReturnsErrorWhenExecutorReturnsAnError(): void
     {
@@ -57,29 +61,31 @@ class ContactServiceTest extends TestCase
             ->willReturn([1 => $this->contactExecutor]);
 
         $this->contactExecutor->method('execute')
-            ->with(array('type' => '1'))
+            ->with(['type' => '1'])
             ->willReturn('Une erreur est survenue.');
 
-        $result = $this->contactService->registerContact(array('type' => '1'));
+        $result = $this->contactService->registerContact(['type' => '1']);
 
         $this->assertEquals('Une erreur est survenue.', $result);
     }
+
 
     public function testRegistercontactReturnsNothingWhenExecutorReturnsNothing(): void
     {
 
         $this->contactExecutors->method('getExecutorsById')
             ->with(1)
-            ->willReturn(array($this->contactExecutor));
+            ->willReturn([$this->contactExecutor]);
 
         $this->contactExecutor->method('execute')
-            ->with(array('type' => '1'))
+            ->with(['type' => '1'])
             ->willReturn('');
 
-        $result = $this->contactService->registerContact(array('type' => '1'));
+        $result = $this->contactService->registerContact(['type' => '1']);
 
         $this->assertEquals('', $result);
     }
+
 
     public function testClosecontactCallsClosecontactOnDAO(): void
     {
@@ -90,6 +96,7 @@ class ContactServiceTest extends TestCase
 
         $this->contactService->closeContact(1, 1);
     }
+
 
     public function testGetcontactReturnsWantendContact(): void
     {

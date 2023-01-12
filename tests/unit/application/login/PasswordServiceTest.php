@@ -20,13 +20,13 @@ use PHPUnit\Framework\TestCase;
 class PasswordServiceTest extends TestCase
 {
 
-    const DEFAULT_PARAMETERS = array(
+    const DEFAULT_PARAMETERS = [
         'firstname' => 'Test',
         'lastname' => 'testa',
         'email' => 'Test.testaaa@etu.univ-lyon1.fr',
         'password' => 'test',
         'password-confirm' => 'test'
-    );
+    ];
     const TEST_EMAIL = 'test.test@etu.univ-lyon1.fr';
     private Account $validAccount;
     private Person $person;
@@ -68,6 +68,7 @@ class PasswordServiceTest extends TestCase
         );
     }
 
+
     public function testResetpasswordDetectsUnknownEmail(): void
     {
 
@@ -83,6 +84,7 @@ class PasswordServiceTest extends TestCase
 
         $this->assertEquals('Email inconnu.', $return);
     }
+
 
     public function testResetpasswordRedirectsToConfirmationPageOnSuccess(): void
     {
@@ -107,8 +109,9 @@ class PasswordServiceTest extends TestCase
             ->method('info')
             ->with(PasswordService::class, 'Reset password email sent to ' . self::TEST_EMAIL);
 
-        $this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
+        $this->passwordService->resetPassword(['email' => self::TEST_EMAIL, 'password' => 'test']);
     }
+
 
     public function testResetpasswordSendsEmailOnSuccess(): void
     {
@@ -147,8 +150,9 @@ class PasswordServiceTest extends TestCase
                 . "http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss"
             );
 
-        $this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
+        $this->passwordService->resetPassword(['email' => self::TEST_EMAIL, 'password' => 'test']);
     }
+
 
     public function testResetpasswordCreatesResetpasswordRecordOnSuccess(): void
     {
@@ -178,8 +182,9 @@ class PasswordServiceTest extends TestCase
             ->method('createResetpassword')
             ->with($account, '1');
 
-        $this->passwordService->resetPassword(array('email' => self::TEST_EMAIL, 'password' => 'test'));
+        $this->passwordService->resetPassword(['email' => self::TEST_EMAIL, 'password' => 'test']);
     }
+
 
     public function testValidateresetpasswordDetectsUnknownToken(): void
     {
@@ -196,6 +201,7 @@ class PasswordServiceTest extends TestCase
 
         $this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
     }
+
 
     public function testValidateresetpasswordEditsAccountOnSuccess(): void
     {
@@ -214,6 +220,7 @@ class PasswordServiceTest extends TestCase
 
         $this->passwordService->validateResetPassword('1');
     }
+
 
     public function testValidateresetpasswordDeletesResetPasswordOnSuccess(): void
     {

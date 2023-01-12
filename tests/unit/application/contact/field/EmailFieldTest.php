@@ -10,10 +10,12 @@ class EmailFieldTest extends TestCase
 
     private EmailField $emailField;
 
+
     public function setUp(): void
     {
         $this->emailField = new EmailField('email', 'error');
     }
+
 
     public function testGetnameReturnsEmail()
     {
@@ -22,11 +24,13 @@ class EmailFieldTest extends TestCase
         $this->assertEquals('email', $result);
     }
 
+
     public function testIsValidReturnsTrueWhenEmailIsValid(): void
     {
         $result = $this->emailField->isValid('test.testa@gmail.com');
         $this->assertTrue($result);
     }
+
 
     public function testIsValidReturnsFalseWhenEmailIsInvalid(): void
     {
