@@ -38,7 +38,8 @@ class DataDownloadController extends Controller
         $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
 
         $id = $_SESSION['user']->getId();
-        $response['content'] = $this->personService->getPersonData($isAdmin ? $parameters['id'] : $id);
+        $person = $this->personService->getPersonData($isAdmin ? $parameters['id'] : $id);
+        $response['content'] = json_encode($person, JSON_PRETTY_PRINT);
 
         if (empty($response['content'])) {
             $response['code'] = 404;

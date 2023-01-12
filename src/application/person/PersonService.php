@@ -150,11 +150,11 @@ class PersonService
 
 
     /**
-     * Add all data from a person to an JSON array
-     * @param int $personId Person
-     * @return String|null a JSON array with all data from a person
+     * Retrieves all data from a person
+     * @param int $personId Id of the person
+     * @return ?Person Person with full data
      */
-    public function getPersonData(int $personId): ?string
+    public function getPersonData(int $personId): ?Person
     {
         $person = $this->personDAO->getPersonById($personId);
 
@@ -167,7 +167,7 @@ class PersonService
         $person->addSponsor($data["godFathers"]);
         $person->addSponsor($data["godChildren"]);
 
-        return json_encode($person, JSON_PRETTY_PRINT);
+        return $person;
     }
 
 

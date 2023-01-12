@@ -6,9 +6,12 @@ use App\application\logging\Logger;
 use App\application\login\SessionManager;
 use App\application\person\PersonDAO;
 use App\application\person\PersonService;
+use App\application\sponsor\SponsorDAO;
+use App\model\person\characteristic\CharacteristicBuilder;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
+use App\model\sponsor\ClassicSponsor;
 use PHPUnit\Framework\TestCase;
 
 class PersonServiceTest extends TestCase
@@ -20,7 +23,7 @@ class PersonServiceTest extends TestCase
     private SessionManager $sessionManager;
     private PersonDAO $personDAO;
     private Logger $logger;
-
+    private SponsorDAO $sponsorDAO;
 
     public function setUp(): void
     {
@@ -34,9 +37,10 @@ class PersonServiceTest extends TestCase
 
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
+        $this->sponsorDAO = $this->createMock(SponsorDAO::class);
         $this->logger = $this->createMock(Logger::class);
 
-        $this->personService = new PersonService($this->personDAO, $this->sessionManager, $this->logger);
+        $this->personService = new PersonService($this->personDAO, $this->sessionManager, $this->logger, $this->sponsorDAO);
     }
 
 
@@ -226,6 +230,71 @@ class PersonServiceTest extends TestCase
             ->with($this->person);
 
         $this->personService->deletePerson($this->person);
+    }
+
+
+    public function testGetfullpersonReturnsNullWhenPersonDoesNotExists(): void
+    {
+        $this->personDAO->method('getPersonById')
+            ->with(1)
+            ->willReturn(null);
+
+        $return = $this->personService->getPersonData(1);
+
+        $this->assertNull($return);
+    }
+
+
+    public function testGetfullpersonReturnsFullPersonDataWhenPersonExists(): void
+    {
+        $this->personDAO->method('getPersonById')
+            ->with(1)
+            ->willReturn($this->person);
+
+        $person = PersonBuilder::aPerson()
+            ->withId(1)
+            ->withIdentity(new Identity('test', 'test', 'test'))
+            ->withBiography('test')
+            ->withDescription('test')
+            ->withColor('test')
+            ->build();
+
+        $person->setCharacteristics([
+            (new CharacteristicBuilder())
+                ->withId(1)
+                ->withTitle('title')
+                ->withImage('image')
+                ->withValue('value')
+                ->withType('URL')
+                ->withUrl('url')
+                ->withVisibility(true)
+                ->build()
+        ]);
+
+        $person->addSponsor([
+            new ClassicSponsor(1, $this->person, $this->person, '2023-01-01', ''),
+            new ClassicSponsor(2, $this->person, $this->person, '2023-01-01', ''),
+            new ClassicSponsor(3, $this->person, $this->person, '2023-01-01', ''),
+            new ClassicSponsor(4, $this->person, $this->person, '2023-01-01', ''),
+        ]);
+
+        $this->sponsorDAO->method('getPersonFamily')
+            ->with(1)
+            ->willReturn([
+                'person' => $person,
+                'godFathers' => [
+                    new ClassicSponsor(1, $this->person, $this->person, '2023-01-01', ''),
+                    new ClassicSponsor(2, $this->person, $this->person, '2023-01-01', '')
+                ],
+                'godChildren' => [
+                    new ClassicSponsor(3, $this->person, $this->person, '2023-01-01', ''),
+                    new ClassicSponsor(4, $this->person, $this->person, '2023-01-01', '')
+                ],
+            ]);
+
+        $return = $this->personService->getPersonData(1);
+
+        $this->assertEquals($return, $person);
     }
 
 }
