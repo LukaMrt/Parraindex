@@ -228,7 +228,6 @@ SQL
         $account = null;
 
         while ($row = $query->fetch()) {
-
             $schoolAddress = new SchoolAddress(
                 $row->address,
                 $row->city

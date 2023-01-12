@@ -131,6 +131,16 @@ class Person implements JsonSerializable
 
 
     /**
+     * Sets characteristics of the person
+     * @param Characteristic[] $characteristics New characteristics of the person
+     */
+    public function setCharacteristics(array $characteristics): void
+    {
+        $this->characteristics = $characteristics;
+    }
+
+
+    /**
      * @return int|null Start year of the person
      */
     public function getStartYear(): int|null
@@ -196,24 +206,14 @@ class Person implements JsonSerializable
     }
 
 
-	/**
-	 * Sets characteristics of the person
-	 * @param Characteristic[] $characteristics New characteristics of the person
-	 */
-	public function setCharacteristics(array $characteristics): void
-	{
-		$this->characteristics = $characteristics;
-	}
-
-
-	/**
-	 * Add Sponsors to the person
-	 * @param array $sponsors New sponsors of the person
-	 */
-	function addSponsor(array $sponsors): void
-	{
-		$this->sponsors = array_merge($this->sponsors, $sponsors);
-	}
+    /**
+     * Add Sponsors to the person
+     * @param array $sponsors New sponsors of the person
+     */
+    public function addSponsor(array $sponsors): void
+    {
+        $this->sponsors = array_merge($this->sponsors, $sponsors);
+    }
 
 
     public function jsonSerialize(): array

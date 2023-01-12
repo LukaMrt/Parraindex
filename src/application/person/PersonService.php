@@ -19,10 +19,10 @@ class PersonService
      */
     private PersonDAO $personDAO;
 
-	/**
-	 * @var SponsorDAO Sponsor data access object
-	 */
-	private SponsorDAO $sponsorDAO;
+    /**
+     * @var SponsorDAO Sponsor data access object
+     */
+    private SponsorDAO $sponsorDAO;
 
     /**
      * @var SessionManager Session manager
@@ -41,13 +41,13 @@ class PersonService
      * @param Logger $logger Logger
      */
     public function __construct(
-		PersonDAO $personDAO,
-		SessionManager $sessionManager,
-		Logger $logger,
-		SponsorDAO $sponsorDAO
-    ){
+        PersonDAO $personDAO,
+        SessionManager $sessionManager,
+        Logger $logger,
+        SponsorDAO $sponsorDAO
+    ) {
         $this->personDAO = $personDAO;
-		$this->sponsorDAO = $sponsorDAO;
+        $this->sponsorDAO = $sponsorDAO;
         $this->sessionManager = $sessionManager;
         $this->logger = $logger;
     }
@@ -60,17 +60,6 @@ class PersonService
     public function getAllPeople(): array
     {
         return $this->personDAO->getAllPeople();
-    }
-
-
-    /**
-     * Get person by id
-     * @param int $id Id
-     * @return Person|null
-     */
-    public function getPersonById(int $id): ?Person
-    {
-        return $this->personDAO->getPersonById($id);
     }
 
 
@@ -160,24 +149,35 @@ class PersonService
     }
 
 
-	/**
-	 * Add all data from a person to an JSON array
-	 * @param int $personId Person
-	 * @return String|null a JSON array with all data from a person
-	 */
-	public function getPersonData(int $personId): ?string
-	{
-		$person = $this->personDAO->getPersonById($personId);
-        
+    /**
+     * Add all data from a person to an JSON array
+     * @param int $personId Person
+     * @return String|null a JSON array with all data from a person
+     */
+    public function getPersonData(int $personId): ?string
+    {
+        $person = $this->personDAO->getPersonById($personId);
+
         if ($person === null) {
             return null;
         }
 
-		$data = $this->sponsorDAO->getPersonFamily($personId);
-		$person->setCharacteristics($data["person"]->getCharacteristics());
-		$person->addSponsor($data["godFathers"]);
-		$person->addSponsor($data["godChildren"]);
+        $data = $this->sponsorDAO->getPersonFamily($personId);
+        $person->setCharacteristics($data["person"]->getCharacteristics());
+        $person->addSponsor($data["godFathers"]);
+        $person->addSponsor($data["godChildren"]);
 
-		return json_encode($person, JSON_PRETTY_PRINT);
-	}
+        return json_encode($person, JSON_PRETTY_PRINT);
+    }
+
+
+    /**
+     * Get person by id
+     * @param int $id Id
+     * @return Person|null
+     */
+    public function getPersonById(int $id): ?Person
+    {
+        return $this->personDAO->getPersonById($id);
+    }
 }

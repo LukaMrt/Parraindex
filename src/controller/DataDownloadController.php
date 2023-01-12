@@ -10,7 +10,6 @@ use App\model\account\PrivilegeType;
  */
 class DataDownloadController extends Controller
 {
-
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
@@ -44,12 +43,11 @@ class DataDownloadController extends Controller
         if (empty($response['content'])) {
             $response['code'] = 404;
             $response['messages'][] = "Aucune donnée n'a été trouvée";
-        }else {
+        } else {
             $response['messages'][] = "Données téléchargées";
         }
 
         echo json_encode($response);
         die();
     }
-
 }

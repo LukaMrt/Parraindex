@@ -208,7 +208,7 @@ class Injector
         $this->router->registerRoute('POST', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_post');
         $this->router->registerRoute('PUT', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_put');
         $this->router->registerRoute('DELETE', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_delete');
-		$this->router->registerRoute('GET', '/person/[i:id]/data', $this->container->get(DataDownloadController::class), 'person_data');
+        $this->router->registerRoute('GET', '/person/[i:id]/data', $this->container->get(DataDownloadController::class), 'person_data');
 
         $this->router->registerRoute('GET', '/sponsor/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
         $this->router->registerRoute('GET', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_get');
