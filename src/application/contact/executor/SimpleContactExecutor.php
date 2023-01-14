@@ -18,6 +18,8 @@ abstract class SimpleContactExecutor extends ContactExecutor
     {
         $contact = new DefaultContact(
             -1,
+            date('Y-m-d'),
+            null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
             $this->contactType,

@@ -69,6 +69,8 @@ abstract class SimpleSponsorContactExecutor extends ContactExecutor
 
         $contact = new SponsorContact(
             -1,
+            date('Y-m-d'),
+            null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
             $this->contactType,

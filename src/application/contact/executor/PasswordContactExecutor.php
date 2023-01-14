@@ -84,6 +84,8 @@ class PasswordContactExecutor extends ContactExecutor
 
         $contact = new PersonContact(
             -1,
+            date('Y-m-d'),
+            null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
             ContactType::PASSWORD,
