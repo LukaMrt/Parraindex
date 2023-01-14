@@ -59,6 +59,7 @@ SQL
                             VALUES (:id_ticket, :firstname, :lastname, :entry_year)
 SQL
         );
+
         $query->execute([
             "id_ticket" => $ticketId,
             "firstname" => $contact->getPerson()->getFirstName(),
@@ -94,15 +95,16 @@ SQL
 
         $ticketId = $connection->lastInsertId();
         $query = $connection->prepare(<<<SQL
-                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name)
-                            VALUES (:id_ticket, :id_person, :firstname, :lastname)
+                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
+                            VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)
 SQL
         );
         $query->execute([
             "id_ticket" => $ticketId,
             "id_person" => $contact->getPerson()->getId(),
             "firstname" => $contact->getPerson()->getFirstName(),
-            "lastname" => $contact->getPerson()->getLastName()
+            "lastname" => $contact->getPerson()->getLastName(),
+            "entry_year" => $contact->getPerson()->getStartYear()
         ]);
 
         $query->closeCursor();
@@ -244,8 +246,8 @@ SQL
 							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
 							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
 						WHERE EP.id_ticket IS NULL
-						  	AND ES.id_ticket IS NULL;
-							
+						  	AND ES.id_ticket IS NULL
+							AND T.resolution_date IS NULL;
 SQL
         );
 
@@ -257,7 +259,8 @@ SQL
 							EP.entry_year
 						FROM Ticket T
 							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
-						WHERE EP.id_ticket IS NOT NULL;
+						WHERE EP.id_ticket IS NOT NULL
+							AND T.resolution_date IS NULL;
 SQL
         );
 
@@ -276,7 +279,8 @@ SQL
 							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
 							JOIN Person P on ES.id_godfather = P.id_person
 							JOIN Person P2 on ES.id_godson = P2.id_person
-						WHERE ES.id_ticket IS NOT NULL;
+						WHERE ES.id_ticket IS NOT NULL
+							AND T.resolution_date IS NULL;
 SQL
         );
 
@@ -299,6 +303,7 @@ SQL
         }
 
         while ($data = $queryPerson->fetch()) {
+
             $person = PersonBuilder::aPerson()
                 ->withId($data->id_person ?? -1)
                 ->withIdentity(new Identity($data->first_name, $data->last_name))
