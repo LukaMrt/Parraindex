@@ -234,6 +234,11 @@ class SignupService
         if (empty($error)) {
             $this->accountDAO->createAccount($account);
             $this->accountDAO->deleteTemporaryAccount($account);
+            $this->mailer->send(
+                $account->getLogin(),
+                'Parraindex : inscription validée',
+                "Bonjour,<br><br>Votre inscription a bien été validée<br><br>Cordialement<br>Le Parrainboss"
+            );
             $this->logger->info(SignupService::class, 'Account created for ' . $account->getLogin());
         }
 

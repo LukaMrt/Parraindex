@@ -344,5 +344,19 @@ class SignupServiceTest extends TestCase
         $this->signupService->validate('1');
     }
 
+
+    public function testValidateSensMailOnSuccess(): void
+    {
+
+        $this->accountDAO->method('getTemporaryAccountByToken')
+            ->with('1')
+            ->willReturn($this->validAccount);
+
+        $this->mailer->expects($this->once())
+            ->method('send');
+
+        $this->signupService->validate('1');
+    }
+
 }
 

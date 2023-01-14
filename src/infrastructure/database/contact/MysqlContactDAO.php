@@ -247,7 +247,7 @@ SQL
 							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
 						WHERE EP.id_ticket IS NULL
 						  	AND ES.id_ticket IS NULL
-							AND T.resolution_date IS NULL;
+							AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
@@ -260,7 +260,7 @@ SQL
 						FROM Ticket T
 							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
 						WHERE EP.id_ticket IS NOT NULL
-							AND T.resolution_date IS NULL;
+							AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
@@ -280,7 +280,7 @@ SQL
 							JOIN Person P on ES.id_godfather = P.id_person
 							JOIN Person P2 on ES.id_godson = P2.id_person
 						WHERE ES.id_ticket IS NOT NULL
-							AND T.resolution_date IS NULL;
+							AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 

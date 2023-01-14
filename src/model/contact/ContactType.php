@@ -56,7 +56,7 @@ enum ContactType: int
             self::BUG => "Bug",
             self::CHOCKING_CONTENT => "Contenu choquant",
             self::OTHER => "Autre",
-            self::PASSWORD => "Création d\'un compte",
+            self::PASSWORD => "Création d'un compte",
         };
     }
 }

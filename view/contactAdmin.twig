@@ -102,7 +102,7 @@
 
                                 {% if not contact.contactresolution %}
 
-                                    {% if contact.typeId == 0 or contact.typeId == 3 %}
+                                    {% if contact.typeId == 0 or contact.typeId == 3 or contact.typeid == 9 %}
 
                                         <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}"
                                             class="contact__actions-button contact__actions-button--green"
