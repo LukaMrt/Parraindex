@@ -50,6 +50,8 @@ class OtherContactExecutorTest extends TestCase
 
         $contact = new DefaultContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             'test.test@test.com',
             ContactType::OTHER,

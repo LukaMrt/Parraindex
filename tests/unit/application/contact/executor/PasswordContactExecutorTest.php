@@ -126,6 +126,8 @@ class PasswordContactExecutorTest extends TestCase
         $person = PersonBuilder::aPerson()->withId(1)->build();
         $contact = new PersonContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             self::DEFAULT_PARAMS['senderEmail'],
             ContactType::PASSWORD,

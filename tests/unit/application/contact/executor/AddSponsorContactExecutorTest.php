@@ -163,6 +163,8 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $contact = new SponsorContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,
@@ -192,6 +194,8 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $contact = new SponsorContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,

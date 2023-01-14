@@ -101,8 +101,8 @@ class ContactServiceTest extends TestCase
     public function testGetcontactReturnsWantendContact(): void
     {
 
-        $contact = new DefaultContact(1, '', '', ContactType::OTHER, '');
-        $contact2 = new DefaultContact(2, '', '', ContactType::OTHER, '');
+        $contact = new DefaultContact(1, date('Y-m-d'), null, '', '', ContactType::OTHER, '');
+        $contact2 = new DefaultContact(2, date('Y-m-d'), null, '', '', ContactType::OTHER, '');
 
         $this->contactDAO->method('getContactList')
             ->willReturn([$contact, $contact2]);

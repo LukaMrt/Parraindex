@@ -90,6 +90,8 @@ class UpdateSponsorContactExecutorTest extends TestCase
 
         $contact = new SponsorContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             'test.test@test.com',
             ContactType::UPDATE_SPONSOR,
