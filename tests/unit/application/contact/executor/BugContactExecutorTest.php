@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class BugContactExecutorTest extends TestCase
 {
-
     private BugContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -45,7 +44,6 @@ class BugContactExecutorTest extends TestCase
     }
 
 
-
     public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
 
@@ -65,5 +63,4 @@ class BugContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

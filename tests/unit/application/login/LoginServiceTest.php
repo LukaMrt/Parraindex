@@ -21,8 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class LoginServiceTest extends TestCase
 {
-
-    const TEST_EMAIL = 'test@test.com';
+    private const TEST_EMAIL = 'test@test.com';
     private Account $account;
 
     private LoginService $loginService;
@@ -31,6 +30,7 @@ class LoginServiceTest extends TestCase
     private PersonDAO $personDAO;
     private SessionManager $sessionManager;
     private Logger $logger;
+
 
     public function setUp(): void
     {
@@ -248,5 +248,4 @@ class LoginServiceTest extends TestCase
 
         $this->loginService->logout();
     }
-
 }

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class YearFieldTest extends TestCase
 {
-
     private YearField $yearField;
 
 
@@ -55,5 +54,4 @@ class YearFieldTest extends TestCase
 
         $this->assertFalse($result);
     }
-
 }

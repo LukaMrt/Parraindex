@@ -16,7 +16,6 @@ use PHPUnit\Framework\TestCase;
 
 class ContactExecutorsTest extends TestCase
 {
-
     private ContactExecutors $contactExecutors;
 
     private AddPersonContactExecutor $addPersonContactExecutor;
@@ -75,5 +74,4 @@ class ContactExecutorsTest extends TestCase
         $this->assertCount(1, $executors);
         $this->assertContains($this->addPersonContactExecutor, $executors);
     }
-
 }

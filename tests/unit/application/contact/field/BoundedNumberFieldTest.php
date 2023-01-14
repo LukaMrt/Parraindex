@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class BoundedNumberFieldTest extends TestCase
 {
-
     private BoundedNumberField $boundedField;
 
 
@@ -63,5 +62,4 @@ class BoundedNumberFieldTest extends TestCase
 
         $this->assertFalse($result);
     }
-
 }

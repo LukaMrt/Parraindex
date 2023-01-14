@@ -19,8 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class SignupServiceTest extends TestCase
 {
-
-    const DEFAULT_PARAMETERS = [
+    private const DEFAULT_PARAMETERS = [
         'firstname' => 'Test',
         'lastname' => 'testa',
         'email' => 'Test.testaaa@etu.univ-lyon1.fr',
@@ -86,7 +85,10 @@ class SignupServiceTest extends TestCase
 
         $this->logger->expects($this->exactly(2))
             ->method('error')
-            ->with(SignupService::class, 'L\'email doit doit être votre email universitaire (' . implode(' ', $parameters) . ')');
+            ->with(
+                SignupService::class,
+                'L\'email doit doit être votre email universitaire (' . implode(' ', $parameters) . ')'
+            );
 
         $return = $this->signupService->signup($parameters);
 
@@ -357,6 +359,4 @@ class SignupServiceTest extends TestCase
 
         $this->signupService->validate('1');
     }
-
 }
-

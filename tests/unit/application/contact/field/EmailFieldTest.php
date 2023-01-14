@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class EmailFieldTest extends TestCase
 {
-
     private EmailField $emailField;
 
 
@@ -37,5 +36,4 @@ class EmailFieldTest extends TestCase
         $result = $this->emailField->isValid('test.testa');
         $this->assertFalse($result);
     }
-
 }

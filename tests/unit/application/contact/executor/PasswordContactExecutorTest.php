@@ -20,13 +20,6 @@ use Monolog\Test\TestCase;
 
 class PasswordContactExecutorTest extends TestCase
 {
-    private PersonDAO $personDAO;
-    private AccountDAO $accountDAO;
-    private Random $random;
-    private UrlUtils $urlUtils;
-    private ContactDAO $contactDAO;
-    private ContactExecutor $executor;
-    private Redirect $redirect;
     private const DEFAULT_PARAMS = [
         'senderFirstName' => 'test1',
         'senderLastName' => 'test2',
@@ -34,6 +27,13 @@ class PasswordContactExecutorTest extends TestCase
         'password' => 'test',
         'passwordConfirm' => 'test'
     ];
+    private PersonDAO $personDAO;
+    private AccountDAO $accountDAO;
+    private Random $random;
+    private UrlUtils $urlUtils;
+    private ContactDAO $contactDAO;
+    private ContactExecutor $executor;
+    private Redirect $redirect;
 
 
     public function setUp(): void
@@ -156,5 +156,4 @@ class PasswordContactExecutorTest extends TestCase
 
         $this->executor->execute(self::DEFAULT_PARAMS);
     }
-
 }

@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class DateFieldTest extends TestCase
 {
-
     private DateField $dateField;
 
 
@@ -55,5 +54,4 @@ class DateFieldTest extends TestCase
 
         $this->assertFalse($result);
     }
-
 }

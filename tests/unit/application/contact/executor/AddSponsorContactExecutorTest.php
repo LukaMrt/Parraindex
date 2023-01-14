@@ -17,9 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 class AddSponsorContactExecutorTest extends TestCase
 {
-
-    const TEST_EMAIL = 'test.test@test.com';
-    const TEST_DATE = '2021-01-01';
+    private const TEST_EMAIL = 'test.test@test.com';
+    private const TEST_DATE = '2021-01-01';
     private AddSponsorContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -211,5 +210,4 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $this->executor->executeSuccess($this->defaultArray);
     }
-
 }

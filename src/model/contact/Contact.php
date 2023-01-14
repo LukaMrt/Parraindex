@@ -120,6 +120,7 @@ abstract class Contact
         return $this->type->value;
     }
 
+
     /**
      * @return int The date where the contact message was resolved
      */
@@ -128,6 +129,7 @@ abstract class Contact
         return $this->contactDate;
     }
 
+
     /**
      * @return int The date where the contact message was resolved
      */
@@ -135,6 +137,7 @@ abstract class Contact
     {
         return $this->contactResolution;
     }
+
 
     /**
      * @return array[] The title description of the contact elements

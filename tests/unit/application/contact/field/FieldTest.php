@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class FieldTest extends TestCase
 {
-
     private Field $field;
 
 
@@ -55,5 +54,4 @@ class FieldTest extends TestCase
 
         $this->assertFalse($result);
     }
-
 }

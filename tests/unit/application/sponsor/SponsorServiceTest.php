@@ -15,8 +15,7 @@ use PHPUnit\Framework\TestCase;
 
 class SponsorServiceTest extends TestCase
 {
-
-    const TEST_DATE = '2020-01-01';
+    private const TEST_DATE = '2020-01-01';
     private Person $person;
     private Sponsor $sponsor;
     private SponsorService $sponsorService;
@@ -175,7 +174,6 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
 
 
@@ -203,7 +201,6 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
 
 
@@ -261,7 +258,6 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
 
 
@@ -284,7 +280,5 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
-
 }

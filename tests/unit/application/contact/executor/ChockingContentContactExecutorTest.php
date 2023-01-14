@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class ChockingContentContactExecutorTest extends TestCase
 {
-
     private ChockingContentContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -85,5 +84,4 @@ class ChockingContentContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

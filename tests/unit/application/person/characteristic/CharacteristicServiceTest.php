@@ -10,7 +10,6 @@ use PHPUnit\Framework\TestCase;
 
 class CharacteristicServiceTest extends TestCase
 {
-
     private Characteristic $characteristic;
 
     private CharacteristicService $characteristicService;

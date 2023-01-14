@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class CustomFieldTest extends TestCase
 {
-
     private CustomField $customField;
 
 
@@ -39,5 +38,4 @@ class CustomFieldTest extends TestCase
 
         $this->assertFalse($result);
     }
-
 }

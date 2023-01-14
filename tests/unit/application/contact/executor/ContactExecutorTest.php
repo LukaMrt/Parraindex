@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class ContactExecutorTest extends TestCase
 {
-
     private ContactExecutor $executor;
 
     private Redirect $redirect;
@@ -75,5 +74,4 @@ class ContactExecutorTest extends TestCase
             'message' => 'a'
         ]);
     }
-
 }

@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class RemovePersonContactExecutorTest extends TestCase
 {
-
     private RemovePersonContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -85,5 +84,4 @@ class RemovePersonContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

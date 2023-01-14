@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 
 class PersonServiceTest extends TestCase
 {
-
+    private const DEFAULT_DATE = '2023-01-01';
     private Person $person;
 
     private PersonService $personService;
@@ -24,6 +24,7 @@ class PersonServiceTest extends TestCase
     private PersonDAO $personDAO;
     private Logger $logger;
     private SponsorDAO $sponsorDAO;
+
 
     public function setUp(): void
     {
@@ -40,7 +41,12 @@ class PersonServiceTest extends TestCase
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
         $this->logger = $this->createMock(Logger::class);
 
-        $this->personService = new PersonService($this->personDAO, $this->sessionManager, $this->logger, $this->sponsorDAO);
+        $this->personService = new PersonService(
+            $this->personDAO,
+            $this->sessionManager,
+            $this->logger,
+            $this->sponsorDAO
+        );
     }
 
 
@@ -112,7 +118,6 @@ class PersonServiceTest extends TestCase
             'description' => 'NewDesc',
             'color' => 'newColor'
         ]);
-
     }
 
 
@@ -272,10 +277,10 @@ class PersonServiceTest extends TestCase
         ]);
 
         $person->addSponsor([
-            new ClassicSponsor(1, $this->person, $this->person, '2023-01-01', ''),
-            new ClassicSponsor(2, $this->person, $this->person, '2023-01-01', ''),
-            new ClassicSponsor(3, $this->person, $this->person, '2023-01-01', ''),
-            new ClassicSponsor(4, $this->person, $this->person, '2023-01-01', ''),
+            new ClassicSponsor(1, $this->person, $this->person, self::DEFAULT_DATE, ''),
+            new ClassicSponsor(2, $this->person, $this->person, self::DEFAULT_DATE, ''),
+            new ClassicSponsor(3, $this->person, $this->person, self::DEFAULT_DATE, ''),
+            new ClassicSponsor(4, $this->person, $this->person, self::DEFAULT_DATE, ''),
         ]);
 
         $this->sponsorDAO->method('getPersonFamily')
@@ -283,12 +288,12 @@ class PersonServiceTest extends TestCase
             ->willReturn([
                 'person' => $person,
                 'godFathers' => [
-                    new ClassicSponsor(1, $this->person, $this->person, '2023-01-01', ''),
-                    new ClassicSponsor(2, $this->person, $this->person, '2023-01-01', '')
+                    new ClassicSponsor(1, $this->person, $this->person, self::DEFAULT_DATE, ''),
+                    new ClassicSponsor(2, $this->person, $this->person, self::DEFAULT_DATE, '')
                 ],
                 'godChildren' => [
-                    new ClassicSponsor(3, $this->person, $this->person, '2023-01-01', ''),
-                    new ClassicSponsor(4, $this->person, $this->person, '2023-01-01', '')
+                    new ClassicSponsor(3, $this->person, $this->person, self::DEFAULT_DATE, ''),
+                    new ClassicSponsor(4, $this->person, $this->person, self::DEFAULT_DATE, '')
                 ],
             ]);
 
@@ -296,5 +301,4 @@ class PersonServiceTest extends TestCase
 
         $this->assertEquals($return, $person);
     }
-
 }

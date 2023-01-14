@@ -11,7 +11,6 @@ use PHPUnit\Framework\TestCase;
 
 class OtherContactExecutorTest extends TestCase
 {
-
     private OtherContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -64,5 +63,4 @@ class OtherContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

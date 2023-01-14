@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class AddPersonContactExecutorTest extends TestCase
 {
-
     private AddPersonContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -68,7 +67,6 @@ class AddPersonContactExecutorTest extends TestCase
     }
 
 
-
     public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
 
@@ -99,5 +97,4 @@ class AddPersonContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

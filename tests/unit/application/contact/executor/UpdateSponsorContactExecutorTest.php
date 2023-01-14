@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class UpdateSponsorContactExecutorTest extends TestCase
 {
-
     private UpdateSponsorContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -105,5 +104,4 @@ class UpdateSponsorContactExecutorTest extends TestCase
 
         $this->executor->executeSuccess($this->defaultArray);
     }
-
 }

@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
 
 class ContactServiceTest extends TestCase
 {
-
     private ContactExecutors $contactExecutors;
     private ContactExecutor $contactExecutor;
     private ContactDAO $contactDAO;
@@ -111,5 +110,4 @@ class ContactServiceTest extends TestCase
 
         $this->assertEquals($contact2, $result);
     }
-
 }

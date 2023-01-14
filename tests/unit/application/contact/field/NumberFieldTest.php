@@ -7,7 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class NumberFieldTest extends TestCase
 {
-
     private NumberField $numberField;
 
 
@@ -47,5 +46,4 @@ class NumberFieldTest extends TestCase
 
         $this->assertFalse($result);
     }
-
 }

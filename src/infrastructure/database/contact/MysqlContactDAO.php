@@ -78,6 +78,16 @@ SQL
      */
     public function savePersonRemoveContact(PersonContact $contact): void
     {
+        $this->savePersonUpdateContact($contact);
+    }
+
+
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
+    public function savePersonUpdateContact(PersonContact $contact): void
+    {
 
         $connection = $this->databaseConnection->getDatabase();
 
@@ -193,46 +203,6 @@ SQL
 
 
     /**
-     * @param PersonContact $contact the contact to save
-     * @return void
-     */
-    public function savePersonUpdateContact(PersonContact $contact): void
-    {
-
-        $connection = $this->databaseConnection->getDatabase();
-
-        $query = $connection->prepare(<<<SQL
-                            INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
-                            VALUES (:type, NOW(), :name, :email, :description)
-SQL
-        );
-        $query->execute([
-            "type" => $contact->getTypeId(),
-            "name" => $contact->getContacterName(),
-            "email" => $contact->getContacterEmail(),
-            "description" => $contact->getMessage()
-        ]);
-
-        $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare(<<<SQL
-                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
-                            VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)
-SQL
-        );
-        $query->execute([
-            "id_ticket" => $ticketId,
-            "id_person" => $contact->getPerson()->getId(),
-            "firstname" => $contact->getPerson()->getFirstName(),
-            "lastname" => $contact->getPerson()->getLastName(),
-            "entry_year" => $contact->getPerson()->getStartYear()
-        ]);
-
-        $query->closeCursor();
-        $connection = null;
-    }
-
-
-    /**
      * @return array the list of all the contacts
      */
     public function getContactList(): array
@@ -303,7 +273,6 @@ SQL
         }
 
         while ($data = $queryPerson->fetch()) {
-
             $person = PersonBuilder::aPerson()
                 ->withId($data->id_person ?? -1)
                 ->withIdentity(new Identity($data->first_name, $data->last_name))

@@ -19,15 +19,14 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordServiceTest extends TestCase
 {
-
-    const DEFAULT_PARAMETERS = [
+    private const DEFAULT_PARAMETERS = [
         'firstname' => 'Test',
         'lastname' => 'testa',
         'email' => 'Test.testaaa@etu.univ-lyon1.fr',
         'password' => 'test',
         'password-confirm' => 'test'
     ];
-    const TEST_EMAIL = 'test.test@etu.univ-lyon1.fr';
+    private const TEST_EMAIL = 'test.test@etu.univ-lyon1.fr';
     private Account $validAccount;
     private Person $person;
 
@@ -39,6 +38,7 @@ class PasswordServiceTest extends TestCase
     private Random $random;
     private UrlUtils $urlUtils;
     private Logger $logger;
+
 
     public function setUp(): void
     {
@@ -235,5 +235,4 @@ class PasswordServiceTest extends TestCase
 
         $this->passwordService->validateResetPassword('1');
     }
-
 }
