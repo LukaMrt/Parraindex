@@ -3,50 +3,107 @@
 @use "../abstracts/breakpoints" as b;
 
 
-.admin{
-	@include m.flex($justify: space-evenly);
-	flex-grow: 1;
-	width: 90%;
-	flex-wrap: wrap;
-	gap: f.rem(32);
+.admin {
+  @include m.flex($direction: column, $justify: flex-start, $align: flex-start);
+  flex-grow: 1;
+  box-sizing: border-box;
+  width: 90%;
+  gap: f.rem(32);
 
-	&__header{
-		@include m.flex($direction: row, $justify: space-evenly	);
-		flex-grow: 1;
-		width: 100%;
-		flex-wrap: wrap;
+  &__header {
+    @include m.flex($direction: row, $justify: space-evenly);
+    width: 100%;
+    flex-wrap: wrap;
 
-		div{
-			@include m.flex($direction: row);
-			flex-wrap: wrap;
-			gap: 0 f.rem(16);
-		}
-	}
+    div {
+      @include m.flex($direction: row);
+      flex-wrap: wrap;
+      gap: 0 f.rem(16);
+    }
+  }
 
-	&__filter{
-		@include m.flex();
-		width: 50%;
-		gap: f.rem(16);
+  &__wrapper {
+    @include m.flex($direction: row, $align: flex-start, $justify: flex-start);
+    width: 100%;
+    gap: f.rem(32);
 
-		ul{
-			@include m.flex($direction: row, $justify: space-evenly);
-			width: 100%;
-			margin: 0;
-			padding: 0;
+    h2 {
+      text-align: right;
+      width: 100%;
+    }
 
-			li{
-				list-style: none;
-			}
-		}
-	}
+    @include b.breakpoint(small) {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
 
-	&__contacts{
-		@include m.flex(flex-start, flex-start, row);
-		width: 100%;
-		flex-grow: 3;
-		flex-wrap: wrap;
-		font-size: 1.1em;
-		color: var(--dark-blue)
-	}
+  &__content {
+    flex-grow: 1;
+    h2{
+      margin: f.rem(16) 0;
+    }
+  }
+  
+  &__filter {
+    @include m.flex($align: flex-start);
+    position: sticky;
+    top: 10vh;
+    min-width: fit-content;
+    gap: f.rem(16);
+
+    &__list {
+      align-items: stretch;
+      margin: 0;
+      padding: 0;
+
+      label {
+
+        @include m.flex($align: flex-start);
+
+        box-sizing: border-box;
+        text-align: left;
+        padding: f.rem(8) f.rem(20);
+
+        &:has(input:checked) {
+          background-color: var(--dark-blue);
+          color: var(--white);
+        }
+
+        &:hover {
+          background-color: var(--light-grey);
+        }
+
+        @include b.breakpoint(small) {
+          width: 100%;
+        }
+      }
+
+      input {
+        display: none;
+      }
+
+      @include b.breakpoint(small) {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @include b.breakpoint(small) {
+      position: static;
+      display: grid;
+      top: 0;
+      h2{
+        text-align: center;
+      }
+    }
+  }
+
+  &__contacts {
+    @include m.flex($direction: row, $justify: center, $align: normal);
+    gap: f.rem(20);
+    width: 100%;
+    flex-wrap: wrap;
+  }
 
 }

@@ -244,8 +244,8 @@ SQL
 							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
 							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
 						WHERE EP.id_ticket IS NULL
-						  	AND ES.id_ticket IS NULL
-							AND resolution_date IS NULL;
+						  	AND ES.id_ticket IS NULL;
+							
 SQL
         );
 
@@ -257,8 +257,7 @@ SQL
 							EP.entry_year
 						FROM Ticket T
 							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
-						WHERE EP.id_ticket IS NOT NULL
-							AND resolution_date IS NULL;
+						WHERE EP.id_ticket IS NOT NULL;
 SQL
         );
 
@@ -277,8 +276,7 @@ SQL
 							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
 							JOIN Person P on ES.id_godfather = P.id_person
 							JOIN Person P2 on ES.id_godson = P2.id_person
-						WHERE ES.id_ticket IS NOT NULL
-							AND resolution_date IS NULL;
+						WHERE ES.id_ticket IS NOT NULL;
 SQL
         );
 
@@ -291,6 +289,8 @@ SQL
         while ($data = $queryDefault->fetch()) {
             $contacts[] = new DefaultContact(
                 $data->id_ticket,
+                $data->creation_date,
+                $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
                 ContactType::from($data->type),
@@ -306,6 +306,8 @@ SQL
                 ->build();
             $contacts[] = new PersonContact(
                 $data->id_ticket,
+                $data->creation_date,
+                $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
                 ContactType::from($data->type),
@@ -336,6 +338,8 @@ SQL
 
             $contacts[] = new SponsorContact(
                 $data->id_ticket,
+                $data->creation_date,
+                $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
                 ContactType::from($data->type),
