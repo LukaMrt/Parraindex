@@ -72,10 +72,23 @@ class PasswordContactExecutor extends ContactExecutor
             return 'Les mots de passe doivent être identiques';
         }
 
-        $person = $this->personDAO->getPerson(new Identity($data['senderFirstName'], $data['senderLastName']));
+        $sender = new Identity($data['senderFirstName'], $data['senderLastName']);
+        
+        $error = "";
+        $person = $this->personDAO->getPerson($sender);
 
         if ($person === null) {
-            return 'La personne doit exister';
+            $error = 'Cete carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
+        } 
+        elseif ($this->accountDAO->existsAccount($data['senderEmail'])) {
+            $error = 'Cet email est déjà associée à un compte';
+        } 
+        elseif ($this->accountDAO->existsAccountByIdentity($sender)) {
+            $error = 'Cette carte est déjà associée à un compte';
+        }
+
+        if ($error !== "") {
+            return $error;
         }
 
         $account = new Account($person->getId(), $data['senderEmail'], $person, new Password($data['password']));

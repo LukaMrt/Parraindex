@@ -4,6 +4,7 @@ namespace App\infrastructure\database\contact;
 
 use App\application\contact\ContactDAO;
 use App\infrastructure\database\DatabaseConnection;
+use App\model\contact\Contact;
 use App\model\contact\ContactType;
 use App\model\contact\DefaultContact;
 use App\model\contact\PersonContact;
@@ -211,46 +212,46 @@ SQL
         $connection = $this->databaseConnection->getDatabase();
 
         $queryDefault = $connection->prepare(<<<SQL
-						SELECT T.*
-						FROM Ticket T
-							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
-							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
-						WHERE EP.id_ticket IS NULL
-						  	AND ES.id_ticket IS NULL
-							AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
+                        SELECT T.*
+                        FROM Ticket T
+                            LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
+                            LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
+                        WHERE EP.id_ticket IS NULL
+                              AND ES.id_ticket IS NULL
+                            AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
         $queryPerson = $connection->prepare(<<<SQL
-						SELECT T.*,
-						    EP.id_person,
-							EP.first_name,
-							EP.last_name,
-							EP.entry_year
-						FROM Ticket T
-							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
-						WHERE EP.id_ticket IS NOT NULL
-							AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
+                        SELECT T.*,
+                            EP.id_person,
+                            EP.first_name,
+                            EP.last_name,
+                            EP.entry_year
+                        FROM Ticket T
+                            LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
+                        WHERE EP.id_ticket IS NOT NULL
+                            AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
         $querySponsor = $connection->prepare(<<<SQL
-						SELECT T.*,
-							ES.date,
-							ES.id_sponsor,
-							P.id_person   AS f_id_person,
-							P.last_name   AS f_last_name,
-							P.first_name  AS f_first_name,
-							P2.id_person  AS c_id_person,
-							P2.last_name  AS c_last_name,
-							P2.first_name AS c_first_name,
-							ES.type AS sponsor_type
-						FROM Ticket T
-							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
-							JOIN Person P on ES.id_godfather = P.id_person
-							JOIN Person P2 on ES.id_godson = P2.id_person
-						WHERE ES.id_ticket IS NOT NULL
-							AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
+                        SELECT T.*,
+                            ES.date,
+                            ES.id_sponsor,
+                            P.id_person   AS f_id_person,
+                            P.last_name   AS f_last_name,
+                            P.first_name  AS f_first_name,
+                            P2.id_person  AS c_id_person,
+                            P2.last_name  AS c_last_name,
+                            P2.first_name AS c_first_name,
+                            ES.type AS sponsor_type
+                        FROM Ticket T
+                            LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
+                            JOIN Person P on ES.id_godfather = P.id_person
+                            JOIN Person P2 on ES.id_godson = P2.id_person
+                        WHERE ES.id_ticket IS NOT NULL
+                            AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
@@ -326,6 +327,10 @@ SQL
         $queryPerson->closeCursor();
         $querySponsor->closeCursor();
         $connection = null;
+
+        usort($contacts, function (Contact $a, Contact $b) {
+            return $a->getContactDate() <=> $b->getContactDate();
+        });
 
         return $contacts;
     }

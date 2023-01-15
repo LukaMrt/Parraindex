@@ -37,5 +37,6 @@ try {
         header('Location: /500');
         exit(0);
     }
-    
+
+    throw $e;
 }

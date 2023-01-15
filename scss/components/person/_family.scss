@@ -88,10 +88,6 @@
       transition: opacity .5s;
     }
 
-    &:hover .person-family__portrait-image {
-      opacity: 0.1;
-    }
-
     &-name {
       position: absolute;
       opacity: 0;
@@ -103,8 +99,17 @@
       z-index: 10;
     }
 
-    &:hover .person-family__portrait-name {
-      opacity: 1;
+    &:hover {
+      z-index: 10;
+      text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+
+      .person-family__portrait-name{
+        opacity: 1;
+      }
+
+      .person-family__portrait-image {
+        opacity: 0.1;
+      }
     }
   }
 

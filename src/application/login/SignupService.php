@@ -152,7 +152,7 @@ class SignupService
         }
 
         if (empty($error) && $person === null) {
-            $error = 'Votre nom n\'est pas enregistré, merci de contacter un administrateur';
+            $error = 'Votre nom n\'est pas enregistré, merci de faire une demande de création de personne';
         }
 
         $emailAccountExists = empty($error) && $this->accountDAO->existsAccount($email);

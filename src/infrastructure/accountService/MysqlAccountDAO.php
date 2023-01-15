@@ -118,8 +118,8 @@ SQL
                                 SELECT *
                                 FROM Account
                                     JOIN Person P on P.id_person = Account.id_person
-                                WHERE first_name = :first_name
-                                  AND last_name = :last_name
+                                WHERE LOWER(first_name) = LOWER(:first_name)
+                                  AND LOWER(last_name) = LOWER(:last_name)
 SQL
         );
         $query->execute(['first_name' => $identity->getFirstName(), 'last_name' => $identity->getLastName()]);

@@ -5,9 +5,7 @@
 .title {
   @include m.flex();
 
-  position: absolute;
-  top: 50%;
-  translate: 0 -50%;
+  translate: 0 -25%;
   width: 90%;
   height: 20vh; 
 
