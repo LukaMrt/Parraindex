@@ -10,6 +10,7 @@
 {% block content %}
 
     <form class="form" action="{{ router.url('signup_post') }}" method="post">
+
         <h1 class="form__title">Inscription</h1>
 
         <div class="form-content">
@@ -31,6 +32,7 @@
                 } %}
 
             </div>
+
             {% include "components/form/input.twig" with {
                 'type': 'email',
                 'slug': 'email',
@@ -54,6 +56,7 @@
             } %}
 
             <div class="form-block form-block--row form-block--space-around">
+
                 {% include "components/link.twig" with{
                     'option': 'link-wrapper',
                     'prefix': 'Vous avez déjà un compte ?',
@@ -68,8 +71,11 @@
                     'name': 'action',
                     'value': 'register'
                 } %}
+
             </div>
+
         </div>
+
     </form>
 
 {% endblock %}

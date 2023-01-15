@@ -29,7 +29,8 @@
     text-transform: uppercase;
     font-weight: 600;
     letter-spacing: 15px;
-    
+    color: var(--medium-blue);
+
     &:hover {
       letter-spacing: 17px;
     }
@@ -45,6 +46,7 @@
     font-size: clamp(f.rem(10), 2vw, f.rem(20));
     font-weight: 400;
     letter-spacing: 2px;
+    color: var(--medium-grey);
   }
 
 }
