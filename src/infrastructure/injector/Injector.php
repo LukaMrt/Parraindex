@@ -179,8 +179,8 @@ class Injector
     public function setUpRouter(): void
     {
         $this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
-        $this->router->registerRoute('GET', '/about', $this->container->get(AboutController::class), 'about');
-        $this->router->registerRoute('GET', '/legalnotice', $this->container->get(legalnoticeController::class), 'legalnotice');
+        $this->router->registerRoute('GET', '/a-propos', $this->container->get(AboutController::class), 'about');
+        $this->router->registerRoute('GET', '/mentions-legales', $this->container->get(legalnoticeController::class), 'legalnotice');
 
         $this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
         $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete', $this->container->get(ContactCloseController::class), 'contact_close');

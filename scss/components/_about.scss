@@ -19,7 +19,7 @@
     }
 
     &-text {
-      @include m.flex($direction: column, $justify: space-evenly);
+      @include m.flex(flex-start, space-evenly, column);
       align-self: stretch;
       padding: f.rem(16) 0;
       gap: f.rem(10);

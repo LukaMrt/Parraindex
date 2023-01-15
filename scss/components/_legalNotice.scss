@@ -13,6 +13,10 @@
 			flex-direction: column;
 		}
 
+		&-title {
+			font-weight: bold;
+		}
+
 		&-text {
 			@include m.flex($direction: column, $justify: space-evenly);
 			align-self: center;
@@ -23,6 +27,28 @@
 			font-size: f.rem(18);
 			width: min(120ch, 100%);
 			list-style-type: none;
+
+			h2 {
+				margin-top: f.rem(30);
+			}
+
+			&--wrapper {
+
+				width: 100%;
+				@include m.flex($direction: row, $justify: space-around);
+				gap: f.rem(16);
+
+				ul {
+					font-weight: 300;
+					list-style: none;
+				}
+
+				@include b.breakpoint(small) {
+					@include m.flex($direction: column);
+				}
+
+			}
+
 		}
 	}
 
