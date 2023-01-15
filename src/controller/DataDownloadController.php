@@ -39,12 +39,12 @@ class DataDownloadController extends Controller
 
         $id = $_SESSION['user']->getId();
         $person = $this->personService->getPersonData($isAdmin ? $parameters['id'] : $id);
-        $response['content'] = json_encode($person, JSON_PRETTY_PRINT);
-
-        if (empty($response['content'])) {
+        
+        if (!$person) {
             $response['code'] = 404;
             $response['messages'][] = "Aucune donnée n'a été trouvée";
         } else {
+            $response['content'] = json_encode($person, JSON_PRETTY_PRINT);
             $response['messages'][] = "Données téléchargées";
         }
 

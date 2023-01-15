@@ -215,7 +215,7 @@ preview.picture.addEventListener("click", (event) => {
   }
 
   function closeByClick(e) {
-    if (!e.path.includes(pictureModal.container)) {
+    if (!e.composedPath().includes(pictureModal.container)) {
       pictureModal.container.classList.remove("edit-picture--active");
       deleteEventListener();
     }

@@ -58,12 +58,6 @@
 
             <div class="form-block form-block--row">
 
-                {% include "components/button.twig" with {
-                    'type': 'submit',
-                    'button_content': 'Valider',
-                    'priority': 'primary'
-                } %}
-
                 {% if (sponsor.id != 0) %}
                     <a href="{{ router.url('removesponsor', {id: sponsor.id}) }}">
                         {% include "components/button.twig" with {
@@ -73,6 +67,12 @@
                         } %}
                     </a>
                 {% endif %}
+
+                {% include "components/button.twig" with {
+                    'type': 'submit',
+                    'button_content': 'Valider',
+                    'priority': 'primary'
+                } %}
 
             </div>
 

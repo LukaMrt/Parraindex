@@ -49,12 +49,17 @@
     text-indent: 10%;
     text-align: justify;
     letter-spacing: f.rem(0.5);
+    width: 100%;
 
     &-title {
       text-indent: 0;
       text-transform: uppercase;
       letter-spacing: f.rem(2);
       text-align: left;
+    }
+
+    p {
+      width: 100%;
     }
   }
 

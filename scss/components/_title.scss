@@ -25,23 +25,26 @@
     // due to the font is not monospaced, the letter-spacing is not the same
     padding-left: 15px;
 
-    font-size: min(f.rem(70), 6vw);
+    font-size: min(f.rem(75), 6vw);
     text-transform: uppercase;
-    color: var(--dark-grey);
-    font-weight: 400;
+    font-weight: 600;
     letter-spacing: 15px;
-
+    
     &:hover {
-      color: var(--dark-blue);
       letter-spacing: 17px;
     }
 
     @include b.breakpoint(small) {
       color: var(--dark-blue);
       letter-spacing: 17px;
-      font-weight: 600;
       font-size: 7vw; 
     }
+  }
+
+  &__subtext{
+    font-size: clamp(f.rem(10), 2vw, f.rem(20));
+    font-weight: 400;
+    letter-spacing: 2px;
   }
 
 }
