@@ -1,0 +1,32 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.legalNotice {
+
+	&__description {
+		@include m.flex($direction: row);
+		width: min(90%, f.rem(1500));
+		gap: f.rem(50);
+
+		@include b.breakpoint(medium) {
+			flex-direction: column;
+		}
+
+		&-text {
+			@include m.flex($direction: column, $justify: space-evenly);
+			align-self: center;
+			padding: f.rem(20) 0;
+			gap: f.rem(16);
+
+			text-align: justify;
+			font-size: f.rem(18);
+			width: min(120ch, 100%);
+			list-style-type: none;
+		}
+	}
+
+
+
+
+}

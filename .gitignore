@@ -102,3 +102,7 @@ phpunit-report.xml
 coverage-report.xml
 
 **/.DS_Store
+
+*.css
+
+*.map
