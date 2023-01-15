@@ -30,7 +30,7 @@ class DataDownloadController extends Controller
 
         if (empty($_SESSION)) {
             $response['code'] = 401;
-            $response['messages'][] = "Vous devez être connecté pour téléchargé des données";
+            $response['messages'][] = "Vous devez être connecté pour télécharger des données";
             echo json_encode($response);
             die();
         }

@@ -293,7 +293,7 @@ for (let card of clickableCards) {
       return;
     }
     
-    window.location.href = "/person/" + card.id
+    window.location.href = "/personne/" + card.id
 
   });
 }

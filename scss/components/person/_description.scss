@@ -43,7 +43,7 @@
 
   &__biography {
 
-    @include m.flex();
+    @include m.flex(flex-start, center, column);
     gap: f.rem(16);
 
     text-indent: 10%;

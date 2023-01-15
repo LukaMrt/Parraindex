@@ -2,7 +2,7 @@
 
 let clickableCards = document.querySelectorAll(".card");
 for (let card of clickableCards) {
-  card.addEventListener('click', () => window.location.href = "/person/" + card.id);
+  card.addEventListener('click', () => window.location.href = "/personne/" + card.id);
 }
 
 let clickableNetworks = document.querySelectorAll(".social-network");

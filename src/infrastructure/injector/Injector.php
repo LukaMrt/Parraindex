@@ -178,44 +178,43 @@ class Injector
     public function setUpRouter(): void
     {
         $this->router->registerRoute('GET', '/', $this->container->get(HomeController::class), 'home');
-        $this->router->registerRoute('GET', '/about', $this->container->get(AboutController::class), 'about');
+        $this->router->registerRoute('GET', '/a-propos', $this->container->get(AboutController::class), 'about');
 
         $this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
-        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/', $this->container->get(ContactCloseController::class), 'contact_close');
+        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete', $this->container->get(ContactCloseController::class), 'contact_close');
         $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
 
         $this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
         $this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 
-        $this->router->registerRoute('GET', '/login', $this->container->get(LoginController::class), 'login_get');
-        $this->router->registerRoute('POST', '/login', $this->container->get(LoginController::class), 'login_post');
-        $this->router->registerRoute('GET', '/logout', $this->container->get(LogoutController::class), 'logout_get');
-        $this->router->registerRoute('GET', '/logout/confirmation', $this->container->get(LogoutConfirmationController::class), 'logout_confirmation');
+        $this->router->registerRoute('GET', '/connexion', $this->container->get(LoginController::class), 'login_get');
+        $this->router->registerRoute('POST', '/connexion', $this->container->get(LoginController::class), 'login_post');
+        $this->router->registerRoute('GET', '/deconnexion', $this->container->get(LogoutController::class), 'logout_get');
+        $this->router->registerRoute('GET', '/deconnexion/confirmation', $this->container->get(LogoutConfirmationController::class), 'logout_confirmation');
 
-        $this->router->registerRoute('GET', '/signup', $this->container->get(SignUpController::class), 'signup_get');
-        $this->router->registerRoute('POST', '/signup', $this->container->get(SignUpController::class), 'signup_post');
-        $this->router->registerRoute('GET', '/signup/confirmation', $this->container->get(SignUpConfirmationController::class), 'signup_confirmation');
-        $this->router->registerRoute('GET', '/signup/validation/[*:token]', $this->container->get(SignUpValidationController::class), 'signup_validation');
+        $this->router->registerRoute('GET', '/inscription', $this->container->get(SignUpController::class), 'signup_get');
+        $this->router->registerRoute('POST', '/inscription', $this->container->get(SignUpController::class), 'signup_post');
+        $this->router->registerRoute('GET', '/inscription/confirmation', $this->container->get(SignUpConfirmationController::class), 'signup_confirmation');
+        $this->router->registerRoute('GET', '/inscription/validation/[*:token]', $this->container->get(SignUpValidationController::class), 'signup_validation');
 
-        $this->router->registerRoute('GET', '/password/reset', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
-        $this->router->registerRoute('POST', '/password/reset', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
-        $this->router->registerRoute('GET', '/password/reset/confirmation', $this->container->get(ResetpasswordConfirmationController::class), 'resetpassword_confirmation');
-        $this->router->registerRoute('GET', '/password/reset/validation/[*:token]', $this->container->get(ResetpasswordValidationController::class), 'resetpassword_validation');
+        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
+        $this->router->registerRoute('POST', '/mot-de-passe/reinitialisation', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
+        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation/confirmation', $this->container->get(ResetpasswordConfirmationController::class), 'resetpassword_confirmation');
+        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation/validation/[*:token]', $this->container->get(ResetpasswordValidationController::class), 'resetpassword_validation');
 
+        $this->router->registerRoute('GET', '/personne/[i:id]', $this->container->get(PersonController::class), 'person');
+        $this->router->registerRoute('GET', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_get');
+        $this->router->registerRoute('POST', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_post');
+        $this->router->registerRoute('PUT', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_put');
+        $this->router->registerRoute('DELETE', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_delete');
+        $this->router->registerRoute('GET', '/personne/[i:id]/donnes', $this->container->get(DataDownloadController::class), 'person_data');
 
-        $this->router->registerRoute('GET', '/person/[i:id]', $this->container->get(PersonController::class), 'person');
-        $this->router->registerRoute('GET', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_get');
-        $this->router->registerRoute('POST', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_post');
-        $this->router->registerRoute('PUT', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_put');
-        $this->router->registerRoute('DELETE', '/person/[i:id]/edit', $this->container->get(EditPersonController::class), 'editperson_delete');
-        $this->router->registerRoute('GET', '/person/[i:id]/data', $this->container->get(DataDownloadController::class), 'person_data');
+        $this->router->registerRoute('GET', '/parrainage/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
+        $this->router->registerRoute('GET', '/parrainage/[i:id]/edition', $this->container->get(EditSponsorController::class), 'editsponsor_get');
+        $this->router->registerRoute('POST', '/parrainage/[i:id]/edition', $this->container->get(EditSponsorController::class), 'editsponsor_post');
+        $this->router->registerRoute('GET', '/parrainage/[i:id]/remove', $this->container->get(RemoveSponsorController::class), 'removesponsor');
 
-        $this->router->registerRoute('GET', '/sponsor/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
-        $this->router->registerRoute('GET', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_get');
-        $this->router->registerRoute('POST', '/sponsor/[i:id]/edit', $this->container->get(EditSponsorController::class), 'editsponsor_post');
-        $this->router->registerRoute('GET', '/sponsor/[i:id]/remove', $this->container->get(RemoveSponsorController::class), 'removesponsor');
-
-        $this->router->registerRoute('GET', '/tree', $this->container->get(TreeController::class), 'tree');
+        $this->router->registerRoute('GET', '/arbre', $this->container->get(TreeController::class), 'tree');
 
         $this->router->registerRoute('GET', '/[i:error]', $this->container->get(ErrorController::class), 'error');
         $this->router->registerRoute('GET', '/[*]', $this->container->get(ErrorController::class), '404');
