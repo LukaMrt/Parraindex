@@ -15,29 +15,29 @@
 
             <div class="description__biography">
                 <h2>BIOGRAPHIE</h2>
-                <textarea name="person-bio" id="bio-field" 
-                    cols="30" rows="10"
-                    placeholder = "Courte présentation qui apparaîtra sur votre carte"
+                <textarea name="person-bio" id="bio-field"
+                          cols="30" rows="10"
+                          placeholder="Courte présentation qui apparaîtra sur votre carte"
                 >{{ person.biography }}</textarea>
             </div>
 
-            <div class = "description__actions">
-                <img src="{{icon('chain.svg')}}" class="sync" 
-                    alt = "Synchronisation des champs" 
-                    title = "Synchronise les champs 'Biographie' et 'A propos'" 
+            <div class="description__actions">
+                <img src="{{ icon('chain.svg') }}" class="sync"
+                     alt="Synchronisation des champs"
+                     title="Synchronise les champs 'Biographie' et 'A propos'"
                 >
 
-                <img src="{{icon('reverse.svg')}}" class="invert" 
-                    alt = "Inversion des champs"
-                    title = "Inverse les champs 'Biographie' et 'A propos'" 
+                <img src="{{ icon('reverse.svg') }}" class="invert"
+                     alt="Inversion des champs"
+                     title="Inverse les champs 'Biographie' et 'A propos'"
                 >
             </div>
 
             <div class="description__about">
                 <h2>À PROPOS</h2>
-                <textarea name="person-desc" id="about-field" 
-                    cols="30" rows="10"
-                    placeholder = "Longue présentation qui apparaîtra sur votre page personnelle"
+                <textarea name="person-desc" id="about-field"
+                          cols="30" rows="10"
+                          placeholder="Longue présentation qui apparaîtra sur votre page personnelle"
                 >{{ person.description }}</textarea>
             </div>
 
@@ -156,11 +156,11 @@
                     Enregistrer
                 </button>
 
-                <a id="download-person" href={{router.url('person_data', {id:person.id})}}>
-                    <img src="{{icon('download.svg')}}"
-                        alt="Telechargement de toutes les données" 
-                        title="Télécharge toutes les données relative a cette personne"
-                    > 
+                <a id="download-person" href={{ router.url('person_data', {id:person.id}) }}>
+                    <img src="{{ icon('download.svg') }}"
+                         alt="Telechargement de toutes les données"
+                         title="Télécharge toutes les données relative a cette personne"
+                    >
                 </a>
 
             </div>
