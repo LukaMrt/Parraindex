@@ -19,7 +19,7 @@
         text-align: right;
       }
 
-      hr{
+      hr {
         width: 2px;
         height: 100px;
         border-radius: 1px;
@@ -51,7 +51,7 @@
       text-align-last: center;
       padding: f.rem(20);
 
-      h2{
+      h2 {
         font-size: f.rem(20);
         font-weight: 700;
         color: var(--dark-blue);
@@ -70,7 +70,7 @@
         border: 0;
       }
 
-      &:hover hr{
+      &:hover hr {
         background-color: var(--light-blue);
       }
     }

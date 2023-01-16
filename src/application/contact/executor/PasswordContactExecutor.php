@@ -73,12 +73,12 @@ class PasswordContactExecutor extends ContactExecutor
         }
 
         $sender = new Identity($data['senderFirstName'], $data['senderLastName']);
-        
+
         $error = "";
         $person = $this->personDAO->getPerson($sender);
 
         if ($person === null) {
-            $error = 'Cete carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
+            $error = 'Cette carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
         } elseif ($this->accountDAO->existsAccount($data['senderEmail'])) {
             $error = 'Cet email est déjà associée à un compte';
         } elseif ($this->accountDAO->existsAccountByIdentity($sender)) {

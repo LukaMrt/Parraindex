@@ -17,7 +17,7 @@
       display: block;
       opacity: 0.15;
 
-      &:hover{
+      &:hover {
         cursor: pointer;
         opacity: 1;
       }
@@ -26,7 +26,7 @@
     &--open {
       display: none;
 
-      &:hover{
+      &:hover {
         cursor: pointer;
         filter: invert(1);
       }

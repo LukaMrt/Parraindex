@@ -88,9 +88,9 @@
     }
   }
 
-  
+
   .filter {
-    @include b.breakpoint(small){
+    @include b.breakpoint(small) {
       width: auto;
       order: -1;
     }
@@ -116,7 +116,7 @@
       }
     }
 
-    @include b.breakpoint(small){
+    @include b.breakpoint(small) {
       width: auto;
     }
 

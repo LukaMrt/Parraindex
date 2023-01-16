@@ -40,11 +40,12 @@
 
   &__content {
     flex-grow: 1;
-    h2{
+
+    h2 {
       margin: f.rem(16) 0;
     }
   }
-  
+
   &__filter {
     @include m.flex($align: flex-start);
     position: sticky;
@@ -94,7 +95,7 @@
       position: static;
       display: grid;
       top: 0;
-      h2{
+      h2 {
         text-align: center;
       }
     }

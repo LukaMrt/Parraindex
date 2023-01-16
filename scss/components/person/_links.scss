@@ -20,7 +20,7 @@
     right: 0;
   }
 
-  &__image{
+  &__image {
     aspect-ratio: 1/1;
     object-fit: contain;
   }
@@ -34,7 +34,7 @@
     padding: f.rem(8);
     background-color: var(--dark-blue);
     border-radius: 50%;
-    
+
     @include b.breakpoint(large) {
       translate: 0 -50%;
     }

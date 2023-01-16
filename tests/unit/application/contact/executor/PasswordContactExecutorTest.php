@@ -89,9 +89,10 @@ class PasswordContactExecutorTest extends TestCase
 
         $result = $this->executor->execute(self::DEFAULT_PARAMS);
 
-        $expected = 'Cete carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
+        $expected = 'Cette carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
         $this->assertEquals($expected, $result);
     }
+
 
     public function testExecuteReturnsErrorWhenEmailIsAlreadyUsed()
     {
@@ -117,6 +118,7 @@ class PasswordContactExecutorTest extends TestCase
         $expected = 'Cet email est déjà associée à un compte';
         $this->assertEquals($expected, $result);
     }
+
 
     public function testExecuteReturnsErrorWhenAccountIsAlreadyCreated()
     {

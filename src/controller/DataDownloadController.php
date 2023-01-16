@@ -39,7 +39,7 @@ class DataDownloadController extends Controller
 
         $id = $_SESSION['user']->getId();
         $person = $this->personService->getPersonData($isAdmin ? $parameters['id'] : $id);
-        
+
         if (!$person) {
             $response['code'] = 404;
             $response['messages'][] = "Aucune donnée n'a été trouvée";

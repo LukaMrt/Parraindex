@@ -2,10 +2,7 @@
 
 namespace App\controller;
 
-use App\application\person\PersonService;
 use App\infrastructure\router\Router;
-use App\model\person\Identity;
-use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;

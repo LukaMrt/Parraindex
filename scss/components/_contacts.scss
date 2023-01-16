@@ -11,8 +11,7 @@
   min-height: f.rem(250);
   height: 100%;
   border-radius: f.rem(30);
-  padding: clamp(0px, 2%, f.rem(40))
-           clamp(f.rem(20), 3%, f.rem(40));
+  padding: clamp(0px, 2%, f.rem(40)) clamp(f.rem(20), 3%, f.rem(40));
 
   @include m.hard-box-shadow();
 
@@ -26,7 +25,7 @@
   }
 
   &__date {
-    @include m.flex($align : flex-end);
+    @include m.flex($align: flex-end);
     gap: f.rem(10);
 
     &-hour {
@@ -42,7 +41,7 @@
     display: flex;
     gap: f.rem(5);
 
-    a{
+    a {
       text-decoration: underline;
       flex-grow: 1;
       text-align: right;

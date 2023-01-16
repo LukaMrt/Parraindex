@@ -277,11 +277,12 @@ create table Ticket
 /*==============================================================*/
 create table TypeCharacteristic
 (
-    id_network int          not null auto_increment,
-    title      varchar(254) not null,
-    type       varchar(254) not null,
-    url        varchar(254),
-    image      varchar(254) not null,
+    id_network           int          not null auto_increment,
+    title                varchar(254) not null,
+    type                 varchar(254) not null,
+    url                  varchar(254),
+    image                varchar(254) not null,
+    characteristic_order int          not null,
     primary key (id_network)
 );
 

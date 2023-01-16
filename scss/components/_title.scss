@@ -7,7 +7,7 @@
 
   translate: 0 -25%;
   width: 90%;
-  height: 20vh; 
+  height: 20vh;
 
   @include b.breakpoint(header) {
     top: 40%;
@@ -36,11 +36,11 @@
     @include b.breakpoint(small) {
       color: var(--dark-blue);
       letter-spacing: 17px;
-      font-size: 7vw; 
+      font-size: 7vw;
     }
   }
 
-  &__subtext{
+  &__subtext {
     font-size: clamp(f.rem(10), 2vw, f.rem(20));
     font-weight: 400;
     letter-spacing: 2px;

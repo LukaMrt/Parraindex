@@ -4,7 +4,7 @@
 
 .navbar {
   position: absolute;
-  
+
   @include m.flex(center, space-evenly, row);
   width: 70%;
   bottom: 3vh;

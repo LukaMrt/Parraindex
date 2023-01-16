@@ -15,7 +15,7 @@
 
   @include b.breakpoint(header) {
     translate: 0;
-    top : 40%;
+    top: 40%;
     left: 50%;
     transform: translate(-50%, -50%);
     width: 50%;

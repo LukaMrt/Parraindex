@@ -47,12 +47,12 @@
       font-size: f.rem(16);
       font-family: inherit;
 
-      &:read-only{
+      &:read-only {
         background-color: var(--light-grey);
-        opacity : 0.80;
+        opacity: 0.80;
       }
 
-      &::placeholder{
+      &::placeholder {
         position: absolute;
         text-align: center;
         vertical-align: middle;
@@ -62,32 +62,32 @@
       }
     }
 
-    &__actions{
+    &__actions {
       position: absolute;
-      left:0;
+      left: 0;
 
       @include m.flex();
       gap: f.rem(16);
 
-      img{
+      img {
         transition: box-shadow 0.2s ease-in-out,
-                    filter 0.2s ease-in-out;
+        filter 0.2s ease-in-out;
         width: f.rem(20);
         padding: f.rem(10);
         @include m.smooth-box-shadow();
         border-radius: f.rem(10);
 
-        &.active{
-          filter:invert(1); 
+        &.active {
+          filter: invert(1);
           box-shadow: none;
         }
 
-        &:active{
-          filter:invert(1); 
+        &:active {
+          filter: invert(1);
           box-shadow: none;
         }
 
-        &:hover{
+        &:hover {
           cursor: pointer;
         }
       }
@@ -111,7 +111,7 @@
     flex: 2 2 0px;
 
     .card {
-      cursor : auto;
+      cursor: auto;
     }
 
     &__personalization {

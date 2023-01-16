@@ -5,7 +5,7 @@
 .person-family {
   height: 100%;
   @include m.flex();
-  gap : f.rem(16);
+  gap: f.rem(16);
 
   @include b.breakpoint(medium) {
     width: 80%;
@@ -56,15 +56,15 @@
 
     &--godfather {
       position: absolute;
-      translate: -50% -50%; 
+      translate: -50% -50%;
     }
 
-    &--godchild{
+    &--godchild {
       position: absolute;
-      translate: -50% 50%; 
+      translate: -50% 50%;
     }
 
-    &--personal{
+    &--personal {
       transition: width .5s ease-in-out;
       border-radius: 50%;
       object-fit: cover;
@@ -73,7 +73,7 @@
 
       @include m.hard-box-shadow();
 
-      &:hover{
+      &:hover {
         width: 70%;
       }
     }
@@ -101,9 +101,9 @@
 
     &:hover {
       z-index: 10;
-      text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
 
-      .person-family__portrait-name{
+      .person-family__portrait-name {
         opacity: 1;
       }
 
