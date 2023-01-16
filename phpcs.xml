@@ -5,6 +5,7 @@
     <arg value="p" />
 
     <file>src</file>
+    <file>tests</file>
     <exclude-pattern>src/infrastructure/injector/Injector.php</exclude-pattern>
 
     <rule ref="PSR12" />

@@ -13,7 +13,6 @@
 
   padding: 0 f.rem(50);
   box-sizing: border-box;
-  position: relative;
 
   &__title {
     @include m.flex(center, center, row);
@@ -37,6 +36,11 @@
     flex-wrap: wrap;
     margin-left: auto;
 
+    & > * {
+      @include m.flex();
+      width: f.rem(100);
+    }
+
     &-picture {
       border-radius: 50%;
       height: f.rem(50);
@@ -54,7 +58,6 @@
     }
 
     &-link {
-      @include m.flex();
       height: 100%;
       color: var(--dark-grey);
       transition: color 0.3s ease;
@@ -64,14 +67,14 @@
       }
     }
 
-    @include b.breakpoint(small) {
+    @include b.breakpoint(header) {
       justify-content: space-evenly;
       width: 90%;
       margin: 0;
     }
   }
 
-  @include b.breakpoint(small) {
+  @include b.breakpoint(header) {
     @include m.hard-box-shadow();
     justify-content: center;
     padding: f.rem(20) 0;

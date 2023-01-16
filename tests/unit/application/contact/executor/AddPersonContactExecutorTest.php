@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class AddPersonContactExecutorTest extends TestCase
 {
-
     private AddPersonContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -32,6 +31,7 @@ class AddPersonContactExecutorTest extends TestCase
         'bonusInformation' => 'empty'
     ];
 
+
     public function setUp(): void
     {
 
@@ -42,6 +42,7 @@ class AddPersonContactExecutorTest extends TestCase
         $this->executor = new AddPersonContactExecutor($this->contactDAO, $this->redirect, $this->personDAO);
     }
 
+
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {
 
@@ -51,6 +52,7 @@ class AddPersonContactExecutorTest extends TestCase
 
         $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
     }
+
 
     public function testExecuteSuccessReturnsErrorWhenPersonAlreadyExists(): void
     {
@@ -63,6 +65,7 @@ class AddPersonContactExecutorTest extends TestCase
 
         $this->assertEquals('La personne ne doit pas exister', $result);
     }
+
 
     public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
@@ -79,6 +82,8 @@ class AddPersonContactExecutorTest extends TestCase
 
         $contact = new PersonContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             'test.test@test.com',
             ContactType::ADD_PERSON,
@@ -92,5 +97,4 @@ class AddPersonContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

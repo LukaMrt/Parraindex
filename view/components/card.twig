@@ -1,15 +1,13 @@
 <article class="card" id="{{ id }}">
     <div class="card__banner" style="background-color:{{ color }}">
-        <img class="card__picture" src="{{ picture(picture) }}" alt="photo">
-        <img class="card__picture__overlay" src="{{ icon('camera.svg') }}" alt="modifier photo">
+        <img class="card__picture" src="{{ picture(picture) }}" alt="photo" loading="lazy">
+        <img class="card__picture__overlay" src="{{ icon('camera.svg') }}" alt="modifier photo" loading="lazy">
     </div>
 
     <div class="card__profil">
         <span class="card__last-name">{{ lastName }}</span>
         <span class="card__first-name">{{ firstName }}</span>
     </div>
-
-    <i class="card__identifiant">{{ id }}</i>
 
     <div class="card__social-network">
         {% for characteristic in characteristics %}

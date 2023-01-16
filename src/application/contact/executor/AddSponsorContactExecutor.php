@@ -89,6 +89,8 @@ class AddSponsorContactExecutor extends ContactExecutor
 
         $contact = new SponsorContact(
             -1,
+            date('Y-m-d'),
+            null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
             ContactType::ADD_SPONSOR,

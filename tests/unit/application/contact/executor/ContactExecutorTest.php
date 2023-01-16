@@ -11,10 +11,10 @@ use PHPUnit\Framework\TestCase;
 
 class ContactExecutorTest extends TestCase
 {
-
     private ContactExecutor $executor;
 
     private Redirect $redirect;
+
 
     public function setUp(): void
     {
@@ -25,10 +25,12 @@ class ContactExecutorTest extends TestCase
         $this->executor = new OtherContactExecutor($contactDAO, $this->redirect);
     }
 
+
     public function testGetidReturnsContactTypeId(): void
     {
         $this->assertEquals(ContactType::OTHER->value, $this->executor->getId());
     }
+
 
     public function testExecuteReturnsErrorWhenFieldsAreMissing(): void
     {
@@ -43,6 +45,7 @@ class ContactExecutorTest extends TestCase
         );
     }
 
+
     public function testExecuteReturnsErrorWhenFieldIsInvalid(): void
     {
 
@@ -55,6 +58,7 @@ class ContactExecutorTest extends TestCase
 
         $this->assertEquals('Votre email doit être valide', $result);
     }
+
 
     public function testExecuteRedirectToHomeOnSuccess(): void
     {
@@ -70,5 +74,4 @@ class ContactExecutorTest extends TestCase
             'message' => 'a'
         ]);
     }
-
 }

@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class ChockingContentContactExecutorTest extends TestCase
 {
-
     private ChockingContentContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -29,6 +28,7 @@ class ChockingContentContactExecutorTest extends TestCase
         'message' => 'empty'
     ];
 
+
     public function setUp(): void
     {
 
@@ -38,6 +38,7 @@ class ChockingContentContactExecutorTest extends TestCase
 
         $this->executor = new ChockingContentContactExecutor($this->contactDAO, $redirect, $this->personDAO);
     }
+
 
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {
@@ -53,6 +54,7 @@ class ChockingContentContactExecutorTest extends TestCase
         $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
+
     public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
 
@@ -67,6 +69,8 @@ class ChockingContentContactExecutorTest extends TestCase
 
         $contact = new PersonContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             'test.test@test.com',
             ContactType::CHOCKING_CONTENT,
@@ -80,5 +84,4 @@ class ChockingContentContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

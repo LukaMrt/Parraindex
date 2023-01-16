@@ -2,10 +2,12 @@
 
 namespace App\model\person\characteristic;
 
+use JsonSerializable;
+
 /**
  * Person characteristic (networks, personal information...)
  */
-class Characteristic
+class Characteristic implements JsonSerializable
 {
     /**
      * @var int Id of the characteristic
@@ -136,5 +138,11 @@ class Characteristic
     public function getPrefix(): string
     {
         return $this->type->getPrefix();
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return get_object_vars($this);
     }
 }

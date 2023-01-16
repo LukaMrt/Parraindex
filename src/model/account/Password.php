@@ -34,6 +34,16 @@ class Password
 
 
     /**
+     * Verifies if the password is already hashed
+     * @return bool true if the password is already hashed, false otherwise
+     */
+    public function isHashed(): bool
+    {
+        return password_get_info($this->password)['algoName'] !== 'unknown';
+    }
+
+
+    /**
      * Verify if the given password matches the stored password
      * @param string $passwordConfirm password to verify
      * @return bool true if the password matches, false otherwise
@@ -60,15 +70,5 @@ class Password
     public function isEmpty(): bool
     {
         return empty($this->password);
-    }
-
-
-    /**
-     * Verifies if the password is already hashed
-     * @return bool true if the password is already hashed, false otherwise
-     */
-    public function isHashed(): bool
-    {
-        return password_get_info($this->password)['algoName'] !== 'unknown';
     }
 }

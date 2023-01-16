@@ -12,6 +12,7 @@ const field = {
   colorPicker: document.querySelector("#color-picker"),
   radioColorPicker: document.querySelector("#radio-color-picker"),
   characteristics: document.querySelector(".information__contact__characteristics"),
+  sync: () => action.sync.classList.contains("active")
 }
 
 const preview = {
@@ -37,10 +38,13 @@ const pictureModal = {
 const action = {
   delete: document.querySelector("#delete-person"),
   save: document.querySelector("#save-person"),
+  download: document.querySelector("#download-person"),
+  sync: document.querySelector(".sync"),
+  invert: document.querySelector(".invert")
 }
 
 const initialPicture = preview.picture.src;
-const personId = Number(document.querySelector(".card__identifiant").textContent);
+const personId = Number(document.querySelector(".card").id);
 
 /**
  * Encode every field of the form in JSON
@@ -130,9 +134,9 @@ function updateCharacteristicPreview() {
     let visibility = characteristic.querySelector("input[type=checkbox]");
     let value = characteristic.querySelector(".characteristic__value").value;
 
-    if (visibility.checked && characteristicsCounter >= 3) {
+    if (visibility.checked && characteristicsCounter >= 4) {
       visibility.checked = false;
-      triggerErrorPopup(["Vous ne pouvez pas avoir plus de 3 réseaux sociaux affichés"]);
+      triggerErrorPopup(["Vous ne pouvez pas avoir plus de 4 réseaux sociaux affichés"]);
     } else if (visibility.checked) {
       let previewCharacteristic = preview.characteristicType[i].cloneNode(true);
       previewCharacteristic.href += value;
@@ -150,6 +154,10 @@ function updateCharacteristicPreview() {
 function updatePreview() {
   preview.bio.textContent = field.bio.value;
 
+  if(field.sync()){
+    field.about.value = field.bio.value;
+  }
+
   let bannerColor = field.colors.querySelector("input:checked").parentElement.style.backgroundColor
 
   preview.color.style.backgroundColor = bannerColor;
@@ -161,7 +169,6 @@ function updatePreview() {
   }
 
   updateCharacteristicPreview();
-
 }
 
 /**
@@ -208,7 +215,7 @@ preview.picture.addEventListener("click", (event) => {
   }
 
   function closeByClick(e) {
-    if (!e.path.includes(pictureModal.container)) {
+    if (!e.composedPath().includes(pictureModal.container)) {
       pictureModal.container.classList.remove("edit-picture--active");
       deleteEventListener();
     }
@@ -290,6 +297,39 @@ action.save.addEventListener("click", async e => {
   }
 });
 
+action.download.addEventListener("click", async e => {
+
+  e.preventDefault();
+
+  let request = await fetch(action.download.href, {
+    method: "GET",
+  });
+
+  if (request.ok) {
+
+    let response = await request.json();
+
+    if (response.code === 200) {
+
+      const file = new Blob([response.content], {type: 'application/json'});
+
+      let content = JSON.parse(response.content);
+
+      let link = document.createElement("a");
+      link.href = URL.createObjectURL(file);
+      link.download = `${content.identity.firstName} ${content.identity.lastName} - ${Date.now()}.json`;
+      link.click();
+
+      triggerSuccessPopup(response.messages);
+    } else {
+      triggerErrorPopup(response.messages);
+    }
+      
+  } else {
+    triggerErrorPopup(["Une erreur est survenue lors de la requête au serveur"]);
+  }
+});
+
 action.delete?.addEventListener("click", async e => {
 
   e.preventDefault();
@@ -326,6 +366,34 @@ action.delete?.addEventListener("click", async e => {
   }
 });
 
+action.invert.addEventListener("click", () => {
+  let tmp = field.bio.value;
+  field.bio.value = field.about.value;
+  field.about.value = tmp;
+
+  updatePreview();
+});
+
+action.sync.addEventListener("click", async () => {
+  if(action.sync.classList.toggle("active")){
+
+    const isEmpty = field.about.value === "";
+    const isSimilar = field.about.value === field.bio.value;
+
+    console.log(isEmpty, isSimilar);
+
+    if (!(isEmpty || isSimilar) && !confirm("Attention ! Vous risquez de perdre le contenu du champ 'A PROPOS'")){
+      action.sync.classList.remove("active");
+      return;
+    }
+
+    field.about.readOnly = true;
+    updatePreview();
+    return;
+  }
+
+  field.about.readOnly = false;
+});
 
 init();
 

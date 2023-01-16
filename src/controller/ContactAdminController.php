@@ -6,6 +6,7 @@ use App\application\contact\ContactService;
 use App\application\person\PersonService;
 use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
+use App\model\contact\ContactType;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -59,7 +60,11 @@ class ContactAdminController extends Controller
         }
 
         $list = $this->contactService->getContactList();
+        $types = ContactType::getValues();
 
-        $this->render('contactAdmin.twig', ['contacts' => $list]);
+        $this->render('contactAdmin.twig', [
+            'contacts' => $list,
+            'typeContact' => $types
+        ]);
     }
 }

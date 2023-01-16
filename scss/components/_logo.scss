@@ -2,15 +2,24 @@
 
 .logo {
   position: absolute;
-  top: -27vw;
-  left: -27vw;
-  width: 70vw;
-  opacity: 0.05;
-  z-index: -1;
+  left: 0;
+  top: 0;
 
-  @include b.breakpoint(small) {
-    display: none;
-    visibility: hidden;
+  height: 150%;
+  max-width: 100%;
+  aspect-ratio: 1/1;
+
+  translate: -25% -40%;
+
+  opacity: 0.05;
+
+  @include b.breakpoint(header) {
+    translate: 0;
+    top: 40%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 50%;
+    height: auto;
   }
 
 }

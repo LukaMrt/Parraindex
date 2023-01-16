@@ -28,8 +28,38 @@
     gap: inherit;
     pointer-events: all;
 
+    #download-person {
+
+      position: absolute;
+      right: -10%;
+
+      pointer-events: all;
+      @include m.flex();
+      height: f.rem(50);
+      aspect-ratio: 1/1;
+      box-sizing: border-box;
+      border-radius: 50%;
+
+      background-color: var(--white);
+      border: 1px solid var(--dark-blue);
+      transition: scale 0.2s ease;
+
+      img {
+        width: 40%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+      }
+
+      &:active {
+        scale: 0.9;
+      }
+
+      @include b.breakpoint(medium) {
+        display: none;
+      }
+    }
+
     #delete-person {
-      background-color: all 0.2s ease-in-out;
       position: relative;
       overflow: hidden;
       width: f.rem(150);
@@ -41,7 +71,7 @@
         position: absolute;
         top: 0;
         left: 0;
-        width: 0px;
+        width: 0;
         height: 100%;
         background-color: #ec5757;
         z-index: -1;
@@ -76,7 +106,6 @@
     @include b.breakpoint(small) {
       flex-wrap: wrap;
     }
-
   }
 
   @include b.breakpoint(medium) {

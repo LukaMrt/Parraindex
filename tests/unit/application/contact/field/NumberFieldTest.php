@@ -7,13 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class NumberFieldTest extends TestCase
 {
-
     private NumberField $numberField;
+
 
     public function setUp(): void
     {
         $this->numberField = new NumberField('number', 'error');
     }
+
 
     public function testGetnameReturnsNumber()
     {
@@ -22,12 +23,14 @@ class NumberFieldTest extends TestCase
         $this->assertEquals('number', $result);
     }
 
+
     public function testIsvalidReturnsTrueWhenValueIsNumeric(): void
     {
         $result = $this->numberField->isValid('123');
 
         $this->assertTrue($result);
     }
+
 
     public function testIsvalidReturnsFalseWhenValueIsNotNumeric(): void
     {
@@ -36,11 +39,11 @@ class NumberFieldTest extends TestCase
         $this->assertFalse($result);
     }
 
+
     public function testIsvalidReturnsFalseWhenValueIsEmpty(): void
     {
         $result = $this->numberField->isValid('');
 
         $this->assertFalse($result);
     }
-
 }

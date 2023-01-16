@@ -21,8 +21,7 @@ use PHPUnit\Framework\TestCase;
 
 class LoginServiceTest extends TestCase
 {
-
-    const TEST_EMAIL = 'test@test.com';
+    private const TEST_EMAIL = 'test@test.com';
     private Account $account;
 
     private LoginService $loginService;
@@ -31,6 +30,7 @@ class LoginServiceTest extends TestCase
     private PersonDAO $personDAO;
     private SessionManager $sessionManager;
     private Logger $logger;
+
 
     public function setUp(): void
     {
@@ -57,6 +57,7 @@ class LoginServiceTest extends TestCase
         );
     }
 
+
     public function testLoginDetectsMissingFields(): void
     {
 
@@ -69,6 +70,7 @@ class LoginServiceTest extends TestCase
         $this->assertEquals('Veuillez remplir tous les champs', $return);
     }
 
+
     public function testLoginDetectsInvalidLogin(): void
     {
 
@@ -76,13 +78,14 @@ class LoginServiceTest extends TestCase
             ->with('test')
             ->willReturn(new Password(''));
 
-        $return = $this->loginService->login(array(
+        $return = $this->loginService->login([
             'login' => 'test',
             'password' => 'test',
-        ));
+        ]);
 
         $this->assertEquals('Identifiant incorrect', $return);
     }
+
 
     public function testLoginSavesLoginInSessionOnSuccess(): void
     {
@@ -116,11 +119,12 @@ class LoginServiceTest extends TestCase
             ->method('info')
             ->with(LoginService::class, 'User ' . self::TEST_EMAIL . ' logged in');
 
-        $this->loginService->login(array(
+        $this->loginService->login([
             'login' => self::TEST_EMAIL,
             'password' => 'test',
-        ));
+        ]);
     }
+
 
     public function testLoginReturnsNothingOnSuccess(): void
     {
@@ -137,13 +141,14 @@ class LoginServiceTest extends TestCase
             ->with('login')
             ->willReturn(false);
 
-        $return = $this->loginService->login(array(
+        $return = $this->loginService->login([
             'login' => self::TEST_EMAIL,
             'password' => 'test',
-        ));
+        ]);
 
         $this->assertEmpty($return);
     }
+
 
     public function testLoginRedirectsToHomeOnSuccess(): void
     {
@@ -164,11 +169,12 @@ class LoginServiceTest extends TestCase
             ->with('login')
             ->willReturn(false);
 
-        $this->loginService->login(array(
+        $this->loginService->login([
             'login' => self::TEST_EMAIL,
             'password' => 'test',
-        ));
+        ]);
     }
+
 
     public function testLoginRedirectToSignupIfNeeded()
     {
@@ -177,10 +183,11 @@ class LoginServiceTest extends TestCase
             ->method('redirect')
             ->with('signup_get');
 
-        $this->loginService->login(array(
+        $this->loginService->login([
             'action' => 'register'
-        ));
+        ]);
     }
+
 
     public function testLoginDetectsAlreadyLoggedIn(): void
     {
@@ -189,13 +196,14 @@ class LoginServiceTest extends TestCase
             ->with('login')
             ->willReturn(true);
 
-        $return = $this->loginService->login(array(
+        $return = $this->loginService->login([
             'login' => self::TEST_EMAIL,
             'password' => 'test',
-        ));
+        ]);
 
         $this->assertEquals('Vous êtes déjà connecté', $return);
     }
+
 
     public function testLogoutRedirectsToHomeWhenUserIsNotLogged(): void
     {
@@ -211,6 +219,7 @@ class LoginServiceTest extends TestCase
         $this->loginService->logout();
     }
 
+
     public function testLogoutRedirectsToConfirmationWhenUserIsLogged(): void
     {
 
@@ -225,6 +234,7 @@ class LoginServiceTest extends TestCase
         $this->loginService->logout();
     }
 
+
     public function testLogoutDestroysSessionsWhenUserIsLogged(): void
     {
 
@@ -238,5 +248,4 @@ class LoginServiceTest extends TestCase
 
         $this->loginService->logout();
     }
-
 }

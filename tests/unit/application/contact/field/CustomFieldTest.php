@@ -7,8 +7,8 @@ use PHPUnit\Framework\TestCase;
 
 class CustomFieldTest extends TestCase
 {
-
     private CustomField $customField;
+
 
     public function testGetnameReturnsCustom()
     {
@@ -19,6 +19,7 @@ class CustomFieldTest extends TestCase
         $this->assertEquals('custom', $result);
     }
 
+
     public function testIsvalidReturnsTrueWhenCustomTestReturnsTrue()
     {
         $this->customField = new CustomField('custom', 'error', fn() => true);
@@ -28,6 +29,7 @@ class CustomFieldTest extends TestCase
         $this->assertTrue($result);
     }
 
+
     public function testIsvalidReturnsFalseWhenCustomTestReturnsFalse()
     {
         $this->customField = new CustomField('custom', 'error', fn() => false);
@@ -36,5 +38,4 @@ class CustomFieldTest extends TestCase
 
         $this->assertFalse($result);
     }
-
 }

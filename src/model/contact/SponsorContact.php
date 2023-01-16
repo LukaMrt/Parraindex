@@ -17,6 +17,8 @@ class SponsorContact extends Contact
 
     /**
      * @param int $id The id of the contact
+     * @param string $contactDate The date where the contact message was sent
+     * @param ?string $contactResolution The date where the contact message was resolved
      * @param string $contacterName The name of the person who sent the contact
      * @param string $contacterEmail The email of the person who sent the contact
      * @param ContactType $type The type of the contact
@@ -25,13 +27,23 @@ class SponsorContact extends Contact
      */
     public function __construct(
         int $id,
+        string $contactDate,
+        ?string $contactResolution,
         string $contacterName,
         string $contacterEmail,
         ContactType $type,
         string $description,
         Sponsor $sponsor
     ) {
-        parent::__construct($id, $contacterName, $contacterEmail, $type, $description);
+        parent::__construct(
+            $id,
+            $contactDate,
+            $contactResolution,
+            $contacterName,
+            $contacterEmail,
+            $type,
+            $description
+        );
         $this->sponsor = $sponsor;
     }
 

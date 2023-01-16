@@ -125,7 +125,7 @@ class EditSponsorController extends Controller
             $this->sponsorService->updateSponsor($parameters['id'], $formParameters);
         }
 
-        header('Location: ' . $router->url('home'));
+        header('Location: ' . $router->url('sponsor', ['id' => $parameters['id']]));
         die();
     }
 }

@@ -4,11 +4,12 @@ namespace App\model\sponsor;
 
 use App\model\person\Person;
 use DateTime;
+use JsonSerializable;
 
 /**
  * Represents a sponsor
  */
-abstract class Sponsor
+abstract class Sponsor implements JsonSerializable
 {
     /**
      * @var int The id of the sponsor
@@ -150,4 +151,10 @@ abstract class Sponsor
      * @return string The icon of the sponsor
      */
     abstract public function getIcon(): string;
+
+
+    public function jsonSerialize(): array
+    {
+        return get_object_vars($this);
+    }
 }

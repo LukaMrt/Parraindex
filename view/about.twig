@@ -34,6 +34,11 @@
                 Nous avons réalisé ce site web dans le cadre d'un projet d'étude et nous avons choisi de le rendre
                 public afin de le partager avec le plus grand nombre.
             </p>
+            <p>
+                Vous pouvez retrouver
+                <strong><a href="{{ router.url('legalnotice') }}">ici</a></strong>,
+                les mentions légales du site.
+            </p>
         </div>
     </div>
 
@@ -44,6 +49,7 @@
                 'firstName': author.firstName,
                 'lastName': author.lastName,
                 'picture': author.picture,
+                'url': router.url('person', {'id': author.id})
             } %}
         {% endfor %}
 

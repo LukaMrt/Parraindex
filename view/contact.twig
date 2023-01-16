@@ -9,7 +9,7 @@
 
 {% block content %}
 
-    <form class="form" action="{{ router.url('contact_post') }}" method="post">
+    <form class="form form--big" action="{{ router.url('contact_post') }}" method="post">
 
         <h1 class="form__title">Formulaire de contact</h1>
 
@@ -27,16 +27,20 @@
                     'type': 'text',
                     'slug': 'senderFirstName',
                     'title': 'Votre prénom',
+                    'value': login.user.firstName,
                     'placeholder': 'John',
                     'pattern': '.+',
+                    'readonly': login.login != null,
                 } %}
 
                 {% include "components/form/input.twig" with {
                     'type': 'text',
                     'slug': 'senderLastName',
                     'title': 'Votre nom',
+                    'value': login.user.lastName,
                     'placeholder': 'Doe',
                     'pattern': '.+',
+                    'readonly': login.login != null,
                 } %}
 
             </div>
@@ -45,8 +49,10 @@
                 'type': 'email',
                 'slug': 'senderEmail',
                 'title': 'Votre email',
+                'value': login.login,
                 'placeholder': 'john.doe@gmail.com',
-                'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$"
+                'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$",
+                'readonly': login.login != null,
             } %}
 
             <div class="form-block form-block--row option option-0">

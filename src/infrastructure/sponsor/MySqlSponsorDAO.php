@@ -59,6 +59,7 @@ class MySqlSponsorDAO implements SponsorDAO
                 LEFT JOIN Characteristic C on P.id_person = C.id_person
                 LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
             WHERE P.id_person = :id
+            ORDER BY characteristic_order
 SQL
         );
 

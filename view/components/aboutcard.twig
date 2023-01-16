@@ -1,10 +1,10 @@
-<div class="about-card">
+<a class="about-card" href={{ url }}>
 
-    <img class="about-card__picture" src="{{ picture(picture) }}" alt="photo">
+    <img class="about-card__picture" src="{{ picture(picture) }}" alt="{{ firstName }}">
 
     <div class="about-card__profil">
         <span class="about-card__first-name">{{ firstName }}</span>
         <span class="about-card__last-name">{{ lastName }}</span>
     </div>
 
-</div>
+</a>

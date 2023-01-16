@@ -5,11 +5,12 @@ namespace App\model\school\promotion;
 use App\model\person\Person;
 use App\model\school\degree\Degree;
 use App\model\school\School;
+use JsonSerializable;
 
 /**
  * Promotion of students in a school
  */
-class Promotion
+class Promotion implements JsonSerializable
 {
     /**
      * @var int Id of the promotion
@@ -68,5 +69,11 @@ class Promotion
     public function getYear(): int
     {
         return $this->year;
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return get_object_vars($this);
     }
 }

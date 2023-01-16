@@ -7,13 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class FieldTest extends TestCase
 {
-
     private Field $field;
+
 
     public function setUp(): void
     {
         $this->field = new Field('name', 'error');
     }
+
 
     public function testGetnameReturnsName(): void
     {
@@ -22,12 +23,14 @@ class FieldTest extends TestCase
         $this->assertEquals('name', $result);
     }
 
+
     public function testGeterrorReturnsError(): void
     {
         $result = $this->field->getError();
 
         $this->assertEquals('error', $result);
     }
+
 
     public function testIsValidReturnsTrueWhenValueIsNotEmpty(): void
     {
@@ -36,6 +39,7 @@ class FieldTest extends TestCase
         $this->assertTrue($result);
     }
 
+
     public function testIsValidReturnsFalseWhenValueIsEmpty(): void
     {
         $result = $this->field->isValid('');
@@ -43,11 +47,11 @@ class FieldTest extends TestCase
         $this->assertFalse($result);
     }
 
+
     public function testIsValidReturnsFalseWhenValueIsWhitespace(): void
     {
         $result = $this->field->isValid(' ');
 
         $this->assertFalse($result);
     }
-
 }

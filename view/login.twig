@@ -10,8 +10,11 @@
 {% block content %}
 
     <form class="form" action="{{ router.url("login_post") }}" method="post">
+
         <h1 class="form__title">Connexion</h1>
+
         <div class="form-content">
+
             {% include "components/form/input.twig" with {
                 'type': 'email',
                 'slug': 'login',
@@ -42,13 +45,16 @@
                     'value': 'login'
                 } %}
             </div>
+
             {% include "components/link.twig" with{
                 'option': 'link--row',
                 'prefix': 'Mot de passe oublié ?',
                 'title': 'Cliquez ici',
                 'href': router.url('resetpassword_get')
             } %}
+
         </div>
+
     </form>
 
 {% endblock %}

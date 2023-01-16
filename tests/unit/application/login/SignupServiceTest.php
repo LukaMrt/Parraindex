@@ -19,8 +19,7 @@ use PHPUnit\Framework\TestCase;
 
 class SignupServiceTest extends TestCase
 {
-
-    const DEFAULT_PARAMETERS = [
+    private const DEFAULT_PARAMETERS = [
         'firstname' => 'Test',
         'lastname' => 'testa',
         'email' => 'Test.testaaa@etu.univ-lyon1.fr',
@@ -38,6 +37,7 @@ class SignupServiceTest extends TestCase
     private Random $random;
     private UrlUtils $urlUtils;
     private Logger $logger;
+
 
     public function setUp(): void
     {
@@ -67,13 +67,15 @@ class SignupServiceTest extends TestCase
         );
     }
 
+
     public function testSignupDetectsMissingFields(): void
     {
 
-        $return = $this->signupService->signup(array());
+        $return = $this->signupService->signup([]);
 
         $this->assertEquals('Veuillez remplir tous les champs', $return);
     }
+
 
     public function testSignupDetectsInvalidEmail(): void
     {
@@ -83,34 +85,41 @@ class SignupServiceTest extends TestCase
 
         $this->logger->expects($this->exactly(2))
             ->method('error')
-            ->with(SignupService::class, 'L\'email doit doit être votre email universitaire (' . implode(' ', $parameters) . ')');
+            ->with(
+                SignupService::class,
+                'L\'email doit doit être votre email universitaire (' . implode(' ', $parameters) . ')'
+            );
 
         $return = $this->signupService->signup($parameters);
 
         $this->assertEquals('L\'email doit doit être votre email universitaire', $return);
     }
 
+
     public function testSignupDetectsPasswordsMismatch(): void
     {
 
-        $return = $this->signupService->signup(array(
+        $return = $this->signupService->signup([
             'lastname' => 'test',
             'firstname' => 'test',
             'email' => 'test.test@etu.univ-lyon1.fr',
             'password' => 'test',
             'password-confirm' => 'test2',
-        ));
+        ]);
 
         $this->assertEquals('Les mots de passe ne correspondent pas', $return);
     }
+
 
     public function testSignupDetectsUnknownName(): void
     {
 
         $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
-        $this->assertEquals('Votre nom n\'est pas enregistré, merci de contacter un administrateur', $return);
+        $expected = 'Votre nom n\'est pas enregistré, merci de faire une demande de création de personne';
+        $this->assertEquals($expected, $return);
     }
+
 
     public function testSignupDetectsAlreadyExistingAccountWithEmail(): void
     {
@@ -126,6 +135,7 @@ class SignupServiceTest extends TestCase
 
         $this->assertEquals('Un compte existe déjà avec cette adresse email', $return);
     }
+
 
     public function testSignupDetectsAlreadyExistingAccountWithName(): void
     {
@@ -145,6 +155,7 @@ class SignupServiceTest extends TestCase
         $this->assertEquals('Un compte existe déjà avec ce nom', $return);
     }
 
+
     public function testSignupDetectsEmailBelongingToSomeoneElse(): void
     {
 
@@ -153,12 +164,12 @@ class SignupServiceTest extends TestCase
             ->willReturn($this->person);
 
         $this->personDAO->method('getAllIdentities')
-            ->willReturn(array(
+            ->willReturn([
                 new Identity('teSTa', 'testb'),
                 new Identity('testa', 'Test'),
                 new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
                 new Identity('TeSt', 'tEst'),
-            ));
+            ]);
 
         $this->accountDAO->method("existsAccount")
             ->willReturn(false);
@@ -173,6 +184,7 @@ class SignupServiceTest extends TestCase
         $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
     }
 
+
     public function testSignupDetectsEmailTooFarFromName(): void
     {
 
@@ -181,7 +193,7 @@ class SignupServiceTest extends TestCase
             ->willReturn($this->person);
 
         $this->personDAO->method('getAllIdentities')
-            ->willReturn(array());
+            ->willReturn([]);
 
         $this->accountDAO->method("existsAccount")
             ->willReturn(false);
@@ -195,6 +207,7 @@ class SignupServiceTest extends TestCase
 
         $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
     }
+
 
     public function testSignupRedirectToConfirmationPageOnSuccess(): void
     {
@@ -210,10 +223,10 @@ class SignupServiceTest extends TestCase
             ->willReturn(false);
 
         $this->personDAO->method('getAllIdentities')
-            ->willReturn(array(
+            ->willReturn([
                 new Identity('Test', 'testa'),
                 new Identity('azeazEZzeazeazeazeazeazeazeazeaz', 'aa'),
-            ));
+            ]);
 
         $this->redirect->expects($this->once())
             ->method('redirect')
@@ -225,6 +238,7 @@ class SignupServiceTest extends TestCase
 
         $this->signupService->signup(self::DEFAULT_PARAMETERS);
     }
+
 
     public function testSignupCreatesTemporaryAccountOnSuccess(): void
     {
@@ -246,6 +260,7 @@ class SignupServiceTest extends TestCase
 
         $this->signupService->signup(self::DEFAULT_PARAMETERS);
     }
+
 
     public function testSignupSendsEmailOnSuccess(): void
     {
@@ -281,6 +296,7 @@ class SignupServiceTest extends TestCase
         $this->signupService->signup(self::DEFAULT_PARAMETERS);
     }
 
+
     public function testValidateDetectsUnknownToken(): void
     {
 
@@ -297,6 +313,7 @@ class SignupServiceTest extends TestCase
         $this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
     }
 
+
     public function testValidateCreatesAccountOnSuccess(): void
     {
 
@@ -310,6 +327,7 @@ class SignupServiceTest extends TestCase
 
         $this->signupService->validate('1');
     }
+
 
     public function testValidateDeletesTemporaryAccountOnSuccess(): void
     {
@@ -329,5 +347,17 @@ class SignupServiceTest extends TestCase
         $this->signupService->validate('1');
     }
 
-}
 
+    public function testValidateSensMailOnSuccess(): void
+    {
+
+        $this->accountDAO->method('getTemporaryAccountByToken')
+            ->with('1')
+            ->willReturn($this->validAccount);
+
+        $this->mailer->expects($this->once())
+            ->method('send');
+
+        $this->signupService->validate('1');
+    }
+}

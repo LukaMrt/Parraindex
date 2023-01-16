@@ -9,11 +9,11 @@ use Monolog\Test\TestCase;
 
 class CharacteristicTypeServiceTest extends TestCase
 {
-
     private CharacteristicTypeDAO $characteristicDAO;
     private CharacteristicTypeService $characteristicTypeService;
 
     private Characteristic $characteristic;
+
 
     public function setUp(): void
     {
@@ -32,6 +32,7 @@ class CharacteristicTypeServiceTest extends TestCase
             ->build();
     }
 
+
     public function testGetallcharacteristictypesReturnsAllTypes()
     {
 
@@ -43,6 +44,7 @@ class CharacteristicTypeServiceTest extends TestCase
 
         $this->assertEquals([$this->characteristic], $characteristics);
     }
+
 
     public function testGetCharacteristicTypeAndValuesReturnsTypeAndValues()
     {
@@ -58,5 +60,4 @@ class CharacteristicTypeServiceTest extends TestCase
 
         $this->assertEquals([$this->characteristic], $characteristic);
     }
-
 }

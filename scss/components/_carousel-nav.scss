@@ -88,6 +88,14 @@
     }
   }
 
+
+  .filter {
+    @include b.breakpoint(small) {
+      width: auto;
+      order: -1;
+    }
+  }
+
   .searchbar {
     input {
       border: 1px solid var(--dark-blue);
@@ -97,11 +105,19 @@
       width: 90%;
 
       @include b.breakpoint(small) {
-        &.placeholder {
+        box-sizing: border-box;
+        width: f.rem(154);
+        height: f.rem(47.5);
+        &::placeholder {
+          text-transform: Uppercase;
           text-align: center;
+          color: var(--dark-blue);
         }
-        text-align: center;
       }
+    }
+
+    @include b.breakpoint(small) {
+      width: auto;
     }
 
     input:focus {
@@ -111,9 +127,12 @@
   }
 
   @include b.breakpoint(small) {
+    gap: f.rem(5) f.rem(10);
+    box-shadow: none;
     width: 90%;
-    flex-direction: column;
-    box-shadow: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     height: max-content;
     padding: f.rem(10) 0;
   }

@@ -3,44 +3,59 @@
 @use "../../abstracts/breakpoints" as b;
 
 .person-link {
-
-  height: 40%;
+  height: min(300px, 40%);
   position: absolute;
   bottom: 0;
   right: 5%;
-  border-left: solid 5px var(--dark-blue);
+  @include m.flex($justify: flex-start);
+  gap: f.rem(16);
 
-  @include b.breakpoint(medium) {
-    @include m.flex(center, space-around, row);
+  @include b.breakpoint(large) {
+    border-top: solid 3px var(--dark-blue);
+    padding-bottom: f.rem(32);
+    width: 90%;
+    justify-content: space-around;
     position: relative;
-    width: 80%;
-    margin: f.rem(10) auto f.rem(20);
-    border: none;
+    flex-direction: row;
     right: 0;
-    height: auto;
+  }
+
+  &__image {
+    aspect-ratio: 1/1;
+    object-fit: contain;
   }
 
   &__wrapper {
     transition: all 150ms;
-    position: absolute;
-    top: 0;
-    left: - f.rem(22);
+    @include m.hard-box-shadow();
     height: f.rem(24);
     width: f.rem(24);
+
     padding: f.rem(8);
     background-color: var(--dark-blue);
     border-radius: 50%;
 
-    @include b.breakpoint(medium) {
-      position: relative;
-      left: 0;
+    @include b.breakpoint(large) {
+      translate: 0 -50%;
     }
 
     &:hover {
       filter: invert(1);
       scale: 1.2;
     }
+  }
 
+  &::before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    border-left: solid 5px var(--dark-blue);
+
+    @include b.breakpoint(large) {
+      content: None;
+    }
   }
 
 }

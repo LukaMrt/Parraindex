@@ -20,7 +20,8 @@
             } %}
 
             {% include 'components/person/description.twig' with {
-                'person': person
+                'person': person,
+                'characteristics': person.characteristics
             } %}
         </div>
 
@@ -32,8 +33,5 @@
 
     </div>
 
-    {% include 'components/person/links.twig' with {
-        'characteristics': person.characteristics
-    } %}
 
 {% endblock %}

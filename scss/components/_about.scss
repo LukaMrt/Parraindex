@@ -9,7 +9,6 @@
     width: min(90%, f.rem(1500));
     gap: f.rem(50);
 
-
     @include b.breakpoint(medium) {
       flex-direction: column;
     }
@@ -20,8 +19,9 @@
     }
 
     &-text {
-      @include m.flex($direction: column, $justify: space-evenly);
+      @include m.flex(flex-start, space-evenly, column);
       align-self: stretch;
+      padding: f.rem(16) 0;
       gap: f.rem(10);
 
       text-align: justify;
@@ -40,7 +40,6 @@
     @include b.breakpoint(medium) {
       justify-content: center;
     }
-
   }
 
 }

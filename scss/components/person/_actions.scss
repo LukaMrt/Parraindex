@@ -12,6 +12,8 @@
   }
 
   &__image {
+    @include m.hard-box-shadow();
+    border-radius: 50%;
     transition: all 150ms;
     width: f.rem(40);
     height: f.rem(40);
@@ -24,7 +26,6 @@
       filter: invert(1);
       scale: 1.2;
     }
-
   }
 
 }

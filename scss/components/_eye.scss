@@ -9,15 +9,29 @@
   }
 
   &__img {
-    width: 30px;
+    width: 25px;
+    object-fit: contain;
+    transition: all 0.15s ease-in-out;
 
     &--close {
       display: block;
+      opacity: 0.15;
+
+      &:hover {
+        cursor: pointer;
+        opacity: 1;
+      }
     }
 
     &--open {
       display: none;
+
+      &:hover {
+        cursor: pointer;
+        filter: invert(1);
+      }
     }
+
   }
 
   &:checked + &__label {

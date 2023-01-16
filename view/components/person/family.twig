@@ -1,6 +1,8 @@
 <div class="person-family">
 
-    <p class="person-family__title">Parrains</p>
+    <p class="person-family__title">
+        Parrains
+    </p>
 
     <div class="person-family__wrapper">
 
@@ -10,28 +12,34 @@
                class="person-family__portrait person-family__portrait--godfather">
                 <img src="{{ picture(godFather.picture) }}" alt="{{ godFather.firstName }}"
                      class="person-family__portrait-image">
-                <p class="person-family__portrait-name">{{ godFather.firstName }} <span
-                            class="person-family__portrait-name--darker">{{ godFather.lastName }}</span></p>
+
+                <p class="person-family__portrait-name">
+                    {{ godFather.firstName }}
+                    <br>
+                    {{ godFather.lastName }}
+                </p>
             </a>
         {% endfor %}
 
-        <div class="person-family__portrait">
-            <img src="{{ picture(person.picture) }}" alt="{{ person.firstName }}" class="person-family__portrait-image">
-            <p class="person-family__portrait-name">{{ person.firstName }} <span
-                        class="person-family__portrait-name--darker">{{ person.lastName }}</span></p>
-        </div>
+        <img src="{{ picture(person.picture) }}" alt="{{ person.firstName }}" class="person-family__portrait--personal"
+             style="background-color : {{ person.bannerColor }}">
 
         {% for sponsor in godChildren %}
             <a href="{{ router.url('sponsor', {'id': sponsor.id}) }}"
                class="person-family__portrait person-family__portrait--godchild">
                 <img src="{{ picture(sponsor.godChild.picture) }}" alt="{{ sponsor.godChild.firstName }}"
                      class="person-family__portrait-image">
-                <p class="person-family__portrait-name">{{ sponsor.godChild.firstName }} <span
-                            class="person-family__portrait-name--darker">{{ sponsor.godChild.lastName }}</span></p>
+                <p class="person-family__portrait-name">
+                    {{ sponsor.godChild.firstName }}
+                    <br>
+                    {{ sponsor.godChild.lastName }}
+                </p>
             </a>
         {% endfor %}
     </div>
 
-    <p class="person-family__title person-family__title--second">Fillots</p>
+    <p class="person-family__title person-family__title--second">
+        Fillots
+    </p>
 
 </div>

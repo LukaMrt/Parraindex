@@ -28,9 +28,21 @@ abstract class Contact
      */
     private string $description;
 
+    /**
+     * @var string The date where the contact message was sent
+     */
+    private string $contactDate;
+
+    /**
+     * @var int The date where the contact message was resolved
+     */
+    private ?string $contactResolution;
+
 
     /**
      * @param int $id The id of the contact
+     * @param string $contactDate The date where the contact message was sent
+     * @param string $contactResolution The date where the contact message was resolved
      * @param string $contacterName The name of the person who sent the contact
      * @param string $contacterEmail The email of the person who sent the contact
      * @param ContactType $type The type of the contact
@@ -38,12 +50,16 @@ abstract class Contact
      */
     public function __construct(
         int $id,
+        string $contactDate,
+        ?string $contactResolution,
         string $contacterName,
         string $contacterEmail,
         ContactType $type,
         string $description
     ) {
         $this->id = $id;
+        $this->contactDate = $contactDate;
+        $this->contactResolution = $contactResolution;
         $this->contacterName = $contacterName;
         $this->contacterEmail = $contacterEmail;
         $this->type = $type;
@@ -102,6 +118,24 @@ abstract class Contact
     public function getTypeId(): int
     {
         return $this->type->value;
+    }
+
+
+    /**
+     * @return int The date where the contact message was resolved
+     */
+    public function getContactDate(): string
+    {
+        return $this->contactDate;
+    }
+
+
+    /**
+     * @return int The date where the contact message was resolved
+     */
+    public function getContactResolution(): ?string
+    {
+        return $this->contactResolution;
     }
 
 

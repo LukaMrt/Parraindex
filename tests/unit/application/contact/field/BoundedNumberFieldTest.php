@@ -7,13 +7,14 @@ use PHPUnit\Framework\TestCase;
 
 class BoundedNumberFieldTest extends TestCase
 {
-
     private BoundedNumberField $boundedField;
+
 
     public function setUp(): void
     {
         $this->boundedField = new BoundedNumberField('bounded', 'error', 0, 10);
     }
+
 
     public function testGetnameReturnsBounded()
     {
@@ -22,12 +23,14 @@ class BoundedNumberFieldTest extends TestCase
         $this->assertEquals('bounded', $result);
     }
 
+
     public function testIsValidReturnsTrueWhenValueIsWithinBounds()
     {
         $result = $this->boundedField->isValid(5);
 
         $this->assertTrue($result);
     }
+
 
     public function testIsValidReturnsTrueWhenValueIsBottomBound()
     {
@@ -36,12 +39,14 @@ class BoundedNumberFieldTest extends TestCase
         $this->assertTrue($result);
     }
 
+
     public function testIsValidReturnsTrueWhenValueIsTopBound()
     {
         $result = $this->boundedField->isValid(10);
 
         $this->assertTrue($result);
     }
+
 
     public function testIsValidReturnsFalseWhenValueIsBelowBounds()
     {
@@ -50,11 +55,11 @@ class BoundedNumberFieldTest extends TestCase
         $this->assertFalse($result);
     }
 
+
     public function testIsValidReturnsFalseWhenValueIsAboveBounds()
     {
         $result = $this->boundedField->isValid(11);
 
         $this->assertFalse($result);
     }
-
 }

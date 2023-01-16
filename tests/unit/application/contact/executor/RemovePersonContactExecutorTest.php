@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
 
 class RemovePersonContactExecutorTest extends TestCase
 {
-
     private RemovePersonContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -29,6 +28,7 @@ class RemovePersonContactExecutorTest extends TestCase
         'message' => 'empty'
     ];
 
+
     public function setUp(): void
     {
 
@@ -38,6 +38,7 @@ class RemovePersonContactExecutorTest extends TestCase
 
         $this->executor = new RemovePersonContactExecutor($this->personDAO, $this->contactDAO, $redirect);
     }
+
 
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {
@@ -53,6 +54,7 @@ class RemovePersonContactExecutorTest extends TestCase
         $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
+
     public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
 
@@ -67,6 +69,8 @@ class RemovePersonContactExecutorTest extends TestCase
 
         $contact = new PersonContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             'test.test@test.com',
             ContactType::REMOVE_PERSON,
@@ -80,5 +84,4 @@ class RemovePersonContactExecutorTest extends TestCase
 
         $this->executor->execute($this->defaultArray);
     }
-
 }

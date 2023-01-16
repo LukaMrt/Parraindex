@@ -17,9 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 class AddSponsorContactExecutorTest extends TestCase
 {
-
-    const TEST_EMAIL = 'test.test@test.com';
-    const TEST_DATE = '2021-01-01';
+    private const TEST_EMAIL = 'test.test@test.com';
+    private const TEST_DATE = '2021-01-01';
     private AddSponsorContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -37,6 +36,7 @@ class AddSponsorContactExecutorTest extends TestCase
         'bonusInformation' => 'empty'
     ];
 
+
     public function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
@@ -52,6 +52,7 @@ class AddSponsorContactExecutorTest extends TestCase
         );
     }
 
+
     public function testExecuteReturnsErrorWhenSenderFirstNameIsMissing()
     {
         $this->defaultArray['senderFirstName'] = '';
@@ -65,6 +66,7 @@ class AddSponsorContactExecutorTest extends TestCase
         $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
+
     public function testExecuteReturnsErrorWhenGodfatherDoesNotExist()
     {
 
@@ -77,6 +79,7 @@ class AddSponsorContactExecutorTest extends TestCase
         $this->assertEquals('Le parrain doit exister', $result);
     }
 
+
     public function testExecuteReturnsErrorWhenGodchildDoesNotExist()
     {
 
@@ -88,6 +91,7 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $this->assertEquals('Le fillot doit exister', $result);
     }
+
 
     public function testExecuteReturnsErrorWhenSponsorTypeIsMinus1(): void
     {
@@ -102,6 +106,7 @@ class AddSponsorContactExecutorTest extends TestCase
         $this->assertEquals('Le type de lien doit être valide', $result);
     }
 
+
     public function testExecuteReturnsErrorWhenSponsorTypeIs2(): void
     {
         $this->defaultArray['sponsorType'] = '2';
@@ -114,6 +119,7 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $this->assertEquals('Le type de lien doit être valide', $result);
     }
+
 
     public function testExecuteReturnsNothingWhenSponsorTypeIs1(): void
     {
@@ -128,6 +134,7 @@ class AddSponsorContactExecutorTest extends TestCase
         $this->assertEquals('', $result);
     }
 
+
     public function testExecutesuccessReturnsErrorWhenSponsorAlreadyExists(): void
     {
 
@@ -139,6 +146,7 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $this->assertEquals('Le lien ne doit pas déjà exister', $result);
     }
+
 
     public function testExecutesuccessSavesClassicSponsorWhenTypeIs0(): void
     {
@@ -154,6 +162,8 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $contact = new SponsorContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,
@@ -167,6 +177,7 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $this->executor->executeSuccess($this->defaultArray);
     }
+
 
     public function testExecutesuccessSavesHeartSponsorWhenTypeIs1(): void
     {
@@ -182,6 +193,8 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $contact = new SponsorContact(
             -1,
+            date('Y-m-d'),
+            null,
             'test1 test2',
             self::TEST_EMAIL,
             ContactType::ADD_SPONSOR,
@@ -197,5 +210,4 @@ class AddSponsorContactExecutorTest extends TestCase
 
         $this->executor->executeSuccess($this->defaultArray);
     }
-
 }

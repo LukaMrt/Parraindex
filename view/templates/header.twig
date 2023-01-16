@@ -13,7 +13,15 @@
             <a class="header__login-link" href="{{ router.url('person', {id: login.user.id}) }}">Mon compte</a>
             <a class="header__login-link" href="{{ router.url('editperson_get', {id: login.user.id}) }}">Modifier</a>
 
-            <img class="header__login-picture" src="{{ picture(login.user.picture) }}" alt="photo">
+            {% if login.privilege == 'ADMIN' %}
+
+                <a class="header__login-link" href="{{ router.url('contact_admin') }}">Administration</a>
+
+            {% endif %}
+
+            <div>
+                <img class="header__login-picture" src="{{ picture(login.user.picture) }}" alt="photo">
+            </div>
 
             <a class="header__login-link" href="{{ router.url('logout_get') }}">Déconnexion</a>
 

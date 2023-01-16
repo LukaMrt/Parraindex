@@ -3,7 +3,8 @@
 $breakpoints: (
         'small' : f.em(700),
         'medium' : f.em(900),
-        'large' : f.em(1200),
+        'large' : f.em(1300),
+        'header' : f.em(830),
 );
 
 @mixin breakpoint($size) {

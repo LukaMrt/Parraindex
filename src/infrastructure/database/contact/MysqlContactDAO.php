@@ -4,6 +4,7 @@ namespace App\infrastructure\database\contact;
 
 use App\application\contact\ContactDAO;
 use App\infrastructure\database\DatabaseConnection;
+use App\model\contact\Contact;
 use App\model\contact\ContactType;
 use App\model\contact\DefaultContact;
 use App\model\contact\PersonContact;
@@ -59,6 +60,7 @@ SQL
                             VALUES (:id_ticket, :firstname, :lastname, :entry_year)
 SQL
         );
+
         $query->execute([
             "id_ticket" => $ticketId,
             "firstname" => $contact->getPerson()->getFirstName(),
@@ -77,6 +79,16 @@ SQL
      */
     public function savePersonRemoveContact(PersonContact $contact): void
     {
+        $this->savePersonUpdateContact($contact);
+    }
+
+
+    /**
+     * @param PersonContact $contact the contact to save
+     * @return void
+     */
+    public function savePersonUpdateContact(PersonContact $contact): void
+    {
 
         $connection = $this->databaseConnection->getDatabase();
 
@@ -94,15 +106,16 @@ SQL
 
         $ticketId = $connection->lastInsertId();
         $query = $connection->prepare(<<<SQL
-                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name)
-                            VALUES (:id_ticket, :id_person, :firstname, :lastname)
+                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
+                            VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)
 SQL
         );
         $query->execute([
             "id_ticket" => $ticketId,
             "id_person" => $contact->getPerson()->getId(),
             "firstname" => $contact->getPerson()->getFirstName(),
-            "lastname" => $contact->getPerson()->getLastName()
+            "lastname" => $contact->getPerson()->getLastName(),
+            "entry_year" => $contact->getPerson()->getStartYear()
         ]);
 
         $query->closeCursor();
@@ -191,46 +204,6 @@ SQL
 
 
     /**
-     * @param PersonContact $contact the contact to save
-     * @return void
-     */
-    public function savePersonUpdateContact(PersonContact $contact): void
-    {
-
-        $connection = $this->databaseConnection->getDatabase();
-
-        $query = $connection->prepare(<<<SQL
-                            INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
-                            VALUES (:type, NOW(), :name, :email, :description)
-SQL
-        );
-        $query->execute([
-            "type" => $contact->getTypeId(),
-            "name" => $contact->getContacterName(),
-            "email" => $contact->getContacterEmail(),
-            "description" => $contact->getMessage()
-        ]);
-
-        $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare(<<<SQL
-                            INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
-                            VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)
-SQL
-        );
-        $query->execute([
-            "id_ticket" => $ticketId,
-            "id_person" => $contact->getPerson()->getId(),
-            "firstname" => $contact->getPerson()->getFirstName(),
-            "lastname" => $contact->getPerson()->getLastName(),
-            "entry_year" => $contact->getPerson()->getStartYear()
-        ]);
-
-        $query->closeCursor();
-        $connection = null;
-    }
-
-
-    /**
      * @return array the list of all the contacts
      */
     public function getContactList(): array
@@ -239,46 +212,46 @@ SQL
         $connection = $this->databaseConnection->getDatabase();
 
         $queryDefault = $connection->prepare(<<<SQL
-						SELECT T.*
-						FROM Ticket T
-							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
-							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
-						WHERE EP.id_ticket IS NULL
-						  	AND ES.id_ticket IS NULL
-							AND resolution_date IS NULL;
+                        SELECT T.*
+                        FROM Ticket T
+                            LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
+                            LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
+                        WHERE EP.id_ticket IS NULL
+                              AND ES.id_ticket IS NULL
+                            AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
         $queryPerson = $connection->prepare(<<<SQL
-						SELECT T.*,
-						    EP.id_person,
-							EP.first_name,
-							EP.last_name,
-							EP.entry_year
-						FROM Ticket T
-							LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
-						WHERE EP.id_ticket IS NOT NULL
-							AND resolution_date IS NULL;
+                        SELECT T.*,
+                            EP.id_person,
+                            EP.first_name,
+                            EP.last_name,
+                            EP.entry_year
+                        FROM Ticket T
+                            LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
+                        WHERE EP.id_ticket IS NOT NULL
+                            AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
         $querySponsor = $connection->prepare(<<<SQL
-						SELECT T.*,
-							ES.date,
-							ES.id_sponsor,
-							P.id_person   AS f_id_person,
-							P.last_name   AS f_last_name,
-							P.first_name  AS f_first_name,
-							P2.id_person  AS c_id_person,
-							P2.last_name  AS c_last_name,
-							P2.first_name AS c_first_name,
-							ES.type AS sponsor_type
-						FROM Ticket T
-							LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
-							JOIN Person P on ES.id_godfather = P.id_person
-							JOIN Person P2 on ES.id_godson = P2.id_person
-						WHERE ES.id_ticket IS NOT NULL
-							AND resolution_date IS NULL;
+                        SELECT T.*,
+                            ES.date,
+                            ES.id_sponsor,
+                            P.id_person   AS f_id_person,
+                            P.last_name   AS f_last_name,
+                            P.first_name  AS f_first_name,
+                            P2.id_person  AS c_id_person,
+                            P2.last_name  AS c_last_name,
+                            P2.first_name AS c_first_name,
+                            ES.type AS sponsor_type
+                        FROM Ticket T
+                            LEFT JOIN EditSponsor ES on T.id_ticket = ES.id_ticket
+                            JOIN Person P on ES.id_godfather = P.id_person
+                            JOIN Person P2 on ES.id_godson = P2.id_person
+                        WHERE ES.id_ticket IS NOT NULL
+                            AND (T.resolution_date IS NULL OR SUBDATE(NOW(), 15) < T.resolution_date);
 SQL
         );
 
@@ -291,6 +264,8 @@ SQL
         while ($data = $queryDefault->fetch()) {
             $contacts[] = new DefaultContact(
                 $data->id_ticket,
+                $data->creation_date,
+                $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
                 ContactType::from($data->type),
@@ -306,6 +281,8 @@ SQL
                 ->build();
             $contacts[] = new PersonContact(
                 $data->id_ticket,
+                $data->creation_date,
+                $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
                 ContactType::from($data->type),
@@ -336,6 +313,8 @@ SQL
 
             $contacts[] = new SponsorContact(
                 $data->id_ticket,
+                $data->creation_date,
+                $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
                 ContactType::from($data->type),
@@ -348,6 +327,10 @@ SQL
         $queryPerson->closeCursor();
         $querySponsor->closeCursor();
         $connection = null;
+
+        usort($contacts, function (Contact $a, Contact $b) {
+            return $a->getContactDate() <=> $b->getContactDate();
+        });
 
         return $contacts;
     }

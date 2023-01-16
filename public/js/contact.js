@@ -3,6 +3,18 @@ import {byId} from "./utils.js";
 
 let defaultValidation = (element) => element.classList.contains('hidden') || element.checkValidity();
 
+const identityField = {
+  lastname : byId('senderFirstName'),
+  firstname : byId('senderLastName'),
+  email : byId('senderEmail'),
+}
+
+const sessionIdentity = {
+  lastname : identityField.lastname.value,
+  firstname : identityField.firstname.value,
+  email : identityField.email.value,
+}
+
 let fields = [
   new Field('type', 'Le type doit être valide', element => 0 <= element.value && element.value <= 9),
   new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère', defaultValidation),
@@ -25,6 +37,16 @@ registerForm(document.querySelector('.form'), fields);
 
 function updateClasses(id) {
 
+  let syncSession = id !== '9';
+
+  identityField.lastname.value = syncSession ? sessionIdentity.lastname : '';
+  identityField.firstname.value = syncSession ? sessionIdentity.firstname : '';
+  identityField.email.value = syncSession ? sessionIdentity.email : '';
+
+  identityField.lastname.readOnly = syncSession;
+  identityField.firstname.readOnly = syncSession;
+  identityField.email.readOnly = syncSession;
+
   let elements = document.querySelectorAll('.option');
 
   for (let element of elements) {
@@ -40,7 +62,6 @@ function updateClasses(id) {
       element.classList.add('hidden');
       element.required = false;
     }
-
   }
 
 }

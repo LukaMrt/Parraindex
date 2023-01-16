@@ -16,6 +16,7 @@
 
     {% block javascripts %}{% endblock %}
     <script src="{{ script('popup/popupInitialize.js') }}" defer></script>
+    <script src="{{ script('common.js') }}" defer></script>
 </head>
 
 <body>
@@ -35,8 +36,6 @@
 <main>
     {% block content %}{% endblock %}
 </main>
-
-{% include 'templates/footer.twig' %}
 
 </body>
 

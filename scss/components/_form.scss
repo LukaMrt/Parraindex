@@ -4,7 +4,7 @@
 
 .form {
 
-  width: max(40vw, f.rem(250));
+  width: min(80%, f.rem(800));
   height: max-content;
   box-sizing: border-box;
   max-width: f.rem(900);
@@ -64,7 +64,6 @@
         height: f.rem(100);
         resize: none;
       }
-
     }
 
     &-label {
@@ -78,6 +77,13 @@
       border: var(--dark-red) solid 1px;
     }
 
+    input:read-only {
+      background-color: var(--light-grey);
+    }
+  }
+
+  &--big {
+    margin-bottom: f.rem(50);
   }
 
 }

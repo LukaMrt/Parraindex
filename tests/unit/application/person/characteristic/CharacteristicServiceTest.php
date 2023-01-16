@@ -10,11 +10,11 @@ use PHPUnit\Framework\TestCase;
 
 class CharacteristicServiceTest extends TestCase
 {
-
     private Characteristic $characteristic;
 
     private CharacteristicService $characteristicService;
     private CharacteristicDAO $characteristicDAO;
+
 
     public function setUp(): void
     {
@@ -33,6 +33,7 @@ class CharacteristicServiceTest extends TestCase
         $this->characteristicService = new CharacteristicService($this->characteristicDAO);
     }
 
+
     public function testUpdateCharacteristic()
     {
 
@@ -42,6 +43,7 @@ class CharacteristicServiceTest extends TestCase
 
         $this->characteristicService->updateCharacteristic(1, $this->characteristic);
     }
+
 
     public function testCreateCharacteristicCreatesCharacteristic()
     {

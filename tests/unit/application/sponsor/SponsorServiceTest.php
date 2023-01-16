@@ -15,13 +15,13 @@ use PHPUnit\Framework\TestCase;
 
 class SponsorServiceTest extends TestCase
 {
-
-    const TEST_DATE = '2020-01-01';
+    private const TEST_DATE = '2020-01-01';
     private Person $person;
     private Sponsor $sponsor;
     private SponsorService $sponsorService;
     private SponsorDAO $sponsorDAO;
     private PersonDAO $personDAO;
+
 
     public function setUp(): void
     {
@@ -32,6 +32,7 @@ class SponsorServiceTest extends TestCase
         $this->personDAO = $this->createMock(PersonDAO::class);
         $this->sponsorService = new SponsorService($this->sponsorDAO, $this->personDAO);
     }
+
 
     public function testGetpersonfamilyRetrievesGodFathersAndGodSons()
     {
@@ -63,6 +64,7 @@ class SponsorServiceTest extends TestCase
         ]);
     }
 
+
     public function testGetsponsorbyidReturnsNullWhenSponsorDoesNotExist(): void
     {
 
@@ -72,6 +74,7 @@ class SponsorServiceTest extends TestCase
 
         $this->assertNull($sponsor);
     }
+
 
     public function testGetsponsorbyidReturnsSponsorWhenSponsorExists(): void
     {
@@ -90,6 +93,7 @@ class SponsorServiceTest extends TestCase
         $this->assertEquals($expectedSponsor, $sponsor);
     }
 
+
     public function testAddsponsorCallsAddSponsorOnSponsorDAO(): void
     {
 
@@ -100,6 +104,7 @@ class SponsorServiceTest extends TestCase
         $this->sponsorService->addSponsor($this->sponsor);
     }
 
+
     public function testRemovesponsorCallsUpdateSponsorOnSponsorDAO(): void
     {
 
@@ -109,6 +114,7 @@ class SponsorServiceTest extends TestCase
 
         $this->sponsorService->removeSponsor(-1);
     }
+
 
     public function testGestsponsorReturnsSponsor(): void
     {
@@ -121,6 +127,7 @@ class SponsorServiceTest extends TestCase
 
         $this->assertEquals($this->sponsor, $sponsor);
     }
+
 
     public function testCreatesponsorDoesNothingWhenSponsorAlreadyExists(): void
     {
@@ -141,6 +148,7 @@ class SponsorServiceTest extends TestCase
             'godChildId' => 1
         ]);
     }
+
 
     public function testCreatesponsorRegistersClassicSponsor(): void
     {
@@ -166,8 +174,8 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
+
 
     public function testCreatesponsorRegistersHeartSponsor(): void
     {
@@ -193,8 +201,8 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
+
 
     public function testUpdatesponsorDoesNothingWhenSponsorDoesNotExist(): void
     {
@@ -212,6 +220,7 @@ class SponsorServiceTest extends TestCase
         ]);
     }
 
+
     public function testUpdatesponsorDoesNothingWhenTypeIsUnknown(): void
     {
 
@@ -228,6 +237,7 @@ class SponsorServiceTest extends TestCase
             'sponsorType' => '2'
         ]);
     }
+
 
     public function testUpdatesponsorRegistersClassicSponsor(): void
     {
@@ -248,8 +258,8 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
+
 
     public function testUpdatesponsorRegistersHeartSponsor(): void
     {
@@ -270,7 +280,5 @@ class SponsorServiceTest extends TestCase
             'sponsorDate' => self::TEST_DATE,
             'description' => 'description'
         ]);
-
     }
-
 }

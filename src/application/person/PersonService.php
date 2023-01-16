@@ -4,6 +4,7 @@ namespace App\application\person;
 
 use App\application\logging\Logger;
 use App\application\login\SessionManager;
+use App\application\sponsor\SponsorDAO;
 use App\model\person\Identity;
 use App\model\person\Person;
 use App\model\person\PersonBuilder;
@@ -17,6 +18,11 @@ class PersonService
      * @var PersonDAO Person data access object
      */
     private PersonDAO $personDAO;
+
+    /**
+     * @var SponsorDAO Sponsor data access object
+     */
+    private SponsorDAO $sponsorDAO;
 
     /**
      * @var SessionManager Session manager
@@ -34,9 +40,14 @@ class PersonService
      * @param SessionManager $sessionManager Session manager
      * @param Logger $logger Logger
      */
-    public function __construct(PersonDAO $personDAO, SessionManager $sessionManager, Logger $logger)
-    {
+    public function __construct(
+        PersonDAO $personDAO,
+        SessionManager $sessionManager,
+        Logger $logger,
+        SponsorDAO $sponsorDAO
+    ) {
         $this->personDAO = $personDAO;
+        $this->sponsorDAO = $sponsorDAO;
         $this->sessionManager = $sessionManager;
         $this->logger = $logger;
     }
@@ -49,17 +60,6 @@ class PersonService
     public function getAllPeople(): array
     {
         return $this->personDAO->getAllPeople();
-    }
-
-
-    /**
-     * Get person by id
-     * @param int $id Id
-     * @return Person|null
-     */
-    public function getPersonById(int $id): ?Person
-    {
-        return $this->personDAO->getPersonById($id);
     }
 
 
@@ -146,5 +146,38 @@ class PersonService
     public function deletePerson(Person $person): void
     {
         $this->personDAO->deletePerson($person);
+    }
+
+
+    /**
+     * Retrieves all data from a person
+     * @param int $personId Id of the person
+     * @return ?Person Person with full data
+     */
+    public function getPersonData(int $personId): ?Person
+    {
+        $person = $this->personDAO->getPersonById($personId);
+
+        if ($person === null) {
+            return null;
+        }
+
+        $data = $this->sponsorDAO->getPersonFamily($personId);
+        $person->setCharacteristics($data["person"]->getCharacteristics());
+        $person->addSponsor($data["godFathers"]);
+        $person->addSponsor($data["godChildren"]);
+
+        return $person;
+    }
+
+
+    /**
+     * Get person by id
+     * @param int $id Id
+     * @return Person|null
+     */
+    public function getPersonById(int $id): ?Person
+    {
+        return $this->personDAO->getPersonById($id);
     }
 }

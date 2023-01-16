@@ -3,6 +3,7 @@
 namespace App\controller;
 
 use App\application\contact\ContactService;
+use App\application\login\SignupService;
 use App\application\person\PersonService;
 use App\application\sponsor\SponsorService;
 use App\infrastructure\router\Router;
@@ -23,6 +24,10 @@ class ContactCloseController extends Controller
      * @var SponsorService the sponsor service
      */
     private SponsorService $sponsorService;
+    /**
+     * @ver SignupService the signup service
+     */
+    private SignupService $signupService;
 
 
     /**
@@ -31,17 +36,20 @@ class ContactCloseController extends Controller
      * @param PersonService $personService the person service
      * @param ContactService $contactService the contact service
      * @param SponsorService $sponsorService the sponsor service
+     * @param SignupService $signupService the signup service
      */
     public function __construct(
         Environment $twig,
         Router $router,
         PersonService $personService,
         ContactService $contactService,
-        SponsorService $sponsorService
+        SponsorService $sponsorService,
+        SignupService $signupService
     ) {
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
         $this->sponsorService = $sponsorService;
+        $this->signupService = $signupService;
     }
 
 
@@ -109,12 +117,16 @@ class ContactCloseController extends Controller
                 $this->sponsorService->removeSponsor($contact->getSponsor()->getId());
                 break;
 
+            case 9:
+                $message = $contact->getMessage();
+                $this->signupService->validate(substr($message, strrpos($message, '/') + 1));
+                break;
+
             case 1:
             case 4:
             case 6:
             case 7:
             case 8:
-            case 9:
             default:
                 break;
         }
