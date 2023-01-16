@@ -70,6 +70,13 @@
     "sniffer-fix": [
       "Composer\\Config::disableProcessTimeout",
       "phpcbf --standard=phpcs.xml"
+    ],
+    "clean": [
+      "Composer\\Config::disableProcessTimeout",
+      "rm -rf out",
+      "rm -rf var",
+      "rm -rf .phpdoc",
+      "rm -f .phpunit.result.cache"
     ]
   },
   "require-dev": {
