@@ -116,7 +116,8 @@ class SignupServiceTest extends TestCase
 
         $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
-        $this->assertEquals('Votre nom n\'est pas enregistré, merci de contacter un administrateur', $return);
+        $expected = 'Votre nom n\'est pas enregistré, merci de faire une demande de création de personne';
+        $this->assertEquals($expected, $return);
     }
 
 

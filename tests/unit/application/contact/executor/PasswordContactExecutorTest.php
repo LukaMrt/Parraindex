@@ -89,7 +89,64 @@ class PasswordContactExecutorTest extends TestCase
 
         $result = $this->executor->execute(self::DEFAULT_PARAMS);
 
-        $this->assertEquals('La personne doit exister', $result);
+        $expected = 'Cete carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testExecuteReturnsErrorWhenEmailIsAlreadyUsed()
+    {
+
+        $person = PersonBuilder::aPerson()->withId(1)->build();
+        $account = new Account(
+            1,
+            self::DEFAULT_PARAMS['senderEmail'],
+            $person,
+            new Password(self::DEFAULT_PARAMS['password'])
+        );
+
+        $this->personDAO->method('getPerson')
+            ->with(new Identity('test1', 'test2'))
+            ->willReturn($person);
+
+        $this->accountDAO->method('existsAccount')
+            ->with(self::DEFAULT_PARAMS['senderEmail'])
+            ->willReturn(true);
+
+        $result = $this->executor->execute(self::DEFAULT_PARAMS);
+
+        $expected = 'Cet email est déjà associée à un compte';
+        $this->assertEquals($expected, $result);
+    }
+
+    public function testExecuteReturnsErrorWhenAccountIsAlreadyCreated()
+    {
+
+        $person = PersonBuilder::aPerson()->withId(1)->build();
+        $account = new Account(
+            1,
+            self::DEFAULT_PARAMS['senderEmail'],
+            $person,
+            new Password(self::DEFAULT_PARAMS['password'])
+        );
+
+        $identity = new Identity('test1', 'test2');
+
+        $this->personDAO->method('getPerson')
+            ->with($identity)
+            ->willReturn($person);
+
+        $this->accountDAO->method('existsAccount')
+            ->with(self::DEFAULT_PARAMS['senderEmail'])
+            ->willReturn(false);
+
+        $this->accountDAO->method('existsAccountByIdentity')
+            ->with($identity)
+            ->willReturn(true);
+
+        $result = $this->executor->execute(self::DEFAULT_PARAMS);
+
+        $expected = 'Cette carte est déjà associée à un compte';
+        $this->assertEquals($expected, $result);
     }
 
 
