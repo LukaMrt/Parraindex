@@ -2,57 +2,78 @@
 @use "../abstracts/functions" as f;
 @use "../abstracts/breakpoints" as b;
 
-.legalNotice {
+.legal-notice {
+  width: 90%;
+  @include m.flex();
+  gap: f.rem(50);
 
-	&__description {
-		@include m.flex($direction: row);
-		width: min(90%, f.rem(1500));
-		gap: f.rem(50);
+  &__header {
+    @include m.flex($direction: row, $justify: space-around, $align: flex-start);
+    gap: inherit;
+    width: min(90%, f.rem(1400));
 
-		@include b.breakpoint(medium) {
-			flex-direction: column;
-		}
+    article {
+      width: 40%;
 
-		&-title {
-			font-weight: bold;
-		}
+      pre {
+        text-align: right;
+      }
 
-		&-text {
-			@include m.flex($direction: column, $justify: space-evenly);
-			align-self: center;
-			padding: f.rem(20) 0;
-			gap: f.rem(16);
+      hr{
+        width: 2px;
+        height: 100px;
+        border-radius: 1px;
+        background-color: var(--dark-blue);
+      }
 
-			text-align: justify;
-			font-size: f.rem(18);
-			width: min(120ch, 100%);
-			list-style-type: none;
+      @include b.breakpoint(small) {
+        width: 100%;
+      }
+    }
 
-			h2 {
-				margin-top: f.rem(30);
-			}
+    @include b.breakpoint(small) {
+      flex-direction: column;
+    }
+  }
 
-			&--wrapper {
+  &__content {
+    @include m.flex($direction: row);
+    justify-content: center;
+    align-items: stretch;
+    flex-wrap: wrap;
+    gap: inherit;
 
-				width: 100%;
-				@include m.flex($direction: row, $justify: space-around);
-				gap: f.rem(16);
+    article {
+      width: min(100%, f.rem(400));
+      @include m.flex($justify: flex-start);
+      gap: f.rem(10);
+      text-align: justify;
+      text-align-last: center;
+      padding: f.rem(20);
 
-				ul {
-					font-weight: 300;
-					list-style: none;
-				}
+      h2{
+        font-size: f.rem(20);
+        font-weight: 700;
+        color: var(--dark-blue);
+        height: f.rem(50);
 
-				@include b.breakpoint(small) {
-					@include m.flex($direction: column);
-				}
+        @include b.breakpoint(small) {
+          height: fit-content;
+        }
+      }
 
-			}
+      hr {
+        width: 100px;
+        height: 2px;
+        border-radius: 1px;
+        background-color: var(--dark-blue);
+        border: 0;
+      }
 
-		}
-	}
-
-
-
+      &:hover hr{
+        background-color: var(--light-blue);
+      }
+    }
+  }
 
 }
