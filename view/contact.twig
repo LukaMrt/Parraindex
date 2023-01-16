@@ -30,7 +30,7 @@
                     'value': login.user.firstName,
                     'placeholder': 'John',
                     'pattern': '.+',
-                    'readonly': login.login != null,
+                    'readonly': login.login is not empty
                 } %}
 
                 {% include "components/form/input.twig" with {
@@ -40,7 +40,7 @@
                     'value': login.user.lastName,
                     'placeholder': 'Doe',
                     'pattern': '.+',
-                    'readonly': login.login != null,
+                    'readonly': login.login is not empty
                 } %}
 
             </div>
@@ -52,7 +52,7 @@
                 'value': login.login,
                 'placeholder': 'john.doe@gmail.com',
                 'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$",
-                'readonly': login.login != null,
+                'readonly': login.login is not empty
             } %}
 
             <div class="form-block form-block--row option option-0">

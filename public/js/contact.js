@@ -37,7 +37,7 @@ registerForm(document.querySelector('.form'), fields);
 
 function updateClasses(id) {
 
-  let syncSession = id !== '9';
+  let syncSession = id !== '9' && identityField.lastname.value;
 
   identityField.lastname.value = syncSession ? sessionIdentity.lastname : '';
   identityField.firstname.value = syncSession ? sessionIdentity.firstname : '';
