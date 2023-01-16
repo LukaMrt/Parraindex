@@ -19,13 +19,6 @@ use PHPUnit\Framework\TestCase;
 
 class PasswordServiceTest extends TestCase
 {
-    private const DEFAULT_PARAMETERS = [
-        'firstname' => 'Test',
-        'lastname' => 'testa',
-        'email' => 'Test.testaaa@etu.univ-lyon1.fr',
-        'password' => 'test',
-        'password-confirm' => 'test'
-    ];
     private const TEST_EMAIL = 'test.test@etu.univ-lyon1.fr';
     private Account $validAccount;
     private Person $person;

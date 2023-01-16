@@ -33,7 +33,6 @@ class PasswordContactExecutorTest extends TestCase
     private UrlUtils $urlUtils;
     private ContactDAO $contactDAO;
     private ContactExecutor $executor;
-    private Redirect $redirect;
 
 
     public function setUp(): void
@@ -43,11 +42,11 @@ class PasswordContactExecutorTest extends TestCase
         $this->random = $this->createMock(Random::class);
         $this->urlUtils = $this->createMock(UrlUtils::class);
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
+        $redirect = $this->createMock(Redirect::class);
 
         $this->executor = new PasswordContactExecutor(
             $this->contactDAO,
-            $this->redirect,
+            $redirect,
             $this->personDAO,
             $this->accountDAO,
             $this->random,
@@ -98,12 +97,6 @@ class PasswordContactExecutorTest extends TestCase
     {
 
         $person = PersonBuilder::aPerson()->withId(1)->build();
-        $account = new Account(
-            1,
-            self::DEFAULT_PARAMS['senderEmail'],
-            $person,
-            new Password(self::DEFAULT_PARAMS['password'])
-        );
 
         $this->personDAO->method('getPerson')
             ->with(new Identity('test1', 'test2'))
@@ -124,12 +117,6 @@ class PasswordContactExecutorTest extends TestCase
     {
 
         $person = PersonBuilder::aPerson()->withId(1)->build();
-        $account = new Account(
-            1,
-            self::DEFAULT_PARAMS['senderEmail'],
-            $person,
-            new Password(self::DEFAULT_PARAMS['password'])
-        );
 
         $identity = new Identity('test1', 'test2');
 
