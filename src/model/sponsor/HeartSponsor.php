@@ -19,13 +19,13 @@ class HeartSponsor extends Sponsor implements JsonSerializable
     /**
      * @param int $id Id of the sponsor
      * @param Person $godFather Godfather of the sponsor
-     * @param Person $godSon Godson of the sponsor
+     * @param Person $godChild Godson of the sponsor
      * @param string $date Date of the sponsor
      * @param string $description Reason of the sponsor
      */
-    public function __construct(int $id, Person $godFather, Person $godSon, string $date, string $description)
+    public function __construct(int $id, Person $godFather, Person $godChild, string $date, string $description)
     {
-        parent::__construct($id, $godFather, $godSon, $date);
+        parent::__construct($id, $godFather, $godChild, $date);
         $this->description = $description;
     }
 

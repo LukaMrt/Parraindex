@@ -22,7 +22,7 @@ abstract class Sponsor implements JsonSerializable
     /**
      * @var ?Person The godchild of the sponsor
      */
-    private ?Person $godSon;
+    private ?Person $godChild;
     /**
      * @var DateTime|null The date of the sponsor
      */
@@ -31,15 +31,15 @@ abstract class Sponsor implements JsonSerializable
 
     /**
      * @param int $id The id of the sponsor
-     * @param Person $godFather The godfather of the sponsor
-     * @param Person $godSon The godchild of the sponsor
+     * @param ?Person $godFather The godfather of the sponsor
+     * @param ?Person $godChild The godchild of the sponsor
      * @param string $date The date of the sponsor
      */
-    protected function __construct(int $id, Person $godFather, Person $godSon, string $date)
+    protected function __construct(int $id, ?Person $godFather, ?Person $godChild, string $date)
     {
         $this->id = $id;
         $this->godFather = $godFather;
-        $this->godSon = $godSon;
+        $this->godChild = $godChild;
         $this->date = null;
 
         if ($date) {
@@ -86,7 +86,7 @@ abstract class Sponsor implements JsonSerializable
      */
     public function getGodChild(): Person
     {
-        return $this->godSon;
+        return $this->godChild;
     }
 
 
@@ -96,10 +96,10 @@ abstract class Sponsor implements JsonSerializable
      * @param bool $force If true, the godchild will be set even if it is null
      * @return void
      */
-    public function setGodSon(?Person $godSon, bool $force = false): void
+    public function setGodChild(?Person $godSon, bool $force = false): void
     {
         if ($force || $godSon) {
-            $this->godSon = $godSon;
+            $this->godChild = $godSon;
         }
     }
 

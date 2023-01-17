@@ -166,7 +166,7 @@ class PersonService
         $person->setCharacteristics($data["person"]->getCharacteristics());
 
         foreach ($data["godFathers"] as $sponsor) {
-            $sponsor->setGodSon(null, true);
+            $sponsor->setGodChild(null, true);
             $sponsor->getGodFather()->setCharacteristics([]);
             $person->addSponsors([$sponsor]);
         }

@@ -81,7 +81,7 @@ class SponsorService
         $godFather = $this->personDAO->getPersonById($sponsor->getGodFather()->getId());
         $godSon = $this->personDAO->getPersonById($sponsor->getGodChild()->getId());
         $sponsor->setGodFather($godFather);
-        $sponsor->setGodSon($godSon);
+        $sponsor->setGodChild($godSon);
         return $sponsor;
     }
 
