@@ -1,0 +1,106 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.sponsor {
+
+  width: 90%;
+  flex-grow: 1;
+  @include m.flex($justify: space-evenly);
+  gap: f.rem(10);
+
+  &__content {
+
+    @include m.flex($direction: row);
+    width: 60%;
+
+    @include b.breakpoint(large) {
+      width: 90%;
+    }
+
+
+    &-link {
+      flex-grow: 1;
+
+      @include m.flex();
+      gap: f.rem(50);
+      width: 70%;
+
+      &-date {
+        letter-spacing: f.rem(2);
+        color: var(--dark-grey);
+        text-align: center;
+      }
+
+      &-line {
+        position: relative;
+        width: 70%;
+        height: 3px;
+        background-color: var(--dark-grey);
+
+        &:before,
+        &:after {
+          content: "";
+          display: block;
+          position: absolute;
+          width: 10px;
+          aspect-ratio: 1/1;
+          border-radius: 50%;
+          background-color: var(--dark-grey);
+
+          left: 0;
+          top: 50%;
+          translate: -50% -50%;
+        }
+
+        &:after {
+          left: 100%;
+        }
+      }
+
+      &-icon {
+        width: 30px;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        translate: -50% -50%;
+      }
+
+      @include b.breakpoint(medium) {
+        order: 1;
+      }
+
+      @include b.breakpoint(small) {
+        order: 0;
+      }
+    }
+
+    @include b.breakpoint(medium) {
+      flex-wrap: wrap;
+    }
+  }
+
+  &__actions {
+    img {
+      position: absolute;
+
+      right: 5%;
+      bottom: 10%;
+      border-radius: 50%;
+      transition: all 150ms ease-in-out;
+      @include m.hard-box-shadow();
+
+      &:hover {
+        scale: 1.1;
+        filter: invert(1);
+      }
+
+      @include b.breakpoint(small) {
+        position: static;
+      }
+    }
+  }
+
+}

@@ -1,0 +1,105 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.contact {
+
+  @include m.flex($direction: column, $justify: space-between, $align: normal);
+  gap: f.rem(6);
+
+  width: min(f.rem(400), 100%);
+  min-height: f.rem(250);
+  height: 100%;
+  border-radius: f.rem(30);
+  padding: clamp(0px, 2%, f.rem(40)) clamp(f.rem(20), 3%, f.rem(40));
+
+  @include m.hard-box-shadow();
+
+  &__header {
+    @include m.flex($direction: row, $justify: space-between);
+    gap: f.rem(10);
+
+    @include b.breakpoint(small) {
+      flex-direction: column;
+    }
+  }
+
+  &__date {
+    @include m.flex($align: flex-end);
+    gap: f.rem(10);
+
+    &-hour {
+      font-weight: 400;
+    }
+  }
+
+  h2 {
+    text-align: left;
+  }
+
+  &__author {
+    display: flex;
+    gap: f.rem(5);
+
+    a {
+      text-decoration: underline;
+      flex-grow: 1;
+      text-align: right;
+    }
+  }
+
+  &__message {
+    flex-grow: 1;
+    word-break: break-word;
+  }
+
+  &__actions {
+    @include m.flex($direction: row);
+    gap: f.rem(20);
+    width: 100%;
+
+    &-button {
+      flex-grow: 1;
+      padding: 5px 10px;
+      border-radius: 20px;
+      background-color: var(--dark-blue);
+      color: var(--white);
+      text-align: center;
+
+      &:hover {
+        cursor: pointer;
+      }
+
+      &--yellow {
+        flex-grow: 9;
+        background-color: var(--dark-yellow);
+      }
+
+      &--red {
+        flex-grow: 9;
+        background-color: var(--dark-red);
+      }
+
+      &--green {
+        flex-grow: 9;
+        background-color: var(--dark-green);
+      }
+
+      &--blue {
+        background-color: var(--light-blue);
+      }
+    }
+  }
+
+  hr {
+    width: 20%;
+    background-color: var(--light-grey);
+    border: none;
+    height: 2px;
+    margin: 10px auto;
+  }
+
+  &--bold {
+    font-weight: 400;
+  }
+}

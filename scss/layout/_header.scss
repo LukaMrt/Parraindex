@@ -1,0 +1,83 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.header {
+
+  @include m.flex($direction: row, $align: center);
+  flex-wrap: wrap;
+  gap: f.rem(10) f.rem(35);
+
+  width: 100%;
+  min-height: f.rem(80);
+
+  padding: 0 f.rem(50);
+  box-sizing: border-box;
+
+  &__title {
+    @include m.flex(center, center, row);
+    gap: f.rem(16);
+
+    font-size: f.rem(16);
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  &__logo {
+    height: f.rem(50);
+    aspect-ratio: 1/1;
+  }
+
+  &__login {
+    @include m.flex($direction: row, $justify: flex-end);
+
+    gap: inherit;
+    flex-wrap: wrap;
+    margin-left: auto;
+
+    & > * {
+      @include m.flex();
+      width: f.rem(100);
+    }
+
+    &-picture {
+      border-radius: 50%;
+      height: f.rem(50);
+      aspect-ratio: 1/1;
+      object-fit: cover;
+
+      border: 3px solid transparent;
+      @include m.hard-box-shadow();
+
+      transition: scale 0.15s ease-in-out;
+
+      &:active {
+        scale: 0.95;
+      }
+    }
+
+    &-link {
+      height: 100%;
+      color: var(--dark-grey);
+      transition: color 0.3s ease;
+
+      &:hover {
+        color: var(--dark-blue);
+      }
+    }
+
+    @include b.breakpoint(header) {
+      justify-content: space-evenly;
+      width: 90%;
+      margin: 0;
+    }
+  }
+
+  @include b.breakpoint(header) {
+    @include m.hard-box-shadow();
+    justify-content: center;
+    padding: f.rem(20) 0;
+  }
+
+}

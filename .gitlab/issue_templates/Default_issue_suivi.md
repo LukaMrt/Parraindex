@@ -1,14 +1,19 @@
-# Titre de la tâche
-Suivi de projet avec le tuteur
+# Title
 
-## Objectifs généraux
-Les objectifs de la tâche de suivi sont :
-- Faire le bilan de ce qui a été effectué
-- Si possible, faire une démonstration du livrable de fin de sprint et obtenir le feedback du PO
-- Définir les objectifs du sprint à venir
+Project monitoring with the tutor
 
-## Informations
-Toutes informations pertinentes pour faciliter la réalisation de la tâche/issue (ex.: répartition des tâches sur les membres)
+## General information
 
-## Description détaillée
-Description détaillée, par membre, si besoin
+The objectives of the monitoring task are:
+
+- Do a review of what has been done
+- If possible, do a demo of the end of sprint deliverable and get the PO's feedback
+- Define the next sprint's objectives
+
+## Information
+
+Relevant information to facilitate the realization of the task/issue (ex.: distribution of tasks among members)
+
+## Detailed description
+
+Detailed description, by member, if needed

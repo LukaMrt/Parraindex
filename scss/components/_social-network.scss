@@ -1,0 +1,25 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+
+.social-network {
+
+  transition: all 150ms;
+
+  width: f.rem(25);
+  height: f.rem(25);
+
+  background-color: var(--dark-blue);
+  border-radius: 50%;
+  @include m.flex();
+
+  &__icon {
+    width: 50%;
+    aspect-ratio: 1/1;
+  }
+
+  &:hover {
+    filter: invert(1);
+    scale: 1.2;
+  }
+
+}

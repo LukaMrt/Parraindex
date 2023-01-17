@@ -1,0 +1,60 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.spinner {
+  @include m.flex($direction: row);
+  box-sizing: border-box;
+  gap: f.rem(5);
+
+  @include b.breakpoint(small) {
+    width: 70%;
+    padding: f.rem(10) f.rem(30);
+    justify-content: space-around;
+    border-radius: f.rem(50);
+  }
+
+  &__container-date {
+    @include m.flex($direction: row, $justify: space-between);
+    white-space: nowrap;
+    cursor: alias;
+    width: f.rem(80);
+  }
+
+  &__dates {
+
+    &--start {
+      color: var(--dark-grey);
+    }
+
+    &--end {
+      font-weight: 700;
+    }
+  }
+
+  &__selector {
+    @include m.flex();
+    gap: f.rem(5) f.rem(10);
+
+    @include b.breakpoint(small) {
+      flex-direction: row;
+    }
+  }
+
+  &__down,
+  &__up {
+    box-sizing: border-box;
+    width: f.rem(20);
+    aspect-ratio: 1/1;
+    border-radius: 50%;
+    cursor: pointer;
+
+    @include b.breakpoint(small) {
+      width: f.rem(30);
+    }
+  }
+
+  &__down {
+    border: 1px solid var(--dark-blue);
+  }
+}

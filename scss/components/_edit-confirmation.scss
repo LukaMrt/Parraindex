@@ -1,0 +1,120 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+
+.confirm {
+  @include m.flex($direction: row, $justify: space-between);
+  pointer-events: none;
+  position: absolute;
+  gap: f.rem(10) f.rem(20);
+
+  left: 10%;
+  right: 10%;
+  bottom: 1vh;
+
+  &__prev {
+    pointer-events: all;
+
+    img {
+      rotate: -90deg;
+      width: f.rem(40);
+      aspect-ratio: 1/1;
+    }
+  }
+
+  &__action {
+    @include m.flex($direction: row);
+    gap: inherit;
+    pointer-events: all;
+
+    #download-person {
+
+      position: absolute;
+      right: -10%;
+
+      pointer-events: all;
+      @include m.flex();
+      height: f.rem(50);
+      aspect-ratio: 1/1;
+      box-sizing: border-box;
+      border-radius: 50%;
+
+      background-color: var(--white);
+      border: 1px solid var(--dark-blue);
+      transition: scale 0.2s ease;
+
+      img {
+        width: 40%;
+        aspect-ratio: 1/1;
+        object-fit: contain;
+      }
+
+      &:active {
+        scale: 0.9;
+      }
+
+      @include b.breakpoint(medium) {
+        display: none;
+      }
+    }
+
+    #delete-person {
+      position: relative;
+      overflow: hidden;
+      width: f.rem(150);
+      z-index: 10;
+
+      &::before {
+        transition: width 0.8s ease;
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 0;
+        height: 100%;
+        background-color: #ec5757;
+        z-index: -1;
+      }
+
+      &.sure {
+
+        animation: forwards suppression 1.2s ease;
+
+        &::before {
+          width: 100%;
+        }
+
+      }
+
+      @keyframes suppression {
+        0% {
+          color: var(--dark-blue);
+        }
+        20% {
+          color: transparent;
+        }
+        70% {
+          color: transparent;
+        }
+        100% {
+          color: white;
+        }
+      }
+    }
+
+    @include b.breakpoint(small) {
+      flex-wrap: wrap;
+    }
+  }
+
+  @include b.breakpoint(medium) {
+    position: relative;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: wrap;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+}

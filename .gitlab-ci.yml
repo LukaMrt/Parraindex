@@ -1,0 +1,63 @@
+stages:
+  - test
+  - deploy
+
+run_tests:
+  stage: test
+  image: php:latest
+  before_script:
+    - apt update -yqq
+    - apt install -yqq git libpq-dev libcurl4-gnutls-dev libicu-dev libvpx-dev libjpeg-dev
+    - apt install -yqq libpng-dev libxpm-dev zlib1g-dev libfreetype6-dev libxml2-dev libexpat1-dev
+    - apt install -yqq libbz2-dev libgmp3-dev libldap2-dev unixodbc-dev libsqlite3-dev libaspell-dev
+    - apt install -yqq libsnmp-dev libpcre3-dev libtidy-dev libonig-dev libzip-dev
+    - docker-php-ext-install mbstring pdo_pgsql curl intl gd xml zip bz2 opcache
+    - curl -sS https://getcomposer.org/installer | php
+    - php composer.phar install
+  script:
+    - vendor/bin/phpunit --configuration phpunit.xml --coverage-text --colors=never
+
+run_deploy_dev:
+  stage: deploy
+  image: debian:stable-slim
+  environment:
+    name: develop
+    url: https://dev.parraindex.com
+  before_script:
+    - apt update && apt install -yqq curl
+  #    - apt update && apt install -yqq openssh-client
+  #    - chmod 400 $SSH_KEY
+  script:
+    - echo "Deploying to develop"
+  #    - ssh -o StrictHostKeyChecking=no -p 55 -i $SSH_KEY parraindex@lukamaret.com "
+  #        cd /var/www/dev.parraindex.com &&
+  #        git checkout develop &&
+  #        git pull &&
+  #        composer update &&
+  #        composer install --no-interaction --prefer-dist --optimize-autoloader &&
+  #        sass --update scss:public/css"
+  only:
+    - develop
+    - main
+
+run_deploy_prod:
+  stage: deploy
+  image: debian:stable-slim
+  environment:
+    name: production
+    url: https://parraindex.com
+  before_script:
+    - apt update && apt install -yqq curl
+  #    - apt update && apt install -yqq openssh-client
+  #    - chmod 400 $SSH_KEY
+  script:
+    - echo "Deploying to production"
+  #    - ssh -o StrictHostKeyChecking=no -p 55 -i $SSH_KEY parraindex@lukamaret.com "
+  #        cd /var/www/parraindex.com &&
+  #        git checkout main &&
+  #        git pull &&
+  #        composer update &&
+  #        composer install --no-interaction --prefer-dist --optimize-autoloader &&
+  #        sass --update scss:public/css"
+  only:
+    - main

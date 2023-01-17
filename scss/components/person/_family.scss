@@ -1,0 +1,116 @@
+@use "../../abstracts/functions" as f;
+@use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
+
+.person-family {
+  height: 100%;
+  @include m.flex();
+  gap: f.rem(16);
+
+  @include b.breakpoint(medium) {
+    width: 80%;
+  }
+
+  &__title {
+    text-align: center;
+    color: var(--medium-grey);
+    text-transform: uppercase;
+    letter-spacing: f.rem(5);
+  }
+
+  &__wrapper {
+    @include m.flex();
+
+    width: min(50vh, 50vw);
+    aspect-ratio: 1/1;
+
+    margin: f.rem(50);
+    border-radius: 50%;
+    border: solid 2px var(--medium-grey);
+    position: relative;
+
+    &:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 100%;
+      border-top: 2px var(--medium-grey) dashed;
+      z-index: -1;
+    }
+
+    @include b.breakpoint(medium) {
+      width: 100%;
+    }
+  }
+
+  &__portrait {
+    @include m.flex(center, center, column);
+    position: relative;
+    width: f.rem(150);
+
+    @include b.breakpoint(medium) {
+      width: f.rem(50);
+      height: f.rem(50);
+    }
+
+    &--godfather {
+      position: absolute;
+      translate: -50% -50%;
+    }
+
+    &--godchild {
+      position: absolute;
+      translate: -50% 50%;
+    }
+
+    &--personal {
+      transition: width .5s ease-in-out;
+      border-radius: 50%;
+      object-fit: cover;
+      width: f.rem(150);
+      aspect-ratio: 1/1;
+
+      @include m.hard-box-shadow();
+
+      &:hover {
+        width: 70%;
+      }
+    }
+
+    &-image {
+      width: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      aspect-ratio: 1/1;
+      border: solid 0.5px var(--medium-grey);
+      opacity: 1;
+      transition: opacity .5s;
+    }
+
+    &-name {
+      position: absolute;
+      opacity: 0;
+      transition: opacity .5s;
+      font-size: f.rem(20);
+      text-align: center;
+      text-transform: capitalize;
+      color: var(--dark-blue);
+      z-index: 10;
+    }
+
+    &:hover {
+      z-index: 10;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+
+      .person-family__portrait-name {
+        opacity: 1;
+      }
+
+      .person-family__portrait-image {
+        opacity: 0.1;
+      }
+    }
+  }
+
+}

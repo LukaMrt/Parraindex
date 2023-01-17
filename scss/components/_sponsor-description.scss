@@ -1,0 +1,15 @@
+@use "../abstracts/mixins" as m;
+@use "../abstracts/functions" as f;
+@use "../abstracts/breakpoints" as b;
+
+.sponsor-description {
+  @include m.flex(center, center, column);
+  gap: f.rem(15);
+  width: 100%;
+  text-align: justify;
+  text-align-last: center;
+
+  p {
+    width: min(90%, 70ch);
+  }
+}

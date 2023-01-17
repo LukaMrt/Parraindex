@@ -1,0 +1,31 @@
+@use "../../abstracts/functions" as f;
+@use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
+
+.person-actions {
+
+  @include m.flex(center, center, row);
+  gap: f.rem(50);
+
+  @include b.breakpoint(medium) {
+    margin: f.rem(10) 0;
+  }
+
+  &__image {
+    @include m.hard-box-shadow();
+    border-radius: 50%;
+    transition: all 150ms;
+    width: f.rem(40);
+    height: f.rem(40);
+
+    &--rotate {
+      transform: rotate(270deg);
+    }
+
+    &:hover {
+      filter: invert(1);
+      scale: 1.2;
+    }
+  }
+
+}

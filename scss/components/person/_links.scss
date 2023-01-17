@@ -1,0 +1,61 @@
+@use "../../abstracts/functions" as f;
+@use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
+
+.person-link {
+  height: min(300px, 40%);
+  position: absolute;
+  bottom: 0;
+  right: 5%;
+  @include m.flex($justify: flex-start);
+  gap: f.rem(16);
+
+  @include b.breakpoint(large) {
+    border-top: solid 3px var(--dark-blue);
+    padding-bottom: f.rem(32);
+    width: 90%;
+    justify-content: space-around;
+    position: relative;
+    flex-direction: row;
+    right: 0;
+  }
+
+  &__image {
+    aspect-ratio: 1/1;
+    object-fit: contain;
+  }
+
+  &__wrapper {
+    transition: all 150ms;
+    @include m.hard-box-shadow();
+    height: f.rem(24);
+    width: f.rem(24);
+
+    padding: f.rem(8);
+    background-color: var(--dark-blue);
+    border-radius: 50%;
+
+    @include b.breakpoint(large) {
+      translate: 0 -50%;
+    }
+
+    &:hover {
+      filter: invert(1);
+      scale: 1.2;
+    }
+  }
+
+  &::before {
+    content: "";
+    z-index: -1;
+    position: absolute;
+    height: 100%;
+    width: 2px;
+    border-left: solid 5px var(--dark-blue);
+
+    @include b.breakpoint(large) {
+      content: None;
+    }
+  }
+
+}

@@ -1,0 +1,26 @@
+@use "../../abstracts/functions" as f;
+@use "../../abstracts/mixins" as m;
+@use "../../abstracts/breakpoints" as b;
+
+.person-content {
+  width: 100%;
+  flex-grow: 1;
+
+  @include m.flex();
+
+  @include b.breakpoint(medium) {
+    width: 100%;
+    padding-right: 0;
+  }
+
+  &__description {
+    @include m.flex($direction: row, $justify: space-evenly);
+    gap: f.rem(50) 0;
+    width: 90%;
+
+    @include b.breakpoint(medium) {
+      flex-direction: column;
+    }
+  }
+
+}

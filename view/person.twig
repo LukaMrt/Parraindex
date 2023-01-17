@@ -1,0 +1,37 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('person.css') %}
+{% set title = 'Parraindex -  ' ~ person.firstName %}
+
+{% block javascripts %}
+    <script src="{{ script("person.js") }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="person-content">
+
+        <div class="person-content__description">
+            {% include 'components/person/family.twig' with {
+                'router': router,
+                'person': person,
+                'godFathers': godFathers,
+                'godChildren': godChildren,
+            } %}
+
+            {% include 'components/person/description.twig' with {
+                'person': person,
+                'characteristics': person.characteristics
+            } %}
+        </div>
+
+        {% include 'components/person/actions.twig' with {
+            'router': router,
+            'admin': admin,
+            'person': person
+        } %}
+
+    </div>
+
+
+{% endblock %}

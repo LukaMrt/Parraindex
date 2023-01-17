@@ -1,0 +1,60 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('login.css') %}
+{% set title = 'Parraindex - Connexion' %}
+
+{% block javascripts %}
+    <script type="module" src="{{ script('login.js') }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <form class="form" action="{{ router.url("login_post") }}" method="post">
+
+        <h1 class="form__title">Connexion</h1>
+
+        <div class="form-content">
+
+            {% include "components/form/input.twig" with {
+                'type': 'email',
+                'slug': 'login',
+                'title': 'Email universitaire',
+                'placeholder': 'john.doe@etu.univ-lyon1.fr',
+                'pattern' : '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
+            } %}
+
+            {% include "components/form/input.twig" with {
+                'type': 'password',
+                'slug': 'password',
+                'title': 'Mot de passe',
+                'placeholder': '••••••••••',
+                'pattern': '.+',
+            } %}
+
+            <div class="form-block form-block--row form-block--space-around">
+                {% include "components/link.twig" with{
+                    'prefix': 'Vous n\'avez pas encore de compte ?',
+                    'title': 'Cliquez ici',
+                    'href': router.url('signup_get')
+                } %}
+                {% include "components/button.twig" with {
+                    'type': 'submit',
+                    'button_content': 'Envoyer',
+                    'priority': 'primary',
+                    'name': 'action',
+                    'value': 'login'
+                } %}
+            </div>
+
+            {% include "components/link.twig" with{
+                'option': 'link--row',
+                'prefix': 'Mot de passe oublié ?',
+                'title': 'Cliquez ici',
+                'href': router.url('resetpassword_get')
+            } %}
+
+        </div>
+
+    </form>
+
+{% endblock %}

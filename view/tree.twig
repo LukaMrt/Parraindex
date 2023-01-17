@@ -1,0 +1,15 @@
+{% extends '/layouts/default.twig' %}
+
+{% set style = style('tree.css') %}
+{% set title = 'Parraindex - Affichage' %}
+
+{% block javascripts %}
+    <script src='{{ script("carousel.js") }}' defer></script>
+{% endblock %}
+
+{% block content %}
+
+    {% include('components/carousel.twig') %}
+    {% include('components/carousel-controller.twig') %}
+
+{% endblock %}

@@ -1,0 +1,40 @@
+@use "../abstracts/functions" as f;
+@use "../abstracts/mixins" as m;
+@use "../abstracts/breakpoints" as b;
+
+.navbar {
+  position: absolute;
+
+  @include m.flex(center, space-evenly, row);
+  width: 70%;
+  bottom: 3vh;
+  min-height: 5rem;
+  flex-wrap: wrap;
+
+  gap: f.rem(26) f.rem(20);
+
+  a {
+    width: f.rem(300);
+    font-size: f.rem(25);
+    color: var(--dark-grey);
+    font-weight: 300;
+
+    transition: color 0.3s ease;
+
+    @include b.breakpoint(medium) {
+      &:nth-child(2) {
+        order: 1;
+      }
+    }
+
+    &:hover {
+      color: var(--dark-blue);
+    }
+  }
+
+  @include b.breakpoint(medium) {
+    bottom: 5vh;
+    width: 90%;
+  }
+
+}
