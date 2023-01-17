@@ -276,7 +276,7 @@ class PersonServiceTest extends TestCase
                 ->build()
         ]);
 
-        $person->addSponsor([
+        $person->addSponsors([
             new ClassicSponsor(1, $this->person, $this->person, self::DEFAULT_DATE, ''),
             new ClassicSponsor(2, $this->person, $this->person, self::DEFAULT_DATE, ''),
             new ClassicSponsor(3, $this->person, $this->person, self::DEFAULT_DATE, ''),

@@ -3,11 +3,12 @@
 namespace App\model\sponsor;
 
 use App\model\person\Person;
+use JsonSerializable;
 
 /**
  * Heart sponsor
  */
-class HeartSponsor extends Sponsor
+class HeartSponsor extends Sponsor implements JsonSerializable
 {
     /**
      * @var string Description of the sponsor
@@ -71,5 +72,11 @@ class HeartSponsor extends Sponsor
     public function getTypeId(): int
     {
         return 1;
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return array_merge(parent::jsonSerialize(), get_object_vars($this));
     }
 }

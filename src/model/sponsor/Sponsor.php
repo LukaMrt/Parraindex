@@ -16,13 +16,13 @@ abstract class Sponsor implements JsonSerializable
      */
     private int $id;
     /**
-     * @var Person The godfather of the sponsor
+     * @var ?Person The godfather of the sponsor
      */
-    private Person $godFather;
+    private ?Person $godFather;
     /**
-     * @var Person The godchild of the sponsor
+     * @var ?Person The godchild of the sponsor
      */
-    private Person $godSon;
+    private ?Person $godSon;
     /**
      * @var DateTime|null The date of the sponsor
      */
@@ -69,10 +69,14 @@ abstract class Sponsor implements JsonSerializable
     /**
      * Sets the godfather of the sponsor
      * @param Person|null $godFather The new godfather of the sponsor
+     * @param bool $force If true, the godchild will be set even if it is null
      * @return void
      */
-    public function setGodFather(?Person $godFather): void
+    public function setGodFather(?Person $godFather, bool $force = false): void
     {
+        if ($force || $godFather) {
+            $this->godFather = $godFather;
+        }
         $this->godFather = $godFather ?? $this->godFather;
     }
 
@@ -89,11 +93,14 @@ abstract class Sponsor implements JsonSerializable
     /**
      * Sets the godchild of the sponsor
      * @param Person|null $godSon The new godchild of the sponsor
+     * @param bool $force If true, the godchild will be set even if it is null
      * @return void
      */
-    public function setGodSon(?Person $godSon): void
+    public function setGodSon(?Person $godSon, bool $force = false): void
     {
-        $this->godSon = $godSon ?? $this->godSon;
+        if ($force || $godSon) {
+            $this->godSon = $godSon;
+        }
     }
 
 

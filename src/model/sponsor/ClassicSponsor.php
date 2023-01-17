@@ -3,11 +3,12 @@
 namespace App\model\sponsor;
 
 use App\model\person\Person;
+use JsonSerializable;
 
 /**
  * Classic sponsor
  */
-class ClassicSponsor extends Sponsor
+class ClassicSponsor extends Sponsor implements JsonSerializable
 {
     /**
      * @var string Reason of the sponsor
@@ -71,5 +72,11 @@ class ClassicSponsor extends Sponsor
     public function getTypeId(): int
     {
         return 0;
+    }
+
+
+    public function jsonSerialize(): array
+    {
+        return array_merge(parent::jsonSerialize(), get_object_vars($this));
     }
 }
