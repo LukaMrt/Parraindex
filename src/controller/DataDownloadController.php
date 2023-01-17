@@ -4,6 +4,9 @@ namespace App\controller;
 
 use App\infrastructure\router\Router;
 use App\model\account\PrivilegeType;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Controller to download data

@@ -44,7 +44,7 @@ class AboutController extends Controller
         $authors = [
             $this->personService->getPersonByIdentity(new Identity("Lilian", "Baudry")),
             $this->personService->getPersonByIdentity(new Identity("Melvyn", "Delpree")),
-            $this->personService->getPersonByIdentity(new Identity("Vincent", "Chavot Dambrun")),
+            $this->personService->getPersonByIdentity(new Identity("Vincent", "Chavot--Dambrun")),
             $this->personService->getPersonByIdentity(new Identity("Luka", "Maret"))
         ];
 

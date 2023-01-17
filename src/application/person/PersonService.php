@@ -164,8 +164,18 @@ class PersonService
 
         $data = $this->sponsorDAO->getPersonFamily($personId);
         $person->setCharacteristics($data["person"]->getCharacteristics());
-        $person->addSponsor($data["godFathers"]);
-        $person->addSponsor($data["godChildren"]);
+
+        foreach ($data["godFathers"] as $sponsor) {
+            $sponsor->setGodChild(null, true);
+            $sponsor->getGodFather()->setCharacteristics([]);
+            $person->addSponsors([$sponsor]);
+        }
+
+        foreach ($data["godChildren"] as $sponsor) {
+            $sponsor->setGodFather(null, true);
+            $sponsor->getGodChild()->setCharacteristics([]);
+            $person->addSponsors([$sponsor]);
+        }
 
         return $person;
     }

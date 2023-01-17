@@ -1,14 +1,14 @@
 # Parraindex
 
-<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
-[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat-square)](#contributors)
-<!-- ALL-CONTRIBUTORS-BADGE:END -->
-
+[![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 ![GitHub language count](https://img.shields.io/github/languages/count/lukamrt/parraindex)
 ![GitHub](https://img.shields.io/github/license/lukamrt/parraindex)
+<!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
+[![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat)](#contributors)
+<!-- ALL-CONTRIBUTORS-BADGE:END -->
 
 ## About the project
 
@@ -70,17 +70,17 @@ To launch the project, you need to follow these steps:
    
    # Database
    DRIVER="mysql"              # Database driver (mysql, pgsql, sqlite, ...)
-   HOST="host"                 # Host of the database
+   HOST="host"                 # Host of the database (ip or domain name)
    PORT="3306"                 # Port of the database (default for mariadb: 3306)
-   DATABASE="database"         # Name of the database
-   USERNAME="user"             # Username of the database
-   PASSWORD="password"         # Password of the database
+   DATABASE="database"         # Name of the used database
+   USERNAME="user"             # Username used to connect to the database
+   PASSWORD="password"         # Password of the user used to connect to the database
    
    # Mail
-   MAIL_HOST="host"            # Host of the mail account
-   MAIL_PORT="587"             # Port of the mail account (default: 587)
-   MAIL_USERNAME="username"    # Username of the mail account
-   MAIL_PASSWORD="password"    # Password of the mail account
+   MAIL_HOST="host"            # Host of the mail server (ip or domain name)
+   MAIL_PORT="587"             # Port of the mail server (default: 587)
+   MAIL_USERNAME="username"    # Username used to connect to the mail server
+   MAIL_PASSWORD="password"    # Password of the user used to connect to the mail server
    ```
 
 5. Build the CSS files with `sass --update scss:public/css` or `composer sass` if you want to watch the changes
@@ -104,7 +104,7 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     <tr>
       <td align="center"><a href="https://lukamaret.com"><img src="https://avatars.githubusercontent.com/u/48085295?v=4?s=100" width="100px;" alt="Luka Maret"/><br /><sub><b>Luka Maret</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=LukaMrt" title="Code">💻</a> <a href="#infra-LukaMrt" title="Infrastructure (Hosting, Build-Tools, etc)">🚇</a> <a href="#projectManagement-LukaMrt" title="Project Management">📆</a> <a href="https://github.com/LukaMrt/Parraindex/commits?author=LukaMrt" title="Tests">⚠️</a> <a href="#" title="Documentation">📖</a></td>
       <td align="center"><a href="https://irophin.github.io/CV-Web/"><img src="https://avatars.githubusercontent.com/u/62310861?v=4?s=100" width="100px;" alt="Lilian Baudry"/><br /><sub><b>Lilian Baudry</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=Irophin" title="Code">💻</a> <a href="#" title="Review">👀</a> <a href="#" title="Ideas">🤔</a> <a href="#" title="Design">🎨</a></td>
-      <td align="center"><a href="https://github.com/Melvyn27"><img src="https://avatars.githubusercontent.com/u/93776074?v=4?s=100" width="100px;" alt="Melvyn Delpree"/><br /><sub><b>Melvyn Delpree</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=Melvyn27" title="Code">💻</a> <a href="#" title="Design">🎨</a><a href="#" title="Documentation">📖 ️</a></td>
+      <td align="center"><a href="https://github.com/Melvyn27"><img src="https://avatars.githubusercontent.com/u/93776074?v=4?s=100" width="100px;" alt="Melvyn Delpree"/><br /><sub><b>Melvyn Delpree</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=Melvyn27" title="Code">💻</a> <a href="#" title="Design">🎨</a> <a href="#" title="Documentation">📖</a></td>
       <td align="center"><a href="https://github.com/415K7467"><img src="https://avatars.githubusercontent.com/u/93972726?v=4?s=100" width="100px;" alt="Vincent Chavot-Dambrun"/><br /><sub><b>Vincent Chavot-Dambrun</b></sub></a><br /><a href="https://github.com/LukaMrt/Parraindex/commits?author=415K7467" title="Code">💻</a></td>
     </tr>
   </tbody>

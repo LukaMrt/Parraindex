@@ -210,7 +210,7 @@ class Person implements JsonSerializable
      * Add Sponsors to the person
      * @param array $sponsors New sponsors of the person
      */
-    public function addSponsor(array $sponsors): void
+    public function addSponsors(array $sponsors): void
     {
         $this->sponsors = array_merge($this->sponsors, $sponsors);
     }

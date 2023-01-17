@@ -34,7 +34,7 @@ abstract class Contact
     private string $contactDate;
 
     /**
-     * @var int The date where the contact message was resolved
+     * @var ?string The date where the contact message was resolved
      */
     private ?string $contactResolution;
 
@@ -42,7 +42,7 @@ abstract class Contact
     /**
      * @param int $id The id of the contact
      * @param string $contactDate The date where the contact message was sent
-     * @param string $contactResolution The date where the contact message was resolved
+     * @param ?string $contactResolution The date where the contact message was resolved
      * @param string $contacterName The name of the person who sent the contact
      * @param string $contacterEmail The email of the person who sent the contact
      * @param ContactType $type The type of the contact
@@ -60,7 +60,7 @@ abstract class Contact
         $this->id = $id;
         $this->contactDate = $contactDate;
         $this->contactResolution = $contactResolution;
-        $this->contacterName = $contacterName;
+        $this->contacterName = ucwords(strtolower($contacterName));
         $this->contacterEmail = $contacterEmail;
         $this->type = $type;
         $this->description = $description;
@@ -122,7 +122,7 @@ abstract class Contact
 
 
     /**
-     * @return int The date where the contact message was resolved
+     * @return string The date where the contact message was resolved
      */
     public function getContactDate(): string
     {
@@ -131,7 +131,7 @@ abstract class Contact
 
 
     /**
-     * @return int The date where the contact message was resolved
+     * @return ?string The date where the contact message was resolved
      */
     public function getContactResolution(): ?string
     {

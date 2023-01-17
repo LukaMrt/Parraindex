@@ -86,7 +86,7 @@ SQL
                                     SELECT *
 									FROM TypeCharacteristic
 									    LEFT JOIN (SELECT * FROM Characteristic WHERE id_person = :id_person)
-									        AS C USING (id_network);
+									        AS C USING (id_network)
                                     ORDER BY characteristic_order
 SQL
         );

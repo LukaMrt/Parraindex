@@ -36,8 +36,8 @@ class Identity implements JsonSerializable
      */
     public function __construct(string $firstName, string $lastName, ?string $picture = null, ?string $birthdate = null)
     {
-        $this->firstName = $firstName;
-        $this->lastName = $lastName;
+        $this->firstName = ucwords(strtolower($firstName));
+        $this->lastName = ucwords(strtolower($lastName));
         $this->picture = $picture ?? 'no-picture.svg';
 
         if ($birthdate) {

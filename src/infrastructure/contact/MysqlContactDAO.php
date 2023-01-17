@@ -1,6 +1,6 @@
 <?php
 
-namespace App\infrastructure\database\contact;
+namespace App\infrastructure\contact;
 
 use App\application\contact\ContactDAO;
 use App\infrastructure\database\DatabaseConnection;
@@ -44,7 +44,7 @@ class MysqlContactDAO implements ContactDAO
 
         $query = $connection->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
-                            VALUES (:type, NOW(), :name, :email, :description)
+                            VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([
@@ -57,7 +57,7 @@ SQL
         $ticketId = $connection->lastInsertId();
         $query = $connection->prepare(<<<SQL
                             INSERT INTO EditPerson (id_ticket, first_name, last_name, entry_year)
-                            VALUES (:id_ticket, :firstname, :lastname, :entry_year)
+                            VALUES (:id_ticket, LOWER(:firstname), LOWER(:lastname), :entry_year)
 SQL
         );
 
@@ -94,7 +94,7 @@ SQL
 
         $query = $connection->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
-                            VALUES (:type, NOW(), :name, :email, :description)
+                            VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([
@@ -107,7 +107,7 @@ SQL
         $ticketId = $connection->lastInsertId();
         $query = $connection->prepare(<<<SQL
                             INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
-                            VALUES (:id_ticket, :id_person, :firstname, :lastname, :entry_year)
+                            VALUES (:id_ticket, :id_person, LOWER(:firstname), LOWER(:lastname), :entry_year)
 SQL
         );
         $query->execute([
@@ -134,7 +134,7 @@ SQL
 
         $query = $connection->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
-                            VALUES (:type, NOW(), :name, :email, :description)
+                            VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([
@@ -160,7 +160,7 @@ SQL
 
         $query = $connection->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
-                            VALUES (:type, NOW(), :name, :email, :description)
+                            VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([

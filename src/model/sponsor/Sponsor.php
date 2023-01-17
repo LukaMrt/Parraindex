@@ -16,13 +16,13 @@ abstract class Sponsor implements JsonSerializable
      */
     private int $id;
     /**
-     * @var Person The godfather of the sponsor
+     * @var ?Person The godfather of the sponsor
      */
-    private Person $godFather;
+    private ?Person $godFather;
     /**
-     * @var Person The godchild of the sponsor
+     * @var ?Person The godchild of the sponsor
      */
-    private Person $godSon;
+    private ?Person $godChild;
     /**
      * @var DateTime|null The date of the sponsor
      */
@@ -31,15 +31,15 @@ abstract class Sponsor implements JsonSerializable
 
     /**
      * @param int $id The id of the sponsor
-     * @param Person $godFather The godfather of the sponsor
-     * @param Person $godSon The godchild of the sponsor
+     * @param ?Person $godFather The godfather of the sponsor
+     * @param ?Person $godChild The godchild of the sponsor
      * @param string $date The date of the sponsor
      */
-    protected function __construct(int $id, Person $godFather, Person $godSon, string $date)
+    protected function __construct(int $id, ?Person $godFather, ?Person $godChild, string $date)
     {
         $this->id = $id;
         $this->godFather = $godFather;
-        $this->godSon = $godSon;
+        $this->godChild = $godChild;
         $this->date = null;
 
         if ($date) {
@@ -69,10 +69,14 @@ abstract class Sponsor implements JsonSerializable
     /**
      * Sets the godfather of the sponsor
      * @param Person|null $godFather The new godfather of the sponsor
+     * @param bool $force If true, the godchild will be set even if it is null
      * @return void
      */
-    public function setGodFather(?Person $godFather): void
+    public function setGodFather(?Person $godFather, bool $force = false): void
     {
+        if ($force || $godFather) {
+            $this->godFather = $godFather;
+        }
         $this->godFather = $godFather ?? $this->godFather;
     }
 
@@ -82,18 +86,21 @@ abstract class Sponsor implements JsonSerializable
      */
     public function getGodChild(): Person
     {
-        return $this->godSon;
+        return $this->godChild;
     }
 
 
     /**
      * Sets the godchild of the sponsor
      * @param Person|null $godSon The new godchild of the sponsor
+     * @param bool $force If true, the godchild will be set even if it is null
      * @return void
      */
-    public function setGodSon(?Person $godSon): void
+    public function setGodChild(?Person $godSon, bool $force = false): void
     {
-        $this->godSon = $godSon ?? $this->godSon;
+        if ($force || $godSon) {
+            $this->godChild = $godSon;
+        }
     }
 
 

@@ -276,11 +276,19 @@ class PersonServiceTest extends TestCase
                 ->build()
         ]);
 
-        $person->addSponsor([
-            new ClassicSponsor(1, $this->person, $this->person, self::DEFAULT_DATE, ''),
-            new ClassicSponsor(2, $this->person, $this->person, self::DEFAULT_DATE, ''),
-            new ClassicSponsor(3, $this->person, $this->person, self::DEFAULT_DATE, ''),
-            new ClassicSponsor(4, $this->person, $this->person, self::DEFAULT_DATE, ''),
+        $personWithoutCharacteristics = PersonBuilder::aPerson()
+            ->withId(1)
+            ->withIdentity(new Identity('test', 'test', 'test'))
+            ->withBiography('test')
+            ->withDescription('test')
+            ->withColor('test')
+            ->build();
+
+        $person->addSponsors([
+            new ClassicSponsor(1, $personWithoutCharacteristics, null, self::DEFAULT_DATE, ''),
+            new ClassicSponsor(2, $personWithoutCharacteristics, null, self::DEFAULT_DATE, ''),
+            new ClassicSponsor(3, null, $personWithoutCharacteristics, self::DEFAULT_DATE, ''),
+            new ClassicSponsor(4, null, $personWithoutCharacteristics, self::DEFAULT_DATE, ''),
         ]);
 
         $this->sponsorDAO->method('getPersonFamily')
@@ -288,12 +296,12 @@ class PersonServiceTest extends TestCase
             ->willReturn([
                 'person' => $person,
                 'godFathers' => [
-                    new ClassicSponsor(1, $this->person, $this->person, self::DEFAULT_DATE, ''),
-                    new ClassicSponsor(2, $this->person, $this->person, self::DEFAULT_DATE, '')
+                    new ClassicSponsor(1, $personWithoutCharacteristics, null, self::DEFAULT_DATE, ''),
+                    new ClassicSponsor(2, $personWithoutCharacteristics, null, self::DEFAULT_DATE, '')
                 ],
                 'godChildren' => [
-                    new ClassicSponsor(3, $this->person, $this->person, self::DEFAULT_DATE, ''),
-                    new ClassicSponsor(4, $this->person, $this->person, self::DEFAULT_DATE, '')
+                    new ClassicSponsor(3, null, $personWithoutCharacteristics, self::DEFAULT_DATE, ''),
+                    new ClassicSponsor(4, null, $personWithoutCharacteristics, self::DEFAULT_DATE, '')
                 ],
             ]);
 

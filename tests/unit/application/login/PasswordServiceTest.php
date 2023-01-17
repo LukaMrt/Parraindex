@@ -137,7 +137,7 @@ class PasswordServiceTest extends TestCase
             ->with(
                 self::TEST_EMAIL,
                 'Parraindex : réinitialisation de mot de passe',
-                "Bonjour test test,<br><br>Votre demande de réinitialisation de mot de passe "
+                "Bonjour Test Test,<br><br>Votre demande de réinitialisation de mot de passe "
                 . "a bien été enregistrée, merci de cliquer sur ce lien pour la valider : "
                 . "<a href=\"http://localhost/password/reset/1\">"
                 . "http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss"
