@@ -1,6 +1,6 @@
 <?php
 
-namespace App\infrastructure\accountService;
+namespace App\infrastructure\account;
 
 use App\application\login\AccountDAO;
 use App\infrastructure\database\DatabaseConnection;
@@ -68,7 +68,7 @@ class MysqlAccountDAO implements AccountDAO
 
         $query = $connection->prepare(<<<SQL
                             INSERT INTO Account (email, password, id_person)
-                            VALUES (:email, :password, :person)
+                            VALUES (LOWER(:email), :password, :person)
 SQL
         );
         $query->execute([
@@ -79,7 +79,7 @@ SQL
 
         $query = $connection->prepare(<<<SQL
                             INSERT INTO Privilege (id_account, id_school, privilege_name)
-                            VALUES ((SELECT id_account FROM Account WHERE email = :email), 1, 'STUDENT')
+                            VALUES ((SELECT id_account FROM Account WHERE LOWER(email) = LOWER(:email)), 1, 'STUDENT')
 SQL
         );
         $query->execute(['email' => $account->getLogin()]);
@@ -97,7 +97,7 @@ SQL
     {
         $connection = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT * FROM Account WHERE email = :email");
+        $query = $connection->prepare("SELECT * FROM Account WHERE LOWER(email) = LOWER(:email)");
         $query->execute(['email' => $login]);
         $result = $query->fetch();
 
@@ -141,7 +141,7 @@ SQL
 
         $query = $connection->prepare(<<<SQL
                                 INSERT INTO TemporaryAccount (email, password, id_person, link)
-                                VALUES (:email, :password, :person, :link)
+                                VALUES (LOWER(:email), :password, :person, :link)
 SQL
         );
         $query->execute([
@@ -214,7 +214,7 @@ SQL
                             FROM Account A
                                 LEFT JOIN Privilege P on A.id_account = P.id_account
                                 JOIN School S on S.id_school = P.id_school
-                            WHERE email = :email
+                            WHERE LOWER(email) = LOWER(:email)
 SQL
         );
 

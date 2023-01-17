@@ -164,8 +164,8 @@ SQL
         $query = $connection->prepare(<<<SQL
                         SELECT *
                         FROM Person
-                        WHERE LOWER(first_name) = :first_name
-                          AND LOWER(last_name) = :last_name
+                        WHERE LOWER(first_name) = LOWER(:first_name)
+                          AND LOWER(last_name) =  LOWER(:last_name)
                         LIMIT 1
 SQL
         );
@@ -248,7 +248,7 @@ SQL
         $connection = $this->databaseConnection->getDatabase();
         $query = $connection->prepare(<<<SQL
             UPDATE Person
-            SET first_name = :firstName, last_name = :lastName, biography = :biography,
+            SET first_name = LOWER(:firstName), last_name = LOWER(:lastName), biography = :biography,
 			    banner_color = :bannerColor, description = :description, picture = :picture
 			WHERE id_person = :id
 SQL
@@ -319,7 +319,7 @@ SQL
                                     LEFT JOIN Characteristic C on Pe.id_person = C.id_person
                                     LEFT JOIN TypeCharacteristic T on C.id_network = T.id_network
                                     LEFT JOIN Account A on Pe.id_person = A.id_person
-                                WHERE A.email = :login
+                                WHERE LOWER(A.email) = LOWER(:login)
 SQL
         );
 
@@ -347,7 +347,8 @@ SQL
         $connection = $this->databaseConnection->getDatabase();
         $query = $connection->prepare(<<<SQL
                             INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture)
-                            VALUES (:firstName, :lastName, :biography, :bannerColor, :description, :picture)
+                            VALUES (LOWER(:firstName), LOWER(:lastName), :biography,
+                                    :bannerColor, :description, :picture)
 SQL
         );
 
