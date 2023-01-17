@@ -5,14 +5,12 @@
 .title {
   @include m.flex();
 
-  translate: 0 -50%;
+  translate: 0 -25%;
   width: 90%;
   height: 20vh;
 
   @include b.breakpoint(header) {
-    position: absolute;
-    translate: 0 0;
-    top: 28%;
+    top: 40%;
 
     &__prefix {
       display: None;
