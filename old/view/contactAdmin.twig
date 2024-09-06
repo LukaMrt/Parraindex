@@ -1,0 +1,164 @@
+{% extends '/old/view/layouts/default.twig' %}
+
+{% set style = style('contactAdmin.css') %}
+{% set title = 'Parraindex - Contact' %}
+
+{% block javascripts %}
+    <script type="module" src="{{ script('contactAdmin.js') }}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="admin">
+
+        <div class="admin__header">
+            <h1>Liste des demandes de contact</h1>
+            <div>
+                <a class="btn btn--primary" href="{{ router.url('editperson_get', {'id': 0}) }}">Ajouter une
+                    personne</a>
+                <a class="btn btn--primary" href="{{ router.url('editsponsor_get', {'id': 0}) }}">Ajouter un lien</a>
+            </div>
+        </div>
+
+        <div class="admin__wrapper">
+            <div class="admin__filter">
+                <h2>Filtres</h2>
+                <div class="admin__filter__list">
+
+                    <label for="new">
+                        Nouveaux
+                        <input type="radio" name="admin_filter" value="all" checked id="new">
+                    </label>
+
+                    {% for type in typeContact %}
+                        <label for="type-{{ type.id }}">
+                            {{ type.title }}
+                            <input type="radio" name="admin_filter" value="{{ type.id }}" id="type-{{ type.id }}">
+                        </label>
+                    {% endfor %}
+
+                    <label for="resolved">
+                        Résolus
+                        <input type="radio" name="admin_filter" value="resolved" id="resolved">
+                    </label>
+
+                </div>
+            </div>
+
+            <div class="admin__content">
+                <h2 class="admin__counter">
+                </h2>
+
+                <div class="admin__contacts">
+
+                    {% for contact in contacts %}
+
+                        <div class="contact type-{{ contact.typeId }} {% if contact.contactresolution %}resolved{% endif %}">
+                            <div class="contact__header">
+                                <h3>
+                                    {{ contact.type }}
+                                </h3>
+
+                                <div class="contact__date">
+                                    <p class="contact__date-day">
+                                        {{ contact.ContactDate | date('d/m/Y') }}
+                                    </p>
+                                    <p class="contact__date-hour">
+                                        {{ contact.ContactDate | date('H:i') }}
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="contact__author">
+                                de
+                                <strong>
+                                    {{ contact.contacterName }}
+                                </strong>
+
+                                <a href="mailto:{{ contact.contacterEmail }}">
+                                    {{ contact.contacterEmail }}
+                                </a>
+
+                            </div>
+
+                            <hr>
+
+                            <p class="contact__message">
+                                <span class="contact--bold">
+                                    Remarques :
+                                </span>
+                                {{ contact.message | raw }}
+                            </p>
+
+                            <div class="contact__other">
+                                {% for line in contact.description %}
+                                    <p>
+                                        <span class="contact--bold">{{ line[0] }} :</span> {{ line[1] }}
+                                    </p>
+                                {% endfor %}
+                            </div>
+
+
+                            <div class="contact__actions">
+
+                                {% if not contact.contactresolution %}
+
+                                    {% if contact.typeId == 0 or contact.typeId == 3 or contact.typeid == 9 %}
+
+                                        <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}"
+                                           class="contact__actions-button contact__actions-button--green"
+                                        >Créer</a>
+
+                                    {% endif %}
+
+                                    {% if contact.typeId == 1 %}
+
+                                        <a rel="noopener" target="_blank"
+                                           href="{{ router.url('editperson_get', {'id': contact.person.id}) }}"
+                                           class="contact__actions-button contact__actions-button--yellow"
+                                        >Éditer</a>
+
+                                    {% endif %}
+
+                                    {% if contact.typeId == 4 %}
+
+                                        <a rel="noopener" target="_blank"
+                                           href="{{ router.url('editsponsor_get', {'id': contact.sponsor.id}) }}"
+                                           class="contact__actions-button contact__actions-button--yellow"
+                                        >Éditer</a>
+
+                                    {% endif %}
+
+                                    {% if contact.typeId == 2 or contact.typeId == 5 %}
+
+                                        <a href="{{ router.url('contact_close_resolve', {'id': contact.id, 'resolve': 'true'}) }}"
+                                           class="contact__actions-button contact__actions-button--red"
+                                        >Supprimer</a>
+
+                                    {% endif %}
+
+                                    <a href="{{ router.url('contact_close', {'id': contact.id, 'resolve': 'false'}) }}"
+                                       class="contact__actions-button"
+                                    >Clore</a>
+
+                                {% else %}
+
+                                    <div class="contact__actions-button contact__actions-button--blue">
+                                        Résolu - {{ contact.contactresolution | date('d/m/Y') }}
+                                    </div>
+
+                                {% endif %}
+
+                            </div>
+
+                        </div>
+
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

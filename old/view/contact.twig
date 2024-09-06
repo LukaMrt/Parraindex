@@ -1,0 +1,176 @@
+{% extends '/old/view/layouts/default.twig' %}
+
+{% set style = style('contact.css') %}
+{% set title = 'Parraindex - Contact' %}
+
+{% block javascripts %}
+    <script type="module" src="{{ script("contact.js") }}"></script>
+{% endblock %}
+
+{% block content %}
+
+    <form class="form form--big" action="{{ router.url('contact_post') }}" method="post">
+
+        <h1 class="form__title">Formulaire de contact</h1>
+
+        <div class="form-content">
+
+            {% include "components/form/select.twig" with {
+                'slug': 'type',
+                'title': 'Objet du message',
+                'options': options,
+            } %}
+
+            <div class="form-block form-block--row">
+
+                {% include "components/form/input.twig" with {
+                    'type': 'text',
+                    'slug': 'senderFirstName',
+                    'title': 'Votre prénom',
+                    'value': login.user.firstName,
+                    'placeholder': 'John',
+                    'pattern': '.+',
+                    'readonly': login.login is not empty
+                } %}
+
+                {% include "components/form/input.twig" with {
+                    'type': 'text',
+                    'slug': 'senderLastName',
+                    'title': 'Votre nom',
+                    'value': login.user.lastName,
+                    'placeholder': 'Doe',
+                    'pattern': '.+',
+                    'readonly': login.login is not empty
+                } %}
+
+            </div>
+
+            {% include "components/form/input.twig" with {
+                'type': 'email',
+                'slug': 'senderEmail',
+                'title': 'Votre email',
+                'value': login.login,
+                'placeholder': 'john.doe@gmail.com',
+                'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$",
+                'readonly': login.login is not empty
+            } %}
+
+            <div class="form-block form-block--row option option-0">
+
+                {% include "components/form/input.twig" with {
+                    'type': 'text',
+                    'slug': 'creationFirstName',
+                    'title': 'Prénom de la personne',
+                    'placeholder': 'John',
+                    'pattern': '.+',
+                    'classes': 'option option-0'
+                } %}
+
+                {% include "components/form/input.twig" with {
+                    'type': 'text',
+                    'slug': 'creationLastName',
+                    'title': 'Nom de la personne',
+                    'placeholder': 'Doe',
+                    'pattern': '.+',
+                    'classes': 'option option-0'
+                } %}
+
+            </div>
+
+            {% include "components/form/input.twig" with {
+                'type': 'number',
+                'slug': 'entryYear',
+                'title': 'Année d\'entrée à l\'IUT',
+                'value': '2022',
+                'pattern': '^(19|20)\d{2}$',
+                'classes': 'option option-0'
+            } %}
+
+            {% include "components/form/select.twig" with {
+                'slug': 'personId',
+                'title': 'Personne concernée',
+                'options': people,
+                'parent': '^[0-9]+$',
+                'classes': 'option option-1 option-2 option-7'
+            } %}
+
+            <div class="form-block form-block--row option option-3 option-4 option-5">
+
+                {% include "components/form/select.twig" with {
+                    'slug': 'godFatherId',
+                    'title': 'Parrain',
+                    'options': people,
+                    'parent': '^[0-9]+$',
+                    'classes': 'option option-3 option-4 option-5'
+                } %}
+
+                {% include "components/form/select.twig" with {
+                    'slug': 'godChildId',
+                    'title': 'Fillot',
+                    'options': people,
+                    'parent': '^[0-9]+$',
+                    'classes': 'option option-3 option-4 option-5'
+                } %}
+
+            </div>
+
+            {% include "components/form/select.twig" with {
+                'slug': 'sponsorType',
+                'title': 'Type de parrainage',
+                'options': sponsorTypes,
+                'parent': '^[0-9]$',
+                'classes': 'option option-3'
+            } %}
+
+            {% include "components/form/input.twig" with {
+                'type': 'date',
+                'slug': 'sponsorDate',
+                'title': 'Date du parrainage',
+                'value': '2022-09-01',
+                'pattern': '.+',
+                'classes': 'option option-3'
+            } %}
+
+            {% include "components/form/input.twig" with {
+                'type': 'password',
+                'slug': 'password',
+                'title': 'Mot de passe',
+                'placeholder': '••••••••••',
+                'pattern': '.+',
+                'classes': 'option option-9'
+            } %}
+
+            {% include "components/form/input.twig" with {
+                'type': 'password',
+                'slug': 'passwordConfirm',
+                'title': 'Confirmation du mot de passe',
+                'placeholder': '••••••••••',
+                'pattern': '.+',
+                'classes': 'option option-9'
+            } %}
+
+            {% include "components/form/textarea.twig" with {
+                'slug': 'message',
+                'title': 'Message',
+                'pattern': '.+',
+                'classes': 'option option-1 option-2 option-4 option-5 option-6 option-7 option-8'
+            } %}
+
+            {% include "components/form/textarea.twig" with {
+                'slug': 'bonusInformation',
+                'title': 'Informations complémentaires',
+                'classes': 'option option-0 option-3 option-9',
+                'required': 'false'
+            } %}
+
+            {% include "components/button.twig" with {
+                'type': 'submit',
+                'button_content': 'Envoyer',
+                'priority': 'primary'
+            } %}
+
+        </div>
+
+    </form>
+
+{% endblock %}

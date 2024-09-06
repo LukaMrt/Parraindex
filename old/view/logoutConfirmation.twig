@@ -1,0 +1,17 @@
+{% extends '/old/view/layouts/default.twig' %}
+
+{% set style = style('signupConfirmation.css') %}
+{% set title = 'Parraindex - Inscription' %}
+
+{% block javascripts %}
+    <script type="module" src="{{ script("logoutConfirmation.js") }}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="signup_confirm">
+        <p>Vous avez bien été déconnecté</p>
+        <a href="{{ router.url('home') }}">Cliquez ici si vous n'êtes pas automatiquement redirigé</a>
+    </div>
+
+{% endblock %}

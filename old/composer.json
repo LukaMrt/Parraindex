@@ -1,0 +1,91 @@
+{
+  "name": "likavynent/parraindex",
+  "description": "School project for the third semester of french Computer Science Bachelor",
+  "type": "project",
+  "license": "MIT",
+  "autoload": {
+    "psr-4": {
+      "App\\": "src/"
+    }
+  },
+  "authors": [
+    {
+      "name": "Luka MARET",
+      "email": "maret.luka@gmail.com"
+    },
+    {
+      "name": "Lilian BAUDRY",
+      "email": "lilian.baudry21@gmail.com"
+    },
+    {
+      "name": "Melvyn DELPREE",
+      "email": "melvyn2701@gmail.com"
+    },
+    {
+      "name": "Vincent CHAVOT-DAMBRUN",
+      "email": "vincent.chavotdambrun@gmail.com"
+    }
+  ],
+  "require": {
+    "vendor/altorouter/altorouter": "^2.0",
+    "ext-pdo": "*",
+    "ext-zip": "*",
+    "ext-fileinfo": "*",
+    "vendor/filp/whoops": "^2.15",
+    "vendor/monolog/monolog": "^3.7",
+    "vendor/php-di/php-di": "^7.0",
+    "vendor/phpmailer/phpmailer": "^6.9",
+    "vendor/symfony/var-dumper": "^7.1",
+    "vendor/twig/twig": "^3.12",
+    "vendor/vlucas/phpdotenv": "^5.6"
+  },
+  "scripts": {
+    "tests": [
+      "Composer\\Config::disableProcessTimeout",
+      "@putenv XDEBUG_MODE=coverage",
+      "vendor/bin/phpunit"
+    ],
+    "server": [
+      "Composer\\Config::disableProcessTimeout",
+      "php -S localhost:8000 -t public"
+    ],
+    "sass": [
+      "Composer\\Config::disableProcessTimeout",
+      "sass --watch scss:public/css"
+    ],
+    "documentation": [
+      "Composer\\Config::disableProcessTimeout",
+      "phpDocumentor -d src/ -t out/documentation/ --title Parraindoc"
+    ],
+    "mutating": [
+      "Composer\\Config::disableProcessTimeout",
+      "vendor/bin/phpunit",
+      "infection --threads=4"
+    ],
+    "sniffer": [
+      "Composer\\Config::disableProcessTimeout",
+      "vendor/bin/phpcs --standard=phpcs.xml"
+    ],
+    "sniffer-fix": [
+      "Composer\\Config::disableProcessTimeout",
+      "vendor/bin/phpcbf --standard=phpcs.xml"
+    ],
+    "clean": [
+      "Composer\\Config::disableProcessTimeout",
+      "rm -rf out",
+      "rm -rf var",
+      "rm -rf .phpdoc",
+      "rm -f .phpunit.result.cache"
+    ]
+  },
+  "require-dev": {
+    "vendor/squizlabs/php_codesniffer": "^3.10",
+    "vendor/phpunit/phpunit": "^11.3",
+    "vendor/infection/infection": "^0.29"
+  },
+  "config": {
+    "allow-plugins": {
+      "infection/extension-installer": true
+    }
+  }
+}
