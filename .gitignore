@@ -126,3 +126,5 @@ coverage-report.xml
 *.css
 
 *.map
+
+docker/
