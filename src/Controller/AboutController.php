@@ -3,8 +3,8 @@
 namespace App\Controller;
 
 use App\Application\person\PersonService;
-use App\Entity\old\person\Identity;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class AboutController extends AbstractController
@@ -15,15 +15,15 @@ class AboutController extends AbstractController
     }
 
     #[Route('/about', name: 'about')]
-    public function index(): void
+    public function index(): Response
     {
         $authors = [
-            $this->personService->getPersonByIdentity(new Identity("Lilian", "Baudry")),
-            $this->personService->getPersonByIdentity(new Identity("Melvyn", "Delpree")),
-            $this->personService->getPersonByIdentity(new Identity("Vincent", "Chavot--Dambrun")),
-            $this->personService->getPersonByIdentity(new Identity("Luka", "Maret"))
+            $this->personService->getPersonByIdentity("Lilian", "Baudry"),
+            $this->personService->getPersonByIdentity("Melvyn", "Delpree"),
+            $this->personService->getPersonByIdentity("Vincent", "Chavot--Dambrun"),
+            $this->personService->getPersonByIdentity("Luka", "Maret"),
         ];
 
-        $this->render('about.html.twig', ['authors' => $authors]);
+        return $this->render('about.html.twig', ['authors' => $authors]);
     }
 }

@@ -3,191 +3,91 @@
 namespace App\Application\person;
 
 use App\Application\logging\Logger;
-use App\Application\login\SessionManager;
-use App\Application\sponsor\SponsorDAO;
-use App\Entity\old\person\Identity;
-use App\Entity\old\person\Person;
-use App\Entity\old\person\PersonBuilder;
+use App\Entity\Person;
+use App\Repository\PersonRepository;
 
-/**
- * Do person relate actions
- */
-class PersonService
+readonly class PersonService
 {
-    /**
-     * @var PersonDAO Person data access object
-     */
-    private PersonDAO $personDAO;
-
-    /**
-     * @var SponsorDAO Sponsor data access object
-     */
-    private SponsorDAO $sponsorDAO;
-
-    /**
-     * @var SessionManager Session manager
-     */
-    private SessionManager $sessionManager;
-
-    /**
-     * @var Logger Logger
-     */
-    private Logger $logger;
-
-
-    /**
-     * @param PersonDAO $personDAO Person data access object
-     * @param SessionManager $sessionManager Session manager
-     * @param Logger $logger Logger
-     */
     public function __construct(
-        PersonDAO $personDAO,
-        SessionManager $sessionManager,
-        Logger $logger,
-        SponsorDAO $sponsorDAO
+        private PersonRepository $personRepository,
+        private Logger           $logger,
     ) {
-        $this->personDAO = $personDAO;
-        $this->sponsorDAO = $sponsorDAO;
-        $this->sessionManager = $sessionManager;
-        $this->logger = $logger;
     }
 
-
     /**
-     * Get all persons
-     * @return array
+     * @return Person[]
      */
     public function getAllPeople(): array
     {
-        return $this->personDAO->getAllPeople();
+        return $this->personRepository->getAll();
     }
 
-
-    /**
-     * Get person by login
-     * @param string $login Login
-     * @return Person|null
-     */
     public function getPersonByLogin(string $login): ?Person
     {
-        return $this->personDAO->getPersonByLogin($login);
+        return $this->personRepository->getByEmail($login);
     }
 
-
-    /**
-     * Update person
-     * @param array $parameters Parameters
-     * @return void
-     */
-    public function updatePerson(array $parameters): void
+    public function getPersonByIdentity(string $firstName, string $lastName): ?Person
     {
-        $person = PersonBuilder::aPerson()
-            ->withId($parameters['id'])
-            ->withIdentity(new Identity($parameters['first_name'], $parameters['last_name'], $parameters['picture']))
-            ->withBiography($parameters['biography'])
-            ->withDescription($parameters['description'])
-            ->withColor($parameters['color'])
-            ->build();
-
-        $this->logger->info(
-            PersonService::class,
-            'Person ' . $parameters['first_name'] . ' ' . $parameters['last_name'] . ' updated.'
-        );
-
-        if ($this->sessionManager->get('user')->getId() === $person->getId()) {
-            $this->sessionManager->set('user', $person);
-        }
-
-
-        $this->personDAO->updatePerson($person);
+        return $this->personRepository->getByIdentity($firstName, $lastName);
     }
 
-
-    /**
-     * Get person by identity
-     * @param Identity $identity Identity
-     * @return Person|null
-     */
-    public function getPersonByIdentity(Identity $identity): ?Person
-    {
-        return $this->personDAO->getPerson($identity);
-    }
-
-
-    /**
-     * Create person
-     * @param array $parameters Parameters
-     * @return int
-     */
-    public function createPerson(array $parameters): int
-    {
-        $person = PersonBuilder::aPerson()
-            ->withIdentity(new Identity($parameters['first_name'], $parameters['last_name'], $parameters['picture']))
-            ->withBiography($parameters['biography'])
-            ->withDescription($parameters['description'])
-            ->withColor($parameters['color'])
-            ->withStartYear($parameters['start_year'] ?? 2022)
-            ->build();
-
-        $this->logger->info(
-            PersonService::class,
-            'Person ' . $parameters['first_name'] . ' ' . $parameters['last_name'] . ' created.'
-        );
-
-        return $this->personDAO->createPerson($person);
-    }
-
-
-    /**
-     * Delete person
-     * @param Person $person Person
-     * @return void
-     */
     public function deletePerson(Person $person): void
     {
-        $this->personDAO->deletePerson($person);
+        $this->logger->info(
+            PersonService::class,
+            'Person ' . $person->getFirstName() . ' ' . $person->getLastName() . ' deleted.'
+        );
+
+        $this->personRepository->delete($person);
     }
 
-
-    /**
-     * Retrieves all data from a person
-     * @param int $personId Id of the person
-     * @return ?Person Person with full data
-     */
-    public function getPersonData(int $personId): ?Person
-    {
-        $person = $this->personDAO->getPersonById($personId);
-
-        if ($person === null) {
-            return null;
-        }
-
-        $data = $this->sponsorDAO->getPersonFamily($personId);
-        $person->setCharacteristics($data["person"]->getCharacteristics());
-
-        foreach ($data["godFathers"] as $sponsor) {
-            $sponsor->setGodChild(null, true);
-            $sponsor->getGodFather()->setCharacteristics([]);
-            $person->addSponsors([$sponsor]);
-        }
-
-        foreach ($data["godChildren"] as $sponsor) {
-            $sponsor->setGodFather(null, true);
-            $sponsor->getGodChild()->setCharacteristics([]);
-            $person->addSponsors([$sponsor]);
-        }
-
-        return $person;
-    }
-
-
-    /**
-     * Get person by id
-     * @param int $id Id
-     * @return Person|null
-     */
     public function getPersonById(int $id): ?Person
     {
-        return $this->personDAO->getPersonById($id);
+        return $this->personRepository->getById($id);
+    }
+
+    public function updatePerson(array $parameters): void
+    {
+        $person = $this->personRepository->getById($parameters['id']);
+
+        if ($person === null) {
+            return;
+        }
+
+        $person->setFirstName($parameters['first_name'])
+            ->setLastName($parameters['last_name'])
+            ->setPicture($parameters['picture'])
+            ->setBiography($parameters['biography'])
+            ->setDescription($parameters['description'])
+            ->setColor($parameters['color'])
+            ->setStartYear($parameters['start_year']);
+
+        $this->logger->info(
+            self::class,
+            'Person ' . $person->getFirstName() . ' ' . $person->getLastName() . ' updated.'
+        );
+
+        $this->personRepository->update($person);
+    }
+
+    public function createPerson(array $parameters): void
+    {
+        $person = (new Person())
+            ->setFirstName($parameters['first_name'])
+            ->setLastName($parameters['last_name'])
+            ->setPicture($parameters['picture'])
+            ->setBiography($parameters['biography'])
+            ->setDescription($parameters['description'])
+            ->setColor($parameters['color'])
+            ->setStartYear($parameters['start_year'])
+            ->setCreatedAt(new \DateTimeImmutable());
+
+        $this->logger->info(
+            self::class,
+            'Person ' . $person->getFirstName() . ' ' . $person->getLastName() . ' created.'
+        );
+
+        $this->personRepository->update($person);
     }
 }

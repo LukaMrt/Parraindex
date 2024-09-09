@@ -1,6 +1,6 @@
 {% extends 'layouts/base.html.twig' %}
 
-{% set style = style('about.css') %}
+{% set style = asset('styles/about.scss') %}
 {% set title = 'Parraindex - À propos' %}
 
 
@@ -10,7 +10,7 @@
 
     <div class="about__description">
 
-        <img class="about__description-logo" src="{{ icon('logo-blue.svg') }}" alt="Logo">
+        <img class="about__description-logo" src="{{ asset('images/icons/logo-blue.svg') }}" alt="Logo">
 
         <div class="about__description-text">
             <p>
@@ -36,7 +36,7 @@
             </p>
             <p>
                 Vous pouvez retrouver
-                <strong><a href="{{ router.url('legalnotice') }}">ici</a></strong>,
+                <strong><a href="{{ url('home') }}">ici</a></strong>,
                 les mentions légales du site.
             </p>
         </div>
@@ -48,8 +48,8 @@
             {% include 'components/aboutcard.twig' with {
                 'firstName': author.firstName,
                 'lastName': author.lastName,
-                'picture': author.picture,
-                'url': router.url('person', {'id': author.id})
+                'picture': 'images/pictures/' ~ author.picture,
+                'url': url('home')
             } %}
         {% endfor %}
 

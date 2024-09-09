@@ -1,6 +1,6 @@
 <header class="header">
 
-    {% if homePage is null %}
+    {% if homePage is defined %}
         <a class="header__title" href="{{ url('home') }}">
             <img class="header__logo" src="{{ asset('images/icons/logo-blue.svg') }}" alt="Logo">
             <p>Parraindex</p>
