@@ -2,7 +2,7 @@
 
 namespace App\Application\person\characteristic;
 
-use App\Entity\person\characteristic\Characteristic;
+use App\Entity\old\person\characteristic\Characteristic;
 
 /**
  * Service to manage the characteristics

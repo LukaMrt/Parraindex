@@ -1,0 +1,34 @@
+<header class="header">
+
+    {% if homePage is null %}
+        <a class="header__title" href="{{ url('home') }}">
+            <img class="header__logo" src="{{ asset('images/icons/logo-blue.svg') }}" alt="Logo">
+            <p>Parraindex</p>
+        </a>
+    {% endif %}
+
+    <div class="header__login">
+        {% if app.user %}
+
+            <a class="header__login-link" href="{{ url('home', {id: app.user.id}) }}">Mon compte</a>
+            <a class="header__login-link" href="{{ url('home', {id: app.user.id}) }}">Modifier</a>
+
+            {% if login.privilege == 'ADMIN' %}
+
+                <a class="header__login-link" href="{{ url('home') }}">Administration</a>
+
+            {% endif %}
+
+            <div>
+                <img class="header__login-picture" src="{{ asset('images/pictures/' . app.user.picture) }}" alt="photo">
+            </div>
+
+            <a class="header__login-link" href="{{ url('home') }}">Déconnexion</a>
+
+        {% else %}
+            <a class="header__login-link" href="{{ url('home') }}">Se connecter</a>
+            <a class="header__login-link" href="{{ url('home') }}">S'inscrire</a>
+        {% endif %}
+    </div>
+
+</header>

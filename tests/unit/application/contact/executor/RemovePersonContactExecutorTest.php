@@ -6,11 +6,11 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\executor\RemovePersonContactExecutor;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\PersonContact;
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
-use App\Entity\person\PersonBuilder;
+use App\Entity\ContactType;
+use App\Entity\old\contact\PersonContact;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
+use App\Entity\old\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
 class RemovePersonContactExecutorTest extends TestCase

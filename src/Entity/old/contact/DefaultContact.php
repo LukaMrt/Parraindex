@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\contact;
+namespace App\Entity\old\contact;
 
 /**
  * Default contact class

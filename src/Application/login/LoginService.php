@@ -5,7 +5,7 @@ namespace App\Application\login;
 use App\Application\logging\Logger;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\account\Password;
+use App\Entity\old\account\Password;
 use JetBrains\PhpStorm\NoReturn;
 
 /**
@@ -75,7 +75,7 @@ class LoginService
             $account = $this->accountDAO->getAccountByLogin($parameters['login']);
 
             $this->sessionManager->set('login', $account->getLogin());
-            $this->sessionManager->set('privilege', $account->getHighestPrivilege()->toString());
+            $this->sessionManager->set('privilege', $account->getRole()->toString());
             $this->sessionManager->set('user', $this->personDAO->getPersonByLogin($account->getLogin()));
 
             $this->logger->info(LoginService::class, 'User ' . $account->getLogin() . ' logged in');

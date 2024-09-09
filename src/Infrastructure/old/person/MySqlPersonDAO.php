@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Infrastructure\person;
+namespace App\Infrastructure\old\person;
 
 use App\Application\person\PersonDAO;
-use App\Entity\person\characteristic\CharacteristicBuilder;
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
-use App\Entity\person\PersonBuilder;
-use App\Entity\school\degree\Degree;
-use App\Entity\school\promotion\Promotion;
-use App\Entity\school\School;
-use App\Entity\school\SchoolAddress;
-use App\Infrastructure\database\DatabaseConnection;
+use App\Entity\old\person\characteristic\CharacteristicBuilder;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\old\school\degree\Degree;
+use App\Entity\old\school\promotion\Promotion;
+use App\Entity\old\school\School;
+use App\Entity\old\school\SchoolAddress;
+use App\Infrastructure\old\database\DatabaseConnection;
 use DateTime;
 
 /**

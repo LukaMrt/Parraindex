@@ -5,7 +5,7 @@ namespace App\Application\contact\executor;
 use App\Application\contact\ContactDAO;
 use App\Application\contact\field\Field;
 use App\Application\redirect\Redirect;
-use App\Entity\contact\ContactType;
+use App\Entity\ContactType;
 
 /**
  * Represents an executor of a contact which perform contact form validation

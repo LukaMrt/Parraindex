@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Entity\person;
+namespace App\Entity\old\person;
 
-use App\Entity\person\characteristic\Characteristic;
-use App\Entity\school\promotion\Promotion;
+use App\Entity\old\person\characteristic\Characteristic;
+use App\Entity\old\school\promotion\Promotion;
 use DateTime;
 
 /**

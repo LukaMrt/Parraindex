@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\field\EmailField;
 use App\Application\contact\field\Field;
 use App\Application\redirect\Redirect;
-use App\Entity\contact\ContactType;
+use App\Entity\ContactType;
 
 /**
  * Contact executor for the reporting of a bug

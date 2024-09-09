@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\login\SignupService;
 use App\Application\person\PersonService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -51,6 +51,6 @@ class SignUpValidationController extends Controller
 
         $error = $this->signupService->validate($parameters['token']);
 
-        $this->render('signupValidation.twig', ['error' => $error]);
+        $this->render('signupValidation.html.twig', ['error' => $error]);
     }
 }

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\logging;
+namespace App\Infrastructure\old\logging;
 
 use App\Application\logging\Logger;
 use Monolog\Handler\NativeMailerHandler;

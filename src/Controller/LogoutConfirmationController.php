@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -23,6 +23,6 @@ class LogoutConfirmationController extends Controller
      */
     public function get(Router $router, array $parameters): void
     {
-        $this->render('logoutConfirmation.twig');
+        $this->render('logoutConfirmation.html.twig');
     }
 }

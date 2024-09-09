@@ -2,7 +2,7 @@
 
 namespace App\Application\sponsor;
 
-use App\Entity\sponsor\Sponsor;
+use App\Entity\old\sponsor\Sponsor;
 
 /**
  * Sponsor data access object

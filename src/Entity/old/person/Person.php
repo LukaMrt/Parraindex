@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Entity\person;
+namespace App\Entity\old\person;
 
-use App\Entity\person\characteristic\Characteristic;
-use App\Entity\sponsor\Sponsor;
+use App\Entity\old\person\characteristic\Characteristic;
+use App\Entity\old\sponsor\Sponsor;
 use JsonSerializable;
 
 /**
@@ -39,18 +39,6 @@ class Person implements JsonSerializable
      * @var Sponsor[] Sponsors of the person
      */
     private array $sponsors;
-    /**
-     * @var array Families of the person
-     */
-    private array $families;
-    /**
-     * @var array Associations of the person
-     */
-    private array $associations;
-    /**
-     * @var array Promotions of the person
-     */
-    private array $promotions;
     /**
      * @var int Start year of the person
      */

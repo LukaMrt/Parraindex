@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity\contact;
+namespace App\Entity\old\contact;
 
-use App\Entity\person\Person;
+use App\Entity\ContactType;
+use App\Entity\old\person\Person;
 
 /**
  * Contact requests related to a person

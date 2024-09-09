@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\random;
+namespace App\Infrastructure\old\random;
 
 use App\Application\random\Random;
 use Exception;

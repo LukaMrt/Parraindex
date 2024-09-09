@@ -6,8 +6,8 @@ use App\Application\contact\ContactService;
 use App\Application\login\SignupService;
 use App\Application\person\PersonService;
 use App\Application\sponsor\SponsorService;
-use App\Entity\account\PrivilegeType;
-use App\Infrastructure\router\Router;
+use App\Entity\Role;
+use App\Infrastructure\old\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 
@@ -61,7 +61,7 @@ class ContactCloseController extends Controller
     #[NoReturn] public function get(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || PrivilegeType::fromString($_SESSION['privilege']) !== PrivilegeType::ADMIN) {
+        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }

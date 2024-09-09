@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\session;
+namespace App\Infrastructure\old\session;
 
 use App\Application\login\SessionManager;
 

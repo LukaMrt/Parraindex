@@ -3,7 +3,7 @@
 namespace App\Controller;
 
 use App\Application\person\PersonService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;

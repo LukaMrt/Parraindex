@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Application\person\PersonService;
 use App\Application\sponsor\SponsorService;
-use App\Entity\account\PrivilegeType;
-use App\Infrastructure\router\Router;
+use App\Entity\Role;
+use App\Infrastructure\old\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -52,7 +52,7 @@ class EditSponsorController extends Controller
     public function get(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || PrivilegeType::fromString($_SESSION['privilege']) !== PrivilegeType::ADMIN) {
+        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }
@@ -87,7 +87,7 @@ class EditSponsorController extends Controller
             usort($sponsorTypes, fn($a, $b) => $a['id'] == $sponsor->getTypeId() ? -1 : 1);
         }
 
-        $this->render('editSponsor.twig', [
+        $this->render('editSponsor.html.twig', [
             'sponsor' => $sponsor,
             'people1' => $people,
             'people2' => $people2,
@@ -104,7 +104,7 @@ class EditSponsorController extends Controller
     #[NoReturn] public function post(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || PrivilegeType::fromString($_SESSION['privilege']) !== PrivilegeType::ADMIN) {
+        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }

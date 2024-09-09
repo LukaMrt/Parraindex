@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -24,6 +24,6 @@ class TreeController extends Controller
     {
         $people = $this->personService->getAllPeople();
         shuffle($people);
-        $this->render('tree.twig', ['people' => $people]);
+        $this->render('tree.html.twig', ['people' => $people]);
     }
 }

@@ -3,7 +3,7 @@
 namespace App\Application\contact;
 
 use App\Application\contact\executor\ContactExecutors;
-use App\Entity\contact\Contact;
+use App\Entity\old\contact\Contact;
 
 /**
  * Service to manage the contacts

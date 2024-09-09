@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructure\redirect;
+namespace App\Infrastructure\old\redirect;
 
 use App\Application\redirect\Redirect;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 
 /**

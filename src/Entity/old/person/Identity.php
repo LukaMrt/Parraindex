@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\person;
+namespace App\Entity\old\person;
 
 use DateTime;
 use JsonSerializable;

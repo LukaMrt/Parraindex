@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\school;
+namespace App\Entity\old\school;
 
 /**
  * Address of a school

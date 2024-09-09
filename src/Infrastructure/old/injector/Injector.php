@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\injector;
+namespace App\Infrastructure\old\injector;
 
 use App\Application\contact\ContactDAO;
 use App\Application\contact\executor\AddPersonContactExecutor;
@@ -48,20 +48,20 @@ use App\Controller\SignUpController;
 use App\Controller\SignUpValidationController;
 use App\Controller\SponsorController;
 use App\Controller\TreeController;
-use App\Infrastructure\account\MysqlAccountDAO;
-use App\Infrastructure\contact\MysqlContactDAO;
-use App\Infrastructure\database\DatabaseConnection;
-use App\Infrastructure\logging\MonologLogger;
-use App\Infrastructure\login\DefaultUrlUtils;
-use App\Infrastructure\mail\PhpMailer;
-use App\Infrastructure\person\characteristic\MysqlCharacteristicDAO;
-use App\Infrastructure\person\characteristic\MysqlCharacteristicTypeDAO;
-use App\Infrastructure\person\MySqlPersonDAO;
-use App\Infrastructure\random\DefaultRandom;
-use App\Infrastructure\redirect\HttpRedirect;
-use App\Infrastructure\router\Router;
-use App\Infrastructure\session\DefaultSessionManager;
-use App\Infrastructure\sponsor\MySqlSponsorDAO;
+use App\Infrastructure\old\account\MysqlAccountDAO;
+use App\Infrastructure\old\contact\MysqlContactDAO;
+use App\Infrastructure\old\database\DatabaseConnection;
+use App\Infrastructure\old\logging\MonologLogger;
+use App\Infrastructure\old\login\DefaultUrlUtils;
+use App\Infrastructure\old\mail\PhpMailer;
+use App\Infrastructure\old\person\characteristic\MysqlCharacteristicDAO;
+use App\Infrastructure\old\person\characteristic\MysqlCharacteristicTypeDAO;
+use App\Infrastructure\old\person\MySqlPersonDAO;
+use App\Infrastructure\old\random\DefaultRandom;
+use App\Infrastructure\old\redirect\HttpRedirect;
+use App\Infrastructure\old\router\Router;
+use App\Infrastructure\old\session\DefaultSessionManager;
+use App\Infrastructure\old\sponsor\MySqlSponsorDAO;
 use DI\Container;
 use DI\ContainerBuilder;
 use DI\DependencyException;
@@ -161,11 +161,11 @@ class Injector
     {
         $twig = new Environment(new FilesystemLoader(Injector . phpdirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
-        $twig->addFunction(new TwigFunction('style', fn(string $path) => '/css/' . $path));
-        $twig->addFunction(new TwigFunction('script', fn(string $path) => '/js/' . $path));
-        $twig->addFunction(new TwigFunction('image', fn(string $path) => '/img/' . $path));
-        $twig->addFunction(new TwigFunction('picture', fn(string $path) => '/img/pictures/' . $path));
-        $twig->addFunction(new TwigFunction('icon', fn(string $path) => '/img/icons/' . $path));
+        $twig->addFunction(new TwigFunction('styles', fn(string $path) => '/css/' . $path));
+        $twig->addFunction(new TwigFunction('scripts', fn(string $path) => '/scripts/' . $path));
+        $twig->addFunction(new TwigFunction('images', fn(string $path) => '/images/' . $path));
+        $twig->addFunction(new TwigFunction('picture', fn(string $path) => '/images/pictures/' . $path));
+        $twig->addFunction(new TwigFunction('icon', fn(string $path) => '/images/icons/' . $path));
 
         return $twig;
     }

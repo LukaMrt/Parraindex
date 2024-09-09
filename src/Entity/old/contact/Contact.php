@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Entity\contact;
+namespace App\Entity\old\contact;
+
+use App\Entity\ContactType;
 
 /**
  * Contact base class which represents a contact request

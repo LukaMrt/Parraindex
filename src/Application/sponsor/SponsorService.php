@@ -3,8 +3,8 @@
 namespace App\Application\sponsor;
 
 use App\Application\person\PersonDAO;
-use App\Entity\sponsor\Sponsor;
-use App\Entity\sponsor\SponsorFactory;
+use App\Entity\old\sponsor\Sponsor;
+use App\Entity\old\sponsor\SponsorFactory;
 
 /**
  * Do sponsor relate actions

@@ -12,9 +12,9 @@ use App\Application\contact\field\NumberField;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\SponsorContact;
-use App\Entity\sponsor\SponsorFactory;
+use App\Entity\ContactType;
+use App\Entity\old\contact\SponsorContact;
+use App\Entity\old\sponsor\SponsorFactory;
 
 /**
  * Contact executor for the adding of a sponsor

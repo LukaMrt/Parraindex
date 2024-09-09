@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Entity\school\promotion;
+namespace App\Entity\old\school\promotion;
 
-use App\Entity\person\Person;
-use App\Entity\school\degree\Degree;
-use App\Entity\school\School;
+use App\Entity\old\person\Person;
+use App\Entity\old\school\degree\Degree;
+use App\Entity\old\school\School;
 use JsonSerializable;
 
 /**

@@ -5,9 +5,9 @@ namespace App\Controller;
 use App\Application\person\characteristic\CharacteristicService;
 use App\Application\person\characteristic\CharacteristicTypeService;
 use App\Application\person\PersonService;
-use App\Entity\account\PrivilegeType;
-use App\Entity\person\PersonBuilder;
-use App\Infrastructure\router\Router;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\Role;
+use App\Infrastructure\old\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -79,7 +79,7 @@ class EditPersonController extends Controller
             die();
         }
 
-        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+        $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
 
         // throw error if user is not admin or the person to edit is not the user
         if (!$isAdmin && $_SESSION['user']->getId() !== $person->getId()) {
@@ -90,7 +90,7 @@ class EditPersonController extends Controller
         $characteristicTypes = $this->characteristicTypeService->getAllCharacteristicTypes();
 
         $this->render(
-            'editPerson.twig',
+            'editPerson.html.twig',
             [
                 'person' => $person,
                 'characteristics' => $characteristicTypes,
@@ -126,7 +126,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
-        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+        $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin) {
             $response['code'] = 403;
             $response['messages'][] = "Vous n'avez pas les droits pour créer une personne";
@@ -139,7 +139,7 @@ class EditPersonController extends Controller
 
         if ($response['code'] === 200) {
             if ($newValues['image']) {
-                $imgPath = 'img/pictures/';
+                $imgPath = 'image/pictures/';
                 file_put_contents($imgPath . $newValues['picture'], $newValues['image']);
             }
 
@@ -326,7 +326,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
-        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+        $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin && $_SESSION['user']->getId() !== $person->getId()) {
             $response['code'] = 403;
             $response['messages'][] = "Vous n'avez pas les droits pour modifier cette personne";
@@ -344,7 +344,7 @@ class EditPersonController extends Controller
 
         if ($response['code'] === 200) {
             if ($newValues['image']) {
-                $imgPath = 'img/pictures/';
+                $imgPath = 'image/pictures/';
                 if ($person->getPicture() != 'no-picture.svg' && file_exists($imgPath . $person->getPicture())) {
                     unlink($imgPath . $person->getPicture());
                 }
@@ -415,7 +415,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
-        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+        $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin) {
             $response['code'] = 403;
             $response['messages'][] = 'Vous devez être Administrateur pour supprimer une personne';
@@ -423,7 +423,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
-        $imgPath = 'img/pictures/';
+        $imgPath = 'image/pictures/';
         $img = $person->getPicture();
         if ($img !== 'no-picture.svg' && file_exists($imgPath . $img)) {
             unlink($imgPath . $img);

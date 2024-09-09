@@ -2,10 +2,10 @@
 
 namespace App\Application\contact;
 
-use App\Entity\contact\Contact;
-use App\Entity\contact\DefaultContact;
-use App\Entity\contact\PersonContact;
-use App\Entity\contact\SponsorContact;
+use App\Entity\old\contact\Contact;
+use App\Entity\old\contact\DefaultContact;
+use App\Entity\old\contact\PersonContact;
+use App\Entity\old\contact\SponsorContact;
 
 /**
  * Class ContactDAO

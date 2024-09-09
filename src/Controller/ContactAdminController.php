@@ -4,9 +4,9 @@ namespace App\Controller;
 
 use App\Application\contact\ContactService;
 use App\Application\person\PersonService;
-use App\Entity\account\PrivilegeType;
-use App\Entity\contact\ContactType;
-use App\Infrastructure\router\Router;
+use App\Entity\ContactType;
+use App\Entity\Role;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -54,7 +54,7 @@ class ContactAdminController extends Controller
     public function get(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || PrivilegeType::fromString($_SESSION['privilege']) !== PrivilegeType::ADMIN) {
+        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }
@@ -62,7 +62,7 @@ class ContactAdminController extends Controller
         $list = $this->contactService->getContactList();
         $types = ContactType::getValues();
 
-        $this->render('contactAdmin.twig', [
+        $this->render('contactAdmin.html.twig', [
             'contacts' => $list,
             'typeContact' => $types
         ]);

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\login\SignupService;
 use App\Application\person\PersonService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -48,7 +48,7 @@ class SignUpController extends Controller
      */
     public function get(Router $router, array $parameters): void
     {
-        $this->render('signup.twig', ['router' => $router]);
+        $this->render('signup.html.twig', ['router' => $router]);
     }
 
 
@@ -73,6 +73,6 @@ class SignUpController extends Controller
 
         $error = $this->signupService->signUp($postParameters);
 
-        $this->render('signup.twig', ['error' => $error]);
+        $this->render('signup.html.twig', ['error' => $error]);
     }
 }

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\login\LoginService;
 use App\Application\person\PersonService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -48,7 +48,7 @@ class LoginController extends Controller
      */
     public function get(Router $router, array $parameters): void
     {
-        $this->render('login.twig', ['router' => $router]);
+        $this->render('login.html.twig', ['router' => $router]);
     }
 
 
@@ -70,6 +70,6 @@ class LoginController extends Controller
 
         $error = $this->loginService->login($formParameters);
 
-        $this->render('login.twig', ['error' => $error ?? '']);
+        $this->render('login.html.twig', ['error' => $error ?? '']);
     }
 }

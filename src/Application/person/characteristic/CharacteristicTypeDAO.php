@@ -2,7 +2,7 @@
 
 namespace App\Application\person\characteristic;
 
-use App\Entity\person\characteristic\Characteristic;
+use App\Entity\old\person\characteristic\Characteristic;
 
 /**
  * DAO for the characteristic type. It is used to manage the characteristic types and their values

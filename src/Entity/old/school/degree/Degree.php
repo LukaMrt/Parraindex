@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\school\degree;
+namespace App\Entity\old\school\degree;
 
 /**
  * Represents a school degree

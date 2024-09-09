@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Infrastructure\contact;
+namespace App\Infrastructure\old\contact;
 
 use App\Application\contact\ContactDAO;
-use App\Entity\contact\Contact;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\DefaultContact;
-use App\Entity\contact\PersonContact;
-use App\Entity\contact\SponsorContact;
-use App\Entity\person\Identity;
-use App\Entity\person\PersonBuilder;
-use App\Entity\sponsor\SponsorFactory;
-use App\Infrastructure\database\DatabaseConnection;
+use App\Entity\ContactType;
+use App\Entity\old\contact\Contact;
+use App\Entity\old\contact\DefaultContact;
+use App\Entity\old\contact\PersonContact;
+use App\Entity\old\contact\SponsorContact;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\old\sponsor\SponsorFactory;
+use App\Infrastructure\old\database\DatabaseConnection;
 
 /**
  * Implementation of the ContactDAO interface for MySQL

@@ -7,8 +7,8 @@ use App\Application\mail\Mailer;
 use App\Application\person\PersonDAO;
 use App\Application\random\Random;
 use App\Application\redirect\Redirect;
-use App\Entity\account\Account;
-use App\Entity\account\Password;
+use App\Entity\old\account\Account;
+use App\Entity\old\account\Password;
 
 /**
  * Service for managing passwords (resetting, changing, etc.)

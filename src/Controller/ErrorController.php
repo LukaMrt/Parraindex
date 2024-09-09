@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -47,6 +47,6 @@ class ErrorController extends Controller
                 die();
         }
 
-        $this->render('error.twig', ['code' => $error['code'], 'message' => $error['message']]);
+        $this->render('error.html.twig', ['code' => $error['code'], 'message' => $error['message']]);
     }
 }

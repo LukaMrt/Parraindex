@@ -2,8 +2,8 @@
 
 namespace App\Controller;
 
-use App\Entity\account\PrivilegeType;
-use App\Infrastructure\router\Router;
+use App\Entity\Role;
+use App\Infrastructure\old\router\Router;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -38,7 +38,7 @@ class DataDownloadController extends Controller
             die();
         }
 
-        $isAdmin = PrivilegeType::fromString($_SESSION['privilege']) === PrivilegeType::ADMIN;
+        $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
 
         $id = $_SESSION['user']->getId();
         $person = $this->personService->getPersonData($isAdmin ? $parameters['id'] : $id);

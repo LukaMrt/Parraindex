@@ -5,9 +5,9 @@ namespace App\Application\person;
 use App\Application\logging\Logger;
 use App\Application\login\SessionManager;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
-use App\Entity\person\PersonBuilder;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
+use App\Entity\old\person\PersonBuilder;
 
 /**
  * Do person relate actions

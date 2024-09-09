@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\person\characteristic;
+namespace App\Entity\old\person\characteristic;
 
 /**
  * Builder instance for {@see Characteristic}.
@@ -86,7 +86,7 @@ class CharacteristicBuilder
 
 
     /**
-     * Sets the image url of the characteristic
+     * Sets the images url of the characteristic
      * @param string $image Image url of the characteristic
      * @return CharacteristicBuilder This to chain calls
      */

@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Infrastructure\sponsor;
+namespace App\Infrastructure\old\sponsor;
 
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\person\characteristic\CharacteristicBuilder;
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
-use App\Entity\person\PersonBuilder;
-use App\Entity\sponsor\ClassicSponsor;
-use App\Entity\sponsor\HeartSponsor;
-use App\Entity\sponsor\Sponsor;
-use App\Entity\sponsor\SponsorFactory;
-use App\Infrastructure\database\DatabaseConnection;
+use App\Entity\old\person\characteristic\CharacteristicBuilder;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\old\sponsor\ClassicSponsor;
+use App\Entity\old\sponsor\HeartSponsor;
+use App\Entity\old\sponsor\Sponsor;
+use App\Entity\old\sponsor\SponsorFactory;
+use App\Infrastructure\old\database\DatabaseConnection;
 use PDOStatement;
 
 /**

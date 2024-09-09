@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\person\PersonService;
 use App\Application\sponsor\SponsorService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -56,7 +56,7 @@ class SponsorController extends Controller
             die();
         }
 
-        $this->render('sponsor.twig', [
+        $this->render('sponsor.html.twig', [
             'sponsor' => $sponsor,
             'godFather' => $sponsor->getGodFather(),
             'godChild' => $sponsor->getGodChild(),

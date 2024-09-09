@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Infrastructure\login;
+namespace App\Infrastructure\old\login;
 
 use App\Application\login\UrlUtils;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 
 /**
  * Default url utils implementation. It uses the php global variables

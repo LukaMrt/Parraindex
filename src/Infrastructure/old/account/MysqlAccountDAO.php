@@ -1,17 +1,17 @@
 <?php
 
-namespace App\Infrastructure\account;
+namespace App\Infrastructure\old\account;
 
 use App\Application\login\AccountDAO;
-use App\Entity\account\Account;
-use App\Entity\account\Password;
-use App\Entity\account\Privilege;
-use App\Entity\account\PrivilegeType;
-use App\Entity\person\Identity;
-use App\Entity\person\PersonBuilder;
-use App\Entity\school\School;
-use App\Entity\school\SchoolAddress;
-use App\Infrastructure\database\DatabaseConnection;
+use App\Entity\old\account\Account;
+use App\Entity\old\account\Password;
+use App\Entity\old\account\Privilege;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\old\school\School;
+use App\Entity\old\school\SchoolAddress;
+use App\Entity\Role;
+use App\Infrastructure\old\database\DatabaseConnection;
 use DateTime;
 use Exception;
 
@@ -240,7 +240,7 @@ SQL
                 new DateTime($row->creation)
             );
 
-            $privileges[] = new Privilege($school, PrivilegeType::fromString($row->privilege_name));
+            $privileges[] = new Privilege($school, Role::fromString($row->privilege_name));
 
             $id = $row->id_account;
             $email = $row->email;

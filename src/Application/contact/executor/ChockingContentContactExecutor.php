@@ -8,8 +8,8 @@ use App\Application\contact\field\EmailField;
 use App\Application\contact\field\Field;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\PersonContact;
+use App\Entity\ContactType;
+use App\Entity\old\contact\PersonContact;
 
 /**
  * Contact executor for the reporting of a chocking content

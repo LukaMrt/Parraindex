@@ -2,7 +2,7 @@
 
 namespace App\Application\contact\executor;
 
-use App\Entity\contact\DefaultContact;
+use App\Entity\old\contact\DefaultContact;
 
 /**
  * Contact executor for adding a default contact (bug, other subject...)

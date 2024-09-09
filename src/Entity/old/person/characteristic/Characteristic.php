@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity\person\characteristic;
+namespace App\Entity\old\person\characteristic;
 
 use JsonSerializable;
 

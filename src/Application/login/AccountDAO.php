@@ -2,9 +2,9 @@
 
 namespace App\Application\login;
 
-use App\Entity\account\Account;
-use App\Entity\account\Password;
-use App\Entity\person\Identity;
+use App\Entity\old\account\Account;
+use App\Entity\old\account\Password;
+use App\Entity\old\person\Identity;
 
 /**
  * DAO to manage accounts

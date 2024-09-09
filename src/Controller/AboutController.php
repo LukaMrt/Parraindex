@@ -3,44 +3,20 @@
 namespace App\Controller;
 
 use App\Application\person\PersonService;
-use App\Entity\person\Identity;
-use App\Infrastructure\router\Router;
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use App\Entity\old\person\Identity;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * The about page, it's the page that explain the project and the team
- */
-class AboutController extends Controller
+class AboutController extends AbstractController
 {
-    /**
-     * AboutController constructor
-     * @param Environment $twig the twig environment
-     * @param Router $router the router
-     * @param PersonService $personService the person service
-     * initialize the controller
-     */
-    public function __construct(Environment $twig, Router $router, PersonService $personService)
-    {
-        parent::__construct($twig, $router, $personService);
-        $this->personService = $personService;
+    public function __construct(
+        private readonly PersonService $personService
+    ) {
     }
 
-
-    /**
-     * function get
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the rendering
-     */
-    public function get(Router $router, array $parameters): void
+    #[Route('/about', name: 'about')]
+    public function index(): void
     {
-
         $authors = [
             $this->personService->getPersonByIdentity(new Identity("Lilian", "Baudry")),
             $this->personService->getPersonByIdentity(new Identity("Melvyn", "Delpree")),
@@ -48,6 +24,6 @@ class AboutController extends Controller
             $this->personService->getPersonByIdentity(new Identity("Luka", "Maret"))
         ];
 
-        $this->render('about.twig', ['authors' => $authors]);
+        $this->render('about.html.twig', ['authors' => $authors]);
     }
 }

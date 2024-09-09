@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\contact\ContactType;
+use App\Entity\ContactType;
 
 /**
  * Contact executor for the updating of a sponsor

@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\login\PasswordService;
 use App\Application\person\PersonService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -48,7 +48,7 @@ class ResetpasswordController extends Controller
      */
     public function get(Router $router, array $parameters): void
     {
-        $this->render('resetpassword.twig');
+        $this->render('resetpassword.html.twig');
     }
 
 
@@ -70,6 +70,6 @@ class ResetpasswordController extends Controller
 
         $error = $this->passwordService->resetPassword($postParameters);
 
-        $this->render('resetpassword.twig', ['error' => $error]);
+        $this->render('resetpassword.html.twig', ['error' => $error]);
     }
 }

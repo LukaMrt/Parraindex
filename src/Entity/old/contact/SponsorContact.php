@@ -1,8 +1,9 @@
 <?php
 
-namespace App\Entity\contact;
+namespace App\Entity\old\contact;
 
-use App\Entity\sponsor\Sponsor;
+use App\Entity\ContactType;
+use App\Entity\old\sponsor\Sponsor;
 
 /**
  * Contact request related to a sponsor

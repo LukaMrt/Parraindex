@@ -2,8 +2,8 @@
 
 namespace App\Application\person;
 
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
 
 /**
  * Person data access object

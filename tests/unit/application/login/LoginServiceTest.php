@@ -8,14 +8,14 @@ use App\Application\login\LoginService;
 use App\Application\login\SessionManager;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\account\Account;
-use App\Entity\account\Password;
-use App\Entity\account\Privilege;
-use App\Entity\account\PrivilegeType;
-use App\Entity\person\Identity;
-use App\Entity\person\PersonBuilder;
-use App\Entity\school\School;
-use App\Entity\school\SchoolAddress;
+use App\Entity\old\account\Account;
+use App\Entity\old\account\Password;
+use App\Entity\old\account\Privilege;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\old\school\School;
+use App\Entity\old\school\SchoolAddress;
+use App\Entity\Role;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
@@ -40,7 +40,7 @@ class LoginServiceTest extends TestCase
             ->withIdentity(new Identity('test', 'test'))
             ->build();
         $school = new School(0, 'school', new SchoolAddress('street', 'city'), new DateTime());
-        $privilege = new Privilege($school, PrivilegeType::ADMIN);
+        $privilege = new Privilege($school, Role::ADMIN);
         $this->account = new Account(0, self::TEST_EMAIL, $person, new Password('password'), $privilege);
 
         $this->accountDAO = $this->createMock(AccountDAO::class);

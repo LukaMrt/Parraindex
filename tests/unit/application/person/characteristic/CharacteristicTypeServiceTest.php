@@ -4,9 +4,9 @@ namespace App\Tests\unit\application\person\characteristic;
 
 use App\Application\person\characteristic\CharacteristicTypeDAO;
 use App\Application\person\characteristic\CharacteristicTypeService;
-use App\Entity\person\characteristic\Characteristic;
-use App\Entity\person\characteristic\CharacteristicBuilder;
-use App\Entity\person\PersonBuilder;
+use App\Entity\old\person\characteristic\Characteristic;
+use App\Entity\old\person\characteristic\CharacteristicBuilder;
+use App\Entity\old\person\PersonBuilder;
 use Monolog\Test\TestCase;
 
 class CharacteristicTypeServiceTest extends TestCase
@@ -27,7 +27,7 @@ class CharacteristicTypeServiceTest extends TestCase
             ->withId(1)
             ->withType('URL')
             ->withTitle('titre-test')
-            ->withImage('image-test')
+            ->withImage('images-test')
             ->withUrl('url-test')
             ->withValue('value-test')
             ->withVisibility(true)

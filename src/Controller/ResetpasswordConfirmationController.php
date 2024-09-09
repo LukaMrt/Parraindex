@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
@@ -22,6 +22,6 @@ class ResetpasswordConfirmationController extends Controller
      */
     public function get(Router $router, array $parameters): void
     {
-        $this->render('resetpasswordConfirmation.twig');
+        $this->render('resetpasswordConfirmation.html.twig');
     }
 }

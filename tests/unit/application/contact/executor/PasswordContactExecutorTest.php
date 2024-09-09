@@ -10,12 +10,12 @@ use App\Application\login\UrlUtils;
 use App\Application\person\PersonDAO;
 use App\Application\random\Random;
 use App\Application\redirect\Redirect;
-use App\Entity\account\Account;
-use App\Entity\account\Password;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\PersonContact;
-use App\Entity\person\Identity;
-use App\Entity\person\PersonBuilder;
+use App\Entity\ContactType;
+use App\Entity\old\account\Account;
+use App\Entity\old\account\Password;
+use App\Entity\old\contact\PersonContact;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\PersonBuilder;
 use Monolog\Test\TestCase;
 
 class PasswordContactExecutorTest extends TestCase

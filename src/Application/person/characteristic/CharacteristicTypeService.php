@@ -2,8 +2,8 @@
 
 namespace App\Application\person\characteristic;
 
-use App\Entity\person\characteristic\Characteristic;
-use App\Entity\person\Person;
+use App\Entity\old\person\characteristic\Characteristic;
+use App\Entity\old\person\Person;
 
 /**
  * Service to manage the characteristic types.

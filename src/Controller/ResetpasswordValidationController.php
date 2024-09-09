@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\login\PasswordService;
 use App\Application\person\PersonService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -52,6 +52,6 @@ class ResetpasswordValidationController extends Controller
 
         $error = $this->passwordService->validateResetPassword($parameters['token']);
 
-        $this->render('resetpasswordValidation.twig', ['error' => $error]);
+        $this->render('resetpasswordValidation.html.twig', ['error' => $error]);
     }
 }

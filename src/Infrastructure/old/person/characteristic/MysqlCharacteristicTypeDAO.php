@@ -1,11 +1,11 @@
 <?php
 
-namespace App\Infrastructure\person\characteristic;
+namespace App\Infrastructure\old\person\characteristic;
 
 use App\Application\person\characteristic\CharacteristicTypeDAO;
-use App\Entity\person\characteristic\Characteristic;
-use App\Entity\person\characteristic\CharacteristicBuilder;
-use App\Infrastructure\database\DatabaseConnection;
+use App\Entity\old\person\characteristic\Characteristic;
+use App\Entity\old\person\characteristic\CharacteristicBuilder;
+use App\Infrastructure\old\database\DatabaseConnection;
 
 /**
  * Mysql Characteristic Type DAO

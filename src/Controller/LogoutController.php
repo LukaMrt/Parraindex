@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\login\LoginService;
 use App\Application\person\PersonService;
-use App\Infrastructure\router\Router;
+use App\Infrastructure\old\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 

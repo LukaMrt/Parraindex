@@ -7,10 +7,10 @@ use App\Application\mail\Mailer;
 use App\Application\person\PersonDAO;
 use App\Application\random\Random;
 use App\Application\redirect\Redirect;
-use App\Entity\account\Account;
-use App\Entity\account\Password;
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
+use App\Entity\old\account\Account;
+use App\Entity\old\account\Password;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
 
 /**
  * Service for signing up new users

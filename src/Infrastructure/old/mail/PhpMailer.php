@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\mail;
+namespace App\Infrastructure\old\mail;
 
 use App\Application\logging\Logger;
 use App\Application\mail\Mailer;

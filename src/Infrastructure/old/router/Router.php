@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Infrastructure\router;
+namespace App\Infrastructure\old\router;
 
 use AltoRouter;
 use App\Controller\Controller;

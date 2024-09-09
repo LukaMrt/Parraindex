@@ -8,10 +8,10 @@ use App\Application\contact\field\Field;
 use App\Application\contact\field\YearField;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\PersonContact;
-use App\Entity\person\Identity;
-use App\Entity\person\PersonBuilder;
+use App\Entity\ContactType;
+use App\Entity\old\contact\PersonContact;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\PersonBuilder;
 
 /**
  * Contact executor for the adding of a person

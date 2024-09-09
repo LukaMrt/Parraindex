@@ -5,12 +5,12 @@ namespace App\Tests\unit\application\sponsor;
 use App\Application\person\PersonDAO;
 use App\Application\sponsor\SponsorDAO;
 use App\Application\sponsor\SponsorService;
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
-use App\Entity\person\PersonBuilder;
-use App\Entity\sponsor\ClassicSponsor;
-use App\Entity\sponsor\HeartSponsor;
-use App\Entity\sponsor\Sponsor;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\old\sponsor\ClassicSponsor;
+use App\Entity\old\sponsor\HeartSponsor;
+use App\Entity\old\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
 
 class SponsorServiceTest extends TestCase

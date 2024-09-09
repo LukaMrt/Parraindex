@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity\school;
+namespace App\Entity\old\school;
 
-use App\Entity\person\Person;
+use App\Entity\old\person\Person;
 use DateTime;
 
 /**

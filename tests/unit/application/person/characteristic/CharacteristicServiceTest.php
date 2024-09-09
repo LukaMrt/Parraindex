@@ -4,8 +4,8 @@ namespace App\Tests\unit\application\person\characteristic;
 
 use App\Application\person\characteristic\CharacteristicDAO;
 use App\Application\person\characteristic\CharacteristicService;
-use App\Entity\person\characteristic\Characteristic;
-use App\Entity\person\characteristic\CharacteristicBuilder;
+use App\Entity\old\person\characteristic\Characteristic;
+use App\Entity\old\person\characteristic\CharacteristicBuilder;
 use PHPUnit\Framework\TestCase;
 
 class CharacteristicServiceTest extends TestCase
@@ -23,7 +23,7 @@ class CharacteristicServiceTest extends TestCase
             ->withId(1)
             ->withType('URL')
             ->withTitle('titre-test')
-            ->withImage('image-test')
+            ->withImage('images-test')
             ->withUrl('url-test')
             ->withValue('value-test')
             ->withVisibility(true)

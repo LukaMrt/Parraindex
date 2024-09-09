@@ -6,8 +6,8 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\ContactService;
 use App\Application\contact\executor\ContactExecutor;
 use App\Application\contact\executor\ContactExecutors;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\DefaultContact;
+use App\Entity\ContactType;
+use App\Entity\old\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
 class ContactServiceTest extends TestCase

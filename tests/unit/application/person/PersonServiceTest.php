@@ -7,11 +7,11 @@ use App\Application\login\SessionManager;
 use App\Application\person\PersonDAO;
 use App\Application\person\PersonService;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\person\characteristic\CharacteristicBuilder;
-use App\Entity\person\Identity;
-use App\Entity\person\Person;
-use App\Entity\person\PersonBuilder;
-use App\Entity\sponsor\ClassicSponsor;
+use App\Entity\old\person\characteristic\CharacteristicBuilder;
+use App\Entity\old\person\Identity;
+use App\Entity\old\person\Person;
+use App\Entity\old\person\PersonBuilder;
+use App\Entity\old\sponsor\ClassicSponsor;
 use PHPUnit\Framework\TestCase;
 
 class PersonServiceTest extends TestCase
@@ -268,7 +268,7 @@ class PersonServiceTest extends TestCase
             (new CharacteristicBuilder())
                 ->withId(1)
                 ->withTitle('title')
-                ->withImage('image')
+                ->withImage('images')
                 ->withValue('value')
                 ->withType('URL')
                 ->withUrl('url')

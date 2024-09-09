@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\executor\ContactExecutor;
 use App\Application\contact\executor\OtherContactExecutor;
 use App\Application\redirect\Redirect;
-use App\Entity\contact\ContactType;
+use App\Entity\ContactType;
 use PHPUnit\Framework\TestCase;
 
 class ContactExecutorTest extends TestCase

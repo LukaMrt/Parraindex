@@ -5,8 +5,8 @@ namespace App\Tests\unit\application\contact\executor;
 use App\Application\contact\ContactDAO;
 use App\Application\contact\executor\BugContactExecutor;
 use App\Application\redirect\Redirect;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\DefaultContact;
+use App\Entity\ContactType;
+use App\Entity\old\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
 class BugContactExecutorTest extends TestCase

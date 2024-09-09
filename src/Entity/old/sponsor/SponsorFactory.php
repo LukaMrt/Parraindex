@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity\sponsor;
+namespace App\Entity\old\sponsor;
 
-use App\Entity\person\Person;
+use App\Entity\old\person\Person;
 
 /**
  * Factory for sponsors

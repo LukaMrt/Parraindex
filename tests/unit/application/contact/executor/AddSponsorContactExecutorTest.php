@@ -7,12 +7,12 @@ use App\Application\contact\executor\AddSponsorContactExecutor;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\contact\ContactType;
-use App\Entity\contact\SponsorContact;
-use App\Entity\person\Person;
-use App\Entity\sponsor\ClassicSponsor;
-use App\Entity\sponsor\HeartSponsor;
-use App\Entity\sponsor\Sponsor;
+use App\Entity\ContactType;
+use App\Entity\old\contact\SponsorContact;
+use App\Entity\old\person\Person;
+use App\Entity\old\sponsor\ClassicSponsor;
+use App\Entity\old\sponsor\HeartSponsor;
+use App\Entity\old\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
 
 class AddSponsorContactExecutorTest extends TestCase
