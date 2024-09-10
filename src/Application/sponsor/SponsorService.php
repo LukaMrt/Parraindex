@@ -5,30 +5,14 @@ namespace App\Application\sponsor;
 use App\Application\person\PersonDAO;
 use App\Entity\old\sponsor\Sponsor;
 use App\Entity\old\sponsor\SponsorFactory;
+use App\Repository\PersonRepository;
+use App\Repository\SponsorRepository;
 
-/**
- * Do sponsor relate actions
- */
-class SponsorService
+readonly class SponsorService
 {
-    /**
-     * @var SponsorDAO Sponsor data access object
-     */
-    private SponsorDAO $sponsorDAO;
-    /**
-     * @var PersonDAO Person data access object
-     */
-    private PersonDAO $personDAO;
-
-
-    /**
-     * @param SponsorDAO $sponsorDAO Sponsor data access object
-     * @param PersonDAO $personDAO Person data access object
-     */
-    public function __construct(SponsorDAO $sponsorDAO, PersonDAO $personDAO)
-    {
-        $this->sponsorDAO = $sponsorDAO;
-        $this->personDAO = $personDAO;
+    public function __construct(
+        private PersonRepository $personRepository,
+        private SponsorRepository $sponsorRepository ) {
     }
 
 
@@ -78,8 +62,8 @@ class SponsorService
             return null;
         }
 
-        $godFather = $this->personDAO->getPersonById($sponsor->getGodFather()->getId());
-        $godSon = $this->personDAO->getPersonById($sponsor->getGodChild()->getId());
+        $godFather = $this->personRepository->getById($sponsor->getGodFather()->getId());
+        $godSon = $this->personRepository->getById($sponsor->getGodChild()->getId());
         $sponsor->setGodFather($godFather);
         $sponsor->setGodChild($godSon);
         return $sponsor;
@@ -125,8 +109,8 @@ class SponsorService
     public function createSponsor(array $parameters): void
     {
 
-        $godFather = $this->personDAO->getPersonById($parameters['godFatherId']);
-        $godChild = $this->personDAO->getPersonById($parameters['godChildId']);
+        $godFather = $this->personRepository->getById($parameters['godFatherId']);
+        $godChild = $this->personRepository->getById($parameters['godChildId']);
 
         $sponsor = $this->sponsorDAO->getSponsorByPeopleId($godFather->getId(), $godChild->getId());
 

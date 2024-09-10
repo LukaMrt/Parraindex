@@ -2,7 +2,7 @@
     <div class="carousel__slider">
 
         {% for person in people %}
-            {% include 'components/card.twig' with {
+            {% include 'components/card.html.twig' with {
                 'id': person.id,
                 'color': person.color,
                 'firstName': person.firstName,

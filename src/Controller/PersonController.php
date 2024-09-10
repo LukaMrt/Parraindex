@@ -3,65 +3,30 @@
 namespace App\Controller;
 
 use App\Application\person\PersonService;
-use App\Application\sponsor\SponsorService;
-use App\Infrastructure\old\router\Router;
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * The person page, it's the page where the user can see his person
- */
-class PersonController extends Controller
+class PersonController extends AbstractController
 {
-    /**
-     * @var SponsorService the sponsor service
-     */
-    private SponsorService $sponsorService;
-
-
-    /**
-     * @param Environment $twig the twig environment
-     * @param Router $router the router
-     * @param PersonService $personService the person service
-     * @param SponsorService $sponsorService the sponsor service
-     */
     public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
-        SponsorService $sponsorService
+        private readonly PersonService $personService,
     ) {
-        parent::__construct($twig, $router, $personService);
-        $this->sponsorService = $sponsorService;
     }
 
-
-    /**
-     * function get
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the rendering
-     */
-    public function get(Router $router, array $parameters): void
+    #[Route('/personne/{id}', name: 'person')]
+    public function index( int $id): Response
     {
+        $person = $this->personService->getPersonById($id);
 
-        $family = $this->sponsorService->getPersonFamily($parameters['id']);
-
-        if ($family === null) {
-            header('Location: ' . $router->url('error', ['error' => 404]));
-            die();
+        if ($person === null) {
+            return $this->redirectToRoute('error');
         }
 
-        $this->render('person.html.twig', [
-            'person' => $family['person'],
-            'godFathers' => $family['godFathers'],
-            'godChildren' => $family['godChildren'],
-            'characteristics' => $family['person']->getCharacteristics()
-        ]);
+        return $this->render(
+            'person.html.twig', [
+                'person' => $person,
+            ]
+        );
     }
 }

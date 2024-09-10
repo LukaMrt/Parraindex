@@ -21,9 +21,9 @@
 
     </div>
 
-    {% if characteristics is not empty %}
-        {% include 'components/person/links.twig' with {
-            'characteristics': characteristics
+    {% if person.characteristics is not empty %}
+        {% include 'components/person/links.html.twig' with {
+            'characteristics': person.characteristics
         } %}
     {% endif %}
 

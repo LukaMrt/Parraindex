@@ -18,14 +18,14 @@
 
             <div class="form-block form-block--row">
 
-                {% include "components/form/select.twig" with {
+                {% include "components/form/select.html.twig" with {
                     'slug': 'godFatherId',
                     'title': 'Parrain',
                     'options': people1,
                     'parent': '^[0-9]+$'
                 } %}
 
-                {% include "components/form/select.twig" with {
+                {% include "components/form/select.html.twig" with {
                     'slug': 'godChildId',
                     'title': 'Fillot',
                     'options': people2,
@@ -34,14 +34,14 @@
 
             </div>
 
-            {% include "components/form/select.twig" with {
+            {% include "components/form/select.html.twig" with {
                 'slug': 'sponsorType',
                 'title': 'Type de parrainage',
                 'options': sponsorTypes,
                 'parent': '^[0-9]$'
             } %}
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'date',
                 'slug': 'sponsorDate',
                 'title': 'Date du parrainage',
@@ -49,7 +49,7 @@
                 'pattern': '.+'
             } %}
 
-            {% include "components/form/textarea.twig" with {
+            {% include "components/form/textarea.html.twig" with {
                 'slug': 'description',
                 'title': 'Raison',
                 'value': sponsor.description,
@@ -60,7 +60,7 @@
 
                 {% if (sponsor.id != 0) %}
                     <a href="{{ router.url('removesponsor', {id: sponsor.id}) }}">
-                        {% include "components/button.twig" with {
+                        {% include "components/button.html.twig" with {
                             'type': 'button',
                             'button_content': 'Supprimer',
                             'priority': 'danger'
@@ -68,7 +68,7 @@
                     </a>
                 {% endif %}
 
-                {% include "components/button.twig" with {
+                {% include "components/button.html.twig" with {
                     'type': 'submit',
                     'button_content': 'Valider',
                     'priority': 'primary'

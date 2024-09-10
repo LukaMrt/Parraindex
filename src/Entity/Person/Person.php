@@ -45,13 +45,13 @@ class Person
     /**
      * @var Collection<int, Sponsor>
      */
-    #[ORM\OneToMany(targetEntity: Sponsor::class, mappedBy: 'godFather', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sponsor::class, mappedBy: 'godChild', orphanRemoval: true)]
     private Collection $godFathers;
 
     /**
      * @var Collection<int, Sponsor>
      */
-    #[ORM\OneToMany(targetEntity: Sponsor::class, mappedBy: 'godChild', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: Sponsor::class, mappedBy: 'godFather', orphanRemoval: true)]
     private Collection $godChildren;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]

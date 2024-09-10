@@ -45,7 +45,7 @@
     <div class="about_authors">
 
         {% for author in authors %}
-            {% include 'components/aboutcard.twig' with {
+            {% include 'components/aboutcard.html.twig' with {
                 'firstName': author.firstName,
                 'lastName': author.lastName,
                 'picture': 'images/pictures/' ~ author.picture,

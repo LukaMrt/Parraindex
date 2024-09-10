@@ -12,7 +12,7 @@
     <div class="card__social-network">
         {% for characteristic in characteristics %}
             {% if characteristic.visible %}
-                {% include 'components/social-network.twig'
+                {% include 'components/social-network.html.twig'
                     with {
                     'network': characteristic.type,
                     'link': characteristic.type.url ~ characteristic.value,

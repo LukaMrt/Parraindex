@@ -1,10 +1,11 @@
-{% extends '/old/view/layouts/base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% set style = style('person.css') %}
+{% set style = asset('styles/person.scss') %}
 {% set title = 'Parraindex -  ' ~ person.firstName %}
+{% set admin = admin ?? false %}
 
 {% block javascripts %}
-    <script src="{{ script("person.scripts") }}" defer></script>
+    <script src="{{ asset('scripts/person.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -12,22 +13,16 @@
     <div class="person-content">
 
         <div class="person-content__description">
-            {% include 'components/person/family.twig' with {
-                'router': router,
+            {% include 'components/person/family.html.twig' with {
                 'person': person,
-                'godFathers': godFathers,
-                'godChildren': godChildren,
             } %}
 
-            {% include 'components/person/description.twig' with {
+            {% include 'components/person/description.html.twig' with {
                 'person': person,
-                'characteristics': person.characteristics
             } %}
         </div>
 
-        {% include 'components/person/actions.twig' with {
-            'router': router,
-            'admin': admin,
+        {% include 'components/person/actions.html.twig' with {
             'person': person
         } %}
 

@@ -24,12 +24,12 @@
 
 <body>
 
-{% include "components/popup.twig" with {
+{% include "components/popup.html.twig" with {
     'message': error,
     'type': 'error'
 } %}
 
-{% include "components/popup.twig" with {
+{% include "components/popup.html.twig" with {
     'message': success,
     'type': 'success'
 } %}

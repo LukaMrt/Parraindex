@@ -15,7 +15,7 @@
 
         <div class="form-content">
 
-            {% include "components/form/select.twig" with {
+            {% include "components/form/select.html.twig" with {
                 'slug': 'type',
                 'title': 'Objet du message',
                 'options': options,
@@ -23,7 +23,7 @@
 
             <div class="form-block form-block--row">
 
-                {% include "components/form/input.twig" with {
+                {% include "components/form/input.html.twig" with {
                     'type': 'text',
                     'slug': 'senderFirstName',
                     'title': 'Votre prénom',
@@ -33,7 +33,7 @@
                     'readonly': login.login is not empty
                 } %}
 
-                {% include "components/form/input.twig" with {
+                {% include "components/form/input.html.twig" with {
                     'type': 'text',
                     'slug': 'senderLastName',
                     'title': 'Votre nom',
@@ -45,7 +45,7 @@
 
             </div>
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'email',
                 'slug': 'senderEmail',
                 'title': 'Votre email',
@@ -57,7 +57,7 @@
 
             <div class="form-block form-block--row option option-0">
 
-                {% include "components/form/input.twig" with {
+                {% include "components/form/input.html.twig" with {
                     'type': 'text',
                     'slug': 'creationFirstName',
                     'title': 'Prénom de la personne',
@@ -66,7 +66,7 @@
                     'classes': 'option option-0'
                 } %}
 
-                {% include "components/form/input.twig" with {
+                {% include "components/form/input.html.twig" with {
                     'type': 'text',
                     'slug': 'creationLastName',
                     'title': 'Nom de la personne',
@@ -77,7 +77,7 @@
 
             </div>
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'number',
                 'slug': 'entryYear',
                 'title': 'Année d\'entrée à l\'IUT',
@@ -86,7 +86,7 @@
                 'classes': 'option option-0'
             } %}
 
-            {% include "components/form/select.twig" with {
+            {% include "components/form/select.html.twig" with {
                 'slug': 'personId',
                 'title': 'Personne concernée',
                 'options': people,
@@ -96,7 +96,7 @@
 
             <div class="form-block form-block--row option option-3 option-4 option-5">
 
-                {% include "components/form/select.twig" with {
+                {% include "components/form/select.html.twig" with {
                     'slug': 'godFatherId',
                     'title': 'Parrain',
                     'options': people,
@@ -104,7 +104,7 @@
                     'classes': 'option option-3 option-4 option-5'
                 } %}
 
-                {% include "components/form/select.twig" with {
+                {% include "components/form/select.html.twig" with {
                     'slug': 'godChildId',
                     'title': 'Fillot',
                     'options': people,
@@ -114,7 +114,7 @@
 
             </div>
 
-            {% include "components/form/select.twig" with {
+            {% include "components/form/select.html.twig" with {
                 'slug': 'sponsorType',
                 'title': 'Type de parrainage',
                 'options': sponsorTypes,
@@ -122,7 +122,7 @@
                 'classes': 'option option-3'
             } %}
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'date',
                 'slug': 'sponsorDate',
                 'title': 'Date du parrainage',
@@ -131,7 +131,7 @@
                 'classes': 'option option-3'
             } %}
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'password',
                 'slug': 'password',
                 'title': 'Mot de passe',
@@ -140,7 +140,7 @@
                 'classes': 'option option-9'
             } %}
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'password',
                 'slug': 'passwordConfirm',
                 'title': 'Confirmation du mot de passe',
@@ -149,21 +149,21 @@
                 'classes': 'option option-9'
             } %}
 
-            {% include "components/form/textarea.twig" with {
+            {% include "components/form/textarea.html.twig" with {
                 'slug': 'message',
                 'title': 'Message',
                 'pattern': '.+',
                 'classes': 'option option-1 option-2 option-4 option-5 option-6 option-7 option-8'
             } %}
 
-            {% include "components/form/textarea.twig" with {
+            {% include "components/form/textarea.html.twig" with {
                 'slug': 'bonusInformation',
                 'title': 'Informations complémentaires',
                 'classes': 'option option-0 option-3 option-9',
                 'required': 'false'
             } %}
 
-            {% include "components/button.twig" with {
+            {% include "components/button.html.twig" with {
                 'type': 'submit',
                 'button_content': 'Envoyer',
                 'priority': 'primary'

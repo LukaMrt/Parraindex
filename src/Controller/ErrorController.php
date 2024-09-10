@@ -2,51 +2,32 @@
 
 namespace App\Controller;
 
-use App\Infrastructure\old\router\Router;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * The error page, it's the page that explain the error
- */
-class ErrorController extends Controller
+class ErrorController extends AbstractController
 {
-    /**
-     * function get
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the rendering
-     */
-    public function get(Router $router, array $parameters): void
+    #[Route('/error/{code}', name: 'error')]
+    public function index(int $code = 404): Response
     {
-
-        $error = [
-            'code' => 0,
-            'message' => ''
-        ];
-
-        switch ($router->getParameter('error')) {
+        switch ($code) {
             case 403:
-                $error['code'] = 403;
-                $error['message'] = 'accès refusé';
+                $message = 'accès refusé';
                 break;
             case 404:
-                $error['code'] = 404;
-                $error['message'] = 'page non trouvée';
+                $message = 'page non trouvée';
                 break;
             case 500:
-                $error['code'] = 500;
-                $error['message'] = 'erreur serveur';
+                $message = 'erreur serveur';
                 break;
             default:
-                header('Location: ' . $router->url('error', ['error' => 404]));
-                die();
+                return $this->redirectToRoute('error');
         }
 
-        $this->render('error.html.twig', ['code' => $error['code'], 'message' => $error['message']]);
+        return $this->render(
+            'error.html.twig',
+            ['code' => $code, 'message' => $message],
+        );
     }
 }

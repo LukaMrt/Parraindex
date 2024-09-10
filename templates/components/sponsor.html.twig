@@ -15,7 +15,7 @@
 
 <div class="sponsor__content">
 
-    {% include 'components/card.twig' with {
+    {% include 'components/card.html.twig' with {
         'id': godFather.id,
         'color': godFather.color,
         'firstName': godFather.firstName,
@@ -35,7 +35,7 @@
         </div>
     </div>
 
-    {% include 'components/card.twig' with {
+    {% include 'components/card.html.twig' with {
         'id': godChild.id,
         'color': godChild.color,
         'firstName': godChild.firstName,

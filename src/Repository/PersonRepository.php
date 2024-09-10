@@ -28,31 +28,22 @@ class PersonRepository extends ServiceEntityRepository
 
     public function getByIdentity(string $firstName, string $lastName): ?Person
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.firstName = :firstName')
-            ->andWhere('p.lastName = :lastName')
-            ->setParameter('firstName', $firstName)
-            ->setParameter('lastName', $lastName)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(
+            [
+                'firstName' => $firstName,
+                'lastName' => $lastName
+            ]
+        ) ?? null;
     }
 
     public function getById(int $id): ?Person
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->find($id);
     }
 
     public function getByEmail(string $email): ?Person
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.email = :email')
-            ->setParameter('email', $email)
-            ->getQuery()
-            ->getOneOrNullResult();
+        return $this->findOneBy(['email' => $email]) ?? null;
     }
 
     public function getAllIdentities(): array

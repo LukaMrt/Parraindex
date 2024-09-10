@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Sponsor\Sponsor;
+use App\Entity\Sponsor\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -16,28 +17,36 @@ class SponsorRepository extends ServiceEntityRepository
         parent::__construct($registry, Sponsor::class);
     }
 
-//    /**
-//     * @return Sponsor[] Returns an array of Sponsor objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    public function getById(int $id): ?Sponsor
+    {
+        return $this->find($id);
+    }
 
-//    public function findOneBySomeField($value): ?Sponsor
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    public function getByPeopleIds(int $gofFatherId, int $godChildId): ?Sponsor
+    {
+        return $this->findOneBy([
+            'godFather' => $gofFatherId,
+            'godChild' => $godChildId
+        ]);
+    }
+
+    public function update(Sponsor $sponsor): void
+    {
+        if ($sponsor->getCreatedAt() === null) {
+            $sponsor->setCreatedAt(new \DateTimeImmutable());
+        }
+
+        if ($sponsor->getType() === null) {
+            $sponsor->setType(Type::UNKNOWN);
+        }
+
+        $this->getEntityManager()->persist($sponsor);
+        $this->getEntityManager()->flush();
+    }
+
+    public function delete(Sponsor $sponsor): void
+    {
+        $this->getEntityManager()->remove($sponsor);
+        $this->getEntityManager()->flush();
+    }
 }

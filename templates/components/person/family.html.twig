@@ -6,11 +6,11 @@
 
     <div class="person-family__wrapper">
 
-        {% for sponsor in godFathers %}
+        {% for sponsor in person.godFathers %}
             {% set godFather = sponsor.godfather %}
-            <a href="{{ router.url('sponsor', {'id': sponsor.id}) }}"
+            <a href="{{ url('home', {'id': sponsor.id}) }}"
                class="person-family__portrait person-family__portrait--godfather">
-                <img src="{{ picture(godFather.picture) }}" alt="{{ godFather.firstName }}"
+                <img src="{{ asset('images/pictures/' ~ godFather.picture) }}" alt="{{ godFather.firstName }}"
                      class="person-family__portrait-image">
 
                 <p class="person-family__portrait-name">
@@ -21,18 +21,19 @@
             </a>
         {% endfor %}
 
-        <img src="{{ picture(person.picture) }}" alt="{{ person.firstName }}" class="person-family__portrait--personal"
-             style="background-color : {{ person.bannerColor }}">
+        <img src="{{ asset('images/pictures/' ~ person.picture) }}" alt="{{ person.firstName }}" class="person-family__portrait--personal"
+             style="background-color : {{ person.color }}">
 
-        {% for sponsor in godChildren %}
-            <a href="{{ router.url('sponsor', {'id': sponsor.id}) }}"
+        {% for sponsor in person.godChildren %}
+            {% set godChild = sponsor.godChild %}
+            <a href="{{ url('home', {'id': sponsor.id}) }}"
                class="person-family__portrait person-family__portrait--godchild">
-                <img src="{{ picture(sponsor.godChild.picture) }}" alt="{{ sponsor.godChild.firstName }}"
+                <img src="{{ asset('images/pictures/' ~ godChild.picture) }}" alt="{{ godChild.firstName }}"
                      class="person-family__portrait-image">
                 <p class="person-family__portrait-name">
-                    {{ sponsor.godChild.firstName }}
+                    {{ godChild.firstName }}
                     <br>
-                    {{ sponsor.godChild.lastName }}
+                    {{ godChild.lastName }}
                 </p>
             </a>
         {% endfor %}

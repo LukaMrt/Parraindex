@@ -45,7 +45,7 @@
 
         <div class="public">
 
-            {% include 'components/card.twig' with {
+            {% include 'components/card.html.twig' with {
                 'id': person.id,
                 'color': person.color,
                 'firstName': person.firstName,
@@ -126,7 +126,7 @@
                             {% endif %}
                         {% endfor %}
 
-                        {% include 'components/characteristic.twig' with {
+                        {% include 'components/characteristic.html.twig' with {
                             'title': characteristic.title,
                             'value': value.value,
                             'visibility': value.visible,
@@ -137,7 +137,7 @@
             </div>
         </div>
 
-        {{ include('components/modal-picture.twig') }}
+        {{ include('components/modal-picture.html.twig') }}
 
         <nav class='confirm'>
 

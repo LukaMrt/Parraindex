@@ -17,14 +17,14 @@
 
             <div class="form-block form-block--row">
 
-                {% include "components/form/input.twig" with {
+                {% include "components/form/input.html.twig" with {
                     'type': 'text',
                     'slug': 'firstname',
                     'title': 'Prénom',
                     'placeholder': 'John'
                 } %}
 
-                {% include "components/form/input.twig" with {
+                {% include "components/form/input.html.twig" with {
                     'type': 'text',
                     'slug': 'lastname',
                     'title': 'Nom',
@@ -33,7 +33,7 @@
 
             </div>
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'email',
                 'slug': 'email',
                 'title': 'Email universitaire',
@@ -41,14 +41,14 @@
                 'pattern' : "^[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+@etu.univ-lyon1.fr$"
             } %}
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'password',
                 'slug': 'password',
                 'title': 'Mot de passe',
                 'placeholder': '••••••••••'
             } %}
 
-            {% include "components/form/input.twig" with {
+            {% include "components/form/input.html.twig" with {
                 'type': 'password',
                 'slug': 'password-confirm',
                 'title': 'Répétez le mot de passe',
@@ -57,14 +57,14 @@
 
             <div class="form-block form-block--row form-block--space-around">
 
-                {% include "components/link.twig" with{
+                {% include "components/link.html.twig" with{
                     'option': 'link-wrapper',
                     'prefix': 'Vous avez déjà un compte ?',
                     'title': 'Connectez-vous',
                     'href': router.url('login_get')
                 } %}
 
-                {% include "components/button.twig" with {
+                {% include "components/button.html.twig" with {
                     'type': 'submit',
                     'button_content': 'Envoyer',
                     'priority': 'primary',
