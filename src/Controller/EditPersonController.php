@@ -6,7 +6,7 @@ use App\Application\person\characteristic\CharacteristicService;
 use App\Application\person\characteristic\CharacteristicTypeService;
 use App\Application\person\PersonService;
 use App\Entity\old\person\PersonBuilder;
-use App\Entity\Role;
+use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;

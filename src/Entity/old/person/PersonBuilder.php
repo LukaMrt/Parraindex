@@ -4,6 +4,7 @@ namespace App\Entity\old\person;
 
 use App\Entity\old\person\characteristic\Characteristic;
 use App\Entity\old\school\promotion\Promotion;
+use App\Entity\Person\Person;
 use DateTime;
 
 /**

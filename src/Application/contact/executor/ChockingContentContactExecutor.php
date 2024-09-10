@@ -8,7 +8,7 @@ use App\Application\contact\field\EmailField;
 use App\Application\contact\field\Field;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\PersonContact;
 
 /**
@@ -31,7 +31,7 @@ class ChockingContentContactExecutor extends ContactExecutor
     {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
 
-        parent::__construct($contactDAO, $redirect, ContactType::CHOCKING_CONTENT, [
+        parent::__construct($contactDAO, $redirect, Type::CHOCKING_CONTENT, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
             new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
             new EmailField('senderEmail', 'Votre email doit être valide'),
@@ -59,7 +59,7 @@ class ChockingContentContactExecutor extends ContactExecutor
             null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
-            ContactType::CHOCKING_CONTENT,
+            Type::CHOCKING_CONTENT,
             $data['message'],
             $person
         );

@@ -2,7 +2,7 @@
 
 namespace App\Entity\old\contact;
 
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\sponsor\Sponsor;
 
 /**
@@ -22,18 +22,18 @@ class SponsorContact extends Contact
      * @param ?string $contactResolution The date where the contact message was resolved
      * @param string $contacterName The name of the person who sent the contact
      * @param string $contacterEmail The email of the person who sent the contact
-     * @param ContactType $type The type of the contact
+     * @param Type $type The type of the contact
      * @param string $description The description of the contact
      * @param Sponsor $sponsor The sponsor related to the contact
      */
     public function __construct(
-        int $id,
-        string $contactDate,
+        int     $id,
+        string  $contactDate,
         ?string $contactResolution,
-        string $contacterName,
-        string $contacterEmail,
-        ContactType $type,
-        string $description,
+        string  $contacterName,
+        string  $contacterEmail,
+        Type    $type,
+        string  $description,
         Sponsor $sponsor
     ) {
         parent::__construct(

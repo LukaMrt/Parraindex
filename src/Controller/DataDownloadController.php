@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use App\Entity\Role;
+use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;

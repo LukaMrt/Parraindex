@@ -2,7 +2,7 @@
 
 namespace App\Repository;
 
-use App\Entity\Sponsor;
+use App\Entity\Sponsor\Sponsor;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 

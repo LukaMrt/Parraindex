@@ -10,7 +10,7 @@ use App\Application\login\UrlUtils;
 use App\Application\person\PersonDAO;
 use App\Application\random\Random;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\account\Account;
 use App\Entity\old\account\Password;
 use App\Entity\old\contact\PersonContact;
@@ -176,7 +176,7 @@ class PasswordContactExecutorTest extends TestCase
             null,
             'test1 test2',
             self::DEFAULT_PARAMS['senderEmail'],
-            ContactType::PASSWORD,
+            Type::PASSWORD,
             'http://localhost/password/validation/aaabbbcccd',
             $person
         );

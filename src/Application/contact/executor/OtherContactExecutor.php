@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\field\EmailField;
 use App\Application\contact\field\Field;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 
 /**
  * Contact executor for the adding of a global message
@@ -19,7 +19,7 @@ class OtherContactExecutor extends SimpleContactExecutor
      */
     public function __construct(ContactDAO $contactDAO, Redirect $redirect)
     {
-        parent::__construct($contactDAO, $redirect, ContactType::OTHER, [
+        parent::__construct($contactDAO, $redirect, Type::OTHER, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
             new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
             new EmailField('senderEmail', 'Votre email doit être valide'),

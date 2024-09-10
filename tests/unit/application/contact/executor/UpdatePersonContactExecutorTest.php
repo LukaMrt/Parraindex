@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\executor\UpdatePersonContactExecutor;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\PersonContact;
 use App\Entity\old\person\Identity;
 use App\Entity\old\person\Person;
@@ -73,7 +73,7 @@ class UpdatePersonContactExecutorTest extends TestCase
             null,
             'test1 test2',
             'test.test@test.com',
-            ContactType::UPDATE_PERSON,
+            Type::UPDATE_PERSON,
             'empty',
             $person
         );

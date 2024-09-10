@@ -1,8 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Sponsor;
 
-enum SponsorType: int
+enum Type: int
 {
     case HEART   = 0;
     case CLASSIC = 1;

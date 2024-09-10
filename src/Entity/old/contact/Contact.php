@@ -2,7 +2,7 @@
 
 namespace App\Entity\old\contact;
 
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 
 /**
  * Contact base class which represents a contact request
@@ -22,9 +22,9 @@ abstract class Contact
      */
     private string $contacterEmail;
     /**
-     * @var ContactType The type of the contact
+     * @var Type The type of the contact
      */
-    private ContactType $type;
+    private Type $type;
     /**
      * @var string The description of the contact message
      */
@@ -47,17 +47,17 @@ abstract class Contact
      * @param ?string $contactResolution The date where the contact message was resolved
      * @param string $contacterName The name of the person who sent the contact
      * @param string $contacterEmail The email of the person who sent the contact
-     * @param ContactType $type The type of the contact
+     * @param Type $type The type of the contact
      * @param string $description The description of the contact message
      */
     public function __construct(
-        int $id,
-        string $contactDate,
+        int     $id,
+        string  $contactDate,
         ?string $contactResolution,
-        string $contacterName,
-        string $contacterEmail,
-        ContactType $type,
-        string $description
+        string  $contacterName,
+        string  $contacterEmail,
+        Type    $type,
+        string  $description
     ) {
         $this->id = $id;
         $this->contactDate = $contactDate;

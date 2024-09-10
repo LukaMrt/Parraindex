@@ -2,22 +2,22 @@
 
 namespace App\Repository;
 
-use App\Entity\Contact\Contact;
+use App\Entity\Characteristic\CharacteristicType;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Contact>
+ * @extends ServiceEntityRepository<CharacteristicType>
  */
-class ContactRepository extends ServiceEntityRepository
+class CharacteristicTypeRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Contact::class);
+        parent::__construct($registry, CharacteristicType::class);
     }
 
     //    /**
-    //     * @return Contact[] Returns an array of Contact objects
+    //     * @return CharacteristicType[] Returns an array of CharacteristicType objects
     //     */
     //    public function findByExampleField($value): array
     //    {
@@ -31,7 +31,7 @@ class ContactRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    //    public function findOneBySomeField($value): ?Contact
+    //    public function findOneBySomeField($value): ?CharacteristicType
     //    {
     //        return $this->createQueryBuilder('c')
     //            ->andWhere('c.exampleField = :val')

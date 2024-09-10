@@ -2,28 +2,24 @@
 
 namespace App\Controller;
 
-use App\Infrastructure\old\router\Router;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use App\Application\person\PersonService;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * The tree page, it's the page where the user can see all the persons
- */
-class TreeController extends Controller
+class TreeController extends AbstractController
 {
-    /**
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template cannot be found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the compilation
-     */
-    public function get(Router $router, array $parameters): void
+
+    public function __construct(
+        private readonly PersonService $personService,
+    ) {
+    }
+
+    #[Route(path: '/tree', name: 'tree')]
+    public function index(): Response
     {
         $people = $this->personService->getAllPeople();
         shuffle($people);
-        $this->render('tree.html.twig', ['people' => $people]);
+        return $this->render('tree.html.twig', ['people' => $people]);
     }
 }

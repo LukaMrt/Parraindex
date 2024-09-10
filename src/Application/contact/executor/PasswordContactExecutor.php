@@ -10,7 +10,7 @@ use App\Application\login\UrlUtils;
 use App\Application\person\PersonDAO;
 use App\Application\random\Random;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\account\Account;
 use App\Entity\old\account\Password;
 use App\Entity\old\contact\PersonContact;
@@ -52,7 +52,7 @@ class PasswordContactExecutor extends ContactExecutor
         Random $random,
         UrlUtils $urlUtils
     ) {
-        parent::__construct($contactDAO, $redirect, ContactType::PASSWORD, [
+        parent::__construct($contactDAO, $redirect, Type::PASSWORD, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
             new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
             new EmailField('senderEmail', 'Votre email doit être valide'),
@@ -99,7 +99,7 @@ class PasswordContactExecutor extends ContactExecutor
             null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
-            ContactType::PASSWORD,
+            Type::PASSWORD,
             $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('signup_validation', ['token' => $token]),
             $person
         );

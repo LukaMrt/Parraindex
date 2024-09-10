@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 
 /**
  * Contact executor for the updating of a sponsor
@@ -25,6 +25,6 @@ class UpdateSponsorContactExecutor extends SimpleSponsorContactExecutor
         SponsorDAO $sponsorDAO,
         Redirect $redirect
     ) {
-        parent::__construct($contactDAO, $redirect, ContactType::UPDATE_SPONSOR, $sponsorDAO, $personDAO);
+        parent::__construct($contactDAO, $redirect, Type::UPDATE_SPONSOR, $sponsorDAO, $personDAO);
     }
 }

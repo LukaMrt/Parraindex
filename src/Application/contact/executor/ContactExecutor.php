@@ -5,7 +5,7 @@ namespace App\Application\contact\executor;
 use App\Application\contact\ContactDAO;
 use App\Application\contact\field\Field;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 
 /**
  * Represents an executor of a contact which perform contact form validation
@@ -17,9 +17,9 @@ abstract class ContactExecutor
      */
     protected ContactDAO $contactDAO;
     /**
-     * @var ContactType $contactType Type of the contact
+     * @var Type $contactType Type of the contact
      */
-    protected ContactType $contactType;
+    protected Type $contactType;
     /**
      * @var Redirect $redirect The redirect service to redirect the user
      */
@@ -33,10 +33,10 @@ abstract class ContactExecutor
     /**
      * @param ContactDAO $contactDAO DAO to save the contact
      * @param Redirect $redirect The redirect service to redirect the user
-     * @param ContactType $contactType Type of the contact
+     * @param Type $contactType Type of the contact
      * @param array $fields Fields of the contact form
      */
-    public function __construct(ContactDAO $contactDAO, Redirect $redirect, ContactType $contactType, array $fields)
+    public function __construct(ContactDAO $contactDAO, Redirect $redirect, Type $contactType, array $fields)
     {
         $this->contactDAO = $contactDAO;
         $this->redirect = $redirect;

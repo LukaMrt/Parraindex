@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Sponsor;
 
+use App\Entity\Person\Person;
 use App\Repository\SponsorRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -29,7 +30,7 @@ class Sponsor
     private ?string $description = null;
 
     #[ORM\Column]
-    private ?SponsorType $type = null;
+    private ?Type $type = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -87,12 +88,12 @@ class Sponsor
         return $this;
     }
 
-    public function getType(): ?SponsorType
+    public function getType(): ?Type
     {
         return $this->type;
     }
 
-    public function setType(SponsorType $type): static
+    public function setType(Type $type): static
     {
         $this->type = $type;
 

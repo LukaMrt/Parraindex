@@ -7,7 +7,7 @@ use App\Application\contact\executor\AddSponsorContactExecutor;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\SponsorContact;
 use App\Entity\old\person\Person;
 use App\Entity\old\sponsor\ClassicSponsor;
@@ -166,7 +166,7 @@ class AddSponsorContactExecutorTest extends TestCase
             null,
             'test1 test2',
             self::TEST_EMAIL,
-            ContactType::ADD_SPONSOR,
+            Type::ADD_SPONSOR,
             'empty',
             $sponsor
         );
@@ -197,7 +197,7 @@ class AddSponsorContactExecutorTest extends TestCase
             null,
             'test1 test2',
             self::TEST_EMAIL,
-            ContactType::ADD_SPONSOR,
+            Type::ADD_SPONSOR,
             'empty',
             $sponsor
         );

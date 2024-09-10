@@ -1,7 +1,9 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Person;
 
+use App\Entity\Characteristic\Characteristic;
+use App\Entity\Sponsor\Sponsor;
 use App\Repository\PersonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -55,11 +57,18 @@ class Person
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
+    /**
+     * @var Collection<int, Characteristic>
+     */
+    #[ORM\OneToMany(targetEntity: Characteristic::class, mappedBy: 'person', orphanRemoval: true)]
+    private Collection $characteristics;
+
     public function __construct()
     {
         $this->sponsors = new ArrayCollection();
         $this->godFathers = new ArrayCollection();
         $this->godChildren = new ArrayCollection();
+        $this->characteristics = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -231,6 +240,36 @@ class Person
     public function setCreatedAt(?\DateTimeInterface $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Characteristic>
+     */
+    public function getCharacteristics(): Collection
+    {
+        return $this->characteristics;
+    }
+
+    public function addCharacteristic(Characteristic $characteristic): static
+    {
+        if (!$this->characteristics->contains($characteristic)) {
+            $this->characteristics->add($characteristic);
+            $characteristic->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeCharacteristic(Characteristic $characteristic): static
+    {
+        if ($this->characteristics->removeElement($characteristic)) {
+            // set the owning side to null (unless already changed)
+            if ($characteristic->getPerson() === $this) {
+                $characteristic->setPerson(null);
+            }
+        }
 
         return $this;
     }

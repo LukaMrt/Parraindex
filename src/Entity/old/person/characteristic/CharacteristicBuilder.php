@@ -2,6 +2,8 @@
 
 namespace App\Entity\old\person\characteristic;
 
+use App\Entity\Characteristic\Characteristic;
+
 /**
  * Builder instance for {@see Characteristic}.
  */

@@ -15,7 +15,7 @@ use App\Entity\old\person\Identity;
 use App\Entity\old\person\PersonBuilder;
 use App\Entity\old\school\School;
 use App\Entity\old\school\SchoolAddress;
-use App\Entity\Role;
+use App\Entity\Person\Role;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 

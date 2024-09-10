@@ -4,8 +4,8 @@ namespace App\Controller;
 
 use App\Application\contact\ContactService;
 use App\Application\person\PersonService;
-use App\Entity\ContactType;
-use App\Entity\Role;
+use App\Entity\Contact\Type;
+use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -60,7 +60,7 @@ class ContactAdminController extends Controller
         }
 
         $list = $this->contactService->getContactList();
-        $types = ContactType::getValues();
+        $types = Type::getValues();
 
         $this->render('contactAdmin.html.twig', [
             'contacts' => $list,

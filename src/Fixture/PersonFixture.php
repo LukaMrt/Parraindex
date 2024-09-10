@@ -1,8 +1,8 @@
 <?php
 
-namespace App\DataFixtures;
+namespace App\Fixture;
 
-use App\Entity\Person;
+use App\Entity\Person\Person;
 use App\Repository\PersonRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -25,7 +25,7 @@ class PersonFixture extends Fixture
             ->setLastName('Maret')
             ->setDescription('Je suis Luka')
             ->setBiography('Je suis Luka')
-            ->setColor('#FF0000')
+            ->setColor('#0000FF')
             ->setStartYear(2021)
             ->setPicture('Luka.jpg')
             ->setCreatedAt(new \DateTimeImmutable());
@@ -49,7 +49,7 @@ class PersonFixture extends Fixture
             ->setLastName('Chavot--Dambrun')
             ->setDescription('Je suis Vincent')
             ->setBiography('Je suis Vincent')
-            ->setColor('#0000FF')
+            ->setColor('#FF0000')
             ->setStartYear(2021)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
@@ -73,7 +73,7 @@ class PersonFixture extends Fixture
             ->setLastName('1')
             ->setDescription('Je suis fillot 1')
             ->setBiography('Je suis fillot 1')
-            ->setColor('#FF0000')
+            ->setColor('#0000FF')
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
@@ -85,7 +85,7 @@ class PersonFixture extends Fixture
             ->setLastName('2')
             ->setDescription('Je suis fillot 2')
             ->setBiography('Je suis fillot 2')
-            ->setColor('#FF0000')
+            ->setColor('#0000FF')
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
@@ -97,7 +97,7 @@ class PersonFixture extends Fixture
             ->setLastName('3')
             ->setDescription('Je suis fillot 3')
             ->setBiography('Je suis fillot 3')
-            ->setColor('#FF0000')
+            ->setColor('#0000FF')
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
@@ -109,7 +109,7 @@ class PersonFixture extends Fixture
             ->setLastName('1')
             ->setDescription('Je suis parrain 1')
             ->setBiography('Je suis parrain 1')
-            ->setColor('#FF0000')
+            ->setColor('#0000FF')
             ->setStartYear(2020)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());

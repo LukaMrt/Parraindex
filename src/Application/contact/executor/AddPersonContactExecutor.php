@@ -8,7 +8,7 @@ use App\Application\contact\field\Field;
 use App\Application\contact\field\YearField;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\PersonContact;
 use App\Entity\old\person\Identity;
 use App\Entity\old\person\PersonBuilder;
@@ -32,7 +32,7 @@ class AddPersonContactExecutor extends ContactExecutor
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, PersonDAO $personDAO)
     {
 
-        parent::__construct($contactDAO, $redirect, ContactType::ADD_PERSON, [
+        parent::__construct($contactDAO, $redirect, Type::ADD_PERSON, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
             new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
             new EmailField('senderEmail', 'Votre email doit être valide'),
@@ -68,7 +68,7 @@ class AddPersonContactExecutor extends ContactExecutor
             null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
-            ContactType::ADD_PERSON,
+            Type::ADD_PERSON,
             $data['bonusInformation'] ?? '',
             $person
         );

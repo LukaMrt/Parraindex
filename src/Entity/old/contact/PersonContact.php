@@ -2,7 +2,7 @@
 
 namespace App\Entity\old\contact;
 
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\person\Person;
 
 /**
@@ -22,19 +22,19 @@ class PersonContact extends Contact
      * @param ?string $contactResolution The date where the contact message was resolved
      * @param string $contacterName The name of the person who sent the contact request
      * @param string $contacterEmail The email of the person who sent the contact request
-     * @param ContactType $type The type of the contact request
+     * @param Type $type The type of the contact request
      * @param string $description The description of the contact request
      * @param Person $person The person related to the contact request
      */
     public function __construct(
-        int $id,
-        string $contactDate,
+        int     $id,
+        string  $contactDate,
         ?string $contactResolution,
-        string $contacterName,
-        string $contacterEmail,
-        ContactType $type,
-        string $description,
-        Person $person
+        string  $contacterName,
+        string  $contacterEmail,
+        Type    $type,
+        string  $description,
+        Person  $person
     ) {
         parent::__construct(
             $id,

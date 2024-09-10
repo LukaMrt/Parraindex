@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Contact;
 
 // WARNING : Don't change the id of the values because it's related to the contact form
 
 /**
  * Type of contact
  */
-enum ContactType: int
+enum Type: int
 {
     case ADD_PERSON       = 0;
     case UPDATE_PERSON    = 1;

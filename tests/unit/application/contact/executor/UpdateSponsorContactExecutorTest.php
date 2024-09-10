@@ -7,7 +7,7 @@ use App\Application\contact\executor\UpdateSponsorContactExecutor;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\SponsorContact;
 use App\Entity\old\person\Person;
 use App\Entity\old\sponsor\Sponsor;
@@ -93,7 +93,7 @@ class UpdateSponsorContactExecutorTest extends TestCase
             null,
             'test1 test2',
             'test.test@test.com',
-            ContactType::UPDATE_SPONSOR,
+            Type::UPDATE_SPONSOR,
             'empty',
             $sponsor
         );

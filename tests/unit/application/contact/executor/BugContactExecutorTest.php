@@ -5,7 +5,7 @@ namespace App\Tests\unit\application\contact\executor;
 use App\Application\contact\ContactDAO;
 use App\Application\contact\executor\BugContactExecutor;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
@@ -53,7 +53,7 @@ class BugContactExecutorTest extends TestCase
             null,
             'test1 test2',
             'test.test@test.com',
-            ContactType::BUG,
+            Type::BUG,
             'empty',
         );
 

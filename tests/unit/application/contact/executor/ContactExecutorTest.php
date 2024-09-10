@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\executor\ContactExecutor;
 use App\Application\contact\executor\OtherContactExecutor;
 use App\Application\redirect\Redirect;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use PHPUnit\Framework\TestCase;
 
 class ContactExecutorTest extends TestCase
@@ -28,7 +28,7 @@ class ContactExecutorTest extends TestCase
 
     public function testGetidReturnsContactTypeId(): void
     {
-        $this->assertEquals(ContactType::OTHER->value, $this->executor->getId());
+        $this->assertEquals(Type::OTHER->value, $this->executor->getId());
     }
 
 

@@ -3,7 +3,7 @@
 namespace App\Application\person;
 
 use App\Application\logging\Logger;
-use App\Entity\Person;
+use App\Entity\Person\Person;
 use App\Repository\PersonRepository;
 
 readonly class PersonService

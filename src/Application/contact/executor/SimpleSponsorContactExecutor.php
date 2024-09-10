@@ -10,7 +10,7 @@ use App\Application\contact\field\NumberField;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\SponsorContact;
 
 /**
@@ -27,16 +27,16 @@ abstract class SimpleSponsorContactExecutor extends ContactExecutor
     /**
      * @param ContactDAO $contactDAO DAO for contacts
      * @param Redirect $redirect Redirect service
-     * @param ContactType $contactType Contact type
+     * @param Type $contactType Contact type
      * @param SponsorDAO $sponsorDAO DAO for sponsors
      * @param PersonDAO $personDAO DAO for persons
      */
     public function __construct(
         ContactDAO $contactDAO,
-        Redirect $redirect,
-        ContactType $contactType,
+        Redirect   $redirect,
+        Type       $contactType,
         SponsorDAO $sponsorDAO,
-        PersonDAO $personDAO
+        PersonDAO  $personDAO
     ) {
         $personExistsClosure = fn($value) => $personDAO->getPersonById($value) !== null;
         parent::__construct($contactDAO, $redirect, $contactType, [

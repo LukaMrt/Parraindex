@@ -3,7 +3,7 @@
 namespace App\Entity\old\account;
 
 use App\Entity\old\person\Person;
-use App\Entity\Role;
+use App\Entity\Person\Role;
 
 /**
  * Account class representing a signed up person

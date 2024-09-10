@@ -6,7 +6,7 @@ use App\Application\contact\ContactDAO;
 use App\Application\contact\ContactService;
 use App\Application\contact\executor\ContactExecutor;
 use App\Application\contact\executor\ContactExecutors;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
@@ -100,8 +100,8 @@ class ContactServiceTest extends TestCase
     public function testGetcontactReturnsWantendContact(): void
     {
 
-        $contact = new DefaultContact(1, date('Y-m-d'), null, '', '', ContactType::OTHER, '');
-        $contact2 = new DefaultContact(2, date('Y-m-d'), null, '', '', ContactType::OTHER, '');
+        $contact = new DefaultContact(1, date('Y-m-d'), null, '', '', Type::OTHER, '');
+        $contact2 = new DefaultContact(2, date('Y-m-d'), null, '', '', Type::OTHER, '');
 
         $this->contactDAO->method('getContactList')
             ->willReturn([$contact, $contact2]);

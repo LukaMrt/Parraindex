@@ -1,7 +1,7 @@
 <article class="card" id="{{ id }}">
     <div class="card__banner" style="background-color:{{ color }}">
-        <img class="card__picture" src="{{ picture(picture) }}" alt="photo" loading="lazy">
-        <img class="card__picture__overlay" src="{{ icon('camera.svg') }}" alt="modifier photo" loading="lazy">
+        <img class="card__picture" src="{{ asset(picture) }}" alt="photo" loading="lazy">
+        <img class="card__picture__overlay" src="{{ asset('images/icons/camera.svg') }}" alt="modifier photo" loading="lazy">
     </div>
 
     <div class="card__profil">
@@ -11,12 +11,12 @@
 
     <div class="card__social-network">
         {% for characteristic in characteristics %}
-            {% if characteristic.visible or mock %}
+            {% if characteristic.visible %}
                 {% include 'components/social-network.twig'
                     with {
-                    'network': characteristic.network,
-                    'link': characteristic.prefix ~ characteristic.url ~ characteristic.value,
-                    'images': characteristic.image
+                    'network': characteristic.type,
+                    'link': characteristic.type.url ~ characteristic.value,
+                    'image': 'images/icons/' ~ characteristic.type.image
                 } %}
             {% endif %}
         {% endfor %}

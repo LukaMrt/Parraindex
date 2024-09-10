@@ -3,7 +3,7 @@
 namespace App\Infrastructure\old\contact;
 
 use App\Application\contact\ContactDAO;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\Contact;
 use App\Entity\old\contact\DefaultContact;
 use App\Entity\old\contact\PersonContact;
@@ -268,7 +268,7 @@ SQL
                 $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
-                ContactType::from($data->type),
+                Type::from($data->type),
                 $data->description
             );
         }
@@ -285,7 +285,7 @@ SQL
                 $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
-                ContactType::from($data->type),
+                Type::from($data->type),
                 $data->description,
                 $person
             );
@@ -317,7 +317,7 @@ SQL
                 $data->resolution_date,
                 $data->contacter_name,
                 $data->contacter_email,
-                ContactType::from($data->type),
+                Type::from($data->type),
                 $data->description,
                 $sponsor
             );

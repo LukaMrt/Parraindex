@@ -6,7 +6,7 @@ use App\Application\contact\ContactService;
 use App\Application\login\SignupService;
 use App\Application\person\PersonService;
 use App\Application\sponsor\SponsorService;
-use App\Entity\Role;
+use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
 use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;

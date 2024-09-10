@@ -12,7 +12,7 @@ use App\Application\contact\field\NumberField;
 use App\Application\person\PersonDAO;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Entity\old\contact\SponsorContact;
 use App\Entity\old\sponsor\SponsorFactory;
 
@@ -46,7 +46,7 @@ class AddSponsorContactExecutor extends ContactExecutor
     ) {
         $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
 
-        parent::__construct($contactDAO, $redirect, ContactType::ADD_SPONSOR, [
+        parent::__construct($contactDAO, $redirect, Type::ADD_SPONSOR, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
             new Field('senderLastName', 'Votre nom doit contenir au moins 1 caractère'),
             new EmailField('senderEmail', 'Votre email doit être valide'),
@@ -93,7 +93,7 @@ class AddSponsorContactExecutor extends ContactExecutor
             null,
             $data['senderFirstName'] . ' ' . $data['senderLastName'],
             $data['senderEmail'],
-            ContactType::ADD_SPONSOR,
+            Type::ADD_SPONSOR,
             $data['bonusInformation'] ?? '',
             $sponsor
         );

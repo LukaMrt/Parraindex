@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Application\contact\ContactService;
 use App\Application\person\PersonService;
-use App\Entity\ContactType;
+use App\Entity\Contact\Type;
 use App\Infrastructure\old\router\Router;
 use Twig\Environment;
 use Twig\Error\LoaderError;
@@ -94,7 +94,7 @@ class ContactController extends Controller
         $people = array_map($closure, $people);
 
         $this->render('contact.html.twig', [
-            'options' => ContactType::getValues(),
+            'options' => Type::getValues(),
             'sponsorTypes' => [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur']],
             'people' => $people,
             'error' => $parameters['error'] ?? [],
