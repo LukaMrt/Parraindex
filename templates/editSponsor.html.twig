@@ -1,15 +1,15 @@
-{% extends '/old/view/layouts/base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% set style = style('editSponsor.css') %}
+{% set style = asset('styles/editSponsor.scss') %}
 {% set title = 'Parraindex - Liens' %}
 
 {% block javascripts %}
-    <script type="module" src="{{ script('editSponsor.scripts') }}" defer></script>
+    <script type="module" src="{{ asset('scripts/editSponsor.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
 
-    <form class="form" action="{{ router.url('editsponsor_post', {id: sponsor.id != null ? sponsor.id : 0}) }}"
+    <form class="form" action="{{ url('home', {id: sponsor.id != null ? sponsor.id : 0}) }}"
           method="post">
 
         <h1 class="form__title">Gestion de lien</h1>
@@ -59,7 +59,7 @@
             <div class="form-block form-block--row">
 
                 {% if (sponsor.id != 0) %}
-                    <a href="{{ router.url('removesponsor', {id: sponsor.id}) }}">
+                    <a href="{{ url('home', {id: sponsor.id}) }}">
                         {% include "components/button.html.twig" with {
                             'type': 'button',
                             'button_content': 'Supprimer',

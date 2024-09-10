@@ -1,10 +1,10 @@
-{% extends '/old/view/layouts/base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% set style = style('signupConfirmation.css') %}
+{% set style = asset('styles/signupConfirmation.scss') %}
 {% set title = 'Parraindex - Inscription' %}
 
 {% block javascripts %}
-    <script type="module" src="{{ script("signupConfirmation.scripts") }}" defer></script>
+    <script type="module" src="{{ asset('scripts/signupConfirmation.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
@@ -12,7 +12,7 @@
     <div class="signup_confirm">
         <p>Votre inscription a été enregistrée et un mail vous a été envoyé avec un lien permettant de terminer la
             création de votre compte.</p>
-        <a href="{{ router.url('home') }}">Cliquez ici si vous n'êtes pas automatiquement redirigé</a>
+        <a href="{{ url('home') }}">Cliquez ici si vous n'êtes pas automatiquement redirigé</a>
     </div>
 
 {% endblock %}

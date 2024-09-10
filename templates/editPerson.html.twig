@@ -1,10 +1,10 @@
-{% extends '/old/view/layouts/base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% set style = style('editperson.css') %}
+{% set style = asset('styles/editperson.scss') %}
 {% set title = 'Parraindex - Edition personne' %}
 
 {% block javascripts %}
-    <script src="{{ script('editPerson.scripts') }}" type="module"></script>
+    <script src="{{ asset('scripts/editPerson.js') }}" type="module"></script>
 {% endblock %}
 
 {% block content %}
@@ -22,12 +22,12 @@
             </div>
 
             <div class="description__actions">
-                <img src="{{ icon('chain.svg') }}" class="sync"
+                <img src="{{ asset('images/icons/chain.svg') }}" class="sync"
                      alt="Synchronisation des champs"
                      title="Synchronise les champs 'Biographie' et 'A propos'"
                 >
 
-                <img src="{{ icon('reverse.svg') }}" class="invert"
+                <img src="{{ asset('images/icons/reverse.svg') }}" class="invert"
                      alt="Inversion des champs"
                      title="Inverse les champs 'Biographie' et 'A propos'"
                 >
@@ -141,8 +141,8 @@
 
         <nav class='confirm'>
 
-            <a href="{{ router.url('person', {id: person.id}) }}" class="confirm__prev">
-                <img src="{{ icon('up.svg') }}" alt="retour">
+            <a href="{{ url('person', {id: person.id}) }}" class="confirm__prev">
+                <img src="{{ asset('images/icons/up.svg') }}" alt="retour">
             </a>
 
             <div class="confirm__action">
@@ -156,8 +156,8 @@
                     Enregistrer
                 </button>
 
-                <a id="download-person" href={{ router.url('person_data', {id:person.id}) }}>
-                    <img src="{{ icon('download.svg') }}"
+                <a id="download-person" href={{ url('home', {id:person.id}) }}>
+                    <img src="{{ asset('images/icons/download.svg') }}"
                          alt="Telechargement de toutes les données"
                          title="Télécharge toutes les données relative a cette personne"
                     >

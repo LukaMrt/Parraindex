@@ -1,6 +1,6 @@
-{% extends '/old/view/layouts/base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% set style = style('signupValidation.css') %}
+{% set style = asset('styles/signupValidation.scss') %}
 {% set title = 'Parraindex - Inscription' %}
 
 {% block javascripts %}
@@ -10,7 +10,7 @@
 
     {% if error is empty %}
         <div class="signup_confirm">
-            <p>Votre inscription a été validée. Vous pouvez dès à présent <a href="{{ router.url('login_get') }}">vous
+            <p>Votre inscription a été validée. Vous pouvez dès à présent <a href="{{ url('home') }}">vous
                     connecter</a>.</p>
         </div>
     {% else %}

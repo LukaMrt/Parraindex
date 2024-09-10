@@ -1,15 +1,15 @@
-{% extends '/old/view/layouts/base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% set style = style('signup.css') %}
+{% set style = asset('styles/signup.scss') %}
 {% set title = 'Parraindex - Inscription' %}
 
 {% block javascripts %}
-    <script type="module" src="{{ script('signup.scripts') }}" defer></script>
+    <script type="module" src="{{ asset('scripts/signup.js') }}" defer></script>
 {% endblock %}
 
 {% block content %}
 
-    <form class="form" action="{{ router.url('signup_post') }}" method="post">
+    <form class="form" action="{{ url('home') }}" method="post">
 
         <h1 class="form__title">Inscription</h1>
 
@@ -61,7 +61,7 @@
                     'option': 'link-wrapper',
                     'prefix': 'Vous avez déjà un compte ?',
                     'title': 'Connectez-vous',
-                    'href': router.url('login_get')
+                    'href': url('home')
                 } %}
 
                 {% include "components/button.html.twig" with {

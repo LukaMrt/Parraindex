@@ -9,6 +9,13 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class AboutController extends AbstractController
 {
+    private const array AUTHORS = [
+        ['firstName' => "Lilian", 'lastName' => "Baudry"],
+        ['firstName' => "Melvyn", 'lastName' => "Delpree"],
+        ['firstName' => "Vincent", 'lastName' => "Chavot--Dambrun"],
+        ['firstName' => "Luka", 'lastName' => "Maret"],
+    ];
+
     public function __construct(
         private readonly PersonService $personService
     ) {
@@ -17,12 +24,10 @@ class AboutController extends AbstractController
     #[Route('/about', name: 'about')]
     public function index(): Response
     {
-        $authors = [
-            $this->personService->getPersonByIdentity("Lilian", "Baudry"),
-            $this->personService->getPersonByIdentity("Melvyn", "Delpree"),
-            $this->personService->getPersonByIdentity("Vincent", "Chavot--Dambrun"),
-            $this->personService->getPersonByIdentity("Luka", "Maret"),
-        ];
+        $authors = array_map(
+            static fn($author) => $this->personService->getPersonByIdentity($author['firstName'], $author['lastName']),
+            self::AUTHORS
+        );
 
         return $this->render('about.html.twig', ['authors' => $authors]);
     }

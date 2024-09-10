@@ -1,15 +1,15 @@
-{% extends '/old/view/layouts/base.html.twig' %}
+{% extends 'layouts/base.html.twig' %}
 
-{% set style = style('contact.css') %}
+{% set style = asset('styles/contact.scss') %}
 {% set title = 'Parraindex - Contact' %}
 
 {% block javascripts %}
-    <script type="module" src="{{ script("contact.scripts") }}"></script>
+    <script type="module" src="{{ asset('scripts/contact.js') }}"></script>
 {% endblock %}
 
 {% block content %}
 
-    <form class="form form--big" action="{{ router.url('contact_post') }}" method="post">
+    <form class="form form--big" action="{{ url('home') }}" method="post">
 
         <h1 class="form__title">Formulaire de contact</h1>
 

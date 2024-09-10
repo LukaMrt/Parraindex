@@ -4,31 +4,14 @@ namespace App\Application\contact;
 
 use App\Application\contact\executor\ContactExecutors;
 use App\Entity\old\contact\Contact;
+use App\Repository\ContactRepository;
 
-/**
- * Service to manage the contacts
- */
 class ContactService
 {
-    /**
-     * @var ContactExecutors executors
-     */
-    private ContactExecutors $contactExecutors;
-
-    /**
-     * @var ContactDAO DAO for the contacts
-     */
-    private ContactDAO $contactDAO;
-
-
-    /**
-     * @param ContactExecutors $contactExecutors executors
-     * @param ContactDAO $contactDAO DAO for the contacts
-     */
-    public function __construct(ContactExecutors $contactExecutors, ContactDAO $contactDAO)
-    {
-        $this->contactExecutors = $contactExecutors;
-        $this->contactDAO = $contactDAO;
+    public function __construct(
+        private readonly ContactExecutors $contactExecutors,
+        private readonly ContactRepository $contactRepository,
+    ) {
     }
 
 
