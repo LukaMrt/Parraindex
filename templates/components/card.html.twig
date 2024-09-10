@@ -14,7 +14,6 @@
             {% if characteristic.visible %}
                 {% include 'components/social-network.html.twig'
                     with {
-                    'network': characteristic.type,
                     'link': characteristic.type.url ~ characteristic.value,
                     'image': 'images/icons/' ~ characteristic.type.image
                 } %}

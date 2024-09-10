@@ -16,4 +16,13 @@ enum Type: int
             self::UNKNOWN => '',
         };
     }
+
+    public function getIcon(): string
+    {
+        return match ($this) {
+            self::HEART   => 'heart.svg',
+            self::CLASSIC => 'chain.svg',
+            self::UNKNOWN => 'interrogation.svg',
+        };
+    }
 }

@@ -8,7 +8,7 @@
 
         {% for sponsor in person.godFathers %}
             {% set godFather = sponsor.godfather %}
-            <a href="{{ url('home', {'id': sponsor.id}) }}"
+            <a href="{{ url('sponsor', {'id': sponsor.id}) }}"
                class="person-family__portrait person-family__portrait--godfather">
                 <img src="{{ asset('images/pictures/' ~ godFather.picture) }}" alt="{{ godFather.firstName }}"
                      class="person-family__portrait-image">
@@ -26,7 +26,7 @@
 
         {% for sponsor in person.godChildren %}
             {% set godChild = sponsor.godChild %}
-            <a href="{{ url('home', {'id': sponsor.id}) }}"
+            <a href="{{ url('sponsor', {'id': sponsor.id}) }}"
                class="person-family__portrait person-family__portrait--godchild">
                 <img src="{{ asset('images/pictures/' ~ godChild.picture) }}" alt="{{ godChild.firstName }}"
                      class="person-family__portrait-image">

@@ -2,8 +2,7 @@
 
 namespace App\Application\sponsor;
 
-use App\Application\person\PersonDAO;
-use App\Entity\old\sponsor\Sponsor;
+use App\Entity\Sponsor\Sponsor;
 use App\Entity\old\sponsor\SponsorFactory;
 use App\Repository\PersonRepository;
 use App\Repository\SponsorRepository;
@@ -12,18 +11,8 @@ readonly class SponsorService
 {
     public function __construct(
         private PersonRepository $personRepository,
-        private SponsorRepository $sponsorRepository ) {
-    }
-
-
-    /**
-     * Get person family by id
-     * @param int $personId Person id
-     * @return array|null
-     */
-    public function getPersonFamily(int $personId): ?array
-    {
-        return $this->sponsorDAO->getPersonFamily($personId);
+        private SponsorRepository $sponsorRepository
+    ) {
     }
 
 
@@ -38,35 +27,15 @@ readonly class SponsorService
     }
 
 
-    /**
-     * Get sponsor by id
-     * @param int $id Id
-     * @return Sponsor|null
-     */
-    public function getSponsor(int $id): ?Sponsor
-    {
-        return $this->sponsorDAO->getSponsorById($id);
-    }
-
 
     /**
      * Get sponsor by id
-     * @param int $int God father id
+     * @param int $id God father id
      * @return Sponsor|null
      */
-    public function getSponsorById(int $int): ?Sponsor
+    public function getSponsorById(int $id): ?Sponsor
     {
-        $sponsor = $this->sponsorDAO->getSponsorById($int);
-
-        if ($sponsor === null) {
-            return null;
-        }
-
-        $godFather = $this->personRepository->getById($sponsor->getGodFather()->getId());
-        $godSon = $this->personRepository->getById($sponsor->getGodChild()->getId());
-        $sponsor->setGodFather($godFather);
-        $sponsor->setGodChild($godSon);
-        return $sponsor;
+        return $this->sponsorRepository->getById($id);
     }
 
 

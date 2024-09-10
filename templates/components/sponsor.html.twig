@@ -16,14 +16,14 @@
 <div class="sponsor__content">
 
     {% include 'components/card.html.twig' with {
-        'id': godFather.id,
-        'color': godFather.color,
-        'firstName': godFather.firstName,
-        'lastName': godFather.lastName,
-        'picture': godFather.picture,
-        'characteristics': godFather.characteristics,
-        'description': godFather.biography,
-        'startYear': godFather.startYear,
+        'id': sponsor.godFather.id,
+        'color': sponsor.godFather.color,
+        'firstName': sponsor.godFather.firstName,
+        'lastName': sponsor.godFather.lastName,
+        'picture': 'images/pictures/' ~ sponsor.godFather.picture,
+        'characteristics': sponsor.godFather.characteristics,
+        'description': sponsor.godFather.biography,
+        'startYear': sponsor.godFather.startYear,
     } %}
 
     <div class="sponsor__content-link">
@@ -31,19 +31,19 @@
             {{ sponsor.formatDate('j') }} {{ trans_day_hash[sponsor.formatDate('F')] }} {{ sponsor.formatDate('Y') }}
         </p>
         <div class="sponsor__content-link-line">
-            <img src="{{ icon(sponsor.icon) }}" alt="icon" class="sponsor__content-link-icon">
+            <img src="{{ asset('images/icons/' ~ sponsor.type.icon) }}" alt="icon" class="sponsor__content-link-icon">
         </div>
     </div>
 
     {% include 'components/card.html.twig' with {
-        'id': godChild.id,
-        'color': godChild.color,
-        'firstName': godChild.firstName,
-        'lastName': godChild.lastName,
-        'picture': godChild.picture,
-        'characteristics': godChild.characteristics,
-        'description': godChild.biography,
-        'startYear': godChild.startYear,
+        'id': sponsor.godChild.id,
+        'color': sponsor.godChild.color,
+        'firstName': sponsor.godChild.firstName,
+        'lastName': sponsor.godChild.lastName,
+        'picture': 'images/pictures/' ~ sponsor.godChild.picture,
+        'characteristics': sponsor.godChild.characteristics,
+        'description': sponsor.godChild.biography,
+        'startYear': sponsor.godChild.startYear,
     } %}
 
 </div>

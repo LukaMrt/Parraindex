@@ -15,11 +15,11 @@ class Sponsor
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'godFathers')]
+    #[ORM\ManyToOne(inversedBy: 'godChildren')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Person $godFather = null;
 
-    #[ORM\ManyToOne(inversedBy: 'godChildren')]
+    #[ORM\ManyToOne(inversedBy: 'godFathers')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Person $godChild = null;
 
@@ -110,5 +110,13 @@ class Sponsor
         $this->createdAt = $createdAt;
 
         return $this;
+    }
+
+    public function formatDate(string $format): string
+    {
+        if ($this->date) {
+            return $this->date->format($format);
+        }
+        return '';
     }
 }

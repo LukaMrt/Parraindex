@@ -5,61 +5,32 @@ namespace App\Controller;
 use App\Application\person\PersonService;
 use App\Application\sponsor\SponsorService;
 use App\Infrastructure\old\router\Router;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-/**
- * The sponsor page, it's the page where the user can see the sponsor
- */
-class SponsorController extends Controller
+class SponsorController extends AbstractController
 {
-    /**
-     * @var SponsorService the sponsor service
-     */
-    private SponsorService $sponsorService;
-
-
-    /**
-     * @param Environment $twig the twig environment
-     * @param Router $router the router
-     * @param PersonService $personService the person service
-     * @param SponsorService $sponsorService the sponsor service
-     */
     public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
-        SponsorService $sponsorService
+        private readonly SponsorService $sponsorService
     ) {
-        parent::__construct($twig, $router, $personService);
-        $this->sponsorService = $sponsorService;
     }
 
-
-    /**
-     * function get
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError when the template is not found
-     * @throws RuntimeError when an error occurs during the rendering
-     * @throws SyntaxError when an error occurs during the rendering
-     */
-    public function get(Router $router, array $parameters): void
+    #[Route('/sponsor/{id}', name: 'sponsor')]
+    public function index(int $id): Response
     {
-        $sponsor = $this->sponsorService->getSponsorById($parameters['id']);
+        $sponsor = $this->sponsorService->getSponsorById($id);
 
         if ($sponsor === null) {
-            header('Location: ' . $router->url('error', ['error' => 404]));
-            die();
+            return $this->redirectToRoute('error');
         }
 
-        $this->render('sponsor.html.twig', [
+        return $this->render('sponsor.html.twig', [
             'sponsor' => $sponsor,
-            'godFather' => $sponsor->getGodFather(),
-            'godChild' => $sponsor->getGodChild(),
         ]);
     }
 }
