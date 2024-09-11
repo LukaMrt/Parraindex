@@ -28,7 +28,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private Collection $roles;
 
     /**
-     * @var string The hashed password
+     * @var ?string The hashed password
      */
     #[ORM\Column]
     private ?string $password = null;
@@ -74,17 +74,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRoles(): array
     {
-        $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
-        $roles[] = 'ROLE_USER';
+        if (!$this->roles->contains(Role::USER)) {
+            $this->roles->add(Role::USER);
+        }
 
-        return array_unique($roles);
+        return $this->roles->map(fn (Role $role) => $role->toString())->toArray();
     }
 
     /**
-     * @param list<string> $roles
+     * @param Collection<int, Role> $roles
      */
-    public function setRoles(array $roles): static
+    public function setRoles(Collection $roles): static
     {
         $this->roles = $roles;
 

@@ -1,3 +1,8 @@
 framework:
     mailer:
-        dsn: '%env(MAILER_DSN)%'
+        dsn: 'smtp://%env(MAIL_USER)%:%env(MAIL_PASSWORD)%@%env(MAIL_HOST)%:%env(MAIL_PORT)%'
+        envelope:
+            sender: '%env(MAIL_USER)%'
+        headers:
+            from: 'Parrainboss <%env(MAIL_USER)%>'
+            reply-to: 'No reply %env(MAIL_USER)%'

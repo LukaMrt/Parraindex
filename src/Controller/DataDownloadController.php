@@ -8,19 +8,8 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-/**
- * Controller to download data
- */
 class DataDownloadController extends Controller
 {
-    /**
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the rendering
-     */
     public function get(Router $router, array $parameters): void
     {
         header('content-type: Application/json');

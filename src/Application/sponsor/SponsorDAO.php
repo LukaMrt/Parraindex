@@ -4,9 +4,6 @@ namespace App\Application\sponsor;
 
 use App\Entity\old\sponsor\Sponsor;
 
-/**
- * Sponsor data access object
- */
 interface SponsorDAO
 {
     /**

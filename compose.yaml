@@ -15,3 +15,8 @@ services:
       retries: 10
     volumes:
       - ./docker/db/data:/var/lib/mysql:rw
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "${MAIL_PORT}:1025"
+      - "${MAIL_WEB_PORT}:8025"

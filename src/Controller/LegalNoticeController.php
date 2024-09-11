@@ -2,27 +2,15 @@
 
 namespace App\Controller;
 
-use App\Infrastructure\old\router\Router;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * The legal notice list all legal content of the website
- */
-class LegalNoticeController extends Controller
+class LegalNoticeController extends AbstractController
 {
-    /**
-     * function get
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the rendering
-     */
-    public function get(Router $router, array $parameters): void
+    #[Route('/mentions-legales', name: 'legalNotice')]
+    public function index(): Response
     {
-        $this->render('legalNotice.html.twig');
+        return $this->render('legalNotice.html.twig');
     }
 }

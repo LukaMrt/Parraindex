@@ -16,7 +16,7 @@ class ContactExecutors
     /**
      * @param ContactExecutor[] $executors the list of contact
      */
-    public function __construct(array $executors)
+    public function __construct(array $executors = [])
     {
         $this->executors = $executors;
     }

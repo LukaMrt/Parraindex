@@ -5,71 +5,23 @@ namespace App\Controller;
 use App\Application\login\LoginService;
 use App\Application\person\PersonService;
 use App\Infrastructure\old\router\Router;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-/**
- * The login page, it's the page where the user can log in
- */
-class LoginController extends Controller
+class LoginController extends AbstractController
 {
-    /**
-     * @var LoginService the login service
-     */
-    private LoginService $loginService;
-
-
-    /**
-     * @param Environment $twig the twig environment
-     * @param Router $router the router
-     * @param PersonService $personService the person service
-     * @param LoginService $passwordService the password service
-     */
-    public function __construct(
-        Environment $twig,
-        Router $router,
-        PersonService $personService,
-        LoginService $passwordService
-    ) {
-        parent::__construct($twig, $router, $personService);
-        $this->loginService = $passwordService;
-    }
-
-
-    /**
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurs during the rendering
-     * @throws SyntaxError if an error occurs during the rendering
-     */
-    public function get(Router $router, array $parameters): void
+    #[Route('/login', name: 'login', methods: ['GET'])]
+    public function index(AuthenticationUtils $authenticationUtils): Response
     {
-        $this->render('login.html.twig', ['router' => $router]);
-    }
-
-
-    /**
-     * @param Router $router the router
-     * @param array $parameters the parameters
-     * @return void
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurs during the rendering
-     * @throws SyntaxError if an error occurs during the rendering
-     */
-    public function post(Router $router, array $parameters): void
-    {
-
-        $formParameters = [
-            'login' => $_POST['login'] ?? '',
-            'password' => $_POST['password'] ?? ''
-        ];
-
-        $error = $this->loginService->login($formParameters);
-
-        $this->render('login.html.twig', ['error' => $error ?? '']);
+        return $this->render('login.html.twig', [
+            'last_username' => $authenticationUtils->getLastUsername(),
+            'error'         => $authenticationUtils->getLastAuthenticationError(),
+        ]);
     }
 }

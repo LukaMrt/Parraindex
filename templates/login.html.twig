@@ -9,7 +9,7 @@
 
 {% block content %}
 
-    <form class="form" action="{{ url("login_post") }}" method="post">
+    <form class="form" action="{{ url("login") }}" method="post">
 
         <h1 class="form__title">Connexion</h1>
 
@@ -17,32 +17,45 @@
 
             {% include "components/form/input.html.twig" with {
                 'type': 'email',
-                'slug': 'login',
+                'slug': '_username',
                 'title': 'Email universitaire',
                 'placeholder': 'john.doe@etu.univ-lyon1.fr',
-                'pattern' : '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$'
+                'pattern' : '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
+                'classes': '',
+                'value': '',
+                'readonly': false,
             } %}
 
             {% include "components/form/input.html.twig" with {
                 'type': 'password',
-                'slug': 'password',
+                'slug': '_password',
                 'title': 'Mot de passe',
                 'placeholder': '••••••••••',
                 'pattern': '.+',
+                'classes': '',
+                'value': '',
+                'readonly': false,
             } %}
 
             <div class="form-block form-block--row form-block--space-around">
                 {% include "components/link.html.twig" with{
                     'prefix': 'Vous n\'avez pas encore de compte ?',
                     'title': 'Cliquez ici',
-                    'href': url('home')
+                    'href': url('home'),
+                    'classes': '',
+                    'value': '',
+                    'readonly': false,
+                    'option': '',
                 } %}
                 {% include "components/button.html.twig" with {
                     'type': 'submit',
                     'button_content': 'Envoyer',
                     'priority': 'primary',
                     'name': 'action',
-                    'value': 'login'
+                    'value': 'login',
+                    'classes': '',
+                    'value': '',
+                    'readonly': false,
                 } %}
             </div>
 
@@ -50,7 +63,11 @@
                 'option': 'link--row',
                 'prefix': 'Mot de passe oublié ?',
                 'title': 'Cliquez ici',
-                'href': url('home')
+                'href': url('home'),
+                'classes': '',
+                'value': '',
+                'readonly': false,
+                'option': '',
             } %}
 
         </div>

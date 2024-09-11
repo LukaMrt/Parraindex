@@ -41,7 +41,8 @@ class LogoutController extends Controller
      * @param array $parameters the parameters
      * @return void
      */
-    #[NoReturn] public function get(Router $router, array $parameters): void
+    #[NoReturn]
+    public function get(Router $router, array $parameters): void
     {
         $this->loginService->logout();
     }

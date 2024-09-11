@@ -42,7 +42,7 @@
         "symfony/validator": "7.1.*",
         "symfony/web-link": "7.1.*",
         "symfony/yaml": "7.1.*",
-        "symfonycasts/sass-bundle": "^0.7.0",
+        "symfonycasts/sass-bundle": "^0.8.1",
         "twig/extra-bundle": "^2.12|^3.0",
         "twig/twig": "^2.12|^3.0"
     },
@@ -85,6 +85,12 @@
         ],
         "post-update-cmd": [
             "@auto-scripts"
+        ],
+        "fixtures": [
+            "php bin/console doctrine:fixtures:load --no-interaction"
+        ],
+        "migration": [
+            "php bin/console doctrine:migrations:migrate --no-interaction"
         ]
     },
     "conflict": {
