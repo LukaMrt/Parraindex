@@ -1,0 +1,58 @@
+parameters:
+    # Directories to be analyzed
+    paths:
+        - src
+        - tests
+
+    cache:
+        directory: var/cache/phpstan
+
+    # Level 0 is the loosest, level 9 is the strictest
+    level: max
+
+    # Autoload files for custom functions or classes not autoloaded via Composer
+    bootstrapFiles:
+        - %rootDir%/../vendor/autoload.php
+
+    # Exclude specific files or directories from analysis
+    excludePaths:
+        - %currentWorkingDirectory%/src/Legacy/*
+        - %currentWorkingDirectory%/tests/Fixtures/*
+
+    # Custom rules or extensions
+    # E.g., if using Doctrine, Symfony, or other integrations, add the necessary extensions
+    # extensions:
+    #     - vendor/phpstan/phpstan-doctrine/extension.neon
+    #     - vendor/phpstan/phpstan-symfony/extension.neon
+
+    # Report uninitialized properties
+    checkUninitializedProperties: true
+
+    # Report missing return types for methods and functions
+    checkMissingIterableValueType: true
+
+    # Enable stricter checks for arrays
+    checkExplicitMixed: true
+
+    # Treat mixed types with caution and require explicit handling
+    strictMixed: true
+
+    # Use static reflection for more accurate results with attributes
+    featureToggles:
+        useStaticReflection: true
+
+    # Enable analysis of PHPDoc types to ensure consistency with actual types
+    phpDoc:
+        strict: true
+
+    # Ignore specific error messages (if needed)
+    ignoreErrors:
+        - '#Call to an undefined method .*#'
+        - '#Property .* does not accept null#'
+
+    # Memory limit for PHPStan
+    memoryLimit: 2G
+
+    # If using Symfony, set up container parameters
+    # symfony:
+    #     container_xml_path: %currentWorkingDirectory%/var/cache/dev/App_KernelDevDebugContainer.xml
