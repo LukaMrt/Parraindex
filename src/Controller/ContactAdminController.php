@@ -21,7 +21,7 @@ class ContactAdminController extends AbstractController
     {
         $this->denyAccessUnlessGranted(Role::ADMIN);
 
-        $list = $this->contactService->getContactList();
+        $list  = $this->contactService->getContactList();
         $types = Type::getValues();
 
         return $this->render('contactAdmin.html.twig', [

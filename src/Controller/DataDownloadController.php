@@ -21,7 +21,7 @@ class DataDownloadController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            $response['code'] = 401;
+            $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté pour télécharger des données";
             echo json_encode($response);
             die();
@@ -29,14 +29,14 @@ class DataDownloadController extends Controller
 
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
 
-        $id = $_SESSION['user']->getId();
+        $id     = $_SESSION['user']->getId();
         $person = $this->personService->getPersonData($isAdmin ? $parameters['id'] : $id);
 
         if (!$person) {
-            $response['code'] = 404;
+            $response['code']       = 404;
             $response['messages'][] = "Aucune donnée n'a été trouvée";
         } else {
-            $response['content'] = json_encode($person, JSON_PRETTY_PRINT);
+            $response['content']    = json_encode($person, JSON_PRETTY_PRINT);
             $response['messages'][] = "Données téléchargées";
         }
 

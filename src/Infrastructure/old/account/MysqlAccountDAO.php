@@ -45,7 +45,7 @@ class MysqlAccountDAO implements AccountDAO
 
         $query = $connection->prepare("SELECT password FROM Account WHERE email = :login LIMIT 1");
         $query->execute(['login' => $login]);
-        $result = $query->fetch();
+        $result   = $query->fetch();
         $password = new Password('');
 
         if ($result) {
@@ -224,7 +224,7 @@ SQL
             return null;
         }
 
-        $person = PersonBuilder::aPerson();
+        $person  = PersonBuilder::aPerson();
         $account = null;
 
         while ($row = $query->fetch()) {
@@ -242,11 +242,11 @@ SQL
 
             $privileges[] = new Privilege($school, Role::fromString($row->privilege_name));
 
-            $id = $row->id_account;
+            $id    = $row->id_account;
             $email = $row->email;
             $person->withId($row->id_person);
             $password = new Password($row->password);
-            $account = new Account($id, $email, $person->build(), $password, ...$privileges);
+            $account  = new Account($id, $email, $person->build(), $password, ...$privileges);
         }
 
         $query->closeCursor();

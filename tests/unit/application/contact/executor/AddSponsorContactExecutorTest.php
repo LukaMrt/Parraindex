@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 class AddSponsorContactExecutorTest extends TestCase
 {
     private const TEST_EMAIL = 'test.test@test.com';
-    private const TEST_DATE = '2021-01-01';
+    private const TEST_DATE  = '2021-01-01';
     private AddSponsorContactExecutor $executor;
 
     private ContactDAO $contactDAO;
@@ -40,8 +40,8 @@ class AddSponsorContactExecutorTest extends TestCase
     public function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $redirect = $this->createMock(Redirect::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
+        $redirect         = $this->createMock(Redirect::class);
+        $this->personDAO  = $this->createMock(PersonDAO::class);
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
         $this->executor = new AddSponsorContactExecutor(
@@ -152,7 +152,7 @@ class AddSponsorContactExecutorTest extends TestCase
     {
 
         $godFather = $this->createMock(Person::class);
-        $godChild = $this->createMock(Person::class);
+        $godChild  = $this->createMock(Person::class);
 
         $this->personDAO->method('getPersonById')
             ->withConsecutive([1], [2])
@@ -183,7 +183,7 @@ class AddSponsorContactExecutorTest extends TestCase
     {
 
         $godFather = $this->createMock(Person::class);
-        $godChild = $this->createMock(Person::class);
+        $godChild  = $this->createMock(Person::class);
 
         $this->personDAO->method('getPersonById')
             ->withConsecutive([1], [2])

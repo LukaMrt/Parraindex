@@ -9,7 +9,7 @@ use ValueError;
  */
 enum CharacteristicType: string
 {
-    case URL = '';
+    case URL   = '';
     case PHONE = 'tel:';
     case EMAIL = 'mailto:';
 

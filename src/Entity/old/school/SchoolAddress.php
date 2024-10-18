@@ -24,7 +24,7 @@ class SchoolAddress
     public function __construct(string $street, string $city)
     {
         $this->street = $street;
-        $this->city = $city;
+        $this->city   = $city;
     }
 
 

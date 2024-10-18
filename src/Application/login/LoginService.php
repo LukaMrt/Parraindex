@@ -49,11 +49,11 @@ class LoginService
         SessionManager $sessionManager,
         Logger $logger
     ) {
-        $this->accountDAO = $accountDAO;
-        $this->personDAO = $personDAO;
-        $this->redirect = $redirect;
+        $this->accountDAO     = $accountDAO;
+        $this->personDAO      = $personDAO;
+        $this->redirect       = $redirect;
         $this->sessionManager = $sessionManager;
-        $this->logger = $logger;
+        $this->logger         = $logger;
     }
 
 
@@ -96,8 +96,8 @@ class LoginService
     private function checkLogin(array $parameters): string
     {
 
-        $login = $parameters['login'] ?? '';
-        $password = new Password($parameters['password'] ?? '');
+        $login        = $parameters['login'] ?? '';
+        $password     = new Password($parameters['password'] ?? '');
         $realPassword = $this->accountDAO->getAccountPassword($login);
 
         $errors = [

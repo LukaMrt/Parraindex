@@ -38,10 +38,10 @@ abstract class ContactExecutor
      */
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, Type $contactType, array $fields)
     {
-        $this->contactDAO = $contactDAO;
-        $this->redirect = $redirect;
+        $this->contactDAO  = $contactDAO;
+        $this->redirect    = $redirect;
         $this->contactType = $contactType;
-        $this->fields = $fields;
+        $this->fields      = $fields;
     }
 
 

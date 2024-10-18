@@ -46,7 +46,7 @@ class EditPersonController extends Controller
     ) {
         parent::__construct($twig, $router, $personService);
         $this->characteristicTypeService = $characteristicTypeService;
-        $this->characteristicService = $characteristicService;
+        $this->characteristicService     = $characteristicService;
     }
 
 
@@ -119,7 +119,7 @@ class EditPersonController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            $response['code'] = 401;
+            $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté et avoir les "
                 . "droits d'administrateur pour ajouter une personne";
             echo json_encode($response);
@@ -128,13 +128,13 @@ class EditPersonController extends Controller
 
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin) {
-            $response['code'] = 403;
+            $response['code']       = 403;
             $response['messages'][] = "Vous n'avez pas les droits pour créer une personne";
             echo json_encode($response);
             exit(0);
         }
 
-        $newValues = $this->getFormValues($data, $response, $isAdmin);
+        $newValues          = $this->getFormValues($data, $response, $isAdmin);
         $newCharacteristics = $this->getFormCharacteristics($data, $response);
 
         if ($response['code'] === 200) {
@@ -170,22 +170,22 @@ class EditPersonController extends Controller
     {
         $newData = [];
 
-        $newData['biography'] = $data['person-bio'] ?? null;
+        $newData['biography']   = $data['person-bio'] ?? null;
         $newData['description'] = $data['person-desc'] ?? null;
 
         if (!isset($newData['biography'], $newData['description'])) {
             $response['messages'][] = 'Les champs biographie et description sont indisponibles';
-            $response['code'] = 400;
+            $response['code']       = 400;
         }
 
         $newData['color'] = $data['banner-color'] ?? null;
 
         if (!isset($newData['color'])) {
             $response['messages'][] = 'La couleur de la bannière est indisponible';
-            $response['code'] = 400;
+            $response['code']       = 400;
         } elseif (!preg_match('/^#[a-f0-9]{6}$/i', $newData['color'])) {
             $response['messages'][] = 'La couleur doit être au format exadecimal';
-            $response['code'] = 400;
+            $response['code']       = 400;
         }
 
         // the picture in base64
@@ -198,7 +198,7 @@ class EditPersonController extends Controller
 
         if ($encodedPictureData === null) {
             $response['messages'][] = 'La photo est indisponible';
-            $response['code'] = 400;
+            $response['code']       = 400;
         } elseif (!empty($encodedPictureData)) {
             // regex to get the base64 encoded picture without the data:image/...;base64
             $encodedPicture = preg_replace('/^data:image\/\w+;base64,/', '', $encodedPictureData);
@@ -214,16 +214,16 @@ class EditPersonController extends Controller
 
             if ($picture === false) {
                 $response['messages'][] = "La photo n'est pas correctement encodée";
-                $response['code'] = 400;
+                $response['code']       = 400;
             } else {
-                $file = finfo_open();
+                $file     = finfo_open();
                 $mimeType = finfo_buffer($file, $picture, FILEINFO_MIME_TYPE);
 
                 if (!array_key_exists($mimeType, $extensions)) {
                     $response['messages'][] = "Le format de la photo n'est pas supporté";
-                    $response['code'] = 400;
+                    $response['code']       = 400;
                 } else {
-                    $newData['image'] = $picture;
+                    $newData['image']   = $picture;
                     $newData['picture'] = uniqid() . 'controller' . $extensions[$mimeType];
                 }
             }
@@ -231,14 +231,14 @@ class EditPersonController extends Controller
 
         if ($isAdmin) {
             $newData['first_name'] = $data['person-firstname'] ?? null;
-            $newData['last_name'] = $data['person-lastname'] ?? null;
+            $newData['last_name']  = $data['person-lastname'] ?? null;
 
             if (!isset($newData['first_name'], $newData['last_name'])) {
                 $response['messages'][] = 'Les champs prénom et nom sont indisponibles';
-                $response['code'] = 400;
+                $response['code']       = 400;
             } elseif ($newData['first_name'] === '' || $newData['last_name'] === '') {
                 $response['messages'][] = 'Les champs prénom et nom ne peuvent pas être vides';
-                $response['code'] = 400;
+                $response['code']       = 400;
             }
         }
 
@@ -261,12 +261,12 @@ class EditPersonController extends Controller
         $characteristicsCounter = 0;
 
         foreach ($characteristics as $characteristic) {
-            $fieldTitle = 'characteristic-' . $characteristic->getTitle();
+            $fieldTitle      = 'characteristic-' . $characteristic->getTitle();
             $fieldVisibility = 'characteristic-visibility-' . $characteristic->getTitle();
 
             if (!isset($data[$fieldTitle])) {
                 $response['messages'][] = 'Le champ ' . $characteristic->getTitle() . " n'est pas disponible";
-                $response['code'] = 400;
+                $response['code']       = 400;
             } else {
                 $visibility = isset($data[$fieldVisibility]);
 
@@ -276,7 +276,7 @@ class EditPersonController extends Controller
 
                 if ($characteristicsCounter === 5) {
                     $response['messages'][] = 'Vous ne pouvez pas avoir plus de 4 caractéristiques visibles';
-                    $response['code'] = 400;
+                    $response['code']       = 400;
 
                     // increment the counter to avoid the message to be displayed multiple times
                     $characteristicsCounter++;
@@ -311,7 +311,7 @@ class EditPersonController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            $response['code'] = 401;
+            $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté et avoir les droits "
                 . "d'administrateur pour modifier une personne";
             echo json_encode($response);
@@ -320,7 +320,7 @@ class EditPersonController extends Controller
 
         $person = $this->personService->getPersonById($parameters['id']);
         if ($person === null) {
-            $response['code'] = 404;
+            $response['code']       = 404;
             $response['messages'][] = "La personne n'existe pas";
             echo json_encode($response);
             exit(0);
@@ -328,7 +328,7 @@ class EditPersonController extends Controller
 
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin && $_SESSION['user']->getId() !== $person->getId()) {
-            $response['code'] = 403;
+            $response['code']       = 403;
             $response['messages'][] = "Vous n'avez pas les droits pour modifier cette personne";
             echo json_encode($response);
             exit(0);
@@ -336,9 +336,9 @@ class EditPersonController extends Controller
 
         $newValues = $this->getFormValues($data, $response, $isAdmin, $person);
 
-        $newValues['id'] = $person->getId();
+        $newValues['id']         = $person->getId();
         $newValues['first_name'] = ($newValues['first_name'] ?? $person->getFirstName());
-        $newValues['last_name'] = ($newValues['last_name'] ?? $person->getLastName());
+        $newValues['last_name']  = ($newValues['last_name'] ?? $person->getLastName());
 
         $newCharacteristics = $this->getFormCharacteristics($data, $response);
 
@@ -400,7 +400,7 @@ class EditPersonController extends Controller
         ];
 
         if (empty($_SESSION)) {
-            $response['code'] = 401;
+            $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur "
                 . "pour supprimer une personne";
             echo json_encode($response);
@@ -409,7 +409,7 @@ class EditPersonController extends Controller
 
         $person = $this->personService->getPersonById($parameters['id']);
         if ($person === null) {
-            $response['code'] = 404;
+            $response['code']       = 404;
             $response['messages'][] = 'La personne n°' . $parameters['id'] . " n'existe pas";
             echo json_encode($response);
             exit(0);
@@ -417,21 +417,21 @@ class EditPersonController extends Controller
 
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin) {
-            $response['code'] = 403;
+            $response['code']       = 403;
             $response['messages'][] = 'Vous devez être Administrateur pour supprimer une personne';
             echo json_encode($response);
             exit(0);
         }
 
         $imgPath = 'image/pictures/';
-        $img = $person->getPicture();
+        $img     = $person->getPicture();
         if ($img !== 'no-picture.svg' && file_exists($imgPath . $img)) {
             unlink($imgPath . $img);
         }
 
         $this->personService->deletePerson($person);
 
-        $response['redirect'] = $router->url('tree');
+        $response['redirect']      = $router->url('tree');
         $response['redirectDelay'] = 5000;
 
         $response['messages'][] = 'La personne ' . $person->getFirstName() . ' '

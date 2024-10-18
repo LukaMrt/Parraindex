@@ -27,14 +27,14 @@ class PersonContact extends Contact
      * @param Person $person The person related to the contact request
      */
     public function __construct(
-        int     $id,
-        string  $contactDate,
+        int $id,
+        string $contactDate,
         ?string $contactResolution,
-        string  $contacterName,
-        string  $contacterEmail,
-        Type    $type,
-        string  $description,
-        Person  $person
+        string $contacterName,
+        string $contacterEmail,
+        Type $type,
+        string $description,
+        Person $person
     ) {
         parent::__construct(
             $id,

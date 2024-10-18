@@ -50,17 +50,17 @@ class Person implements JsonSerializable
      */
     public function __construct(PersonBuilder $builder)
     {
-        $this->id = $builder->id;
-        $this->identity = $builder->identity;
-        $this->biography = $builder->biography;
-        $this->color = $builder->color;
-        $this->description = $builder->description;
+        $this->id              = $builder->id;
+        $this->identity        = $builder->identity;
+        $this->biography       = $builder->biography;
+        $this->color           = $builder->color;
+        $this->description     = $builder->description;
         $this->characteristics = $builder->characteristics;
-        $this->sponsors = $builder->sponsors;
-        $this->families = $builder->families;
-        $this->associations = $builder->associations;
-        $this->promotions = $builder->promotions;
-        $this->startYear = $builder->startYear;
+        $this->sponsors        = $builder->sponsors;
+        $this->families        = $builder->families;
+        $this->associations    = $builder->associations;
+        $this->promotions      = $builder->promotions;
+        $this->startYear       = $builder->startYear;
     }
 
 

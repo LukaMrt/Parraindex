@@ -22,7 +22,8 @@ enum Type: int
 
 
     /**
-     * @return array<string, mixed> All the values of the enum as an array with the id as key and the verbose name as value
+     * @return array<string, mixed> All the values of the enum
+     * as an array with the id as key and the verbose name as value
      */
     public static function getValues(): array
     {

@@ -49,7 +49,7 @@ class ContactCloseController extends Controller
         parent::__construct($twig, $router, $personService);
         $this->contactService = $contactService;
         $this->sponsorService = $sponsorService;
-        $this->signupService = $signupService;
+        $this->signupService  = $signupService;
     }
 
 
@@ -70,7 +70,7 @@ class ContactCloseController extends Controller
             $this->resolve($parameters['id']);
         }
 
-        $contactId = $parameters['id'];
+        $contactId  = $parameters['id'];
         $resolverId = $_SESSION['user']->getId();
 
         $this->contactService->closeContact($contactId, $resolverId);

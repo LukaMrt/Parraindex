@@ -29,7 +29,7 @@ class CharacteristicServiceTest extends TestCase
             ->withVisibility(true)
             ->build();
 
-        $this->characteristicDAO = $this->createMock(CharacteristicDAO::class);
+        $this->characteristicDAO     = $this->createMock(CharacteristicDAO::class);
         $this->characteristicService = new CharacteristicService($this->characteristicDAO);
     }
 

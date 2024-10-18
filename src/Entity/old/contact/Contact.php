@@ -51,21 +51,21 @@ abstract class Contact
      * @param string $description The description of the contact message
      */
     public function __construct(
-        int     $id,
-        string  $contactDate,
+        int $id,
+        string $contactDate,
         ?string $contactResolution,
-        string  $contacterName,
-        string  $contacterEmail,
-        Type    $type,
-        string  $description
+        string $contacterName,
+        string $contacterEmail,
+        Type $type,
+        string $description
     ) {
-        $this->id = $id;
-        $this->contactDate = $contactDate;
+        $this->id                = $id;
+        $this->contactDate       = $contactDate;
         $this->contactResolution = $contactResolution;
-        $this->contacterName = ucwords(strtolower($contacterName));
-        $this->contacterEmail = $contacterEmail;
-        $this->type = $type;
-        $this->description = $description;
+        $this->contacterName     = ucwords(strtolower($contacterName));
+        $this->contacterEmail    = $contacterEmail;
+        $this->type              = $type;
+        $this->description       = $description;
     }
 
 

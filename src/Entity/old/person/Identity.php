@@ -37,8 +37,8 @@ class Identity implements JsonSerializable
     public function __construct(string $firstName, string $lastName, ?string $picture = null, ?string $birthdate = null)
     {
         $this->firstName = ucwords(strtolower($firstName));
-        $this->lastName = ucwords(strtolower($lastName));
-        $this->picture = $picture ?? 'no-picture.svg';
+        $this->lastName  = ucwords(strtolower($lastName));
+        $this->picture   = $picture ?? 'no-picture.svg';
 
         if ($birthdate) {
             $this->birthdate = DateTime::createFromFormat("Y-m-d", $birthdate);

@@ -67,18 +67,18 @@ class PersonBuilder
      */
     private function __construct()
     {
-        $this->id = 0;
-        $this->identity = new Identity('', '');
-        $this->birthDate = new DateTime();
-        $this->biography = '';
-        $this->description = '';
+        $this->id              = 0;
+        $this->identity        = new Identity('', '');
+        $this->birthDate       = new DateTime();
+        $this->biography       = '';
+        $this->description     = '';
         $this->characteristics = [];
-        $this->sponsors = [];
-        $this->families = [];
-        $this->associations = [];
-        $this->promotions = [];
-        $this->startYear = 0;
-        $this->color = '#f0f0f0';
+        $this->sponsors        = [];
+        $this->families        = [];
+        $this->associations    = [];
+        $this->promotions      = [];
+        $this->startYear       = 0;
+        $this->color           = '#f0f0f0';
     }
 
 

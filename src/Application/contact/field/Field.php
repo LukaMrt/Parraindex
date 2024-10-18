@@ -25,7 +25,7 @@ class Field
      */
     public function __construct(string $name, string $error)
     {
-        $this->name = $name;
+        $this->name  = $name;
         $this->error = $error;
     }
 

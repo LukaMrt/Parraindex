@@ -91,7 +91,7 @@ class ContactController extends Controller
             'id' => $person->getId(),
             'title' => ucfirst($person->getFirstName()) . ' ContactController.php' . strtoupper($person->getLastName())
         ];
-        $people = array_map($closure, $people);
+        $people  = array_map($closure, $people);
 
         $this->render('contact.html.twig', [
             'options' => Type::getValues(),

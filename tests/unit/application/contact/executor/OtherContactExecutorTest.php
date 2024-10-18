@@ -27,7 +27,7 @@ class OtherContactExecutorTest extends TestCase
     {
 
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $redirect = $this->createMock(Redirect::class);
+        $redirect         = $this->createMock(Redirect::class);
 
         $this->executor = new OtherContactExecutor($this->contactDAO, $redirect);
     }

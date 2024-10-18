@@ -64,12 +64,12 @@ class PasswordService
         Logger $logger
     ) {
         $this->accountDAO = $accountDAO;
-        $this->personDAO = $personDAO;
-        $this->redirect = $redirect;
-        $this->mailer = $mailer;
-        $this->random = $random;
-        $this->urlUtils = $urlUtils;
-        $this->logger = $logger;
+        $this->personDAO  = $personDAO;
+        $this->redirect   = $redirect;
+        $this->mailer     = $mailer;
+        $this->random     = $random;
+        $this->urlUtils   = $urlUtils;
+        $this->logger     = $logger;
     }
 
 
@@ -87,15 +87,21 @@ class PasswordService
             return 'Email inconnu.';
         }
 
-        $account = $this->accountDAO->getAccountByLogin($parameters['email']);
-        $person = $this->personDAO->getPersonById($account->getPersonId());
+        $account   = $this->accountDAO->getAccountByLogin($parameters['email']);
+        $person    = $this->personDAO->getPersonById($account->getPersonId());
         $firstname = $person->getFirstname();
-        $lastname = $person->getLastname();
-        $account = new Account($account->getId(), $account->getLogin(), $person, new Password($parameters['password']));
+        $lastname  = $person->getLastname();
+        $account   = new Account(
+            $account->getId(),
+            $account->getLogin(),
+            $person,
+            new Password($parameters['password']),
+            $account->getRole(),
+        );
 
         $token = $this->random->generate(10);
-        $url = $this->urlUtils->getBaseUrl();
-        $url .= $this->urlUtils->buildUrl('resetpassword_validation', ['token' => $token]);
+        $url   = $this->urlUtils->getBaseUrl();
+        $url  .= $this->urlUtils->buildUrl('resetpassword_validation', ['token' => $token]);
         $this->mailer->send(
             $parameters['email'],
             'Parraindex : réinitialisation de mot de passe',

@@ -55,7 +55,7 @@ readonly class SponsorService
         }
 
         $godFather = $sponsor->getGodFather();
-        $godChild = $sponsor->getGodChild();
+        $godChild  = $sponsor->getGodChild();
 
         $sponsor = SponsorFactory::createSponsor(
             $parameters['sponsorType'],
@@ -79,7 +79,7 @@ readonly class SponsorService
     {
 
         $godFather = $this->personRepository->getById($parameters['godFatherId']);
-        $godChild = $this->personRepository->getById($parameters['godChildId']);
+        $godChild  = $this->personRepository->getById($parameters['godChildId']);
 
         $sponsor = $this->sponsorDAO->getSponsorByPeopleId($godFather->getId(), $godChild->getId());
 

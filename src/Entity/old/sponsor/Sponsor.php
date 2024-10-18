@@ -37,10 +37,10 @@ abstract class Sponsor implements JsonSerializable
      */
     protected function __construct(int $id, ?Person $godFather, ?Person $godChild, string $date)
     {
-        $this->id = $id;
+        $this->id        = $id;
         $this->godFather = $godFather;
-        $this->godChild = $godChild;
-        $this->date = null;
+        $this->godChild  = $godChild;
+        $this->date      = null;
 
         if ($date) {
             $this->date = DateTime::createFromFormat("Y-m-d", $date);

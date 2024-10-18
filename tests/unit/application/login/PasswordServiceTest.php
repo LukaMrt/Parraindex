@@ -43,13 +43,13 @@ class PasswordServiceTest extends TestCase
 
         $this->validAccount = new Account(1, self::TEST_EMAIL, $this->person, new Password('password'));
 
-        $this->accountDAO = $this->createMock(AccountDAO::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
-        $this->mailer = $this->createMock(Mailer::class);
-        $this->random = $this->createMock(Random::class);
-        $this->urlUtils = $this->createMock(UrlUtils::class);
-        $this->logger = $this->createMock(Logger::class);
+        $this->accountDAO      = $this->createMock(AccountDAO::class);
+        $this->personDAO       = $this->createMock(PersonDAO::class);
+        $this->redirect        = $this->createMock(Redirect::class);
+        $this->mailer          = $this->createMock(Mailer::class);
+        $this->random          = $this->createMock(Random::class);
+        $this->urlUtils        = $this->createMock(UrlUtils::class);
+        $this->logger          = $this->createMock(Logger::class);
         $this->passwordService = new PasswordService(
             $this->accountDAO,
             $this->personDAO,

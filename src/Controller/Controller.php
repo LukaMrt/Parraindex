@@ -36,8 +36,8 @@ abstract class Controller
      */
     public function __construct(Environment $twig, Router $router, PersonService $personService)
     {
-        $this->twig = $twig;
-        $this->router = $router;
+        $this->twig          = $twig;
+        $this->router        = $router;
         $this->personService = $personService;
     }
 

@@ -58,13 +58,13 @@ class EditSponsorController extends Controller
         }
 
         $sponsor = $this->sponsorService->getSponsor($parameters['id']);
-        $people = $this->personService->getAllPeople();
+        $people  = $this->personService->getAllPeople();
         usort($people, fn($a, $b) => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
         $closure = fn($person) => [
             'id' => $person->getId(),
             'title' => $person->getLastName() . ' EditSponsorController.php' . $person->getFirstName()
         ];
-        $people = array_map($closure, $people);
+        $people  = array_map($closure, $people);
         $people2 = $people;
 
         $sponsorTypes = [
@@ -75,12 +75,12 @@ class EditSponsorController extends Controller
 
         if ($sponsor !== null) {
             $godFather = $this->personService->getPersonById($sponsor->getGodFather()->getId());
-            $godChild = $this->personService->getPersonById($sponsor->getGodChild()->getId());
-            $people = [[
+            $godChild  = $this->personService->getPersonById($sponsor->getGodChild()->getId());
+            $people    = [[
                 'id' => $godFather->getId(),
                 'title' => $godFather->getLastName() . ' EditSponsorController.php' . $godFather->getFirstName()
             ]];
-            $people2 = [[
+            $people2   = [[
                 'id' => $godChild->getId(),
                 'title' => $godChild->getLastName() . ' EditSponsorController.php' . $godChild->getFirstName()
             ]];

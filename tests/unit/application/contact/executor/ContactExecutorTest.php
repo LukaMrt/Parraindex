@@ -19,7 +19,7 @@ class ContactExecutorTest extends TestCase
     public function setUp(): void
     {
 
-        $contactDAO = $this->createMock(ContactDAO::class);
+        $contactDAO     = $this->createMock(ContactDAO::class);
         $this->redirect = $this->createMock(Redirect::class);
 
         $this->executor = new OtherContactExecutor($contactDAO, $this->redirect);

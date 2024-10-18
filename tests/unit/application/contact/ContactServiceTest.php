@@ -22,9 +22,9 @@ class ContactServiceTest extends TestCase
     public function setUp(): void
     {
         $this->contactExecutors = $this->createMock(ContactExecutors::class);
-        $this->contactExecutor = $this->createMock(ContactExecutor::class);
-        $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->contactService = new ContactService($this->contactExecutors, $this->contactDAO);
+        $this->contactExecutor  = $this->createMock(ContactExecutor::class);
+        $this->contactDAO       = $this->createMock(ContactDAO::class);
+        $this->contactService   = new ContactService($this->contactExecutors, $this->contactDAO);
     }
 
 
@@ -100,7 +100,7 @@ class ContactServiceTest extends TestCase
     public function testGetcontactReturnsWantendContact(): void
     {
 
-        $contact = new DefaultContact(1, date('Y-m-d'), null, '', '', Type::OTHER, '');
+        $contact  = new DefaultContact(1, date('Y-m-d'), null, '', '', Type::OTHER, '');
         $contact2 = new DefaultContact(2, date('Y-m-d'), null, '', '', Type::OTHER, '');
 
         $this->contactDAO->method('getContactList')

@@ -33,10 +33,10 @@ abstract class SimpleSponsorContactExecutor extends ContactExecutor
      */
     public function __construct(
         ContactDAO $contactDAO,
-        Redirect   $redirect,
-        Type       $contactType,
+        Redirect $redirect,
+        Type $contactType,
         SponsorDAO $sponsorDAO,
-        PersonDAO  $personDAO
+        PersonDAO $personDAO
     ) {
         $personExistsClosure = fn($value) => $personDAO->getPersonById($value) !== null;
         parent::__construct($contactDAO, $redirect, $contactType, [
@@ -49,7 +49,7 @@ abstract class SimpleSponsorContactExecutor extends ContactExecutor
             new CustomField('godChildId', 'Le fillot doit exister', $personExistsClosure),
             new Field('message', 'La description doit contenir au moins 1 caractère'),
         ]);
-        $this->sponsorDAO = $sponsorDAO;
+        $this->sponsorDAO    = $sponsorDAO;
     }
 
 

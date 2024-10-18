@@ -90,7 +90,7 @@ class MonologLogger implements Logger
             return;
         }
 
-        $zip = new ZipArchive();
+        $zip         = new ZipArchive();
         $zipFileName = $logPath . '/archives/' . $name . '_' . date('Y-m-d_H-i-s') . '.zip';
         if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
             $zip->addFile($logFile, 'log.txt');

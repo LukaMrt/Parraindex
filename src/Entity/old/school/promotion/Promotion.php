@@ -54,12 +54,12 @@ class Promotion implements JsonSerializable
         string $description,
         Person ...$students
     ) {
-        $this->id = $id;
-        $this->degree = $degree;
-        $this->school = $school;
-        $this->year = $year;
+        $this->id          = $id;
+        $this->degree      = $degree;
+        $this->school      = $school;
+        $this->year        = $year;
         $this->description = $description;
-        $this->students = $students;
+        $this->students    = $students;
     }
 
 

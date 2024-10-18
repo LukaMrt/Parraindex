@@ -36,10 +36,10 @@ class PersonServiceTest extends TestCase
             ->withColor('test')
             ->build();
 
-        $this->personDAO = $this->createMock(PersonDAO::class);
+        $this->personDAO      = $this->createMock(PersonDAO::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
-        $this->sponsorDAO = $this->createMock(SponsorDAO::class);
-        $this->logger = $this->createMock(Logger::class);
+        $this->sponsorDAO     = $this->createMock(SponsorDAO::class);
+        $this->logger         = $this->createMock(Logger::class);
 
         $this->personService = new PersonService(
             $this->personDAO,

@@ -49,13 +49,13 @@ class SignupServiceTest extends TestCase
 
         $this->validAccount = new Account(1, 'test.test@etu.univ-lyon1.fr', $this->person, new Password('password'));
 
-        $this->accountDAO = $this->createMock(AccountDAO::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
-        $this->mailer = $this->createMock(Mailer::class);
-        $this->random = $this->createMock(Random::class);
-        $this->urlUtils = $this->createMock(UrlUtils::class);
-        $this->logger = $this->createMock(Logger::class);
+        $this->accountDAO    = $this->createMock(AccountDAO::class);
+        $this->personDAO     = $this->createMock(PersonDAO::class);
+        $this->redirect      = $this->createMock(Redirect::class);
+        $this->mailer        = $this->createMock(Mailer::class);
+        $this->random        = $this->createMock(Random::class);
+        $this->urlUtils      = $this->createMock(UrlUtils::class);
+        $this->logger        = $this->createMock(Logger::class);
         $this->signupService = new SignupService(
             $this->accountDAO,
             $this->personDAO,
@@ -80,7 +80,7 @@ class SignupServiceTest extends TestCase
     public function testSignupDetectsInvalidEmail(): void
     {
 
-        $parameters = self::DEFAULT_PARAMETERS;
+        $parameters          = self::DEFAULT_PARAMETERS;
         $parameters['email'] = 'test';
 
         $this->logger->expects($this->exactly(2))
@@ -177,9 +177,9 @@ class SignupServiceTest extends TestCase
         $this->accountDAO->method("existsAccountByIdentity")
             ->willReturn(false);
 
-        $params = self::DEFAULT_PARAMETERS;
+        $params          = self::DEFAULT_PARAMETERS;
         $params['email'] = 'tEsta.testb@etu.univ-lyon1.fr';
-        $return = $this->signupService->signup($params);
+        $return          = $this->signupService->signup($params);
 
         $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
     }
@@ -201,9 +201,9 @@ class SignupServiceTest extends TestCase
         $this->accountDAO->method("existsAccountByIdentity")
             ->willReturn(false);
 
-        $params = self::DEFAULT_PARAMETERS;
+        $params          = self::DEFAULT_PARAMETERS;
         $params['email'] = 'amkfjsqdmfkjqsdf.qsdùfkjqsdfkljsqdf@etu.univ-lyon1.fr';
-        $return = $this->signupService->signup($params);
+        $return          = $this->signupService->signup($params);
 
         $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
     }

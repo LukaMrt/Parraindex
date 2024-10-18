@@ -121,15 +121,15 @@ SQL
             return null;
         }
 
-        $person = $buildPeople[0];
-        $godFathers = $this->buildPeople($godFathersQuery);
+        $person      = $buildPeople[0];
+        $godFathers  = $this->buildPeople($godFathersQuery);
         $godChildren = $this->buildPeople($godChildrenQuery);
 
-        $godFathersSponsors = [];
+        $godFathersSponsors  = [];
         $godChildrenSponsors = [];
 
         while ($row = $godFathersSponsorsQuery->fetch()) {
-            $godChild = $person;
+            $godChild  = $person;
             $godFather = null;
 
             for ($i = 0; $i < count($godFathers); $i++) {
@@ -139,8 +139,8 @@ SQL
                 }
             }
 
-            $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
-            $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
+            $sponsorType          = $row->id_heart_sponsor != null ? 1 : -1;
+            $sponsorType          = $row->id_classic_sponsor != null ? 0 : $sponsorType;
             $godFathersSponsors[] = SponsorFactory::createSponsor(
                 $sponsorType,
                 $row->id_sponsor,
@@ -153,7 +153,7 @@ SQL
 
         while ($row = $godChildrenSponsorsQuery->fetch()) {
             $godFather = $person;
-            $godChild = null;
+            $godChild  = null;
 
             for ($i = 0; $i < count($godChildren); $i++) {
                 if ($godChildren[$i]->getId() === $row->id_godson) {
@@ -162,8 +162,8 @@ SQL
                 }
             }
 
-            $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
-            $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
+            $sponsorType           = $row->id_heart_sponsor != null ? 1 : -1;
+            $sponsorType           = $row->id_classic_sponsor != null ? 0 : $sponsorType;
             $godChildrenSponsors[] = SponsorFactory::createSponsor(
                 $sponsorType,
                 $row->id_sponsor,
@@ -197,7 +197,7 @@ SQL
         $people = [];
 
         $currentPerson = null;
-        $buffer = [];
+        $buffer        = [];
 
         while ($row = $query->fetch()) {
             if ($currentPerson === null) {
@@ -205,8 +205,8 @@ SQL
             }
 
             if ($currentPerson != $row->id_person) {
-                $people[] = $this->buildPerson($buffer);
-                $buffer = [];
+                $people[]      = $this->buildPerson($buffer);
+                $buffer        = [];
                 $currentPerson = $row->id_person;
             }
 
@@ -228,8 +228,8 @@ SQL
     private function buildPerson(array $buffer): Person
     {
 
-        $characteristics = [];
-        $filterClosure = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
+        $characteristics       = [];
+        $filterClosure         = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
         $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($characteristicsBuffer as $row) {
@@ -289,11 +289,11 @@ SQL
 
         if ($row = $query->fetch()) {
             $godFather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
-            $godChild = PersonBuilder::aPerson()->withId($row->id_godson)->build();
+            $godChild  = PersonBuilder::aPerson()->withId($row->id_godson)->build();
 
             $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
             $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
-            $sponsor = SponsorFactory::createSponsor(
+            $sponsor     = SponsorFactory::createSponsor(
                 $sponsorType,
                 $row->id_sponsor,
                 $godFather,
@@ -338,11 +338,11 @@ SQL
 
         if ($row = $query->fetch()) {
             $godFather = PersonBuilder::aPerson()->withId($row->id_godfather)->build();
-            $godChild = PersonBuilder::aPerson()->withId($row->id_godson)->build();
+            $godChild  = PersonBuilder::aPerson()->withId($row->id_godson)->build();
 
             $sponsorType = $row->id_heart_sponsor != null ? 1 : -1;
             $sponsorType = $row->id_classic_sponsor != null ? 0 : $sponsorType;
-            $sponsor = SponsorFactory::createSponsor(
+            $sponsor     = SponsorFactory::createSponsor(
                 $sponsorType,
                 $row->id_sponsor,
                 $godFather,
@@ -404,7 +404,7 @@ SQL
                 'reason' => $sponsor->getDescription()
             ]);
         } elseif ($sponsor instanceof HeartSponsor) {
-            $sql = "INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)";
+            $sql   = "INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)";
             $query = $connection->prepare($sql);
             $query->execute([
                 'id' => $connection->lastInsertId(),

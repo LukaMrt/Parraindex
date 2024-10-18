@@ -11,11 +11,11 @@ use App\Entity\Person\Role;
 readonly class Account
 {
     public function __construct(
-        private int      $id,
-        private string   $email,
-        private Person   $user,
+        private int $id,
+        private string $email,
+        private Person $user,
         private Password $password,
-        private Role     $role,
+        private Role $role,
     ) {
     }
 

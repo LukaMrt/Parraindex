@@ -70,12 +70,12 @@ class SignupService
         Logger $logger
     ) {
         $this->accountDAO = $accountDAO;
-        $this->personDAO = $personDAO;
-        $this->redirect = $redirect;
-        $this->mailer = $mailer;
-        $this->random = $random;
-        $this->urlUtils = $urlUtils;
-        $this->logger = $logger;
+        $this->personDAO  = $personDAO;
+        $this->redirect   = $redirect;
+        $this->mailer     = $mailer;
+        $this->random     = $random;
+        $this->urlUtils   = $urlUtils;
+        $this->logger     = $logger;
     }
 
 
@@ -87,18 +87,18 @@ class SignupService
     public function signup(array $parameters): string
     {
 
-        $email = strtolower($parameters['email'] ?? '');
-        $password = $parameters['password'] ?? '';
+        $email           = strtolower($parameters['email'] ?? '');
+        $password        = $parameters['password'] ?? '';
         $passwordConfirm = $parameters['password-confirm'] ?? '';
-        $firstname = $parameters['firstname'] ?? '';
-        $lastname = $parameters['lastname'] ?? '';
-        $person = $this->personDAO->getPerson(new Identity($firstname, $lastname));
+        $firstname       = $parameters['firstname'] ?? '';
+        $lastname        = $parameters['lastname'] ?? '';
+        $person          = $this->personDAO->getPerson(new Identity($firstname, $lastname));
 
         $error = $this->buildError($email, $password, $passwordConfirm, $lastname, $firstname, $person);
 
         if (empty($error)) {
             $account = new Account($person->getId(), $email, $person, new Password($password));
-            $token = $this->random->generate(10);
+            $token   = $this->random->generate(10);
             $this->accountDAO->createTemporaryAccount($account, $token);
             $url = $this->urlUtils->getBaseUrl() . $this->urlUtils->buildUrl('signup_validation', ['token' => $token]);
             $this->mailer->send(
@@ -173,11 +173,11 @@ class SignupService
             return $error;
         }
 
-        $identities = $this->personDAO->getAllIdentities();
+        $identities       = $this->personDAO->getAllIdentities();
         $emailLevenshtein = preg_replace(self::NON_LETTER_REGEX, '', explode('@', $email)[0]);
-        $nameLevenshtein = preg_replace(self::NON_LETTER_REGEX, '', strtolower($firstname . $lastname));
+        $nameLevenshtein  = preg_replace(self::NON_LETTER_REGEX, '', strtolower($firstname . $lastname));
         $entryLevenshtein = levenshtein($emailLevenshtein, $nameLevenshtein);
-        $minLevenshtein = $entryLevenshtein;
+        $minLevenshtein   = $entryLevenshtein;
 
         if (2 < $entryLevenshtein) {
             $error = 'D\'après notre recherche, cet email n\'est pas le vôtre';

@@ -65,9 +65,9 @@ class Person
 
     public function __construct()
     {
-        $this->sponsors = new ArrayCollection();
-        $this->godFathers = new ArrayCollection();
-        $this->godChildren = new ArrayCollection();
+        $this->sponsors        = new ArrayCollection();
+        $this->godFathers      = new ArrayCollection();
+        $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
     }
 

@@ -27,13 +27,13 @@ class SponsorContact extends Contact
      * @param Sponsor $sponsor The sponsor related to the contact
      */
     public function __construct(
-        int     $id,
-        string  $contactDate,
+        int $id,
+        string $contactDate,
         ?string $contactResolution,
-        string  $contacterName,
-        string  $contacterEmail,
-        Type    $type,
-        string  $description,
+        string $contacterName,
+        string $contacterEmail,
+        Type $type,
+        string $description,
         Sponsor $sponsor
     ) {
         parent::__construct(
@@ -56,7 +56,7 @@ class SponsorContact extends Contact
     {
 
         $godFather = $this->sponsor->getGodFather();
-        $godChild = $this->sponsor->getGodChild();
+        $godChild  = $this->sponsor->getGodChild();
 
         return [
             ['Parrain', $godFather->getFirstName() . ' SponsorContact.php' . $godFather->getLastName()],

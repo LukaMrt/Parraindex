@@ -58,7 +58,7 @@ class AddSponsorContactExecutor extends ContactExecutor
             new BoundedNumberField('sponsorType', 'Le type de lien doit être valide', 0, 1),
             new DateField('sponsorDate', 'La date doit être valide'),
         ]);
-        $this->personDAO = $personDAO;
+        $this->personDAO  = $personDAO;
         $this->sponsorDAO = $sponsorDAO;
     }
 
@@ -76,7 +76,7 @@ class AddSponsorContactExecutor extends ContactExecutor
         }
 
         $godFather = $this->personDAO->getPersonById($data['godFatherId']);
-        $godChild = $this->personDAO->getPersonById($data['godChildId']);
+        $godChild  = $this->personDAO->getPersonById($data['godChildId']);
 
         $sponsor = SponsorFactory::createSponsor(
             $data['sponsorType'],

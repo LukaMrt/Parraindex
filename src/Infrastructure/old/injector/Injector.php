@@ -69,6 +69,7 @@ use DI\NotFoundException;
 use Twig\Environment;
 use Twig\Loader\FilesystemLoader;
 use Twig\TwigFunction;
+
 use function DI\get;
 
 /**
@@ -92,7 +93,7 @@ class Injector
     public function __construct(Router $router)
     {
         $this->container = ContainerBuilder::buildDevContainer();
-        $this->router = $router;
+        $this->router    = $router;
     }
 
 
@@ -103,21 +104,21 @@ class Injector
     public function build(): void
     {
 
-        $twig = $this->buildTwig();
-        $databaseConnection = new DatabaseConnection();
-        $userDAO = get(MySqlPersonDAO::class);
-        $accountDAO = get(MySqlAccountDAO::class);
-        $sessionManager = get(DefaultSessionManager::class);
-        $redirect = get(HttpRedirect::class);
-        $personDAO = get(MySqlPersonDAO::class);
-        $contactDAO = get(MySqlContactDAO::class);
-        $sponsorDAO = get(MySqlSponsorDAO::class);
-        $characteristicDAO = get(MysqlCharacteristicDAO::class);
+        $twig                  = $this->buildTwig();
+        $databaseConnection    = new DatabaseConnection();
+        $userDAO               = get(MySqlPersonDAO::class);
+        $accountDAO            = get(MySqlAccountDAO::class);
+        $sessionManager        = get(DefaultSessionManager::class);
+        $redirect              = get(HttpRedirect::class);
+        $personDAO             = get(MySqlPersonDAO::class);
+        $contactDAO            = get(MySqlContactDAO::class);
+        $sponsorDAO            = get(MySqlSponsorDAO::class);
+        $characteristicDAO     = get(MysqlCharacteristicDAO::class);
         $characteristicTypeDAO = get(MysqlCharacteristicTypeDAO::class);
-        $logger = get(MonologLogger::class);
-        $mailer = get(PhpMailer::class);
-        $random = get(DefaultRandom::class);
-        $urlUtils = get(DefaultUrlUtils::class);
+        $logger                = get(MonologLogger::class);
+        $mailer                = get(PhpMailer::class);
+        $random                = get(DefaultRandom::class);
+        $urlUtils              = get(DefaultUrlUtils::class);
 
         $this->container->set(Environment::class, $twig);
         $this->container->set(DatabaseConnection::class, $databaseConnection);

@@ -55,7 +55,7 @@ SQL
         ]);
 
         $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare(<<<SQL
+        $query    = $connection->prepare(<<<SQL
                             INSERT INTO EditPerson (id_ticket, first_name, last_name, entry_year)
                             VALUES (:id_ticket, LOWER(:firstname), LOWER(:lastname), :entry_year)
 SQL
@@ -105,7 +105,7 @@ SQL
         ]);
 
         $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare(<<<SQL
+        $query    = $connection->prepare(<<<SQL
                             INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
                             VALUES (:id_ticket, :id_person, LOWER(:firstname), LOWER(:lastname), :entry_year)
 SQL
@@ -171,13 +171,13 @@ SQL
         ]);
 
         $ticketId = $connection->lastInsertId();
-        $query = $connection->prepare(<<<SQL
+        $query    = $connection->prepare(<<<SQL
                             INSERT INTO EditSponsor (id_ticket, id_sponsor, id_godfather,
                                                      id_godson, date, description, type)
                             VALUES (:id_ticket, :id_sponsor, :id_godfather, :id_godson, :date, :description, :type)
 SQL
         );
-        $date = $contact->getSponsor()->formatDate("Y-m-d");
+        $date     = $contact->getSponsor()->formatDate("Y-m-d");
         $query->execute([
             "id_ticket" => $ticketId,
             "id_sponsor" => $contact->getSponsor()->getId() != -1 ? $contact->getSponsor()->getId() : null,
@@ -274,7 +274,7 @@ SQL
         }
 
         while ($data = $queryPerson->fetch()) {
-            $person = PersonBuilder::aPerson()
+            $person     = PersonBuilder::aPerson()
                 ->withId($data->id_person ?? -1)
                 ->withIdentity(new Identity($data->first_name, $data->last_name))
                 ->withStartYear($data->entry_year ?? -1)

@@ -67,7 +67,7 @@ SQL
         $users = [];
 
         $currentPerson = null;
-        $buffer = [];
+        $buffer        = [];
 
         while ($row = $query->fetch()) {
             if ($currentPerson === null) {
@@ -75,8 +75,8 @@ SQL
             }
 
             if ($currentPerson != $row->id_person) {
-                $users[] = $this->buildPerson($buffer);
-                $buffer = [];
+                $users[]       = $this->buildPerson($buffer);
+                $buffer        = [];
                 $currentPerson = $row->id_person;
             }
 
@@ -109,12 +109,12 @@ SQL
             ->withDescription($buffer[0]->description)
             ->withColor($buffer[0]->banner_color);
 
-        $startYear = date("Y");
-        $filterClosure = fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null;
+        $startYear       = date("Y");
+        $filterClosure   = fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null;
         $promotionBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($promotionBuffer as $row) {
-            $degree = new Degree(
+            $degree    = new Degree(
                 $row->id_degree,
                 $row->degree_name,
                 $row->level,
@@ -122,7 +122,7 @@ SQL
                 $row->duration,
                 $row->official
             );
-            $school = new School(
+            $school    = new School(
                 $row->id_school,
                 $row->school_name,
                 new SchoolAddress($row->address, $row->city),
@@ -133,7 +133,7 @@ SQL
             $startYear = min($startYear, $row->year);
         }
 
-        $filterClosure = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
+        $filterClosure         = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
         $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($characteristicsBuffer as $row) {
@@ -161,7 +161,7 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare(<<<SQL
+        $query      = $connection->prepare(<<<SQL
                         SELECT *
                         FROM Person
                         WHERE LOWER(first_name) = LOWER(:first_name)
@@ -197,7 +197,7 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare(<<<SQL
+        $query      = $connection->prepare(<<<SQL
                                 SELECT Pe.*,
                                        Pr.*,
                                        D.*,
@@ -246,7 +246,7 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare(<<<SQL
+        $query      = $connection->prepare(<<<SQL
             UPDATE Person
             SET first_name = LOWER(:firstName), last_name = LOWER(:lastName), biography = :biography,
 			    banner_color = :bannerColor, description = :description, picture = :picture
@@ -302,7 +302,7 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare(<<<SQL
+        $query      = $connection->prepare(<<<SQL
                                 SELECT Pe.*,
                                        Pr.*,
                                        D.*,
@@ -345,7 +345,7 @@ SQL
     {
 
         $connection = $this->databaseConnection->getDatabase();
-        $query = $connection->prepare(<<<SQL
+        $query      = $connection->prepare(<<<SQL
                             INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture)
                             VALUES (LOWER(:firstName), LOWER(:lastName), :biography,
                                     :bannerColor, :description, :picture)

@@ -11,7 +11,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PersonRepository extends ServiceEntityRepository
 {
-    const string DEFAULT_PICTURE = 'no-picture.svg';
+    public const string DEFAULT_PICTURE = 'no-picture.svg';
 
     public function __construct(ManagerRegistry $registry)
     {

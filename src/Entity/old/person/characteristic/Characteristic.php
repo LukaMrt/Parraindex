@@ -44,13 +44,13 @@ class Characteristic implements JsonSerializable
      */
     public function __construct(CharacteristicBuilder $builder)
     {
-        $this->id = $builder->getId();
-        $this->title = $builder->getTitle();
-        $this->type = $builder->getType();
-        $this->url = $builder->getUrl();
-        $this->image = $builder->getImage();
+        $this->id      = $builder->getId();
+        $this->title   = $builder->getTitle();
+        $this->type    = $builder->getType();
+        $this->url     = $builder->getUrl();
+        $this->image   = $builder->getImage();
         $this->visible = $builder->isVisible();
-        $this->value = $builder->getValue();
+        $this->value   = $builder->getValue();
     }
 
 

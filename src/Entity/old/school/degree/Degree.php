@@ -43,10 +43,10 @@ class Degree
      */
     public function __construct(int $id, string $name, int $level, int $ects, int $duration, bool $official)
     {
-        $this->id = $id;
-        $this->name = $name;
-        $this->level = $level;
-        $this->ects = $ects;
+        $this->id       = $id;
+        $this->name     = $name;
+        $this->level    = $level;
+        $this->ects     = $ects;
         $this->duration = $duration;
         $this->official = $official;
     }

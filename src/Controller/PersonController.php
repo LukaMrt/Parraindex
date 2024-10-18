@@ -15,7 +15,7 @@ class PersonController extends AbstractController
     }
 
     #[Route('/personne/{id}', name: 'person')]
-    public function index( int $id): Response
+    public function index(int $id): Response
     {
         $person = $this->personService->getPersonById($id);
 
@@ -24,7 +24,8 @@ class PersonController extends AbstractController
         }
 
         return $this->render(
-            'person.html.twig', [
+            'person.html.twig',
+            [
                 'person' => $person,
             ]
         );

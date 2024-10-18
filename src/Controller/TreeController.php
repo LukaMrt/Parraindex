@@ -9,7 +9,6 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class TreeController extends AbstractController
 {
-
     public function __construct(
         private readonly PersonService $personService,
     ) {

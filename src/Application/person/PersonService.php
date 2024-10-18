@@ -10,7 +10,7 @@ readonly class PersonService
 {
     public function __construct(
         private PersonRepository $personRepository,
-        private Logger           $logger,
+        private Logger $logger,
     ) {
     }
 

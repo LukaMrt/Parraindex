@@ -35,20 +35,20 @@ class LoginServiceTest extends TestCase
     public function setUp(): void
     {
 
-        $person = PersonBuilder::aPerson()
+        $person        = PersonBuilder::aPerson()
             ->withId(-1)
             ->withIdentity(new Identity('test', 'test'))
             ->build();
-        $school = new School(0, 'school', new SchoolAddress('street', 'city'), new DateTime());
-        $privilege = new Privilege($school, Role::ADMIN);
+        $school        = new School(0, 'school', new SchoolAddress('street', 'city'), new DateTime());
+        $privilege     = new Privilege($school, Role::ADMIN);
         $this->account = new Account(0, self::TEST_EMAIL, $person, new Password('password'), $privilege);
 
-        $this->accountDAO = $this->createMock(AccountDAO::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
+        $this->accountDAO     = $this->createMock(AccountDAO::class);
+        $this->personDAO      = $this->createMock(PersonDAO::class);
+        $this->redirect       = $this->createMock(Redirect::class);
         $this->sessionManager = $this->createMock(SessionManager::class);
-        $this->logger = $this->createMock(Logger::class);
-        $this->loginService = new LoginService(
+        $this->logger         = $this->createMock(Logger::class);
+        $this->loginService   = new LoginService(
             $this->accountDAO,
             $this->personDAO,
             $this->redirect,

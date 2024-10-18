@@ -46,10 +46,10 @@ class School
         DateTime $creationDate,
         ?Person $director = null
     ) {
-        $this->id = $id;
-        $this->name = $name;
-        $this->address = $address;
+        $this->id           = $id;
+        $this->name         = $name;
+        $this->address      = $address;
         $this->creationDate = $creationDate;
-        $this->director = $director;
+        $this->director     = $director;
     }
 }

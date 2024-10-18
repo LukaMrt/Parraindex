@@ -58,10 +58,10 @@ class PasswordContactExecutor extends ContactExecutor
             new EmailField('senderEmail', 'Votre email doit être valide'),
             new Field('password', 'Le mot de passe doit contenir au moins 1 caractère'),
         ]);
-        $this->personDAO = $personDAO;
+        $this->personDAO  = $personDAO;
         $this->accountDAO = $accountDAO;
-        $this->random = $random;
-        $this->urlUtils = $urlUtils;
+        $this->random     = $random;
+        $this->urlUtils   = $urlUtils;
     }
 
 
@@ -74,7 +74,7 @@ class PasswordContactExecutor extends ContactExecutor
 
         $sender = new Identity($data['senderFirstName'], $data['senderLastName']);
 
-        $error = "";
+        $error  = "";
         $person = $this->personDAO->getPerson($sender);
 
         if ($person === null) {
@@ -90,7 +90,7 @@ class PasswordContactExecutor extends ContactExecutor
         }
 
         $account = new Account($person->getId(), $data['senderEmail'], $person, new Password($data['password']));
-        $token = $this->random->generate(10);
+        $token   = $this->random->generate(10);
         $this->accountDAO->createTemporaryAccount($account, $token);
 
         $contact = new PersonContact(

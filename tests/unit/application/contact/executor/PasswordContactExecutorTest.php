@@ -37,12 +37,12 @@ class PasswordContactExecutorTest extends TestCase
 
     public function setUp(): void
     {
-        $this->personDAO = $this->createMock(PersonDAO::class);
+        $this->personDAO  = $this->createMock(PersonDAO::class);
         $this->accountDAO = $this->createMock(AccountDAO::class);
-        $this->random = $this->createMock(Random::class);
-        $this->urlUtils = $this->createMock(UrlUtils::class);
+        $this->random     = $this->createMock(Random::class);
+        $this->urlUtils   = $this->createMock(UrlUtils::class);
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $redirect = $this->createMock(Redirect::class);
+        $redirect         = $this->createMock(Redirect::class);
 
         $this->executor = new PasswordContactExecutor(
             $this->contactDAO,
@@ -58,7 +58,7 @@ class PasswordContactExecutorTest extends TestCase
     public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
     {
 
-        $parameters = self::DEFAULT_PARAMS;
+        $parameters                    = self::DEFAULT_PARAMS;
         $parameters['senderFirstName'] = '';
 
         $result = $this->executor->execute($parameters);
@@ -70,7 +70,7 @@ class PasswordContactExecutorTest extends TestCase
     public function testExecuteReturnsErrorWhenPasswordsAreNoteTheSame()
     {
 
-        $parameters = self::DEFAULT_PARAMS;
+        $parameters                    = self::DEFAULT_PARAMS;
         $parameters['passwordConfirm'] = 'test2';
 
         $result = $this->executor->execute($parameters);
@@ -142,7 +142,7 @@ class PasswordContactExecutorTest extends TestCase
     public function testExecuteCreateTemporaryAccountOnSuccess()
     {
 
-        $person = PersonBuilder::aPerson()->withId(1)->build();
+        $person  = PersonBuilder::aPerson()->withId(1)->build();
         $account = new Account(
             1,
             self::DEFAULT_PARAMS['senderEmail'],
@@ -169,7 +169,7 @@ class PasswordContactExecutorTest extends TestCase
     public function testExecuteSavesContactOnSuccess()
     {
 
-        $person = PersonBuilder::aPerson()->withId(1)->build();
+        $person  = PersonBuilder::aPerson()->withId(1)->build();
         $contact = new PersonContact(
             -1,
             date('Y-m-d'),

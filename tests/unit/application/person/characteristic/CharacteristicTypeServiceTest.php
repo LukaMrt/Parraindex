@@ -20,7 +20,7 @@ class CharacteristicTypeServiceTest extends TestCase
     public function setUp(): void
     {
 
-        $this->characteristicDAO = $this->createMock(CharacteristicTypeDAO::class);
+        $this->characteristicDAO         = $this->createMock(CharacteristicTypeDAO::class);
         $this->characteristicTypeService = new CharacteristicTypeService($this->characteristicDAO);
 
         $this->characteristic = (new CharacteristicBuilder())

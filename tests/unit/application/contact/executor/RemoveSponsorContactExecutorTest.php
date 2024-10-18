@@ -36,8 +36,8 @@ class RemoveSponsorContactExecutorTest extends TestCase
     public function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $redirect = $this->createMock(Redirect::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
+        $redirect         = $this->createMock(Redirect::class);
+        $this->personDAO  = $this->createMock(PersonDAO::class);
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
         $this->executor = new RemoveSponsorContactExecutor(

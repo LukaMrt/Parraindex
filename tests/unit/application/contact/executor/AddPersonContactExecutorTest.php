@@ -36,8 +36,8 @@ class AddPersonContactExecutorTest extends TestCase
     {
 
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->redirect = $this->createMock(Redirect::class);
-        $this->personDAO = $this->createMock(PersonDAO::class);
+        $this->redirect   = $this->createMock(Redirect::class);
+        $this->personDAO  = $this->createMock(PersonDAO::class);
 
         $this->executor = new AddPersonContactExecutor($this->contactDAO, $this->redirect, $this->personDAO);
     }
