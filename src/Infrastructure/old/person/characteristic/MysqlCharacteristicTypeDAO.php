@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\person\characteristic;
 
 use App\Application\person\characteristic\CharacteristicTypeDAO;
@@ -31,11 +33,12 @@ class MysqlCharacteristicTypeDAO implements CharacteristicTypeDAO
      * Get all the characteristics types
      * @return Characteristic[] The characteristics types
      */
+    #[\Override]
     public function getAllCharacteristicTypes(): array
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare(<<<SQL
+        $statement = $pdo->prepare(<<<SQL
                                 SELECT * FROM TypeCharacteristic
                                 ORDER BY characteristic_order
 SQL
@@ -78,11 +81,12 @@ SQL
      * @param int $idPerson Id of the person
      * @return Characteristic[] The characteristics types and values
      */
+    #[\Override]
     public function getAllCharacteristicAndValues(int $idPerson): array
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare(<<<SQL
+        $statement = $pdo->prepare(<<<SQL
                                     SELECT *
 									FROM TypeCharacteristic
 									    LEFT JOIN (SELECT * FROM Characteristic WHERE id_person = :id_person)

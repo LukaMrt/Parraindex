@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\contact;
 
 use App\Application\contact\ContactDAO;
@@ -34,28 +36,28 @@ class MysqlContactDAO implements ContactDAO
 
 
     /**
-     * @param PersonContact $contact the contact to save
-     * @return void
+     * @param PersonContact $personContact the contact to save
      */
-    public function savePersonAddContact(PersonContact $contact): void
+    #[\Override]
+    public function savePersonAddContact(PersonContact $personContact): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
                             VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([
-            "type" => $contact->getTypeId(),
-            "name" => $contact->getContacterName(),
-            "email" => $contact->getContacterEmail(),
-            "description" => $contact->getMessage()
+            "type" => $personContact->getTypeId(),
+            "name" => $personContact->getContacterName(),
+            "email" => $personContact->getContacterEmail(),
+            "description" => $personContact->getMessage()
         ]);
 
-        $ticketId = $connection->lastInsertId();
-        $query    = $connection->prepare(<<<SQL
+        $ticketId = $pdo->lastInsertId();
+        $query    = $pdo->prepare(<<<SQL
                             INSERT INTO EditPerson (id_ticket, first_name, last_name, entry_year)
                             VALUES (:id_ticket, LOWER(:firstname), LOWER(:lastname), :entry_year)
 SQL
@@ -63,155 +65,156 @@ SQL
 
         $query->execute([
             "id_ticket" => $ticketId,
-            "firstname" => $contact->getPerson()->getFirstName(),
-            "lastname" => $contact->getPerson()->getLastName(),
-            "entry_year" => $contact->getPerson()->getStartYear()
+            "firstname" => $personContact->getPerson()->getFirstName(),
+            "lastname" => $personContact->getPerson()->getLastName(),
+            "entry_year" => $personContact->getPerson()->getStartYear()
         ]);
 
         $query->closeCursor();
-        $connection = null;
+
     }
 
 
     /**
-     * @param PersonContact $contact the contact to save
-     * @return void
+     * @param PersonContact $personContact the contact to save
      */
-    public function savePersonRemoveContact(PersonContact $contact): void
+    #[\Override]
+    public function savePersonRemoveContact(PersonContact $personContact): void
     {
-        $this->savePersonUpdateContact($contact);
+        $this->savePersonUpdateContact($personContact);
     }
 
 
     /**
-     * @param PersonContact $contact the contact to save
-     * @return void
+     * @param PersonContact $personContact the contact to save
      */
-    public function savePersonUpdateContact(PersonContact $contact): void
+    #[\Override]
+    public function savePersonUpdateContact(PersonContact $personContact): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
                             VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([
-            "type" => $contact->getTypeId(),
-            "name" => $contact->getContacterName(),
-            "email" => $contact->getContacterEmail(),
-            "description" => $contact->getMessage()
+            "type" => $personContact->getTypeId(),
+            "name" => $personContact->getContacterName(),
+            "email" => $personContact->getContacterEmail(),
+            "description" => $personContact->getMessage()
         ]);
 
-        $ticketId = $connection->lastInsertId();
-        $query    = $connection->prepare(<<<SQL
+        $ticketId = $pdo->lastInsertId();
+        $query    = $pdo->prepare(<<<SQL
                             INSERT INTO EditPerson (id_ticket, id_person, first_name, last_name, entry_year)
                             VALUES (:id_ticket, :id_person, LOWER(:firstname), LOWER(:lastname), :entry_year)
 SQL
         );
         $query->execute([
             "id_ticket" => $ticketId,
-            "id_person" => $contact->getPerson()->getId(),
-            "firstname" => $contact->getPerson()->getFirstName(),
-            "lastname" => $contact->getPerson()->getLastName(),
-            "entry_year" => $contact->getPerson()->getStartYear()
+            "id_person" => $personContact->getPerson()->getId(),
+            "firstname" => $personContact->getPerson()->getFirstName(),
+            "lastname" => $personContact->getPerson()->getLastName(),
+            "entry_year" => $personContact->getPerson()->getStartYear()
         ]);
 
         $query->closeCursor();
-        $connection = null;
+
     }
 
 
     /**
-     * @param DefaultContact $contact the contact to save
-     * @return void
+     * @param DefaultContact $defaultContact the contact to save
      */
-    public function saveSimpleContact(DefaultContact $contact): void
+    #[\Override]
+    public function saveSimpleContact(DefaultContact $defaultContact): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
                             VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([
-            "type" => $contact->getTypeId(),
-            "name" => $contact->getContacterName(),
-            "email" => $contact->getContacterEmail(),
-            "description" => $contact->getMessage()
+            "type" => $defaultContact->getTypeId(),
+            "name" => $defaultContact->getContacterName(),
+            "email" => $defaultContact->getContacterEmail(),
+            "description" => $defaultContact->getMessage()
         ]);
 
         $query->closeCursor();
-        $connection = null;
+
     }
 
 
     /**
-     * @param SponsorContact $contact the contact to save
-     * @return void
+     * @param SponsorContact $sponsorContact the contact to save
      */
-    public function saveSponsorContact(SponsorContact $contact): void
+    #[\Override]
+    public function saveSponsorContact(SponsorContact $sponsorContact): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             INSERT INTO Ticket (type, creation_date, contacter_name, contacter_email, description)
                             VALUES (:type, NOW(), LOWER(:name), LOWER(:email), :description)
 SQL
         );
         $query->execute([
-            "type" => $contact->getTypeId(),
-            "name" => $contact->getContacterName(),
-            "email" => $contact->getContacterEmail(),
-            "description" => $contact->getMessage()
+            "type" => $sponsorContact->getTypeId(),
+            "name" => $sponsorContact->getContacterName(),
+            "email" => $sponsorContact->getContacterEmail(),
+            "description" => $sponsorContact->getMessage()
         ]);
 
-        $ticketId = $connection->lastInsertId();
-        $query    = $connection->prepare(<<<SQL
+        $ticketId = $pdo->lastInsertId();
+        $query    = $pdo->prepare(<<<SQL
                             INSERT INTO EditSponsor (id_ticket, id_sponsor, id_godfather,
                                                      id_godson, date, description, type)
                             VALUES (:id_ticket, :id_sponsor, :id_godfather, :id_godson, :date, :description, :type)
 SQL
         );
-        $date     = $contact->getSponsor()->formatDate("Y-m-d");
+        $date     = $sponsorContact->getSponsor()->formatDate("Y-m-d");
         $query->execute([
             "id_ticket" => $ticketId,
-            "id_sponsor" => $contact->getSponsor()->getId() != -1 ? $contact->getSponsor()->getId() : null,
-            "id_godfather" => $contact->getSponsor()->getGodfather()->getId(),
-            "id_godson" => $contact->getSponsor()->getGodChild()->getId(),
-            "date" => !empty($date) ? $date : null,
-            "description" => $contact->getSponsor()->getDescription(),
-            "type" => $contact->getSponsor()->getTypeId()
+            "id_sponsor" => $sponsorContact->getSponsor()->getId() != -1 ? $sponsorContact->getSponsor()->getId() : null,
+            "id_godfather" => $sponsorContact->getSponsor()->getGodfather()->getId(),
+            "id_godson" => $sponsorContact->getSponsor()->getGodChild()->getId(),
+            "date" => $date === '' || $date === '0' ? null : $date,
+            "description" => $sponsorContact->getSponsor()->getDescription(),
+            "type" => $sponsorContact->getSponsor()->getTypeId()
         ]);
 
         $query->closeCursor();
-        $connection = null;
+
     }
 
 
     /**
-     * @param PersonContact $contact the contact to save
-     * @return void
+     * @param PersonContact $personContact the contact to save
      */
-    public function saveChockingContentContact(PersonContact $contact): void
+    #[\Override]
+    public function saveChockingContentContact(PersonContact $personContact): void
     {
-        $this->savePersonUpdateContact($contact);
+        $this->savePersonUpdateContact($personContact);
     }
 
 
     /**
      * @return array the list of all the contacts
      */
+    #[\Override]
     public function getContactList(): array
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $queryDefault = $connection->prepare(<<<SQL
+        $queryDefault = $pdo->prepare(<<<SQL
                         SELECT T.*
                         FROM Ticket T
                             LEFT JOIN EditPerson EP on T.id_ticket = EP.id_ticket
@@ -222,7 +225,7 @@ SQL
 SQL
         );
 
-        $queryPerson = $connection->prepare(<<<SQL
+        $queryPerson = $pdo->prepare(<<<SQL
                         SELECT T.*,
                             EP.id_person,
                             EP.first_name,
@@ -235,7 +238,7 @@ SQL
 SQL
         );
 
-        $querySponsor = $connection->prepare(<<<SQL
+        $querySponsor = $pdo->prepare(<<<SQL
                         SELECT T.*,
                             ES.date,
                             ES.id_sponsor,
@@ -326,9 +329,8 @@ SQL
         $queryDefault->closeCursor();
         $queryPerson->closeCursor();
         $querySponsor->closeCursor();
-        $connection = null;
 
-        usort($contacts, function (Contact $a, Contact $b) {
+        usort($contacts, function (Contact $a, Contact $b): int {
             return $a->getContactDate() <=> $b->getContactDate();
         });
 
@@ -339,13 +341,13 @@ SQL
     /**
      * @param int $contactId the id of the contact to close
      * @param int $resolverId the id of the person who resolved the contact
-     * @return void
      */
+    #[\Override]
     public function closeContact(int $contactId, int $resolverId): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             UPDATE Ticket
                             SET id_resolver = :id_resolver, resolution_date = NOW()
                             WHERE id_ticket = :id_ticket
@@ -357,6 +359,6 @@ SQL
         ]);
 
         $query->closeCursor();
-        $connection = null;
+
     }
 }

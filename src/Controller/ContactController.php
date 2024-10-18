@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\contact\ContactService;
@@ -23,18 +25,18 @@ class ContactController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param ContactService $contactService the contact service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         ContactService $contactService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->contactService = $contactService;
     }
 
@@ -47,6 +49,7 @@ class ContactController extends Controller
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
      */
+    #[\Override]
     public function post(Router $router, array $parameters): void
     {
 
@@ -83,11 +86,12 @@ class ContactController extends Controller
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         $people = $this->personService->getAllPeople();
-        usort($people, fn($a, $b) => $a->getFirstName() !== '?' && $a->getFirstName() < $b->getFirstName() ? -1 : 1);
-        $closure = fn($person) => [
+        usort($people, fn($a, $b): int => $a->getFirstName() !== '?' && $a->getFirstName() < $b->getFirstName() ? -1 : 1);
+        $closure = fn($person): array => [
             'id' => $person->getId(),
             'title' => ucfirst($person->getFirstName()) . ' ContactController.php' . strtoupper($person->getLastName())
         ];

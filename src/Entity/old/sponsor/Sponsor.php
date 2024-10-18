@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\sponsor;
 
 use App\Entity\old\person\Person;
@@ -15,18 +17,21 @@ abstract class Sponsor implements JsonSerializable
      * @var int The id of the sponsor
      */
     private int $id;
+
     /**
      * @var ?Person The godfather of the sponsor
      */
     private ?Person $godFather;
+
     /**
      * @var ?Person The godchild of the sponsor
      */
     private ?Person $godChild;
+
     /**
      * @var DateTime|null The date of the sponsor
      */
-    private ?DateTime $date;
+    private ?DateTime $dateTime = null;
 
 
     /**
@@ -40,10 +45,9 @@ abstract class Sponsor implements JsonSerializable
         $this->id        = $id;
         $this->godFather = $godFather;
         $this->godChild  = $godChild;
-        $this->date      = null;
 
-        if ($date) {
-            $this->date = DateTime::createFromFormat("Y-m-d", $date);
+        if ($date !== '' && $date !== '0') {
+            $this->dateTime = DateTime::createFromFormat("Y-m-d", $date);
         }
     }
 
@@ -68,16 +72,16 @@ abstract class Sponsor implements JsonSerializable
 
     /**
      * Sets the godfather of the sponsor
-     * @param Person|null $godFather The new godfather of the sponsor
+     * @param Person|null $person The new godfather of the sponsor
      * @param bool $force If true, the godchild will be set even if it is null
-     * @return void
      */
-    public function setGodFather(?Person $godFather, bool $force = false): void
+    public function setGodFather(?Person $person, bool $force = false): void
     {
-        if ($force || $godFather) {
-            $this->godFather = $godFather;
+        if ($force || $person instanceof \App\Entity\old\person\Person) {
+            $this->godFather = $person;
         }
-        $this->godFather = $godFather ?? $this->godFather;
+
+        $this->godFather = $person ?? $this->godFather;
     }
 
 
@@ -92,14 +96,13 @@ abstract class Sponsor implements JsonSerializable
 
     /**
      * Sets the godchild of the sponsor
-     * @param Person|null $godSon The new godchild of the sponsor
+     * @param Person|null $person The new godchild of the sponsor
      * @param bool $force If true, the godchild will be set even if it is null
-     * @return void
      */
-    public function setGodChild(?Person $godSon, bool $force = false): void
+    public function setGodChild(?Person $person, bool $force = false): void
     {
-        if ($force || $godSon) {
-            $this->godChild = $godSon;
+        if ($force || $person instanceof \App\Entity\old\person\Person) {
+            $this->godChild = $person;
         }
     }
 
@@ -109,7 +112,7 @@ abstract class Sponsor implements JsonSerializable
      */
     public function getDate(): ?DateTime
     {
-        return $this->date;
+        return $this->dateTime;
     }
 
 
@@ -122,8 +125,8 @@ abstract class Sponsor implements JsonSerializable
     public function formatDate(string $format): string
     {
 
-        if ($this->date) {
-            return $this->date->format($format);
+        if ($this->dateTime instanceof \DateTime) {
+            return $this->dateTime->format($format);
         }
 
         return '';
@@ -160,6 +163,7 @@ abstract class Sponsor implements JsonSerializable
     abstract public function getIcon(): string;
 
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return get_object_vars($this);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -9,9 +11,9 @@ use App\Entity\Contact\Type;
 use App\Entity\old\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
-class BugContactExecutorTest extends TestCase
+final class BugContactExecutorTest extends TestCase
 {
-    private BugContactExecutor $executor;
+    private BugContactExecutor $bugContactExecutor;
 
     private ContactDAO $contactDAO;
 
@@ -23,31 +25,32 @@ class BugContactExecutorTest extends TestCase
     ];
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->contactDAO = $this->createMock(ContactDAO::class);
         $redirect         = $this->createMock(Redirect::class);
 
-        $this->executor = new BugContactExecutor($this->contactDAO, $redirect);
+        $this->bugContactExecutor = new BugContactExecutor($this->contactDAO, $redirect);
     }
 
 
-    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
+    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing(): void
     {
 
         $this->defaultArray['senderFirstName'] = '';
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->bugContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
+        $this->assertSame('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
 
     public function testExecuteSuccessSavesContactWithGivenValues(): void
     {
 
-        $contact = new DefaultContact(
+        $defaultContact = new DefaultContact(
             -1,
             date('Y-m-d'),
             null,
@@ -59,8 +62,8 @@ class BugContactExecutorTest extends TestCase
 
         $this->contactDAO->expects($this->once())
             ->method('saveSimpleContact')
-            ->with($contact);
+            ->with($defaultContact);
 
-        $this->executor->execute($this->defaultArray);
+        $this->bugContactExecutor->execute($this->defaultArray);
     }
 }

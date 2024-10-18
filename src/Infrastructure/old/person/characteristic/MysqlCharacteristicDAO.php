@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\person\characteristic;
 
 use App\Application\person\characteristic\CharacteristicDAO;
@@ -30,13 +32,13 @@ class MysqlCharacteristicDAO implements CharacteristicDAO
      * Update a characteristic
      * @param int $idPerson Id of the person
      * @param Characteristic $characteristic Characteristic
-     * @return void
      */
+    #[\Override]
     public function updateCharacteristic(int $idPerson, Characteristic $characteristic): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare(<<<SQL
+        $statement = $pdo->prepare(<<<SQL
                                     UPDATE Characteristic
                                     SET value = :value, visibility = :visibility
 									WHERE id_person = :idPerson
@@ -56,13 +58,13 @@ SQL
      * Create a characteristic
      * @param int $idPerson Id of the person
      * @param Characteristic $characteristic Characteristic
-     * @return void
      */
+    #[\Override]
     public function createCharacteristic(int $idPerson, Characteristic $characteristic): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $statement = $connection->prepare(<<<SQL
+        $statement = $pdo->prepare(<<<SQL
                                     INSERT INTO Characteristic (id_person, id_network, value, visibility)
 									VALUES (:idPerson, :idNetwork, :value, :visibility)
 SQL

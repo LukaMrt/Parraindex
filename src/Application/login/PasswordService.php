@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\login;
 
 use App\Application\logging\Logger;
@@ -19,26 +21,32 @@ class PasswordService
      * @var AccountDAO DAO for accounts
      */
     private AccountDAO $accountDAO;
+
     /**
      * @var PersonDAO DAO for persons
      */
     private PersonDAO $personDAO;
+
     /**
      * @var Redirect Redirect service
      */
     private Redirect $redirect;
+
     /**
      * @var Mailer Mailer service
      */
     private Mailer $mailer;
+
     /**
      * @var Random Random generator
      */
     private Random $random;
+
     /**
      * @var UrlUtils URL utilities
      */
     private UrlUtils $urlUtils;
+
     /**
      * @var Logger Logger
      */
@@ -105,8 +113,8 @@ class PasswordService
         $this->mailer->send(
             $parameters['email'],
             'Parraindex : réinitialisation de mot de passe',
-            "Bonjour $firstname $lastname,<br><br>Votre demande de réinitialisation de mot de passe a bien été "
-            . "enregistrée, merci de cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>"
+            sprintf('Bonjour %s %s,<br><br>Votre demande de réinitialisation de mot de passe a bien été ', $firstname, $lastname)
+            . sprintf('enregistrée, merci de cliquer sur ce lien pour la valider : <a href="%s">%s</a><br><br>', $url, $url)
             . "Cordialement<br>Le Parrainboss"
         );
         $this->accountDAO->createResetpassword($account, $token);
@@ -130,10 +138,10 @@ class PasswordService
 
         if ($account->getId() === -1) {
             $this->logger->error(PasswordService::class, 'Token invalid');
-            $error = 'Ce lien n\'est pas ou plus valide.';
+            $error = "Ce lien n'est pas ou plus valide.";
         }
 
-        if (empty($error)) {
+        if ($error === '' || $error === '0') {
             $this->accountDAO->editAccountPassword($account);
             $this->accountDAO->deleteResetPassword($account);
             $this->logger->info(PasswordService::class, 'Password reset for ' . $account->getLogin());

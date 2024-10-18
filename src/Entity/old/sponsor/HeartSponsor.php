@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\sponsor;
 
 use App\Entity\old\person\Person;
@@ -33,6 +35,7 @@ class HeartSponsor extends Sponsor implements JsonSerializable
     /**
      * @return string Description of the sponsor
      */
+    #[\Override]
     public function getDescription(): string
     {
         return $this->description;
@@ -42,6 +45,7 @@ class HeartSponsor extends Sponsor implements JsonSerializable
     /**
      * @return string Title of the sponsor type
      */
+    #[\Override]
     public function getType(): string
     {
         return 'Parrainage de coeur';
@@ -51,6 +55,7 @@ class HeartSponsor extends Sponsor implements JsonSerializable
     /**
      * @return string Description title of the sponsor
      */
+    #[\Override]
     public function getDescriptionTitle(): string
     {
         return 'Description de la demande';
@@ -60,6 +65,7 @@ class HeartSponsor extends Sponsor implements JsonSerializable
     /**
      * @return string Icon of the sponsor
      */
+    #[\Override]
     public function getIcon(): string
     {
         return 'heart.svg';
@@ -69,12 +75,14 @@ class HeartSponsor extends Sponsor implements JsonSerializable
     /**
      * @return int Id of the sponsor type
      */
+    #[\Override]
     public function getTypeId(): int
     {
         return 1;
     }
 
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return array_merge(parent::jsonSerialize(), get_object_vars($this));

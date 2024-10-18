@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\login\PasswordService;
@@ -22,18 +24,18 @@ class ResetpasswordController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param PasswordService $passwordService the password service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         PasswordService $passwordService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->passwordService = $passwordService;
     }
 
@@ -41,11 +43,11 @@ class ResetpasswordController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template cannot be found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         $this->render('resetpassword.html.twig');
@@ -55,11 +57,11 @@ class ResetpasswordController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template cannot be found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
      */
+    #[\Override]
     public function post(Router $router, array $parameters): void
     {
 

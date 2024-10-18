@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -15,14 +17,18 @@ use App\Entity\old\sponsor\HeartSponsor;
 use App\Entity\old\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
 
-class AddSponsorContactExecutorTest extends TestCase
+final class AddSponsorContactExecutorTest extends TestCase
 {
-    private const TEST_EMAIL = 'test.test@test.com';
-    private const TEST_DATE  = '2021-01-01';
-    private AddSponsorContactExecutor $executor;
+    private const string TEST_EMAIL = 'test.test@test.com';
+
+    private const string TEST_DATE  = '2021-01-01';
+
+    private AddSponsorContactExecutor $addSponsorContactExecutor;
 
     private ContactDAO $contactDAO;
+
     private PersonDAO $personDAO;
+
     private SponsorDAO $sponsorDAO;
 
     private array $defaultArray = [
@@ -37,14 +43,15 @@ class AddSponsorContactExecutorTest extends TestCase
     ];
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
         $redirect         = $this->createMock(Redirect::class);
         $this->personDAO  = $this->createMock(PersonDAO::class);
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
-        $this->executor = new AddSponsorContactExecutor(
+        $this->addSponsorContactExecutor = new AddSponsorContactExecutor(
             $this->contactDAO,
             $redirect,
             $this->personDAO,
@@ -53,7 +60,7 @@ class AddSponsorContactExecutorTest extends TestCase
     }
 
 
-    public function testExecuteReturnsErrorWhenSenderFirstNameIsMissing()
+    public function testExecuteReturnsErrorWhenSenderFirstNameIsMissing(): void
     {
         $this->defaultArray['senderFirstName'] = '';
 
@@ -61,35 +68,35 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturn($this->createMock(Person::class));
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addSponsorContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
+        $this->assertSame('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
 
-    public function testExecuteReturnsErrorWhenGodfatherDoesNotExist()
+    public function testExecuteReturnsErrorWhenGodfatherDoesNotExist(): void
     {
 
         $this->personDAO->method('getPersonById')
             ->withConsecutive([1], [2])
             ->willReturnOnConsecutiveCalls(null, $this->createMock(Person::class));
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addSponsorContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Le parrain doit exister', $result);
+        $this->assertSame('Le parrain doit exister', $result);
     }
 
 
-    public function testExecuteReturnsErrorWhenGodchildDoesNotExist()
+    public function testExecuteReturnsErrorWhenGodchildDoesNotExist(): void
     {
 
         $this->personDAO->method('getPersonById')
             ->withConsecutive([1], [2])
             ->willReturnOnConsecutiveCalls($this->createMock(Person::class), null);
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addSponsorContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Le fillot doit exister', $result);
+        $this->assertSame('Le fillot doit exister', $result);
     }
 
 
@@ -101,9 +108,9 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturn($this->createMock(Person::class));
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addSponsorContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Le type de lien doit être valide', $result);
+        $this->assertSame('Le type de lien doit être valide', $result);
     }
 
 
@@ -115,9 +122,9 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturn($this->createMock(Person::class));
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addSponsorContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Le type de lien doit être valide', $result);
+        $this->assertSame('Le type de lien doit être valide', $result);
     }
 
 
@@ -129,9 +136,9 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturn($this->createMock(Person::class));
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addSponsorContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
 
@@ -142,9 +149,9 @@ class AddSponsorContactExecutorTest extends TestCase
             ->with(1, 2)
             ->willReturn($this->createMock(Sponsor::class));
 
-        $result = $this->executor->executeSuccess($this->defaultArray);
+        $result = $this->addSponsorContactExecutor->executeSuccess($this->defaultArray);
 
-        $this->assertEquals('Le lien ne doit pas déjà exister', $result);
+        $this->assertSame('Le lien ne doit pas déjà exister', $result);
     }
 
 
@@ -158,9 +165,9 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturnOnConsecutiveCalls($godFather, $godChild);
 
-        $sponsor = new ClassicSponsor(-1, $godFather, $godChild, self::TEST_DATE, '');
+        $classicSponsor = new ClassicSponsor(-1, $godFather, $godChild, self::TEST_DATE, '');
 
-        $contact = new SponsorContact(
+        $sponsorContact = new SponsorContact(
             -1,
             date('Y-m-d'),
             null,
@@ -168,14 +175,14 @@ class AddSponsorContactExecutorTest extends TestCase
             self::TEST_EMAIL,
             Type::ADD_SPONSOR,
             'empty',
-            $sponsor
+            $classicSponsor
         );
 
         $this->contactDAO->expects($this->once())
             ->method('saveSponsorContact')
-            ->with($contact);
+            ->with($sponsorContact);
 
-        $this->executor->executeSuccess($this->defaultArray);
+        $this->addSponsorContactExecutor->executeSuccess($this->defaultArray);
     }
 
 
@@ -189,9 +196,9 @@ class AddSponsorContactExecutorTest extends TestCase
             ->withConsecutive([1], [2])
             ->willReturnOnConsecutiveCalls($godFather, $godChild);
 
-        $sponsor = new HeartSponsor(-1, $godFather, $godChild, self::TEST_DATE, '');
+        $heartSponsor = new HeartSponsor(-1, $godFather, $godChild, self::TEST_DATE, '');
 
-        $contact = new SponsorContact(
+        $sponsorContact = new SponsorContact(
             -1,
             date('Y-m-d'),
             null,
@@ -199,15 +206,15 @@ class AddSponsorContactExecutorTest extends TestCase
             self::TEST_EMAIL,
             Type::ADD_SPONSOR,
             'empty',
-            $sponsor
+            $heartSponsor
         );
 
         $this->contactDAO->expects($this->once())
             ->method('saveSponsorContact')
-            ->with($contact);
+            ->with($sponsorContact);
 
         $this->defaultArray['sponsorType'] = '1';
 
-        $this->executor->executeSuccess($this->defaultArray);
+        $this->addSponsorContactExecutor->executeSuccess($this->defaultArray);
     }
 }

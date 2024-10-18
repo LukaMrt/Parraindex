@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\login;
 
 use App\Application\logging\Logger;
@@ -19,20 +21,27 @@ use App\Entity\Person\Role;
 use DateTime;
 use PHPUnit\Framework\TestCase;
 
-class LoginServiceTest extends TestCase
+final class LoginServiceTest extends TestCase
 {
-    private const TEST_EMAIL = 'test@test.com';
+    private const string TEST_EMAIL = 'test@test.com';
+
     private Account $account;
 
     private LoginService $loginService;
+
     private Redirect $redirect;
+
     private AccountDAO $accountDAO;
+
     private PersonDAO $personDAO;
+
     private SessionManager $sessionManager;
+
     private Logger $logger;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $person        = PersonBuilder::aPerson()
@@ -67,7 +76,7 @@ class LoginServiceTest extends TestCase
 
         $return = $this->loginService->login(['login' => 'test']);
 
-        $this->assertEquals('Veuillez remplir tous les champs', $return);
+        $this->assertSame('Veuillez remplir tous les champs', $return);
     }
 
 
@@ -83,7 +92,7 @@ class LoginServiceTest extends TestCase
             'password' => 'test',
         ]);
 
-        $this->assertEquals('Identifiant incorrect', $return);
+        $this->assertSame('Identifiant incorrect', $return);
     }
 
 
@@ -176,7 +185,7 @@ class LoginServiceTest extends TestCase
     }
 
 
-    public function testLoginRedirectToSignupIfNeeded()
+    public function testLoginRedirectToSignupIfNeeded(): void
     {
 
         $this->redirect->expects($this->once())
@@ -201,7 +210,7 @@ class LoginServiceTest extends TestCase
             'password' => 'test',
         ]);
 
-        $this->assertEquals('Vous êtes déjà connecté', $return);
+        $this->assertSame('Vous êtes déjà connecté', $return);
     }
 
 

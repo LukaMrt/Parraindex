@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\sponsor;
 
 use App\Entity\old\person\Person;
@@ -24,6 +26,7 @@ class UnknownSponsor extends Sponsor
     /**
      * @return string Description of the sponsor (empty)
      */
+    #[\Override]
     public function getDescription(): string
     {
         return $this->getDescriptionTitle();
@@ -33,6 +36,7 @@ class UnknownSponsor extends Sponsor
     /**
      * @return string Description title of the sponsor (empty)
      */
+    #[\Override]
     public function getDescriptionTitle(): string
     {
         return $this->getType();
@@ -42,6 +46,7 @@ class UnknownSponsor extends Sponsor
     /**
      * @return string Type of the sponsor (empty)
      */
+    #[\Override]
     public function getType(): string
     {
         return '';
@@ -51,6 +56,7 @@ class UnknownSponsor extends Sponsor
     /**
      * @return string Icon of the sponsor
      */
+    #[\Override]
     public function getIcon(): string
     {
         return 'interrogation.svg';
@@ -60,6 +66,7 @@ class UnknownSponsor extends Sponsor
     /**
      * @return int Type id of the sponsor
      */
+    #[\Override]
     public function getTypeId(): int
     {
         return 2;

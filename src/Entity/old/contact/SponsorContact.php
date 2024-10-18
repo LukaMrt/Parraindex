@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\contact;
 
 use App\Entity\Contact\Type;
@@ -52,14 +54,15 @@ class SponsorContact extends Contact
     /**
      * @return array[] The contact as an array
      */
+    #[\Override]
     public function getDescription(): array
     {
 
-        $godFather = $this->sponsor->getGodFather();
+        $person = $this->sponsor->getGodFather();
         $godChild  = $this->sponsor->getGodChild();
 
         return [
-            ['Parrain', $godFather->getFirstName() . ' SponsorContact.php' . $godFather->getLastName()],
+            ['Parrain', $person->getFirstName() . ' SponsorContact.php' . $person->getLastName()],
             ['Fillot', $godChild->getFirstName() . ' SponsorContact.php' . $godChild->getLastName()],
             ['Type de parrainage', $this->sponsor->getType()],
             ['Date du parrainage', $this->sponsor->formatDate('d/m/Y')]

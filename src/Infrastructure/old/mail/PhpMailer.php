@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\mail;
 
 use App\Application\mail\Mailer;
@@ -16,6 +18,7 @@ readonly class PhpMailer implements Mailer
     ) {
     }
 
+    #[\Override]
     public function send(string $to, string $subject, string $body): void
     {
         try {
@@ -26,9 +29,9 @@ readonly class PhpMailer implements Mailer
 
             $this->mailer->send($email);
 
-            $this->logger->info("Mailer success: [{$subject}] request, has been sent to {$to}");
-        } catch (Throwable $e) {
-            $this->logger->error("Mailer error: {$e->getMessage()}");
+            $this->logger->info(sprintf('Mailer success: [%s] request, has been sent to %s', $subject, $to));
+        } catch (Throwable $throwable) {
+            $this->logger->error('Mailer error: ' . $throwable->getMessage());
         }
     }
 }

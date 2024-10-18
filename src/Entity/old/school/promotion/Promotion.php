@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\school\promotion;
 
 use App\Entity\old\person\Person;
@@ -12,30 +14,15 @@ use JsonSerializable;
  */
 class Promotion implements JsonSerializable
 {
-    /**
-     * @var int Id of the promotion
-     */
-    private int $id;
-    /**
-     * @var Degree Degree objective of the promotion
-     */
-    private Degree $degree;
-    /**
-     * @var School School of the promotion
-     */
-    private School $school;
+
+
+
     /**
      * @var int Year of the promotion
      */
     private int $year;
-    /**
-     * @var string Description of the promotion
-     */
-    private string $description;
-    /**
-     * @var Person[] Students of the promotion
-     */
-    private array $students;
+
+
 
 
     /**
@@ -44,7 +31,7 @@ class Promotion implements JsonSerializable
      * @param School $school School of the promotion
      * @param int $year Year of the promotion
      * @param string $description Description of the promotion
-     * @param Person ...$students Students of the promotion
+     * @param Person ...$person Students of the promotion
      */
     public function __construct(
         int $id,
@@ -52,14 +39,9 @@ class Promotion implements JsonSerializable
         School $school,
         int $year,
         string $description,
-        Person ...$students
+        Person ...$person
     ) {
-        $this->id          = $id;
-        $this->degree      = $degree;
-        $this->school      = $school;
         $this->year        = $year;
-        $this->description = $description;
-        $this->students    = $students;
     }
 
 
@@ -72,6 +54,7 @@ class Promotion implements JsonSerializable
     }
 
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return get_object_vars($this);

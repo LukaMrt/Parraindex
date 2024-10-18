@@ -1,26 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\field;
 
 use App\Application\contact\field\YearField;
 use PHPUnit\Framework\TestCase;
 
-class YearFieldTest extends TestCase
+final class YearFieldTest extends TestCase
 {
     private YearField $yearField;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->yearField = new YearField('year', 'error');
     }
 
 
-    public function testGetnameReturnsYear()
+    public function testGetnameReturnsYear(): void
     {
         $result = $this->yearField->getName();
 
-        $this->assertEquals('year', $result);
+        $this->assertSame('year', $result);
     }
 
 

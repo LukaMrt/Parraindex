@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\injector;
 
 use App\Application\contact\ContactDAO;
@@ -81,6 +83,7 @@ class Injector
      * @var Container DI container
      */
     private Container $container;
+
     /**
      * @var Router $router Router
      */
@@ -99,12 +102,11 @@ class Injector
 
     /**
      * Register all dependencies in the container
-     * @return void
      */
     public function build(): void
     {
 
-        $twig                  = $this->buildTwig();
+        $twigEnvironment                  = $this->buildTwig();
         $databaseConnection    = new DatabaseConnection();
         $userDAO               = get(MySqlPersonDAO::class);
         $accountDAO            = get(MySqlAccountDAO::class);
@@ -120,7 +122,7 @@ class Injector
         $random                = get(DefaultRandom::class);
         $urlUtils              = get(DefaultUrlUtils::class);
 
-        $this->container->set(Environment::class, $twig);
+        $this->container->set(Environment::class, $twigEnvironment);
         $this->container->set(DatabaseConnection::class, $databaseConnection);
         $this->container->set(Router::class, $this->router);
         $this->container->set(Router::class, $this->router);
@@ -131,7 +133,7 @@ class Injector
         $this->container->set(UrlUtils::class, $urlUtils);
         $this->container->set(SessionManager::class, $sessionManager);
 
-        $this->container->set(ContactExecutors::class, fn(Container $container) => new ContactExecutors([
+        $this->container->set(ContactExecutors::class, fn(Container $container): \App\Application\contact\executor\ContactExecutors => new ContactExecutors([
             $container->get(AddPersonContactExecutor::class),
             $container->get(UpdatePersonContactExecutor::class),
             $container->get(RemovePersonContactExecutor::class),
@@ -160,15 +162,15 @@ class Injector
      */
     private function buildTwig(): Environment
     {
-        $twig = new Environment(new FilesystemLoader(Injector . phpdirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
+        $twigEnvironment = new Environment(new FilesystemLoader(Injector . phpdirname(__FILE__, 4) . DIRECTORY_SEPARATOR . 'view' . DIRECTORY_SEPARATOR));
 
-        $twig->addFunction(new TwigFunction('styles', fn(string $path) => '/css/' . $path));
-        $twig->addFunction(new TwigFunction('scripts', fn(string $path) => '/scripts/' . $path));
-        $twig->addFunction(new TwigFunction('images', fn(string $path) => '/images/' . $path));
-        $twig->addFunction(new TwigFunction('picture', fn(string $path) => '/images/pictures/' . $path));
-        $twig->addFunction(new TwigFunction('icon', fn(string $path) => '/images/icons/' . $path));
+        $twigEnvironment->addFunction(new TwigFunction('styles', fn(string $path): string => '/css/' . $path));
+        $twigEnvironment->addFunction(new TwigFunction('scripts', fn(string $path): string => '/scripts/' . $path));
+        $twigEnvironment->addFunction(new TwigFunction('images', fn(string $path): string => '/images/' . $path));
+        $twigEnvironment->addFunction(new TwigFunction('picture', fn(string $path): string => '/images/pictures/' . $path));
+        $twigEnvironment->addFunction(new TwigFunction('icon', fn(string $path): string => '/images/icons/' . $path));
 
-        return $twig;
+        return $twigEnvironment;
     }
 
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Sponsor\Sponsor;
@@ -12,9 +14,9 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class SponsorRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Sponsor::class);
+        parent::__construct($managerRegistry, Sponsor::class);
     }
 
     public function getById(int $id): ?Sponsor
@@ -32,11 +34,11 @@ class SponsorRepository extends ServiceEntityRepository
 
     public function update(Sponsor $sponsor): void
     {
-        if ($sponsor->getCreatedAt() === null) {
+        if (!$sponsor->getCreatedAt() instanceof \DateTimeInterface) {
             $sponsor->setCreatedAt(new \DateTimeImmutable());
         }
 
-        if ($sponsor->getType() === null) {
+        if (!$sponsor->getType() instanceof \App\Entity\Sponsor\Type) {
             $sponsor->setType(Type::UNKNOWN);
         }
 

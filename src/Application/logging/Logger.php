@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\logging;
 
 /**
@@ -12,7 +14,6 @@ interface Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
     public function debug(string $className, string $message, array $context = []): void;
 
@@ -22,7 +23,6 @@ interface Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
     public function info(string $className, string $message, array $context = []): void;
 
@@ -32,7 +32,6 @@ interface Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
     public function warning(string $className, string $message, array $context = []): void;
 
@@ -42,7 +41,6 @@ interface Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
     public function error(string $className, string $message, array $context = []): void;
 
@@ -52,7 +50,6 @@ interface Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
     public function critical(string $className, string $message, array $context = []): void;
 
@@ -62,7 +59,6 @@ interface Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
     public function alert(string $className, string $message, array $context = []): void;
 
@@ -72,7 +68,6 @@ interface Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
     public function emergency(string $className, string $message, array $context = []): void;
 }

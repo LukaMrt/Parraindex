@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Contact;
 
 // WARNING : Don't change the id of the values because it's related to the contact form

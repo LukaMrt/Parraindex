@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -9,35 +11,36 @@ use App\Application\redirect\Redirect;
 use App\Entity\Contact\Type;
 use PHPUnit\Framework\TestCase;
 
-class ContactExecutorTest extends TestCase
+final class ContactExecutorTest extends TestCase
 {
-    private ContactExecutor $executor;
+    private ContactExecutor $contactExecutor;
 
     private Redirect $redirect;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $contactDAO     = $this->createMock(ContactDAO::class);
         $this->redirect = $this->createMock(Redirect::class);
 
-        $this->executor = new OtherContactExecutor($contactDAO, $this->redirect);
+        $this->contactExecutor = new OtherContactExecutor($contactDAO, $this->redirect);
     }
 
 
     public function testGetidReturnsContactTypeId(): void
     {
-        $this->assertEquals(Type::OTHER->value, $this->executor->getId());
+        $this->assertEquals(Type::OTHER->value, $this->contactExecutor->getId());
     }
 
 
     public function testExecuteReturnsErrorWhenFieldsAreMissing(): void
     {
 
-        $result = $this->executor->execute([]);
+        $result = $this->contactExecutor->execute([]);
 
-        $this->assertEquals(
+        $this->assertSame(
             'Votre prénom doit contenir au moins 1 caractère'
             . '<br>Votre nom doit contenir au moins 1 caractère<br>Votre email doit être valide'
             . '<br>La description doit contenir au moins 1 caractère',
@@ -49,14 +52,14 @@ class ContactExecutorTest extends TestCase
     public function testExecuteReturnsErrorWhenFieldIsInvalid(): void
     {
 
-        $result = $this->executor->execute([
+        $result = $this->contactExecutor->execute([
             'senderFirstName' => 'a',
             'senderLastName' => 'a',
             'senderEmail' => 'a',
             'message' => 'a',
         ]);
 
-        $this->assertEquals('Votre email doit être valide', $result);
+        $this->assertSame('Votre email doit être valide', $result);
     }
 
 
@@ -67,7 +70,7 @@ class ContactExecutorTest extends TestCase
             ->method('redirect')
             ->with('home');
 
-        $this->executor->execute([
+        $this->contactExecutor->execute([
             'senderFirstName' => 'a',
             'senderLastName' => 'a',
             'senderEmail' => 'a.a@a.com',

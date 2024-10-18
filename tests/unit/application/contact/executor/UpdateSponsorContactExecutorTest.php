@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -13,13 +15,16 @@ use App\Entity\old\person\Person;
 use App\Entity\old\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
 
-class UpdateSponsorContactExecutorTest extends TestCase
+final class UpdateSponsorContactExecutorTest extends TestCase
 {
-    private UpdateSponsorContactExecutor $executor;
+    private UpdateSponsorContactExecutor $updateSponsorContactExecutor;
 
     private ContactDAO $contactDAO;
+
     private Redirect $redirect;
+
     private PersonDAO $personDAO;
+
     private SponsorDAO $sponsorDAO;
 
     private array $defaultArray = [
@@ -34,14 +39,15 @@ class UpdateSponsorContactExecutorTest extends TestCase
     ];
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
         $this->redirect   = $this->createMock(Redirect::class);
         $this->personDAO  = $this->createMock(PersonDAO::class);
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
-        $this->executor = new UpdateSponsorContactExecutor(
+        $this->updateSponsorContactExecutor = new UpdateSponsorContactExecutor(
             $this->contactDAO,
             $this->personDAO,
             $this->sponsorDAO,
@@ -50,7 +56,7 @@ class UpdateSponsorContactExecutorTest extends TestCase
     }
 
 
-    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
+    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing(): void
     {
 
         $this->personDAO->method('getPersonById')
@@ -59,9 +65,9 @@ class UpdateSponsorContactExecutorTest extends TestCase
 
         $this->defaultArray['senderFirstName'] = '';
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->updateSponsorContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
+        $this->assertSame('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
 
@@ -72,9 +78,9 @@ class UpdateSponsorContactExecutorTest extends TestCase
             ->with(1, 2)
             ->willReturn(null);
 
-        $result = $this->executor->executeSuccess($this->defaultArray);
+        $result = $this->updateSponsorContactExecutor->executeSuccess($this->defaultArray);
 
-        $this->assertEquals('Le lien doit exister', $result);
+        $this->assertSame('Le lien doit exister', $result);
     }
 
 
@@ -87,7 +93,7 @@ class UpdateSponsorContactExecutorTest extends TestCase
             ->with(1, 2)
             ->willReturn($sponsor);
 
-        $contact = new SponsorContact(
+        $sponsorContact = new SponsorContact(
             -1,
             date('Y-m-d'),
             null,
@@ -100,8 +106,8 @@ class UpdateSponsorContactExecutorTest extends TestCase
 
         $this->contactDAO->expects($this->once())
             ->method('saveSponsorContact')
-            ->with($contact);
+            ->with($sponsorContact);
 
-        $this->executor->executeSuccess($this->defaultArray);
+        $this->updateSponsorContactExecutor->executeSuccess($this->defaultArray);
     }
 }

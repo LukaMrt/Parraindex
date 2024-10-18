@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -22,14 +24,17 @@ class PasswordContactExecutor extends ContactExecutor
      * @var PersonDAO DAO for person
      */
     private PersonDAO $personDAO;
+
     /**
      * @var AccountDAO DAO for account
      */
     private AccountDAO $accountDAO;
+
     /**
      * @var Random Random generator service
      */
     private Random $random;
+
     /**
      * @var UrlUtils Url utilities
      */
@@ -65,6 +70,7 @@ class PasswordContactExecutor extends ContactExecutor
     }
 
 
+    #[\Override]
     public function executeSuccess(array $data): string
     {
 
@@ -72,16 +78,16 @@ class PasswordContactExecutor extends ContactExecutor
             return 'Les mots de passe doivent être identiques';
         }
 
-        $sender = new Identity($data['senderFirstName'], $data['senderLastName']);
+        $identity = new Identity($data['senderFirstName'], $data['senderLastName']);
 
         $error  = "";
-        $person = $this->personDAO->getPerson($sender);
+        $person = $this->personDAO->getPerson($identity);
 
-        if ($person === null) {
+        if (!$person instanceof \App\Entity\old\person\Person) {
             $error = 'Cette carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
         } elseif ($this->accountDAO->existsAccount($data['senderEmail'])) {
             $error = 'Cet email est déjà associée à un compte';
-        } elseif ($this->accountDAO->existsAccountByIdentity($sender)) {
+        } elseif ($this->accountDAO->existsAccountByIdentity($identity)) {
             $error = 'Cette carte est déjà associée à un compte';
         }
 
@@ -93,7 +99,7 @@ class PasswordContactExecutor extends ContactExecutor
         $token   = $this->random->generate(10);
         $this->accountDAO->createTemporaryAccount($account, $token);
 
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -104,7 +110,7 @@ class PasswordContactExecutor extends ContactExecutor
             $person
         );
 
-        $this->contactDAO->savePersonUpdateContact($contact);
+        $this->contactDAO->savePersonUpdateContact($personContact);
         return '';
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -13,11 +15,12 @@ use App\Entity\old\person\Person;
 use App\Entity\old\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
-class ChockingContentContactExecutorTest extends TestCase
+final class ChockingContentContactExecutorTest extends TestCase
 {
-    private ChockingContentContactExecutor $executor;
+    private ChockingContentContactExecutor $chockingContentContactExecutor;
 
     private ContactDAO $contactDAO;
+
     private PersonDAO $personDAO;
 
     private array $defaultArray = [
@@ -29,18 +32,19 @@ class ChockingContentContactExecutorTest extends TestCase
     ];
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->contactDAO = $this->createMock(ContactDAO::class);
         $redirect         = $this->createMock(Redirect::class);
         $this->personDAO  = $this->createMock(PersonDAO::class);
 
-        $this->executor = new ChockingContentContactExecutor($this->contactDAO, $redirect, $this->personDAO);
+        $this->chockingContentContactExecutor = new ChockingContentContactExecutor($this->contactDAO, $redirect, $this->personDAO);
     }
 
 
-    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
+    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing(): void
     {
 
         $this->personDAO->method('getPersonById')
@@ -49,9 +53,9 @@ class ChockingContentContactExecutorTest extends TestCase
 
         $this->defaultArray['senderFirstName'] = '';
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->chockingContentContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
+        $this->assertSame('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
 
@@ -67,7 +71,7 @@ class ChockingContentContactExecutorTest extends TestCase
             ->with(1)
             ->willReturn($person);
 
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -80,8 +84,8 @@ class ChockingContentContactExecutorTest extends TestCase
 
         $this->contactDAO->expects($this->once())
             ->method('saveChockingContentContact')
-            ->with($contact);
+            ->with($personContact);
 
-        $this->executor->execute($this->defaultArray);
+        $this->chockingContentContactExecutor->execute($this->defaultArray);
     }
 }

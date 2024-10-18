@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\contact\ContactService;
@@ -20,10 +22,12 @@ class ContactCloseController extends Controller
      * @var ContactService the contact service
      */
     private ContactService $contactService;
+
     /**
      * @var SponsorService the sponsor service
      */
     private SponsorService $sponsorService;
+
     /**
      * @ver SignupService the signup service
      */
@@ -31,7 +35,7 @@ class ContactCloseController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param ContactService $contactService the contact service
@@ -39,14 +43,14 @@ class ContactCloseController extends Controller
      * @param SignupService $signupService the signup service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         ContactService $contactService,
         SponsorService $sponsorService,
         SignupService $signupService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->contactService = $contactService;
         $this->sponsorService = $sponsorService;
         $this->signupService  = $signupService;
@@ -56,12 +60,12 @@ class ContactCloseController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
-    #[NoReturn] public function get(Router $router, array $parameters): void
+    #[NoReturn]
+    #[\Override] public function get(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
+        if ($_SESSION === [] || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }
@@ -83,7 +87,6 @@ class ContactCloseController extends Controller
     /**
      * Resolves the contact action
      * @param int $id the contact id
-     * @return void
      */
     private function resolve(int $id): void
     {

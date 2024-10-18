@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -18,24 +20,31 @@ use App\Entity\old\person\Identity;
 use App\Entity\old\person\PersonBuilder;
 use Monolog\Test\TestCase;
 
-class PasswordContactExecutorTest extends TestCase
+final class PasswordContactExecutorTest extends TestCase
 {
-    private const DEFAULT_PARAMS = [
+    private const array DEFAULT_PARAMS = [
         'senderFirstName' => 'test1',
         'senderLastName' => 'test2',
         'senderEmail' => 'test.test@test.com',
         'password' => 'test',
         'passwordConfirm' => 'test'
     ];
+
     private PersonDAO $personDAO;
+
     private AccountDAO $accountDAO;
+
     private Random $random;
+
     private UrlUtils $urlUtils;
+
     private ContactDAO $contactDAO;
-    private ContactExecutor $executor;
+
+    private ContactExecutor $contactExecutor;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->personDAO  = $this->createMock(PersonDAO::class);
         $this->accountDAO = $this->createMock(AccountDAO::class);
@@ -44,7 +53,7 @@ class PasswordContactExecutorTest extends TestCase
         $this->contactDAO = $this->createMock(ContactDAO::class);
         $redirect         = $this->createMock(Redirect::class);
 
-        $this->executor = new PasswordContactExecutor(
+        $this->contactExecutor = new PasswordContactExecutor(
             $this->contactDAO,
             $redirect,
             $this->personDAO,
@@ -55,45 +64,45 @@ class PasswordContactExecutorTest extends TestCase
     }
 
 
-    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
+    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing(): void
     {
 
         $parameters                    = self::DEFAULT_PARAMS;
         $parameters['senderFirstName'] = '';
 
-        $result = $this->executor->execute($parameters);
+        $result = $this->contactExecutor->execute($parameters);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
+        $this->assertSame('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
 
-    public function testExecuteReturnsErrorWhenPasswordsAreNoteTheSame()
+    public function testExecuteReturnsErrorWhenPasswordsAreNoteTheSame(): void
     {
 
         $parameters                    = self::DEFAULT_PARAMS;
         $parameters['passwordConfirm'] = 'test2';
 
-        $result = $this->executor->execute($parameters);
+        $result = $this->contactExecutor->execute($parameters);
 
-        $this->assertEquals('Les mots de passe doivent être identiques', $result);
+        $this->assertSame('Les mots de passe doivent être identiques', $result);
     }
 
 
-    public function testExecuteReturnsErrorWhenPersonDoesNotExist()
+    public function testExecuteReturnsErrorWhenPersonDoesNotExist(): void
     {
 
         $this->personDAO->method('getPerson')
             ->with(new Identity('test1', 'test2'))
             ->willReturn(null);
 
-        $result = $this->executor->execute(self::DEFAULT_PARAMS);
+        $result = $this->contactExecutor->execute(self::DEFAULT_PARAMS);
 
         $expected = 'Cette carte n\'est pas enregistrée, veuillez faire une demande de création de personne avant';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
 
-    public function testExecuteReturnsErrorWhenEmailIsAlreadyUsed()
+    public function testExecuteReturnsErrorWhenEmailIsAlreadyUsed(): void
     {
 
         $person = PersonBuilder::aPerson()->withId(1)->build();
@@ -106,14 +115,14 @@ class PasswordContactExecutorTest extends TestCase
             ->with(self::DEFAULT_PARAMS['senderEmail'])
             ->willReturn(true);
 
-        $result = $this->executor->execute(self::DEFAULT_PARAMS);
+        $result = $this->contactExecutor->execute(self::DEFAULT_PARAMS);
 
         $expected = 'Cet email est déjà associée à un compte';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
 
-    public function testExecuteReturnsErrorWhenAccountIsAlreadyCreated()
+    public function testExecuteReturnsErrorWhenAccountIsAlreadyCreated(): void
     {
 
         $person = PersonBuilder::aPerson()->withId(1)->build();
@@ -132,14 +141,14 @@ class PasswordContactExecutorTest extends TestCase
             ->with($identity)
             ->willReturn(true);
 
-        $result = $this->executor->execute(self::DEFAULT_PARAMS);
+        $result = $this->contactExecutor->execute(self::DEFAULT_PARAMS);
 
         $expected = 'Cette carte est déjà associée à un compte';
-        $this->assertEquals($expected, $result);
+        $this->assertSame($expected, $result);
     }
 
 
-    public function testExecuteCreateTemporaryAccountOnSuccess()
+    public function testExecuteCreateTemporaryAccountOnSuccess(): void
     {
 
         $person  = PersonBuilder::aPerson()->withId(1)->build();
@@ -162,15 +171,15 @@ class PasswordContactExecutorTest extends TestCase
             ->method('createTemporaryAccount')
             ->with($account, 'aaabbbcccd');
 
-        $this->executor->execute(self::DEFAULT_PARAMS);
+        $this->contactExecutor->execute(self::DEFAULT_PARAMS);
     }
 
 
-    public function testExecuteSavesContactOnSuccess()
+    public function testExecuteSavesContactOnSuccess(): void
     {
 
         $person  = PersonBuilder::aPerson()->withId(1)->build();
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -198,8 +207,8 @@ class PasswordContactExecutorTest extends TestCase
 
         $this->contactDAO->expects($this->once())
             ->method('savePersonUpdateContact')
-            ->with($contact);
+            ->with($personContact);
 
-        $this->executor->execute(self::DEFAULT_PARAMS);
+        $this->contactExecutor->execute(self::DEFAULT_PARAMS);
     }
 }

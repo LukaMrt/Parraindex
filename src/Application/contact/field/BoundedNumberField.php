@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\field;
 
 /**
@@ -38,6 +40,7 @@ class BoundedNumberField extends Field
      * @param $value string The value to validate
      * @return bool True if the value is valid, false otherwise
      */
+    #[\Override]
     public function isValid(string $value): bool
     {
         return is_numeric($value) && $this->min <= $value && $value <= $this->max;

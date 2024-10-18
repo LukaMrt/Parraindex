@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\login;
 
 use App\Application\logging\Logger;
@@ -17,23 +19,33 @@ use App\Entity\old\person\Person;
 use App\Entity\old\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
-class PasswordServiceTest extends TestCase
+final class PasswordServiceTest extends TestCase
 {
-    private const TEST_EMAIL = 'test.test@etu.univ-lyon1.fr';
+    private const string TEST_EMAIL = 'test.test@etu.univ-lyon1.fr';
+
     private Account $validAccount;
+
     private Person $person;
 
     private PasswordService $passwordService;
+
     private Redirect $redirect;
+
     private AccountDAO $accountDAO;
+
     private PersonDAO $personDAO;
+
     private Mailer $mailer;
+
     private Random $random;
+
     private UrlUtils $urlUtils;
+
     private Logger $logger;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->person = PersonBuilder::aPerson()
@@ -75,7 +87,7 @@ class PasswordServiceTest extends TestCase
 
         $return = $this->passwordService->resetPassword(['email' => self::TEST_EMAIL, 'password' => 'test']);
 
-        $this->assertEquals('Email inconnu.', $return);
+        $this->assertSame('Email inconnu.', $return);
     }
 
 
@@ -139,7 +151,7 @@ class PasswordServiceTest extends TestCase
                 'Parraindex : réinitialisation de mot de passe',
                 "Bonjour Test Test,<br><br>Votre demande de réinitialisation de mot de passe "
                 . "a bien été enregistrée, merci de cliquer sur ce lien pour la valider : "
-                . "<a href=\"http://localhost/password/reset/1\">"
+                . '<a href="http://localhost/password/reset/1">'
                 . "http://localhost/password/reset/1</a><br><br>Cordialement<br>Le Parrainboss"
             );
 
@@ -192,7 +204,7 @@ class PasswordServiceTest extends TestCase
 
         $return = $this->passwordService->validateResetPassword('1');
 
-        $this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
+        $this->assertSame("Ce lien n'est pas ou plus valide.", $return);
     }
 
 

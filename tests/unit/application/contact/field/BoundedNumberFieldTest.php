@@ -1,64 +1,67 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\field;
 
 use App\Application\contact\field\BoundedNumberField;
 use PHPUnit\Framework\TestCase;
 
-class BoundedNumberFieldTest extends TestCase
+final class BoundedNumberFieldTest extends TestCase
 {
-    private BoundedNumberField $boundedField;
+    private BoundedNumberField $boundedNumberField;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
-        $this->boundedField = new BoundedNumberField('bounded', 'error', 0, 10);
+        $this->boundedNumberField = new BoundedNumberField('bounded', 'error', 0, 10);
     }
 
 
-    public function testGetnameReturnsBounded()
+    public function testGetnameReturnsBounded(): void
     {
-        $result = $this->boundedField->getName();
+        $result = $this->boundedNumberField->getName();
 
-        $this->assertEquals('bounded', $result);
+        $this->assertSame('bounded', $result);
     }
 
 
-    public function testIsValidReturnsTrueWhenValueIsWithinBounds()
+    public function testIsValidReturnsTrueWhenValueIsWithinBounds(): void
     {
-        $result = $this->boundedField->isValid(5);
+        $result = $this->boundedNumberField->isValid(5);
 
         $this->assertTrue($result);
     }
 
 
-    public function testIsValidReturnsTrueWhenValueIsBottomBound()
+    public function testIsValidReturnsTrueWhenValueIsBottomBound(): void
     {
-        $result = $this->boundedField->isValid(0);
+        $result = $this->boundedNumberField->isValid(0);
 
         $this->assertTrue($result);
     }
 
 
-    public function testIsValidReturnsTrueWhenValueIsTopBound()
+    public function testIsValidReturnsTrueWhenValueIsTopBound(): void
     {
-        $result = $this->boundedField->isValid(10);
+        $result = $this->boundedNumberField->isValid(10);
 
         $this->assertTrue($result);
     }
 
 
-    public function testIsValidReturnsFalseWhenValueIsBelowBounds()
+    public function testIsValidReturnsFalseWhenValueIsBelowBounds(): void
     {
-        $result = $this->boundedField->isValid(-1);
+        $result = $this->boundedNumberField->isValid(-1);
 
         $this->assertFalse($result);
     }
 
 
-    public function testIsValidReturnsFalseWhenValueIsAboveBounds()
+    public function testIsValidReturnsFalseWhenValueIsAboveBounds(): void
     {
-        $result = $this->boundedField->isValid(11);
+        $result = $this->boundedNumberField->isValid(11);
 
         $this->assertFalse($result);
     }

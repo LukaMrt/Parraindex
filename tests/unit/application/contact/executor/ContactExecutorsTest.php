@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\executor\AddPersonContactExecutor;
@@ -14,22 +16,31 @@ use App\Application\contact\executor\UpdatePersonContactExecutor;
 use App\Application\contact\executor\UpdateSponsorContactExecutor;
 use PHPUnit\Framework\TestCase;
 
-class ContactExecutorsTest extends TestCase
+final class ContactExecutorsTest extends TestCase
 {
     private ContactExecutors $contactExecutors;
 
     private AddPersonContactExecutor $addPersonContactExecutor;
+
     private RemovePersonContactExecutor $removePersonContactExecutor;
+
     private UpdatePersonContactExecutor $updatePersonContactExecutor;
+
     private AddSponsorContactExecutor $addSponsorContactExecutor;
+
     private RemoveSponsorContactExecutor $removeSponsorContactExecutor;
+
     private UpdateSponsorContactExecutor $updateSponsorContactExecutor;
+
     private BugContactExecutor $bugContactExecutor;
+
     private ChockingContentContactExecutor $chockingContentContactExecutor;
+
     private OtherContactExecutor $otherContactExecutor;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->addPersonContactExecutor       = $this->createMock(AddPersonContactExecutor::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\login\LoginService;
@@ -20,18 +22,18 @@ class LogoutController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param LoginService $loginService the login service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         LoginService $loginService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->loginService = $loginService;
     }
 
@@ -39,9 +41,9 @@ class LogoutController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
     #[NoReturn]
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         $this->loginService->logout();

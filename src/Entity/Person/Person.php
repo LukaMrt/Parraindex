@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Person;
 
 use App\Entity\Characteristic\Characteristic;
@@ -13,6 +15,11 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 class Person
 {
+    /**
+     * @var \Doctrine\Common\Collections\ArrayCollection
+     */
+    public $sponsors;
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -180,23 +187,21 @@ class Person
         return $this->godFathers;
     }
 
-    public function addGodFather(Sponsor $godFather): static
+    public function addGodFather(Sponsor $sponsor): static
     {
-        if (!$this->godFathers->contains($godFather)) {
-            $this->godFathers->add($godFather);
-            $godFather->setGodFather($this);
+        if (!$this->godFathers->contains($sponsor)) {
+            $this->godFathers->add($sponsor);
+            $sponsor->setGodFather($this);
         }
 
         return $this;
     }
 
-    public function removeGodFather(Sponsor $godFather): static
+    public function removeGodFather(Sponsor $sponsor): static
     {
-        if ($this->godFathers->removeElement($godFather)) {
-            // set the owning side to null (unless already changed)
-            if ($godFather->getGodFather() === $this) {
-                $godFather->setGodFather(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->godFathers->removeElement($sponsor) && $sponsor->getGodFather() === $this) {
+            $sponsor->setGodFather(null);
         }
 
         return $this;
@@ -210,23 +215,21 @@ class Person
         return $this->godChildren;
     }
 
-    public function addGodChild(Sponsor $godChild): static
+    public function addGodChild(Sponsor $sponsor): static
     {
-        if (!$this->godChildren->contains($godChild)) {
-            $this->godChildren->add($godChild);
-            $godChild->setGodChild($this);
+        if (!$this->godChildren->contains($sponsor)) {
+            $this->godChildren->add($sponsor);
+            $sponsor->setGodChild($this);
         }
 
         return $this;
     }
 
-    public function removeGodChild(Sponsor $godChild): static
+    public function removeGodChild(Sponsor $sponsor): static
     {
-        if ($this->godChildren->removeElement($godChild)) {
-            // set the owning side to null (unless already changed)
-            if ($godChild->getGodChild() === $this) {
-                $godChild->setGodChild(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->godChildren->removeElement($sponsor) && $sponsor->getGodChild() === $this) {
+            $sponsor->setGodChild(null);
         }
 
         return $this;
@@ -264,11 +267,9 @@ class Person
 
     public function removeCharacteristic(Characteristic $characteristic): static
     {
-        if ($this->characteristics->removeElement($characteristic)) {
-            // set the owning side to null (unless already changed)
-            if ($characteristic->getPerson() === $this) {
-                $characteristic->setPerson(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->characteristics->removeElement($characteristic) && $characteristic->getPerson() === $this) {
+            $characteristic->setPerson(null);
         }
 
         return $this;

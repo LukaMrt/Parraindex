@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\login;
 
 use App\Application\logging\Logger;
@@ -17,29 +19,39 @@ use App\Entity\old\person\Person;
 use App\Entity\old\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
-class SignupServiceTest extends TestCase
+final class SignupServiceTest extends TestCase
 {
-    private const DEFAULT_PARAMETERS = [
+    private const array DEFAULT_PARAMETERS = [
         'firstname' => 'Test',
         'lastname' => 'testa',
         'email' => 'Test.testaaa@etu.univ-lyon1.fr',
         'password' => 'test',
         'password-confirm' => 'test'
     ];
+
     private Account $validAccount;
+
     private Person $person;
 
     private SignupService $signupService;
+
     private Redirect $redirect;
+
     private AccountDAO $accountDAO;
+
     private PersonDAO $personDAO;
+
     private Mailer $mailer;
+
     private Random $random;
+
     private UrlUtils $urlUtils;
+
     private Logger $logger;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->person = PersonBuilder::aPerson()
@@ -73,7 +85,7 @@ class SignupServiceTest extends TestCase
 
         $return = $this->signupService->signup([]);
 
-        $this->assertEquals('Veuillez remplir tous les champs', $return);
+        $this->assertSame('Veuillez remplir tous les champs', $return);
     }
 
 
@@ -92,7 +104,7 @@ class SignupServiceTest extends TestCase
 
         $return = $this->signupService->signup($parameters);
 
-        $this->assertEquals('L\'email doit doit être votre email universitaire', $return);
+        $this->assertSame('L\'email doit doit être votre email universitaire', $return);
     }
 
 
@@ -107,7 +119,7 @@ class SignupServiceTest extends TestCase
             'password-confirm' => 'test2',
         ]);
 
-        $this->assertEquals('Les mots de passe ne correspondent pas', $return);
+        $this->assertSame('Les mots de passe ne correspondent pas', $return);
     }
 
 
@@ -117,7 +129,7 @@ class SignupServiceTest extends TestCase
         $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
         $expected = 'Votre nom n\'est pas enregistré, merci de faire une demande de création de personne';
-        $this->assertEquals($expected, $return);
+        $this->assertSame($expected, $return);
     }
 
 
@@ -133,7 +145,7 @@ class SignupServiceTest extends TestCase
 
         $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
-        $this->assertEquals('Un compte existe déjà avec cette adresse email', $return);
+        $this->assertSame('Un compte existe déjà avec cette adresse email', $return);
     }
 
 
@@ -152,7 +164,7 @@ class SignupServiceTest extends TestCase
 
         $return = $this->signupService->signup(self::DEFAULT_PARAMETERS);
 
-        $this->assertEquals('Un compte existe déjà avec ce nom', $return);
+        $this->assertSame('Un compte existe déjà avec ce nom', $return);
     }
 
 
@@ -181,7 +193,7 @@ class SignupServiceTest extends TestCase
         $params['email'] = 'tEsta.testb@etu.univ-lyon1.fr';
         $return          = $this->signupService->signup($params);
 
-        $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
+        $this->assertSame('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
     }
 
 
@@ -205,7 +217,7 @@ class SignupServiceTest extends TestCase
         $params['email'] = 'amkfjsqdmfkjqsdf.qsdùfkjqsdfkljsqdf@etu.univ-lyon1.fr';
         $return          = $this->signupService->signup($params);
 
-        $this->assertEquals('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
+        $this->assertSame('D\'après notre recherche, cet email n\'est pas le vôtre', $return);
     }
 
 
@@ -289,7 +301,7 @@ class SignupServiceTest extends TestCase
                 'test.testaaa@etu.univ-lyon1.fr',
                 'Parraindex : inscription',
                 "Bonjour Test testa,<br><br>Votre demande d'inscription a bien été enregistrée, merci de cliquer "
-                . "sur ce lien pour la valider : <a href=\"http://localhost/signup/validation/1\">"
+                . 'sur ce lien pour la valider : <a href="http://localhost/signup/validation/1">'
                 . "http://localhost/signup/validation/1</a><br><br>Cordialement<br>Le Parrainboss"
             );
 
@@ -310,7 +322,7 @@ class SignupServiceTest extends TestCase
 
         $return = $this->signupService->validate('1');
 
-        $this->assertEquals('Ce lien n\'est pas ou plus valide.', $return);
+        $this->assertSame("Ce lien n'est pas ou plus valide.", $return);
     }
 
 

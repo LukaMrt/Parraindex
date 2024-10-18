@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -49,10 +51,11 @@ class AddPersonContactExecutor extends ContactExecutor
      * @param array $data Form data
      * @return string Error message or empty string if no error
      */
+    #[\Override]
     public function executeSuccess(array $data): string
     {
 
-        if ($this->personDAO->getPerson(new Identity($data['creationFirstName'], $data['creationLastName'])) !== null) {
+        if ($this->personDAO->getPerson(new Identity($data['creationFirstName'], $data['creationLastName'])) instanceof \App\Entity\old\person\Person) {
             return 'La personne ne doit pas exister';
         }
 
@@ -62,7 +65,7 @@ class AddPersonContactExecutor extends ContactExecutor
             ->withStartYear($data['entryYear'])
             ->build();
 
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -73,7 +76,7 @@ class AddPersonContactExecutor extends ContactExecutor
             $person
         );
 
-        $this->contactDAO->savePersonAddContact($contact);
+        $this->contactDAO->savePersonAddContact($personContact);
         return '';
     }
 }

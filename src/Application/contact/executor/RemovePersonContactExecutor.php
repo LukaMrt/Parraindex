@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -30,7 +32,7 @@ class RemovePersonContactExecutor extends ContactExecutor
      */
     public function __construct(PersonDAO $personDAO, ContactDAO $contactDAO, Redirect $redirect)
     {
-        $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
+        $personExistsClosure = fn($value): bool => $this->personDAO->getPersonById($value) instanceof \App\Entity\old\person\Person;
 
         parent::__construct($contactDAO, $redirect, Type::REMOVE_PERSON, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
@@ -49,12 +51,13 @@ class RemovePersonContactExecutor extends ContactExecutor
      * @param array $data form data
      * @return string error message or empty string if no error
      */
+    #[\Override]
     public function executeSuccess(array $data): string
     {
 
         $person = $this->personDAO->getPersonById($data['personId']);
 
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -65,7 +68,7 @@ class RemovePersonContactExecutor extends ContactExecutor
             $person
         );
 
-        $this->contactDAO->savePersonRemoveContact($contact);
+        $this->contactDAO->savePersonRemoveContact($personContact);
         return '';
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 /**
@@ -29,6 +31,6 @@ class ContactExecutors
      */
     public function getExecutorsById(int $type): array
     {
-        return array_filter($this->executors, fn($executor) => $executor->getId() === $type);
+        return array_filter($this->executors, fn($executor): bool => $executor->getId() === $type);
     }
 }

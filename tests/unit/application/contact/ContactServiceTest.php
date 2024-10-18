@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact;
 
 use App\Application\contact\ContactDAO;
@@ -10,16 +12,19 @@ use App\Entity\Contact\Type;
 use App\Entity\old\contact\DefaultContact;
 use PHPUnit\Framework\TestCase;
 
-class ContactServiceTest extends TestCase
+final class ContactServiceTest extends TestCase
 {
     private ContactExecutors $contactExecutors;
+
     private ContactExecutor $contactExecutor;
+
     private ContactDAO $contactDAO;
 
     private ContactService $contactService;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->contactExecutors = $this->createMock(ContactExecutors::class);
         $this->contactExecutor  = $this->createMock(ContactExecutor::class);
@@ -36,7 +41,7 @@ class ContactServiceTest extends TestCase
 
         $result = $this->contactService->registerContact([]);
 
-        $this->assertEquals('Le type de contact n\'est pas valide.', $result);
+        $this->assertSame("Le type de contact n'est pas valide.", $result);
     }
 
 
@@ -48,7 +53,7 @@ class ContactServiceTest extends TestCase
             ->willReturn([]);
 
         $result = $this->contactService->registerContact(['type' => '12345678']);
-        $this->assertEquals('Le type de contact n\'est pas valide.', $result);
+        $this->assertSame("Le type de contact n'est pas valide.", $result);
     }
 
 
@@ -65,7 +70,7 @@ class ContactServiceTest extends TestCase
 
         $result = $this->contactService->registerContact(['type' => '1']);
 
-        $this->assertEquals('Une erreur est survenue.', $result);
+        $this->assertSame('Une erreur est survenue.', $result);
     }
 
 
@@ -82,7 +87,7 @@ class ContactServiceTest extends TestCase
 
         $result = $this->contactService->registerContact(['type' => '1']);
 
-        $this->assertEquals('', $result);
+        $this->assertSame('', $result);
     }
 
 

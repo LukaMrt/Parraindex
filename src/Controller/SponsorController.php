@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\person\PersonService;
@@ -25,7 +27,7 @@ class SponsorController extends AbstractController
     {
         $sponsor = $this->sponsorService->getSponsorById($id);
 
-        if ($sponsor === null) {
+        if (!$sponsor instanceof \App\Entity\Sponsor\Sponsor) {
             return $this->redirectToRoute('error');
         }
 

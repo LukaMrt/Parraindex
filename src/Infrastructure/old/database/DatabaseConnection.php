@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\database;
 
 use PDO;
@@ -12,7 +14,7 @@ class DatabaseConnection
     /**
      * @var PDO PDO instance
      */
-    private PDO $database;
+    private PDO $pdo;
 
 
     /**
@@ -26,7 +28,6 @@ class DatabaseConnection
 
     /**
      * Connect to database using environment variables
-     * @return void
      */
     private function connect(): void
     {
@@ -40,15 +41,15 @@ class DatabaseConnection
             'PASSWORD' => $password,
         ] = $_ENV;
 
-        $this->database = new PDO(
-            "$driver:host=$host; dbname=$database; port=$port; charset=utf8",
+        $this->pdo = new PDO(
+            sprintf('%s:host=%s; dbname=%s; port=%s; charset=utf8', $driver, $host, $database, $port),
             $username,
             $password
         );
 
-        $this->database->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $this->database->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
-        $this->database->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
+        $this->pdo->setAttribute(PDO::ATTR_STRINGIFY_FETCHES, false);
     }
 
 
@@ -58,6 +59,6 @@ class DatabaseConnection
      */
     public function getDatabase(): PDO
     {
-        return $this->database;
+        return $this->pdo;
     }
 }

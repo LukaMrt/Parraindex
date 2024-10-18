@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\field;
 
 use Closure;
@@ -32,6 +34,7 @@ class CustomField extends Field
      * @param string $value The value to verify
      * @return bool True if the value is valid, false otherwise
      */
+    #[\Override]
     public function isValid(string $value): bool
     {
         return ($this->validator)($value);

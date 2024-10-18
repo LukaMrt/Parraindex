@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\logging;
 
 use App\Application\logging\Logger;
@@ -15,19 +17,20 @@ class MonologLogger implements Logger
     /**
      * @var string The name of the log file
      */
-    private const DEFAULT_LOG_FILE = '/log.txt';
+    private const string DEFAULT_LOG_FILE = '/log.txt';
+
     /**
      * @var string The name of the error log file
      */
-    private const ERROR_FILE = '/errors.txt';
+    private const string ERROR_FILE = '/errors.txt';
 
 
     /**
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
+    #[\Override]
     public function info(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className)->info($message, $context);
@@ -81,7 +84,6 @@ class MonologLogger implements Logger
      * @param string $logFile Log file to watch
      * @param string $name Name of the zip folder
      * @param string $logPath Log path to store the zip file
-     * @return void
      */
     private function zipLoggFile(string $logFile, string $name, string $logPath): void
     {
@@ -90,11 +92,11 @@ class MonologLogger implements Logger
             return;
         }
 
-        $zip         = new ZipArchive();
+        $zipArchive         = new ZipArchive();
         $zipFileName = $logPath . '/archives/' . $name . '_' . date('Y-m-d_H-i-s') . '.zip';
-        if ($zip->open($zipFileName, ZipArchive::CREATE) === true) {
-            $zip->addFile($logFile, 'log.txt');
-            $zip->close();
+        if ($zipArchive->open($zipFileName, ZipArchive::CREATE) === true) {
+            $zipArchive->addFile($logFile, 'log.txt');
+            $zipArchive->close();
         }
 
         file_put_contents($logFile, '');
@@ -105,8 +107,8 @@ class MonologLogger implements Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
+    #[\Override]
     public function debug(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className)->debug($message, $context);
@@ -117,8 +119,8 @@ class MonologLogger implements Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
+    #[\Override]
     public function warning(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className)->warning($message, $context);
@@ -129,8 +131,8 @@ class MonologLogger implements Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
+    #[\Override]
     public function error(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className)->error($message, $context);
@@ -141,8 +143,8 @@ class MonologLogger implements Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
+    #[\Override]
     public function alert(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className)->alert($message, $context);
@@ -153,8 +155,8 @@ class MonologLogger implements Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
+    #[\Override]
     public function critical(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className)->critical($message, $context);
@@ -165,8 +167,8 @@ class MonologLogger implements Logger
      * @param string $className Name of the class that sends the log message
      * @param string $message Message to log
      * @param array $context Additional information to log
-     * @return void
      */
+    #[\Override]
     public function emergency(string $className, string $message, array $context = []): void
     {
         $this->createLogger($className)->emergency($message, $context);

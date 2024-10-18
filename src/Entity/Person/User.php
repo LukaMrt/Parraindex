@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Person;
 
 use App\Repository\UserRepository;
@@ -62,6 +64,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @see UserInterface
      */
+    #[\Override]
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
@@ -72,13 +75,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      *
      * @return list<string>
      */
+    #[\Override]
     public function getRoles(): array
     {
         if (!$this->roles->contains(Role::USER)) {
             $this->roles->add(Role::USER);
         }
 
-        return $this->roles->map(fn (Role $role) => $role->toString())->toArray();
+        return $this->roles->map(fn (Role $role): string => $role->toString())->toArray();
     }
 
     /**
@@ -94,6 +98,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see PasswordAuthenticatedUserInterface
      */
+    #[\Override]
     public function getPassword(): ?string
     {
         return $this->password;
@@ -109,6 +114,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      */
+    #[\Override]
     public function eraseCredentials(): void
     {
         // If you store any temporary, sensitive data on the user, clear it here

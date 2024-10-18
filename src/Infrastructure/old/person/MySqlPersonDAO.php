@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\person;
 
 use App\Application\person\PersonDAO;
@@ -36,14 +38,14 @@ class MySqlPersonDAO implements PersonDAO
 
     /**
      * Get all the persons
-     * @return array
      */
+    #[\Override]
     public function getAllPeople(): array
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             SELECT Pe.*,
                                    Pr.*,
                                    D.*,
@@ -92,12 +94,11 @@ SQL
     /**
      * Build a person
      * @param array $buffer Buffer of the person
-     * @return Person
      */
     private function buildPerson(array $buffer): Person
     {
 
-        $builder = PersonBuilder::aPerson()
+        $personBuilder = PersonBuilder::aPerson()
             ->withId($buffer[0]->id_person)
             ->withIdentity(new Identity(
                 $buffer[0]->first_name,
@@ -110,7 +111,7 @@ SQL
             ->withColor($buffer[0]->banner_color);
 
         $startYear       = date("Y");
-        $filterClosure   = fn($row) => property_exists($row, 'id_degree') && $row->id_degree != null;
+        $filterClosure   = fn($row): bool => property_exists($row, 'id_degree') && $row->id_degree != null;
         $promotionBuffer = array_filter($buffer, $filterClosure);
 
         foreach ($promotionBuffer as $row) {
@@ -129,39 +130,39 @@ SQL
                 DateTime::createFromFormat('Y-m-d', $row->creation)
             );
             $promotion = new Promotion($row->id_promotion, $degree, $school, $row->year, $row->desc_promotion);
-            $builder->addPromotion($promotion);
+            $personBuilder->addPromotion($promotion);
             $startYear = min($startYear, $row->year);
         }
 
-        $filterClosure         = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
+        $filterClosure         = fn($row): bool => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
         $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
-        foreach ($characteristicsBuffer as $row) {
-            $builder->addCharacteristic((new CharacteristicBuilder())
-                ->withId($row->id_characteristic)
-                ->withTitle($row->title)
-                ->withType($row->type)
-                ->withUrl($row->url)
-                ->withImage($row->image)
-                ->withVisibility($row->visibility)
-                ->withValue($row->value)
+        foreach ($characteristicsBuffer as $characteristicBuffer) {
+            $personBuilder->addCharacteristic((new CharacteristicBuilder())
+                ->withId($characteristicBuffer->id_characteristic)
+                ->withTitle($characteristicBuffer->title)
+                ->withType($characteristicBuffer->type)
+                ->withUrl($characteristicBuffer->url)
+                ->withImage($characteristicBuffer->image)
+                ->withVisibility($characteristicBuffer->visibility)
+                ->withValue($characteristicBuffer->value)
                 ->build());
         }
 
-        return $builder->withStartYear($startYear)->build();
+        return $personBuilder->withStartYear($startYear)->build();
     }
 
 
     /**
      * Get a person
      * @param Identity $identity Identity of the person
-     * @return Person|null
      */
+    #[\Override]
     public function getPerson(Identity $identity): ?Person
     {
 
-        $connection = $this->databaseConnection->getDatabase();
-        $query      = $connection->prepare(<<<SQL
+        $pdo = $this->databaseConnection->getDatabase();
+        $query      = $pdo->prepare(<<<SQL
                         SELECT *
                         FROM Person
                         WHERE LOWER(first_name) = LOWER(:first_name)
@@ -183,7 +184,6 @@ SQL
         }
 
         $query->closeCursor();
-        $connection = null;
         return $person;
     }
 
@@ -191,13 +191,13 @@ SQL
     /**
      * Get a person by id
      * @param int $id Id of the person
-     * @return Person|null
      */
+    #[\Override]
     public function getPersonById(int $id): ?Person
     {
 
-        $connection = $this->databaseConnection->getDatabase();
-        $query      = $connection->prepare(<<<SQL
+        $pdo = $this->databaseConnection->getDatabase();
+        $query      = $pdo->prepare(<<<SQL
                                 SELECT Pe.*,
                                        Pr.*,
                                        D.*,
@@ -219,6 +219,7 @@ SQL
         );
 
         $query->execute(['id_person' => $id]);
+
         $buffer = [];
 
         while ($row = $query->fetch()) {
@@ -227,12 +228,11 @@ SQL
 
         $person = null;
 
-        if (!empty($buffer)) {
+        if ($buffer !== []) {
             $person = $this->buildPerson($buffer);
         }
 
         $query->closeCursor();
-        $connection = null;
         return $person;
     }
 
@@ -240,13 +240,13 @@ SQL
     /**
      * Update de person
      * @param Person $person Person to update
-     * @return void
      */
+    #[\Override]
     public function updatePerson(Person $person): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
-        $query      = $connection->prepare(<<<SQL
+        $pdo = $this->databaseConnection->getDatabase();
+        $query      = $pdo->prepare(<<<SQL
             UPDATE Person
             SET first_name = LOWER(:firstName), last_name = LOWER(:lastName), biography = :biography,
 			    banner_color = :bannerColor, description = :description, picture = :picture
@@ -264,20 +264,20 @@ SQL
             'id' => $person->getId()
         ]);
         $query->closeCursor();
-        $connection = null;
+
     }
 
 
     /**
      * Get all identities
-     * @return array
      */
+    #[\Override]
     public function getAllIdentities(): array
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(
+        $query = $pdo->prepare(
             "SELECT first_name, last_name FROM Person"
         );
         $query->execute();
@@ -296,13 +296,13 @@ SQL
     /**
      * Get person by login
      * @param string $login Login of the person
-     * @return Person|null
      */
+    #[\Override]
     public function getPersonByLogin(string $login): ?Person
     {
 
-        $connection = $this->databaseConnection->getDatabase();
-        $query      = $connection->prepare(<<<SQL
+        $pdo = $this->databaseConnection->getDatabase();
+        $query      = $pdo->prepare(<<<SQL
                                 SELECT Pe.*,
                                        Pr.*,
                                        D.*,
@@ -324,6 +324,7 @@ SQL
         );
 
         $query->execute(['login' => $login]);
+
         $buffer = [];
 
         while ($row = $query->fetch()) {
@@ -331,7 +332,6 @@ SQL
         }
 
         $query->closeCursor();
-        $connection = null;
         return $this->buildPerson($buffer);
     }
 
@@ -339,13 +339,13 @@ SQL
     /**
      * Create a person
      * @param Person $person Person to create
-     * @return int
      */
+    #[\Override]
     public function createPerson(Person $person): int
     {
 
-        $connection = $this->databaseConnection->getDatabase();
-        $query      = $connection->prepare(<<<SQL
+        $pdo = $this->databaseConnection->getDatabase();
+        $query      = $pdo->prepare(<<<SQL
                             INSERT INTO Person (first_name, last_name, biography, banner_color, description, picture)
                             VALUES (LOWER(:firstName), LOWER(:lastName), :biography,
                                     :bannerColor, :description, :picture)
@@ -361,9 +361,9 @@ SQL
             'picture' => $person->getPicture()
         ]);
 
-        $idPerson = $connection->lastInsertId();
+        $idPerson = $pdo->lastInsertId();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                                 SELECT id_promotion
                                 FROM Promotion
                                 WHERE year = :start_year
@@ -375,7 +375,7 @@ SQL
         if ($row = $query->fetch()) {
             $idPromotion = $row->id_promotion;
         } else {
-            $query = $connection->prepare(<<<SQL
+            $query = $pdo->prepare(<<<SQL
                                 INSERT INTO Promotion (year, id_degree, id_school, desc_promotion, speciality)
                                 VALUES (:start_year,
                                         (SELECT id_degree FROM Degree WHERE degree_name = :degree_name),
@@ -388,10 +388,10 @@ SQL
                 'start_year' => $person->getStartYear(),
                 'degree_name' => $person->getStartYear() < 2021 ? 'DUT' : 'BUT'
             ]);
-            $idPromotion = $connection->lastInsertId();
+            $idPromotion = $pdo->lastInsertId();
         }
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                                 INSERT INTO Student (id_person, id_promotion)
                                 VALUES (:id_person, :id_promotion)
 SQL
@@ -403,7 +403,7 @@ SQL
         ]);
 
         $query->closeCursor();
-        $connection = null;
+
 
         return $idPerson;
     }
@@ -412,16 +412,16 @@ SQL
     /**
      * Delete a person
      * @param Person $person Person to delete
-     * @return void
      */
+    #[\Override]
     public function deletePerson(Person $person): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("DELETE FROM Person WHERE id_person = :id");
+        $query = $pdo->prepare("DELETE FROM Person WHERE id_person = :id");
         $query->execute(['id' => $person->getId()]);
         $query->closeCursor();
-        $connection = null;
+
     }
 }

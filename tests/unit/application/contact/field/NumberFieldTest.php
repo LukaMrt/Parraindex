@@ -1,26 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\field;
 
 use App\Application\contact\field\NumberField;
 use PHPUnit\Framework\TestCase;
 
-class NumberFieldTest extends TestCase
+final class NumberFieldTest extends TestCase
 {
     private NumberField $numberField;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->numberField = new NumberField('number', 'error');
     }
 
 
-    public function testGetnameReturnsNumber()
+    public function testGetnameReturnsNumber(): void
     {
         $result = $this->numberField->getName();
 
-        $this->assertEquals('number', $result);
+        $this->assertSame('number', $result);
     }
 
 

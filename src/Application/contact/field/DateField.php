@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\field;
 
 use DateTime;
@@ -15,6 +17,7 @@ class DateField extends Field
      * @param string $value The value to verify
      * @return bool True if value is a valid date, false otherwise
      */
+    #[\Override]
     public function isValid(string $value): bool
     {
         $date = DateTime::createFromFormat('Y-m-d', $value);

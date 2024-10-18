@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Infrastructure\old\router\Router;
@@ -16,11 +18,11 @@ class LogoutConfirmationController extends Controller
      * function get
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurs during the rendering
      * @throws SyntaxError if an error occurs during the rendering
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         $this->render('logoutConfirmation.html.twig');

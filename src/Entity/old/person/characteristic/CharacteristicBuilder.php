@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\person\characteristic;
 
 use App\Entity\Characteristic\Characteristic;
@@ -13,26 +15,32 @@ class CharacteristicBuilder
      * @var int Id of the characteristic
      */
     private int $id;
+
     /**
      * @var string Name of the characteristic
      */
     private string $title;
+
     /**
      * @var CharacteristicType Type of the characteristic
      */
-    private CharacteristicType $type;
+    private CharacteristicType $characteristicType;
+
     /**
      * @var string Target url of the characteristic
      */
     private string $url;
+
     /**
      * @var string Image url of the characteristic
      */
     private string $image;
+
     /**
      * @var bool Is the characteristic visible
      */
     private bool $visible;
+
     /**
      * @var string Description of the characteristic
      */
@@ -70,7 +78,7 @@ class CharacteristicBuilder
      */
     public function withType(string $typeName): CharacteristicBuilder
     {
-        $this->type = CharacteristicType::fromName($typeName);
+        $this->characteristicType = CharacteristicType::fromName($typeName);
         return $this;
     }
 
@@ -146,7 +154,7 @@ class CharacteristicBuilder
      */
     public function getType(): CharacteristicType
     {
-        return $this->type;
+        return $this->characteristicType;
     }
 
 

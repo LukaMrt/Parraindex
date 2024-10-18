@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\person\characteristic;
 
 use App\Entity\old\person\characteristic\Characteristic;
@@ -13,15 +15,15 @@ class CharacteristicTypeService
     /**
      * @var CharacteristicTypeDAO DAO for characteristic types.
      */
-    private CharacteristicTypeDAO $characteristicDAO;
+    private CharacteristicTypeDAO $characteristicTypeDAO;
 
 
     /**
-     * @param CharacteristicTypeDAO $characteristicDAO DAO for characteristic types.
+     * @param CharacteristicTypeDAO $characteristicTypeDAO DAO for characteristic types.
      */
-    public function __construct(CharacteristicTypeDAO $characteristicDAO)
+    public function __construct(CharacteristicTypeDAO $characteristicTypeDAO)
     {
-        $this->characteristicDAO = $characteristicDAO;
+        $this->characteristicTypeDAO = $characteristicTypeDAO;
     }
 
 
@@ -31,7 +33,7 @@ class CharacteristicTypeService
      */
     public function getAllCharacteristicTypes(): array
     {
-        return $this->characteristicDAO->getAllCharacteristicTypes();
+        return $this->characteristicTypeDAO->getAllCharacteristicTypes();
     }
 
 
@@ -39,11 +41,10 @@ class CharacteristicTypeService
      * Get all the characteristic types and values
      * The column value is null if the person doesn't have a value for this characteristic
      *
-     * @param Person $person
      * @return Characteristic[] of CharacteristicType
      */
     public function getAllCharacteristicAndValues(Person $person): array
     {
-        return $this->characteristicDAO->getAllCharacteristicAndValues($person->getId());
+        return $this->characteristicTypeDAO->getAllCharacteristicAndValues($person->getId());
     }
 }

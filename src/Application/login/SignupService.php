@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\login;
 
 use App\Application\logging\Logger;
@@ -20,31 +22,38 @@ class SignupService
     /**
      * @var string regex a non letter character
      */
-    private const NON_LETTER_REGEX = "/[^a-z]/";
+    private const string NON_LETTER_REGEX = "/[^a-z]/";
+
     /**
      * @var AccountDAO DAO for accounts
      */
     private AccountDAO $accountDAO;
+
     /**
      * @var PersonDAO DAO for persons
      */
     private PersonDAO $personDAO;
+
     /**
      * @var Redirect redirect service
      */
     private Redirect $redirect;
+
     /**
      * @var Mailer mailer service
      */
     private Mailer $mailer;
+
     /**
      * @var Random random generator
      */
     private Random $random;
+
     /**
      * @var UrlUtils Url utilities
      */
     private UrlUtils $urlUtils;
+
     /**
      * @var Logger logger
      */
@@ -96,7 +105,7 @@ class SignupService
 
         $error = $this->buildError($email, $password, $passwordConfirm, $lastname, $firstname, $person);
 
-        if (empty($error)) {
+        if ($error === '' || $error === '0') {
             $account = new Account($person->getId(), $email, $person, new Password($password));
             $token   = $this->random->generate(10);
             $this->accountDAO->createTemporaryAccount($account, $token);
@@ -104,8 +113,8 @@ class SignupService
             $this->mailer->send(
                 $email,
                 'Parraindex : inscription',
-                "Bonjour $firstname $lastname,<br><br>Votre demande d'inscription a bien été enregistrée, merci de "
-                . "cliquer sur ce lien pour la valider : <a href=\"$url\">$url</a><br><br>Cordialement"
+                sprintf("Bonjour %s %s,<br><br>Votre demande d'inscription a bien été enregistrée, merci de ", $firstname, $lastname)
+                . sprintf('cliquer sur ce lien pour la valider : <a href="%s">%s</a><br><br>Cordialement', $url, $url)
                 . "<br>Le Parrainboss"
             );
             $this->logger->info(SignupService::class, 'Signup request sent to ' . $email);
@@ -139,33 +148,33 @@ class SignupService
 
         $error = '';
 
-        if (empty($error) && $this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
+        if ($this->empty($email, $password, $passwordConfirm, $lastname, $firstname)) {
             $error = 'Veuillez remplir tous les champs';
         }
 
-        if (empty($error) && !str_ends_with($email, '@etu.univ-lyon1.fr')) {
+        if (($error === '' || $error === '0') && !str_ends_with($email, '@etu.univ-lyon1.fr')) {
             $error = 'L\'email doit doit être votre email universitaire';
         }
 
-        if (empty($error) && $password !== $passwordConfirm) {
+        if (($error === '' || $error === '0') && $password !== $passwordConfirm) {
             $error = 'Les mots de passe ne correspondent pas';
         }
 
-        if (empty($error) && $person === null) {
+        if (($error === '' || $error === '0') && !$person instanceof \App\Entity\old\person\Person) {
             $error = 'Votre nom n\'est pas enregistré, merci de faire une demande de création de personne';
         }
 
-        $emailAccountExists = empty($error) && $this->accountDAO->existsAccount($email);
+        $emailAccountExists = ($error === '' || $error === '0') && $this->accountDAO->existsAccount($email);
         if ($emailAccountExists) {
             $error = 'Un compte existe déjà avec cette adresse email';
         }
 
-        $accountExistsClosure = fn() => $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
-        if (empty($error) && $accountExistsClosure()) {
+        $accountExistsClosure = fn(): bool => $this->accountDAO->existsAccountByIdentity(new Identity($firstname, $lastname));
+        if (($error === '' || $error === '0') && $accountExistsClosure()) {
             $error = 'Un compte existe déjà avec ce nom';
         }
 
-        if (!empty($error)) {
+        if ($error !== '' && $error !== '0') {
             $this->logger->error(
                 SignupService::class,
                 $error . ' (' . implode(' ', [$firstname, $lastname, $email, $password, $passwordConfirm]) . ')'
@@ -207,10 +216,11 @@ class SignupService
     private function empty(string ...$parameters): bool
     {
         foreach ($parameters as $parameter) {
-            if (empty($parameter)) {
+            if ($parameter === '' || $parameter === '0') {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -228,10 +238,10 @@ class SignupService
 
         if ($account->getId() === -1) {
             $this->logger->error(SignupService::class, 'Token invalid');
-            $error = 'Ce lien n\'est pas ou plus valide.';
+            $error = "Ce lien n'est pas ou plus valide.";
         }
 
-        if (empty($error)) {
+        if ($error === '' || $error === '0') {
             $this->accountDAO->createAccount($account);
             $this->accountDAO->deleteTemporaryAccount($account);
             $this->mailer->send(

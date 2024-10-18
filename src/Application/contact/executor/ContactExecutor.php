@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -16,14 +18,17 @@ abstract class ContactExecutor
      * @var ContactDAO $contactDAO DAO to save the contact
      */
     protected ContactDAO $contactDAO;
+
     /**
      * @var Type $contactType Type of the contact
      */
     protected Type $contactType;
+
     /**
      * @var Redirect $redirect The redirect service to redirect the user
      */
     private Redirect $redirect;
+
     /**
      * @var array $fields Fields of the contact form
      */
@@ -63,11 +68,11 @@ abstract class ContactExecutor
     {
         $errors = $this->validate($data);
 
-        if (empty($errors)) {
+        if ($errors === '' || $errors === '0') {
             $errors = $this->executeSuccess($data);
         }
 
-        if (empty($errors)) {
+        if ($errors === '' || $errors === '0') {
             $this->redirect->redirect('home');
         }
 
@@ -89,7 +94,7 @@ abstract class ContactExecutor
             $errors[] = $this->validateField($field, $data);
         }
 
-        $errors = array_filter($errors, fn($error) => !empty($error));
+        $errors = array_filter($errors, fn($error): bool => $error !== '' && $error !== '0');
 
         return implode('<br>', $errors);
     }
@@ -104,13 +109,11 @@ abstract class ContactExecutor
     private function validateField(Field $field, array $data): string
     {
 
-        $error = '';
-
         if (!isset($data[$field->getName()]) || !$field->isValid($data[$field->getName()])) {
-            $error = $field->getError();
+            return $field->getError();
         }
 
-        return $error;
+        return '';
     }
 
 

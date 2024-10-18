@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\login;
 
 use App\Application\logging\Logger;
@@ -17,18 +19,22 @@ class LoginService
      * @var AccountDAO DAO for account
      */
     private AccountDAO $accountDAO;
+
     /**
      * @var Redirect Redirect service
      */
     private Redirect $redirect;
+
     /**
      * @var SessionManager Session manager
      */
     private SessionManager $sessionManager;
+
     /**
      * @var PersonDAO DAO for person
      */
     private PersonDAO $personDAO;
+
     /**
      * @var Logger Logger
      */
@@ -71,7 +77,7 @@ class LoginService
         }
 
         $error = $this->checkLogin($parameters);
-        if (empty($error)) {
+        if ($error === '' || $error === '0') {
             $account = $this->accountDAO->getAccountByLogin($parameters['login']);
 
             $this->sessionManager->set('login', $account->getLogin());
@@ -119,8 +125,8 @@ class LoginService
             ]
         ];
 
-        $errors = array_filter($errors, fn($error) => $error['condition']);
-        $errors = array_map(fn($error) => $error['message'], $errors);
+        $errors = array_filter($errors, fn($error): bool => $error['condition']);
+        $errors = array_map(fn($error): string => $error['message'], $errors);
 
         return array_shift($errors) ?? '';
     }
@@ -128,7 +134,6 @@ class LoginService
 
     /**
      * Logout the current user by destroying the session
-     * @return void
      */
     #[NoReturn] public function logout(): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\person;
 
 use App\Entity\old\person\characteristic\Characteristic;
@@ -12,33 +14,55 @@ use JsonSerializable;
 class Person implements JsonSerializable
 {
     /**
+     * @var mixed[]
+     */
+    public $families;
+
+    /**
+     * @var mixed[]
+     */
+    public $associations;
+
+    /**
+     * @var mixed[]
+     */
+    public $promotions;
+
+    /**
      * @var int Id of the person
      */
     private int $id;
+
     /**
      * @var Identity Identity of the person
      */
     private Identity $identity;
+
     /**
      * @var string Biography of the person
      */
     private string $biography;
+
     /**
      * @var string Color of the person (hexadecimal)
      */
     private string $color;
+
     /**
      * @var string Description of the person
      */
     private string $description;
+
     /**
      * @var Characteristic[] Characteristics of the person
      */
     private array $characteristics;
+
     /**
      * @var Sponsor[] Sponsors of the person
      */
     private array $sponsors;
+
     /**
      * @var int Start year of the person
      */
@@ -46,21 +70,21 @@ class Person implements JsonSerializable
 
 
     /**
-     * @param PersonBuilder $builder Builder to build the person
+     * @param PersonBuilder $personBuilder Builder to build the person
      */
-    public function __construct(PersonBuilder $builder)
+    public function __construct(PersonBuilder $personBuilder)
     {
-        $this->id              = $builder->id;
-        $this->identity        = $builder->identity;
-        $this->biography       = $builder->biography;
-        $this->color           = $builder->color;
-        $this->description     = $builder->description;
-        $this->characteristics = $builder->characteristics;
-        $this->sponsors        = $builder->sponsors;
-        $this->families        = $builder->families;
-        $this->associations    = $builder->associations;
-        $this->promotions      = $builder->promotions;
-        $this->startYear       = $builder->startYear;
+        $this->id              = $personBuilder->id;
+        $this->identity        = $personBuilder->identity;
+        $this->biography       = $personBuilder->biography;
+        $this->color           = $personBuilder->color;
+        $this->description     = $personBuilder->description;
+        $this->characteristics = $personBuilder->characteristics;
+        $this->sponsors        = $personBuilder->sponsors;
+        $this->families        = $personBuilder->families;
+        $this->associations    = $personBuilder->associations;
+        $this->promotions      = $personBuilder->promotions;
+        $this->startYear       = $personBuilder->startYear;
     }
 
 
@@ -140,7 +164,7 @@ class Person implements JsonSerializable
 
         $dates = array_map(fn($promotion) => $promotion->getYear(), $this->promotions);
 
-        if (empty($dates)) {
+        if ($dates === []) {
             return null;
         }
 
@@ -204,6 +228,7 @@ class Person implements JsonSerializable
     }
 
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return get_object_vars($this);

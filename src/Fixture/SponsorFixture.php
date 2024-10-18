@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Fixture;
 
 use App\Entity\Sponsor\Sponsor;
@@ -10,7 +12,8 @@ use Doctrine\Persistence\ObjectManager;
 
 class SponsorFixture extends Fixture implements DependentFixtureInterface
 {
-    public function load(ObjectManager $manager): void
+    #[\Override]
+    public function load(ObjectManager $objectManager): void
     {
         $sponsor1 = (new Sponsor())
             ->setGodFather($this->getReference(PersonFixture::LUKA))
@@ -19,7 +22,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
             ->setType(Type::CLASSIC)
             ->setDescription('God child 1 a demandé Luka dans son formulaire de parrainage')
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($sponsor1);
+        $objectManager->persist($sponsor1);
 
         $sponsor2 = (new Sponsor())
             ->setGodFather($this->getReference(PersonFixture::LUKA))
@@ -28,7 +31,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
             ->setType(Type::CLASSIC)
             ->setDescription('Luka a choisi God child 2')
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($sponsor2);
+        $objectManager->persist($sponsor2);
 
         $sponsor3 = (new Sponsor())
             ->setGodFather($this->getReference(PersonFixture::LUKA))
@@ -37,7 +40,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
             ->setType(Type::HEART)
             ->setDescription('God child 3 a demandé Luka en parrain pendant une soirée')
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($sponsor3);
+        $objectManager->persist($sponsor3);
 
         $sponsor4 = (new Sponsor())
             ->setGodFather($this->getReference(PersonFixture::GOD_FATHER))
@@ -46,14 +49,15 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
             ->setType(Type::CLASSIC)
             ->setDescription('God father a choisi Luka')
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($sponsor4);
+        $objectManager->persist($sponsor4);
 
-        $manager->flush();
+        $objectManager->flush();
     }
 
     /**
      * @return string[]
      */
+    #[\Override]
     public function getDependencies(): array
     {
         return [

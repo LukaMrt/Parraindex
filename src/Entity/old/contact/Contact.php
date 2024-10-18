@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\contact;
 
 use App\Entity\Contact\Type;
@@ -13,18 +15,22 @@ abstract class Contact
      * @var int The id of the contact
      */
     private int $id;
+
     /**
      * @var string The name of the person who sent the contact
      */
     private string $contacterName;
+
     /**
      * @var string The email of the person who sent the contact
      */
     private string $contacterEmail;
+
     /**
      * @var Type The type of the contact
      */
     private Type $type;
+
     /**
      * @var string The description of the contact message
      */

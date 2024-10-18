@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\person\characteristic;
 
 use App\Entity\old\person\characteristic\Characteristic;

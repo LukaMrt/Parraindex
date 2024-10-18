@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\account;
 
 use App\Application\login\AccountDAO;
@@ -39,12 +41,14 @@ class MysqlAccountDAO implements AccountDAO
      * @param string $login login of the account
      * @return Password password of the account, em if the account does not exist
      */
+    #[\Override]
     public function getAccountPassword(string $login): Password
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT password FROM Account WHERE email = :login LIMIT 1");
+        $query = $pdo->prepare("SELECT password FROM Account WHERE email = :login LIMIT 1");
         $query->execute(['login' => $login]);
+
         $result   = $query->fetch();
         $password = new Password('');
 
@@ -53,20 +57,19 @@ class MysqlAccountDAO implements AccountDAO
         }
 
         $query->closeCursor();
-        $connection = null;
         return $password;
     }
 
 
     /**
      * @param Account $account The account to create
-     * @return void
      */
+    #[\Override]
     public function createAccount(Account $account): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             INSERT INTO Account (email, password, id_person)
                             VALUES (LOWER(:email), :password, :person)
 SQL
@@ -77,14 +80,12 @@ SQL
             'person' => $account->getPersonId()
         ]);
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             INSERT INTO Privilege (id_account, id_school, privilege_name)
                             VALUES ((SELECT id_account FROM Account WHERE LOWER(email) = LOWER(:email)), 1, 'STUDENT')
 SQL
         );
         $query->execute(['email' => $account->getLogin()]);
-
-        $connection = null;
         $query->closeCursor();
     }
 
@@ -93,15 +94,15 @@ SQL
      * @param string $login The login of the account
      * @return bool true if the account exists, false otherwise
      */
+    #[\Override]
     public function existsAccount(string $login): bool
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT * FROM Account WHERE LOWER(email) = LOWER(:email)");
+        $query = $pdo->prepare("SELECT * FROM Account WHERE LOWER(email) = LOWER(:email)");
         $query->execute(['email' => $login]);
-        $result = $query->fetch();
 
-        $connection = null;
+        $result = $query->fetch();
         return (bool)$result;
     }
 
@@ -110,11 +111,12 @@ SQL
      * @param Identity $identity The identity of the person
      * @return bool true if the person exists, false otherwise
      */
+    #[\Override]
     public function existsAccountByIdentity(Identity $identity): bool
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                                 SELECT *
                                 FROM Account
                                     JOIN Person P on P.id_person = Account.id_person
@@ -123,9 +125,8 @@ SQL
 SQL
         );
         $query->execute(['first_name' => $identity->getFirstName(), 'last_name' => $identity->getLastName()]);
-        $result = $query->fetch();
 
-        $connection = null;
+        $result = $query->fetch();
         return (bool)$result;
     }
 
@@ -133,13 +134,13 @@ SQL
     /**
      * @param Account $account The temporary account to create
      * @param string $token The token to confirm the account creation
-     * @return void
      */
+    #[\Override]
     public function createTemporaryAccount(Account $account, string $token): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                                 INSERT INTO TemporaryAccount (email, password, id_person, link)
                                 VALUES (LOWER(:email), :password, :person, :link)
 SQL
@@ -150,8 +151,6 @@ SQL
             'person' => $account->getPersonId(),
             'link' => $token
         ]);
-
-        $connection = null;
         $query->closeCursor();
     }
 
@@ -160,11 +159,12 @@ SQL
      * @param string $token The token related to the temporary account
      * @return Account The temporary account, with id = -1 if the account does not exist
      */
+    #[\Override]
     public function getTemporaryAccountByToken(string $token): Account
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT * FROM TemporaryAccount WHERE link = :token");
+        $query = $pdo->prepare("SELECT * FROM TemporaryAccount WHERE link = :token");
         $query->execute(['token' => $token]);
 
         $account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
@@ -178,7 +178,6 @@ SQL
             );
         }
 
-        $connection = null;
         $query->closeCursor();
         return $account;
     }
@@ -186,16 +185,14 @@ SQL
 
     /**
      * @param Account $account The temporary account to delete
-     * @return void
      */
+    #[\Override]
     public function deleteTemporaryAccount(Account $account): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("DELETE FROM TemporaryAccount WHERE id_person = :id");
+        $query = $pdo->prepare("DELETE FROM TemporaryAccount WHERE id_person = :id");
         $query->execute(['id' => $account->getPersonId()]);
-
-        $connection = null;
         $query->closeCursor();
     }
 
@@ -205,11 +202,12 @@ SQL
      * @return Account|null The account, null if the account does not exist
      * @throws Exception if the account exists but the person does not
      */
+    #[\Override]
     public function getAccountByLogin(string $login): ?Account
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             SELECT *
                             FROM Account A
                                 LEFT JOIN Privilege P on A.id_account = P.id_account
@@ -224,7 +222,7 @@ SQL
             return null;
         }
 
-        $person  = PersonBuilder::aPerson();
+        $personBuilder  = PersonBuilder::aPerson();
         $account = null;
 
         while ($row = $query->fetch()) {
@@ -244,13 +242,12 @@ SQL
 
             $id    = $row->id_account;
             $email = $row->email;
-            $person->withId($row->id_person);
+            $personBuilder->withId($row->id_person);
             $password = new Password($row->password);
-            $account  = new Account($id, $email, $person->build(), $password, ...$privileges);
+            $account  = new Account($id, $email, $personBuilder->build(), $password, ...$privileges);
         }
 
         $query->closeCursor();
-        $connection = null;
         return $account;
     }
 
@@ -258,13 +255,13 @@ SQL
     /**
      * @param Account $account The account which asked for a password reset
      * @param string $token The token to confirm the password reset
-     * @return void
      */
+    #[\Override]
     public function createResetpassword(Account $account, string $token): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                                 INSERT INTO ResetPassword (id_account, password, link)
                                 VALUES (:id, :password, :link)
 SQL
@@ -274,8 +271,6 @@ SQL
             'password' => $account->getHashedPassword(),
             'link' => $token
         ]);
-
-        $connection = null;
         $query->closeCursor();
     }
 
@@ -284,11 +279,12 @@ SQL
      * @param string $token The token related to the password reset
      * @return Account The account, with id = -1 if the account does not exist
      */
+    #[\Override]
     public function getAccountResetPasswordByToken(string $token): Account
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("SELECT * FROM ResetPassword WHERE link = :token");
+        $query = $pdo->prepare("SELECT * FROM ResetPassword WHERE link = :token");
         $query->execute(['token' => $token]);
 
         $account = new Account(-1, '', PersonBuilder::aPerson()->build(), new Password(''));
@@ -302,7 +298,6 @@ SQL
             );
         }
 
-        $connection = null;
         $query->closeCursor();
         return $account;
     }
@@ -310,35 +305,31 @@ SQL
 
     /**
      * @param Account $account The account which asked for a password reset
-     * @return void
      */
+    #[\Override]
     public function editAccountPassword(Account $account): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("UPDATE Account SET password = :password WHERE id_account = :id");
+        $query = $pdo->prepare("UPDATE Account SET password = :password WHERE id_account = :id");
         $query->execute([
             'password' => $account->getHashedPassword(),
             'id' => $account->getId()
         ]);
-
-        $connection = null;
         $query->closeCursor();
     }
 
 
     /**
      * @param Account $account The account which asked for a password reset
-     * @return void
      */
+    #[\Override]
     public function deleteResetPassword(Account $account): void
     {
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("DELETE FROM ResetPassword WHERE id_account = :id");
+        $query = $pdo->prepare("DELETE FROM ResetPassword WHERE id_account = :id");
         $query->execute(['id' => $account->getId()]);
-
-        $connection = null;
         $query->closeCursor();
     }
 }

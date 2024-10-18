@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Sponsor;
 
 use App\Entity\Person\Person;
@@ -45,9 +47,9 @@ class Sponsor
         return $this->godFather;
     }
 
-    public function setGodFather(?Person $godFather): static
+    public function setGodFather(?Person $person): static
     {
-        $this->godFather = $godFather;
+        $this->godFather = $person;
 
         return $this;
     }
@@ -57,9 +59,9 @@ class Sponsor
         return $this->godChild;
     }
 
-    public function setGodChild(?Person $godChild): static
+    public function setGodChild(?Person $person): static
     {
-        $this->godChild = $godChild;
+        $this->godChild = $person;
 
         return $this;
     }
@@ -114,9 +116,10 @@ class Sponsor
 
     public function formatDate(string $format): string
     {
-        if ($this->date) {
+        if ($this->date instanceof \DateTimeInterface) {
             return $this->date->format($format);
         }
+
         return '';
     }
 }

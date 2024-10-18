@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\person;
 
 use App\Entity\old\person\characteristic\Characteristic;
@@ -15,51 +17,62 @@ class PersonBuilder
     /**
      * @var int The id of the person
      */
-    public int $id;
+    public int $id = 0;
+
     /**
      * @var Identity The identity of the person
      */
     public Identity $identity;
+
     /**
      * @var DateTime The birthdate of the person
      */
     public DateTime $birthDate;
+
     /**
      * @var string The biography of the person
      */
-    public string $biography;
+    public string $biography = '';
+
     /**
      * @var string The description of the person
      */
-    public string $description;
+    public string $description = '';
+
     /**
      * @var array The characteristics of the person
      */
-    public array $characteristics;
+    public array $characteristics = [];
+
     /**
      * @var array The sponsors of the person
      */
-    public array $sponsors;
+    public array $sponsors = [];
+
     /**
      * @var array The families of the person
      */
-    public array $families;
+    public array $families = [];
+
     /**
      * @var array The associations of the person
      */
-    public array $associations;
+    public array $associations = [];
+
     /**
      * @var string The color of the person (hexadecimal)
      */
-    public string $color;
+    public string $color = '#f0f0f0';
+
     /**
      * @var array The promotions of the person
      */
-    public array $promotions;
+    public array $promotions = [];
+
     /**
      * @var int The year when the person started at the IUT
      */
-    public int $startYear;
+    public int $startYear = 0;
 
 
     /**
@@ -67,18 +80,8 @@ class PersonBuilder
      */
     private function __construct()
     {
-        $this->id              = 0;
         $this->identity        = new Identity('', '');
         $this->birthDate       = new DateTime();
-        $this->biography       = '';
-        $this->description     = '';
-        $this->characteristics = [];
-        $this->sponsors        = [];
-        $this->families        = [];
-        $this->associations    = [];
-        $this->promotions      = [];
-        $this->startYear       = 0;
-        $this->color           = '#f0f0f0';
     }
 
 
@@ -173,6 +176,7 @@ class PersonBuilder
         if (!in_Array($characteristic, $this->characteristics)) {
             $this->characteristics[] = $characteristic;
         }
+
         return $this;
     }
 

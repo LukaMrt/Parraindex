@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Fixture;
 
 use App\Entity\Person\Role;
@@ -10,15 +12,16 @@ use Doctrine\Persistence\ObjectManager;
 
 class UserFixture extends Fixture
 {
-    public function load(ObjectManager $manager): void
+    #[\Override]
+    public function load(ObjectManager $objectManager): void
     {
-        $luka = (new User())
+        $user = (new User())
             ->setEmail('luka@luka.com')
             ->setPassword('password')
             ->setPerson($this->getReference(PersonFixture::LUKA))
             ->setRoles(new ArrayCollection([Role::ADMIN, Role::USER]))
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($luka);
+        $objectManager->persist($user);
 
         $melvyn = (new User())
             ->setEmail('melvyn@melvyn.fr')
@@ -26,8 +29,8 @@ class UserFixture extends Fixture
             ->setPerson($this->getReference(PersonFixture::MELVYN))
             ->setRoles(new ArrayCollection([Role::USER]))
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($melvyn);
+        $objectManager->persist($melvyn);
 
-        $manager->flush();
+        $objectManager->flush();
     }
 }

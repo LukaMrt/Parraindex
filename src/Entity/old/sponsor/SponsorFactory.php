@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\sponsor;
 
 use App\Entity\old\person\Person;

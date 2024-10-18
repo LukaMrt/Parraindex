@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -44,7 +46,7 @@ class AddSponsorContactExecutor extends ContactExecutor
         PersonDAO $personDAO,
         SponsorDAO $sponsorDAO
     ) {
-        $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
+        $personExistsClosure = fn($value): bool => $this->personDAO->getPersonById($value) instanceof \App\Entity\old\person\Person;
 
         parent::__construct($contactDAO, $redirect, Type::ADD_SPONSOR, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
@@ -68,10 +70,11 @@ class AddSponsorContactExecutor extends ContactExecutor
      * @param array $data Data to execute
      * @return string error message if an error occurred, null otherwise
      */
+    #[\Override]
     public function executeSuccess(array $data): string
     {
 
-        if ($this->sponsorDAO->getSponsorByPeopleId($data['godFatherId'], $data['godChildId']) !== null) {
+        if ($this->sponsorDAO->getSponsorByPeopleId($data['godFatherId'], $data['godChildId']) instanceof \App\Entity\old\sponsor\Sponsor) {
             return 'Le lien ne doit pas déjà exister';
         }
 
@@ -87,7 +90,7 @@ class AddSponsorContactExecutor extends ContactExecutor
             ''
         );
 
-        $contact = new SponsorContact(
+        $sponsorContact = new SponsorContact(
             -1,
             date('Y-m-d'),
             null,
@@ -98,7 +101,7 @@ class AddSponsorContactExecutor extends ContactExecutor
             $sponsor
         );
 
-        $this->contactDAO->saveSponsorContact($contact);
+        $this->contactDAO->saveSponsorContact($sponsorContact);
         return '';
     }
 }

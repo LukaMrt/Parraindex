@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\person\characteristic;
 
 use JsonSerializable;
@@ -13,26 +15,32 @@ class Characteristic implements JsonSerializable
      * @var int Id of the characteristic
      */
     private int $id;
+
     /**
      * @var string Name of the characteristic
      */
     private string $title;
+
     /**
      * @var CharacteristicType Type of the characteristic
      */
-    private CharacteristicType $type;
+    private CharacteristicType $characteristicType;
+
     /**
      * @var string Target url of the characteristic
      */
     private string $url;
+
     /**
      * @var string Image url of the characteristic
      */
     private string $image;
+
     /**
      * @var bool Is the characteristic visible
      */
     private bool $visible;
+
     /**
      * @var string|null Description of the characteristic
      */
@@ -40,17 +48,17 @@ class Characteristic implements JsonSerializable
 
 
     /**
-     * @param CharacteristicBuilder $builder Builder of the characteristic
+     * @param CharacteristicBuilder $characteristicBuilder Builder of the characteristic
      */
-    public function __construct(CharacteristicBuilder $builder)
+    public function __construct(CharacteristicBuilder $characteristicBuilder)
     {
-        $this->id      = $builder->getId();
-        $this->title   = $builder->getTitle();
-        $this->type    = $builder->getType();
-        $this->url     = $builder->getUrl();
-        $this->image   = $builder->getImage();
-        $this->visible = $builder->isVisible();
-        $this->value   = $builder->getValue();
+        $this->id      = $characteristicBuilder->getId();
+        $this->title   = $characteristicBuilder->getTitle();
+        $this->characteristicType    = $characteristicBuilder->getType();
+        $this->url     = $characteristicBuilder->getUrl();
+        $this->image   = $characteristicBuilder->getImage();
+        $this->visible = $characteristicBuilder->isVisible();
+        $this->value   = $characteristicBuilder->getValue();
     }
 
 
@@ -103,7 +111,6 @@ class Characteristic implements JsonSerializable
      * Set the new value of the characteristic
      *
      * @param ?string $value New value of the characteristic
-     * @return void
      */
     public function setValue(?string $value): void
     {
@@ -124,7 +131,6 @@ class Characteristic implements JsonSerializable
      * Set the new visibility of the characteristic
      *
      * @param bool $visible New visibility of the characteristic
-     * @return void
      */
     public function setVisible(bool $visible): void
     {
@@ -137,10 +143,11 @@ class Characteristic implements JsonSerializable
      */
     public function getPrefix(): string
     {
-        return $this->type->getPrefix();
+        return $this->characteristicType->getPrefix();
     }
 
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return get_object_vars($this);

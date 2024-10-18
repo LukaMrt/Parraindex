@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Infrastructure\old\router\Router;
@@ -16,11 +18,11 @@ class SignUpConfirmationController extends Controller
      * function get
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError
      * @throws RuntimeError
      * @throws SyntaxError
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         $this->render('signupConfirmation.html.twig');

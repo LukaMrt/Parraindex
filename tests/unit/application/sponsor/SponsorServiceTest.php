@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\sponsor;
 
 use App\Application\person\PersonDAO;
@@ -13,17 +15,23 @@ use App\Entity\old\sponsor\HeartSponsor;
 use App\Entity\old\sponsor\Sponsor;
 use PHPUnit\Framework\TestCase;
 
-class SponsorServiceTest extends TestCase
+final class SponsorServiceTest extends TestCase
 {
-    private const TEST_DATE = '2020-01-01';
+    private const string TEST_DATE = '2020-01-01';
+
     private Person $person;
+
     private Sponsor $sponsor;
+
     private SponsorService $sponsorService;
+
     private SponsorDAO $sponsorDAO;
+
     private PersonDAO $personDAO;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $person               = PersonBuilder::aPerson()->withId(1)->build();
         $this->sponsor        = new ClassicSponsor(1, $person, $person, '', '');
@@ -37,7 +45,7 @@ class SponsorServiceTest extends TestCase
     }
 
 
-    public function testGetpersonfamilyRetrievesGodFathersAndGodSons()
+    public function testGetpersonfamilyRetrievesGodFathersAndGodSons(): void
     {
 
         $person  = PersonBuilder::aPerson()->withId(1)->withIdentity(new Identity('test', 'test'))->build();
@@ -51,7 +59,7 @@ class SponsorServiceTest extends TestCase
         $godSon2 = new ClassicSponsor(4, $person, $person3, '', '');
 
         $this->sponsorDAO->method('getPersonFamily')
-            ->with($this->equalTo(1))
+            ->with(1)
             ->willReturn([
                 'person' => $person,
                 'godFathers' => [$godFather1, $godFather2],
@@ -92,8 +100,8 @@ class SponsorServiceTest extends TestCase
 
         $sponsor = $this->sponsorService->getSponsorById(1);
 
-        $expectedSponsor = new ClassicSponsor(1, $this->person, $this->person, '', '');
-        $this->assertEquals($expectedSponsor, $sponsor);
+        $classicSponsor = new ClassicSponsor(1, $this->person, $this->person, '', '');
+        $this->assertEquals($classicSponsor, $sponsor);
     }
 
 
@@ -135,9 +143,7 @@ class SponsorServiceTest extends TestCase
     public function testCreatesponsorDoesNothingWhenSponsorAlreadyExists(): void
     {
 
-        $this->personDAO->method('getPersonById')
-            ->withConsecutive([1], [1])
-            ->willReturnOnConsecutiveCalls($this->person, $this->person);
+        $this->personDAO->method('getPersonById')->with([1])->willReturn($this->person);
 
         $this->sponsorDAO->method('getSponsorByPeopleId')
             ->with(1, 1)
@@ -156,19 +162,17 @@ class SponsorServiceTest extends TestCase
     public function testCreatesponsorRegistersClassicSponsor(): void
     {
 
-        $this->personDAO->method('getPersonById')
-            ->withConsecutive([1], [1])
-            ->willReturnOnConsecutiveCalls($this->person, $this->person);
+        $this->personDAO->method('getPersonById')->with([1])->willReturn($this->person);
 
         $this->sponsorDAO->method('getSponsorByPeopleId')
             ->with(1, 1)
             ->willReturn(null);
 
-        $sponsor = new ClassicSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
+        $classicSponsor = new ClassicSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('addSponsor')
-            ->with($sponsor);
+            ->with($classicSponsor);
 
         $this->sponsorService->createSponsor([
             'godFatherId' => 1,
@@ -183,19 +187,17 @@ class SponsorServiceTest extends TestCase
     public function testCreatesponsorRegistersHeartSponsor(): void
     {
 
-        $this->personDAO->method('getPersonById')
-            ->withConsecutive([1], [1])
-            ->willReturnOnConsecutiveCalls($this->person, $this->person);
+        $this->personDAO->method('getPersonById')->with([1])->willReturn($this->person);
 
         $this->sponsorDAO->method('getSponsorByPeopleId')
             ->with(1, 1)
             ->willReturn(null);
 
-        $sponsor = new HeartSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
+        $heartSponsor = new HeartSponsor(-1, $this->person, $this->person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('addSponsor')
-            ->with($sponsor);
+            ->with($heartSponsor);
 
         $this->sponsorService->createSponsor([
             'godFatherId' => 1,
@@ -250,11 +252,11 @@ class SponsorServiceTest extends TestCase
             ->willReturn($this->sponsor);
 
         $person  = PersonBuilder::aPerson()->withId(1)->build();
-        $sponsor = new ClassicSponsor(1, $person, $person, self::TEST_DATE, 'description');
+        $classicSponsor = new ClassicSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('updateSponsor')
-            ->with($sponsor);
+            ->with($classicSponsor);
 
         $this->sponsorService->updateSponsor(1, [
             'sponsorType' => '0',
@@ -272,11 +274,11 @@ class SponsorServiceTest extends TestCase
             ->willReturn($this->sponsor);
 
         $person  = PersonBuilder::aPerson()->withId(1)->build();
-        $sponsor = new HeartSponsor(1, $person, $person, self::TEST_DATE, 'description');
+        $heartSponsor = new HeartSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
             ->method('updateSponsor')
-            ->with($sponsor);
+            ->with($heartSponsor);
 
         $this->sponsorService->updateSponsor(1, [
             'sponsorType' => '1',

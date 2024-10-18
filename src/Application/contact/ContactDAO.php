@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact;
 
 use App\Entity\old\contact\Contact;
@@ -16,50 +18,44 @@ interface ContactDAO
 {
     /**
      * Saves a contact representing the adding of a new person
-     * @param PersonContact $contact the contact to save
-     * @return void
+     * @param PersonContact $personContact the contact to save
      */
-    public function savePersonAddContact(PersonContact $contact): void;
+    public function savePersonAddContact(PersonContact $personContact): void;
 
 
     /**
      * Saves a contact representing the suppression of a person
-     * @param PersonContact $contact the contact to remove
-     * @return void
+     * @param PersonContact $personContact the contact to remove
      */
-    public function savePersonRemoveContact(PersonContact $contact): void;
+    public function savePersonRemoveContact(PersonContact $personContact): void;
 
 
     /**
      * Saves a contact representing the modification of a person
-     * @param PersonContact $contact the contact to save
-     * @return void
+     * @param PersonContact $personContact the contact to save
      */
-    public function savePersonUpdateContact(PersonContact $contact): void;
+    public function savePersonUpdateContact(PersonContact $personContact): void;
 
 
     /**
      * Saves a contact representing a simple message
-     * @param DefaultContact $contact the contact to save
-     * @return void
+     * @param DefaultContact $defaultContact the contact to save
      */
-    public function saveSimpleContact(DefaultContact $contact): void;
+    public function saveSimpleContact(DefaultContact $defaultContact): void;
 
 
     /**
      * Saves a contact representing a message related to a chocking content
-     * @param PersonContact $contact the contact to save
-     * @return void
+     * @param PersonContact $personContact the contact to save
      */
-    public function saveChockingContentContact(PersonContact $contact): void;
+    public function saveChockingContentContact(PersonContact $personContact): void;
 
 
     /**
      * Saves a contact representing a message related to the manipulation of a sponsor
-     * @param SponsorContact $contact the contact to save
-     * @return void
+     * @param SponsorContact $sponsorContact the contact to save
      */
-    public function saveSponsorContact(SponsorContact $contact): void;
+    public function saveSponsorContact(SponsorContact $sponsorContact): void;
 
 
     /**
@@ -73,7 +69,6 @@ interface ContactDAO
      * Closes a contact by adding the date of the closing and the person who closed it
      * @param int $contactId the id of the contact to close
      * @param int $resolverId the id of the person who closed the contact
-     * @return void
      */
     public function closeContact(int $contactId, int $resolverId): void;
 }

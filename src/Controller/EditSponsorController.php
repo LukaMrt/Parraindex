@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\person\PersonService;
@@ -24,18 +26,18 @@ class EditSponsorController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param SponsorService $sponsorService the sponsor service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         SponsorService $sponsorService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
 
@@ -44,23 +46,23 @@ class EditSponsorController extends Controller
      * function get
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
+        if ($_SESSION === [] || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }
 
         $sponsor = $this->sponsorService->getSponsor($parameters['id']);
         $people  = $this->personService->getAllPeople();
-        usort($people, fn($a, $b) => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
-        $closure = fn($person) => [
+        usort($people, fn($a, $b): int => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
+        $closure = fn($person): array => [
             'id' => $person->getId(),
             'title' => $person->getLastName() . ' EditSponsorController.php' . $person->getFirstName()
         ];
@@ -84,7 +86,7 @@ class EditSponsorController extends Controller
                 'id' => $godChild->getId(),
                 'title' => $godChild->getLastName() . ' EditSponsorController.php' . $godChild->getFirstName()
             ]];
-            usort($sponsorTypes, fn($a, $b) => $a['id'] == $sponsor->getTypeId() ? -1 : 1);
+            usort($sponsorTypes, fn($a, $b): int => $a['id'] == $sponsor->getTypeId() ? -1 : 1);
         }
 
         $this->render('editSponsor.html.twig', [
@@ -99,12 +101,12 @@ class EditSponsorController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
-    #[NoReturn] public function post(Router $router, array $parameters): void
+    #[NoReturn]
+    #[\Override] public function post(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
+        if ($_SESSION === [] || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }

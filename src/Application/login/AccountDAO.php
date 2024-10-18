@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\login;
 
 use App\Entity\old\account\Account;
@@ -22,7 +24,6 @@ interface AccountDAO
     /**
      * Creates a new account
      * @param Account $account The account to create
-     * @return void
      */
     public function createAccount(Account $account): void;
 
@@ -47,7 +48,6 @@ interface AccountDAO
      * Creates a temporary account (used for signup before email confirmation)
      * @param Account $account the temporary account to create
      * @param string $token the token to confirm the account
-     * @return void
      */
     public function createTemporaryAccount(Account $account, string $token): void;
 
@@ -63,7 +63,6 @@ interface AccountDAO
     /**
      * Deletes a temporary account
      * @param Account $account the temporary account to delete
-     * @return void
      */
     public function deleteTemporaryAccount(Account $account): void;
 
@@ -80,7 +79,6 @@ interface AccountDAO
      * Creates a ResetPassword entry
      * @param Account $account the account which asks to reset its password
      * @param string $token the token to confirm the reset
-     * @return void
      */
     public function createResetpassword(Account $account, string $token): void;
 
@@ -96,7 +94,6 @@ interface AccountDAO
     /**
      * Updates the password of an account
      * @param Account $account the account to update with the new password
-     * @return void
      */
     public function editAccountPassword(Account $account): void;
 
@@ -104,7 +101,6 @@ interface AccountDAO
     /**
      * Deletes a ResetPassword entry
      * @param Account $account the account related to the ResetPassword entry to delete
-     * @return void
      */
     public function deleteResetPassword(Account $account): void;
 }

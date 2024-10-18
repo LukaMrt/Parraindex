@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -29,7 +31,7 @@ class ChockingContentContactExecutor extends ContactExecutor
      */
     public function __construct(ContactDAO $contactDAO, Redirect $redirect, PersonDAO $personDAO)
     {
-        $personExistsClosure = fn($value) => $this->personDAO->getPersonById($value) !== null;
+        $personExistsClosure = fn($value): bool => $this->personDAO->getPersonById($value) instanceof \App\Entity\old\person\Person;
 
         parent::__construct($contactDAO, $redirect, Type::CHOCKING_CONTENT, [
             new Field('senderFirstName', 'Votre prénom doit contenir au moins 1 caractère'),
@@ -45,15 +47,14 @@ class ChockingContentContactExecutor extends ContactExecutor
 
     /**
      * Performs the actions when the form is valid
-     * @param array $data
-     * @return string
      */
+    #[\Override]
     public function executeSuccess(array $data): string
     {
 
         $person = $this->personDAO->getPersonById($data['personId']);
 
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -64,7 +65,7 @@ class ChockingContentContactExecutor extends ContactExecutor
             $person
         );
 
-        $this->contactDAO->saveChockingContentContact($contact);
+        $this->contactDAO->saveChockingContentContact($personContact);
         return '';
     }
 }

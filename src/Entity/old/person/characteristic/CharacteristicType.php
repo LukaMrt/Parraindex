@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\person\characteristic;
 
 use ValueError;
@@ -26,7 +28,8 @@ enum CharacteristicType: string
                 return $status;
             }
         }
-        throw new ValueError("$name is not a valid backing value for enum " . self::class);
+
+        throw new ValueError($name . ' is not a valid backing value for enum ' . self::class);
     }
 
 

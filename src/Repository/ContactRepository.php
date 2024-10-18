@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Contact\Contact;
@@ -11,8 +13,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class ContactRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Contact::class);
+        parent::__construct($managerRegistry, Contact::class);
     }
 }

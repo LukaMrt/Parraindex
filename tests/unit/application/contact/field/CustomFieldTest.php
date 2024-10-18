@@ -1,28 +1,30 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\field;
 
 use App\Application\contact\field\CustomField;
 use PHPUnit\Framework\TestCase;
 
-class CustomFieldTest extends TestCase
+final class CustomFieldTest extends TestCase
 {
     private CustomField $customField;
 
 
-    public function testGetnameReturnsCustom()
+    public function testGetnameReturnsCustom(): void
     {
-        $this->customField = new CustomField('custom', 'error', fn() => true);
+        $this->customField = new CustomField('custom', 'error', fn(): true => true);
 
         $result = $this->customField->getName();
 
-        $this->assertEquals('custom', $result);
+        $this->assertSame('custom', $result);
     }
 
 
-    public function testIsvalidReturnsTrueWhenCustomTestReturnsTrue()
+    public function testIsvalidReturnsTrueWhenCustomTestReturnsTrue(): void
     {
-        $this->customField = new CustomField('custom', 'error', fn() => true);
+        $this->customField = new CustomField('custom', 'error', fn(): true => true);
 
         $result = $this->customField->isValid('test');
 
@@ -30,9 +32,9 @@ class CustomFieldTest extends TestCase
     }
 
 
-    public function testIsvalidReturnsFalseWhenCustomTestReturnsFalse()
+    public function testIsvalidReturnsFalseWhenCustomTestReturnsFalse(): void
     {
-        $this->customField = new CustomField('custom', 'error', fn() => false);
+        $this->customField = new CustomField('custom', 'error', fn(): false => false);
 
         $result = $this->customField->isValid('test');
 

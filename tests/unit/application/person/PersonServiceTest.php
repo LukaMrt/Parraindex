@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\person;
 
 use App\Application\logging\Logger;
@@ -14,19 +16,25 @@ use App\Entity\old\person\PersonBuilder;
 use App\Entity\old\sponsor\ClassicSponsor;
 use PHPUnit\Framework\TestCase;
 
-class PersonServiceTest extends TestCase
+final class PersonServiceTest extends TestCase
 {
-    private const DEFAULT_DATE = '2023-01-01';
+    private const string DEFAULT_DATE = '2023-01-01';
+
     private Person $person;
 
     private PersonService $personService;
+
     private SessionManager $sessionManager;
+
     private PersonDAO $personDAO;
+
     private Logger $logger;
+
     private SponsorDAO $sponsorDAO;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->person = PersonBuilder::aPerson()
             ->withId(1)
@@ -160,7 +168,7 @@ class PersonServiceTest extends TestCase
     {
 
         $this->personDAO->method('getPerson')
-            ->with($this->equalTo(new Identity('test', 'test')))
+            ->with(new Identity('test', 'test'))
             ->willReturn($this->person);
 
         $return = $this->personService->getPersonByIdentity(new Identity('test', 'test'));
@@ -197,7 +205,7 @@ class PersonServiceTest extends TestCase
             'start_year' => 2010
         ]);
 
-        $this->assertEquals(1, $return);
+        $this->assertSame(1, $return);
     }
 
 
@@ -224,7 +232,7 @@ class PersonServiceTest extends TestCase
             'color' => 'newColor'
         ]);
 
-        $this->assertEquals(1, $return);
+        $this->assertSame(1, $return);
     }
 
 

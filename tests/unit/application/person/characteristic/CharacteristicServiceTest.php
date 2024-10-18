@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\person\characteristic;
 
 use App\Application\person\characteristic\CharacteristicDAO;
@@ -8,15 +10,17 @@ use App\Entity\old\person\characteristic\Characteristic;
 use App\Entity\old\person\characteristic\CharacteristicBuilder;
 use PHPUnit\Framework\TestCase;
 
-class CharacteristicServiceTest extends TestCase
+final class CharacteristicServiceTest extends TestCase
 {
     private Characteristic $characteristic;
 
     private CharacteristicService $characteristicService;
+
     private CharacteristicDAO $characteristicDAO;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->characteristic = (new CharacteristicBuilder())
@@ -34,7 +38,7 @@ class CharacteristicServiceTest extends TestCase
     }
 
 
-    public function testUpdateCharacteristic()
+    public function testUpdateCharacteristic(): void
     {
 
         $this->characteristicDAO->expects($this->once())
@@ -45,7 +49,7 @@ class CharacteristicServiceTest extends TestCase
     }
 
 
-    public function testCreateCharacteristicCreatesCharacteristic()
+    public function testCreateCharacteristicCreatesCharacteristic(): void
     {
 
         $this->characteristicDAO->expects($this->once())

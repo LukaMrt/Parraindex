@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\sponsor;
 
 use App\Entity\Sponsor\Sponsor;
@@ -9,6 +11,8 @@ use App\Repository\SponsorRepository;
 
 readonly class SponsorService
 {
+    public $sponsorDAO;
+
     public function __construct(
         private PersonRepository $personRepository,
         private SponsorRepository $sponsorRepository
@@ -19,7 +23,6 @@ readonly class SponsorService
     /**
      * Remove sponsor by id
      * @param int $id Id
-     * @return void
      */
     public function removeSponsor(int $id): void
     {
@@ -31,7 +34,6 @@ readonly class SponsorService
     /**
      * Get sponsor by id
      * @param int $id God father id
-     * @return Sponsor|null
      */
     public function getSponsorById(int $id): ?Sponsor
     {
@@ -43,7 +45,6 @@ readonly class SponsorService
      * Update sponsor by id
      * @param int $id Id
      * @param array $parameters Parameters
-     * @return void
      */
     public function updateSponsor(int $id, array $parameters): void
     {
@@ -73,7 +74,6 @@ readonly class SponsorService
     /**
      * Create sponsor
      * @param array $parameters Parameters
-     * @return void
      */
     public function createSponsor(array $parameters): void
     {
@@ -103,7 +103,6 @@ readonly class SponsorService
     /**
      * Get sponsor by people id
      * @param Sponsor $sponsor Sponsor
-     * @return void
      */
     public function addSponsor(Sponsor $sponsor): void
     {

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\router;
 
 use AltoRouter;
@@ -14,7 +16,7 @@ class Router
     /**
      * @var AltoRouter $router Router instance
      */
-    private AltoRouter $router;
+    private AltoRouter $altoRouter;
 
 
     /**
@@ -22,7 +24,7 @@ class Router
      */
     public function __construct()
     {
-        $this->router = new AltoRouter();
+        $this->altoRouter = new AltoRouter();
     }
 
 
@@ -42,9 +44,9 @@ class Router
         };
 
         try {
-            $this->router->map($method, $url, $closure, $name);
-        } catch (Exception $e) {
-            dd($e->getMessage());
+            $this->altoRouter->map($method, $url, $closure, $name);
+        } catch (Exception $exception) {
+            dd($exception->getMessage());
         }
 
         return $this;
@@ -53,11 +55,10 @@ class Router
 
     /**
      * Run the router to find the route and call the controller
-     * @return void
      */
     public function run(): void
     {
-        $match = $this->router->match();
+        $match = $this->altoRouter->match();
         $match['target']($this, $match['params']);
     }
 
@@ -70,7 +71,7 @@ class Router
     public function getParameter(string $name): string
     {
 
-        $params = $this->router->match()['params'];
+        $params = $this->altoRouter->match()['params'];
 
         if (isset($params[$name])) {
             return $params[$name];
@@ -89,12 +90,13 @@ class Router
     public function url(string $name, array $parameters = []): string
     {
         try {
-            return $this->router->generate($name, $parameters);
-        } catch (Exception $e) {
+            return $this->altoRouter->generate($name, $parameters);
+        } catch (Exception $exception) {
             if ($_ENV['DEBUG'] === "true") {
-                dd($e->getMessage());
+                dd($exception->getMessage());
             }
         }
+
         return '/';
     }
 }

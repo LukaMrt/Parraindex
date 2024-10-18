@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\person\characteristic;
 
 use App\Application\person\characteristic\CharacteristicTypeDAO;
@@ -9,19 +11,21 @@ use App\Entity\old\person\characteristic\CharacteristicBuilder;
 use App\Entity\old\person\PersonBuilder;
 use Monolog\Test\TestCase;
 
-class CharacteristicTypeServiceTest extends TestCase
+final class CharacteristicTypeServiceTest extends TestCase
 {
-    private CharacteristicTypeDAO $characteristicDAO;
+    private CharacteristicTypeDAO $characteristicTypeDAO;
+
     private CharacteristicTypeService $characteristicTypeService;
 
     private Characteristic $characteristic;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
-        $this->characteristicDAO         = $this->createMock(CharacteristicTypeDAO::class);
-        $this->characteristicTypeService = new CharacteristicTypeService($this->characteristicDAO);
+        $this->characteristicTypeDAO         = $this->createMock(CharacteristicTypeDAO::class);
+        $this->characteristicTypeService = new CharacteristicTypeService($this->characteristicTypeDAO);
 
         $this->characteristic = (new CharacteristicBuilder())
             ->withId(1)
@@ -35,10 +39,10 @@ class CharacteristicTypeServiceTest extends TestCase
     }
 
 
-    public function testGetallcharacteristictypesReturnsAllTypes()
+    public function testGetallcharacteristictypesReturnsAllTypes(): void
     {
 
-        $this->characteristicDAO
+        $this->characteristicTypeDAO
             ->method('getAllCharacteristicTypes')
             ->willReturn([$this->characteristic]);
 
@@ -48,13 +52,13 @@ class CharacteristicTypeServiceTest extends TestCase
     }
 
 
-    public function testGetCharacteristicTypeAndValuesReturnsTypeAndValues()
+    public function testGetCharacteristicTypeAndValuesReturnsTypeAndValues(): void
     {
 
         $person = PersonBuilder::aPerson()
             ->build();
 
-        $this->characteristicDAO->method('getAllCharacteristicAndValues')
+        $this->characteristicTypeDAO->method('getAllCharacteristicAndValues')
             ->with($person->getId())
             ->willReturn([$this->characteristic]);
 

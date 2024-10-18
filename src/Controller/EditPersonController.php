@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\person\characteristic\CharacteristicService;
@@ -31,20 +33,20 @@ class EditPersonController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param CharacteristicTypeService $characteristicTypeService the characteristic type service
      * @param CharacteristicService $characteristicService the characteristic service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         CharacteristicTypeService $characteristicTypeService,
         CharacteristicService $characteristicService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->characteristicTypeService = $characteristicTypeService;
         $this->characteristicService     = $characteristicService;
     }
@@ -53,11 +55,11 @@ class EditPersonController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         // if id is 0, create a new person
@@ -67,14 +69,14 @@ class EditPersonController extends Controller
             $person = $this->personService->getPersonById($parameters['id']);
 
             // throw error if person does not exist
-            if ($person === null) {
+            if (!$person instanceof \App\Entity\Person\Person) {
                 header('Location: ' . $router->url('error', ['error' => 404]));
                 die();
             }
         }
 
         // throw error if user is not logged in
-        if (empty($_SESSION)) {
+        if ($_SESSION === []) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }
@@ -103,9 +105,9 @@ class EditPersonController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
-    #[NoReturn] public function post(Router $router, array $parameters): void
+    #[NoReturn]
+    #[\Override] public function post(Router $router, array $parameters): void
     {
         header('content-type: Application/json');
         $json = file_get_contents('php://input');
@@ -118,7 +120,7 @@ class EditPersonController extends Controller
             'messages' => [],
         ];
 
-        if (empty($_SESSION)) {
+        if ($_SESSION === []) {
             $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté et avoir les "
                 . "droits d'administrateur pour ajouter une personne";
@@ -145,9 +147,9 @@ class EditPersonController extends Controller
 
             $idPerson = $this->personService->createPerson($newValues);
 
-            foreach ($newCharacteristics as $characteristic) {
-                if ($characteristic->getValue() !== '') {
-                    $this->characteristicService->createCharacteristic($idPerson, $characteristic);
+            foreach ($newCharacteristics as $newCharacteristic) {
+                if ($newCharacteristic->getValue() !== '') {
+                    $this->characteristicService->createCharacteristic($idPerson, $newCharacteristic);
                 }
             }
 
@@ -183,7 +185,7 @@ class EditPersonController extends Controller
         if (!isset($newData['color'])) {
             $response['messages'][] = 'La couleur de la bannière est indisponible';
             $response['code']       = 400;
-        } elseif (!preg_match('/^#[a-f0-9]{6}$/i', $newData['color'])) {
+        } elseif (preg_match('/^#[a-f0-9]{6}$/i', $newData['color']) === 0 || preg_match('/^#[a-f0-9]{6}$/i', $newData['color']) === false) {
             $response['messages'][] = 'La couleur doit être au format exadecimal';
             $response['code']       = 400;
         }
@@ -271,7 +273,7 @@ class EditPersonController extends Controller
                 $visibility = isset($data[$fieldVisibility]);
 
                 if ($visibility) {
-                    $characteristicsCounter++;
+                    ++$characteristicsCounter;
                 }
 
                 if ($characteristicsCounter === 5) {
@@ -279,7 +281,7 @@ class EditPersonController extends Controller
                     $response['code']       = 400;
 
                     // increment the counter to avoid the message to be displayed multiple times
-                    $characteristicsCounter++;
+                    ++$characteristicsCounter;
                 }
 
                 $characteristic->setValue($data[$fieldTitle]);
@@ -295,9 +297,9 @@ class EditPersonController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
-    #[NoReturn] public function put(Router $router, array $parameters): void
+    #[NoReturn]
+    #[\Override] public function put(Router $router, array $parameters): void
     {
         header('content-type: Application/json');
         $json = file_get_contents('php://input');
@@ -310,7 +312,7 @@ class EditPersonController extends Controller
             'messages' => [],
         ];
 
-        if (empty($_SESSION)) {
+        if ($_SESSION === []) {
             $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté et avoir les droits "
                 . "d'administrateur pour modifier une personne";
@@ -319,7 +321,7 @@ class EditPersonController extends Controller
         }
 
         $person = $this->personService->getPersonById($parameters['id']);
-        if ($person === null) {
+        if (!$person instanceof \App\Entity\Person\Person) {
             $response['code']       = 404;
             $response['messages'][] = "La personne n'existe pas";
             echo json_encode($response);
@@ -334,7 +336,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
-        $newValues = $this->getFormValues($data, $response, $isAdmin, $person);
+        $newValues = $this->getFormValues($data, $response, $isAdmin);
 
         $newValues['id']         = $person->getId();
         $newValues['first_name'] = ($newValues['first_name'] ?? $person->getFirstName());
@@ -358,20 +360,20 @@ class EditPersonController extends Controller
 
             $characteristicPerson = $this->characteristicTypeService->getAllCharacteristicAndValues($person);
 
-            foreach ($newCharacteristics as $characteristic) {
+            foreach ($newCharacteristics as $newCharacteristic) {
                 $lastCharacteristic = array_filter(
                     $characteristicPerson,
-                    function ($c) use ($characteristic) {
-                        return $c->getId() === $characteristic->getId();
+                    function ($c) use ($newCharacteristic): bool {
+                        return $c->getId() === $newCharacteristic->getId();
                     }
                 );
 
                 $lastValue = array_shift($lastCharacteristic)->getValue();
 
                 if ($lastValue !== null) {
-                    $this->characteristicService->updateCharacteristic($person->getId(), $characteristic);
-                } elseif ($characteristic->getValue() !== '') {
-                    $this->characteristicService->createCharacteristic($person->getId(), $characteristic);
+                    $this->characteristicService->updateCharacteristic($person->getId(), $newCharacteristic);
+                } elseif ($newCharacteristic->getValue() !== '') {
+                    $this->characteristicService->createCharacteristic($person->getId(), $newCharacteristic);
                 }
             }
 
@@ -383,12 +385,8 @@ class EditPersonController extends Controller
     }
 
 
-    /**
-     * @param Router $router
-     * @param array $parameters
-     * @return void
-     */
-    #[NoReturn] public function delete(Router $router, array $parameters): void
+    #[NoReturn]
+    #[\Override] public function delete(Router $router, array $parameters): void
     {
         header('content-type: Application/json');
 
@@ -399,7 +397,7 @@ class EditPersonController extends Controller
             'messages' => [],
         ];
 
-        if (empty($_SESSION)) {
+        if ($_SESSION === []) {
             $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté et avoir les droits d'administrateur "
                 . "pour supprimer une personne";
@@ -408,7 +406,7 @@ class EditPersonController extends Controller
         }
 
         $person = $this->personService->getPersonById($parameters['id']);
-        if ($person === null) {
+        if (!$person instanceof \App\Entity\Person\Person) {
             $response['code']       = 404;
             $response['messages'][] = 'La personne n°' . $parameters['id'] . " n'existe pas";
             echo json_encode($response);

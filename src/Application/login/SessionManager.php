@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\login;
 
 /**
@@ -9,14 +11,12 @@ interface SessionManager
 {
     /**
      * Starts a session
-     * @return void
      */
     public function startSession(): void;
 
 
     /**
      * Destroys a session
-     * @return void
      */
     public function destroySession(): void;
 
@@ -40,7 +40,6 @@ interface SessionManager
      * Sets a session field
      * @param string $key the field key
      * @param mixed $value the field value
-     * @return void
      */
     public function set(string $key, mixed $value): void;
 

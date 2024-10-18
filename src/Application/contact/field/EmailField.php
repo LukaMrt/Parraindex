@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\field;
 
 /**
@@ -12,6 +14,7 @@ class EmailField extends Field
      * @param string $value The value to verify.
      * @return bool True if the value is a valid email address, false otherwise.
      */
+    #[\Override]
     public function isValid(string $value): bool
     {
         return filter_var($value, FILTER_VALIDATE_EMAIL);

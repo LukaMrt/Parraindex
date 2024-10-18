@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\login;
 
 use App\Application\login\UrlUtils;
@@ -28,6 +30,7 @@ class DefaultUrlUtils implements UrlUtils
     /**
      * @return string The base url
      */
+    #[\Override]
     public function getBaseUrl(): string
     {
 
@@ -46,6 +49,7 @@ class DefaultUrlUtils implements UrlUtils
      * @param array $parameters Parameters to add to the url
      * @return string The url
      */
+    #[\Override]
     public function buildUrl(string $route, array $parameters): string
     {
         return $this->router->url($route, $parameters);

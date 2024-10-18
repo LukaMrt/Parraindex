@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Person\Role;
@@ -10,6 +12,7 @@ use Twig\Error\SyntaxError;
 
 class DataDownloadController extends Controller
 {
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         header('content-type: Application/json');
@@ -20,7 +23,7 @@ class DataDownloadController extends Controller
             'messages' => [],
         ];
 
-        if (empty($_SESSION)) {
+        if ($_SESSION === []) {
             $response['code']       = 401;
             $response['messages'][] = "Vous devez être connecté pour télécharger des données";
             echo json_encode($response);

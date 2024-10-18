@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\person\PersonService;
@@ -19,7 +21,7 @@ class PersonController extends AbstractController
     {
         $person = $this->personService->getPersonById($id);
 
-        if ($person === null) {
+        if (!$person instanceof \App\Entity\Person\Person) {
             return $this->redirectToRoute('error');
         }
 

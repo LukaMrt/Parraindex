@@ -1,26 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\field;
 
 use App\Application\contact\field\DateField;
 use PHPUnit\Framework\TestCase;
 
-class DateFieldTest extends TestCase
+final class DateFieldTest extends TestCase
 {
     private DateField $dateField;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->dateField = new DateField('date', 'error');
     }
 
 
-    public function testGetnameReturnsDate()
+    public function testGetnameReturnsDate(): void
     {
         $result = $this->dateField->getName();
 
-        $this->assertEquals('date', $result);
+        $this->assertSame('date', $result);
     }
 
 

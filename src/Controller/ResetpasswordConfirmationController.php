@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Infrastructure\old\router\Router;
@@ -15,11 +17,11 @@ class ResetpasswordConfirmationController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template cannot be found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         $this->render('resetpasswordConfirmation.html.twig');

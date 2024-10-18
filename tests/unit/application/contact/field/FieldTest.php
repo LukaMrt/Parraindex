@@ -1,16 +1,19 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\field;
 
 use App\Application\contact\field\Field;
 use PHPUnit\Framework\TestCase;
 
-class FieldTest extends TestCase
+final class FieldTest extends TestCase
 {
     private Field $field;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->field = new Field('name', 'error');
     }
@@ -20,7 +23,7 @@ class FieldTest extends TestCase
     {
         $result = $this->field->getName();
 
-        $this->assertEquals('name', $result);
+        $this->assertSame('name', $result);
     }
 
 
@@ -28,7 +31,7 @@ class FieldTest extends TestCase
     {
         $result = $this->field->getError();
 
-        $this->assertEquals('error', $result);
+        $this->assertSame('error', $result);
     }
 
 

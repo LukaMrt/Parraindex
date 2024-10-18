@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\session;
 
 use App\Application\login\SessionManager;
@@ -9,18 +11,14 @@ use App\Application\login\SessionManager;
  */
 class DefaultSessionManager implements SessionManager
 {
-    /**
-     * @return void
-     */
+    #[\Override]
     public function startSession(): void
     {
         session_start();
     }
 
 
-    /**
-     * @return void
-     */
+    #[\Override]
     public function destroySession(): void
     {
         session_unset();
@@ -31,6 +29,7 @@ class DefaultSessionManager implements SessionManager
     /**
      * @return bool true if the session is started, false otherwise
      */
+    #[\Override]
     public function isSessionStarted(): bool
     {
         return session_status() === PHP_SESSION_ACTIVE;
@@ -41,6 +40,7 @@ class DefaultSessionManager implements SessionManager
      * @param string $key Key of the field
      * @return mixed Value of the field
      */
+    #[\Override]
     public function get(string $key): mixed
     {
         return $_SESSION[$key];
@@ -50,8 +50,8 @@ class DefaultSessionManager implements SessionManager
     /**
      * @param string $key Key of the field
      * @param mixed $value Value of the field
-     * @return void
      */
+    #[\Override]
     public function set(string $key, mixed $value): void
     {
         $_SESSION[$key] = $value;
@@ -62,6 +62,7 @@ class DefaultSessionManager implements SessionManager
      * @param string $key Key of the field
      * @return bool True if the field exists, false otherwise
      */
+    #[\Override]
     public function exists(string $key): bool
     {
         return isset($_SESSION[$key]);

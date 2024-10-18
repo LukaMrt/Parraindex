@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -13,12 +15,14 @@ use App\Entity\old\person\Person;
 use App\Entity\old\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
-class AddPersonContactExecutorTest extends TestCase
+final class AddPersonContactExecutorTest extends TestCase
 {
-    private AddPersonContactExecutor $executor;
+    private AddPersonContactExecutor $addPersonContactExecutor;
 
     private ContactDAO $contactDAO;
+
     private Redirect $redirect;
+
     private PersonDAO $personDAO;
 
     private array $defaultArray = [
@@ -32,25 +36,26 @@ class AddPersonContactExecutorTest extends TestCase
     ];
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->contactDAO = $this->createMock(ContactDAO::class);
         $this->redirect   = $this->createMock(Redirect::class);
         $this->personDAO  = $this->createMock(PersonDAO::class);
 
-        $this->executor = new AddPersonContactExecutor($this->contactDAO, $this->redirect, $this->personDAO);
+        $this->addPersonContactExecutor = new AddPersonContactExecutor($this->contactDAO, $this->redirect, $this->personDAO);
     }
 
 
-    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
+    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing(): void
     {
 
         $this->defaultArray['senderFirstName'] = '';
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addPersonContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
+        $this->assertSame('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
 
@@ -61,9 +66,9 @@ class AddPersonContactExecutorTest extends TestCase
             ->with(new Identity('test3', 'test4'))
             ->willReturn($this->createMock(Person::class));
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->addPersonContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('La personne ne doit pas exister', $result);
+        $this->assertSame('La personne ne doit pas exister', $result);
     }
 
 
@@ -80,7 +85,7 @@ class AddPersonContactExecutorTest extends TestCase
             ->withStartYear(2022)
             ->build();
 
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -93,8 +98,8 @@ class AddPersonContactExecutorTest extends TestCase
 
         $this->contactDAO->expects($this->once())
             ->method('savePersonAddContact')
-            ->with($contact);
+            ->with($personContact);
 
-        $this->executor->execute($this->defaultArray);
+        $this->addPersonContactExecutor->execute($this->defaultArray);
     }
 }

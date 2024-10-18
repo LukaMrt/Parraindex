@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\account;
 
 class Password
@@ -31,6 +33,6 @@ class Password
 
     public function isEmpty(): bool
     {
-        return empty($this->password);
+        return $this->password === '' || $this->password === '0';
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\executor;
 
 use App\Entity\old\contact\DefaultContact;
@@ -12,11 +14,11 @@ abstract class SimpleContactExecutor extends ContactExecutor
     /**
      * Performs the actions when the contact is valid
      * @param array $data Data from the form
-     * @return string
      */
+    #[\Override]
     public function executeSuccess(array $data): string
     {
-        $contact = new DefaultContact(
+        $defaultContact = new DefaultContact(
             -1,
             date('Y-m-d'),
             null,
@@ -26,7 +28,7 @@ abstract class SimpleContactExecutor extends ContactExecutor
             $data['message'],
         );
 
-        $this->contactDAO->saveSimpleContact($contact);
+        $this->contactDAO->saveSimpleContact($defaultContact);
         return '';
     }
 }

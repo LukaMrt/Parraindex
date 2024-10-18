@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Fixture;
 
 use App\Entity\Person\Person;
@@ -10,17 +12,25 @@ use Doctrine\Persistence\ObjectManager;
 class PersonFixture extends Fixture
 {
     public const string LUKA        = 'person_luka';
+
     public const string MELVYN      = 'person_melvyn';
+
     public const string VINCENT     = 'person_vincent';
+
     public const string LILIAN      = 'person_lilian';
+
     public const string GOD_CHILD_1 = 'person_god_child_1';
+
     public const string GOD_CHILD_2 = 'person_god_child_2';
+
     public const string GOD_CHILD_3 = 'person_god_child_3';
+
     public const string GOD_FATHER  = 'person_god_father';
 
-    public function load(ObjectManager $manager): void
+    #[\Override]
+    public function load(ObjectManager $objectManager): void
     {
-        $luka = (new Person())
+        $person = (new Person())
             ->setFirstName('Luka')
             ->setLastName('Maret')
             ->setDescription('Je suis Luka')
@@ -29,8 +39,8 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture('Luka.jpg')
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($luka);
-        $this->addReference(self::LUKA, $luka);
+        $objectManager->persist($person);
+        $this->addReference(self::LUKA, $person);
 
         $melvyn = (new Person())
             ->setFirstName('Melvyn')
@@ -41,7 +51,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($melvyn);
+        $objectManager->persist($melvyn);
         $this->addReference(self::MELVYN, $melvyn);
 
         $vincent = (new Person())
@@ -53,7 +63,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($vincent);
+        $objectManager->persist($vincent);
         $this->addReference(self::VINCENT, $vincent);
 
         $lilian = (new Person())
@@ -65,7 +75,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture('Lilian.jpg')
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($lilian);
+        $objectManager->persist($lilian);
         $this->addReference(self::LILIAN, $lilian);
 
         $godChild1 = (new Person())
@@ -77,7 +87,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($godChild1);
+        $objectManager->persist($godChild1);
         $this->addReference(self::GOD_CHILD_1, $godChild1);
 
         $godChild2 = (new Person())
@@ -89,7 +99,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($godChild2);
+        $objectManager->persist($godChild2);
         $this->addReference(self::GOD_CHILD_2, $godChild2);
 
         $godChild3 = (new Person())
@@ -101,7 +111,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($godChild3);
+        $objectManager->persist($godChild3);
         $this->addReference(self::GOD_CHILD_3, $godChild3);
 
         $godFather = (new Person())
@@ -113,9 +123,9 @@ class PersonFixture extends Fixture
             ->setStartYear(2020)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $manager->persist($godFather);
+        $objectManager->persist($godFather);
         $this->addReference(self::GOD_FATHER, $godFather);
 
-        $manager->flush();
+        $objectManager->flush();
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\login\PasswordService;
@@ -22,18 +24,18 @@ class ResetpasswordValidationController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param PasswordService $passwordService the password service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         PasswordService $passwordService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->passwordService = $passwordService;
     }
 
@@ -42,11 +44,11 @@ class ResetpasswordValidationController extends Controller
      * function get
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if the password is not valid
      * @throws SyntaxError if the password is not valid
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
 

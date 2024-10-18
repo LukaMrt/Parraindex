@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\person\PersonService;
@@ -21,18 +23,18 @@ class RemoveSponsorController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      * @param SponsorService $sponsorService the sponsor service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
         SponsorService $sponsorService
     ) {
-        parent::__construct($twig, $router, $personService);
+        parent::__construct($twigEnvironment, $router, $personService);
         $this->sponsorService = $sponsorService;
     }
 
@@ -40,12 +42,12 @@ class RemoveSponsorController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
-    #[NoReturn] public function get(Router $router, array $parameters): void
+    #[NoReturn]
+    #[\Override] public function get(Router $router, array $parameters): void
     {
 
-        if (empty($_SESSION) || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
+        if ($_SESSION === [] || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }

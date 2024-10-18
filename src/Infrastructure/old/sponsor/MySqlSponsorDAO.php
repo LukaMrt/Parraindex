@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Infrastructure\old\sponsor;
 
 use App\Application\sponsor\SponsorDAO;
@@ -37,8 +39,8 @@ class MySqlSponsorDAO implements SponsorDAO
     /**
      * Get a person family
      * @param int $personId Id of the person
-     * @return array|null
      */
+    #[\Override]
     public function getPersonFamily(int $personId): ?array
     {
 
@@ -113,7 +115,7 @@ SQL
 
         $buildPeople = $this->buildPeople($personQuery);
 
-        if (empty($buildPeople)) {
+        if ($buildPeople === []) {
             $personQuery->closeCursor();
             $godFathersQuery->closeCursor();
             $godChildrenQuery->closeCursor();
@@ -131,8 +133,9 @@ SQL
         while ($row = $godFathersSponsorsQuery->fetch()) {
             $godChild  = $person;
             $godFather = null;
+            $counter = count($godFathers);
 
-            for ($i = 0; $i < count($godFathers); $i++) {
+            for ($i = 0; $i < $counter; ++$i) {
                 if ($godFathers[$i]->getId() === $row->id_godfather) {
                     $godFather = $godFathers[$i];
                     break;
@@ -154,8 +157,9 @@ SQL
         while ($row = $godChildrenSponsorsQuery->fetch()) {
             $godFather = $person;
             $godChild  = null;
+            $counter = count($godChildren);
 
-            for ($i = 0; $i < count($godChildren); $i++) {
+            for ($i = 0; $i < $counter; ++$i) {
                 if ($godChildren[$i]->getId() === $row->id_godson) {
                     $godChild = $godChildren[$i];
                     break;
@@ -177,7 +181,6 @@ SQL
         $personQuery->closeCursor();
         $godFathersQuery->closeCursor();
         $godChildrenQuery->closeCursor();
-        $connection = null;
         return [
             'person' => $person,
             'godFathers' => $godFathersSponsors,
@@ -189,7 +192,6 @@ SQL
     /**
      * Build a person
      * @param bool|PDOStatement $query Query
-     * @return array
      */
     private function buildPeople(bool|PDOStatement $query): array
     {
@@ -213,9 +215,10 @@ SQL
             $buffer[] = $row;
         }
 
-        if (!empty($buffer)) {
+        if ($buffer !== []) {
             $people[] = $this->buildPerson($buffer);
         }
+
         return $people;
     }
 
@@ -223,24 +226,23 @@ SQL
     /**
      * Build a person
      * @param array $buffer Buffer
-     * @return Person
      */
     private function buildPerson(array $buffer): Person
     {
 
         $characteristics       = [];
-        $filterClosure         = fn($row) => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
+        $filterClosure         = fn($row): bool => property_exists($row, 'id_characteristic') && $row->id_characteristic != null;
         $characteristicsBuffer = array_filter($buffer, $filterClosure);
 
-        foreach ($characteristicsBuffer as $row) {
+        foreach ($characteristicsBuffer as $characteristicBuffer) {
             $characteristics[] = (new CharacteristicBuilder())
-                ->withId($row->id_characteristic)
-                ->withTitle($row->title)
-                ->withType($row->type)
-                ->withUrl($row->url)
-                ->withImage($row->image)
-                ->withVisibility($row->visibility)
-                ->withValue($row->value)
+                ->withId($characteristicBuffer->id_characteristic)
+                ->withTitle($characteristicBuffer->title)
+                ->withType($characteristicBuffer->type)
+                ->withUrl($characteristicBuffer->url)
+                ->withImage($characteristicBuffer->image)
+                ->withVisibility($characteristicBuffer->visibility)
+                ->withValue($characteristicBuffer->value)
                 ->build();
         }
 
@@ -264,14 +266,14 @@ SQL
     /**
      * Get a sponsor with id
      * @param int $id Id
-     * @return Sponsor|null
      */
+    #[\Override]
     public function getSponsorById(int $id): ?Sponsor
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
 			SELECT S.*,
 			       CS.reason,
 			       CS.id_sponsor AS id_classic_sponsor,
@@ -285,6 +287,7 @@ SQL
         );
 
         $query->execute(['id' => $id]);
+
         $sponsor = null;
 
         if ($row = $query->fetch()) {
@@ -304,7 +307,6 @@ SQL
         }
 
         $query->closeCursor();
-        $connection = null;
         return $sponsor;
     }
 
@@ -313,14 +315,14 @@ SQL
      * Get sponsor by people id
      * @param int $godFatherId Godfather id
      * @param int $godChildId Godchild id
-     * @return Sponsor|null
      */
+    #[\Override]
     public function getSponsorByPeopleId(int $godFatherId, int $godChildId): ?Sponsor
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
 			SELECT S.*,
 			       CS.reason,
 			       CS.id_sponsor AS id_classic_sponsor,
@@ -334,6 +336,7 @@ SQL
         );
 
         $query->execute(['godFatherId' => $godFatherId, 'godChildId' => $godChildId]);
+
         $sponsor = null;
 
         if ($row = $query->fetch()) {
@@ -353,7 +356,6 @@ SQL
         }
 
         $query->closeCursor();
-        $connection = null;
         return $sponsor;
     }
 
@@ -361,32 +363,32 @@ SQL
     /**
      * Remove a sponsor
      * @param int $id Id
-     * @return void
      */
+    #[\Override]
     public function removeSponsor(int $id): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("DELETE FROM Sponsor WHERE id_sponsor = :id");
+        $query = $pdo->prepare("DELETE FROM Sponsor WHERE id_sponsor = :id");
         $query->execute(['id' => $id]);
 
         $query->closeCursor();
-        $connection = null;
+
     }
 
 
     /**
      * Add a sponsor
      * @param Sponsor $sponsor Sponsor
-     * @return void
      */
+    #[\Override]
     public function addSponsor(Sponsor $sponsor): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare(<<<SQL
+        $query = $pdo->prepare(<<<SQL
                             INSERT INTO Sponsor (id_godfather, id_godson, sponsorDate)
                             VALUES (:godFatherId, :godChildId, :date)
 SQL
@@ -398,74 +400,72 @@ SQL
         ]);
 
         if ($sponsor instanceof ClassicSponsor) {
-            $query = $connection->prepare("INSERT INTO ClassicSponsor (id_sponsor, reason) VALUES (:id, :reason)");
+            $query = $pdo->prepare("INSERT INTO ClassicSponsor (id_sponsor, reason) VALUES (:id, :reason)");
             $query->execute([
-                'id' => $connection->lastInsertId(),
+                'id' => $pdo->lastInsertId(),
                 'reason' => $sponsor->getDescription()
             ]);
         } elseif ($sponsor instanceof HeartSponsor) {
             $sql   = "INSERT INTO HeartSponsor (id_sponsor, description) VALUES (:id, :description)";
-            $query = $connection->prepare($sql);
+            $query = $pdo->prepare($sql);
             $query->execute([
-                'id' => $connection->lastInsertId(),
+                'id' => $pdo->lastInsertId(),
                 'description' => $sponsor->getDescription()
             ]);
         }
 
         $query->closeCursor();
-        $connection = null;
     }
 
 
     /**
      * Update a sponsor
      * @param Sponsor $sponsor Sponsor
-     * @return void
      */
+    #[\Override]
     public function updateSponsor(Sponsor $sponsor): void
     {
 
-        $connection = $this->databaseConnection->getDatabase();
+        $pdo = $this->databaseConnection->getDatabase();
 
-        $query = $connection->prepare("UPDATE Sponsor SET sponsorDate = :date WHERE id_sponsor = :id");
+        $query = $pdo->prepare("UPDATE Sponsor SET sponsorDate = :date WHERE id_sponsor = :id");
         $query->execute([
             'id' => $sponsor->getId(),
             'date' => $sponsor->getDate()->format('Y-m-d')
         ]);
 
         if ($sponsor instanceof ClassicSponsor) {
-            $query = $connection->prepare("INSERT IGNORE INTO ClassicSponsor VALUES (:id, :reason)");
+            $query = $pdo->prepare("INSERT IGNORE INTO ClassicSponsor VALUES (:id, :reason)");
             $query->execute([
                 'id' => $sponsor->getId(),
                 'reason' => $sponsor->getDescription()
             ]);
-            $query = $connection->prepare("UPDATE ClassicSponsor SET reason = :reason WHERE id_sponsor = :id");
+            $query = $pdo->prepare("UPDATE ClassicSponsor SET reason = :reason WHERE id_sponsor = :id");
             $query->execute([
                 'id' => $sponsor->getId(),
                 'reason' => $sponsor->getDescription()
             ]);
-            $query = $connection->prepare("DELETE FROM HeartSponsor WHERE id_sponsor = :id");
+            $query = $pdo->prepare("DELETE FROM HeartSponsor WHERE id_sponsor = :id");
             $query->execute([
                 'id' => $sponsor->getId()
             ]);
         } elseif ($sponsor instanceof HeartSponsor) {
-            $query = $connection->prepare("INSERT IGNORE INTO HeartSponsor VALUES (:id, :description)");
+            $query = $pdo->prepare("INSERT IGNORE INTO HeartSponsor VALUES (:id, :description)");
             $query->execute([
                 'id' => $sponsor->getId(),
                 'description' => $sponsor->getDescription()
             ]);
-            $query = $connection->prepare("UPDATE HeartSponsor SET description = :description WHERE id_sponsor = :id");
+            $query = $pdo->prepare("UPDATE HeartSponsor SET description = :description WHERE id_sponsor = :id");
             $query->execute([
                 'id' => $sponsor->getId(),
                 'description' => $sponsor->getDescription()
             ]);
-            $query = $connection->prepare("DELETE FROM ClassicSponsor WHERE id_sponsor = :id");
+            $query = $pdo->prepare("DELETE FROM ClassicSponsor WHERE id_sponsor = :id");
             $query->execute([
                 'id' => $sponsor->getId()
             ]);
         }
 
         $query->closeCursor();
-        $connection = null;
     }
 }

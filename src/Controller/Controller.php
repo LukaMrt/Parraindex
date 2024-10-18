@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\person\PersonService;
@@ -19,10 +21,12 @@ abstract class Controller
      * @var PersonService the person service
      */
     protected PersonService $personService;
+
     /**
      * @var Environment the twig environment
      */
-    private Environment $twig;
+    private Environment $twigEnvironment;
+
     /**
      * @var Router the router
      */
@@ -30,13 +34,13 @@ abstract class Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      */
-    public function __construct(Environment $twig, Router $router, PersonService $personService)
+    public function __construct(Environment $twigEnvironment, Router $router, PersonService $personService)
     {
-        $this->twig          = $twig;
+        $this->twigEnvironment          = $twigEnvironment;
         $this->router        = $router;
         $this->personService = $personService;
     }
@@ -47,7 +51,6 @@ abstract class Controller
      * @param string $method the method to call
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
     public function call(string $method, Router $router, array $parameters): void
     {
@@ -73,7 +76,6 @@ abstract class Controller
      * Called when the HTTP method is POST
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
     public function post(Router $router, array $parameters): void
     {
@@ -84,7 +86,6 @@ abstract class Controller
      * Called when the HTTP method is PUT
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
     public function put(Router $router, array $parameters): void
     {
@@ -95,7 +96,6 @@ abstract class Controller
      * Called when the HTTP method is DELETE
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
     public function delete(Router $router, array $parameters): void
     {
@@ -106,7 +106,6 @@ abstract class Controller
      * Called when the HTTP method is GET
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      */
     public function get(Router $router, array $parameters): void
     {
@@ -117,7 +116,6 @@ abstract class Controller
      * Renders the twig template with the given parameters
      * @param string $template the template
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template cannot be found
      * @throws RuntimeError if an error occurs during the rendering
      * @throws SyntaxError if an error occurs during the rendering
@@ -125,12 +123,12 @@ abstract class Controller
     protected function render(string $template, array $parameters = []): void
     {
 
-        if (!empty($_SESSION)) {
+        if ($_SESSION !== []) {
             $parameters['login'] = $_SESSION;
         }
 
         $parameters['router'] = $this->router;
 
-        echo $this->twig->render($template, $parameters);
+        echo $this->twigEnvironment->render($template, $parameters);
     }
 }

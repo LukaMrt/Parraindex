@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\contact;
 
 use App\Entity\Contact\Type;
@@ -52,6 +54,7 @@ class PersonContact extends Contact
     /**
      * @return array[] The description of the contact request
      */
+    #[\Override]
     public function getDescription(): array
     {
 

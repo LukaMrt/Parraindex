@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact\field;
 
 /**
@@ -54,6 +56,6 @@ class Field
      */
     public function isValid(string $value): bool
     {
-        return !empty(trim($value));
+        return trim($value) !== '' && trim($value) !== '0';
     }
 }

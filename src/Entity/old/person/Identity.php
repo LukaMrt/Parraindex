@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\old\person;
 
 use DateTime;
@@ -14,35 +16,29 @@ class Identity implements JsonSerializable
      * @var string First name of the person
      */
     private string $firstName;
+
     /**
      * @var string Last name of the person
      */
     private string $lastName;
+
     /**
      * @var string|null Profile picture of the person
      */
     private ?string $picture;
-    /**
-     * @var DateTime|null Birthdate of the person
-     */
-    private ?DateTime $birthdate;
+
 
 
     /**
      * @param string $firstName First name of the person
      * @param string $lastName Last name of the person
      * @param string|null $picture Profile picture of the person
-     * @param string|null $birthdate Birthdate of the person
      */
-    public function __construct(string $firstName, string $lastName, ?string $picture = null, ?string $birthdate = null)
+    public function __construct(string $firstName, string $lastName, ?string $picture = null)
     {
         $this->firstName = ucwords(strtolower($firstName));
         $this->lastName  = ucwords(strtolower($lastName));
         $this->picture   = $picture ?? 'no-picture.svg';
-
-        if ($birthdate) {
-            $this->birthdate = DateTime::createFromFormat("Y-m-d", $birthdate);
-        }
     }
 
 
@@ -58,6 +54,7 @@ class Identity implements JsonSerializable
     /**
      * @return string Simple representation of the identity (first name + last name)
      */
+    #[\Override]
     public function __toString(): string
     {
         return $this->firstName . ' ' . $this->lastName;
@@ -69,7 +66,7 @@ class Identity implements JsonSerializable
      */
     public function isEmpty(): bool
     {
-        return empty($this->firstName) && empty($this->lastName);
+        return ($this->firstName === '' || $this->firstName === '0') && ($this->lastName === '' || $this->lastName === '0');
     }
 
 
@@ -102,7 +99,6 @@ class Identity implements JsonSerializable
 
     /**
      * @param string $picture New profile picture of the person
-     * @return void
      */
     public function setPicture(string $picture): void
     {
@@ -110,6 +106,7 @@ class Identity implements JsonSerializable
     }
 
 
+    #[\Override]
     public function jsonSerialize(): array
     {
         return get_object_vars($this);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\contact;
 
 use App\Application\contact\executor\ContactExecutors;
@@ -8,9 +10,10 @@ use App\Repository\ContactRepository;
 
 class ContactService
 {
+    public $contactDAO;
+
     public function __construct(
         private readonly ContactExecutors $contactExecutors,
-        private readonly ContactRepository $contactRepository,
     ) {
     }
 
@@ -32,8 +35,8 @@ class ContactService
 
         $executors = array_values($this->contactExecutors->getExecutorsById($id));
 
-        if (empty($executors)) {
-            return 'Le type de contact n\'est pas valide.';
+        if ($executors === []) {
+            return "Le type de contact n'est pas valide.";
         }
 
         return $executors[0]->execute($parameters);
@@ -45,7 +48,6 @@ class ContactService
      *
      * @param int $contactId id of the contact
      * @param int $resolverId id of the person who closed the contact
-     * @return void
      */
     public function closeContact(int $contactId, int $resolverId): void
     {
@@ -61,7 +63,7 @@ class ContactService
      */
     public function getContact(int $id): Contact
     {
-        return array_values(array_filter($this->getContactList(), fn($contact) => $contact->getId() === $id))[0];
+        return array_values(array_filter($this->getContactList(), fn($contact): bool => $contact->getId() === $id))[0];
     }
 
 

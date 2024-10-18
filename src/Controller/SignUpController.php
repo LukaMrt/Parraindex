@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Application\login\SignupService;
@@ -22,30 +24,30 @@ class SignUpController extends Controller
 
 
     /**
-     * @param Environment $twig the twig environment
+     * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
-     * @param SignupService $passwordService the password service
+     * @param SignupService $signupService the password service
      */
     public function __construct(
-        Environment $twig,
+        Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
-        SignupService $passwordService
+        SignupService $signupService
     ) {
-        parent::__construct($twig, $router, $personService);
-        $this->signupService = $passwordService;
+        parent::__construct($twigEnvironment, $router, $personService);
+        $this->signupService = $signupService;
     }
 
 
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurs during the rendering
      * @throws SyntaxError if an error occurs during the rendering
      */
+    #[\Override]
     public function get(Router $router, array $parameters): void
     {
         $this->render('signup.html.twig', ['router' => $router]);
@@ -55,11 +57,11 @@ class SignUpController extends Controller
     /**
      * @param Router $router the router
      * @param array $parameters the parameters
-     * @return void
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurs during the rendering
      * @throws SyntaxError if an error occurs during the rendering
      */
+    #[\Override]
     public function post(Router $router, array $parameters): void
     {
 

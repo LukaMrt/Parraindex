@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Application\person;
 
 use App\Application\logging\Logger;
@@ -51,7 +53,7 @@ readonly class PersonService
     {
         $person = $this->personRepository->getById($parameters['id']);
 
-        if ($person === null) {
+        if (!$person instanceof \App\Entity\Person\Person) {
             return;
         }
 

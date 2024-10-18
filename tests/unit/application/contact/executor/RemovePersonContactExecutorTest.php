@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\executor;
 
 use App\Application\contact\ContactDAO;
@@ -13,11 +15,12 @@ use App\Entity\old\person\Person;
 use App\Entity\old\person\PersonBuilder;
 use PHPUnit\Framework\TestCase;
 
-class RemovePersonContactExecutorTest extends TestCase
+final class RemovePersonContactExecutorTest extends TestCase
 {
-    private RemovePersonContactExecutor $executor;
+    private RemovePersonContactExecutor $removePersonContactExecutor;
 
     private ContactDAO $contactDAO;
+
     private PersonDAO $personDAO;
 
     private array $defaultArray = [
@@ -29,18 +32,19 @@ class RemovePersonContactExecutorTest extends TestCase
     ];
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
 
         $this->contactDAO = $this->createMock(ContactDAO::class);
         $redirect         = $this->createMock(Redirect::class);
         $this->personDAO  = $this->createMock(PersonDAO::class);
 
-        $this->executor = new RemovePersonContactExecutor($this->personDAO, $this->contactDAO, $redirect);
+        $this->removePersonContactExecutor = new RemovePersonContactExecutor($this->personDAO, $this->contactDAO, $redirect);
     }
 
 
-    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing()
+    public function testExecuteReturnsErrorWhenSenderFirstnameIsMissing(): void
     {
 
         $this->personDAO->method('getPersonById')
@@ -49,9 +53,9 @@ class RemovePersonContactExecutorTest extends TestCase
 
         $this->defaultArray['senderFirstName'] = '';
 
-        $result = $this->executor->execute($this->defaultArray);
+        $result = $this->removePersonContactExecutor->execute($this->defaultArray);
 
-        $this->assertEquals('Votre prénom doit contenir au moins 1 caractère', $result);
+        $this->assertSame('Votre prénom doit contenir au moins 1 caractère', $result);
     }
 
 
@@ -67,7 +71,7 @@ class RemovePersonContactExecutorTest extends TestCase
             ->with(1)
             ->willReturn($person);
 
-        $contact = new PersonContact(
+        $personContact = new PersonContact(
             -1,
             date('Y-m-d'),
             null,
@@ -80,8 +84,8 @@ class RemovePersonContactExecutorTest extends TestCase
 
         $this->contactDAO->expects($this->once())
             ->method('savePersonRemoveContact')
-            ->with($contact);
+            ->with($personContact);
 
-        $this->executor->execute($this->defaultArray);
+        $this->removePersonContactExecutor->execute($this->defaultArray);
     }
 }

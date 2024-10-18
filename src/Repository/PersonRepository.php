@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Person\Person;
@@ -13,9 +15,9 @@ class PersonRepository extends ServiceEntityRepository
 {
     public const string DEFAULT_PICTURE = 'no-picture.svg';
 
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(ManagerRegistry $managerRegistry)
     {
-        parent::__construct($registry, Person::class);
+        parent::__construct($managerRegistry, Person::class);
     }
 
     /**
@@ -56,7 +58,7 @@ class PersonRepository extends ServiceEntityRepository
 
     public function update(Person $person): void
     {
-        if ($person->getCreatedAt() === null) {
+        if (!$person->getCreatedAt() instanceof \DateTimeInterface) {
             $person->setCreatedAt(new \DateTimeImmutable());
         }
 

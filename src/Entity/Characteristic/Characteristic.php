@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Characteristic;
 
 use App\Entity\Person\Person;
@@ -22,7 +24,7 @@ class Characteristic
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    private ?CharacteristicType $type = null;
+    private ?CharacteristicType $characteristicType = null;
 
     #[ORM\ManyToOne(inversedBy: 'characteristics')]
     #[ORM\JoinColumn(nullable: false)]
@@ -59,12 +61,12 @@ class Characteristic
 
     public function getType(): ?CharacteristicType
     {
-        return $this->type;
+        return $this->characteristicType;
     }
 
-    public function setType(?CharacteristicType $type): static
+    public function setType(?CharacteristicType $characteristicType): static
     {
-        $this->type = $type;
+        $this->characteristicType = $characteristicType;
 
         return $this;
     }

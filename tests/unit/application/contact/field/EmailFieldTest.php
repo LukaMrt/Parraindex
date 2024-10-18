@@ -1,26 +1,29 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Tests\unit\application\contact\field;
 
 use App\Application\contact\field\EmailField;
 use PHPUnit\Framework\TestCase;
 
-class EmailFieldTest extends TestCase
+final class EmailFieldTest extends TestCase
 {
     private EmailField $emailField;
 
 
-    public function setUp(): void
+    #[\Override]
+    protected function setUp(): void
     {
         $this->emailField = new EmailField('email', 'error');
     }
 
 
-    public function testGetnameReturnsEmail()
+    public function testGetnameReturnsEmail(): void
     {
         $result = $this->emailField->getName();
 
-        $this->assertEquals('email', $result);
+        $this->assertSame('email', $result);
     }
 
 
