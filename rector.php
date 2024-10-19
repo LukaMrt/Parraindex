@@ -22,7 +22,6 @@ return static function (RectorConfig $rectorConfig): void {
         SetList::TYPE_DECLARATION,
         SetList::EARLY_RETURN,
         SetList::PRIVATIZATION,
-        SetList::NAMING,
         SetList::STRICT_BOOLEANS,
         SetList::RECTOR_PRESET,
         SetList::INSTANCEOF,
