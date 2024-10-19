@@ -11,7 +11,7 @@ use App\Repository\SponsorRepository;
 
 readonly class SponsorService
 {
-    public $sponsorDAO;
+    public SponsorDAO $sponsorDAO;
 
     public function __construct(
         private PersonRepository $personRepository,

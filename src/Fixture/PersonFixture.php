@@ -28,7 +28,7 @@ class PersonFixture extends Fixture
     public const string GOD_FATHER  = 'person_god_father';
 
     #[\Override]
-    public function load(ObjectManager $objectManager): void
+    public function load(ObjectManager $manager): void
     {
         $person = (new Person())
             ->setFirstName('Luka')
@@ -39,7 +39,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture('Luka.jpg')
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($person);
+        $manager->persist($person);
         $this->addReference(self::LUKA, $person);
 
         $melvyn = (new Person())
@@ -51,7 +51,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($melvyn);
+        $manager->persist($melvyn);
         $this->addReference(self::MELVYN, $melvyn);
 
         $vincent = (new Person())
@@ -63,7 +63,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($vincent);
+        $manager->persist($vincent);
         $this->addReference(self::VINCENT, $vincent);
 
         $lilian = (new Person())
@@ -75,7 +75,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setPicture('Lilian.jpg')
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($lilian);
+        $manager->persist($lilian);
         $this->addReference(self::LILIAN, $lilian);
 
         $godChild1 = (new Person())
@@ -87,7 +87,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($godChild1);
+        $manager->persist($godChild1);
         $this->addReference(self::GOD_CHILD_1, $godChild1);
 
         $godChild2 = (new Person())
@@ -99,7 +99,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($godChild2);
+        $manager->persist($godChild2);
         $this->addReference(self::GOD_CHILD_2, $godChild2);
 
         $godChild3 = (new Person())
@@ -111,7 +111,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($godChild3);
+        $manager->persist($godChild3);
         $this->addReference(self::GOD_CHILD_3, $godChild3);
 
         $godFather = (new Person())
@@ -123,9 +123,9 @@ class PersonFixture extends Fixture
             ->setStartYear(2020)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
             ->setCreatedAt(new \DateTimeImmutable());
-        $objectManager->persist($godFather);
+        $manager->persist($godFather);
         $this->addReference(self::GOD_FATHER, $godFather);
 
-        $objectManager->flush();
+        $manager->flush();
     }
 }

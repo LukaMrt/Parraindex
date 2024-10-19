@@ -25,7 +25,9 @@ class PersonRepository extends ServiceEntityRepository
      */
     public function getAll(): array
     {
-        return $this->createQueryBuilder('p')->getQuery()->getResult();
+        /** @var Person[] $result */
+        $result = $this->createQueryBuilder('p')->getQuery()->getResult();
+        return $result;
     }
 
     public function getByIdentity(string $firstName, string $lastName): ?Person
@@ -45,15 +47,22 @@ class PersonRepository extends ServiceEntityRepository
 
     public function getByEmail(string $email): ?Person
     {
-        return $this->findOneBy(['email' => $email]) ?? null;
+        /** @var ?Person $result */
+        $result = $this->findOneBy(['email' => $email]);
+        return $result;
     }
 
+    /**
+     * @return array<string, string>
+     */
     public function getAllIdentities(): array
     {
-        return $this->createQueryBuilder('p')
+        /** @var array<string, string> $result */
+        $result = $this->createQueryBuilder('p')
             ->select('p.firstName', 'p.lastName')
             ->getQuery()
             ->getResult();
+        return $result;
     }
 
     public function update(Person $person): void

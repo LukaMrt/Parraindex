@@ -20,7 +20,7 @@ class CharacteristicTypesFixture extends Fixture
     public const string PHONE     = 'characteristic_type_phone';
 
     #[\Override]
-    public function load(ObjectManager $objectManager): void
+    public function load(ObjectManager $manager): void
     {
         $characteristicType = (new CharacteristicType())
             ->setType(Type::URL)
@@ -28,7 +28,7 @@ class CharacteristicTypesFixture extends Fixture
             ->setImage('github.svg')
             ->setUrl('https://github.com/')
             ->setPlace(0);
-        $objectManager->persist($characteristicType);
+        $manager->persist($characteristicType);
         $this->addReference(self::GITHUB, $characteristicType);
 
         $type2 = (new CharacteristicType())
@@ -37,7 +37,7 @@ class CharacteristicTypesFixture extends Fixture
             ->setImage('instagram.svg')
             ->setUrl('https://www.instagram.com/')
             ->setPlace(1);
-        $objectManager->persist($type2);
+        $manager->persist($type2);
         $this->addReference(self::INSTAGRAM, $type2);
 
         $type3 = (new CharacteristicType())
@@ -46,7 +46,7 @@ class CharacteristicTypesFixture extends Fixture
             ->setImage('mail.svg')
             ->setUrl('mailto:')
             ->setPlace(2);
-        $objectManager->persist($type3);
+        $manager->persist($type3);
         $this->addReference(self::EMAIL, $type3);
 
         $type4 = (new CharacteristicType())
@@ -55,9 +55,9 @@ class CharacteristicTypesFixture extends Fixture
             ->setImage('0738383838')
             ->setUrl('tel:')
             ->setPlace(3);
-        $objectManager->persist($type4);
+        $manager->persist($type4);
         $this->addReference(self::PHONE, $type4);
 
-        $objectManager->flush();
+        $manager->flush();
     }
 }
