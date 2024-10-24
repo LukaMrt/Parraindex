@@ -9,6 +9,9 @@ framework:
     #esi: true
     #fragments: true
 
+    router:
+        utf8: true
+
 when@test:
     framework:
         test: true
