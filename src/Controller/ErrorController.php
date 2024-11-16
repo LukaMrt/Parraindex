@@ -8,9 +8,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
+#[Route('/error')]
 class ErrorController extends AbstractController
 {
-    #[Route('/error/{code}', name: 'error')]
+    #[Route('/{code}', name: 'error')]
     public function index(int $code = 404): Response
     {
         switch ($code) {

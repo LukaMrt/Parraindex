@@ -10,7 +10,10 @@ use App\Entity\Person\Role;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
+#[Route('/admin/contact')]
+#[IsGranted(Role::ADMIN->value)]
 class ContactAdminController extends AbstractController
 {
     public function __construct(
@@ -18,11 +21,9 @@ class ContactAdminController extends AbstractController
     ) {
     }
 
-    #[Route('/admin/contact', name: 'contactAdmin')]
+    #[Route('/', name: 'contactAdmin')]
     public function index(): Response
     {
-        $this->denyAccessUnlessGranted(Role::ADMIN);
-
         $list  = $this->contactService->getContactList();
         $types = Type::getValues();
 
