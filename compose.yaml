@@ -1,7 +1,7 @@
 
 services:
   database:
-    image: mysql:8.0
+    image: mysql:9.1
     ports:
       - "${DATABASE_PORT}:3306"
     environment:
