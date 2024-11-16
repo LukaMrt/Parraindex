@@ -23,7 +23,7 @@ class UserFixture extends Fixture
             ->setPassword('password')
             ->setPerson($person)
             ->setRoles(new ArrayCollection([Role::ADMIN, Role::USER]))
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($user);
 
         /** @var Person $person */
@@ -33,7 +33,7 @@ class UserFixture extends Fixture
             ->setPassword('password2')
             ->setPerson($person)
             ->setRoles(new ArrayCollection([Role::USER]))
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($melvyn);
 
         $manager->flush();

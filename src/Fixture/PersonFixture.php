@@ -38,7 +38,7 @@ class PersonFixture extends Fixture
             ->setColor('#0000FF')
             ->setStartYear(2021)
             ->setPicture('Luka.jpg')
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($person);
         $this->addReference(self::LUKA, $person);
 
@@ -50,7 +50,7 @@ class PersonFixture extends Fixture
             ->setColor('#A52A2A')
             ->setStartYear(2021)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($melvyn);
         $this->addReference(self::MELVYN, $melvyn);
 
@@ -62,7 +62,7 @@ class PersonFixture extends Fixture
             ->setColor('#FF0000')
             ->setStartYear(2021)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($vincent);
         $this->addReference(self::VINCENT, $vincent);
 
@@ -74,7 +74,7 @@ class PersonFixture extends Fixture
             ->setColor('#0F0F0F')
             ->setStartYear(2021)
             ->setPicture('Lilian.jpg')
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($lilian);
         $this->addReference(self::LILIAN, $lilian);
 
@@ -86,7 +86,7 @@ class PersonFixture extends Fixture
             ->setColor('#0000FF')
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($godChild1);
         $this->addReference(self::GOD_CHILD_1, $godChild1);
 
@@ -98,7 +98,7 @@ class PersonFixture extends Fixture
             ->setColor('#0000FF')
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($godChild2);
         $this->addReference(self::GOD_CHILD_2, $godChild2);
 
@@ -110,7 +110,7 @@ class PersonFixture extends Fixture
             ->setColor('#0000FF')
             ->setStartYear(2022)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($godChild3);
         $this->addReference(self::GOD_CHILD_3, $godChild3);
 
@@ -122,7 +122,7 @@ class PersonFixture extends Fixture
             ->setColor('#0000FF')
             ->setStartYear(2020)
             ->setPicture(PersonRepository::DEFAULT_PICTURE)
-            ->setCreatedAt(new \DateTimeImmutable());
+            ->setCreatedAt(new \DateTime());
         $manager->persist($godFather);
         $this->addReference(self::GOD_FATHER, $godFather);
 
