@@ -1,2 +1,18 @@
 symfonycasts_sass:
-  root_sass: assets/styles/app.scss
+  root_sass:
+    - assets/styles/about.scss
+    - assets/styles/contact.scss
+    - assets/styles/contactAdmin.scss
+    - assets/styles/editPerson.scss
+    - assets/styles/editSponsor.scss
+    - assets/styles/error.scss
+    - assets/styles/home.scss
+    - assets/styles/legalNotice.scss
+    - assets/styles/login.scss
+    - assets/styles/person.scss
+    - assets/styles/resetPassword.scss
+    - assets/styles/signup.scss
+    - assets/styles/signupConfirmation.scss
+    - assets/styles/signupValidation.scss
+    - assets/styles/sponsor.scss
+    - assets/styles/tree.scss
