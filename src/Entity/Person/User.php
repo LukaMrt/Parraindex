@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Entity\Person;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -15,6 +14,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
+    private const string DEFAULT_PICTURE = 'no-picture.svg';
+
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -24,10 +25,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $email = null;
 
     /**
-     * @var Collection<int, Role>
+     * @var string[] $roles
      */
-    #[ORM\Column]
-    private Collection $roles;
+    #[ORM\Column(type: "json")]
+    private array $roles;
 
     /**
      * @var ?string The hashed password
@@ -35,12 +36,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToOne(cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Person $person = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?string $picture = null;
 
     public function getId(): ?int
     {
@@ -73,24 +77,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @see UserInterface
      *
-     * @return list<string>
+     * @return string[]
      */
     #[\Override]
     public function getRoles(): array
     {
-        if (!$this->roles->contains(Role::USER)) {
-            $this->roles->add(Role::USER);
+        if (!in_array(Role::USER->value, $this->roles)) {
+            $this->roles[] = Role::USER->value;
         }
 
-        return $this->roles->map(fn (Role $role): string => $role->toString())->toArray();
+        return $this->roles;
     }
 
     /**
-     * @param Collection<int, Role> $roles
+     * @return Role[]
      */
-    public function setRoles(Collection $roles): static
+    public function getRolesEnum(): array
     {
-        $this->roles = $roles;
+        return array_map(static fn (string $role) => Role::from($role), $this->getRoles());
+    }
+
+    /**
+     * @param Role[] $roles
+     */
+    public function setRoles(array $roles): static
+    {
+        $this->roles = array_map(static fn (Role $role) => $role->value, $roles);
 
         return $this;
     }
@@ -147,6 +159,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isAdmin(): bool
     {
-        return in_array('ROLE_ADMIN', $this->getRoles());
+        return in_array(Role::ADMIN, $this->getRolesEnum());
+    }
+
+    public function getPicture(): string
+    {
+        return $this->picture ?? self::DEFAULT_PICTURE;
+    }
+
+    public function setPicture(string $picture): static
+    {
+        $this->picture = $picture;
+
+        return $this;
     }
 }

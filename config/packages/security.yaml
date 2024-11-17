@@ -4,7 +4,7 @@ security:
     providers:
         app_user_provider:
             entity:
-                class: App\Entity\User
+                class: App\Entity\Person\User
                 property: email
     firewalls:
         dev:
@@ -16,6 +16,9 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+            logout:
+                path: /logout
+                target: home
 
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }

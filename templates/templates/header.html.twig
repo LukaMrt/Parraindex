@@ -13,17 +13,17 @@
             <a class="header__login-link" href="{{ url('home', {id: app.user.id}) }}">Mon compte</a>
             <a class="header__login-link" href="{{ url('home', {id: app.user.id}) }}">Modifier</a>
 
-            {% if login.privilege == 'ADMIN' %}
+            {% if app.user.admin %}
 
                 <a class="header__login-link" href="{{ url('home') }}">Administration</a>
 
             {% endif %}
 
             <div>
-                <img class="header__login-picture" src="{{ asset('images/pictures/' . app.user.picture) }}" alt="photo">
+                <img class="header__login-picture" src="{{ asset('images/pictures/' ~ app.user.picture) }}" alt="photo">
             </div>
 
-            <a class="header__login-link" href="{{ url('home') }}">Déconnexion</a>
+            <a class="header__login-link" href="{{ url('_logout_main') }}">Déconnexion</a>
 
         {% else %}
             <a class="header__login-link" href="{{ url('login') }}">Se connecter</a>

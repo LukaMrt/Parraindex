@@ -16,14 +16,17 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-class LoginController extends AbstractController
+class SecurityController extends AbstractController
 {
-    #[Route('/login', name: 'login', methods: ['GET'])]
+    #[Route('/login', name: 'login')]
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
+        $error        = $authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $authenticationUtils->getLastUsername();
+
         return $this->render('login.html.twig', [
-            'last_username' => $authenticationUtils->getLastUsername(),
-            'error'         => $authenticationUtils->getLastAuthenticationError(),
+            'last_username' => $lastUsername,
+            'error'         => $error,
         ]);
     }
 }

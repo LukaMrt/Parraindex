@@ -15,11 +15,6 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 class Person
 {
-    /**
-     * @var \Doctrine\Common\Collections\ArrayCollection
-     */
-    public $sponsors;
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -34,7 +29,7 @@ class Person
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -72,7 +67,6 @@ class Person
 
     public function __construct()
     {
-        $this->sponsors        = new ArrayCollection();
         $this->godFathers      = new ArrayCollection();
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();

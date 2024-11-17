@@ -37,7 +37,7 @@ use App\Controller\EditSponsorController;
 use App\Controller\ErrorController;
 use App\Controller\HomeController;
 use App\Controller\LegalNoticeController;
-use App\Controller\LoginController;
+use App\Controller\SecurityController;
 use App\Controller\LogoutConfirmationController;
 use App\Controller\LogoutController;
 use App\Controller\PersonController;
@@ -192,8 +192,8 @@ class Injector
         $this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
         $this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
 
-        $this->router->registerRoute('GET', '/connexion', $this->container->get(LoginController::class), 'login_get');
-        $this->router->registerRoute('POST', '/connexion', $this->container->get(LoginController::class), 'login_post');
+        $this->router->registerRoute('GET', '/connexion', $this->container->get(SecurityController::class), 'login_get');
+        $this->router->registerRoute('POST', '/connexion', $this->container->get(SecurityController::class), 'login_post');
         $this->router->registerRoute('GET', '/deconnexion', $this->container->get(LogoutController::class), 'logout_get');
         $this->router->registerRoute('GET', '/deconnexion/confirmation', $this->container->get(LogoutConfirmationController::class), 'logout_confirmation');
 

@@ -14,7 +14,6 @@
         <h1 class="form__title">Connexion</h1>
 
         <div class="form-content">
-
             {% include "components/form/input.html.twig" with {
                 'type': 'email',
                 'slug': '_username',
@@ -22,7 +21,7 @@
                 'placeholder': 'john.doe@etu.univ-lyon1.fr',
                 'pattern' : '^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$',
                 'classes': '',
-                'value': '',
+                'value': last_username,
                 'readonly': false,
             } %}
 

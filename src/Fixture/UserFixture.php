@@ -8,11 +8,16 @@ use App\Entity\Person\Person;
 use App\Entity\Person\Role;
 use App\Entity\Person\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class UserFixture extends Fixture
 {
+    public function __construct(
+        private readonly UserPasswordHasherInterface $passwordHasher,
+    ) {
+    }
+
     #[\Override]
     public function load(ObjectManager $manager): void
     {
@@ -20,21 +25,25 @@ class UserFixture extends Fixture
         $person = $this->getReference(PersonFixture::LUKA);
         $user   = (new User())
             ->setEmail('luka@luka.com')
-            ->setPassword('password')
             ->setPerson($person)
-            ->setRoles(new ArrayCollection([Role::ADMIN, Role::USER]))
-            ->setCreatedAt(new \DateTime());
+            ->setRoles([Role::ADMIN, Role::USER])
+            ->setPicture('Luka.jpg')
+            ->setCreatedAt(new \DateTimeImmutable());
+
+        $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
         $manager->persist($user);
 
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::MELVYN);
-        $melvyn = (new User())
-            ->setEmail('melvyn@melvyn.fr')
-            ->setPassword('password2')
+        $person = $this->getReference(PersonFixture::LILIAN);
+        $lilian = (new User())
+            ->setEmail('lilian@lilian.fr')
             ->setPerson($person)
-            ->setRoles(new ArrayCollection([Role::USER]))
-            ->setCreatedAt(new \DateTime());
-        $manager->persist($melvyn);
+            ->setRoles([Role::USER])
+            ->setPicture('Lilian.jpg')
+            ->setCreatedAt(new \DateTimeImmutable());
+
+        $lilian->setPassword($this->passwordHasher->hashPassword($lilian, 'password2'));
+        $manager->persist($lilian);
 
         $manager->flush();
     }
