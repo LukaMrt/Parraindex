@@ -84,7 +84,7 @@ class Person
 
     public function setFirstName(string $firstName): static
     {
-        $this->firstName = $firstName;
+        $this->firstName = ucfirst(strtolower($firstName));
 
         return $this;
     }
@@ -96,7 +96,7 @@ class Person
 
     public function setLastName(string $lastName): static
     {
-        $this->lastName = $lastName;
+        $this->lastName = ucfirst(strtolower($lastName));
 
         return $this;
     }

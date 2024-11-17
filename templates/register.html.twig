@@ -9,50 +9,45 @@
 
 {% block content %}
 
-    <form class="form" action="{{ url('home') }}" method="post">
+    {% for flash in app.flashes('success') %}
+        <div class="alert alert--success">{{ flash }}</div>
+    {% endfor %}
+
+    {% for flash in app.flashes('error') %}
+        <div class="alert alert--error">{{ flash }}</div>
+    {% endfor %}
+
+    <form class="form" action="{{ url('register_handle') }}" method="post">
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">
 
         <h1 class="form__title">Inscription</h1>
 
         <div class="form-content">
 
-            <div class="form-block form-block--row">
-
-                {% include "components/form/input.html.twig" with {
-                    'type': 'text',
-                    'slug': 'firstname',
-                    'title': 'Prénom',
-                    'placeholder': 'John'
-                } %}
-
-                {% include "components/form/input.html.twig" with {
-                    'type': 'text',
-                    'slug': 'lastname',
-                    'title': 'Nom',
-                    'placeholder': 'Doe'
-                } %}
-
-            </div>
-
             {% include "components/form/input.html.twig" with {
                 'type': 'email',
-                'slug': 'email',
+                'slug': field_name(form.email),
+                'value': field_value(form.email),
                 'title': 'Email universitaire',
                 'placeholder': 'john.doe@etu.univ-lyon1.fr',
-                'pattern' : "^[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+@etu.univ-lyon1.fr$"
+                'pattern' : "^[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+@etu.univ-lyon1.fr$",
             } %}
 
             {% include "components/form/input.html.twig" with {
                 'type': 'password',
-                'slug': 'password',
+                'slug': field_name(form.password.first),
+                'value': field_value(form.password.first),
                 'title': 'Mot de passe',
-                'placeholder': '••••••••••'
+                'placeholder': '••••••••••',
             } %}
 
             {% include "components/form/input.html.twig" with {
                 'type': 'password',
-                'slug': 'password-confirm',
+                'slug': field_name(form.password.second),
+                'value': field_value(form.password.second),
                 'title': 'Répétez le mot de passe',
-                'placeholder': '••••••••••'
+                'placeholder': '••••••••••',
             } %}
 
             <div class="form-block form-block--row form-block--space-around">
@@ -61,7 +56,7 @@
                     'option': 'link-wrapper',
                     'prefix': 'Vous avez déjà un compte ?',
                     'title': 'Connectez-vous',
-                    'href': url('home')
+                    'href': url('login')
                 } %}
 
                 {% include "components/button.html.twig" with {

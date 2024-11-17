@@ -22,12 +22,13 @@ class UserFixture extends Fixture
     public function load(ObjectManager $manager): void
     {
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA);
+        $person = $this->getReference(PersonFixture::MELVYN);
         $user   = (new User())
-            ->setEmail('luka@luka.com')
+            ->setEmail('fake.luka.maret@etu.univ-lyon1.fr')
             ->setPerson($person)
             ->setRoles([Role::ADMIN, Role::USER])
             ->setPicture('Luka.jpg')
+            ->setVerified(true)
             ->setCreatedAt(new \DateTimeImmutable());
 
         $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
@@ -36,10 +37,11 @@ class UserFixture extends Fixture
         /** @var Person $person */
         $person = $this->getReference(PersonFixture::LILIAN);
         $lilian = (new User())
-            ->setEmail('lilian@lilian.fr')
+            ->setEmail('lilian.baudry@etu.univ-lyon1.fr')
             ->setPerson($person)
             ->setRoles([Role::USER])
             ->setPicture('Lilian.jpg')
+            ->setVerified(true)
             ->setCreatedAt(new \DateTimeImmutable());
 
         $lilian->setPassword($this->passwordHasher->hashPassword($lilian, 'password2'));

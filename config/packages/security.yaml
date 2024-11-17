@@ -16,9 +16,10 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+                enable_csrf: true
             logout:
                 path: /logout
-                target: home
+                target: logout_success
 
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }

@@ -24,15 +24,22 @@
 
 <body>
 
-{% include "components/popup.html.twig" with {
-    'message': error,
-    'type': 'error'
-} %}
+{% set errors = app.flashes('error') %}
+{% set success = app.flashes('success') %}
 
-{% include "components/popup.html.twig" with {
-    'message': success,
-    'type': 'success'
-} %}
+{% if errors|length > 0 %}
+    {% include "components/popup.html.twig" with {
+        'type': 'error',
+        'message': errors|first,
+    } %}
+{% endif %}
+
+{% if errors|length == 0 and success|length > 0 %}
+    {% include "components/popup.html.twig" with {
+        'type': 'success',
+        'message': success|first,
+    } %}
+{% endif %}
 
 {% include 'templates/header.html.twig' %}
 

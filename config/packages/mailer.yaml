@@ -4,5 +4,5 @@ framework:
         envelope:
             sender: '%env(MAIL_USER)%'
         headers:
-            from: 'Parrainboss <%env(MAIL_USER)%>'
-            reply-to: 'No reply %env(MAIL_USER)%'
+            from: '%env(MAIL_NAME)% <%env(MAIL_USER)%>'
+            reply-to: '%env(MAIL_USER)%'

@@ -7,11 +7,14 @@ namespace App\Entity\Person;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(fields: 'email', message: 'Un compte existe déjà avec cette adresse email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     private const string DEFAULT_PICTURE = 'no-picture.svg';
@@ -22,18 +25,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?int $id = null;
 
     #[ORM\Column(length: 180)]
+    #[Assert\Email]
+    #[Assert\NotBlank]
+    #[Assert\Regex(
+        pattern: '/^[a-zA-Z-]+\.[a-zA-Z-]+@etu\.univ-lyon1\.fr$/',
+        message: 'L\'adresse mail doit être une adresse universitaire de Lyon 1'
+    )]
     private ?string $email = null;
 
     /**
      * @var string[] $roles
      */
     #[ORM\Column(type: "json")]
-    private array $roles;
+    private array $roles = [Role::USER->value];
 
     /**
      * @var ?string The hashed password
      */
     #[ORM\Column]
+    #[Assert\Length(
+        min: 6,
+        max: 4096,
+        minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères'
+    )]
+    #[Assert\NotBlank]
+    #[Assert\NotCompromisedPassword(message: 'Ce mot de passe a déjà été compromis. Veuillez en choisir un autre')]
+    #[Assert\PasswordStrength(
+        minScore: Assert\PasswordStrength::STRENGTH_WEAK,
+        message: 'Votre mot de passe est trop simple'
+    )]
     private ?string $password = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
@@ -45,6 +65,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(nullable: true)]
     private ?string $picture = null;
+
+    #[ORM\Column]
+    private bool $isVerified = false;
 
     public function getId(): ?int
     {
@@ -129,13 +152,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[\Override]
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
-    }
-
-    public function getCreatedAt(): ?\DateTimeInterface
-    {
-        return $this->createdAt;
     }
 
     public function setCreatedAt(?\DateTimeInterface $createdAt): static
@@ -157,19 +173,33 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
+    // Used in twig templates
     public function isAdmin(): bool
     {
         return in_array(Role::ADMIN, $this->getRolesEnum());
     }
 
+    public function setPicture(string $picture): static
+    {
+        $this->picture = $picture;
+
+        return $this;
+    }
+
+    // Used in twig templates
     public function getPicture(): string
     {
         return $this->picture ?? self::DEFAULT_PICTURE;
     }
 
-    public function setPicture(string $picture): static
+    public function isVerified(): bool
     {
-        $this->picture = $picture;
+        return $this->isVerified;
+    }
+
+    public function setVerified(bool $isVerified): static
+    {
+        $this->isVerified = $isVerified;
 
         return $this;
     }

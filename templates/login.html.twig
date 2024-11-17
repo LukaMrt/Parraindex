@@ -11,6 +11,8 @@
 
     <form class="form" action="{{ url("login") }}" method="post">
 
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
         <h1 class="form__title">Connexion</h1>
 
         <div class="form-content">
@@ -40,7 +42,7 @@
                 {% include "components/link.html.twig" with{
                     'prefix': 'Vous n\'avez pas encore de compte ?',
                     'title': 'Cliquez ici',
-                    'href': url('home'),
+                    'href': url('register'),
                     'classes': '',
                     'value': '',
                     'readonly': false,

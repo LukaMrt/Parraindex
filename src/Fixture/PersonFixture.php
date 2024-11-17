@@ -11,13 +11,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class PersonFixture extends Fixture
 {
-    public const string LUKA        = 'person_luka';
+    public const string LUKA = 'person_luka';
 
-    public const string MELVYN      = 'person_melvyn';
+    public const string MELVYN = 'person_melvyn';
 
-    public const string VINCENT     = 'person_vincent';
+    public const string VINCENT = 'person_vincent';
 
-    public const string LILIAN      = 'person_lilian';
+    public const string LILIAN = 'person_lilian';
 
     public const string GOD_CHILD_1 = 'person_god_child_1';
 
@@ -25,7 +25,7 @@ class PersonFixture extends Fixture
 
     public const string GOD_CHILD_3 = 'person_god_child_3';
 
-    public const string GOD_FATHER  = 'person_god_father';
+    public const string GOD_FATHER = 'person_god_father';
 
     #[\Override]
     public function load(ObjectManager $manager): void

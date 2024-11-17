@@ -11,3 +11,6 @@ services:
             - '%kernel.project_dir%/src/DependencyInjection/'
             - '%kernel.project_dir%/src/Entity/'
             - '%kernel.project_dir%/src/Kernel.php'
+
+    App\Security\LoginSuccessListener:
+        tags: [kernel.event_listener]

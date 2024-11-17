@@ -1,3 +1,9 @@
+{% set classes = classes ?? '' %}
+{% set value = value ?? '' %}
+{% set placeholder = placeholder ?? '' %}
+{% set pattern = pattern ?? null %}
+{% set readonly = readonly ?? false %}
+
 <div class="form__element {{ classes }}">
 
     <label class="form__element-label" for="{{ slug }}">{{ title }}</label>
