@@ -41,9 +41,6 @@ class DataController extends AbstractController
             );
         }
 
-        return $this->json(
-            $person,
-            Response::HTTP_OK,
-        );
+        return $this->json($person);
     }
 }
