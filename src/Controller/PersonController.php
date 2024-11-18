@@ -24,14 +24,9 @@ class PersonController extends AbstractController
         $person = $this->personService->getPersonById($id);
 
         if (!$person instanceof Person) {
-            return $this->redirectToRoute('error');
+            throw $this->createNotFoundException('Personne non trouvée');
         }
 
-        return $this->render(
-            'person.html.twig',
-            [
-                'person' => $person,
-            ]
-        );
+        return $this->render('person.html.twig', ['person' => $person]);
     }
 }
