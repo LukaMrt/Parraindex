@@ -28,10 +28,10 @@ use App\Application\random\Random;
 use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
 use App\Controller\AboutController;
-use App\Controller\ContactAdminController;
+use App\Controller\AdminController;
 use App\Controller\ContactCloseController;
 use App\Controller\ContactController;
-use App\Controller\DataDownloadController;
+use App\Controller\DataController;
 use App\Controller\EditPersonController;
 use App\Controller\EditSponsorController;
 use App\Controller\ErrorController;
@@ -185,7 +185,7 @@ class Injector
         $this->router->registerRoute('GET', '/a-propos', $this->container->get(AboutController::class), 'about');
         $this->router->registerRoute('GET', '/mentions-legales', $this->container->get(legalnoticeController::class), 'legalnotice');
 
-        $this->router->registerRoute('GET', '/admin/contact', $this->container->get(ContactAdminController::class), 'contact_admin');
+        $this->router->registerRoute('GET', '/admin/contact', $this->container->get(AdminController::class), 'contact_admin');
         $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete', $this->container->get(ContactCloseController::class), 'contact_close');
         $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
 
@@ -212,7 +212,7 @@ class Injector
         $this->router->registerRoute('POST', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_post');
         $this->router->registerRoute('PUT', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_put');
         $this->router->registerRoute('DELETE', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_delete');
-        $this->router->registerRoute('GET', '/personne/[i:id]/donnees', $this->container->get(DataDownloadController::class), 'person_data');
+        $this->router->registerRoute('GET', '/personne/[i:id]/donnees', $this->container->get(DataController::class), 'person_data');
 
         $this->router->registerRoute('GET', '/parrainage/[i:id]', $this->container->get(SponsorController::class), 'sponsor');
         $this->router->registerRoute('GET', '/parrainage/[i:id]/edition', $this->container->get(EditSponsorController::class), 'editsponsor_get');
