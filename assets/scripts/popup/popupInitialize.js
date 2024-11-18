@@ -5,8 +5,12 @@ function closePopup(popup) {
 let errorPopup = document.querySelector('.popup--success');
 let successPopup = document.querySelector('.popup--error');
 
-errorPopup.querySelector('.popup__close-button')
-  .addEventListener('click', () => closePopup(errorPopup));
+if (errorPopup) {
+  errorPopup.querySelector('.popup__close-button')
+      .addEventListener('click', () => closePopup(errorPopup));
+}
 
-successPopup.querySelector('.popup__close-button')
-  .addEventListener('click', () => closePopup(successPopup));
+if (successPopup) {
+    successPopup.querySelector('.popup__close-button')
+        .addEventListener('click', () => closePopup(successPopup));
+}
