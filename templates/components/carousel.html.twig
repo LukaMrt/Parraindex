@@ -2,16 +2,7 @@
     <div class="carousel__slider">
 
         {% for person in people %}
-            {% include 'components/card.html.twig' with {
-                'id': person.id,
-                'color': person.color,
-                'firstName': person.firstName,
-                'lastName': person.lastName,
-                'picture': 'images/pictures/' ~ person.picture,
-                'characteristics': person.characteristics,
-                'description': person.biography,
-                'startYear': person.startYear,
-            } %}
+            {% include 'components/card.html.twig' with {'person': person} %}
         {% endfor %}
 
     </div>

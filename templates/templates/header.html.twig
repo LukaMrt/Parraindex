@@ -8,8 +8,8 @@
     <div class="header__login">
         {% if app.user %}
 
-            <a class="header__login-link" href="{{ url('home', {id: app.user.id}) }}">Mon compte</a>
-            <a class="header__login-link" href="{{ url('home', {id: app.user.id}) }}">Modifier</a>
+            <a class="header__login-link" href="{{ url('person', {id: app.user.person.id}) }}">Mon compte</a>
+            <a class="header__login-link" href="{{ url('person_edit', {id: app.user.person.id}) }}">Modifier</a>
 
             {% if app.user.admin %}
 

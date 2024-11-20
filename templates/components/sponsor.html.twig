@@ -15,16 +15,7 @@
 
 <div class="sponsor__content">
 
-    {% include 'components/card.html.twig' with {
-        'id': sponsor.godFather.id,
-        'color': sponsor.godFather.color,
-        'firstName': sponsor.godFather.firstName,
-        'lastName': sponsor.godFather.lastName,
-        'picture': 'images/pictures/' ~ sponsor.godFather.picture,
-        'characteristics': sponsor.godFather.characteristics,
-        'description': sponsor.godFather.biography,
-        'startYear': sponsor.godFather.startYear,
-    } %}
+    {% include 'components/card.html.twig' with {'person': sponsor.godChild} %}
 
     <div class="sponsor__content-link">
         <p class="sponsor__content-link-date">
@@ -35,15 +26,6 @@
         </div>
     </div>
 
-    {% include 'components/card.html.twig' with {
-        'id': sponsor.godChild.id,
-        'color': sponsor.godChild.color,
-        'firstName': sponsor.godChild.firstName,
-        'lastName': sponsor.godChild.lastName,
-        'picture': 'images/pictures/' ~ sponsor.godChild.picture,
-        'characteristics': sponsor.godChild.characteristics,
-        'description': sponsor.godChild.biography,
-        'startYear': sponsor.godChild.startYear,
-    } %}
+    {% include 'components/card.html.twig' with {'person': sponsor.godFather} %}
 
 </div>

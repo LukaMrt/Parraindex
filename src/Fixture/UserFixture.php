@@ -22,9 +22,9 @@ class UserFixture extends Fixture
     public function load(ObjectManager $manager): void
     {
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::MELVYN);
+        $person = $this->getReference(PersonFixture::LUKA);
         $user   = (new User())
-            ->setEmail('fake.luka.maret@etu.univ-lyon1.fr')
+            ->setEmail('luka.maret@etu.univ-lyon1.fr')
             ->setPerson($person)
             ->setRoles([Role::ADMIN, Role::USER])
             ->setPicture('Luka.jpg')

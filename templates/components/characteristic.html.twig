@@ -1,6 +1,6 @@
 <div class="characteristic">
     {% include 'components/eye.html.twig' with {
-        'slug': 'characteristic-visibility-' ~ title,
+        'slug': field_name(form) 'characteristic-visibility-' ~ title,
         'visibility': visibility,
     } %}
     <label class="characteristic__title" for="characteristic-{{ title }}"> {{ title }} </label>

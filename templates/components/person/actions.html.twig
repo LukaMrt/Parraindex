@@ -5,13 +5,13 @@
     </a>
 
     {% if person.id == app.user.id ?? -1 or app.user.admin ?? false %}
-        <a class="person-action__wrapper" href="{{ url('home', {'id': person.id}) }}">
-            <img class="person-actions__image" src="{{ asset('images/icons/pen.svg') }}" alt="Retour">
+        <a class="person-action__wrapper" href="{{ url('person_edit', {'id': person.id}) }}">
+            <img class="person-actions__image" src="{{ asset('images/icons/pen.svg') }}" alt="Editer">
         </a>
     {% endif %}
 
     <a class="person-action__wrapper" href="{{ url('home') }}">
-        <img class="person-actions__image" src="{{ asset('images/icons/report.svg') }}" alt="Retour">
+        <img class="person-actions__image" src="{{ asset('images/icons/report.svg') }}" alt="Report">
     </a>
 
 </div>

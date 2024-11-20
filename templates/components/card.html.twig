@@ -1,16 +1,16 @@
-<article class="card" id="{{ id }}">
-    <div class="card__banner" style="background-color:{{ color }}">
-        <img class="card__picture" src="{{ asset(picture) }}" alt="photo" loading="lazy">
+<article class="card" id="{{ person.id }}">
+    <div class="card__banner" style="background-color:{{ person.color }}">
+        <img class="card__picture" src="{{ asset('images/pictures/' ~ person.picture) }}" alt="photo" loading="lazy">
         <img class="card__picture__overlay" src="{{ asset('images/icons/camera.svg') }}" alt="modifier photo" loading="lazy">
     </div>
 
     <div class="card__profil">
-        <span class="card__last-name">{{ lastName }}</span>
-        <span class="card__first-name">{{ firstName }}</span>
+        <span class="card__last-name">{{ person.lastName }}</span>
+        <span class="card__first-name">{{ person.firstName }}</span>
     </div>
 
     <div class="card__social-network">
-        {% for characteristic in characteristics %}
+        {% for characteristic in person.characteristics %}
             {% if characteristic.visible %}
                 {% include 'components/social-network.html.twig'
                     with {
@@ -22,8 +22,8 @@
     </div>
 
     <p class="card__description">
-        {{ description }}
+        {{ person.description }}
     </p>
 
-    <p class="card__start-year">{{ startYear }}</p>
+    <p class="card__start-year">{{ person.startYear }}</p>
 </article>

@@ -11,8 +11,11 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
+#[UniqueEntity(fields: ['firstName', 'lastName'], message: 'person.unique')]
 class Person
 {
     #[ORM\Id]
@@ -21,9 +24,13 @@ class Person
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $firstName = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
+    #[Assert\Length(max: 255)]
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255, nullable: true)]
@@ -36,12 +43,16 @@ class Person
     private ?string $biography = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $color = null;
+    #[Assert\CssColor([Assert\CssColor::HEX_LONG])]
+    private ?string $color;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column]
+    #[Assert\Positive]
+    #[Assert\NotBlank]
+    #[Assert\Range(min: 1900, max: 2100)]
     private ?int $startYear = null;
 
     /**
@@ -70,6 +81,8 @@ class Person
         $this->godFathers      = new ArrayCollection();
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
+        $this->createdAt       = new \DateTime();
+        $this->color           = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
 
     public function getId(): ?int
@@ -201,6 +214,13 @@ class Person
         return $this;
     }
 
+    public function setGodFathers(Collection $godFathers): static
+    {
+        $this->godFathers = $godFathers;
+
+        return $this;
+    }
+
     /**
      * @return Collection<int, Sponsor>
      */
@@ -225,6 +245,13 @@ class Person
         if ($this->godChildren->removeElement($sponsor) && $sponsor->getGodChild() === $this) {
             $sponsor->setGodChild(null);
         }
+
+        return $this;
+    }
+
+    public function setGodChildren(Collection $godChildren): static
+    {
+        $this->godChildren = $godChildren;
 
         return $this;
     }
@@ -267,5 +294,10 @@ class Person
         }
 
         return $this;
+    }
+
+    public function equals(Person $person): bool
+    {
+        return $this->getId() === $person->getId();
     }
 }

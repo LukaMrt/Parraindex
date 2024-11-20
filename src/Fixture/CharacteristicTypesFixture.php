@@ -11,13 +11,13 @@ use Doctrine\Persistence\ObjectManager;
 
 class CharacteristicTypesFixture extends Fixture
 {
-    public const string GITHUB    = 'characteristic_type_github';
+    public const string GITHUB = 'characteristic_type_github';
 
     public const string INSTAGRAM = 'characteristic_type_instagram';
 
-    public const string EMAIL     = 'characteristic_type_email';
+    public const string EMAIL = 'characteristic_type_email';
 
-    public const string PHONE     = 'characteristic_type_phone';
+    public const string PHONE = 'characteristic_type_phone';
 
     #[\Override]
     public function load(ObjectManager $manager): void
