@@ -5,7 +5,7 @@
 {% set admin = admin ?? false %}
 
 {% block javascripts %}
-    <script src="{{ asset('scripts/person.js') }}" defer></script>
+    {{  importmap(['common', 'popupInitialize', 'person']) }}
 {% endblock %}
 
 {% block content %}

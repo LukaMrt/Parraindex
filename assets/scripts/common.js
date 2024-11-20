@@ -1,4 +1,3 @@
-
 const darkTheme = window.matchMedia("(prefers-color-scheme: dark)");
 let favicon = document.querySelector('link[rel="icon"]');
 

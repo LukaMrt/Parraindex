@@ -1,4 +1,6 @@
 export function byId(id) {
+  // Wait for the DOM to be loaded
+
   return document.getElementById(id);
 }
 

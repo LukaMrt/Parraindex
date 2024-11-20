@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Contact' %}
 
 {% block javascripts %}
-    <script type="module" src="{{ asset('scripts/contact.js') }}"></script>
+    {{  importmap(['common', 'popupInitialize', 'contact']) }}
 {% endblock %}
 
 {% block content %}

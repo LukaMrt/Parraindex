@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Inscription' %}
 
 {% block javascripts %}
-    <script type="module" src="{{ asset('scripts/signupConfirmation.js') }}" defer></script>
+    {{  importmap(['common', 'popupInitialize', 'signupConfirmation']) }}
 {% endblock %}
 
 {% block content %}

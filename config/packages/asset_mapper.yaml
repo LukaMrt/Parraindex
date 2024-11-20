@@ -6,3 +6,5 @@ framework:
         excluded_patterns:
             - '*/assets/styles/_*.scss'
             - '*/assets/styles/**/_*.scss'
+        importmap_script_attributes:
+            defer: true

@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Affichage' %}
 
 {% block javascripts %}
-    <script src='{{ asset('scripts/carousel.js') }}' defer></script>
+    {{  importmap(['common', 'popupInitialize', 'carousel']) }}
 {% endblock %}
 
 {% block content %}

@@ -17,10 +17,9 @@
     <link rel="stylesheet" href="{{ style }}">
     <link rel="icon" type="image/x-icon" href="{{ asset('images/icons/logo-blue.svg') }}">
 
-    {{ importmap('app') }}
-    {% block javascripts %}{% endblock %}
-    <script src="{{ asset('scripts/popup/popupInitialize.js') }}" defer></script>
-    <script src="{{ asset('scripts/common.js') }}" defer></script>
+    {% block javascripts %}
+        {{  importmap(['common', 'popupInitialize']) }}
+    {% endblock %}
 </head>
 
 <body>

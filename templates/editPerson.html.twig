@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Edition personne' %}
 
 {% block javascripts %}
-    <script src="{{ asset('scripts/editPerson.js') }}" type="module"></script>
+    {{  importmap(['common', 'popupInitialize', 'editPerson']) }}
 {% endblock %}
 
 {% block content %}

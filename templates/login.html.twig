@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Connexion' %}
 
 {% block javascripts %}
-    <script type="module" src="{{ asset('scripts/login.js') }}" defer></script>
+    {{  importmap(['common', 'popupInitialize', 'login']) }}
 {% endblock %}
 
 {% block content %}

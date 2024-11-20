@@ -4,7 +4,7 @@
 {% set title = 'Parraindex - Lien' %}
 
 {% block javascripts %}
-    <script src="{{ asset('scripts/sponsor.js') }}" defer></script>
+    {{  importmap(['common', 'popupInitialize', 'sponsor']) }}
 {% endblock %}
 
 {% block content %}
