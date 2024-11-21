@@ -1,10 +1,17 @@
 <div class="characteristic">
-    {% include 'components/eye.html.twig' with {
-        'slug': field_name(form) 'characteristic-visibility-' ~ title,
-        'visibility': visibility,
-    } %}
-    <label class="characteristic__title" for="characteristic-{{ title }}"> {{ title }} </label>
+    <input id="{{ field_name(characteristic.visible) }}"
+           class="eye"
+           type="checkbox"
+           name="{{ field_name(characteristic.visible) }}"
+           {% if characteristic.visible.vars['data'] %}checked {% endif %}>
 
-    <input class="characteristic__value" type="text" name="characteristic-{{ title }}" id="characteristic-{{ title }}"
-           value="{{ value }}">
+    <label for="{{ field_name(characteristic.visible) }}" class='eye__label'>
+        <img class="eye__img eye__img--open" src="{{ asset('images/icons/eye-open.svg') }}" alt="Visible">
+        <img class="eye__img eye__img--close" src="{{ asset('images/icons/eye-close.svg') }}" alt="Non visible">
+    </label>
+
+    <label class="characteristic__title" for="{{ field_name(characteristic.value) }}"> {{ label }} </label>
+    <input class="characteristic__value" type="text" name="{{ field_name(characteristic.value) }}"
+           id="{{ field_name(characteristic.value) }}"
+           value="{{ field_value(characteristic.value) }}">
 </div>

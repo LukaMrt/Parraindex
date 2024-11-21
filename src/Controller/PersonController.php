@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Characteristic\Characteristic;
+use App\Entity\Characteristic\CharacteristicType;
 use App\Entity\Person\Person;
 use App\Entity\Person\User;
 use App\Form\PersonFormType;
@@ -19,6 +21,7 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/personne')]
 class PersonController extends AbstractController
 {
+
     public function __construct(
         private readonly Security $security,
         private readonly PersonRepository $personRepository,
@@ -43,12 +46,25 @@ class PersonController extends AbstractController
         if ($response instanceof RedirectResponse) {
             return $response;
         }
+        assert($person instanceof Person);
+
+        /** @var CharacteristicType[] $allTypes */
+        $allTypes = $this->characteristicTypeRepository->findAll();
+        foreach ($allTypes as $type) {
+            $exists = $person->getCharacteristics()
+                ->exists(static fn (int $key, Characteristic $characteristic)
+                    => $characteristic->getType()?->equals($type) ?? false);
+            if ($exists) {
+                continue;
+            }
+
+            $person->addCharacteristic((new Characteristic())->setVisible(false)->setType($type));
+        }
 
         $form = $this->createForm(PersonFormType::class, $person);
         return $this->render('editPerson.html.twig', [
-            'form'                => $form,
             'person'              => $person,
-            'characteristicTypes' => $this->characteristicTypeRepository->findAll(),
+            'form'                => $form,
         ]);
     }
 
@@ -62,6 +78,8 @@ class PersonController extends AbstractController
 
         $form = $this->createForm(PersonFormType::class, $person);
         $form->handleRequest($request);
+        dump($request->request->all());
+        dump($form);
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Person $data */
             $data = $form->getData();

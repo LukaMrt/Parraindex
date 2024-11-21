@@ -24,6 +24,9 @@ class CharacteristicTypeRepository extends ServiceEntityRepository
         $this->getEntityManager()->flush();
     }
 
+    /**
+     * @return CharacteristicType[]
+     */
     public function getAll(): array
     {
         return $this->findAll();

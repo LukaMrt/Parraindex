@@ -52,7 +52,7 @@ class CharacteristicTypesFixture extends Fixture
         $type4 = (new CharacteristicType())
             ->setType(Type::PHONE)
             ->setTitle('Phone')
-            ->setImage('0738383838')
+            ->setImage('telephone.svg')
             ->setUrl('tel:')
             ->setPlace(3);
         $manager->persist($type4);

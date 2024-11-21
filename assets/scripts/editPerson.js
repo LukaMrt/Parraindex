@@ -125,27 +125,23 @@ function initColor() {
  */
 function updateCharacteristicPreview() {
 
-    let newCharacteristic = [];
     let characteristicsCounter = 0
 
     for (let i = 0; i < field.characteristics.children.length; i++) {
-
         let characteristic = field.characteristics.children[i];
         let visibility = characteristic.querySelector("input[type=checkbox]");
-        let value = characteristic.querySelector(".characteristic__value").value;
 
         if (visibility.checked && characteristicsCounter >= 4) {
             visibility.checked = false;
             triggerErrorPopup(["Vous ne pouvez pas avoir plus de 4 réseaux sociaux affichés"]);
         } else if (visibility.checked) {
-            let previewCharacteristic = preview.characteristicType[i].cloneNode(true);
-            previewCharacteristic.href += value;
-            newCharacteristic.push(previewCharacteristic);
+            preview.characteristicType[i].classList.remove('social-network--invisible')
             characteristicsCounter++;
+        } else {
+            preview.characteristicType[i].classList.add('social-network--invisible')
         }
     }
 
-    preview.characteristics.replaceChildren(...newCharacteristic);
 }
 
 /**
@@ -170,13 +166,6 @@ function updatePreview() {
 
     updateCharacteristicPreview();
 }
-
-/**
- * prevent the form to be submitted
- */
-field.form.addEventListener("submit", (e) => {
-    e.preventDefault();
-})
 
 preview.picture.addEventListener("mouseover", () => {
     preview.overlayPicture.classList.add("overlay--active");
@@ -259,42 +248,6 @@ field.colorPicker.addEventListener("input", e => {
     field.radioColorPicker.checked = true;
     field.radioColorPicker.value = e.target.value;
     e.target.parentElement.style.backgroundColor = e.target.value;
-});
-
-action.save.addEventListener("click", async e => {
-
-    e.preventDefault();
-
-    let request = await fetch(window.location.href, {
-        method: (personId === 0) ? "POST" : "PUT",
-        headers: {
-            "content-type": "application/json"
-        },
-        body: await formEncodeJson()
-    });
-
-    if (request.ok) {
-
-        let response = await request.json();
-
-        if (response.code === 200) {
-            if (personId === 0) {
-                field.form.reset();
-
-                preview.picture.src = initialPicture;
-                pictureModal.imagePreview.src = initialPicture;
-
-                init();
-            }
-            triggerSuccessPopup(response.messages);
-        } else {
-            triggerErrorPopup(response.messages);
-        }
-
-
-    } else {
-        triggerErrorPopup(["Une erreur est survenue lors de la requête au serveur"]);
-    }
 });
 
 action.download.addEventListener("click", async e => {

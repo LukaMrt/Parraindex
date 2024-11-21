@@ -107,28 +107,23 @@
 
                 <div class="information__contact__characteristics" id="contact-field">
 
-                    {% for type in characteristicTypes %}
-
-                        {% set value = null %}
-
-                        {% for userCharacteristic in person.characteristics %}
-                            {% if type.type.title == userCharacteristic.type.title %}
-                                {% set value = userCharacteristic %}
-                            {% endif %}
-                        {% endfor %}
-
+                    {% set i = 0 %}
+                    {% for characteristic in person.characteristics %}
                         {% include 'components/characteristic.html.twig' with {
-                            'title': type.title,
-                            'value': value.value,
-                            'visibility': value.visible,
+                            'characteristic': form.characteristics[i],
+                            'label': characteristic.type.title,
                         } %}
+                        {% set i = i + 1 %}
                     {% endfor %}
 
                 </div>
             </div>
         </div>
 
-        {{ include('components/modal-picture.html.twig') }}
+        {% include 'components/modal-picture.html.twig' with {
+            'person': person,
+            'field': form.picture,
+        } %}
 
         <nav class='confirm'>
 

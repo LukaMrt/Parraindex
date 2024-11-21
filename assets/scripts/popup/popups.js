@@ -3,7 +3,12 @@ import {byClass} from "../utils.js";
 function setPopupContent(type, messages) {
 
   let popup = byClass('popup--' + type);
-  let popupContent = byClass('popup--' + type).querySelector('.popup__content');
+
+  if (!popup) {
+    return;
+  }
+
+  let popupContent = popup.querySelector('.popup__content');
 
   popupContent.replaceChildren();
 

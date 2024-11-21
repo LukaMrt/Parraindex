@@ -15,8 +15,7 @@ class PersonRepository extends ServiceEntityRepository
 {
     public const string DEFAULT_PICTURE = 'no-picture.svg';
 
-    public function __construct(ManagerRegistry $managerRegistry)
-    {
+    public function __construct(ManagerRegistry $managerRegistry) {
         parent::__construct($managerRegistry, Person::class);
     }
 
@@ -47,22 +46,7 @@ class PersonRepository extends ServiceEntityRepository
 
     public function getByEmail(string $email): ?Person
     {
-        /** @var ?Person $result */
-        $result = $this->findOneBy(['email' => $email]);
-        return $result;
-    }
-
-    /**
-     * @return array<string, string>
-     */
-    public function getAllIdentities(): array
-    {
-        /** @var array<string, string> $result */
-        $result = $this->createQueryBuilder('p')
-            ->select('p.firstName', 'p.lastName')
-            ->getQuery()
-            ->getResult();
-        return $result;
+        return $this->findOneBy(['email' => $email]);
     }
 
     public function update(Person $person): void

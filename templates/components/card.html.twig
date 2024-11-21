@@ -11,13 +11,12 @@
 
     <div class="card__social-network">
         {% for characteristic in person.characteristics %}
-            {% if characteristic.visible %}
-                {% include 'components/social-network.html.twig'
-                    with {
-                    'link': characteristic.type.url ~ characteristic.value,
-                    'image': 'images/icons/' ~ characteristic.type.image
-                } %}
-            {% endif %}
+            {% include 'components/social-network.html.twig'
+                with {
+                'link': characteristic.type.url ~ characteristic.value,
+                'image': 'images/icons/' ~ characteristic.type.image,
+                'visible': characteristic.visible
+            } %}
         {% endfor %}
     </div>
 

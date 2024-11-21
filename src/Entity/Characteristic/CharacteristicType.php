@@ -94,4 +94,9 @@ class CharacteristicType
 
         return $this;
     }
+
+    public function equals(CharacteristicType $type): bool
+    {
+        return $this->getId() === $type->getId();
+    }
 }
