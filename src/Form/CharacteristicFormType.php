@@ -11,14 +11,16 @@ class CharacteristicFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $builder->add('visible')
+        $builder->add('id')
+            ->add('visible')
             ->add('value');
     }
 
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Characteristic::class,
+            'data_class'         => Characteristic::class,
+            'allow_extra_fields' => true,
         ]);
     }
 }

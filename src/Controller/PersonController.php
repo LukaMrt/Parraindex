@@ -36,21 +36,13 @@ class PersonController extends AbstractController
     #[IsGranted(PersonVoter::PERSON_EDIT, subject: 'person')]
     public function edit(Person $person): Response
     {
+        dump($person);
         /** @var CharacteristicType[] $allTypes */
         $allTypes = $this->characteristicTypeRepository->findAll();
-        foreach ($allTypes as $type) {
-            $exists = $person->getCharacteristics()
-                ->exists(static fn (int $key, Characteristic $characteristic)
-                    => $characteristic->getType()?->equals($type) ?? false);
-            if ($exists) {
-                continue;
-            }
-
-            $person->addCharacteristic((new Characteristic())->setVisible(false)->setType($type));
-        }
+        $person->createMissingCharacteristics($allTypes);
 
         $form = $this->createForm(PersonFormType::class, $person);
-        dump($form);
+        $form->get('characteristics')->setData($person->getCharacteristics());
         return $this->render('editPerson.html.twig', [
             'person'              => $person,
             'form'                => $form,
@@ -63,16 +55,21 @@ class PersonController extends AbstractController
     {
         $form = $this->createForm(PersonFormType::class, $person);
         $form->handleRequest($request);
-        dump($request->request->all());
-        dump($form);
+        dump($person);
+
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var Person $data */
-            $data = $form->getData();
-            $data->setStartYear($person->getStartYear())
-                ->setBirthdate($person->getBirthdate())
-                ->setGodFathers($person->getGodFathers())
-                ->setGodChildren($person->getGodChildren());
-            $this->personRepository->update($data);
+            $person->getCharacteristics()->forAll(
+                static function (int $key, Characteristic $characteristic) use ($form): bool {
+                    foreach ($form->get('characteristics')->getExtraData() as $formCharacteristic) {
+                        if ($characteristic->getId() === intval($formCharacteristic['id'])) {
+                            $characteristic->setVisible($formCharacteristic['visible']);
+                            $characteristic->setValue($formCharacteristic['value']);
+                        }
+                    }
+                    return true;
+                }
+            );
+            $this->personRepository->update($person);
             $this->addFlash('success', 'Personne modifiée');
             return $this->redirectToRoute('person', ['id' => $person->getId()]);
         }

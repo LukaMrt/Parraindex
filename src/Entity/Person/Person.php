@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Person;
 
 use App\Entity\Characteristic\Characteristic;
+use App\Entity\Characteristic\CharacteristicType;
 use App\Entity\Sponsor\Sponsor;
 use App\Repository\PersonRepository;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -299,5 +300,19 @@ class Person
     public function equals(Person $person): bool
     {
         return $this->getId() === $person->getId();
+    }
+
+    /** @param CharacteristicType[] $allTypes */
+    public function createMissingCharacteristics(array $allTypes): void
+    {
+        foreach ($allTypes as $type) {
+            $exists = $this->getCharacteristics()->exists(
+                static fn (int $key, Characteristic $c) => $c->getType()?->equals($type) ?? false
+            );
+
+            if (!$exists) {
+                $this->addCharacteristic((new Characteristic())->setVisible(false)->setType($type));
+            }
+        }
     }
 }

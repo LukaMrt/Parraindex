@@ -37,6 +37,7 @@ class PersonFormType extends AbstractType
                 'entry_type'   => CharacteristicFormType::class,
                 'by_reference' => false,
                 'keep_as_list' => true,
+                'mapped'       => false,
             ])
         ;
     }
@@ -44,7 +45,8 @@ class PersonFormType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => Person::class,
+            'data_class'         => Person::class,
+            'allow_extra_fields' => true,
         ]);
     }
 }

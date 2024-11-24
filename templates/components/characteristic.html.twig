@@ -1,4 +1,6 @@
 <div class="characteristic">
+    <input hidden type="text" name="{{ field_name(characteristic.id) }}" id="{{ field_name(characteristic.id) }}"
+           value="{{ field_value(characteristic.id) }}">
     <input id="{{ field_name(characteristic.visible) }}"
            class="eye"
            type="checkbox"
