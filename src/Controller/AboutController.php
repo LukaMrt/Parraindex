@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use App\Application\person\PersonService;
 use App\Entity\Person\Person;
+use App\Repository\PersonRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -33,7 +34,7 @@ class AboutController extends AbstractController
     ];
 
     public function __construct(
-        private readonly PersonService $personService
+        private readonly PersonRepository $personRepository
     ) {
     }
 
@@ -41,7 +42,7 @@ class AboutController extends AbstractController
     public function index(): Response
     {
         $authors = array_map(
-            fn($author): Person => $this->personService->getPersonByIdentity(
+            fn($author): ?Person => $this->personRepository->getByIdentity(
                 $author['firstName'],
                 $author['lastName']
             ),

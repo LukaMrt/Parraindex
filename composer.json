@@ -90,7 +90,7 @@
             "php bin/console doctrine:fixtures:load --no-interaction"
         ],
         "migration-diff": [
-            "php bin/console doctrine:migrations:diff --no-interaction"
+            "php bin/console make:migration"
         ],
         "migration": [
             "php bin/console doctrine:migrations:migrate --no-interaction"

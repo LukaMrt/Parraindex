@@ -28,16 +28,17 @@ class SecurityController extends AbstractController
         private readonly Security $security,
         private readonly UserRepository $userRepository,
         private readonly PersonRepository $personRepository,
+        private readonly AuthenticationUtils $authenticationUtils
     ) {
     }
 
     #[Route('/login', name: 'login')]
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    public function index(): Response
     {
-        $error        = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
+        $error        = $this->authenticationUtils->getLastAuthenticationError();
+        $lastUsername = $this->authenticationUtils->getLastUsername();
 
-        if (null !== $error) {
+        if ($error !== null) {
             $this->addFlash('error', 'Identifiants incorrects');
         }
 
@@ -72,12 +73,12 @@ class SecurityController extends AbstractController
 
         $form->handleRequest($request);
 
-        foreach ($form->getErrors(true) as $error) {
-            $this->addFlash('error', $error->getMessage());
-        }
-
         if ($form->isSubmitted() && $form->isValid()) {
             return $this->handleForm($form, $user);
+        }
+
+        foreach ($form->getErrors(true) as $error) {
+            $this->addFlash('error', $error->getMessage());
         }
 
         return $this->render('register.html.twig', ['form' => $form]);

@@ -24,7 +24,7 @@ class ContactCloseController extends Controller
     private ContactService $contactService;
 
     /**
-     * @var SponsorService the sponsor service
+         * @var SponsorService the sponsor service
      */
     private SponsorService $sponsorService;
 
