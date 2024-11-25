@@ -178,7 +178,7 @@ final class PasswordContactExecutorTest extends TestCase
     public function testExecuteSavesContactOnSuccess(): void
     {
 
-        $person  = PersonBuilder::aPerson()->withId(1)->build();
+        $person        = PersonBuilder::aPerson()->withId(1)->build();
         $personContact = new PersonContact(
             -1,
             date('Y-m-d'),

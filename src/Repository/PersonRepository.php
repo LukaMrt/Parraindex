@@ -15,7 +15,8 @@ class PersonRepository extends ServiceEntityRepository
 {
     public const string DEFAULT_PICTURE = 'no-picture.svg';
 
-    public function __construct(ManagerRegistry $managerRegistry) {
+    public function __construct(ManagerRegistry $managerRegistry)
+    {
         parent::__construct($managerRegistry, Person::class);
     }
 

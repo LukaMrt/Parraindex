@@ -24,7 +24,7 @@ final class CharacteristicTypeServiceTest extends TestCase
     protected function setUp(): void
     {
 
-        $this->characteristicTypeDAO         = $this->createMock(CharacteristicTypeDAO::class);
+        $this->characteristicTypeDAO     = $this->createMock(CharacteristicTypeDAO::class);
         $this->characteristicTypeService = new CharacteristicTypeService($this->characteristicTypeDAO);
 
         $this->characteristic = (new CharacteristicBuilder())

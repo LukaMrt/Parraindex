@@ -23,12 +23,12 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 class SecurityController extends AbstractController
 {
     public function __construct(
-        private readonly EmailVerifier $emailVerifier,
-        private readonly UserPasswordHasherInterface $userPasswordHasher,
         private readonly Security $security,
+        private readonly EmailVerifier $emailVerifier,
         private readonly UserRepository $userRepository,
         private readonly PersonRepository $personRepository,
-        private readonly AuthenticationUtils $authenticationUtils
+        private readonly AuthenticationUtils $authenticationUtils,
+        private readonly UserPasswordHasherInterface $userPasswordHasher,
     ) {
     }
 
@@ -38,7 +38,7 @@ class SecurityController extends AbstractController
         $error        = $this->authenticationUtils->getLastAuthenticationError();
         $lastUsername = $this->authenticationUtils->getLastUsername();
 
-        if ($error !== null) {
+        if ($error instanceof \Symfony\Component\Security\Core\Exception\AuthenticationException) {
             $this->addFlash('error', 'Identifiants incorrects');
         }
 
@@ -91,6 +91,7 @@ class SecurityController extends AbstractController
         // Get firstName and lastName from email
         $emailParts = explode('@', $form->get('email')->getData());
         $emailParts = explode('.', $emailParts[0]);
+
         $firstName  = ucfirst($emailParts[0]);
         $lastName   = ucfirst($emailParts[1]);
         $person     = $this->personRepository->findOneBy(['firstName' => $firstName, 'lastName' => $lastName]);

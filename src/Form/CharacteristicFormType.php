@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Characteristic\Characteristic;
@@ -9,6 +11,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class CharacteristicFormType extends AbstractType
 {
+    #[\Override]
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder->add('id')
@@ -16,6 +19,7 @@ class CharacteristicFormType extends AbstractType
             ->add('value');
     }
 
+    #[\Override]
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([

@@ -251,7 +251,7 @@ final class SponsorServiceTest extends TestCase
             ->with(1)
             ->willReturn($this->sponsor);
 
-        $person  = PersonBuilder::aPerson()->withId(1)->build();
+        $person         = PersonBuilder::aPerson()->withId(1)->build();
         $classicSponsor = new ClassicSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())
@@ -273,7 +273,7 @@ final class SponsorServiceTest extends TestCase
             ->with(1)
             ->willReturn($this->sponsor);
 
-        $person  = PersonBuilder::aPerson()->withId(1)->build();
+        $person       = PersonBuilder::aPerson()->withId(1)->build();
         $heartSponsor = new HeartSponsor(1, $person, $person, self::TEST_DATE, 'description');
 
         $this->sponsorDAO->expects($this->once())

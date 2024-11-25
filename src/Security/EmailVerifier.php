@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security;
 
 use App\Entity\Person\User;
@@ -39,8 +41,8 @@ readonly class EmailVerifier
 
         try {
             $this->mailer->send($email);
-        } catch (TransportExceptionInterface $e) {
-            $this->logger->warning('Email could not be sent to ' . $user->getEmail(), ['exception' => $e]);
+        } catch (TransportExceptionInterface $transportException) {
+            $this->logger->warning('Email could not be sent to ' . $user->getEmail(), ['exception' => $transportException]);
         }
     }
 

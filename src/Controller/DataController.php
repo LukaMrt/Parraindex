@@ -20,12 +20,9 @@ class DataController extends AbstractController
     #[IsGranted(PersonVoter::PERSON_DATA_DOWNLOAD, subject: 'person')]
     public function download(?Person $person): JsonResponse
     {
-        /** @var ?User $user */
-        $user   = $this->getUser();
-        $admin  = $user instanceof User && $user->isAdmin();
-        $person = $person instanceof Person ? $person : ($admin ? $user->getPerson() : null);
+        $person = $this->getPerson($person);
 
-        if (!$person) {
+        if (!$person instanceof \App\Entity\Person\Person) {
             return $this->json(
                 [
                     'data' => "Aucune donnée n'a été trouvée",
@@ -35,5 +32,13 @@ class DataController extends AbstractController
         }
 
         return $this->json($person);
+    }
+
+    public function getPerson(?Person $person): ?Person
+    {
+        /** @var ?User $user */
+        $user  = $this->getUser();
+        $admin = $user instanceof User && $user->isAdmin();
+        return $person instanceof Person ? $person : ($admin ? $user->getPerson() : null);
     }
 }

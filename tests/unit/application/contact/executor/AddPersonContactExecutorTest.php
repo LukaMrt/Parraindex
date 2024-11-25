@@ -21,8 +21,6 @@ final class AddPersonContactExecutorTest extends TestCase
 
     private ContactDAO $contactDAO;
 
-    private Redirect $redirect;
-
     private PersonDAO $personDAO;
 
     private array $defaultArray = [
@@ -41,10 +39,10 @@ final class AddPersonContactExecutorTest extends TestCase
     {
 
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->redirect   = $this->createMock(Redirect::class);
+        $redirect   = $this->createMock(Redirect::class);
         $this->personDAO  = $this->createMock(PersonDAO::class);
 
-        $this->addPersonContactExecutor = new AddPersonContactExecutor($this->contactDAO, $this->redirect, $this->personDAO);
+        $this->addPersonContactExecutor = new AddPersonContactExecutor($this->contactDAO, $redirect, $this->personDAO);
     }
 
 

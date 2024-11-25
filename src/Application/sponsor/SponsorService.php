@@ -51,7 +51,7 @@ readonly class SponsorService
 
         $sponsor = $this->sponsorDAO->getSponsorById($id);
 
-        if ($sponsor === null || $parameters['sponsorType'] === '2') {
+        if (!$sponsor instanceof \App\Entity\old\sponsor\Sponsor || $parameters['sponsorType'] === '2') {
             return;
         }
 
@@ -83,7 +83,7 @@ readonly class SponsorService
 
         $sponsor = $this->sponsorDAO->getSponsorByPeopleId($godFather->getId(), $godChild->getId());
 
-        if ($sponsor !== null) {
+        if ($sponsor instanceof \App\Entity\old\sponsor\Sponsor) {
             return;
         }
 

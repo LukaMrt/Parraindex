@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string[] $roles
      */
-    #[ORM\Column(type: "json")]
+    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::JSON)]
     private array $roles = [Role::USER->value];
 
     /**
@@ -117,7 +117,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRolesEnum(): array
     {
-        return array_map(static fn (string $role) => Role::from($role), $this->getRoles());
+        return array_map(static fn (string $role): \App\Entity\Person\Role => Role::from($role), $this->getRoles());
     }
 
     /**

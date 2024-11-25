@@ -21,8 +21,6 @@ final class UpdateSponsorContactExecutorTest extends TestCase
 
     private ContactDAO $contactDAO;
 
-    private Redirect $redirect;
-
     private PersonDAO $personDAO;
 
     private SponsorDAO $sponsorDAO;
@@ -43,7 +41,7 @@ final class UpdateSponsorContactExecutorTest extends TestCase
     protected function setUp(): void
     {
         $this->contactDAO = $this->createMock(ContactDAO::class);
-        $this->redirect   = $this->createMock(Redirect::class);
+        $redirect   = $this->createMock(Redirect::class);
         $this->personDAO  = $this->createMock(PersonDAO::class);
         $this->sponsorDAO = $this->createMock(SponsorDAO::class);
 
@@ -51,7 +49,7 @@ final class UpdateSponsorContactExecutorTest extends TestCase
             $this->contactDAO,
             $this->personDAO,
             $this->sponsorDAO,
-            $this->redirect
+            $redirect
         );
     }
 

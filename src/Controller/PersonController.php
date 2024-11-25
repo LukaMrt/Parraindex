@@ -66,6 +66,7 @@ class PersonController extends AbstractController
                             $characteristic->setValue($formCharacteristic['value']);
                         }
                     }
+
                     return true;
                 }
             );

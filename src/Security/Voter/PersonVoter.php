@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Security\Voter;
 
 use App\Entity\Person\Person;
@@ -13,6 +15,7 @@ final class PersonVoter extends Voter
 
     public const string PERSON_DATA_DOWNLOAD = 'PERSON_DATA_DOWNLOAD';
 
+    #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
         return in_array($attribute, [self::PERSON_EDIT, self::PERSON_DATA_DOWNLOAD], true)
@@ -20,11 +23,9 @@ final class PersonVoter extends Voter
     }
 
     /**
-     * @param string $attribute
      * @param Person $subject
-     * @param TokenInterface $token
-     * @return bool
      */
+    #[\Override]
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();

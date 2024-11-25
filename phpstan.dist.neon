@@ -10,6 +10,7 @@ parameters:
     # Exclude specific files or directories from analysis
     excludePaths:
         - */old/*
+        - */Application/*
 
     # Custom rules or extensions
     # E.g., if using Doctrine, Symfony, or other integrations, add the necessary extensions

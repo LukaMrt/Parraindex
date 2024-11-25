@@ -21,7 +21,7 @@ final class AddSponsorContactExecutorTest extends TestCase
 {
     private const string TEST_EMAIL = 'test.test@test.com';
 
-    private const string TEST_DATE  = '2021-01-01';
+    private const string TEST_DATE = '2021-01-01';
 
     private AddSponsorContactExecutor $addSponsorContactExecutor;
 

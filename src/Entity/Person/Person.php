@@ -307,7 +307,7 @@ class Person
     {
         foreach ($allTypes as $type) {
             $exists = $this->getCharacteristics()->exists(
-                static fn (int $key, Characteristic $c) => $c->getType()?->equals($type) ?? false
+                static fn (int $key, Characteristic $c): bool => $c->getType()?->equals($type) ?? false
             );
 
             if (!$exists) {

@@ -83,6 +83,7 @@ class Characteristic
         return $this;
     }
 
+    #[\Override]
     public function __toString(): string
     {
         return $this->value ?? '';

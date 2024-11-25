@@ -32,6 +32,7 @@ class UserFixture extends Fixture
             ->setCreatedAt(new \DateTimeImmutable());
 
         $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
+
         $manager->persist($user);
 
         /** @var Person $person */
@@ -45,6 +46,7 @@ class UserFixture extends Fixture
             ->setCreatedAt(new \DateTimeImmutable());
 
         $lilian->setPassword($this->passwordHasher->hashPassword($lilian, 'password2'));
+
         $manager->persist($lilian);
 
         $manager->flush();
