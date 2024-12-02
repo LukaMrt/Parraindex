@@ -215,6 +215,9 @@ class Person
         return $this;
     }
 
+    /**
+     * @param Collection<int, Sponsor> $godFathers
+     */
     public function setGodFathers(Collection $godFathers): static
     {
         $this->godFathers = $godFathers;
@@ -250,6 +253,9 @@ class Person
         return $this;
     }
 
+    /**
+     * @param Collection<int, Sponsor> $godChildren
+     */
     public function setGodChildren(Collection $godChildren): static
     {
         $this->godChildren = $godChildren;

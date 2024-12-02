@@ -36,7 +36,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var string[] $roles
      */
-    #[ORM\Column(type: \Doctrine\DBAL\Types\Types::JSON)]
+    #[ORM\Column(type: Types::JSON)]
     private array $roles = [Role::USER->value];
 
     /**
@@ -94,7 +94,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[\Override]
     public function getUserIdentifier(): string
     {
-        return (string) $this->email;
+        if ($this->email === null || $this->email === '' || $this->email === '0') {
+            throw new \LogicException('The email of the user is not set.');
+        }
+
+        return $this->email;
     }
 
     /**
@@ -202,5 +206,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->isVerified = $isVerified;
 
         return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
     }
 }

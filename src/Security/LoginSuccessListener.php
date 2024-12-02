@@ -6,28 +6,30 @@ namespace App\Security;
 
 use App\Entity\Person\User;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Session\Flash\FlashBagInterface;
+use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\Security\Http\Event\LoginSuccessEvent;
 
 readonly class LoginSuccessListener
 {
-    private FlashBagInterface $flashBag;
-
     public function __construct(
         private RequestStack $requestStack,
     ) {
-        $this->flashBag = $this->requestStack->getSession()->getFlashBag();
     }
 
     public function __invoke(LoginSuccessEvent $event): void
     {
+        /** @var FlashBagAwareSessionInterface $session */
+        $session = $this->requestStack->getSession();
+
+        $flashBag = $session->getFlashBag();
+
         /** @var User $user */
         $user = $event->getUser();
 
         if ($user->isVerified()) {
-            $this->flashBag->add('success', 'Vous êtes connecté');
+            $flashBag->add('success', 'Vous êtes connecté');
         } else {
-            $this->flashBag->add('success', 'Vous êtes connecté, veuillez vérifier votre adresse email');
+            $flashBag->add('success', 'Vous êtes connecté, veuillez vérifier votre adresse email');
         }
     }
 }

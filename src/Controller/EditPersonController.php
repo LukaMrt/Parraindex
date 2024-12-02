@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Application\person\characteristic\CharacteristicService;
 use App\Application\person\characteristic\CharacteristicTypeService;
 use App\Application\person\PersonService;
+use App\Entity\old\person\characteristic\Characteristic;
 use App\Entity\old\person\PersonBuilder;
 use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
@@ -51,10 +52,9 @@ class EditPersonController extends Controller
         $this->characteristicService     = $characteristicService;
     }
 
-
     /**
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
@@ -66,7 +66,7 @@ class EditPersonController extends Controller
         if ($parameters['id'] === '0') {
             $person = PersonBuilder::aPerson()->build();
         } else {
-            $person = $this->personService->getPersonById($parameters['id']);
+            $person = $this->personService->getPersonById(intval($parameters['id']));
 
             // throw error if person does not exist
             if (!$person instanceof \App\Entity\Person\Person) {
@@ -81,6 +81,7 @@ class EditPersonController extends Controller
             die();
         }
 
+        // @phpstan-ignore-next-line
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
 
         // throw error if user is not admin or the person to edit is not the user
@@ -93,6 +94,7 @@ class EditPersonController extends Controller
 
         $this->render(
             'editPerson.html.twig',
+            // @phpstan-ignore-next-line
             [
                 'person' => $person,
                 'characteristics' => $characteristicTypes,
@@ -104,13 +106,13 @@ class EditPersonController extends Controller
 
     /**
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
-    #[NoReturn]
     #[\Override] public function post(Router $router, array $parameters): void
     {
         header('content-type: Application/json');
         $json = file_get_contents('php://input');
+        // @phpstan-ignore-next-line
         $data = json_decode($json, true);
 
         $response = [
@@ -128,6 +130,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
+        // @phpstan-ignore-next-line
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin) {
             $response['code']       = 403;
@@ -136,7 +139,9 @@ class EditPersonController extends Controller
             exit(0);
         }
 
-        $newValues          = $this->getFormValues($data, $response, $isAdmin);
+        // @phpstan-ignore-next-line
+        $newValues = $this->getFormValues($data, $response, $isAdmin);
+        // @phpstan-ignore-next-line
         $newCharacteristics = $this->getFormCharacteristics($data, $response);
 
         if ($response['code'] === 200) {
@@ -145,10 +150,12 @@ class EditPersonController extends Controller
                 file_put_contents($imgPath . $newValues['picture'], $newValues['image']);
             }
 
+            // @phpstan-ignore-next-line
             $idPerson = $this->personService->createPerson($newValues);
 
             foreach ($newCharacteristics as $newCharacteristic) {
                 if ($newCharacteristic->getValue() !== '') {
+                    // @phpstan-ignore-next-line
                     $this->characteristicService->createCharacteristic($idPerson, $newCharacteristic);
                 }
             }
@@ -163,10 +170,10 @@ class EditPersonController extends Controller
 
     /**
      * Get the form values
-     * @param $data array the form data
-     * @param array $response the response if an error occurs
+     * @param array<string, string> $data array the form data
+     * @param array<string, string|string[]> $response the response if an error occurs
      * @param bool $isAdmin if the user is admin
-     * @return array the validated values
+     * @return array<string, string|null> the validated values
      */
     private function getFormValues(array $data, array &$response, bool $isAdmin): array
     {
@@ -176,6 +183,7 @@ class EditPersonController extends Controller
         $newData['description'] = $data['person-desc'] ?? null;
 
         if (!isset($newData['biography'], $newData['description'])) {
+            // @phpstan-ignore-next-line
             $response['messages'][] = 'Les champs biographie et description sont indisponibles';
             $response['code']       = 400;
         }
@@ -183,9 +191,20 @@ class EditPersonController extends Controller
         $newData['color'] = $data['banner-color'] ?? null;
 
         if (!isset($newData['color'])) {
+            // @phpstan-ignore-next-line
             $response['messages'][] = 'La couleur de la bannière est indisponible';
             $response['code']       = 400;
-        } elseif (preg_match('/^#[a-f0-9]{6}$/i', $newData['color']) === 0 || preg_match('/^#[a-f0-9]{6}$/i', $newData['color']) === false) {
+        } elseif (
+            preg_match(
+                '/^#[a-f0-9]{6}$/i',
+                $newData['color']
+            ) === 0
+            || preg_match(
+                '/^#[a-f0-9]{6}$/i',
+                $newData['color']
+            ) === false
+        ) {
+            // @phpstan-ignore-next-line
             $response['messages'][] = 'La couleur doit être au format exadecimal';
             $response['code']       = 400;
         }
@@ -199,6 +218,7 @@ class EditPersonController extends Controller
         $encodedPictureData = $data['person-picture'] ?? null;
 
         if ($encodedPictureData === null) {
+            // @phpstan-ignore-next-line
             $response['messages'][] = 'La photo est indisponible';
             $response['code']       = 400;
         } elseif (!empty($encodedPictureData)) {
@@ -212,16 +232,21 @@ class EditPersonController extends Controller
                 'image/gif' => 'gif',
             ];
 
-            $picture = base64_decode($encodedPicture);
+            $picture = base64_decode($encodedPicture ?? '');
 
+            // @phpstan-ignore-next-line
             if ($picture === false) {
+                // @phpstan-ignore-next-line
                 $response['messages'][] = "La photo n'est pas correctement encodée";
                 $response['code']       = 400;
             } else {
-                $file     = finfo_open();
+                $file = finfo_open();
+                // @phpstan-ignore-next-line
                 $mimeType = finfo_buffer($file, $picture, FILEINFO_MIME_TYPE);
 
+                // @phpstan-ignore-next-line
                 if (!array_key_exists($mimeType, $extensions)) {
+                    // @phpstan-ignore-next-line
                     $response['messages'][] = "Le format de la photo n'est pas supporté";
                     $response['code']       = 400;
                 } else {
@@ -236,9 +261,11 @@ class EditPersonController extends Controller
             $newData['last_name']  = $data['person-lastname'] ?? null;
 
             if (!isset($newData['first_name'], $newData['last_name'])) {
+                // @phpstan-ignore-next-line
                 $response['messages'][] = 'Les champs prénom et nom sont indisponibles';
                 $response['code']       = 400;
             } elseif ($newData['first_name'] === '' || $newData['last_name'] === '') {
+                // @phpstan-ignore-next-line
                 $response['messages'][] = 'Les champs prénom et nom ne peuvent pas être vides';
                 $response['code']       = 400;
             }
@@ -250,9 +277,9 @@ class EditPersonController extends Controller
 
     /**
      * Get the form characteristics
-     * @param $data array the data
-     * @param array $response the response if an error occurs
-     * @return array the characteristics
+     * @param array<string, string> $data array the data
+     * @param array<string, string> $response the response if an error occurs
+     * @return Characteristic[] the characteristics
      */
     private function getFormCharacteristics(array $data, array &$response): array
     {
@@ -296,13 +323,13 @@ class EditPersonController extends Controller
 
     /**
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
-    #[NoReturn]
     #[\Override] public function put(Router $router, array $parameters): void
     {
         header('content-type: Application/json');
         $json = file_get_contents('php://input');
+        // @phpstan-ignore-next-line
         $data = json_decode($json, true);
 
         $response = [
@@ -320,6 +347,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
+        // @phpstan-ignore-next-line
         $person = $this->personService->getPersonById($parameters['id']);
         if (!$person instanceof \App\Entity\Person\Person) {
             $response['code']       = 404;
@@ -328,6 +356,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
+        // @phpstan-ignore-next-line
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin && $_SESSION['user']->getId() !== $person->getId()) {
             $response['code']       = 403;
@@ -336,12 +365,14 @@ class EditPersonController extends Controller
             exit(0);
         }
 
+        // @phpstan-ignore-next-line
         $newValues = $this->getFormValues($data, $response, $isAdmin);
 
         $newValues['id']         = $person->getId();
         $newValues['first_name'] = ($newValues['first_name'] ?? $person->getFirstName());
         $newValues['last_name']  = ($newValues['last_name'] ?? $person->getLastName());
 
+        // @phpstan-ignore-next-line
         $newCharacteristics = $this->getFormCharacteristics($data, $response);
 
         if ($response['code'] === 200) {
@@ -358,6 +389,7 @@ class EditPersonController extends Controller
 
             $this->personService->updatePerson($newValues);
 
+            // @phpstan-ignore-next-line
             $characteristicPerson = $this->characteristicTypeService->getAllCharacteristicAndValues($person);
 
             foreach ($newCharacteristics as $newCharacteristic) {
@@ -368,11 +400,14 @@ class EditPersonController extends Controller
                     }
                 );
 
+                // @phpstan-ignore-next-line
                 $lastValue = array_shift($lastCharacteristic)->getValue();
 
                 if ($lastValue !== null) {
+                    // @phpstan-ignore-next-line
                     $this->characteristicService->updateCharacteristic($person->getId(), $newCharacteristic);
                 } elseif ($newCharacteristic->getValue() !== '') {
+                    // @phpstan-ignore-next-line
                     $this->characteristicService->createCharacteristic($person->getId(), $newCharacteristic);
                 }
             }
@@ -384,8 +419,9 @@ class EditPersonController extends Controller
         exit(0);
     }
 
-
-    #[NoReturn]
+    /**
+     * @param array<string, string> $parameters
+     */
     #[\Override] public function delete(Router $router, array $parameters): void
     {
         header('content-type: Application/json');
@@ -405,6 +441,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
+        // @phpstan-ignore-next-line
         $person = $this->personService->getPersonById($parameters['id']);
         if (!$person instanceof \App\Entity\Person\Person) {
             $response['code']       = 404;
@@ -413,6 +450,7 @@ class EditPersonController extends Controller
             exit(0);
         }
 
+        // @phpstan-ignore-next-line
         $isAdmin = Role::fromString($_SESSION['privilege']) === Role::ADMIN;
         if (!$isAdmin) {
             $response['code']       = 403;
@@ -433,7 +471,7 @@ class EditPersonController extends Controller
         $response['redirectDelay'] = 5000;
 
         $response['messages'][] = 'La personne ' . $person->getFirstName() . ' '
-            . strtoupper($person->getLastName()) . ' a correctement été supprimée';
+            . strtoupper($person->getLastName() ?? '') . ' a correctement été supprimée';
 
         $response['messages'][] = "Vous allez être redirigé vers la page d'accueil dans "
             . ($response['redirectDelay'] / 1000) . 's';

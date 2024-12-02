@@ -24,7 +24,7 @@ enum Type: int
 
 
     /**
-     * @return array<string, mixed> All the values of the enum
+     * @return array<int, array<string, string|int>> All the values of the enum
      * as an array with the id as key and the verbose name as value
      */
     public static function getValues(): array

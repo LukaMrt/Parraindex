@@ -16,7 +16,7 @@ class ResetpasswordConfirmationController extends Controller
 {
     /**
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      * @throws LoaderError if the template cannot be found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering

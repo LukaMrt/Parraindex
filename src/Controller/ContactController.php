@@ -43,7 +43,7 @@ class ContactController extends Controller
 
     /**
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      * @return void the function return nothing
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurred during the rendering
@@ -80,7 +80,7 @@ class ContactController extends Controller
 
     /**
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      * @return void the function return nothing
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurred during the rendering
@@ -90,13 +90,17 @@ class ContactController extends Controller
     public function get(Router $router, array $parameters): void
     {
         $people = $this->personService->getAllPeople();
-        usort($people, fn($a, $b): int => $a->getFirstName() !== '?' && $a->getFirstName() < $b->getFirstName() ? -1 : 1);
+        usort(
+            $people,
+            fn($a, $b): int => $a->getFirstName() !== '?' && $a->getFirstName() < $b->getFirstName() ? -1 : 1
+        );
         $closure = fn($person): array => [
             'id' => $person->getId(),
             'title' => ucfirst($person->getFirstName()) . ' ContactController.php' . strtoupper($person->getLastName())
         ];
         $people  = array_map($closure, $people);
 
+        // @phpstan-ignore-next-line
         $this->render('contact.html.twig', [
             'options' => Type::getValues(),
             'sponsorTypes' => [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur']],

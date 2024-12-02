@@ -50,7 +50,7 @@ abstract class Controller
      * Looks the method parameter to redirect to the right method
      * @param string $method the method to call
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
     public function call(string $method, Router $router, array $parameters): void
     {
@@ -75,7 +75,7 @@ abstract class Controller
     /**
      * Called when the HTTP method is POST
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
     public function post(Router $router, array $parameters): void
     {
@@ -85,7 +85,7 @@ abstract class Controller
     /**
      * Called when the HTTP method is PUT
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
     public function put(Router $router, array $parameters): void
     {
@@ -95,7 +95,7 @@ abstract class Controller
     /**
      * Called when the HTTP method is DELETE
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
     public function delete(Router $router, array $parameters): void
     {
@@ -105,7 +105,7 @@ abstract class Controller
     /**
      * Called when the HTTP method is GET
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
     public function get(Router $router, array $parameters): void
     {
@@ -115,7 +115,7 @@ abstract class Controller
     /**
      * Renders the twig template with the given parameters
      * @param string $template the template
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      * @throws LoaderError if the template cannot be found
      * @throws RuntimeError if an error occurs during the rendering
      * @throws SyntaxError if an error occurs during the rendering

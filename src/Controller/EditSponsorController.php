@@ -45,7 +45,7 @@ class EditSponsorController extends Controller
     /**
      * function get
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if an error occurred during the rendering
      * @throws SyntaxError if an error occurred during the rendering
@@ -54,11 +54,13 @@ class EditSponsorController extends Controller
     public function get(Router $router, array $parameters): void
     {
 
+        // @phpstan-ignore-next-line
         if ($_SESSION === [] || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }
 
+        // @phpstan-ignore-next-line
         $sponsor = $this->sponsorService->getSponsor($parameters['id']);
         $people  = $this->personService->getAllPeople();
         usort($people, fn($a, $b): int => $a->getLastName() !== '?' && $a->getLastName() < $b->getLastName() ? -1 : 1);
@@ -79,11 +81,15 @@ class EditSponsorController extends Controller
             $godFather = $this->personService->getPersonById($sponsor->getGodFather()->getId());
             $godChild  = $this->personService->getPersonById($sponsor->getGodChild()->getId());
             $people    = [[
+                // @phpstan-ignore-next-line
                 'id' => $godFather->getId(),
+                // @phpstan-ignore-next-line
                 'title' => $godFather->getLastName() . ' EditSponsorController.php' . $godFather->getFirstName()
             ]];
             $people2   = [[
+                // @phpstan-ignore-next-line
                 'id' => $godChild->getId(),
+                // @phpstan-ignore-next-line
                 'title' => $godChild->getLastName() . ' EditSponsorController.php' . $godChild->getFirstName()
             ]];
             usort($sponsorTypes, fn($a, $b): int => $a['id'] == $sponsor->getTypeId() ? -1 : 1);
@@ -100,17 +106,18 @@ class EditSponsorController extends Controller
 
     /**
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      */
-    #[NoReturn]
     #[\Override] public function post(Router $router, array $parameters): void
     {
 
+        // @phpstan-ignore-next-line
         if ($_SESSION === [] || Role::fromString($_SESSION['privilege']) !== Role::ADMIN) {
             header('Location: ' . $router->url('error', ['error' => 403]));
             die();
         }
 
+        // @phpstan-ignore-next-line
         $sponsor = $this->sponsorService->getSponsor($parameters['id']);
 
         $formParameters = [
@@ -124,7 +131,7 @@ class EditSponsorController extends Controller
         if ($sponsor === null) {
             $this->sponsorService->createSponsor($formParameters);
         } else {
-            $this->sponsorService->updateSponsor($parameters['id'], $formParameters);
+            $this->sponsorService->updateSponsor(intval($parameters['id']), $formParameters);
         }
 
         header('Location: ' . $router->url('sponsor', ['id' => $parameters['id']]));

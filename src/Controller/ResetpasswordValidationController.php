@@ -43,7 +43,7 @@ class ResetpasswordValidationController extends Controller
     /**
      * function get
      * @param Router $router the router
-     * @param array $parameters the parameters
+     * @param array<string, string> $parameters the parameters
      * @throws LoaderError if the template is not found
      * @throws RuntimeError if the password is not valid
      * @throws SyntaxError if the password is not valid

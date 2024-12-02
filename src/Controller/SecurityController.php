@@ -78,23 +78,30 @@ class SecurityController extends AbstractController
         }
 
         foreach ($form->getErrors(true) as $error) {
+            // @phpstan-ignore-next-line
             $this->addFlash('error', $error->getMessage());
         }
 
         return $this->render('register.html.twig', ['form' => $form]);
     }
 
-    private function handleForm(FormInterface $form, User $user): ?Response
+    private function handleForm(FormInterface $form, User $user): Response
     {
         /** @var string $password */
         $password = $form->get('password')->getData();
         // Get firstName and lastName from email
-        $emailParts = explode('@', $form->get('email')->getData());
+        $email = $form->get('email')->getData();
+        if (!is_string($email)) {
+            $this->addFlash('error', 'Email invalide');
+            return $this->redirectToRoute('register');
+        }
+
+        $emailParts = explode('@', $email);
         $emailParts = explode('.', $emailParts[0]);
 
-        $firstName  = ucfirst($emailParts[0]);
-        $lastName   = ucfirst($emailParts[1]);
-        $person     = $this->personRepository->findOneBy(['firstName' => $firstName, 'lastName' => $lastName]);
+        $firstName = ucfirst($emailParts[0]);
+        $lastName  = ucfirst($emailParts[1]);
+        $person    = $this->personRepository->findOneBy(['firstName' => $firstName, 'lastName' => $lastName]);
 
         if (null === $person) {
             $this->addFlash('error', 'Personne non trouvée');
@@ -115,7 +122,13 @@ class SecurityController extends AbstractController
                 ->htmlTemplate('registration/confirmation_email.html.twig')
         );
 
-        return $this->security->login($user, 'form_login', 'main');
+        $response = $this->security->login($user, 'form_login', 'main');
+
+        if ($response instanceof Response) {
+            return $response;
+        }
+
+        return $this->redirectToRoute('register_success');
     }
 
     #[Route('/register/verify', name: 'register_verify')]

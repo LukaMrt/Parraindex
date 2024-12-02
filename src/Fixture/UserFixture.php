@@ -22,7 +22,7 @@ class UserFixture extends Fixture
     public function load(ObjectManager $manager): void
     {
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA);
+        $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
         $user   = (new User())
             ->setEmail('luka.maret@etu.univ-lyon1.fr')
             ->setPerson($person)
@@ -36,7 +36,7 @@ class UserFixture extends Fixture
         $manager->persist($user);
 
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LILIAN);
+        $person = $this->getReference(PersonFixture::LILIAN, PersonFixture::class);
         $lilian = (new User())
             ->setEmail('lilian.baudry@etu.univ-lyon1.fr')
             ->setPerson($person)

@@ -9,12 +9,18 @@ use App\Entity\Person\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
+/**
+ * @extends Voter<string, Person>
+ */
 final class PersonVoter extends Voter
 {
     public const string PERSON_EDIT = 'PERSON_EDIT';
 
     public const string PERSON_DATA_DOWNLOAD = 'PERSON_DATA_DOWNLOAD';
 
+    /**
+     * @param Person $subject
+     */
     #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
