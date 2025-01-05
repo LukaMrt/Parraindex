@@ -1,0 +1,33 @@
+services:
+
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: sleep infinity
+    volumes:
+      - ../.:/Parraindex
+    ports:
+      - "${PHP_PORT}:8000"
+
+  database:
+    image: mysql:9.1
+    ports:
+      - "${DATABASE_PORT}:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    healthcheck:
+      test: [ "CMD", "mysqladmin" ,"ping", "-h", "localhost" ]
+      timeout: 20s
+      retries: 10
+    volumes:
+      - ../docker/db/data:/var/lib/mysql:rw
+
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "${MAIL_PORT}:1025"
+      - "${MAIL_WEB_PORT}:8025"
