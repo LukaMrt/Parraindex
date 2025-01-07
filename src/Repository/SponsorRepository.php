@@ -38,7 +38,7 @@ class SponsorRepository extends ServiceEntityRepository
             $sponsor->setCreatedAt(new \DateTimeImmutable());
         }
 
-        if (!$sponsor->getType() instanceof \App\Entity\Sponsor\Type) {
+        if (!$sponsor->getType() instanceof Type) {
             $sponsor->setType(Type::UNKNOWN);
         }
 

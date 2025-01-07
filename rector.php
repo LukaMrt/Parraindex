@@ -5,36 +5,44 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\ValueObject\SetList;
 use Rector\Symfony\Set\SymfonySetList;
 
-return static function (RectorConfig $rectorConfig): void {
-    $rectorConfig->paths([
+return RectorConfig::configure()
+    ->withRootFiles()
+    ->withPaths([
         __DIR__ . '/src',
         __DIR__ . '/tests',
-    ]);
-
-    $rectorConfig->sets([
-        SetList::CODE_QUALITY,
-        SetList::CODING_STYLE,
-        SetList::PHP_84,
-        SetList::DEAD_CODE,
-        SetList::TYPE_DECLARATION,
-        SetList::EARLY_RETURN,
-        SetList::PRIVATIZATION,
-        SetList::STRICT_BOOLEANS,
-        SetList::RECTOR_PRESET,
-        SetList::INSTANCEOF,
-
-        SymfonySetList::SYMFONY_71,
+    ])
+    ->withPhpSets()
+    ->withAttributesSets()
+    ->withDeadCodeLevel(80)
+    ->withCodeQualityLevel(80)
+    ->withTypeCoverageLevel(80)
+    ->withComposerBased(twig: true, doctrine: true, phpunit: true)
+    ->withPreparedSets(
+        deadCode: false,
+        codeQuality: false,
+        codingStyle: true,
+        typeDeclarations: false,
+        privatization: false,
+        naming: false,
+        instanceOf: true,
+        earlyReturn: true,
+        strictBooleans: true,
+        carbon: false,
+        rectorPreset: true,
+        phpunitCodeQuality: true,
+        doctrineCodeQuality: true,
+        symfonyCodeQuality: true,
+        symfonyConfigs: true,
+    )
+    ->withSets([
+        SymfonySetList::SYMFONY_72,
         SymfonySetList::SYMFONY_CODE_QUALITY,
         SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-        SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES,
         SymfonySetList::CONFIGS,
-
         PHPUnitSetList::PHPUNIT_110,
         PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-
         DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
         DoctrineSetList::DOCTRINE_CODE_QUALITY,
         DoctrineSetList::TYPED_COLLECTIONS,
@@ -42,13 +50,18 @@ return static function (RectorConfig $rectorConfig): void {
         DoctrineSetList::DOCTRINE_ORM_213,
         DoctrineSetList::DOCTRINE_DBAL_40,
         DoctrineSetList::DOCTRINE_BUNDLE_210,
-    ]);
-
-    // Optional: Exclude specific files or directories
-    $rectorConfig->skip([
+    ])
+    ->withSkip([
         __DIR__ . '/var',
         __DIR__ . '/vendor',
-    ]);
-
-    $rectorConfig->cacheDirectory(__DIR__ . '/var/cache/rector');
-};
+        __DIR__ . '/src/Application',
+        __DIR__ . '/src/Entity/old',
+        __DIR__ . '/src/Infrastructure',
+    ])
+    ->withImportNames(
+        importNames: true,
+        importDocBlockNames: true,
+        importShortClasses: false,
+        removeUnusedImports: true,
+    )
+    ->withCache(__DIR__ . '/var/cache/rector');

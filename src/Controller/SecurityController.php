@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use App\Entity\Person\User;
 use App\Form\RegistrationFormType;
 use App\Repository\PersonRepository;
@@ -38,7 +39,7 @@ class SecurityController extends AbstractController
         $error        = $this->authenticationUtils->getLastAuthenticationError();
         $lastUsername = $this->authenticationUtils->getLastUsername();
 
-        if ($error instanceof \Symfony\Component\Security\Core\Exception\AuthenticationException) {
+        if ($error instanceof AuthenticationException) {
             $this->addFlash('error', 'Identifiants incorrects');
         }
 

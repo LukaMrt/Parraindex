@@ -22,7 +22,7 @@ class DataController extends AbstractController
     {
         $person = $this->getPerson($person);
 
-        if (!$person instanceof \App\Entity\Person\Person) {
+        if (!$person instanceof Person) {
             return $this->json(
                 [
                     'data' => "Aucune donnée n'a été trouvée",

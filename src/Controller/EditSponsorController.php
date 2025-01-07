@@ -8,7 +8,6 @@ use App\Application\person\PersonService;
 use App\Application\sponsor\SponsorService;
 use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
-use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -20,12 +19,6 @@ use Twig\Error\SyntaxError;
 class EditSponsorController extends Controller
 {
     /**
-     * @var SponsorService the sponsor service
-     */
-    private SponsorService $sponsorService;
-
-
-    /**
      * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
@@ -35,10 +28,9 @@ class EditSponsorController extends Controller
         Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
-        SponsorService $sponsorService
+        private readonly SponsorService $sponsorService
     ) {
         parent::__construct($twigEnvironment, $router, $personService);
-        $this->sponsorService = $sponsorService;
     }
 
 

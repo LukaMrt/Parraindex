@@ -11,7 +11,6 @@ use App\Application\sponsor\SponsorService;
 use App\Entity\old\contact\PersonContact;
 use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
-use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 
 /**
@@ -19,22 +18,6 @@ use Twig\Environment;
  */
 class ContactCloseController extends Controller
 {
-    /**
-     * @var ContactService the contact service
-     */
-    private ContactService $contactService;
-
-    /**
-         * @var SponsorService the sponsor service
-     */
-    private SponsorService $sponsorService;
-
-    /**
-     * @ver SignupService the signup service
-     */
-    private SignupService $signupService;
-
-
     /**
      * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
@@ -47,14 +30,11 @@ class ContactCloseController extends Controller
         Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
-        ContactService $contactService,
-        SponsorService $sponsorService,
-        SignupService $signupService
+        private readonly ContactService $contactService,
+        private readonly SponsorService $sponsorService,
+        private readonly SignupService $signupService
     ) {
         parent::__construct($twigEnvironment, $router, $personService);
-        $this->contactService = $contactService;
-        $this->sponsorService = $sponsorService;
-        $this->signupService  = $signupService;
     }
 
 

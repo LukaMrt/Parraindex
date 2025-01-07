@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Person\Person;
 use App\Application\person\characteristic\CharacteristicService;
 use App\Application\person\characteristic\CharacteristicTypeService;
 use App\Application\person\PersonService;
@@ -11,7 +12,6 @@ use App\Entity\old\person\characteristic\Characteristic;
 use App\Entity\old\person\PersonBuilder;
 use App\Entity\Person\Role;
 use App\Infrastructure\old\router\Router;
-use JetBrains\PhpStorm\NoReturn;
 use Twig\Environment;
 use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
@@ -23,17 +23,6 @@ use Twig\Error\SyntaxError;
 class EditPersonController extends Controller
 {
     /**
-     * @var CharacteristicTypeService the characteristic type service
-     */
-    private CharacteristicTypeService $characteristicTypeService;
-
-    /**
-     * @var CharacteristicService the characteristic service
-     */
-    private CharacteristicService $characteristicService;
-
-
-    /**
      * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
@@ -44,12 +33,10 @@ class EditPersonController extends Controller
         Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
-        CharacteristicTypeService $characteristicTypeService,
-        CharacteristicService $characteristicService
+        private readonly CharacteristicTypeService $characteristicTypeService,
+        private readonly CharacteristicService $characteristicService
     ) {
         parent::__construct($twigEnvironment, $router, $personService);
-        $this->characteristicTypeService = $characteristicTypeService;
-        $this->characteristicService     = $characteristicService;
     }
 
     /**
@@ -69,7 +56,7 @@ class EditPersonController extends Controller
             $person = $this->personService->getPersonById(intval($parameters['id']));
 
             // throw error if person does not exist
-            if (!$person instanceof \App\Entity\Person\Person) {
+            if (!$person instanceof Person) {
                 header('Location: ' . $router->url('error', ['error' => 404]));
                 die();
             }
@@ -349,7 +336,7 @@ class EditPersonController extends Controller
 
         // @phpstan-ignore-next-line
         $person = $this->personService->getPersonById($parameters['id']);
-        if (!$person instanceof \App\Entity\Person\Person) {
+        if (!$person instanceof Person) {
             $response['code']       = 404;
             $response['messages'][] = "La personne n'existe pas";
             echo json_encode($response);
@@ -369,8 +356,8 @@ class EditPersonController extends Controller
         $newValues = $this->getFormValues($data, $response, $isAdmin);
 
         $newValues['id']         = $person->getId();
-        $newValues['first_name'] = ($newValues['first_name'] ?? $person->getFirstName());
-        $newValues['last_name']  = ($newValues['last_name'] ?? $person->getLastName());
+        $newValues['first_name'] ??= $person->getFirstName();
+        $newValues['last_name'] ??= $person->getLastName();
 
         // @phpstan-ignore-next-line
         $newCharacteristics = $this->getFormCharacteristics($data, $response);
@@ -395,9 +382,7 @@ class EditPersonController extends Controller
             foreach ($newCharacteristics as $newCharacteristic) {
                 $lastCharacteristic = array_filter(
                     $characteristicPerson,
-                    function ($c) use ($newCharacteristic): bool {
-                        return $c->getId() === $newCharacteristic->getId();
-                    }
+                    fn($c): bool => $c->getId() === $newCharacteristic->getId()
                 );
 
                 // @phpstan-ignore-next-line
@@ -443,7 +428,7 @@ class EditPersonController extends Controller
 
         // @phpstan-ignore-next-line
         $person = $this->personService->getPersonById($parameters['id']);
-        if (!$person instanceof \App\Entity\Person\Person) {
+        if (!$person instanceof Person) {
             $response['code']       = 404;
             $response['messages'][] = 'La personne n°' . $parameters['id'] . " n'existe pas";
             echo json_encode($response);

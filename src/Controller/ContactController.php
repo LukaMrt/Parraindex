@@ -19,12 +19,6 @@ use Twig\Error\SyntaxError;
 class ContactController extends Controller
 {
     /**
-     * @var ContactService the contact service
-     */
-    private ContactService $contactService;
-
-
-    /**
      * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
@@ -34,10 +28,9 @@ class ContactController extends Controller
         Environment $twigEnvironment,
         Router $router,
         PersonService $personService,
-        ContactService $contactService
+        private readonly ContactService $contactService
     ) {
         parent::__construct($twigEnvironment, $router, $personService);
-        $this->contactService = $contactService;
     }
 
 
@@ -54,22 +47,22 @@ class ContactController extends Controller
     {
 
         $formParameters = [
-            'type' => htmlspecialchars($_POST['type']),
-            'senderFirstName' => htmlspecialchars($_POST['senderFirstName']),
-            'senderLastName' => htmlspecialchars($_POST['senderLastName']),
-            'senderEmail' => htmlspecialchars($_POST['senderEmail']),
-            'creationFirstName' => htmlspecialchars($_POST['creationFirstName']),
-            'creationLastName' => htmlspecialchars($_POST['creationLastName']),
-            'entryYear' => htmlspecialchars($_POST['entryYear']),
-            'godFatherId' => htmlspecialchars($_POST['godFatherId']),
-            'godChildId' => htmlspecialchars($_POST['godChildId']),
-            'sponsorType' => htmlspecialchars($_POST['sponsorType']),
-            'sponsorDate' => htmlspecialchars($_POST['sponsorDate']),
-            'password' => htmlspecialchars($_POST['password']),
-            'passwordConfirm' => htmlspecialchars($_POST['passwordConfirm']),
-            'message' => htmlspecialchars($_POST['message']),
-            'personId' => htmlspecialchars($_POST['personId']),
-            'bonusInformation' => htmlspecialchars($_POST['bonusInformation'])
+            'type' => htmlspecialchars((string) $_POST['type']),
+            'senderFirstName' => htmlspecialchars((string) $_POST['senderFirstName']),
+            'senderLastName' => htmlspecialchars((string) $_POST['senderLastName']),
+            'senderEmail' => htmlspecialchars((string) $_POST['senderEmail']),
+            'creationFirstName' => htmlspecialchars((string) $_POST['creationFirstName']),
+            'creationLastName' => htmlspecialchars((string) $_POST['creationLastName']),
+            'entryYear' => htmlspecialchars((string) $_POST['entryYear']),
+            'godFatherId' => htmlspecialchars((string) $_POST['godFatherId']),
+            'godChildId' => htmlspecialchars((string) $_POST['godChildId']),
+            'sponsorType' => htmlspecialchars((string) $_POST['sponsorType']),
+            'sponsorDate' => htmlspecialchars((string) $_POST['sponsorDate']),
+            'password' => htmlspecialchars((string) $_POST['password']),
+            'passwordConfirm' => htmlspecialchars((string) $_POST['passwordConfirm']),
+            'message' => htmlspecialchars((string) $_POST['message']),
+            'personId' => htmlspecialchars((string) $_POST['personId']),
+            'bonusInformation' => htmlspecialchars((string) $_POST['bonusInformation'])
         ];
 
         $error = $this->contactService->registerContact($formParameters);
@@ -96,7 +89,7 @@ class ContactController extends Controller
         );
         $closure = fn($person): array => [
             'id' => $person->getId(),
-            'title' => ucfirst($person->getFirstName()) . ' ContactController.php' . strtoupper($person->getLastName())
+            'title' => ucfirst((string) $person->getFirstName()) . ' ContactController.php' . strtoupper((string) $person->getLastName())
         ];
         $people  = array_map($closure, $people);
 

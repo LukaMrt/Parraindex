@@ -18,31 +18,12 @@ use Twig\Error\SyntaxError;
 abstract class Controller
 {
     /**
-     * @var PersonService the person service
-     */
-    protected PersonService $personService;
-
-    /**
-     * @var Environment the twig environment
-     */
-    private Environment $twigEnvironment;
-
-    /**
-     * @var Router the router
-     */
-    private Router $router;
-
-
-    /**
      * @param Environment $twigEnvironment the twig environment
      * @param Router $router the router
      * @param PersonService $personService the person service
      */
-    public function __construct(Environment $twigEnvironment, Router $router, PersonService $personService)
+    public function __construct(private readonly Environment $twigEnvironment, private readonly Router $router, protected PersonService $personService)
     {
-        $this->twigEnvironment = $twigEnvironment;
-        $this->router          = $router;
-        $this->personService   = $personService;
     }
 
 
@@ -55,20 +36,12 @@ abstract class Controller
     public function call(string $method, Router $router, array $parameters): void
     {
 
-        switch ($method) {
-            case 'POST':
-                $this->post($router, $parameters);
-                break;
-            case 'PUT':
-                $this->put($router, $parameters);
-                break;
-            case 'DELETE':
-                $this->delete($router, $parameters);
-                break;
-            case 'GET':
-            default:
-                $this->get($router, $parameters);
-        }
+        match ($method) {
+            'POST' => $this->post($router, $parameters),
+            'PUT' => $this->put($router, $parameters),
+            'DELETE' => $this->delete($router, $parameters),
+            default => $this->get($router, $parameters),
+        };
     }
 
 

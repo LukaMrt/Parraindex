@@ -9,7 +9,7 @@ use App\Repository\CharacteristicRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: CharacteristicRepository::class)]
-class Characteristic
+class Characteristic implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
