@@ -22,7 +22,7 @@ parameters:
     checkUninitializedProperties: true
 
     # Report missing return types for methods and functions
-    checkMissingIterableValueType: true
+    # reportMissingReturnType: true
 
     # Enable stricter checks for arrays
     checkExplicitMixed: true
