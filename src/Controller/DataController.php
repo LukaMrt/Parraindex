@@ -17,7 +17,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class DataController extends AbstractController
 {
     #[Route(path: '/download/{id}', name: 'data_download')]
-    #[IsGranted(PersonVoter::PERSON_DATA_DOWNLOAD, subject: 'person')]
+    #[IsGranted(PersonVoter::DOWNLOAD_DATA, subject: 'person')]
     public function download(?Person $person): JsonResponse
     {
         $person = $this->getPerson($person);

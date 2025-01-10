@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/signupConfirmation.scss') %}
+{% set title = 'Parraindex - Email envoyé' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize']) }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="signup_confirm">
+        <p>
+            Si un compte associé à ce mail existe, un email vient d'être envoyé contenant un lien pour réinitialiser votre mot de passe.
+            Ce lien expirera dans {{ token.expirationMessageKey | trans(token.expirationMessageData, 'ResetPasswordBundle') }}.
+        </p>
+        <p>Sinon, veuillez vérifier votre dossier spam ou <a href="{{ path('forgot_password_request') }}">réessayer</a>.</p>
+    </div>
+
+{% endblock %}

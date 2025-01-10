@@ -1,3 +1,9 @@
+{% set classes = (classes ?? '') %}
+{%  set slug = ( slug ?? '') %}
+{% set title = (title ?? '') %}
+{% set options = (options ?? []) %}
+{% set default = (default ?? '') %}
+
 <div class="form__element {{ classes }}">
 
     <label class="form__element-label" for="{{ slug }}">{{ title }}</label>
@@ -5,9 +11,9 @@
     <select class="form__element-input form__element-input-select {{ classes }}" name="{{ slug }}" id="{{ slug }}"
             required>
 
-        {% for option in options %}
+        {% for id, title in options %}
 
-            <option class="form__select-option" value="{{ option.id }}">{{ option.title }}</option>
+            <option class="form__select-option" {% if title == default.title %} selected {% endif %} value="{{ id }}">{{ title }}</option>
 
         {% endfor %}
 

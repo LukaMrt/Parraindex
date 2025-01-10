@@ -1,6 +1,7 @@
 symfonycasts_sass:
   root_sass:
     - assets/styles/about.scss
+    - assets/styles/check_email.scss
     - assets/styles/contact.scss
     - assets/styles/contactAdmin.scss
     - assets/styles/editPerson.scss

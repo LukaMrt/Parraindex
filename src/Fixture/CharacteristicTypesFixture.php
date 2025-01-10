@@ -22,7 +22,7 @@ class CharacteristicTypesFixture extends Fixture
     #[\Override]
     public function load(ObjectManager $manager): void
     {
-        $characteristicType = (new CharacteristicType())
+        $characteristicType = new CharacteristicType()
             ->setType(Type::URL)
             ->setTitle('Github')
             ->setImage('github.svg')
@@ -31,7 +31,7 @@ class CharacteristicTypesFixture extends Fixture
         $manager->persist($characteristicType);
         $this->addReference(self::GITHUB, $characteristicType);
 
-        $type2 = (new CharacteristicType())
+        $type2 = new CharacteristicType()
             ->setType(Type::URL)
             ->setTitle('Instagram')
             ->setImage('instagram.svg')
@@ -40,7 +40,7 @@ class CharacteristicTypesFixture extends Fixture
         $manager->persist($type2);
         $this->addReference(self::INSTAGRAM, $type2);
 
-        $type3 = (new CharacteristicType())
+        $type3 = new CharacteristicType()
             ->setType(Type::EMAIL)
             ->setTitle('Email')
             ->setImage('mail.svg')
@@ -49,7 +49,7 @@ class CharacteristicTypesFixture extends Fixture
         $manager->persist($type3);
         $this->addReference(self::EMAIL, $type3);
 
-        $type4 = (new CharacteristicType())
+        $type4 = new CharacteristicType()
             ->setType(Type::PHONE)
             ->setTitle('Phone')
             ->setImage('telephone.svg')

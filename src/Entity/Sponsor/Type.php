@@ -15,8 +15,20 @@ enum Type: int
         return match ($this) {
             self::HEART   => 'Parrainage de coeur',
             self::CLASSIC => 'Parrainage IUT',
-            self::UNKNOWN => '',
+            self::UNKNOWN => 'Inconnu',
         };
+    }
+
+    /**
+     * @return array<int, string>
+     */
+    public static function allTitles(): array
+    {
+        return [
+            self::HEART->value   => 'Parrainage de coeur',
+            self::CLASSIC->value => 'Parrainage IUT',
+            self::UNKNOWN->value => 'Inconnu',
+        ];
     }
 
     public function getIcon(): string

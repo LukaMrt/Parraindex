@@ -51,27 +51,28 @@
 
                 <h2>PERSONNALISATION</h2>
 
-                <div class="public__personalization__choice" id="color-field">
+                <input type="hidden" id="color-choice" name="{{ field_name(form.color) }}" value="{{ field_value(form.color) }}">
 
+                <div class="public__personalization__choice" id="color-field">
                     <label style="background-color : #053259">
-                        <input type="radio" name="{{ field_name(form.color) }}" value="#053259">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#053259">
                     </label>
 
                     <label style="background-color : #A60303">
-                        <input type="radio" name="{{ field_name(form.color) }}" value="#A60303">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#A60303">
                     </label>
 
                     <label style="background-color : #03A62C">
-                        <input type="radio" name="{{ field_name(form.color) }}" value="#03A62C">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#03A62C">
                     </label>
 
                     <label style="background-color : #e0e0e0">
-                        <input checked type="radio" name="{{ field_name(form.color) }}" value="#e0e0e0">
+                        <input checked type="radio" name="_{{ field_name(form.color) }}" value="#e0e0e0">
                     </label>
 
                     <label for="color-picker" class="user-color" style="background-color : #e0e0e0">
-                        <input type="radio" name="{{ field_name(form.color) }}" value="#e0e0e0" id="radio-color-picker">
-                        <input type="color" name="{{ field_name(form.color) }}" id="color-picker" value="#e0e0e0">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#e0e0e0" id="radio-color-picker">
+                        <input type="color" name="_{{ field_name(form.color) }}" id="color-picker" value="#e0e0e0">
                     </label>
 
                 </div>
@@ -134,7 +135,9 @@
             <div class="confirm__action">
                 {% if app.user.admin %}
                     <button class="btn btn--secondary" type="button" id="delete-person">
-                        Supprimer
+                        <a href={{ url('person_delete', {id: person.id}) }}>
+                            Supprimer
+                        </a>
                     </button>
                 {% endif %}
 
@@ -144,7 +147,7 @@
 
                 <a id="download-person" href={{ url('data_download', {id: person.id}) }}>
                     <img src="{{ asset('images/icons/download.svg') }}"
-                         alt="Telechargement de toutes les données"
+                         alt="Téléchargement de toutes les données"
                          title="Télécharge toutes les données relative a cette personne"
                     >
                 </a>

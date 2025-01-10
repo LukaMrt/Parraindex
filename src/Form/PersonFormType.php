@@ -9,6 +9,8 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Form\FormEvent;
+use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -35,12 +37,8 @@ class PersonFormType extends AbstractType
                     ])
                 ],
             ])
-            ->add('characteristics', CollectionType::class, [
-                'entry_type'   => CharacteristicFormType::class,
-                'by_reference' => false,
-                'keep_as_list' => true,
-                'mapped'       => false,
-            ])
+            ->add('characteristics', CollectionType::class, ['entry_type' => CharacteristicFormType::class])
+            ->addEventListener(FormEvents::PRE_SUBMIT, fn (FormEvent $event) => $this->preSubmit($event))
         ;
     }
 
@@ -51,5 +49,27 @@ class PersonFormType extends AbstractType
             'data_class'         => Person::class,
             'allow_extra_fields' => true,
         ]);
+    }
+
+    private function preSubmit(FormEvent $event): void
+    {
+        /** @var array<string, mixed> $data */
+        $data = $event->getData();
+        /** @var array<array<string, string>> $characteristics */
+        $characteristics = $data['characteristics'] ?? [];
+
+        dump($data['picture']);
+        $data['characteristics'] = array_map(
+            fn (array $characteristic): array => [
+                'id'      => $characteristic['id'],
+                'visible' => ($characteristic['visible'] ?? '') === 'on',
+                'value'   => $characteristic['value'] ?? '',
+            ],
+            array_filter(
+                $characteristics,
+                fn (array $characteristic): bool => !empty($characteristic['id'])
+            ),
+        );
+        $event->setData($data);
     }
 }

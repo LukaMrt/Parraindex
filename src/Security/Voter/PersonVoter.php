@@ -14,34 +14,31 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 final class PersonVoter extends Voter
 {
-    public const string PERSON_EDIT = 'PERSON_EDIT';
+    public const string EDIT = 'RIGHT_PERSON_EDIT';
 
-    public const string PERSON_DATA_DOWNLOAD = 'PERSON_DATA_DOWNLOAD';
+    public const string DOWNLOAD_DATA = 'RIGHT_PERSON_DOWNLOAD_DATA';
 
-    /**
-     * @param Person $subject
-     */
     #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::PERSON_EDIT, self::PERSON_DATA_DOWNLOAD], true)
+        return in_array($attribute, [self::EDIT, self::DOWNLOAD_DATA], true)
             && $subject instanceof Person;
     }
 
     /**
-     * @param Person $subject
+     * @param ?Person $subject
      */
     #[\Override]
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
     {
         $user = $token->getUser();
 
-        if (!$user instanceof User) {
+        if (!$user instanceof User || !$subject instanceof Person) {
             return false;
         }
 
         return match ($attribute) {
-            self::PERSON_EDIT, self::PERSON_DATA_DOWNLOAD => $subject->getId() === $user->getPerson()?->getId(),
+            self::EDIT, self::DOWNLOAD_DATA => $subject->getId() === $user->getPerson()?->getId(),
             default => false,
         };
     }

@@ -16,21 +16,21 @@ class CharacteristicsFixture extends Fixture implements DependentFixtureInterfac
     #[\Override]
     public function load(ObjectManager $manager): void
     {
-        $characteristic = (new Characteristic())
+        $characteristic = new Characteristic()
             ->setType($this->getCharacteristicType(CharacteristicTypesFixture::GITHUB))
             ->setPerson($this->getPerson(PersonFixture::LUKA))
             ->setValue('LukaMrt')
             ->setVisible(true);
         $manager->persist($characteristic);
 
-        $characteristic2 = (new Characteristic())
+        $characteristic2 = new Characteristic()
             ->setType($this->getCharacteristicType(CharacteristicTypesFixture::INSTAGRAM))
             ->setPerson($this->getPerson(PersonFixture::LUKA))
             ->setValue('lukamrt')
             ->setVisible(false);
         $manager->persist($characteristic2);
 
-        $characteristic3 = (new Characteristic())
+        $characteristic3 = new Characteristic()
             ->setType($this->getCharacteristicType(CharacteristicTypesFixture::EMAIL))
             ->setPerson($this->getPerson(PersonFixture::LUKA))
             ->setValue('maret.luka@gmail.com')

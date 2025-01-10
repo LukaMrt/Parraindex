@@ -117,7 +117,7 @@ class SecurityController extends AbstractController
         $this->emailVerifier->sendEmailConfirmation(
             'register_verify',
             $user,
-            (new TemplatedEmail())
+            new TemplatedEmail()
                 ->to((string)$user->getEmail())
                 ->subject('Confirmez votre email')
                 ->htmlTemplate('registration/confirmation_email.html.twig')

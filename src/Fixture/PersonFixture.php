@@ -30,7 +30,7 @@ class PersonFixture extends Fixture
     #[\Override]
     public function load(ObjectManager $manager): void
     {
-        $person = (new Person())
+        $person = new Person()
             ->setFirstName('Luka')
             ->setLastName('Maret')
             ->setDescription('Je suis Luka')
@@ -42,7 +42,7 @@ class PersonFixture extends Fixture
         $manager->persist($person);
         $this->addReference(self::LUKA, $person);
 
-        $melvyn = (new Person())
+        $melvyn = new Person()
             ->setFirstName('Melvyn')
             ->setLastName('Delpree')
             ->setDescription('Je suis Melvyn')
@@ -54,7 +54,7 @@ class PersonFixture extends Fixture
         $manager->persist($melvyn);
         $this->addReference(self::MELVYN, $melvyn);
 
-        $vincent = (new Person())
+        $vincent = new Person()
             ->setFirstName('Vincent')
             ->setLastName('Chavot--Dambrun')
             ->setDescription('Je suis Vincent')
@@ -66,7 +66,7 @@ class PersonFixture extends Fixture
         $manager->persist($vincent);
         $this->addReference(self::VINCENT, $vincent);
 
-        $lilian = (new Person())
+        $lilian = new Person()
             ->setFirstName('Lilian')
             ->setLastName('Baudry')
             ->setDescription('Je suis Lilian')
@@ -78,7 +78,7 @@ class PersonFixture extends Fixture
         $manager->persist($lilian);
         $this->addReference(self::LILIAN, $lilian);
 
-        $godChild1 = (new Person())
+        $godChild1 = new Person()
             ->setFirstName('Godchild')
             ->setLastName('1')
             ->setDescription('Je suis fillot 1')
@@ -90,7 +90,7 @@ class PersonFixture extends Fixture
         $manager->persist($godChild1);
         $this->addReference(self::GOD_CHILD_1, $godChild1);
 
-        $godChild2 = (new Person())
+        $godChild2 = new Person()
             ->setFirstName('Godchild')
             ->setLastName('2')
             ->setDescription('Je suis fillot 2')
@@ -102,7 +102,7 @@ class PersonFixture extends Fixture
         $manager->persist($godChild2);
         $this->addReference(self::GOD_CHILD_2, $godChild2);
 
-        $godChild3 = (new Person())
+        $godChild3 = new Person()
             ->setFirstName('Godchild')
             ->setLastName('3')
             ->setDescription('Je suis fillot 3')
@@ -114,7 +114,7 @@ class PersonFixture extends Fixture
         $manager->persist($godChild3);
         $this->addReference(self::GOD_CHILD_3, $godChild3);
 
-        $godFather = (new Person())
+        $godFather = new Person()
             ->setFirstName('Godfather')
             ->setLastName('1')
             ->setDescription('Je suis parrain 1')

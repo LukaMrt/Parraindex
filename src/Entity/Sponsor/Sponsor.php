@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Sponsor;
 
 use App\Entity\Person\Person;
+use App\Entity\Sponsor\Type;
 use App\Repository\SponsorRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
@@ -42,7 +43,7 @@ class Sponsor
         return $this->id;
     }
 
-    public function getGodFather(): ?Person
+    public function getGodFather(): Person
     {
         return $this->godFather;
     }
@@ -54,7 +55,7 @@ class Sponsor
         return $this;
     }
 
-    public function getGodChild(): ?Person
+    public function getGodChild(): Person
     {
         return $this->godChild;
     }

@@ -20,7 +20,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
         $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
         /** @var Person $person2 */
         $person2  = $this->getReference(PersonFixture::GOD_CHILD_1, PersonFixture::class);
-        $sponsor1 = (new Sponsor())
+        $sponsor1 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)
             ->setDate(new \DateTime('2022-09-01'))
@@ -33,7 +33,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
         $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
         /** @var Person $person2 */
         $person2  = $this->getReference(PersonFixture::GOD_CHILD_2, PersonFixture::class);
-        $sponsor2 = (new Sponsor())
+        $sponsor2 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)
             ->setDate(new \DateTime('2022-09-01'))
@@ -46,7 +46,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
         $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
         /** @var Person $person2 */
         $person2  = $this->getReference(PersonFixture::GOD_CHILD_3, PersonFixture::class);
-        $sponsor3 = (new Sponsor())
+        $sponsor3 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)
             ->setDate(new \DateTime('2024-03-21'))
@@ -59,7 +59,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
         $person = $this->getReference(PersonFixture::GOD_FATHER, PersonFixture::class);
         /** @var Person $person2 */
         $person2  = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
-        $sponsor4 = (new Sponsor())
+        $sponsor4 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)
             ->setDate(new \DateTime('2021-09-01'))

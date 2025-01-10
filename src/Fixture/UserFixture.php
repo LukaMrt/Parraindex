@@ -23,7 +23,7 @@ class UserFixture extends Fixture
     {
         /** @var Person $person */
         $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
-        $user   = (new User())
+        $user   = new User()
             ->setEmail('luka.maret@etu.univ-lyon1.fr')
             ->setPerson($person)
             ->setRoles([Role::ADMIN, Role::USER])
@@ -37,7 +37,7 @@ class UserFixture extends Fixture
 
         /** @var Person $person */
         $person = $this->getReference(PersonFixture::LILIAN, PersonFixture::class);
-        $lilian = (new User())
+        $lilian = new User()
             ->setEmail('lilian.baudry@etu.univ-lyon1.fr')
             ->setPerson($person)
             ->setRoles([Role::USER])

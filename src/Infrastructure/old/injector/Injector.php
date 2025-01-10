@@ -42,9 +42,9 @@ use App\Controller\LogoutConfirmationController;
 use App\Controller\LogoutController;
 use App\Controller\PersonController;
 use App\Controller\RemoveSponsorController;
-use App\Controller\ResetpasswordConfirmationController;
-use App\Controller\ResetpasswordController;
-use App\Controller\ResetpasswordValidationController;
+use App\Controller\OldResetpasswordConfirmationController;
+use App\Controller\OldResetpasswordController;
+use App\Controller\OldResetpasswordValidationController;
 use App\Controller\SignUpConfirmationController;
 use App\Controller\SignUpController;
 use App\Controller\SignUpValidationController;
@@ -202,10 +202,10 @@ class Injector
         $this->router->registerRoute('GET', '/inscription/confirmation', $this->container->get(SignUpConfirmationController::class), 'signup_confirmation');
         $this->router->registerRoute('GET', '/inscription/validation/[*:token]', $this->container->get(SignUpValidationController::class), 'signup_validation');
 
-        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation', $this->container->get(ResetpasswordController::class), 'resetpassword_get');
-        $this->router->registerRoute('POST', '/mot-de-passe/reinitialisation', $this->container->get(ResetpasswordController::class), 'resetpassword_post');
-        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation/confirmation', $this->container->get(ResetpasswordConfirmationController::class), 'resetpassword_confirmation');
-        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation/validation/[*:token]', $this->container->get(ResetpasswordValidationController::class), 'resetpassword_validation');
+        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation', $this->container->get(OldResetpasswordController::class), 'resetpassword_get');
+        $this->router->registerRoute('POST', '/mot-de-passe/reinitialisation', $this->container->get(OldResetpasswordController::class), 'resetpassword_post');
+        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation/confirmation', $this->container->get(OldResetpasswordConfirmationController::class), 'resetpassword_confirmation');
+        $this->router->registerRoute('GET', '/mot-de-passe/reinitialisation/validation/[*:token]', $this->container->get(OldResetpasswordValidationController::class), 'resetpassword_validation');
 
         $this->router->registerRoute('GET', '/personne/[i:id]', $this->container->get(PersonController::class), 'person');
         $this->router->registerRoute('GET', '/personne/[i:id]/edition', $this->container->get(EditPersonController::class), 'editperson_get');

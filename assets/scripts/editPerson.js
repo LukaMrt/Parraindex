@@ -11,6 +11,7 @@ const field = {
     firstName: document.querySelector("#firstname-field"),
     colorPicker: document.querySelector("#color-picker"),
     radioColorPicker: document.querySelector("#radio-color-picker"),
+    colorChoice: document.querySelector("#color-choice"),
     characteristics: document.querySelector(".information__contact__characteristics"),
     sync: () => action.sync.classList.contains("active")
 }
@@ -113,6 +114,7 @@ function initColor() {
         }).join("");
 
         field.radioColorPicker.checked = true;
+        field.colorChoice.value = bannerColorHex;
         field.radioColorPicker.value = bannerColorHex;
         field.colorPicker.value = bannerColorHex;
         field.colorPicker.parentElement.style.backgroundColor = bannerColorHex;
@@ -247,8 +249,16 @@ field.picture.addEventListener("input", () => {
 field.colorPicker.addEventListener("input", e => {
     field.radioColorPicker.checked = true;
     field.radioColorPicker.value = e.target.value;
+    field.colorChoice.value = e.target.value;
     e.target.parentElement.style.backgroundColor = e.target.value;
 });
+
+for (const color of field.colors.children) {
+    // if label is clicked, check the input
+    color.addEventListener("click", () => {
+        field.colorChoice.value = color.children[0].value;
+    });
+}
 
 action.download.addEventListener("click", async e => {
 

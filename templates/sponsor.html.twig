@@ -20,8 +20,8 @@
             'sponsor': sponsor
         } %}
 
-        {% if ((app.user) ?? false) and app.user.admin %}
-            <a class="sponsor__actions" href="{{ url('home', {id: sponsor.id}) }}">
+        {% if ((app.user) ?? false) and (app.user.admin or app.user.id == sponsor.godFather.id or app.user.id == sponsor.godChild) %}
+            <a class="sponsor__actions" href="{{ url('sponsor_edit', {id: sponsor.id}) }}">
                 <img src="{{ asset('images/icons/pen.svg') }}" alt="modifier">
             </a>
         {% endif %}
