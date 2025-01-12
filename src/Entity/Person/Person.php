@@ -45,7 +45,7 @@ class Person
 
     #[ORM\Column(length: 255)]
     #[Assert\CssColor([Assert\CssColor::HEX_LONG])]
-    private ?string $color;
+    private string $color;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
@@ -86,9 +86,18 @@ class Person
         $this->color           = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
 
-    public function getId(): ?int
+    public function getId(): int
     {
-        return $this->id;
+        /** @var int $id */
+        $id = $this->id;
+        return $id;
+    }
+
+    public function setId(int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getFirstName(): string
@@ -307,9 +316,9 @@ class Person
         return $this;
     }
 
-    public function equals(Person $person): bool
+    public function equals(?Person $person): bool
     {
-        return $this->getId() === $person->getId();
+        return $person instanceof Person && $this->getId() === $person->getId();
     }
 
     /** @param CharacteristicType[] $allTypes */

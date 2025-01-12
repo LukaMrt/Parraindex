@@ -43,9 +43,18 @@ class Sponsor
         return $this->id;
     }
 
+    public function setId(?int $id): static
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getGodFather(): Person
     {
-        return $this->godFather;
+        /** @var Person $godFather */
+        $godFather = $this->godFather;
+        return $godFather;
     }
 
     public function setGodFather(?Person $person): static
@@ -57,7 +66,9 @@ class Sponsor
 
     public function getGodChild(): Person
     {
-        return $this->godChild;
+        /** @var Person $godChild */
+        $godChild = $this->godChild;
+        return $godChild;
     }
 
     public function setGodChild(?Person $person): static

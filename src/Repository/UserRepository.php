@@ -23,7 +23,7 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
 
     public function update(User $user): void
     {
-        if ($user->getCreatedAt() === null) {
+        if (!$user->getCreatedAt() instanceof \DateTimeInterface) {
             $user->setCreatedAt(new \DateTimeImmutable());
         }
 

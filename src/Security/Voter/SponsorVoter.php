@@ -36,6 +36,7 @@ final class SponsorVoter extends Voter
             if ($subject->getGodChild()->equals($user->getPerson())) {
                 return true;
             }
+
             return $subject->getGodFather()->equals($user->getPerson());
         }
 

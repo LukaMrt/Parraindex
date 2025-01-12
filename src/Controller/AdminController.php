@@ -19,8 +19,6 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -77,18 +75,29 @@ class AdminController extends AbstractController
                 break;
 
             case Type::UPDATE_PERSON:
+            case Type::CHOCKING_CONTENT:
                 $person = $this->personRepository->getByIdentity(
                     $contact->getRelatedPersonFirstName(),
                     $contact->getRelatedPersonLastName()
                 );
-                return $this->redirectToRoute('person_edit', ['id' => $person->getId()]);
+                if ($person instanceof Person) {
+                    return $this->redirectToRoute('person_edit', ['id' => $person->getId()]);
+                }
+
+                $this->addFlash('error', 'Personne non trouvée');
+                return $this->redirectToRoute('admin_contact');
 
             case Type::REMOVE_PERSON:
                 $person = $this->personRepository->getByIdentity(
                     $contact->getRelatedPersonFirstName(),
                     $contact->getRelatedPersonLastName()
                 );
-                $this->personRepository->delete($person);
+                if ($person instanceof Person) {
+                    $this->personRepository->delete($person);
+                } else {
+                    $this->addFlash('error', 'Personne non trouvée');
+                }
+
                 break;
 
             case Type::ADD_SPONSOR:
@@ -100,6 +109,11 @@ class AdminController extends AbstractController
                     $contact->getRelatedPerson2FirstName(),
                     $contact->getRelatedPerson2LastName()
                 );
+                if (!$person1 instanceof Person || !$person2 instanceof Person) {
+                    $this->addFlash('error', 'Personnes non trouvées');
+                    return $this->redirectToRoute('admin_contact');
+                }
+
                 $sponsor = new Sponsor()
                     ->setGodFather($person1)
                     ->setGodChild($person2)
@@ -118,10 +132,18 @@ class AdminController extends AbstractController
                     $contact->getRelatedPerson2FirstName(),
                     $contact->getRelatedPerson2LastName()
                 );
-                if ($person1 === null || $person2 === null) {
-                    throw $this->createNotFoundException('Personnes non trouvées');
+                if (!$person1 instanceof Person || !$person2 instanceof Person) {
+                    $this->addFlash('error', 'Personnes non trouvées');
+                    return $this->redirectToRoute('admin_contact');
                 }
+
                 $sponsor = $this->sponsorRepository->getByPeopleIds($person1->getId(), $person2->getId());
+
+                if (!$sponsor instanceof Sponsor) {
+                    $this->addFlash('error', 'Parrainage non trouvé');
+                    return $this->redirectToRoute('admin_contact');
+                }
+
                 return $this->redirectToRoute('sponsor_edit', ['id' => $sponsor->getId()]);
 
             case Type::REMOVE_SPONSOR:
@@ -133,25 +155,30 @@ class AdminController extends AbstractController
                     $contact->getRelatedPerson2FirstName(),
                     $contact->getRelatedPerson2LastName()
                 );
+                if (!$person1 instanceof Person || !$person2 instanceof Person) {
+                    $this->addFlash('error', 'Personnes non trouvées');
+                    return $this->redirectToRoute('admin_contact');
+                }
+
                 $sponsor = $this->sponsorRepository->getByPeopleIds($person1->getId(), $person2->getId());
+
+                if (!$sponsor instanceof Sponsor) {
+                    $this->addFlash('error', 'Parrainage non trouvé');
+                    return $this->redirectToRoute('admin_contact');
+                }
+
                 $this->sponsorRepository->delete($sponsor);
                 break;
-
-            case Type::CHOCKING_CONTENT:
-                $person = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPersonFirstName(),
-                    $contact->getRelatedPersonLastName()
-                );
-                return $this->redirectToRoute('person_edit', ['id' => $person->getId()]);
 
             case Type::PASSWORD:
                 $person = $this->personRepository->getByIdentity(
                     $contact->getContacterFirstName(),
                     $contact->getContacterLastName()
                 );
-                if ($person === null) {
+                if (!$person instanceof Person) {
                     throw $this->createNotFoundException('Personne non trouvée');
                 }
+
                 $user = new User()->setPerson($person)->setEmail($contact->getContacterEmail());
                 $user->setPassword($this->userPasswordHasher->hashPassword($user, $contact->getPassword()));
 

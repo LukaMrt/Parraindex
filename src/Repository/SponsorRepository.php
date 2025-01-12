@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
-use App\Entity\Person\Person;
 use App\Entity\Sponsor\Sponsor;
 use App\Entity\Sponsor\Type;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;

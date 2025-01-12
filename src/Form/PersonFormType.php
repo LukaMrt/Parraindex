@@ -58,7 +58,6 @@ class PersonFormType extends AbstractType
         /** @var array<array<string, string>> $characteristics */
         $characteristics = $data['characteristics'] ?? [];
 
-        dump($data['picture']);
         $data['characteristics'] = array_map(
             fn (array $characteristic): array => [
                 'id'      => $characteristic['id'],
@@ -67,7 +66,9 @@ class PersonFormType extends AbstractType
             ],
             array_filter(
                 $characteristics,
-                fn (array $characteristic): bool => !empty($characteristic['id'])
+                static fn(array $characteristic): bool => isset($characteristic['id'])
+                    && ($characteristic['id'] !== ''
+                    && $characteristic['id'] !== '0')
             ),
         );
         $event->setData($data);

@@ -123,9 +123,11 @@ class Contact
         return $this;
     }
 
-    public function getContacterFirstName(): ?string
+    public function getContacterFirstName(): string
     {
-        return $this->contacterFirstName;
+        /** @var string $contacterFirstName */
+        $contacterFirstName = $this->contacterFirstName;
+        return $contacterFirstName;
     }
 
     public function setContacterFirstName(string $contacterFirstName): static
@@ -135,9 +137,11 @@ class Contact
         return $this;
     }
 
-    public function getContacterLastName(): ?string
+    public function getContacterLastName(): string
     {
-        return $this->contacterLastName;
+        /** @var string $contacterLastName */
+        $contacterLastName = $this->contacterLastName;
+        return $contacterLastName;
     }
 
     public function setContacterLastName(string $contacterLastName): static
@@ -147,9 +151,11 @@ class Contact
         return $this;
     }
 
-    public function getContacterEmail(): ?string
+    public function getContacterEmail(): string
     {
-        return $this->contacterEmail;
+        /** @var string $contacterEmail */
+        $contacterEmail = $this->contacterEmail;
+        return $contacterEmail;
     }
 
     public function setContacterEmail(string $contacterEmail): static
@@ -231,7 +237,7 @@ class Contact
         return $this;
     }
 
-    public function getEntryYear(): ?int
+    public function getEntryYear(): int
     {
         return $this->entryYear ?? 2022;
     }
@@ -267,9 +273,9 @@ class Contact
         return $this;
     }
 
-    public function getSponsorType(): ?SponsorType
+    public function getSponsorType(): SponsorType
     {
-        return $this->sponsorType;
+        return $this->sponsorType ?? SponsorType::UNKNOWN;
     }
 
     public function setSponsorType(SponsorType $sponsorType): static

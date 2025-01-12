@@ -34,8 +34,13 @@ class ChangePasswordFormType extends AbstractType
                             'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
                             'max'        => 4096,
                         ]),
-                        new PasswordStrength(minScore: PasswordStrength::STRENGTH_WEAK, message: 'Le mot de passe est trop simple'),
-                        new NotCompromisedPassword(message: 'Ce mot de passe a déjà été compromis. Veuillez en choisir un autre'),
+                        new PasswordStrength(
+                            minScore: PasswordStrength::STRENGTH_WEAK,
+                            message: 'Le mot de passe est trop simple',
+                        ),
+                        new NotCompromisedPassword(
+                            message: 'Ce mot de passe a déjà été compromis. Veuillez en choisir un autre',
+                        ),
                     ],
                     'label' => 'New password',
                 ],

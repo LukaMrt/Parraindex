@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Form;
 
 use App\Entity\Contact\Contact;
@@ -61,7 +63,6 @@ class ContactType extends AbstractType
 
     private function preSubmit(PreSubmitEvent $event): void
     {
-        dump($event->getData());
         /** @var array<string, string> $data */
         $data = $event->getData();
 

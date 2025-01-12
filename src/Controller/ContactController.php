@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Controller;
 
 use App\Entity\Contact\Contact;
@@ -58,6 +60,7 @@ class ContactController extends AbstractController
         foreach ($form->getErrors(true) as $error) {
             $this->addFlash('error', $error->getMessage());
         }
+
         return $this->redirectToRoute('contact');
     }
 }
