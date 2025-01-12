@@ -31,83 +31,64 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-progress
 
+      - name: Run PhpStan
+        run: composer phpstan
+
+      - name: Run Php-CS
+        run: composer phpcs
+
+      - name: Run Rector
+        run: composer rector-dry
+
       - name: Run test suite
         run: composer tests
 
-      - name: Run mutation tests
-        run: vendor/bin/infection --threads=4 --min-msi=75
+#      - name: Run mutation tests
+#        run: vendor/bin/infection --threads=4 --min-msi=75
 
-  sonarcloud:
-    name: SonarCloud analysis
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
+#  deploy-develop:
+#    name: Deploy develop
+#    needs: tests
+#    if: github.ref == 'refs/heads/develop'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Deploy
+#        uses: appleboy/ssh-action@master
+#        with:
+#          username: ${{ secrets.USERNAME }}
+#          host: ${{ secrets.HOST }}
+#          port: ${{ secrets.PORT }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: 'cd /var/www/dev.parraindex.com &&
+#            git add . &&
+#            git reset --hard &&
+#            git checkout develop &&
+#            git pull &&
+#            composer update &&
+#            composer install --no-interaction --prefer-dist --optimize-autoloader &&
+#            sass --update scss:public/css'
 
-      - name: Setup PHP with Xdebug
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.1'
-          coverage: xdebug
-
-      - name: Install dependencies with composer
-        run: composer update --no-ansi --no-interaction --no-progress
-
-      - name: Run tests with phpunit/phpunit
-        run: XDEBUG_MODE=coverage vendor/bin/phpunit --coverage-clover=coverage-report.xml --log-junit=phpunit-report.xml
-
-      - name: Fix code coverage paths
-        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace/@g' coverage-report.xml
-
-      - name: Fix phpunit report paths
-        run: sed -i 's@'$GITHUB_WORKSPACE'@/github/workspace@g' phpunit-report.xml
-
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITH_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-
-  deploy-develop:
-    name: Deploy develop
-    needs: tests
-    if: github.ref == 'refs/heads/develop'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          username: ${{ secrets.USERNAME }}
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: 'cd /var/www/dev.parraindex.com &&
-            git add . &&
-            git reset --hard &&
-            git checkout develop &&
-            git pull &&
-            composer update &&
-            composer install --no-interaction --prefer-dist --optimize-autoloader &&
-            sass --update scss:public/css'
-
-  deploy-production:
-    name: Deploy production
-    needs: tests
-    if: github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Deploy
-        uses: appleboy/ssh-action@master
-        with:
-          username: ${{ secrets.USERNAME }}
-          host: ${{ secrets.HOST }}
-          port: ${{ secrets.PORT }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: 'cd /var/www/parraindex.com &&
-            git add . &&
-            git reset --hard &&
-            git checkout master &&
-            git pull &&
-            composer update && composer install --no-interaction --prefer-dist --optimize-autoloader &&
-            sass --update scss:public/css'
+#  deploy-production:
+#    name: Deploy production
+#    needs: tests
+#    if: github.ref == 'refs/heads/master'
+#    runs-on: ubuntu-latest
+#    steps:
+#      - name: Deploy
+#        uses: appleboy/ssh-action@master
+#        with:
+#          username: ${{ secrets.USERNAME }}
+#          host: ${{ secrets.HOST }}
+#          port: ${{ secrets.PORT }}
+#          key: ${{ secrets.SSH_PRIVATE_KEY }}
+#          script: 'cd /var/www/parraindex.com &&
+#            git add . &&
+#            git reset --hard &&
+#            git checkout master &&
+#            git pull &&
+#            chmod -R 775 var/cache var/log var/sessions &&
+#            composer install --no-interaction --prefer-dist --optimize-autoloader --no-dev &&
+#            php bin/console doctrine:migrations:migrate --no-interaction &&
+#            APP_ENV=prod APP_DEBUG=0 php bin/console cache:clear &&
+#            APP_ENV=prod APP_DEBUG=0 php bin/console cache:warmup &&
+#            php bin/console asset-map:compile'

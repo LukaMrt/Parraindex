@@ -1,0 +1,25 @@
+{% set classes = ( classes ?? '') %}
+{% set value = (value ?? '') %}
+{% set placeholder = (placeholder ?? '') %}
+{% set pattern = (pattern ?? null) %}
+{% set readonly = (readonly ?? false) %}
+
+<div class="form__element {{ classes }}">
+
+    <label class="form__element-label" for="{{ slug }}">{{ title }}</label>
+
+    <input class="form__element-input form__element-input-{{ type }} {{ classes }}"
+           type="{{ type }}"
+           name="{{ slug }}"
+           id="{{ slug }}"
+           placeholder="{{ placeholder }}"
+           value="{{ value }}"
+            {% if pattern is not null %}
+                pattern="{{ pattern }}"
+            {% endif %}
+            {% if readonly %}
+                readonly
+            {% endif %}
+           required>
+
+</div>

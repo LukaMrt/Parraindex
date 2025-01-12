@@ -1,0 +1,19 @@
+{% set classes = (classes ?? '') %}
+{%  set slug = ( slug ?? '') %}
+{% set title = (title ?? '') %}
+{% set options = (options ?? []) %}
+{% set value = (value ?? '') %}
+{% set placeholder = (placeholder ?? '') %}
+{% set required = (required ?? '') %}
+
+<div class="form__element {{ classes }}">
+
+    <label class="form__element-label" id="{{ slug }}-label" for="{{ slug }}">{{ title }}</label>
+
+    <textarea class="form__element-input form__element-input-textarea {{ classes }}"
+              name="{{ slug }}"
+              id="{{ slug }}"
+              placeholder="{{ placeholder }}"
+              {% if required is empty %}required{% endif %}>{{ value }}</textarea>
+
+</div>

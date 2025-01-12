@@ -1,15 +1,60 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ruleset name="MyProject">
+<ruleset name="Project Coding Standards">
+    <config name="testVersion" value="8.3"/>
 
-    <arg name="colors" />
-    <arg value="p" />
+    <arg name="colors"/>
+    <arg value="p"/>
 
+    <!-- Define the files and directories to analyze -->
     <file>src</file>
     <file>tests</file>
+
+    <!-- Exclude specific files or directories -->
+    <exclude-pattern>*/vendor/*</exclude-pattern>
+    <exclude-pattern>*/var/*</exclude-pattern>
+    <exclude-pattern>*/old/*</exclude-pattern>
+    <exclude-pattern>*/Application/*</exclude-pattern>
+
     <exclude-pattern>src/infrastructure/injector/Injector.php</exclude-pattern>
 
-    <rule ref="PSR12" />
+    <!-- Set the coding standard to use -->
+    <!-- You can use built-in standards like PSR12, PSR2, PEAR, Squiz, Zend, or custom ones -->
+    <rule ref="PSR12"/>
 
-    <rule ref="Generic.Arrays.DisallowLongArraySyntax"></rule>
+    <!-- Optional: Define specific sniffs to include or exclude -->
+    <rule ref="Generic.Formatting.MultipleStatementAlignment"/>
+    <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
+    <rule ref="Squiz.Functions.MultiLineFunctionDeclaration"/>
+    <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
+
+    <!-- Example of excluding a sniff -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="140"/>
+        </properties>
+    </rule>
+
+
+    <!-- Example of including a custom sniff -->
+    <!-- <rule ref="MyStandard.MyCustomSniff" /> -->
+
+    <!-- Set severity levels -->
+    <config name="severity" value="5"/>
+
+    <!-- Set the number of spaces for tabs -->
+    <config name="tab-width" value="4"/>
+
+    <!-- Report warnings in addition to errors -->
+    <config name="show_warnings" value="true"/>
+
+    <!-- Ignore specific error messages (if needed) -->
+    <ignore type="error">Found unused variable</ignore>
+
+    <!-- Allow extensions -->
+    <extensions>
+        <extension name="php"/>
+        <extension name="inc"/>
+    </extensions>
 
 </ruleset>

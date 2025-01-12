@@ -1,0 +1,8 @@
+framework:
+    mailer:
+        dsn: 'smtp://%env(MAIL_USER)%:%env(MAIL_PASSWORD)%@%env(MAIL_HOST)%:%env(MAIL_PORT)%'
+        envelope:
+            sender: '%env(MAIL_USER)%'
+        headers:
+            from: '%env(MAIL_NAME)% <%env(MAIL_USER)%>'
+            reply-to: '%env(MAIL_USER)%'

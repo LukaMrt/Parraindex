@@ -1,0 +1,22 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/signupValidation.scss') %}
+{% set title = 'Parraindex - Inscription' %}
+
+{% block javascripts %}
+{% endblock %}
+
+{% block content %}
+
+    {% if error is empty %}
+        <div class="signup_confirm">
+            <p>Votre inscription a été validée. Vous pouvez dès à présent <a href="{{ url('login') }}">vous
+                    connecter</a>.</p>
+        </div>
+    {% else %}
+        <div class="signup_confirm">
+            <p>Une erreur est survenue lors de la validation de votre inscription. Veuillez réessayer.</p>
+        </div>
+    {% endif %}
+
+{% endblock %}

@@ -1,0 +1,22 @@
+<section class="navbar">
+
+    <div class="searchbar">
+        <label for="searchbar-input"></label>
+        <input id="searchbar-input" class="name_filter" type="text" placeholder="Recherche">
+    </div>
+
+    <img src="{{ asset('images/icons/magnifier.svg') }}" alt="loupe" class="navbar__icon navbar__icon--search">
+
+    {% include('components/spinner.html.twig') %}
+
+    <img src="{{ asset('images/icons/gear.svg') }}" alt="paramètres" class="navbar__icon navbar__icon--filter">
+
+    <div class="filter">
+
+        <button class="btn btn--secondary alpha_filter">
+            ALPHABETIQUE
+        </button>
+
+    </div>
+
+</section>

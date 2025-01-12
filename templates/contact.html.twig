@@ -1,0 +1,168 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/contact.scss') %}
+{% set title = 'Parraindex - Contact' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize', 'contact']) }}
+{% endblock %}
+
+{% block content %}
+
+    <form class="form form--big" action="{{ url('contact_post') }}" method="post">
+
+        <h1 class="form__title">Formulaire de contact</h1>
+
+        <div class="form-content">
+
+            {% include "components/form/select.html.twig" with {
+                'slug': field_name(form.type),
+                'title': 'Objet du message',
+                'options': contactTypes,
+            } %}
+
+            <div class="form-block form-block--row">
+
+                {% include "components/form/input.html.twig" with {
+                    'type': 'text',
+                    'slug': field_name(form.contacterFirstName),
+                    'title': 'Votre prénom',
+                    'value': app.user ? app.user.person.firstName : '',
+                    'placeholder': 'John',
+                    'pattern': '.+',
+                    'readonly': app.user is not null
+                } %}
+
+                {% include "components/form/input.html.twig" with {
+                    'type': 'text',
+                    'slug': field_name(form.contacterLastName),
+                    'title': 'Votre nom',
+                    'value': app.user ? app.user.person.lastName : '',
+                    'placeholder': 'Doe',
+                    'pattern': '.+',
+                    'readonly': app.user is not null
+                } %}
+
+            </div>
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'email',
+                'slug': field_name(form.contacterEmail),
+                'title': 'Votre email',
+                'value': app.user ? app.user.email : '',
+                'placeholder': 'john.doe@gmail.com',
+                'pattern' : "^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$",
+                'readonly': app.user is not null
+            } %}
+
+            <div class="form-block form-block--row option option-0">
+
+                {% include "components/form/input.html.twig" with {
+                    'type': 'text',
+                    'slug': field_name(form.relatedPersonFirstName),
+                    'title': 'Prénom de la personne',
+                    'placeholder': 'John',
+                    'pattern': '.+',
+                    'classes': 'option option-0'
+                } %}
+
+                {% include "components/form/input.html.twig" with {
+                    'type': 'text',
+                    'slug': field_name(form.relatedPersonLastName),
+                    'title': 'Nom de la personne',
+                    'placeholder': 'Doe',
+                    'pattern': '.+',
+                    'classes': 'option option-0'
+                } %}
+
+            </div>
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'number',
+                'slug': field_name(form.entryYear),
+                'title': 'Année d\'entrée à l\'IUT',
+                'value': 'now' | date('Y'),
+                'pattern': "^(19|20)\d{2}$",
+                'classes': 'option option-0'
+            } %}
+
+            {% include "components/form/select.html.twig" with {
+                'slug': field_name(form.relatedPersonBis),
+                'title': 'Personne concernée',
+                'options': people,
+                'parent': '^[0-9]+$',
+                'classes': 'option option-1 option-2 option-7'
+            } %}
+
+            <div class="form-block form-block--row option option-3 option-4 option-5">
+
+                {% include "components/form/select.html.twig" with {
+                    'slug': field_name(form.relatedPerson),
+                    'title': 'Parrain',
+                    'options': people,
+                    'parent': '^[0-9]+$',
+                    'classes': 'option option-3 option-4 option-5'
+                } %}
+
+                {% include "components/form/select.html.twig" with {
+                    'slug': field_name(form.relatedPerson2),
+                    'title': 'Fillot',
+                    'options': people,
+                    'parent': '^[0-9]+$',
+                    'classes': 'option option-3 option-4 option-5'
+                } %}
+
+            </div>
+
+            {% include "components/form/select.html.twig" with {
+                'slug': field_name(form.sponsorType),
+                'title': 'Type de parrainage',
+                'options': sponsorTypes,
+                'parent': '^[0-9]$',
+                'classes': 'option option-3'
+            } %}
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'date',
+                'slug': field_name(form.sponsorDate),
+                'title': 'Date du parrainage',
+                'pattern': '.+',
+                'classes': 'option option-3'
+            } %}
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'password',
+                'slug': field_name(form.password.first),
+                'title': 'Mot de passe',
+                'placeholder': '••••••••••',
+                'pattern': '.+',
+                'classes': 'option option-9'
+            } %}
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'password',
+                'slug': field_name(form.password.second),
+                'title': 'Confirmation du mot de passe',
+                'placeholder': '••••••••••',
+                'pattern': '.+',
+                'classes': 'option option-9'
+            } %}
+
+            {% include "components/form/textarea.html.twig" with {
+                'slug': field_name(form.description),
+                'title': 'Message',
+                'pattern': '.+',
+                'classes': 'option option-1 option-2 option-3 option-4 option-5 option-6 option-7 option-8 option-9'
+            } %}
+
+            {% include "components/button.html.twig" with {
+                'type': 'submit',
+                'button_content': 'Envoyer',
+                'priority': 'primary'
+            } %}
+
+        </div>
+
+    </form>
+
+{% endblock %}

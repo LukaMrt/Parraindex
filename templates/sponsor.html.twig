@@ -1,0 +1,31 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/sponsor.scss') %}
+{% set title = 'Parraindex - Lien' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize', 'sponsor']) }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="sponsor">
+        <h1>{{ sponsor.type.title }}</h1>
+
+        {% include 'components/sponsor.html.twig' with {
+            'sponsor': sponsor,
+        } %}
+
+        {% include 'components/sponsor-description.html.twig' with {
+            'sponsor': sponsor
+        } %}
+
+        {% if ((app.user) ?? false) and (app.user.admin or app.user.id == sponsor.godFather.id or app.user.id == sponsor.godChild) %}
+            <a class="sponsor__actions" href="{{ url('sponsor_edit', {id: sponsor.id}) }}">
+                <img src="{{ asset('images/icons/pen.svg') }}" alt="modifier">
+            </a>
+        {% endif %}
+    </div>
+
+
+{% endblock %}

@@ -1,0 +1,15 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/tree.scss') %}
+{% set title = 'Parraindex - Affichage' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize', 'carousel']) }}
+{% endblock %}
+
+{% block content %}
+
+    {% include('components/carousel.html.twig') %}
+    {% include('components/carousel-controller.html.twig') %}
+
+{% endblock %}

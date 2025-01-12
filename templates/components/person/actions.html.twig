@@ -1,0 +1,17 @@
+<div class="person-actions">
+
+    <a class="person-action__wrapper" href="{{ url('tree') }}">
+        <img class="person-actions__image person-actions__image--rotate" src="{{ asset('images/icons/up.svg') }}" alt="Retour">
+    </a>
+
+    {% if person.id == app.user.id ?? -1 or app.user.admin ?? false %}
+        <a class="person-action__wrapper" href="{{ url('person_edit', {'id': person.id}) }}">
+            <img class="person-actions__image" src="{{ asset('images/icons/pen.svg') }}" alt="Editer">
+        </a>
+    {% endif %}
+
+    <a class="person-action__wrapper" href="{{ url('contact') }}">
+        <img class="person-actions__image" src="{{ asset('images/icons/report.svg') }}" alt="Report">
+    </a>
+
+</div>
