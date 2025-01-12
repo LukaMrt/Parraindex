@@ -103,6 +103,9 @@
         "rector": [
             "php vendor/bin/rector process"
         ],
+        "rector-dry": [
+            "php vendor/bin/rector process --dry-run"
+        ],
         "phpstan": [
             "php vendor/bin/phpstan --memory-limit=1G"
         ],
