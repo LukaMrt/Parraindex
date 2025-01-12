@@ -16,6 +16,16 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup PHP 8.4
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: curl, pdo_mysql, bcmath, ctype, date, fileinfo, gd, gmp, iconv, intl, json, mbstring, openssl, pcre, PDO, random, zip, zlib
+
+      - name: Set up temporary .env file
+        run: cp .env.example .env
+
+
       - name: Validate composer.json and composer.lock
         run: composer validate --strict
 
@@ -41,7 +51,7 @@ jobs:
         run: composer rector-dry
 
       - name: Run test suite
-        run: composer tests
+        run: composer test
 
 #      - name: Run mutation tests
 #        run: vendor/bin/infection --threads=4 --min-msi=75

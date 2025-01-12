@@ -1,4 +1,6 @@
 {
+    "name": "lukamrt/parraindex",
+    "description": "School project that stores the list of godfathers and godchildren at the IUT Lyon 1",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
@@ -146,6 +148,7 @@
         }
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^8.2",
         "doctrine/doctrine-fixtures-bundle": "4.0.*",
         "infection/infection": "^0.29.8",
         "phpstan/phpstan": "2.1.*",
