@@ -1,0 +1,11 @@
+{% set type = (type ?? 'button') %}
+{% set priority = (priority ?? 'primary') %}
+{% set name = (name ?? '') %}
+{% set value = (value ?? '') %}
+{% set button_content = (button_content ?? '') %}
+
+<button type="{{ type }}" class="btn btn--{{ priority }}" name="{{ name }}" value="{{ value }}">
+    <strong>
+        {{ button_content }}
+    </strong>
+</button>

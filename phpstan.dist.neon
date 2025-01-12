@@ -1,0 +1,35 @@
+parameters:
+    # Directories to be analyzed
+    paths:
+        - src
+#        - tests
+
+    # Level 0 is the loosest, level 9 is the strictest
+    level: max
+
+    # Exclude specific files or directories from analysis
+    excludePaths:
+        - */old/*
+        - */Application/*
+
+    # Custom rules or extensions
+    # E.g., if using Doctrine, Symfony, or other integrations, add the necessary extensions
+    # extensions:
+    #     - vendor/phpstan/phpstan-doctrine/extension.neon
+    #     - vendor/phpstan/phpstan-symfony/extension.neon
+
+    # Report uninitialized properties
+    checkUninitializedProperties: true
+
+    # Report missing return types for methods and functions
+    # reportMissingReturnType: true
+
+    # Enable stricter checks for arrays
+    checkExplicitMixed: true
+
+    # Ignore specific error messages (if needed)
+#    ignoreErrors:
+
+    # If using Symfony, set up container parameters
+    # symfony:
+    #     container_xml_path: %currentWorkingDirectory%/var/cache/dev/App_KernelDevDebugContainer.xml

@@ -1,0 +1,161 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/editPerson.scss') %}
+{% set title = 'Parraindex - Edition personne' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize', 'editPerson']) }}
+{% endblock %}
+
+{% block content %}
+
+    <form class="edit-person" action="{{ url('person_edit_post', {id: person.id}) }}" method="post">
+
+        <div class="description">
+
+            <div class="description__biography">
+                <h2>BIOGRAPHIE</h2>
+                <textarea name="{{ field_name(form.biography) }}" id="bio-field"
+                          cols="30" rows="10"
+                          placeholder="Courte présentation qui apparaîtra sur votre carte"
+                >{{ field_value(form.biography) }}</textarea>
+            </div>
+
+            <div class="description__actions">
+                <img src="{{ asset('images/icons/chain.svg') }}" class="sync"
+                     alt="Synchronisation des champs"
+                     title="Synchronise les champs 'Biographie' et 'A propos'"
+                >
+
+                <img src="{{ asset('images/icons/reverse.svg') }}" class="invert"
+                     alt="Inversion des champs"
+                     title="Inverse les champs 'Biographie' et 'A propos'"
+                >
+            </div>
+
+            <div class="description__about">
+                <h2>À PROPOS</h2>
+                <textarea name="{{ field_name(form.description) }}" id="about-field"
+                          cols="30" rows="10"
+                          placeholder="Longue présentation qui apparaîtra sur votre page personnelle"
+                >{{ field_value(form.description) }}</textarea>
+            </div>
+
+        </div>
+
+        <div class="public">
+
+            {% include 'components/card.html.twig' with {'person': person} %}
+
+            <div class="public__personalization">
+
+                <h2>PERSONNALISATION</h2>
+
+                <input type="hidden" id="color-choice" name="{{ field_name(form.color) }}" value="{{ field_value(form.color) }}">
+
+                <div class="public__personalization__choice" id="color-field">
+                    <label style="background-color : #053259">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#053259">
+                    </label>
+
+                    <label style="background-color : #A60303">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#A60303">
+                    </label>
+
+                    <label style="background-color : #03A62C">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#03A62C">
+                    </label>
+
+                    <label style="background-color : #e0e0e0">
+                        <input checked type="radio" name="_{{ field_name(form.color) }}" value="#e0e0e0">
+                    </label>
+
+                    <label for="color-picker" class="user-color" style="background-color : #e0e0e0">
+                        <input type="radio" name="_{{ field_name(form.color) }}" value="#e0e0e0" id="radio-color-picker">
+                        <input type="color" name="_{{ field_name(form.color) }}" id="color-picker" value="#e0e0e0">
+                    </label>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="information">
+
+            {% if app.user.admin %}
+                <div class="information__personal">
+                    <h2>PERSONNEL</h2>
+
+                    <div class="information__personal__data">
+                        <div>
+                            <label for="firstname-field">PRENOM</label>
+                            <input type="text" name="{{ field_name(form.firstName) }}" id="firstname-field"
+                                   value="{{ field_value(form.firstName) }}">
+                        </div>
+
+                        <div>
+                            <label for="lastname-field">NOM</label>
+                            <input type="text" name="{{ field_name(form.lastName) }}" id="lastname-field"
+                                   value="{{ field_value(form.lastName) }}">
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+
+            <div class="information__contact">
+                <h2>CONTACT</h2>
+
+                <div class="information__contact__characteristics" id="contact-field">
+
+                    {% set i = 0 %}
+                    {% for characteristic in person.characteristics %}
+                        {% include 'components/characteristic.html.twig' with {
+                            'characteristic': form.characteristics[i],
+                            'label': characteristic.type.title,
+                        } %}
+                        {% set i = i + 1 %}
+                    {% endfor %}
+
+                </div>
+            </div>
+        </div>
+
+        {% include 'components/modal-picture.html.twig' with {
+            'person': person,
+            'field': form.picture,
+        } %}
+
+        <nav class='confirm'>
+
+            <a href="{{ url('person', {id: person.id}) }}" class="confirm__prev">
+                <img src="{{ asset('images/icons/up.svg') }}" alt="retour">
+            </a>
+
+            <div class="confirm__action">
+                {% if app.user.admin %}
+                    <button class="btn btn--secondary" type="button" id="delete-person">
+                        <a href={{ url('person_delete', {id: person.id}) }}>
+                            Supprimer
+                        </a>
+                    </button>
+                {% endif %}
+
+                <button class="btn btn--primary" type="submit" id="save-person">
+                    Enregistrer
+                </button>
+
+                <a id="download-person" href={{ url('data_download', {id: person.id}) }}>
+                    <img src="{{ asset('images/icons/download.svg') }}"
+                         alt="Téléchargement de toutes les données"
+                         title="Télécharge toutes les données relative a cette personne"
+                    >
+                </a>
+
+            </div>
+
+        </nav>
+
+    </form>
+
+{% endblock %}

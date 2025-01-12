@@ -1,0 +1,46 @@
+<div class="person-family">
+
+    <p class="person-family__title">
+        Parrains
+    </p>
+
+    <div class="person-family__wrapper">
+
+        {% for sponsor in person.godFathers %}
+            {% set godFather = sponsor.godfather %}
+            <a href="{{ url('sponsor', {'id': sponsor.id}) }}"
+               class="person-family__portrait person-family__portrait--godfather">
+                <img src="{{ asset('images/pictures/' ~ godFather.picture) }}" alt="{{ godFather.firstName }}"
+                     class="person-family__portrait-image">
+
+                <p class="person-family__portrait-name">
+                    {{ godFather.firstName }}
+                    <br>
+                    {{ godFather.lastName }}
+                </p>
+            </a>
+        {% endfor %}
+
+        <img src="{{ asset('images/pictures/' ~ person.picture) }}" alt="{{ person.firstName }}" class="person-family__portrait--personal"
+             style="background-color : {{ person.color }}">
+
+        {% for sponsor in person.godChildren %}
+            {% set godChild = sponsor.godChild %}
+            <a href="{{ url('sponsor', {'id': sponsor.id}) }}"
+               class="person-family__portrait person-family__portrait--godchild">
+                <img src="{{ asset('images/pictures/' ~ godChild.picture) }}" alt="{{ godChild.firstName }}"
+                     class="person-family__portrait-image">
+                <p class="person-family__portrait-name">
+                    {{ godChild.firstName }}
+                    <br>
+                    {{ godChild.lastName }}
+                </p>
+            </a>
+        {% endfor %}
+    </div>
+
+    <p class="person-family__title person-family__title--second">
+        Fillots
+    </p>
+
+</div>

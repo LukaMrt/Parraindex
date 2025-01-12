@@ -1,3 +1,27 @@
+###> symfony/framework-bundle ###
+/.env
+/.env.example
+/.env.local
+/.env.test
+/.env.local.php
+/.env.*.local
+/config/secrets/prod/prod.decrypt.private.php
+/public/bundles/
+/var/
+/vendor/
+###< symfony/framework-bundle ###
+
+###> phpunit/phpunit ###
+/phpunit.xml
+.phpunit.result.cache
+###< phpunit/phpunit ###
+
+###> symfony/asset-mapper ###
+/public/assets/
+/assets/vendor/
+###< symfony/asset-mapper ###
+
+
 ### VisualStudioCode template
 .vscode/*
 !.vscode/settings.json
@@ -84,10 +108,6 @@ fabric.properties
 
 .idea
 
-/vendor/
-
-.phpunit.result.cache
-
 composer.phar
 
 .env
@@ -97,7 +117,6 @@ public/style/*
 public/img/pictures/*
 var/
 .phpdoc/
-composer.lock
 phpunit-report.xml
 coverage-report.xml
 
@@ -106,3 +125,14 @@ coverage-report.xml
 *.css
 
 *.map
+
+docker/
+
+###> phpstan/phpstan ###
+phpstan.neon
+###< phpstan/phpstan ###
+
+###> squizlabs/php_codesniffer ###
+/.phpcs-cache
+/phpcs.xml
+###< squizlabs/php_codesniffer ###

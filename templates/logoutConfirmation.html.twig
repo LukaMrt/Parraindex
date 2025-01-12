@@ -1,0 +1,17 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/signupConfirmation.scss') %}
+{% set title = 'Parraindex - Inscription' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize', 'logoutConfirmation']) }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="signup_confirm">
+        <p>Vous avez bien été déconnecté</p>
+        <a href="{{ url('home') }}">Cliquez ici si vous n'êtes pas automatiquement redirigé</a>
+    </div>
+
+{% endblock %}

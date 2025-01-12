@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/person.scss') %}
+{% set title = 'Parraindex -  ' ~ person.firstName %}
+{% set admin = admin ?? false %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize', 'person']) }}
+{% endblock %}
+
+{% block content %}
+
+    <div class="person-content">
+
+        <div class="person-content__description">
+            {% include 'components/person/family.html.twig' with {
+                'person': person,
+            } %}
+
+            {% include 'components/person/description.html.twig' with {
+                'person': person,
+            } %}
+        </div>
+
+        {% include 'components/person/actions.html.twig' with {
+            'person': person
+        } %}
+
+    </div>
+
+
+{% endblock %}

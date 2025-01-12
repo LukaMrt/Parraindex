@@ -1,0 +1,52 @@
+{% set error = '' %}
+{% set success = '' %}
+
+<!DOCTYPE html>
+<html lang="fr-FR" class="bg-white">
+
+<head>
+    <base href=".">
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {{ title }}
+    </title>
+
+    <link rel="stylesheet" href="{{ style }}">
+    <link rel="icon" type="image/x-icon" href="{{ asset('images/icons/logo-blue.svg') }}">
+
+    {% block javascripts %}
+        {{  importmap(['common', 'popupInitialize']) }}
+    {% endblock %}
+</head>
+
+<body>
+
+{% set errors = app.flashes('error') %}
+{% set success = app.flashes('success') %}
+
+{% if errors|length > 0 %}
+    {% include "components/popup.html.twig" with {
+        'type': 'error',
+        'message': errors|first,
+    } %}
+{% endif %}
+
+{% if errors|length == 0 and success|length > 0 %}
+    {% include "components/popup.html.twig" with {
+        'type': 'success',
+        'message': success|first,
+    } %}
+{% endif %}
+
+{% include 'templates/header.html.twig' %}
+
+<main>
+    {% block content %}{% endblock %}
+</main>
+
+</body>
+
+</html>

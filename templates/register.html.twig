@@ -1,0 +1,68 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/signup.scss') %}
+{% set title = 'Parraindex - Inscription' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize', 'signup']) }}
+{% endblock %}
+
+{% block content %}
+
+    <form class="form" action="{{ url('register_handle') }}" method="post">
+
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('register') }}">
+
+        <h1 class="form__title">Inscription</h1>
+
+        <div class="form-content">
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'email',
+                'slug': field_name(form.email),
+                'value': field_value(form.email),
+                'title': 'Email universitaire',
+                'placeholder': 'john.doe@etu.univ-lyon1.fr',
+                'pattern' : "^[a-zA-Z0-9._-]+\.[a-zA-Z0-9._-]+@etu.univ-lyon1.fr$",
+            } %}
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'password',
+                'slug': field_name(form.password.first),
+                'value': field_value(form.password.first),
+                'title': 'Mot de passe',
+                'placeholder': '••••••••••',
+            } %}
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'password',
+                'slug': field_name(form.password.second),
+                'value': field_value(form.password.second),
+                'title': 'Répétez le mot de passe',
+                'placeholder': '••••••••••',
+            } %}
+
+            <div class="form-block form-block--row form-block--space-around">
+
+                {% include "components/link.html.twig" with{
+                    'option': 'link-wrapper',
+                    'prefix': 'Vous avez déjà un compte ?',
+                    'title': 'Connectez-vous',
+                    'href': url('login')
+                } %}
+
+                {% include "components/button.html.twig" with {
+                    'type': 'submit',
+                    'button_content': 'Envoyer',
+                    'priority': 'primary',
+                    'name': 'action',
+                    'value': 'register'
+                } %}
+
+            </div>
+
+        </div>
+
+    </form>
+
+{% endblock %}

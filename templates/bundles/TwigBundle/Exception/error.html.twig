@@ -1,0 +1,20 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/error.scss') %}
+{% set title = 'Parraindex - Erreur' %}
+
+{% block content %}
+
+    <div class="error-block">
+
+        <img class="error-block__background" src="{{ asset('images/icons/triangle.svg') }}" alt="">
+
+        <h1 class="error-block__title">{{ status_code }}</h1>
+
+        <p class="error-block__message">{{ status_text }}</p>
+
+    </div>
+
+    {% include 'templates/navbar.html.twig' %}
+
+{% endblock %}

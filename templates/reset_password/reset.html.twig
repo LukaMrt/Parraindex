@@ -1,0 +1,51 @@
+{% extends 'layouts/base.html.twig' %}
+
+{% set style = asset('styles/login.scss') %}
+{% set title = 'Parraindex - Réinitialisez votre mot de passe' %}
+
+{% block javascripts %}
+    {{  importmap(['common', 'popupInitialize']) }}
+{% endblock %}
+
+{% block content %}
+
+    <form class="form" action="{{ url("reset_password") }}" method="post">
+
+        <h1 class="form__title">Réinitialisez votre mot de passe</h1>
+
+        <div class="form-content">
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'password',
+                'slug': field_name(form.plainPassword.first),
+                'value': field_value(form.plainPassword.first),
+                'title': 'Mot de passe',
+                'placeholder': '••••••••••',
+            } %}
+
+            {% include "components/form/input.html.twig" with {
+                'type': 'password',
+                'slug': field_name(form.plainPassword.second),
+                'value': field_value(form.plainPassword.second),
+                'title': 'Répétez le mot de passe',
+                'placeholder': '••••••••••',
+            } %}
+
+            <div class="form-block form-block--row form-block--space-around">
+                {% include "components/button.html.twig" with {
+                    'type': 'submit',
+                    'button_content': 'Réinitialisez votre mot de passe',
+                    'priority': 'primary',
+                    'name': 'action',
+                    'value': 'login',
+                    'classes': '',
+                    'value': '',
+                    'readonly': false,
+                } %}
+            </div>
+
+        </div>
+
+    </form>
+
+{% endblock %}

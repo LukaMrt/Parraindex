@@ -1,0 +1,16 @@
+<section class="carousel">
+    <div class="carousel__slider">
+
+        {% for person in people %}
+            {% include 'components/card.html.twig' with {'person': person} %}
+        {% endfor %}
+
+    </div>
+</section>
+
+<nav class="scrollbar">
+    <span class="scrollbar__min">1</span>
+    <label for="scrollbar-input"></label>
+    <input id="scrollbar-input" type="range" class="scrollbar__cursor" step=0.01>
+    <span class="scrollbar__max">1</span>
+</nav>

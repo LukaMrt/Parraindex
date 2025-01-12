@@ -1,0 +1,31 @@
+{% set trans_day_hash = {
+    "January": "janvier",
+    "February": "février",
+    "March": "mars",
+    "April": "avril",
+    "May": "mai",
+    "June": "juin",
+    "July": "juillet",
+    "August": "août",
+    "September": "septembre",
+    "October": "octobre",
+    "November": "novembre",
+    "December": "décembre"
+} %}
+
+<div class="sponsor__content">
+
+    {% include 'components/card.html.twig' with {'person': sponsor.godFather} %}
+
+    <div class="sponsor__content-link">
+        <p class="sponsor__content-link-date">
+            {{ sponsor.formatDate('j') }} {{ trans_day_hash[sponsor.formatDate('F')] }} {{ sponsor.formatDate('Y') }}
+        </p>
+        <div class="sponsor__content-link-line">
+            <img src="{{ asset('images/icons/' ~ sponsor.type.icon) }}" alt="icon" class="sponsor__content-link-icon">
+        </div>
+    </div>
+
+    {% include 'components/card.html.twig' with {'person': sponsor.godChild} %}
+
+</div>
