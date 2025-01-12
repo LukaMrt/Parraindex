@@ -9,15 +9,15 @@
 
 {% block content %}
 
+    <h1 class="form__title">Gestion de lien</h1>
+
+    {% include 'components/sponsor.html.twig' with {
+        'sponsor': sponsor,
+    } %}
+
     <form class="form" action="{{ url('sponsor_edit', {id: sponsor.id}) }}" method="post">
 
-        <h1 class="form__title">Gestion de lien</h1>
-
         <div class="form-content">
-
-            {% include 'components/sponsor.html.twig' with {
-                'sponsor': sponsor,
-            } %}
 
             {% include "components/form/select.html.twig" with {
                 'slug': field_name(form.type),

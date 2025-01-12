@@ -54,6 +54,11 @@ class PersonRepository extends ServiceEntityRepository
         return $this->findOneBy(['email' => $email]);
     }
 
+    public function create(Person $person): void
+    {
+        $this->update($person);
+    }
+
     public function update(Person $person): void
     {
         if (!$person->getCreatedAt() instanceof \DateTimeInterface) {

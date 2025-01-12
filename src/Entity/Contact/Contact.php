@@ -207,24 +207,24 @@ class Contact
         return $this;
     }
 
-    public function getRelatedPersonFirstName(): ?string
+    public function getRelatedPersonFirstName(): string
     {
-        return $this->relatedPersonFirstName;
+        return $this->relatedPersonFirstName ?? '';
     }
 
-    public function setRelatedPersonFirstName(string $relatedPersonFirstName): static
+    public function setRelatedPersonFirstName(?string $relatedPersonFirstName): static
     {
         $this->relatedPersonFirstName = $relatedPersonFirstName;
 
         return $this;
     }
 
-    public function getRelatedPersonLastName(): ?string
+    public function getRelatedPersonLastName(): string
     {
-        return $this->relatedPersonLastName;
+        return $this->relatedPersonLastName ?? '';
     }
 
-    public function setRelatedPersonLastName(string $relatedPersonLastName): static
+    public function setRelatedPersonLastName(?string $relatedPersonLastName): static
     {
         $this->relatedPersonLastName = $relatedPersonLastName;
 
@@ -233,7 +233,7 @@ class Contact
 
     public function getEntryYear(): ?int
     {
-        return $this->entryYear;
+        return $this->entryYear ?? 2022;
     }
 
     public function setEntryYear(int $entryYear): static
@@ -243,24 +243,24 @@ class Contact
         return $this;
     }
 
-    public function getRelatedPerson2FirstName(): ?string
+    public function getRelatedPerson2FirstName(): string
     {
-        return $this->relatedPerson2FirstName;
+        return $this->relatedPerson2FirstName ?? '';
     }
 
-    public function setRelatedPerson2FirstName(string $relatedPerson2FirstName): static
+    public function setRelatedPerson2FirstName(?string $relatedPerson2FirstName): static
     {
         $this->relatedPerson2FirstName = $relatedPerson2FirstName;
 
         return $this;
     }
 
-    public function getRelatedPerson2LastName(): ?string
+    public function getRelatedPerson2LastName(): string
     {
-        return $this->relatedPerson2LastName;
+        return $this->relatedPerson2LastName ?? '';
     }
 
-    public function setRelatedPerson2LastName(string $relatedPerson2LastName): static
+    public function setRelatedPerson2LastName(?string $relatedPerson2LastName): static
     {
         $this->relatedPerson2LastName = $relatedPerson2LastName;
 
@@ -291,12 +291,12 @@ class Contact
         return $this;
     }
 
-    public function getPassword(): ?string
+    public function getPassword(): string
     {
-        return $this->password;
+        return $this->password ?? '';
     }
 
-    public function setPassword(string $password): static
+    public function setPassword(?string $password): static
     {
         $this->password = $password;
 

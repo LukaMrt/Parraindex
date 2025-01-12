@@ -15,7 +15,7 @@
 
 <div class="sponsor__content">
 
-    {% include 'components/card.html.twig' with {'person': sponsor.godChild} %}
+    {% include 'components/card.html.twig' with {'person': sponsor.godFather} %}
 
     <div class="sponsor__content-link">
         <p class="sponsor__content-link-date">
@@ -26,6 +26,6 @@
         </div>
     </div>
 
-    {% include 'components/card.html.twig' with {'person': sponsor.godFather} %}
+    {% include 'components/card.html.twig' with {'person': sponsor.godChild} %}
 
 </div>

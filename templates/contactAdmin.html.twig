@@ -13,11 +13,11 @@
 
         <div class="admin__header">
             <h1>Liste des demandes de contact</h1>
-            <div>
-                <a class="btn btn--primary" href="{{ url('home', {'id': 0}) }}">Ajouter une
-                    personne</a>
-                <a class="btn btn--primary" href="{{ url('home', {'id': 0}) }}">Ajouter un lien</a>
-            </div>
+{#            <div>#}
+{#                <a class="btn btn--primary" href="{{ url('home', {'id': 0}) }}">Ajouter une#}
+{#                    personne</a>#}
+{#                <a class="btn btn--primary" href="{{ url('home', {'id': 0}) }}">Ajouter un lien</a>#}
+{#            </div>#}
         </div>
 
         <div class="admin__wrapper">
@@ -56,7 +56,7 @@
                         <div class="contact type-{{ contact.type.value }} {% if contact.resolutionDate is not null %}resolved{% endif %}">
                             <div class="contact__header">
                                 <h3>
-                                    {{ contact.type.value }}
+                                    {{ contact.type.toString }}
                                 </h3>
 
                                 <div class="contact__date">
@@ -83,9 +83,48 @@
 
                             <hr>
 
+                            <div class="contact__other">
+                                {% if contact.type.value in [0, 1, 2, 7] %}
+                                    <p>
+                                        <span class="contact--bold">Prénom :</span>
+                                        {{ contact.relatedPersonFirstName }}
+                                    </p>
+                                    <p>
+                                        <span class="contact--bold">Nom :</span>
+                                        {{ contact.relatedPersonLastName }}
+                                    </p>
+                                {% endif %}
+
+                                {% if contact.type.value in [3, 4, 5] %}
+                                    <p>
+                                        <span class="contact--bold">Parrain :</span>
+                                        {{ contact.relatedPersonFirstName }} {{ contact.relatedPersonLastName }}
+                                    </p>
+                                    <p>
+                                        <span class="contact--bold">Fillot :</span>
+                                        {{ contact.relatedPerson2FirstName }} {{ contact.relatedPerson2LastName }}
+                                    </p>
+                                {% endif %}
+
+                                {% if contact.type.value == 9 %}
+                                    <p>
+                                        <span class="contact--bold">Prénom :</span>
+                                        {{ contact.contacterFirstName }}
+                                    </p>
+                                    <p>
+                                        <span class="contact--bold">Nom :</span>
+                                        {{ contact.contacterLastName }}
+                                    </p>
+                                    <p>
+                                        <span class="contact--bold">Email :</span>
+                                        {{ contact.contacterEmail }}
+                                    </p>
+                                {% endif %}
+                            </div>
+
                             <p class="contact__message">
                                 <span class="contact--bold">
-                                    Remarques :
+                                    Description :
                                 </span>
                                 {{ contact.description | raw }}
                             </p>

@@ -117,7 +117,6 @@ public/style/*
 public/img/pictures/*
 var/
 .phpdoc/
-composer.lock
 phpunit-report.xml
 coverage-report.xml
 
