@@ -17,9 +17,9 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
+        $person = $this->getReference(PersonFixture::LUKA, Person::class);
         /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::GOD_CHILD_1, PersonFixture::class);
+        $person2  = $this->getReference(PersonFixture::GOD_CHILD_1, Person::class);
         $sponsor1 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)
@@ -30,9 +30,9 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
         $manager->persist($sponsor1);
 
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
+        $person = $this->getReference(PersonFixture::LUKA, Person::class);
         /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::GOD_CHILD_2, PersonFixture::class);
+        $person2  = $this->getReference(PersonFixture::GOD_CHILD_2, Person::class);
         $sponsor2 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)
@@ -43,9 +43,9 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
         $manager->persist($sponsor2);
 
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
+        $person = $this->getReference(PersonFixture::LUKA, Person::class);
         /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::GOD_CHILD_3, PersonFixture::class);
+        $person2  = $this->getReference(PersonFixture::GOD_CHILD_3, Person::class);
         $sponsor3 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)
@@ -56,9 +56,9 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
         $manager->persist($sponsor3);
 
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::GOD_FATHER, PersonFixture::class);
+        $person = $this->getReference(PersonFixture::GOD_FATHER, Person::class);
         /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
+        $person2  = $this->getReference(PersonFixture::LUKA, Person::class);
         $sponsor4 = new Sponsor()
             ->setGodFather($person)
             ->setGodChild($person2)

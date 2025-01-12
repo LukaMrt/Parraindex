@@ -23,7 +23,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
     public function load(ObjectManager $manager): void
     {
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, PersonFixture::class);
+        $person = $this->getReference(PersonFixture::LUKA, Person::class);
         $user   = new User()
             ->setEmail('luka.maret@etu.univ-lyon1.fr')
             ->setPerson($person)
@@ -37,7 +37,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
         $manager->persist($user);
 
         /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LILIAN, PersonFixture::class);
+        $person = $this->getReference(PersonFixture::LILIAN, Person::class);
         $lilian = new User()
             ->setEmail('lilian.baudry@etu.univ-lyon1.fr')
             ->setPerson($person)
