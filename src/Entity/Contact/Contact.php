@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Entity\Contact;
 
-use App\Entity\Person\Person;
-use App\Entity\Sponsor\Sponsor;
+use App\Entity\Sponsor\Type as SponsorType;
 use App\Repository\ContactRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
 class Contact
@@ -19,42 +19,130 @@ class Contact
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $contacterName = null;
+    private ?string $contacterFirstName = null;
 
     #[ORM\Column(length: 255)]
+    private ?string $contacterLastName = null;
+
+    #[ORM\Column(length: 255)]
+    #[Assert\Email]
     private ?string $contacterEmail = null;
 
     #[ORM\Column]
-    private ?int $type = null;
+    private ?Type $type = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
+
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\GeneratedValue(strategy: 'AUTO')]
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
     private ?\DateTimeInterface $resolutionDate = null;
 
-    #[ORM\ManyToOne]
-    private ?Person $person = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [0, 1, 2, 3, 4, 5, 7]',
+        constraints: [new Assert\NotNull()]
+    )]
+    private ?string $relatedPersonFirstName = null;
 
-    #[ORM\ManyToOne]
-    private ?Sponsor $sponsor = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [0, 1, 2, 3, 4, 5, 7]',
+        constraints: [new Assert\NotNull()]
+    )]
+    private ?string $relatedPersonLastName = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [3, 4, 5]',
+        constraints: [new Assert\NotNull()]
+    )]
+    private ?string $relatedPerson2FirstName = null;
+
+    #[ORM\Column(type: Types::INTEGER, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [0]',
+        constraints: [new Assert\NotNull()]
+    )]
+    private ?int $entryYear = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [3, 4, 5]',
+        constraints: [new Assert\NotNull()]
+    )]
+    private ?string $relatedPerson2LastName = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [3]',
+        constraints: [new Assert\NotNull()]
+    )]
+    private ?SponsorType $sponsorType = null;
+
+    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [3]',
+        constraints: [new Assert\NotNull()]
+    )]
+    private ?\DateTime $sponsorDate = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Assert\When(
+        expression: 'this.getType().value in [9]',
+        constraints: [
+            new Assert\NotNull(),
+            new Assert\Length(
+                min: 6,
+                max: 4096,
+                minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères'
+            ),
+            new Assert\NotCompromisedPassword(
+                message: 'Ce mot de passe a déjà été compromis. Veuillez en choisir un autre'
+            ),
+            new Assert\PasswordStrength(
+                minScore: Assert\PasswordStrength::STRENGTH_WEAK,
+                message: 'Votre mot de passe est trop simple'
+            )
+        ]
+    )]
+    private ?string $password = null;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getContacterName(): ?string
+    public function setId(int $id): static
     {
-        return $this->contacterName;
+        $this->id = $id;
+
+        return $this;
     }
 
-    public function setContacterName(string $contacterName): static
+    public function getContacterFirstName(): ?string
     {
-        $this->contacterName = $contacterName;
+        return $this->contacterFirstName;
+    }
+
+    public function setContacterFirstName(string $contacterFirstName): static
+    {
+        $this->contacterFirstName = $contacterFirstName;
+
+        return $this;
+    }
+
+    public function getContacterLastName(): ?string
+    {
+        return $this->contacterLastName;
+    }
+
+    public function setContacterLastName(string $contacterLastName): static
+    {
+        $this->contacterLastName = $contacterLastName;
 
         return $this;
     }
@@ -71,12 +159,12 @@ class Contact
         return $this;
     }
 
-    public function getType(): ?int
+    public function getType(): ?Type
     {
         return $this->type;
     }
 
-    public function setType(int $type): static
+    public function setType(Type $type): static
     {
         $this->type = $type;
 
@@ -119,26 +207,98 @@ class Contact
         return $this;
     }
 
-    public function getPerson(): ?Person
+    public function getRelatedPersonFirstName(): ?string
     {
-        return $this->person;
+        return $this->relatedPersonFirstName;
     }
 
-    public function setPerson(?Person $person): static
+    public function setRelatedPersonFirstName(string $relatedPersonFirstName): static
     {
-        $this->person = $person;
+        $this->relatedPersonFirstName = $relatedPersonFirstName;
 
         return $this;
     }
 
-    public function getSponsor(): ?Sponsor
+    public function getRelatedPersonLastName(): ?string
     {
-        return $this->sponsor;
+        return $this->relatedPersonLastName;
     }
 
-    public function setSponsor(?Sponsor $sponsor): static
+    public function setRelatedPersonLastName(string $relatedPersonLastName): static
     {
-        $this->sponsor = $sponsor;
+        $this->relatedPersonLastName = $relatedPersonLastName;
+
+        return $this;
+    }
+
+    public function getEntryYear(): ?int
+    {
+        return $this->entryYear;
+    }
+
+    public function setEntryYear(int $entryYear): static
+    {
+        $this->entryYear = $entryYear;
+
+        return $this;
+    }
+
+    public function getRelatedPerson2FirstName(): ?string
+    {
+        return $this->relatedPerson2FirstName;
+    }
+
+    public function setRelatedPerson2FirstName(string $relatedPerson2FirstName): static
+    {
+        $this->relatedPerson2FirstName = $relatedPerson2FirstName;
+
+        return $this;
+    }
+
+    public function getRelatedPerson2LastName(): ?string
+    {
+        return $this->relatedPerson2LastName;
+    }
+
+    public function setRelatedPerson2LastName(string $relatedPerson2LastName): static
+    {
+        $this->relatedPerson2LastName = $relatedPerson2LastName;
+
+        return $this;
+    }
+
+    public function getSponsorType(): ?SponsorType
+    {
+        return $this->sponsorType;
+    }
+
+    public function setSponsorType(SponsorType $sponsorType): static
+    {
+        $this->sponsorType = $sponsorType;
+
+        return $this;
+    }
+
+    public function getSponsorDate(): ?\DateTime
+    {
+        return $this->sponsorDate;
+    }
+
+    public function setSponsorDate(?\DateTime $sponsorDate): static
+    {
+        $this->sponsorDate = $sponsorDate;
+
+        return $this;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function setPassword(string $password): static
+    {
+        $this->password = $password;
 
         return $this;
     }

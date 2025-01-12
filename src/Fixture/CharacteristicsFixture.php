@@ -37,6 +37,13 @@ class CharacteristicsFixture extends Fixture implements DependentFixtureInterfac
             ->setVisible(true);
         $manager->persist($characteristic3);
 
+        $characteristic4 = new Characteristic()
+            ->setType($this->getCharacteristicType(CharacteristicTypesFixture::PHONE))
+            ->setPerson($this->getPerson(PersonFixture::GOD_CHILD_1))
+            ->setValue('+33 7 77 77 77 77')
+            ->setVisible(true);
+        $manager->persist($characteristic4);
+
         $manager->flush();
     }
 
@@ -47,8 +54,8 @@ class CharacteristicsFixture extends Fixture implements DependentFixtureInterfac
     public function getDependencies(): array
     {
         return [
-            PersonFixture::class,
             CharacteristicTypesFixture::class,
+            PersonFixture::class,
         ];
     }
 

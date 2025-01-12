@@ -91,9 +91,11 @@ class Person
         return $this->id;
     }
 
-    public function getFirstName(): ?string
+    public function getFirstName(): string
     {
-        return $this->firstName;
+        /** @var string $firstName */
+        $firstName = $this->firstName;
+        return $firstName;
     }
 
     public function setFirstName(string $firstName): static
@@ -103,9 +105,11 @@ class Person
         return $this;
     }
 
-    public function getLastName(): ?string
+    public function getLastName(): string
     {
-        return $this->lastName;
+        /** @var string $lastName */
+        $lastName = $this->lastName;
+        return $lastName;
     }
 
     public function setLastName(string $lastName): static
@@ -317,8 +321,13 @@ class Person
             );
 
             if (!$exists) {
-                $this->addCharacteristic((new Characteristic())->setVisible(false)->setType($type));
+                $this->addCharacteristic(new Characteristic()->setVisible(false)->setType($type));
             }
         }
+    }
+
+    public function getFullName(): string
+    {
+        return ucfirst($this->getFirstName()) . ' ' . strtoupper($this->getLastName());
     }
 }

@@ -17,4 +17,23 @@ class ContactRepository extends ServiceEntityRepository
     {
         parent::__construct($managerRegistry, Contact::class);
     }
+
+    public function create(Contact $contact): void
+    {
+        $this->update($contact);
+    }
+
+    /**
+     * @return Contact[]
+     */
+    public function getAll(): array
+    {
+        return $this->findAll();
+    }
+
+    public function update(Contact $contact): void
+    {
+        $this->getEntityManager()->persist($contact);
+        $this->getEntityManager()->flush();
+    }
 }

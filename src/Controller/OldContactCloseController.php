@@ -16,7 +16,7 @@ use Twig\Environment;
 /**
  * The contact close page, it's the page to close a contact and execute the contact action
  */
-class ContactCloseController extends Controller
+class OldContactCloseController extends Controller
 {
     /**
      * @param Environment $twigEnvironment the twig environment

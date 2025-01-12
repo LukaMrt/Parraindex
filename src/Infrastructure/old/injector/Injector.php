@@ -29,8 +29,8 @@ use App\Application\redirect\Redirect;
 use App\Application\sponsor\SponsorDAO;
 use App\Controller\AboutController;
 use App\Controller\AdminController;
-use App\Controller\ContactCloseController;
-use App\Controller\ContactController;
+use App\Controller\OldContactCloseController;
+use App\Controller\OldContactController;
 use App\Controller\DataController;
 use App\Controller\EditPersonController;
 use App\Controller\EditSponsorController;
@@ -186,11 +186,11 @@ class Injector
         $this->router->registerRoute('GET', '/mentions-legales', $this->container->get(legalnoticeController::class), 'legalnotice');
 
         $this->router->registerRoute('GET', '/admin/contact', $this->container->get(AdminController::class), 'contact_admin');
-        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete', $this->container->get(ContactCloseController::class), 'contact_close');
-        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(ContactCloseController::class), 'contact_close_resolve');
+        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete', $this->container->get(OldContactCloseController::class), 'contact_close');
+        $this->router->registerRoute('GET', '/admin/contact/[i:id]/delete/[*:resolve]', $this->container->get(OldContactCloseController::class), 'contact_close_resolve');
 
-        $this->router->registerRoute('GET', '/contact', $this->container->get(ContactController::class), 'contact_get');
-        $this->router->registerRoute('POST', '/contact', $this->container->get(ContactController::class), 'contact_post');
+        $this->router->registerRoute('GET', '/contact', $this->container->get(OldContactController::class), 'contact_get');
+        $this->router->registerRoute('POST', '/contact', $this->container->get(OldContactController::class), 'contact_post');
 
         $this->router->registerRoute('GET', '/connexion', $this->container->get(SecurityController::class), 'login_get');
         $this->router->registerRoute('POST', '/connexion', $this->container->get(SecurityController::class), 'login_post');

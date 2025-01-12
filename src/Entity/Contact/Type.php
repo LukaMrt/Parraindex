@@ -22,24 +22,22 @@ enum Type: int
     case OTHER            = 8;
     case PASSWORD         = 9;
 
-
     /**
-     * @return array<int, array<string, string|int>> All the values of the enum
-     * as an array with the id as key and the verbose name as value
+     * @return array<int, string>
      */
-    public static function getValues(): array
+    public static function allTitles(): array
     {
         return [
-            ['id' => 0, 'title' => "Ajout d'une personne"],
-            ['id' => 1, 'title' => "Modification d'une personne"],
-            ['id' => 2, 'title' => "Suppression d'une personne"],
-            ['id' => 3, 'title' => "Ajout d'un lien"],
-            ['id' => 4, 'title' => "Modification d'un lien"],
-            ['id' => 5, 'title' => "Suppression d'un lien"],
-            ['id' => 6, 'title' => "Bug"],
-            ['id' => 7, 'title' => "Contenu choquant"],
-            ['id' => 9, 'title' => "Création d'un compte"],
-            ['id' => 8, 'title' => "Autre"],
+            self::ADD_PERSON->value       => self::ADD_PERSON->toString(),
+            self::UPDATE_PERSON->value    => self::UPDATE_PERSON->toString(),
+            self::REMOVE_PERSON->value    => self::REMOVE_PERSON->toString(),
+            self::ADD_SPONSOR->value      => self::ADD_SPONSOR->toString(),
+            self::UPDATE_SPONSOR->value   => self::UPDATE_SPONSOR->toString(),
+            self::REMOVE_SPONSOR->value   => self::REMOVE_SPONSOR->toString(),
+            self::BUG->value              => self::BUG->toString(),
+            self::CHOCKING_CONTENT->value => self::CHOCKING_CONTENT->toString(),
+            self::OTHER->value            => self::OTHER->toString(),
+            self::PASSWORD->value         => self::PASSWORD->toString(),
         ];
     }
 

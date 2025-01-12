@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Person\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -23,10 +24,13 @@ class PersonRepository extends ServiceEntityRepository
     /**
      * @return Person[]
      */
-    public function getAll(): array
+    public function getAll(string $orderBy = 'id'): array
     {
         /** @var Person[] $result */
-        $result = $this->createQueryBuilder('p')->getQuery()->getResult();
+        $result = $this->createQueryBuilder('p')
+            ->orderBy('p.' . $orderBy, 'ASC')
+            ->getQuery()
+            ->getResult();
         return $result;
     }
 

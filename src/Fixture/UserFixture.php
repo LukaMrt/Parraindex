@@ -8,10 +8,11 @@ use App\Entity\Person\Person;
 use App\Entity\Person\Role;
 use App\Entity\Person\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class UserFixture extends Fixture
+class UserFixture extends Fixture implements DependentFixtureInterface
 {
     public function __construct(
         private readonly UserPasswordHasherInterface $passwordHasher,
@@ -50,5 +51,12 @@ class UserFixture extends Fixture
         $manager->persist($lilian);
 
         $manager->flush();
+    }
+
+    public function getDependencies(): array
+    {
+        return [
+            PersonFixture::class,
+        ];
     }
 }

@@ -49,7 +49,7 @@
                 'firstName': author.firstName,
                 'lastName': author.lastName,
                 'picture': 'images/pictures/' ~ author.picture,
-                'url': url('home')
+                'url': url('person', {id: author.id})
             } %}
         {% endfor %}
 

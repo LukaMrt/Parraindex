@@ -1,104 +1,63 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Controller;
 
-use App\Application\contact\ContactService;
-use App\Application\person\PersonService;
+use App\Entity\Contact\Contact;
 use App\Entity\Contact\Type;
-use App\Infrastructure\old\router\Router;
-use Twig\Environment;
-use Twig\Error\LoaderError;
-use Twig\Error\RuntimeError;
-use Twig\Error\SyntaxError;
+use App\Entity\Sponsor\Type as SponsorType;
+use App\Form\ContactType;
+use App\Repository\ContactRepository;
+use App\Repository\PersonRepository;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Form\FormError;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Attribute\Route;
 
-/**
- * The contact page, it's the page to contact the team and the admin
- */
-class ContactController extends Controller
+#[Route('/contact')]
+class ContactController extends AbstractController
 {
-    /**
-     * @param Environment $twigEnvironment the twig environment
-     * @param Router $router the router
-     * @param PersonService $personService the person service
-     * @param ContactService $contactService the contact service
-     */
     public function __construct(
-        Environment $twigEnvironment,
-        Router $router,
-        PersonService $personService,
-        private readonly ContactService $contactService
+        private readonly PersonRepository $personRepository,
+        private readonly ContactRepository $contactRepository,
     ) {
-        parent::__construct($twigEnvironment, $router, $personService);
     }
 
-
-    /**
-     * @param Router $router the router
-     * @param array<string, string> $parameters the parameters
-     * @return void the function return nothing
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the rendering
-     */
-    #[\Override]
-    public function post(Router $router, array $parameters): void
+    #[Route('/contact', name: 'contact', methods: [Request::METHOD_GET])]
+    public function index(): Response
     {
+        $form   = $this->createForm(ContactType::class);
+        $people = [];
+        $data   = $this->personRepository->getAll(orderBy: 'lastName');
+        foreach ($data as $person) {
+            $people[$person->getFullName()] = $person->getFullName();
+        }
 
-        $formParameters = [
-            'type' => htmlspecialchars((string) $_POST['type']),
-            'senderFirstName' => htmlspecialchars((string) $_POST['senderFirstName']),
-            'senderLastName' => htmlspecialchars((string) $_POST['senderLastName']),
-            'senderEmail' => htmlspecialchars((string) $_POST['senderEmail']),
-            'creationFirstName' => htmlspecialchars((string) $_POST['creationFirstName']),
-            'creationLastName' => htmlspecialchars((string) $_POST['creationLastName']),
-            'entryYear' => htmlspecialchars((string) $_POST['entryYear']),
-            'godFatherId' => htmlspecialchars((string) $_POST['godFatherId']),
-            'godChildId' => htmlspecialchars((string) $_POST['godChildId']),
-            'sponsorType' => htmlspecialchars((string) $_POST['sponsorType']),
-            'sponsorDate' => htmlspecialchars((string) $_POST['sponsorDate']),
-            'password' => htmlspecialchars((string) $_POST['password']),
-            'passwordConfirm' => htmlspecialchars((string) $_POST['passwordConfirm']),
-            'message' => htmlspecialchars((string) $_POST['message']),
-            'personId' => htmlspecialchars((string) $_POST['personId']),
-            'bonusInformation' => htmlspecialchars((string) $_POST['bonusInformation'])
-        ];
-
-        $error = $this->contactService->registerContact($formParameters);
-
-        $this->get($router, ['error' => $error]);
-    }
-
-
-    /**
-     * @param Router $router the router
-     * @param array<string, string> $parameters the parameters
-     * @return void the function return nothing
-     * @throws LoaderError if the template is not found
-     * @throws RuntimeError if an error occurred during the rendering
-     * @throws SyntaxError if an error occurred during the rendering
-     */
-    #[\Override]
-    public function get(Router $router, array $parameters): void
-    {
-        $people = $this->personService->getAllPeople();
-        usort(
-            $people,
-            fn($a, $b): int => $a->getFirstName() !== '?' && $a->getFirstName() < $b->getFirstName() ? -1 : 1
-        );
-        $closure = fn($person): array => [
-            'id' => $person->getId(),
-            'title' => ucfirst((string) $person->getFirstName()) . ' ContactController.php' . strtoupper((string) $person->getLastName())
-        ];
-        $people  = array_map($closure, $people);
-
-        // @phpstan-ignore-next-line
-        $this->render('contact.html.twig', [
-            'options' => Type::getValues(),
-            'sponsorTypes' => [['id' => 0, 'title' => 'Parrainage IUT'], ['id' => 1, 'title' => 'Parrainage de coeur']],
-            'people' => $people,
-            'error' => $parameters['error'] ?? [],
+        return $this->render('contact.html.twig', [
+            'contactTypes' => Type::allTitles(),
+            'sponsorTypes' => SponsorType::allTitles(),
+            'people'       => $people,
+            'form'         => $form,
         ]);
+    }
+
+    #[Route('/contact', name: 'contact_post', methods: [Request::METHOD_POST])]
+    public function post(Request $request): Response
+    {
+        $form = $this->createForm(ContactType::class);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            /** @var Contact $contact */
+            $contact = $form->getData();
+            $this->contactRepository->create($contact);
+            $this->addFlash('success', 'Message enregistré');
+        }
+
+        /** @var FormError $error */
+        foreach ($form->getErrors(true) as $error) {
+            $this->addFlash('error', $error->getMessage());
+        }
+        return $this->redirectToRoute('contact');
     }
 }

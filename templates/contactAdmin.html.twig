@@ -30,10 +30,10 @@
                         <input type="radio" name="admin_filter" value="all" checked id="new">
                     </label>
 
-                    {% for type in typeContact %}
-                        <label for="type-{{ type.id }}">
-                            {{ type.title }}
-                            <input type="radio" name="admin_filter" value="{{ type.id }}" id="type-{{ type.id }}">
+                    {% for id, title in typeContact %}
+                        <label for="type-{{ id }}">
+                            {{ title }}
+                            <input type="radio" name="admin_filter" value="{{ id }}" id="type-{{ id }}">
                         </label>
                     {% endfor %}
 
@@ -53,18 +53,18 @@
 
                     {% for contact in contacts %}
 
-                        <div class="contact type-{{ contact.typeId }} {% if contact.contactresolution %}resolved{% endif %}">
+                        <div class="contact type-{{ contact.type.value }} {% if contact.resolutionDate is not null %}resolved{% endif %}">
                             <div class="contact__header">
                                 <h3>
-                                    {{ contact.type }}
+                                    {{ contact.type.value }}
                                 </h3>
 
                                 <div class="contact__date">
                                     <p class="contact__date-day">
-                                        {{ contact.ContactDate | date('d/m/Y') }}
+                                        {{ contact.createdAt | date('d/m/Y') }}
                                     </p>
                                     <p class="contact__date-hour">
-                                        {{ contact.ContactDate | date('H:i') }}
+                                        {{ contact.createdAt | date('H:i') }}
                                     </p>
                                 </div>
                             </div>
@@ -72,7 +72,7 @@
                             <div class="contact__author">
                                 de
                                 <strong>
-                                    {{ contact.contacterName }}
+                                    {{ contact.contacterFirstName }} {{ contact.contacterLastName }}
                                 </strong>
 
                                 <a href="mailto:{{ contact.contacterEmail }}">
@@ -87,64 +87,43 @@
                                 <span class="contact--bold">
                                     Remarques :
                                 </span>
-                                {{ contact.message | raw }}
+                                {{ contact.description | raw }}
                             </p>
-
-                            <div class="contact__other">
-                                {% for line in contact.description %}
-                                    <p>
-                                        <span class="contact--bold">{{ line[0] }} :</span> {{ line[1] }}
-                                    </p>
-                                {% endfor %}
-                            </div>
-
 
                             <div class="contact__actions">
 
-                                {% if not contact.contactresolution %}
+                                {% if contact.resolutionDate is null %}
 
-                                    {% if contact.typeId == 0 or contact.typeId == 3 or contact.typeid == 9 %}
+                                    {% if contact.type.value in [0, 1, 2, 3, 4, 5, 7, 9] %}
+                                        {% set color = '' %}
+                                        {% set action = '' %}
 
-                                        <a href="{{ url('home', {'id': contact.id, 'resolve': 'true'}) }}"
-                                           class="contact__actions-button contact__actions-button--green"
-                                        >Créer</a>
+                                        {% if contact.type.value in [0, 3, 9] %}
+                                            {% set action = 'Créer' %}
+                                            {% set color = 'green' %}
+                                        {% elseif contact.type.value in [1, 4, 7] %}
+                                            {% set action = 'Éditer' %}
+                                            {% set color = 'yellow' %}
+                                        {% elseif contact.type.value in [2, 5] %}
+                                            {% set action = 'Supprimer' %}
+                                            {% set color = 'red' %}
+                                        {% endif %}
 
+                                        <a href="{{ url('admin_contact_resolve', {'id': contact.id}) }}"
+                                           class="contact__actions-button contact__actions-button--{{ color }}"
+                                           methods="post"
+                                        >{{ action }}</a>
                                     {% endif %}
 
-                                    {% if contact.typeId == 1 %}
-
-                                        <a rel="noopener" target="_blank"
-                                           href="{{ url('home', {'id': contact.person.id}) }}"
-                                           class="contact__actions-button contact__actions-button--yellow"
-                                        >Éditer</a>
-
-                                    {% endif %}
-
-                                    {% if contact.typeId == 4 %}
-
-                                        <a rel="noopener" target="_blank"
-                                           href="{{ url('home', {'id': contact.sponsor.id}) }}"
-                                           class="contact__actions-button contact__actions-button--yellow"
-                                        >Éditer</a>
-
-                                    {% endif %}
-
-                                    {% if contact.typeId == 2 or contact.typeId == 5 %}
-
-                                        <a href="{{ url('home', {'id': contact.id, 'resolve': 'true'}) }}"
-                                           class="contact__actions-button contact__actions-button--red"
-                                        >Supprimer</a>
-
-                                    {% endif %}
-
-                                    <a href="{{ url('home', {'id': contact.id, 'resolve': 'false'}) }}"
-                                       class="contact__actions-button"
+                                    <a href="{{ url('admin_contact_delete', {'id': contact.id}) }}"
+                                       class="contact__actions-button contact__actions-button--blue"
+                                       methods="delete"
                                     >Clore</a>
 
                                 {% else %}
 
                                     <div class="contact__actions-button contact__actions-button--blue">
-                                        Résolu - {{ contact.contactresolution | date('d/m/Y') }}
+                                        Résolu le {{ contact.resolutionDate | date('d/m/Y') }} à {{ contact.resolutionDate | date('H:i') }}
                                     </div>
 
                                 {% endif %}
