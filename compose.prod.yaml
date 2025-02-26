@@ -6,8 +6,6 @@ services:
       - database
   database:
     image: mysql:9.2
-    env_file:
-      - .env.prod
     environment:
       MYSQL_ALLOW_EMPTY_PASSWORD: "no"
       MYSQL_USER: ${DATABASE_USER}
