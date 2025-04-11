@@ -67,6 +67,7 @@ To launch the project, you need to follow these steps:
    ```properties
     # Environment
    DEBUG="false"               # Set to "true" to enable debug mode
+   DOMAINS="parraindex.com"    # Domains of the website (separated by commas)
    
    # Database
    DRIVER="mysql"              # Database driver (mysql, pgsql, sqlite, ...)

@@ -1,0 +1,61 @@
+services:
+  parraindex-nginx:
+    image: nginx:1.23.3-alpine
+    restart: on-failure
+    volumes:
+        - './public/:/var/www/html/public'
+        - './docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro'
+    environment:
+      VIRTUAL_HOST: ${DOMAINS}
+      LETSENCRYPT_HOST: ${DOMAINS}
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      parraindex-php-fpm:
+        condition: service_healthy
+    networks:
+      - proxy
+      - backend
+
+  parraindex-php-fpm:
+    build:
+      context: .
+      dockerfile: ./docker/php-fpm/Dockerfile
+    restart: always
+    volumes:
+      - .:/var/www/html
+    healthcheck:
+      test: ["CMD", "php-fpm", "-t"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    depends_on:
+      parraindex-database:
+        condition: service_healthy
+    networks:
+      - backend
+        
+  parraindex-database:
+    image: mysql:9.2
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_USER: ${USERNAME}
+      MYSQL_PASSWORD: ${PASSWORD}
+      MYSQL_DATABASE: ${DATABASE}
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 3
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    networks:
+      - backend
+
+networks:
+  proxy:
+    name: 'nginx-proxy'
+    external: true
+  backend:
