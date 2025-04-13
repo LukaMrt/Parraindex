@@ -12,6 +12,8 @@
   translate: -25% -40%;
 
   opacity: 0.05;
+  user-select: none;
+  pointer-events: none;
 
   @include b.breakpoint(header) {
     translate: 0;

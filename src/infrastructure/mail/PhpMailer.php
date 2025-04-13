@@ -64,9 +64,10 @@ class PhpMailer implements Mailer
             $this->mailer->addAddress($to);
             $this->mailer->addReplyTo($_ENV['MAIL_USERNAME'], 'Ne pas répondre');
 
-            $this->mailer->isHTML();
+            $this->mailer->isHTML(true);
             $this->mailer->Subject = $subject;
             $this->mailer->Body = $body;
+            $this->mailer->AltBody = strip_tags($body);
 
             $this->mailer->send();
 

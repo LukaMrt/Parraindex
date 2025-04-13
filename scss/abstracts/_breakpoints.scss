@@ -1,4 +1,5 @@
 @use "../abstracts/functions" as f;
+@use "sass:map";
 
 $breakpoints: (
         'small' : f.em(700),
@@ -8,7 +9,7 @@ $breakpoints: (
 );
 
 @mixin breakpoint($size) {
-  @media (max-width: map-get($breakpoints, $size)) {
+  @media (max-width: map.get($breakpoints, $size)) {
     @content;
   }
 }
