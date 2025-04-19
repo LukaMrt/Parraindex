@@ -137,7 +137,8 @@
         "build-scss": [
             "php bin/console sass:build",
             "php bin/console asset-map:compile"
-        ]
+        ],
+        "docker": "docker buildx build --platform linux/arm64 -t lukamrt/parraindex --push ."
     },
     "conflict": {
         "symfony/symfony": "*"
