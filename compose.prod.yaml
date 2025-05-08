@@ -1,7 +1,7 @@
 services:
   parraindex-nginx:
     image: nginx:1.23.3-alpine
-    restart: on-failure
+    restart: always
     volumes:
         - ./public/:/var/www/html/public
         - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf:ro
@@ -40,6 +40,7 @@ services:
         
   parraindex-database:
     image: mysql:9.2
+    restart: always
     environment:
       MYSQL_RANDOM_ROOT_PASSWORD: "yes"
       MYSQL_USER: ${USERNAME}
