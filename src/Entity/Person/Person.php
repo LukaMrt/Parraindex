@@ -40,14 +40,14 @@ class Person
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 65_535, nullable: true)]
     private ?string $biography = null;
 
     #[ORM\Column(length: 255)]
     #[Assert\CssColor([Assert\CssColor::HEX_LONG])]
     private string $color;
 
-    #[ORM\Column(length: 255, nullable: true)]
+    #[ORM\Column(type: Types::TEXT, length: 65_535, nullable: true)]
     private ?string $description = null;
 
     #[ORM\Column]

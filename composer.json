@@ -15,6 +15,7 @@
         "doctrine/orm": "^3.3",
         "phpdocumentor/reflection-docblock": "^5.6",
         "phpstan/phpdoc-parser": "^2.0",
+        "runtime/frankenphp-symfony": "^0.2.0",
         "symfony/asset": "7.2.*",
         "symfony/asset-mapper": "7.2.*",
         "symfony/console": "7.2.*",
@@ -136,7 +137,8 @@
         "build-scss": [
             "php bin/console sass:build",
             "php bin/console asset-map:compile"
-        ]
+        ],
+        "docker": "docker buildx build --platform linux/arm64 -t lukamrt/parraindex --push ."
     },
     "conflict": {
         "symfony/symfony": "*"
