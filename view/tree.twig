@@ -1,10 +1,18 @@
 {% extends '/layouts/default.twig' %}
 
 {% set style = style('tree.css') %}
-{% set title = 'Parraindex - Affichage' %}
+{% set title = 'Parraindex – Arbre IUT Lyon 1' %}
 
 {% block javascripts %}
     <script src='{{ script("carousel.js") }}' defer></script>
+{% endblock %}
+
+{% block metadatas %}
+    <meta name="description" content="Découvrez l'arbre généalogique des parrains et marraines de l'IUT Lyon 1. Explorez les relations entre les étudiants et trouvez vos origines.">
+    <meta name="keywords" content="Parraindex, arbre, généalogie">
+
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="{{ icon('logo-blue.svg') }}">
 {% endblock %}
 
 {% block content %}
