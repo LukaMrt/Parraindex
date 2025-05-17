@@ -1,14 +1,14 @@
 
-const darkTheme = window.matchMedia("(prefers-color-scheme: dark)");
-let favicon = document.querySelector('link[rel="icon"]');
+const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
 
-function setFavicon() {
-  if (darkTheme.matches) {
-    favicon.href = "/img/icons/logo-white.svg";
-  } else {
-    favicon.href = "/img/icons/logo-blue.svg";
-  }
-}
+const updateFavicon = () => {
+  const iconPath = prefersDark.matches
+    ? '/img/icons/logo-white.svg'
+    : '/img/icons/logo-blue.svg';
 
-darkTheme.addEventListener("change", setFavicon);
-setFavicon();
+  let favicon = document.querySelector('link[rel="icon"]');
+  favicon.href = iconPath;
+};
+
+prefersDark.addEventListener('change', updateFavicon);
+updateFavicon();

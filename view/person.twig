@@ -1,7 +1,15 @@
 {% extends '/layouts/default.twig' %}
 
 {% set style = style('person.css') %}
-{% set title = 'Parraindex -  ' ~ person.firstName %}
+{% set title = 'Parraindex -  ' ~ person.firstName ~ ' ' ~ person.lastName %}
+
+{% block metadatas %}
+    <meta name="description" content="Découvrez le profil de {{ person.firstName }} {{ person.lastName }} sur le Parraindex.">
+    <meta name="keywords" content="{{ person.firstName }}, {{ person.lastName }}, généalogie, famille, arbre généalogique">
+    
+    <meta property="og:type" content="profile">
+    <meta property="og:image" content="{{ person.image }}">
+{% endblock %}
 
 {% block javascripts %}
     <script src="{{ script("person.js") }}" defer></script>

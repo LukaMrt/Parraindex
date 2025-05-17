@@ -3,6 +3,16 @@
 {% set style = style('home.css') %}
 {% set title = 'Parraindex' %}
 
+{% block metadatas %}
+    <meta name="description" content="Le Parraindex : l'annuaire des parrains de l'IUT Lyon 1. Trouvez facilement votre parrain ou marraine parmi les étudiants.">
+    <meta name="keywords" content="Parraindex, IUT Lyon 1, annuaire, parrains, marraines, étudiants, université, Lyon, réseau, contacts">
+    <meta name="author" content="Lilian Baudry, Luka Maret, Melvyn Delpree, Vincent Chavot--dambrun">
+    
+    <meta property="og:title" content="Parraindex - L'annuaire des parrains de l'IUT Lyon 1">
+    <meta property="og:description" content="Le Parraindex : l'annuaire des parrains de l'IUT Lyon 1. Trouvez facilement votre parrain ou marraine parmi les étudiants.">
+    <meta property="og:image" content="{{ icon('logo-blue.svg') }}">
+{% endblock %}
+
 {% block content %}
 
     <img class="logo" src="{{ icon('logo-blue.svg') }}" alt="Logo">
