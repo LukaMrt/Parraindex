@@ -29,7 +29,7 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 | S4 | Corriger parsing email | `SecurityController.php` | 1h |
 | S5 | Corriger parsing noms | `ContactType.php` | 1h |
 | S6 | Utiliser POST/DELETE au lieu de GET | `AdminController.php` | 1h |
-| S7 | Mise à jour des dépendances | `composer.json` | 1h |
+| S7 | Mettre à jour les dépendances | `composer update` | 1h |
 
 ### Qualité
 
@@ -58,7 +58,6 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 | # | Tâche | Effort |
 |---|-------|--------|
 | S8 | Configurer HTML Sanitizer pour XSS | 2h |
-| S9 | Configurer Dependabot | 30min |
 
 ### Qualité
 
@@ -74,7 +73,7 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 | P3 | Optimiser images (compression) | 3h |
 | P4 | Ajouter lazy loading images | 1h |
 
-**Total estimé**: 10h30 (1.5 jours)
+**Total estimé**: 10h (1.5 jours)
 
 ---
 
@@ -114,7 +113,7 @@ Semaine 2-3: P1 (Fondations)
 └── Jours 8-9: Performance DB (P1, P2)
 
 Semaine 4: P2 (Renforcement)
-├── Sécurité (S8, S9)
+├── Sécurité (S8)
 ├── Qualité (Q5, Q6)
 └── Performance (P3, P4)
 
@@ -156,19 +155,6 @@ composer require symfony/html-sanitizer
 
 # Performance - Optimisation images
 composer require intervention/image
-```
-
-### Maintenance des dépendances
-
-```bash
-# Audit de sécurité régulier
-composer audit
-
-# Vérification des mises à jour
-composer outdated
-
-# Mise à jour avec validation
-composer update && composer phpstan && composer phpcs && composer test
 ```
 
 ### Infrastructure
