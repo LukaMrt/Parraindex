@@ -29,6 +29,7 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 | S4 | Corriger parsing email | `SecurityController.php` | 1h |
 | S5 | Corriger parsing noms | `ContactType.php` | 1h |
 | S6 | Utiliser POST/DELETE au lieu de GET | `AdminController.php` | 1h |
+| S7 | Mise à jour des dépendances | `composer.json` | 1h |
 
 ### Qualité
 
@@ -44,10 +45,9 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 | # | Tâche | Fichier | Effort |
 |---|-------|---------|--------|
 | P1 | Corriger requêtes N+1 | `PersonRepository.php` | 2h |
-| P2 | Ajouter pagination | Repos + Templates | 3h |
-| P3 | Créer indexes DB | Migration | 1h |
+| P2 | Créer indexes DB | Migration | 1h |
 
-**Total estimé**: 24h (3 jours)
+**Total estimé**: 22h (3 jours)
 
 ---
 
@@ -57,27 +57,24 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 
 | # | Tâche | Effort |
 |---|-------|--------|
-| S7 | Ajouter headers de sécurité | 2h |
-| S8 | Implémenter rate limiting | 2h |
-| S9 | Ajouter audit logging | 3h |
+| S8 | Configurer HTML Sanitizer pour XSS | 2h |
+| S9 | Configurer Dependabot | 30min |
 
 ### Qualité
 
 | # | Tâche | Effort |
 |---|-------|--------|
-| Q5 | Ajouter PHPDoc complet | 4h |
-| Q6 | Supprimer @phpstan-ignore | 1h |
-| Q7 | Améliorer gestion erreurs JS | 3h |
+| Q5 | Supprimer @phpstan-ignore | 1h |
+| Q6 | Améliorer gestion erreurs JS | 3h |
 
 ### Performance
 
 | # | Tâche | Effort |
 |---|-------|--------|
-| P4 | Configurer cache applicatif | 3h |
-| P5 | Optimiser images (compression) | 3h |
-| P6 | Ajouter lazy loading images | 1h |
+| P3 | Optimiser images (compression) | 3h |
+| P4 | Ajouter lazy loading images | 1h |
 
-**Total estimé**: 22h (3 jours)
+**Total estimé**: 10h30 (1.5 jours)
 
 ---
 
@@ -87,20 +84,19 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 
 | # | Tâche | Effort |
 |---|-------|--------|
-| Q8 | Migrer JS vers TypeScript | 8h |
-| Q9 | Améliorer structure SCSS | 4h |
-| Q10 | Ajouter JSDoc | 2h |
+| Q7 | Migrer JS vers TypeScript | 8h |
+| Q8 | Améliorer structure SCSS | 4h |
+| Q9 | Ajouter JSDoc | 2h |
 
 ### Performance
 
 | # | Tâche | Effort |
 |---|-------|--------|
-| P7 | Critical CSS | 2h |
-| P8 | Service Worker (PWA) | 4h |
-| P9 | Configurer CDN | 2h |
-| P10 | Setup monitoring (Blackfire) | 2h |
+| P5 | Critical CSS | 2h |
+| P6 | Service Worker (PWA) | 4h |
+| P7 | Configurer CDN | 2h |
 
-**Total estimé**: 24h (3 jours)
+**Total estimé**: 22h (3 jours)
 
 ---
 
@@ -112,17 +108,17 @@ Semaine 1: P0 (Sécurité critique)
 └── Jour 2: Tests manuels + déploiement patch
 
 Semaine 2-3: P1 (Fondations)
-├── Jours 1-2: Sécurité (S4, S5, S6)
+├── Jours 1-2: Sécurité (S4, S5, S6, S7)
 ├── Jours 3-4: Refactoring (Q1)
 ├── Jours 5-7: Tests (Q2, Q3, Q4)
-└── Jours 8-9: Performance DB (P1, P2, P3)
+└── Jours 8-9: Performance DB (P1, P2)
 
-Semaine 4-5: P2 (Renforcement)
-├── Sécurité (S7, S8, S9)
-├── Qualité (Q5, Q6, Q7)
-└── Performance (P4, P5, P6)
+Semaine 4: P2 (Renforcement)
+├── Sécurité (S8, S9)
+├── Qualité (Q5, Q6)
+└── Performance (P3, P4)
 
-Semaine 6+: P3 (Polish)
+Semaine 5+: P3 (Polish)
 └── Selon les ressources disponibles
 ```
 
@@ -155,23 +151,28 @@ Semaine 6+: P3 (Polish)
 ### Nouvelles dépendances suggérées
 
 ```bash
-# Tests
-composer require --dev phpunit/phpunit
+# Sécurité - Protection XSS
+composer require symfony/html-sanitizer
 
-# Performance
-composer require babdev/pagerfanta-bundle
+# Performance - Optimisation images
 composer require intervention/image
+```
 
-# Sécurité
-composer require symfony/rate-limiter
+### Maintenance des dépendances
 
-# Monitoring (optionnel)
-composer require blackfire/php-sdk --dev
+```bash
+# Audit de sécurité régulier
+composer audit
+
+# Vérification des mises à jour
+composer outdated
+
+# Mise à jour avec validation
+composer update && composer phpstan && composer phpcs && composer test
 ```
 
 ### Infrastructure
 
-- Redis (pour cache) - optionnel mais recommandé
 - CDN (pour assets) - optionnel
 
 ---

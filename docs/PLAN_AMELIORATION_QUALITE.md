@@ -285,20 +285,7 @@ class LoginTest extends WebTestCase
 
 ## Phase 3: Documentation (Priorité P2)
 
-### 3.1 PHPDoc sur les méthodes publiques
-
-```php
-/**
- * Recherche une personne par son identité.
- *
- * @param string $firstName Le prénom (insensible à la casse)
- * @param string $lastName Le nom de famille (insensible à la casse)
- * @return Person|null La personne trouvée ou null
- */
-public function getByIdentity(string $firstName, string $lastName): ?Person
-```
-
-### 3.2 JSDoc pour JavaScript
+### 3.1 JSDoc pour JavaScript
 
 ```javascript
 /**
@@ -308,7 +295,7 @@ public function getByIdentity(string $firstName, string $lastName): ?Person
 async function formEncodeJson() {
 ```
 
-### 3.3 README amélioré
+### 3.2 README amélioré
 
 Voir le fichier CLAUDE.md créé comme base.
 
