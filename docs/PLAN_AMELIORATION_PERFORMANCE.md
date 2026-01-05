@@ -60,44 +60,7 @@ public function index(int $id): Response
 }
 ```
 
-### 1.2 Pagination des listes
-
-**Installation**:
-```bash
-composer require babdev/pagerfanta-bundle
-```
-
-**Implémentation**:
-```php
-// src/Repository/PersonRepository.php
-use Pagerfanta\Doctrine\ORM\QueryAdapter;
-use Pagerfanta\Pagerfanta;
-
-public function findPaginated(int $page = 1, int $perPage = 20): Pagerfanta
-{
-    $queryBuilder = $this->createQueryBuilder('p')
-        ->orderBy('p.lastName', 'ASC');
-
-    $adapter = new QueryAdapter($queryBuilder);
-    $pagerfanta = new Pagerfanta($adapter);
-
-    $pagerfanta->setMaxPerPage($perPage);
-    $pagerfanta->setCurrentPage($page);
-
-    return $pagerfanta;
-}
-```
-
-**Template Twig**:
-```twig
-{% for person in pager %}
-    {# affichage de la personne #}
-{% endfor %}
-
-{{ pagerfanta(pager) }}
-```
-
-### 1.3 Index de base de données
+### 1.2 Index de base de données
 
 **Migration recommandée**:
 ```php
@@ -116,112 +79,9 @@ public function up(Schema $schema): void
 
 ---
 
-## Phase 2: Cache Applicatif (Priorité P1)
+## Phase 2: Optimisation des Assets (Priorité P2)
 
-### 2.1 Configuration du cache Symfony
-
-```yaml
-# config/packages/cache.yaml
-framework:
-    cache:
-        pools:
-            app.cache:
-                adapter: cache.adapter.redis
-                default_lifetime: 3600
-            doctrine.result_cache_pool:
-                adapter: cache.adapter.redis
-            doctrine.system_cache_pool:
-                adapter: cache.adapter.redis
-
-when@prod:
-    framework:
-        cache:
-            pools:
-                app.cache:
-                    adapter: cache.adapter.redis
-                    provider: 'redis://redis:6379'
-```
-
-### 2.2 Cache des données fréquemment accédées
-
-```php
-// src/Repository/PersonRepository.php
-use Symfony\Contracts\Cache\CacheInterface;
-use Symfony\Contracts\Cache\ItemInterface;
-
-class PersonRepository extends ServiceEntityRepository
-{
-    public function __construct(
-        ManagerRegistry $managerRegistry,
-        private readonly CacheInterface $cache,
-    ) {
-        parent::__construct($managerRegistry, Person::class);
-    }
-
-    /**
-     * @return Person[]
-     */
-    public function getAllCached(): array
-    {
-        return $this->cache->get('persons_all', function (ItemInterface $item): array {
-            $item->expiresAfter(300); // 5 minutes
-
-            return $this->getAll();
-        });
-    }
-
-    public function invalidateCache(): void
-    {
-        $this->cache->delete('persons_all');
-    }
-}
-```
-
-**Invalidation automatique**:
-```php
-// src/EventListener/PersonCacheInvalidator.php
-use Doctrine\ORM\Events;
-
-#[AsDoctrineListener(event: Events::postPersist, entity: Person::class)]
-#[AsDoctrineListener(event: Events::postUpdate, entity: Person::class)]
-#[AsDoctrineListener(event: Events::postRemove, entity: Person::class)]
-class PersonCacheInvalidator
-{
-    public function __construct(
-        private readonly PersonRepository $personRepository,
-    ) {}
-
-    public function __invoke(): void
-    {
-        $this->personRepository->invalidateCache();
-    }
-}
-```
-
-### 2.3 Cache HTTP
-
-```yaml
-# config/packages/framework.yaml
-framework:
-    http_cache:
-        enabled: true
-```
-
-**Dans les contrôleurs**:
-```php
-#[Route('/tree', name: 'tree')]
-#[Cache(maxage: 300, public: true)]
-public function tree(): Response
-{
-    // ...
-}
-```
-
----
-
-## Phase 3: Optimisation des Assets (Priorité P2)
-
-### 3.1 Compression des images
+### 2.1 Compression des images
 
 **Installation**:
 ```bash
@@ -265,7 +125,7 @@ class ImageOptimizer
 }
 ```
 
-### 3.2 Lazy loading des images
+### 2.2 Lazy loading des images
 
 **Template Twig**:
 ```twig
@@ -299,7 +159,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 ```
 
-### 3.3 Minification et bundling
+### 2.3 Minification et bundling
 
 **Configuration de l'asset mapper** (production):
 ```yaml
@@ -316,7 +176,7 @@ when@prod:
 php bin/console asset-map:compile
 ```
 
-### 3.4 Préchargement des fonts
+### 2.4 Préchargement des fonts
 
 ```twig
 {# templates/layouts/base.html.twig #}
@@ -326,9 +186,9 @@ php bin/console asset-map:compile
 
 ---
 
-## Phase 4: Optimisation PHP (Priorité P2)
+## Phase 3: Optimisation PHP (Priorité P2)
 
-### 4.1 OPcache configuration (production)
+### 3.1 OPcache configuration (production)
 
 ```ini
 ; php.ini
@@ -341,7 +201,7 @@ opcache.save_comments=1
 opcache.enable_file_override=1
 ```
 
-### 4.2 Preloading
+### 3.2 Preloading
 
 ```php
 // config/preload.php (déjà présent)
@@ -352,7 +212,7 @@ if (file_exists(dirname(__DIR__).'/var/cache/prod/App_KernelProdContainer.preloa
 }
 ```
 
-### 4.3 JIT compilation (PHP 8.4)
+### 3.3 JIT compilation (PHP 8.4)
 
 ```ini
 ; php.ini
@@ -362,9 +222,9 @@ opcache.jit=function
 
 ---
 
-## Phase 5: Frontend Performance (Priorité P3)
+## Phase 4: Frontend Performance (Priorité P3)
 
-### 5.1 Critical CSS
+### 4.1 Critical CSS
 
 Extraire le CSS critique pour le rendu initial:
 
@@ -378,7 +238,7 @@ Extraire le CSS critique pour le rendu initial:
 <link rel="preload" href="{{ asset('styles/app.css') }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
 ```
 
-### 5.2 Defer JavaScript
+### 4.2 Defer JavaScript
 
 ```twig
 <script type="module" defer>
@@ -386,7 +246,7 @@ Extraire le CSS critique pour le rendu initial:
 </script>
 ```
 
-### 5.3 Service Worker (PWA optionnel)
+### 4.3 Service Worker (PWA optionnel)
 
 ```javascript
 // public/sw.js
@@ -415,25 +275,9 @@ self.addEventListener('fetch', (event) => {
 
 ---
 
-## Phase 6: Monitoring (Priorité P2)
+## Phase 5: Monitoring (Priorité P2)
 
-### 6.1 Blackfire (profiling)
-
-**Installation**:
-```bash
-composer require blackfire/php-sdk --dev
-```
-
-**Configuration Docker**:
-```yaml
-services:
-  app:
-    environment:
-      - BLACKFIRE_CLIENT_ID=${BLACKFIRE_CLIENT_ID}
-      - BLACKFIRE_CLIENT_TOKEN=${BLACKFIRE_CLIENT_TOKEN}
-```
-
-### 6.2 Logging des performances
+### 5.1 Logging des performances
 
 ```php
 // src/EventListener/PerformanceListener.php
@@ -465,7 +309,7 @@ class PerformanceListener
 }
 ```
 
-### 6.3 Doctrine SQL Logger (développement)
+### 5.2 Doctrine SQL Logger (développement)
 
 ```yaml
 # config/packages/doctrine.yaml

@@ -171,79 +171,196 @@ Et dans le template:
 
 ## Phase 3: Renforcement (Priorité P2)
 
-### 3.1 Headers de sécurité
+### 3.1 Protection XSS avec Symfony HTML Sanitizer
 
-**Fichier**: `config/packages/framework.yaml`
-
-```yaml
-framework:
-    http_method_override: false
-
-# Ajouter un listener ou configurer via Caddy/Nginx
-# Content-Security-Policy
-# X-Content-Type-Options: nosniff
-# X-Frame-Options: DENY
-# Strict-Transport-Security
-```
-
-### 3.2 Rate limiting
+Utiliser le composant HTML Sanitizer de Symfony pour nettoyer les contenus HTML des champs texte libres.
 
 **Installation**:
 ```bash
-composer require symfony/rate-limiter
+composer require symfony/html-sanitizer
 ```
 
-**Configuration** (`config/packages/rate_limiter.yaml`):
+**Configuration** (`config/packages/html_sanitizer.yaml`):
 ```yaml
 framework:
-    rate_limiter:
-        login_limiter:
-            policy: 'sliding_window'
-            limit: 5
-            interval: '15 minutes'
-        contact_limiter:
-            policy: 'fixed_window'
-            limit: 10
-            interval: '1 hour'
+    html_sanitizer:
+        sanitizers:
+            app.biography_sanitizer:
+                # Autoriser uniquement le texte simple, pas de HTML
+                allow_safe_elements: false
+            app.description_sanitizer:
+                # Autoriser quelques balises basiques
+                allow_elements:
+                    p: []
+                    br: []
+                    strong: []
+                    em: []
+                    ul: []
+                    ol: []
+                    li: []
 ```
 
-### 3.3 Audit logging
-
-Créer un service pour tracer les actions sensibles:
-
+**Utilisation dans un service ou contrôleur**:
 ```php
-// src/Service/AuditLogger.php
-class AuditLogger
+// src/Service/ContentSanitizer.php
+use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
+
+class ContentSanitizer
 {
     public function __construct(
-        private readonly LoggerInterface $auditLogger,
+        private readonly HtmlSanitizerInterface $biographySanitizer,
+        private readonly HtmlSanitizerInterface $descriptionSanitizer,
     ) {}
 
-    public function logAdminAction(User $admin, string $action, array $context = []): void
+    public function sanitizeBiography(?string $content): ?string
     {
-        $this->auditLogger->info("Admin action: $action", [
-            'admin_id' => $admin->getId(),
-            'admin_email' => $admin->getEmail(),
-            'timestamp' => new \DateTimeImmutable(),
-            ...$context,
-        ]);
+        if ($content === null) {
+            return null;
+        }
+
+        return $this->biographySanitizer->sanitize($content);
+    }
+
+    public function sanitizeDescription(?string $content): ?string
+    {
+        if ($content === null) {
+            return null;
+        }
+
+        return $this->descriptionSanitizer->sanitize($content);
     }
 }
 ```
 
-### 3.4 Validation des entrées
-
-Ajouter des contraintes sur les champs texte libres pour éviter XSS:
-
+**Utilisation dans le repository avant persistence**:
 ```php
-// Dans les entités
-#[Assert\Regex(
-    pattern: '/<script|javascript:|on\w+=/i',
-    match: false,
-    message: 'Contenu non autorisé'
-)]
-private ?string $biography = null;
+// src/Repository/PersonRepository.php
+public function __construct(
+    ManagerRegistry $managerRegistry,
+    private readonly ContentSanitizer $contentSanitizer,
+) {
+    parent::__construct($managerRegistry, Person::class);
+}
+
+public function update(Person $person): void
+{
+    // Sanitizer les champs texte avant persistence
+    $person->setBiography($this->contentSanitizer->sanitizeBiography($person->getBiography()));
+    $person->setDescription($this->contentSanitizer->sanitizeDescription($person->getDescription()));
+
+    if (!$person->getCreatedAt() instanceof \DateTimeInterface) {
+        $person->setCreatedAt(new \DateTimeImmutable());
+    }
+
+    if ($person->getPicture() === null) {
+        $person->setPicture(self::DEFAULT_PICTURE);
+    }
+
+    $this->getEntityManager()->persist($person);
+    $this->getEntityManager()->flush();
+}
 ```
+
+**Alternative avec filtre Twig** (pour l'affichage):
+```twig
+{# Sanitizer à l'affichage plutôt qu'au stockage #}
+{{ person.biography|sanitize_html('app.biography_sanitizer') }}
+```
+
+---
+
+## Phase 4: Maintenance des Dépendances (Priorité P1)
+
+### 4.1 Audit régulier des dépendances
+
+**Vérifier les vulnérabilités connues**:
+```bash
+# Audit des dépendances PHP
+composer audit
+
+# Vérifier les mises à jour disponibles
+composer outdated
+```
+
+### 4.2 Mise à jour des dépendances
+
+**Procédure de mise à jour**:
+```bash
+# 1. Vérifier les mises à jour disponibles
+composer outdated
+
+# 2. Mettre à jour les dépendances (mineures/patches)
+composer update
+
+# 3. Pour les mises à jour majeures, faire une par une
+composer require symfony/framework-bundle:^7.3
+
+# 4. Vérifier que tout fonctionne
+composer phpstan
+composer phpcs
+composer test
+```
+
+### 4.3 Configuration de Dependabot (GitHub)
+
+Créer le fichier `.github/dependabot.yml`:
+```yaml
+version: 2
+updates:
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "php"
+    commit-message:
+      prefix: "chore(deps)"
+    ignore:
+      # Ignorer les versions alpha/beta/RC
+      - dependency-name: "*"
+        update-types: ["version-update:semver-prerelease"]
+```
+
+### 4.4 Script de mise à jour automatisée
+
+Ajouter dans `composer.json`:
+```json
+{
+    "scripts": {
+        "security-check": [
+            "composer audit",
+            "composer outdated --direct"
+        ],
+        "update-deps": [
+            "composer update --with-all-dependencies",
+            "@phpstan",
+            "@phpcs",
+            "@test"
+        ]
+    }
+}
+```
+
+**Utilisation**:
+```bash
+# Vérification de sécurité
+composer security-check
+
+# Mise à jour avec validation
+composer update-deps
+```
+
+### 4.5 Politique de mise à jour
+
+| Type de mise à jour | Fréquence | Action |
+|---------------------|-----------|--------|
+| Patches de sécurité | Immédiat | `composer update` |
+| Patches (x.x.X) | Hebdomadaire | `composer update` |
+| Mineure (x.X.0) | Mensuelle | Tester en staging |
+| Majeure (X.0.0) | Trimestrielle | Planifier migration |
 
 ---
 
@@ -254,7 +371,7 @@ private ?string $biography = null;
 - [ ] Injection SQL corrigée
 - [ ] Validation upload serveur ajoutée
 - [ ] CSRF sur toutes les actions sensibles
-- [ ] Headers de sécurité configurés
+- [ ] HTML Sanitizer configuré
 
 ### Régulièrement
 - [ ] Mise à jour des dépendances (`composer update`)
@@ -275,4 +392,6 @@ private ?string $biography = null;
 
 - [OWASP Top 10](https://owasp.org/Top10/)
 - [Symfony Security](https://symfony.com/doc/current/security.html)
+- [Symfony HTML Sanitizer](https://symfony.com/doc/current/html_sanitizer.html)
 - [PHP Security Best Practices](https://www.php.net/manual/en/security.php)
+- [Composer Security Advisories](https://github.com/advisories)
