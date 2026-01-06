@@ -1,6 +1,7 @@
 # Plan d'Amélioration - Qualité et Propreté du Code
 
 ## Objectif
+
 Améliorer la qualité, la lisibilité et la maintenabilité du code.
 
 ---
@@ -83,7 +84,7 @@ class ContactResolverManager
 services:
     _instanceof:
         App\Service\Contact\ContactResolverInterface:
-            tags: ['app.contact_resolver']
+            tags: [ 'app.contact_resolver' ]
 
     App\Service\Contact\ContactResolverManager:
         arguments:
@@ -111,9 +112,11 @@ public function resolve(Contact $contact): Response
 ### 1.2 Élimination du code mort
 
 **Fichiers concernés**:
+
 - `src/Controller/AdminController.php:203-204`
 
 **Action**: Supprimer les lignes commentées:
+
 ```php
 //        $contact->setResolutionDate(new \DateTime());
 //        $this->contactRepository->update($contact);
@@ -124,12 +127,14 @@ public function resolve(Contact $contact): Response
 **Fichier**: `src/Controller/SecurityController.php:82`
 
 **Problème**:
+
 ```php
 // @phpstan-ignore-next-line
 $this->addFlash('error', $error->getMessage());
 ```
 
 **Solution**: Typer correctement
+
 ```php
 foreach ($form->getErrors(true) as $error) {
     $message = $error->getMessage();
@@ -272,14 +277,14 @@ class LoginTest extends WebTestCase
 
 ### 2.5 Objectif de couverture
 
-| Composant | Couverture cible |
-|-----------|------------------|
-| Entités | 90% |
-| Repositories | 80% |
-| Services | 85% |
-| Contrôleurs | 70% |
-| Voters | 95% |
-| **Global** | **75%** |
+| Composant    | Couverture cible |
+|--------------|------------------|
+| Entités      | 90%              |
+| Repositories | 80%              |
+| Services     | 85%              |
+| Contrôleurs  | 70%              |
+| Voters       | 95%              |
+| **Global**   | **75%**          |
 
 ---
 
@@ -306,6 +311,7 @@ Voir le fichier CLAUDE.md créé comme base.
 ### 4.1 Variables centralisées
 
 Déplacer toutes les couleurs vers `_colors.scss`:
+
 ```scss
 // assets/styles/base/_colors.scss
 :root {
@@ -328,6 +334,7 @@ Déplacer toutes les couleurs vers `_colors.scss`:
 ### 4.2 Typage des composants
 
 Créer des mixins typés pour les composants:
+
 ```scss
 // assets/styles/abstracts/_components.scss
 @mixin card($padding: 1rem, $radius: 0.5rem) {
@@ -415,25 +422,27 @@ async function fetchApi(url, options = {}) {
 
 ## Métriques de Succès
 
-| Métrique | Actuel | Cible |
-|----------|--------|-------|
-| Couverture tests | ~0% | 75% |
-| Complexité cyclomatique max | 25+ | 10 |
-| PHPStan erreurs | 0 (avec ignores) | 0 (sans ignores) |
-| Lignes par méthode max | 140+ | 30 |
-| Code dupliqué | ~5% | < 2% |
+| Métrique                    | Actuel           | Cible            |
+|-----------------------------|------------------|------------------|
+| Couverture tests            | ~0%              | 75%              |
+| Complexité cyclomatique max | 25+              | 10               |
+| PHPStan erreurs             | 0 (avec ignores) | 0 (sans ignores) |
+| Lignes par méthode max      | 140+             | 30               |
+| Code dupliqué               | ~5%              | < 2%             |
 
 ---
 
 ## Checklist Qualité
 
 ### Avant chaque commit
+
 - [ ] `composer phpstan` passe
 - [ ] `composer phpcs` passe
 - [ ] `composer test` passe
 - [ ] Pas de `@phpstan-ignore` ajoutés
 
 ### Avant chaque release
+
 - [ ] `composer rector:dry` vérifié
 - [ ] Couverture tests maintenue
 - [ ] Documentation à jour

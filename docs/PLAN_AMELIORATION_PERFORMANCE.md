@@ -1,7 +1,9 @@
 # Plan d'Amélioration - Performance et Optimisation
 
 ## Objectif
-Optimiser les performances de l'application pour une meilleure expérience utilisateur et une utilisation efficace des ressources.
+
+Optimiser les performances de l'application pour une meilleure expérience utilisateur et une utilisation efficace des
+ressources.
 
 ---
 
@@ -12,6 +14,7 @@ Optimiser les performances de l'application pour une meilleure expérience utili
 **Problème identifié**: Chargement lazy des relations dans les templates.
 
 **Fichiers concernés**:
+
 - `src/Repository/PersonRepository.php`
 - `templates/person.html.twig`
 
@@ -46,6 +49,7 @@ public function findWithRelations(int $id): ?Person
 ```
 
 **Utilisation dans le contrôleur**:
+
 ```php
 #[Route('/{id}', name: 'person')]
 public function index(int $id): Response
@@ -63,6 +67,7 @@ public function index(int $id): Response
 ### 1.2 Index de base de données
 
 **Migration recommandée**:
+
 ```php
 // migrations/VersionXXXX_AddIndexes.php
 public function up(Schema $schema): void
@@ -84,11 +89,13 @@ public function up(Schema $schema): void
 ### 2.1 Compression des images
 
 **Installation**:
+
 ```bash
 composer require intervention/image
 ```
 
 **Service d'optimisation**:
+
 ```php
 // src/Service/ImageOptimizer.php
 use Intervention\Image\ImageManager;
@@ -128,6 +135,7 @@ class ImageOptimizer
 ### 2.2 Lazy loading des images
 
 **Template Twig**:
+
 ```twig
 <img
     src="{{ asset('images/placeholder.svg') }}"
@@ -139,6 +147,7 @@ class ImageOptimizer
 ```
 
 **JavaScript**:
+
 ```javascript
 // assets/scripts/lazyload.js
 document.addEventListener('DOMContentLoaded', () => {
@@ -162,6 +171,7 @@ document.addEventListener('DOMContentLoaded', () => {
 ### 2.3 Minification et bundling
 
 **Configuration de l'asset mapper** (production):
+
 ```yaml
 # config/packages/asset_mapper.yaml
 when@prod:
@@ -172,6 +182,7 @@ when@prod:
 ```
 
 **Commande de build**:
+
 ```bash
 php bin/console asset-map:compile
 ```
@@ -192,13 +203,13 @@ php bin/console asset-map:compile
 
 ```ini
 ; php.ini
-opcache.enable=1
-opcache.memory_consumption=256
-opcache.interned_strings_buffer=16
-opcache.max_accelerated_files=20000
-opcache.validate_timestamps=0
-opcache.save_comments=1
-opcache.enable_file_override=1
+opcache.enable = 1
+opcache.memory_consumption = 256
+opcache.interned_strings_buffer = 16
+opcache.max_accelerated_files = 20000
+opcache.validate_timestamps = 0
+opcache.save_comments = 1
+opcache.enable_file_override = 1
 ```
 
 ### 3.2 Preloading
@@ -216,8 +227,8 @@ if (file_exists(dirname(__DIR__).'/var/cache/prod/App_KernelProdContainer.preloa
 
 ```ini
 ; php.ini
-opcache.jit_buffer_size=256M
-opcache.jit=function
+opcache.jit_buffer_size = 256M
+opcache.jit = function
 ```
 
 ---
@@ -324,32 +335,35 @@ when@dev:
 
 ## Métriques de Performance Cibles
 
-| Métrique | Actuel | Cible |
-|----------|--------|-------|
-| Time to First Byte (TTFB) | ~300ms | < 100ms |
-| Largest Contentful Paint (LCP) | ~2s | < 1.5s |
-| First Input Delay (FID) | ~100ms | < 50ms |
-| Cumulative Layout Shift (CLS) | ~0.1 | < 0.05 |
-| Requêtes DB par page | ~10+ | < 5 |
-| Temps de réponse moyen | ~400ms | < 200ms |
+| Métrique                       | Actuel | Cible   |
+|--------------------------------|--------|---------|
+| Time to First Byte (TTFB)      | ~300ms | < 100ms |
+| Largest Contentful Paint (LCP) | ~2s    | < 1.5s  |
+| First Input Delay (FID)        | ~100ms | < 50ms  |
+| Cumulative Layout Shift (CLS)  | ~0.1   | < 0.05  |
+| Requêtes DB par page           | ~10+   | < 5     |
+| Temps de réponse moyen         | ~400ms | < 200ms |
 
 ---
 
 ## Checklist Optimisation
 
 ### Avant déploiement
+
 - [ ] Cache Doctrine configuré
 - [ ] OPcache activé
 - [ ] Assets compilés
 - [ ] Indexes DB créés
 
 ### En production
+
 - [ ] HTTP cache configuré
 - [ ] CDN configuré (optionnel)
 - [ ] Monitoring actif
 - [ ] Logs de performance analysés
 
 ### Tests de performance
+
 - [ ] Lighthouse score > 90
 - [ ] WebPageTest validé
 - [ ] Tests de charge réalisés

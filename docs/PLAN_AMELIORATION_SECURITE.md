@@ -1,6 +1,7 @@
 # Plan d'Amélioration - Sécurité
 
 ## Objectif
+
 Corriger les vulnérabilités identifiées et renforcer la posture de sécurité de l'application.
 
 ---
@@ -14,11 +15,13 @@ Corriger les vulnérabilités identifiées et renforcer la posture de sécurité
 **Problème**: Le champ `password` stocke le mot de passe en clair.
 
 **Solution**:
+
 1. Supprimer le champ `password` de l'entité Contact
 2. Créer un mécanisme de token temporaire sécurisé
 3. Envoyer un lien de création de compte par email
 
 **Alternative**: Si le flux actuel doit être conservé:
+
 1. Hasher le mot de passe avant stockage
 2. Supprimer immédiatement après utilisation
 
@@ -37,6 +40,7 @@ $this->contactRepository->delete($contact);
 **Problème**: Le paramètre `$orderBy` est concaténé sans validation.
 
 **Solution**:
+
 ```php
 private const ALLOWED_ORDER_FIELDS = ['id', 'firstName', 'lastName', 'startYear', 'createdAt'];
 
@@ -94,6 +98,7 @@ class ImageValidator
 **Fichier**: `src/Controller/SecurityController.php:100-104`
 
 **Solution**:
+
 ```php
 private function extractNamesFromEmail(string $email): ?array
 {
@@ -120,6 +125,7 @@ if ($names === null) {
 **Fichier**: `src/Form/ContactType.php:75-78`
 
 **Solution**:
+
 ```php
 private function splitFullName(string $fullName): array
 {
@@ -148,11 +154,13 @@ if (in_array(Type::from(intval($data['type'])), $typesWithRelatedPerson)) {
 **Fichier**: `src/Controller/AdminController.php:52-59`
 
 **Problème actuel**:
+
 ```php
 #[Route('/admin/contact/{id}/delete', methods: [Request::METHOD_GET])]
 ```
 
 **Solution**:
+
 ```php
 #[Route('/admin/contact/{id}/delete', methods: [Request::METHOD_POST, Request::METHOD_DELETE])]
 #[IsCsrfTokenValid('delete_contact', tokenKey: '_token')]
@@ -160,6 +168,7 @@ public function delete(Contact $contact): Response
 ```
 
 Et dans le template:
+
 ```twig
 <form action="{{ path('admin_contact_delete', {id: contact.id}) }}" method="POST">
     <input type="hidden" name="_token" value="{{ csrf_token('delete_contact') }}">
@@ -176,11 +185,13 @@ Et dans le template:
 Utiliser le composant HTML Sanitizer de Symfony pour nettoyer les contenus HTML des champs texte libres.
 
 **Installation**:
+
 ```bash
 composer require symfony/html-sanitizer
 ```
 
 **Configuration** (`config/packages/html_sanitizer.yaml`):
+
 ```yaml
 framework:
     html_sanitizer:
@@ -191,16 +202,17 @@ framework:
             app.description_sanitizer:
                 # Autoriser quelques balises basiques
                 allow_elements:
-                    p: []
-                    br: []
-                    strong: []
-                    em: []
-                    ul: []
-                    ol: []
-                    li: []
+                    p: [ ]
+                    br: [ ]
+                    strong: [ ]
+                    em: [ ]
+                    ul: [ ]
+                    ol: [ ]
+                    li: [ ]
 ```
 
 **Utilisation dans un service ou contrôleur**:
+
 ```php
 // src/Service/ContentSanitizer.php
 use Symfony\Component\HtmlSanitizer\HtmlSanitizerInterface;
@@ -233,6 +245,7 @@ class ContentSanitizer
 ```
 
 **Utilisation dans le repository avant persistence**:
+
 ```php
 // src/Repository/PersonRepository.php
 public function __construct(
@@ -262,6 +275,7 @@ public function update(Person $person): void
 ```
 
 **Alternative avec filtre Twig** (pour l'affichage):
+
 ```twig
 {# Sanitizer à l'affichage plutôt qu'au stockage #}
 {{ person.biography|sanitize_html('app.biography_sanitizer') }}
@@ -272,6 +286,7 @@ public function update(Person $person): void
 ## Checklist de Sécurité
 
 ### Avant déploiement
+
 - [ ] Faille mot de passe en clair corrigée
 - [ ] Injection SQL corrigée
 - [ ] Validation upload serveur ajoutée
@@ -279,12 +294,14 @@ public function update(Person $person): void
 - [ ] HTML Sanitizer configuré
 
 ### Régulièrement
+
 - [ ] Mise à jour des dépendances (`composer update`)
 - [ ] Audit des dépendances (`composer audit`)
 - [ ] Revue des logs d'accès
 - [ ] Test de pénétration
 
 ### Configuration production
+
 - [ ] `APP_DEBUG=false`
 - [ ] `APP_ENV=prod`
 - [ ] Clé secrète unique (`APP_SECRET`)
