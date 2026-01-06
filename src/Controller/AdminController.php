@@ -23,7 +23,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/admin')]
 #[IsGranted(Role::ADMIN->value)]
 class AdminController extends AbstractController
 {
@@ -37,7 +36,7 @@ class AdminController extends AbstractController
     ) {
     }
 
-    #[Route('/contact', name: 'admin_contact', methods: [Request::METHOD_GET])]
+    #[Route('/admin/contact', name: 'admin_contact', methods: [Request::METHOD_GET])]
     public function index(): Response
     {
         $list  = $this->contactRepository->getAll();
@@ -49,7 +48,7 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/contact/{id}/delete', name: 'admin_contact_delete', methods: [Request::METHOD_GET])]
+    #[Route('/admin/contact/{id}/delete', name: 'admin_contact_delete', methods: [Request::METHOD_GET])]
     public function delete(Contact $contact): Response
     {
         $contact->setResolutionDate(new \DateTime());
@@ -62,7 +61,7 @@ class AdminController extends AbstractController
     /**
      * @throws \Exception If contact type is unknown.
      */
-    #[Route('/contact/{id}/resolve', name: 'admin_contact_resolve', methods: [Request::METHOD_GET])]
+    #[Route('/admin/contact/{id}/resolve', name: 'admin_contact_resolve', methods: [Request::METHOD_GET])]
     public function resolve(Contact $contact): Response
     {
         switch ($contact->getType()) {

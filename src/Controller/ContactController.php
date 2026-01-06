@@ -16,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/contact')]
 class ContactController extends AbstractController
 {
     public function __construct(
@@ -25,7 +24,7 @@ class ContactController extends AbstractController
     ) {
     }
 
-    #[Route('/contact', name: 'contact', methods: [Request::METHOD_GET])]
+    #[Route('/contact/contact', name: 'contact', methods: [Request::METHOD_GET])]
     public function index(): Response
     {
         $form   = $this->createForm(ContactType::class);
@@ -43,7 +42,7 @@ class ContactController extends AbstractController
         ]);
     }
 
-    #[Route('/contact', name: 'contact_post', methods: [Request::METHOD_POST])]
+    #[Route('/contact/contact', name: 'contact_post', methods: [Request::METHOD_POST])]
     public function post(Request $request): Response
     {
         $form = $this->createForm(ContactType::class);

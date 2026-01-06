@@ -1,10 +1,15 @@
 framework:
     asset_mapper:
-        # The paths to make available to the asset mapper.
         paths:
             - assets/
+        missing_import_mode: strict
         excluded_patterns:
             - '*/assets/styles/_*.scss'
             - '*/assets/styles/**/_*.scss'
         importmap_script_attributes:
             defer: true
+
+when@prod:
+    framework:
+        asset_mapper:
+            missing_import_mode: warn

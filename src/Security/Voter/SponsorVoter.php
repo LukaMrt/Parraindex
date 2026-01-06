@@ -7,6 +7,7 @@ namespace App\Security\Voter;
 use App\Entity\Person\User;
 use App\Entity\Sponsor\Sponsor;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
@@ -24,7 +25,7 @@ final class SponsorVoter extends Voter
     /**
      * @param Sponsor $subject
      */
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
 

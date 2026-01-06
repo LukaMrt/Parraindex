@@ -7,6 +7,7 @@ namespace App\Security\Voter;
 use App\Entity\Person\Person;
 use App\Entity\Person\User;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
+use Symfony\Component\Security\Core\Authorization\Voter\Vote;
 use Symfony\Component\Security\Core\Authorization\Voter\Voter;
 
 /**
@@ -29,7 +30,7 @@ final class PersonVoter extends Voter
      * @param Person $subject
      */
     #[\Override]
-    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token): bool
+    protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
 

@@ -1,8 +1,5 @@
 ###> symfony/framework-bundle ###
-/.env
 /.env.local
-/.env.test
-/.env.local.php
 /.env.*.local
 /config/secrets/prod/prod.decrypt.private.php
 /public/bundles/
@@ -12,7 +9,7 @@
 
 ###> phpunit/phpunit ###
 /phpunit.xml
-.phpunit.result.cache
+/.phpunit.cache/
 ###< phpunit/phpunit ###
 
 ###> symfony/asset-mapper ###

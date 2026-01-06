@@ -101,7 +101,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[\Override]
     public function getUserIdentifier(): string
     {
-        if ($this->email === null || $this->email === '' || $this->email === '0') {
+        if (in_array($this->email, [null, '', '0'], true)) {
             throw new \LogicException('The email of the user is not set.');
         }
 
@@ -128,7 +128,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function getRolesEnum(): array
     {
-        return array_map(static fn (string $role): Role => Role::from($role), $this->getRoles());
+        return array_map(Role::from(...), $this->getRoles());
     }
 
     /**
@@ -155,14 +155,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->password = $password;
 
         return $this;
-    }
-
-    /**
-     * @see UserInterface
-     */
-    #[\Override]
-    public function eraseCredentials(): void
-    {
     }
 
     public function setCreatedAt(?\DateTimeInterface $createdAt): static

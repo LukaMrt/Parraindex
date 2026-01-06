@@ -1,7 +1,0 @@
-{
-  name: "Parraindex",
-  service: "dev",
-  dockerComposeFile: "compose.yml",
-  workspaceFolder: "/Parraindex",
-  shutdownAction: "stopCompose"
-}

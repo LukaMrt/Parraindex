@@ -10,7 +10,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/about')]
 class AboutController extends AbstractController
 {
     private const array AUTHORS = [
@@ -37,11 +36,11 @@ class AboutController extends AbstractController
     ) {
     }
 
-    #[Route('/', name: 'about')]
+    #[Route('/about/', name: 'about')]
     public function index(): Response
     {
         $authors = array_map(
-            fn($author): ?Person => $this->personRepository->getByIdentity(
+            fn(array $author): ?Person => $this->personRepository->getByIdentity(
                 $author['firstName'],
                 $author['lastName']
             ),

@@ -13,10 +13,9 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route(path: '/data')]
 class DataController extends AbstractController
 {
-    #[Route(path: '/download/{id}', name: 'data_download')]
+    #[Route(path: '/data/download/{id}', name: 'data_download')]
     #[IsGranted(PersonVoter::DOWNLOAD_DATA, subject: 'person')]
     public function download(?Person $person): JsonResponse
     {
