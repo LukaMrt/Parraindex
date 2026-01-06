@@ -434,6 +434,6 @@ async function fetchApi(url, options = {}) {
 - [ ] Pas de `@phpstan-ignore` ajoutés
 
 ### Avant chaque release
-- [ ] `composer rector-dry` vérifié
+- [ ] `composer rector:dry` vérifié
 - [ ] Couverture tests maintenue
 - [ ] Documentation à jour

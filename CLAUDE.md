@@ -53,13 +53,13 @@ composer phpstan             # Analyse statique (niveau max)
 composer phpcs               # Vérification style de code
 composer phpcs-fix           # Correction automatique
 composer rector              # Modernisation du code
-composer rector-dry          # Prévisualisation rector
+composer rector:dry          # Prévisualisation rector
 
 # Tests
 composer test                # Lancer les tests PHPUnit
 
 # Assets
-composer build-scss          # Compiler SCSS et assets
+composer scss:build          # Compiler SCSS et assets
 ```
 
 ## Architecture du code
