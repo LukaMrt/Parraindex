@@ -3,8 +3,8 @@
     <description>Coding standards for Parraindex Symfony project</description>
 
     <!-- PHP version compatibility -->
-    <config name="testVersion" value="8.4"/>
-    <config name="php_version" value="80400"/>
+    <config name="testVersion" value="8.5"/>
+    <config name="php_version" value="80500"/>
 
     <!-- Display options -->
     <arg name="colors"/>

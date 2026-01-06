@@ -9,7 +9,7 @@ parameters:
         - tests
 
     # Level 0 is the loosest, level 9 is the strictest
-    level: 8
+    level: 9
 
     # Exclude specific files or directories from analysis
     excludePaths:
