@@ -1,6 +1,8 @@
 includes:
     - vendor/phpstan/phpstan-symfony/extension.neon
     - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
 
 parameters:
     # Directories to be analyzed
@@ -8,8 +10,12 @@ parameters:
         - src
         - tests
 
-    # Level 0 is the loosest, level 9 is the strictest
-    level: 9
+    # Level 0 is the loosest, level 10 is the strictest
+    level: 10
+
+    # Cache configuration for better performance
+    tmpDir: var/cache/phpstan
+    resultCachePath: var/cache/phpstan/resultCache.php
 
     # Exclude specific files or directories from analysis
     excludePaths:
