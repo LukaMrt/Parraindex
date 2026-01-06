@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route(path: '/tree')]
 class TreeController extends AbstractController
 {
     public function __construct(
@@ -17,7 +16,7 @@ class TreeController extends AbstractController
     ) {
     }
 
-    #[Route(path: '/', name: 'tree')]
+    #[Route(path: '/tree/', name: 'tree')]
     public function index(): Response
     {
         $people = $this->personRepository->findAll();

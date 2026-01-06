@@ -17,7 +17,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/personne')]
 class PersonController extends AbstractController
 {
     public function __construct(
@@ -26,13 +25,13 @@ class PersonController extends AbstractController
     ) {
     }
 
-    #[Route('/{id}', name: 'person', methods: [Request::METHOD_GET])]
+    #[Route('/personne/{id}', name: 'person', methods: [Request::METHOD_GET])]
     public function index(Person $person): Response
     {
         return $this->render('person.html.twig', ['person' => $person]);
     }
 
-    #[Route('/{id}/edit', name: 'person_edit', methods: [Request::METHOD_GET])]
+    #[Route('/personne/{id}/edit', name: 'person_edit', methods: [Request::METHOD_GET])]
     #[IsGranted(PersonVoter::EDIT, subject: 'person')]
     public function edit(Person $person): Response
     {
@@ -48,7 +47,7 @@ class PersonController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'person_edit_post', methods: [Request::METHOD_POST])]
+    #[Route('/personne/{id}/edit', name: 'person_edit_post', methods: [Request::METHOD_POST])]
     #[IsGranted(PersonVoter::EDIT, subject: 'person')]
     public function editPost(Person $person, Request $request): Response
     {
@@ -67,7 +66,7 @@ class PersonController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'person_delete', methods: [Request::METHOD_DELETE])]
+    #[Route('/personne/{id}', name: 'person_delete', methods: [Request::METHOD_DELETE])]
     #[IsGranted(Role::ADMIN->value)]
     public function delete(Person $person): Response
     {

@@ -5,30 +5,50 @@ declare(strict_types=1);
 use Rector\Config\RectorConfig;
 use Rector\Doctrine\Set\DoctrineSetList;
 use Rector\PHPUnit\Set\PHPUnitSetList;
+use Rector\Symfony\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector;
 use Rector\Symfony\Set\SymfonySetList;
 
 return RectorConfig::configure()
     ->withRootFiles()
     ->withPaths([
+        __DIR__ . '/config',
+        __DIR__ . '/public',
         __DIR__ . '/src',
         __DIR__ . '/tests',
     ])
-    ->withPhpSets()
-    ->withAttributesSets()
-    ->withDeadCodeLevel(80)
-    ->withCodeQualityLevel(80)
-    ->withTypeCoverageLevel(80)
-    ->withComposerBased(twig: true, doctrine: true, phpunit: true)
+    ->withSkip([
+        __DIR__ . '/var',
+        __DIR__ . '/vendor',
+        __DIR__ . '/migrations',
+        __DIR__ . '/src/Kernel.php',
+        __DIR__ . '/config/bundles.php',
+        __DIR__ . '/config/reference.php',
+        ControllerMethodInjectionToConstructorRector::class,
+    ])
+    ->withPhpSets(
+        php85: true
+    )
+    ->withAttributesSets(
+        symfony: true,
+        doctrine: true,
+        phpunit: true,
+    )
+    ->withComposerBased(
+        twig: true,
+        doctrine: true,
+        phpunit: true,
+        symfony: true,
+    )
     ->withPreparedSets(
-        deadCode: false,
-        codeQuality: false,
+        deadCode: true,
+        codeQuality: true,
         codingStyle: true,
-        typeDeclarations: false,
+        typeDeclarations: true,
         privatization: false,
         naming: false,
         instanceOf: true,
         earlyReturn: true,
-        strictBooleans: true,
+        strictBooleans: false,
         carbon: false,
         rectorPreset: true,
         phpunitCodeQuality: true,
@@ -36,32 +56,14 @@ return RectorConfig::configure()
         symfonyCodeQuality: true,
         symfonyConfigs: true,
     )
-    ->withSets([
-        SymfonySetList::SYMFONY_72,
-        SymfonySetList::SYMFONY_CODE_QUALITY,
-        SymfonySetList::SYMFONY_CONSTRUCTOR_INJECTION,
-        SymfonySetList::CONFIGS,
-        PHPUnitSetList::PHPUNIT_110,
-        PHPUnitSetList::PHPUNIT_CODE_QUALITY,
-        DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES,
-        DoctrineSetList::DOCTRINE_CODE_QUALITY,
-        DoctrineSetList::TYPED_COLLECTIONS,
-        DoctrineSetList::YAML_TO_ANNOTATIONS,
-        DoctrineSetList::DOCTRINE_ORM_213,
-        DoctrineSetList::DOCTRINE_DBAL_40,
-        DoctrineSetList::DOCTRINE_BUNDLE_210,
-    ])
-    ->withSkip([
-        __DIR__ . '/var',
-        __DIR__ . '/vendor',
-        __DIR__ . '/src/Application',
-        __DIR__ . '/src/Entity/old',
-        __DIR__ . '/src/Infrastructure',
-    ])
     ->withImportNames(
-        importNames: true,
-        importDocBlockNames: true,
         importShortClasses: false,
         removeUnusedImports: true,
     )
-    ->withCache(__DIR__ . '/var/cache/rector');
+    ->withParallel(
+        timeoutSeconds: 300,
+        maxNumberOfProcess: 4,
+        jobSize: 20
+    )
+    ->withCache(__DIR__ . '/var/cache/rector')
+;

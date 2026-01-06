@@ -24,7 +24,6 @@ use SymfonyCasts\Bundle\ResetPassword\Controller\ResetPasswordControllerTrait;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
 
-#[Route('/reset-password')]
 class ResetPasswordController extends AbstractController
 {
     use ResetPasswordControllerTrait;
@@ -38,7 +37,7 @@ class ResetPasswordController extends AbstractController
     ) {
     }
 
-    #[Route('', name: 'forgot_password_request')]
+    #[Route('/reset-password', name: 'forgot_password_request')]
     public function request(Request $request): Response
     {
         $form = $this->createForm(ResetPasswordRequestFormType::class);
@@ -53,7 +52,7 @@ class ResetPasswordController extends AbstractController
         return $this->render('reset_password/request.html.twig', ['form' => $form]);
     }
 
-    #[Route('/check-email', name: 'check_email')]
+    #[Route('/reset-password/check-email', name: 'check_email')]
     public function checkEmail(): Response
     {
         $token = $this->getTokenObjectFromSession();
@@ -64,10 +63,10 @@ class ResetPasswordController extends AbstractController
         return $this->render('reset_password/check_email.html.twig', ['token' => $token]);
     }
 
-    #[Route('/reset/{token}', name: 'reset_password')]
+    #[Route('/reset-password/reset/{token}', name: 'reset_password')]
     public function reset(Request $request, ?string $token = null): Response
     {
-        if ($token !== null && $token !== '' && $token !== '0') {
+        if (!in_array($token, [null, '', '0'], true)) {
             $this->storeTokenInSession($token);
             return $this->redirectToRoute('reset_password');
         }

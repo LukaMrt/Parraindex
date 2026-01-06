@@ -15,7 +15,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[Route('/parrainage')]
 class SponsorController extends AbstractController
 {
     public function __construct(
@@ -23,13 +22,13 @@ class SponsorController extends AbstractController
     ) {
     }
 
-    #[Route('/{id}', name: 'sponsor', methods: [Request::METHOD_GET])]
+    #[Route('/parrainage/{id}', name: 'sponsor', methods: [Request::METHOD_GET])]
     public function index(Sponsor $sponsor): Response
     {
         return $this->render('sponsor.html.twig', ['sponsor' => $sponsor]);
     }
 
-    #[Route('/{id}/edit', name: 'sponsor_edit', methods: [Request::METHOD_GET])]
+    #[Route('/parrainage/{id}/edit', name: 'sponsor_edit', methods: [Request::METHOD_GET])]
     #[IsGranted(SponsorVoter::EDIT, subject: 'sponsor')]
     public function edit(Sponsor $sponsor): Response
     {
@@ -44,7 +43,7 @@ class SponsorController extends AbstractController
         );
     }
 
-    #[Route('/{id}/edit', name: 'sponsor_edit_post', methods: [Request::METHOD_POST])]
+    #[Route('/parrainage/{id}/edit', name: 'sponsor_edit_post', methods: [Request::METHOD_POST])]
     #[IsGranted(SponsorVoter::EDIT, subject: 'sponsor')]
     public function editPost(Sponsor $sponsor, Request $request): Response
     {
@@ -60,8 +59,7 @@ class SponsorController extends AbstractController
         return $this->redirectToRoute('sponsor_edit', ['id' => $sponsor->getId()]);
     }
 
-
-    #[Route('/{id}', name: 'sponsor_delete', methods: [Request::METHOD_DELETE])]
+    #[Route('/parrainage/{id}', name: 'sponsor_delete', methods: [Request::METHOD_DELETE])]
     #[IsGranted(SponsorVoter::EDIT, subject: 'sponsor')]
     public function delete(Sponsor $sponsor): Response
     {
