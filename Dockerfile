@@ -2,7 +2,7 @@
 FROM composer:2 AS composer
 
 # Stage 2: FrankenPHP runtime
-FROM dunglas/frankenphp:1.5-php8.4-alpine AS frankenphp
+FROM dunglas/frankenphp:1.5-php8.5-alpine AS frankenphp
 
 # Copy Composer from stage 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
@@ -11,7 +11,9 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 ENV SERVER_NAME=parraindex.com
 ENV APP_RUNTIME=Runtime\\FrankenPhpSymfony\\Runtime
 ENV FRANKENPHP_CONFIG="worker /app/public/index.php"
-COPY .env.prod .env
+RUN echo "" > .env
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
 
 # Install netcat for database connection checking
 RUN apk add --no-cache netcat-openbsd
