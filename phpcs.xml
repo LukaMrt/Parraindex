@@ -1,43 +1,116 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<ruleset name="Project Coding Standards">
-    <config name="testVersion" value="8.3"/>
+<ruleset name="Parraindex Coding Standards">
+    <description>Coding standards for Parraindex Symfony project</description>
 
+    <!-- PHP version compatibility -->
+    <config name="testVersion" value="8.4"/>
+    <config name="php_version" value="80400"/>
+
+    <!-- Display options -->
     <arg name="colors"/>
     <arg value="p"/>
+    <arg name="extensions" value="php"/>
+    <arg name="parallel" value="80"/>
 
     <!-- Define the files and directories to analyze -->
     <file>src</file>
     <file>tests</file>
+    <file>migrations</file>
 
     <!-- Exclude specific files or directories -->
     <exclude-pattern>*/vendor/*</exclude-pattern>
     <exclude-pattern>*/var/*</exclude-pattern>
     <exclude-pattern>*/old/*</exclude-pattern>
     <exclude-pattern>*/Application/*</exclude-pattern>
+    <exclude-pattern>*/tests/bootstrap.php</exclude-pattern>
+    <exclude-pattern>*/public/index.php</exclude-pattern>
 
-    <exclude-pattern>src/infrastructure/injector/Injector.php</exclude-pattern>
+    <!-- Set the coding standard to use PSR-12 -->
+    <rule ref="PSR12">
+        <!-- Allow longer lines in some cases -->
+        <exclude name="Generic.Files.LineLength.TooLong"/>
+    </rule>
 
-    <!-- Set the coding standard to use -->
-    <!-- You can use built-in standards like PSR12, PSR2, PEAR, Squiz, Zend, or custom ones -->
-    <rule ref="PSR12"/>
+    <!-- Custom line length rules -->
+    <rule ref="Generic.Files.LineLength">
+        <properties>
+            <property name="lineLimit" value="120"/>
+            <property name="absoluteLineLimit" value="200"/>
+        </properties>
+        <!-- Exclude migrations from line length checks -->
+        <exclude-pattern>*/migrations/*</exclude-pattern>
+    </rule>
 
-    <!-- Optional: Define specific sniffs to include or exclude -->
-    <rule ref="Generic.Formatting.MultipleStatementAlignment"/>
+    <!-- Additional formatting rules -->
+    <rule ref="Generic.Formatting.MultipleStatementAlignment">
+        <properties>
+            <property name="maxPadding" value="8"/>
+        </properties>
+    </rule>
     <rule ref="Generic.Functions.FunctionCallArgumentSpacing"/>
     <rule ref="Squiz.Functions.MultiLineFunctionDeclaration"/>
     <rule ref="Generic.Arrays.DisallowLongArraySyntax"/>
 
-    <!-- Example of excluding a sniff -->
-    <rule ref="Generic.Files.LineLength">
+    <!-- Array formatting -->
+    <rule ref="Generic.Arrays.ArrayIndent"/>
+    <rule ref="Squiz.Arrays.ArrayDeclaration">
+        <exclude name="Squiz.Arrays.ArrayDeclaration.MultiLineNotAllowed"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.DoubleArrowNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.KeyNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.ValueNotAligned"/>
+        <exclude name="Squiz.Arrays.ArrayDeclaration.CloseBraceNotAligned"/>
+    </rule>
+
+    <!-- Code quality rules -->
+    <rule ref="Generic.CodeAnalysis.EmptyStatement"/>
+    <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop"/>
+    <rule ref="Generic.CodeAnalysis.UnconditionalIfStatement"/>
+    <rule ref="Generic.CodeAnalysis.UnnecessaryFinalModifier"/>
+    <rule ref="Generic.CodeAnalysis.UselessOverridingMethod"/>
+
+    <!-- Naming conventions -->
+    <rule ref="Generic.NamingConventions.ConstructorName"/>
+    <rule ref="Generic.NamingConventions.CamelCapsFunctionName"/>
+
+    <!-- PHP specific rules -->
+    <rule ref="Generic.PHP.DeprecatedFunctions"/>
+    <rule ref="Generic.PHP.ForbiddenFunctions"/>
+    <rule ref="Squiz.PHP.NonExecutableCode"/>
+    <rule ref="Squiz.PHP.CommentedOutCode">
         <properties>
-            <property name="lineLimit" value="120"/>
-            <property name="absoluteLineLimit" value="140"/>
+            <property name="maxPercentage" value="45"/>
         </properties>
     </rule>
 
+    <!-- Whitespace rules -->
+    <rule ref="Squiz.WhiteSpace.SuperfluousWhitespace">
+        <properties>
+            <property name="ignoreBlankLines" value="false"/>
+        </properties>
+    </rule>
+    <rule ref="Squiz.WhiteSpace.OperatorSpacing">
+        <properties>
+            <property name="ignoreNewlines" value="true"/>
+        </properties>
+    </rule>
 
-    <!-- Example of including a custom sniff -->
-    <!-- <rule ref="MyStandard.MyCustomSniff" /> -->
+    <!-- Documentation rules (relaxed for modern PHP with type hints) -->
+    <rule ref="Squiz.Commenting.FunctionComment">
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamComment"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingParamTag"/>
+        <exclude name="Squiz.Commenting.FunctionComment.MissingReturn"/>
+        <exclude name="Squiz.Commenting.FunctionComment.Missing"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ParamNameNoMatch"/>
+        <exclude name="Squiz.Commenting.FunctionComment.IncorrectTypeHint"/>
+        <exclude name="Squiz.Commenting.FunctionComment.ThrowsNotCapital"/>
+    </rule>
+    <rule ref="Squiz.Commenting.ClassComment">
+        <exclude name="Squiz.Commenting.ClassComment.Missing"/>
+        <exclude name="Squiz.Commenting.ClassComment.TagNotAllowed"/>
+    </rule>
+    <rule ref="Squiz.Commenting.VariableComment">
+        <exclude name="Squiz.Commenting.VariableComment.Missing"/>
+    </rule>
 
     <!-- Set severity levels -->
     <config name="severity" value="5"/>
@@ -47,14 +120,5 @@
 
     <!-- Report warnings in addition to errors -->
     <config name="show_warnings" value="true"/>
-
-    <!-- Ignore specific error messages (if needed) -->
-    <ignore type="error">Found unused variable</ignore>
-
-    <!-- Allow extensions -->
-    <extensions>
-        <extension name="php"/>
-        <extension name="inc"/>
-    </extensions>
 
 </ruleset>

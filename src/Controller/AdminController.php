@@ -45,7 +45,7 @@ class AdminController extends AbstractController
 
         return $this->render('contactAdmin.html.twig', [
             'contacts'    => $list,
-            'typeContact' => $types
+            'typeContact' => $types,
         ]);
     }
 
@@ -60,7 +60,7 @@ class AdminController extends AbstractController
     }
 
     /**
-     * @throws \Exception
+     * @throws \Exception If contact type is unknown.
      */
     #[Route('/contact/{id}/resolve', name: 'admin_contact_resolve', methods: [Request::METHOD_GET])]
     public function resolve(Contact $contact): Response
@@ -200,8 +200,8 @@ class AdminController extends AbstractController
                 throw new \Exception('Type de contact inconnu');
         }
 
-//        $contact->setResolutionDate(new \DateTime());
-//        $this->contactRepository->update($contact);
+        $contact->setResolutionDate(new \DateTime());
+        $this->contactRepository->update($contact);
         $this->addFlash('success', 'Contact résolu');
         return $this->redirectToRoute('admin_contact');
     }

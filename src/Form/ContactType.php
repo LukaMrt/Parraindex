@@ -18,6 +18,9 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<Contact>
+ */
 class ContactType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -72,7 +75,7 @@ class ContactType extends AbstractType
             Type::REMOVE_SPONSOR,
         ];
         if (in_array(Type::from(intval($data['type'])), $typesWithRelatedPerson)) {
-            $names                          = explode(' ', $data['relatedPerson']);
+            $names = explode(' ', $data['relatedPerson']);
             $data['relatedPersonFirstName'] = $names[0];
             $data['relatedPersonLastName']  = $names[1];
             unset($data['relatedPerson']);
@@ -84,7 +87,7 @@ class ContactType extends AbstractType
             Type::CHOCKING_CONTENT,
         ];
         if (in_array(Type::from(intval($data['type'])), $typesWithRelatedPersonBis)) {
-            $names                          = explode(' ', $data['relatedPersonBis']);
+            $names = explode(' ', $data['relatedPersonBis']);
             $data['relatedPersonFirstName'] = $names[0];
             $data['relatedPersonLastName']  = $names[1];
             unset($data['relatedPerson']);
@@ -96,7 +99,7 @@ class ContactType extends AbstractType
             Type::REMOVE_SPONSOR,
         ];
         if (in_array(Type::from(intval($data['type'])), $typesWithRelatedPerson2)) {
-            $names                           = explode(' ', $data['relatedPerson2']);
+            $names = explode(' ', $data['relatedPerson2']);
             $data['relatedPerson2FirstName'] = $names[0];
             $data['relatedPerson2LastName']  = $names[1];
             unset($data['relatedPerson2']);

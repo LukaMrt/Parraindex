@@ -83,7 +83,7 @@ class Person
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
         $this->createdAt       = new \DateTime();
-        $this->color           = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
+        $this->color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
 
     public function getId(): int
