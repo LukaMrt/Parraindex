@@ -33,10 +33,14 @@ class PersonFormType extends AbstractType
                 'required'    => false,
                 'constraints' => [
                     new Assert\File([
-                        'maxSize'   => '1024k',
-                        'mimeTypes' => [
-                            'image/*',
+                        'maxSize'          => '5M',
+                        'mimeTypes'        => [
+                            'image/jpeg',
+                            'image/png',
+                            'image/gif',
+                            'image/webp',
                         ],
+                        'mimeTypesMessage' => 'Veuillez uploader une image valide (JPEG, PNG, GIF ou WebP)',
                     ])
                 ],
             ])

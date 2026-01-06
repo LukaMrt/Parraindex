@@ -10,13 +10,13 @@ Ce document présente la feuille de route consolidée des améliorations à appo
 
 ### Sécurité
 
-| # | Tâche | Fichier | Effort |
-|---|-------|---------|--------|
-| S1 | Supprimer stockage mot de passe en clair | `Contact.php`, `AdminController.php` | 2h |
-| S2 | Valider paramètre orderBy (injection SQL) | `PersonRepository.php` | 30min |
-| S3 | Validation upload images côté serveur | Nouveau service | 1h |
+| # | Tâche | Fichier | Effort | Statut |
+|---|-------|---------|--------|--------|
+| S1 | Supprimer stockage mot de passe en clair | `Contact.php`, `AdminController.php` | 2h | ✅ Complété |
+| S2 | Valider paramètre orderBy (injection SQL) | `PersonRepository.php` | 30min | ✅ Complété |
+| S3 | Validation upload images côté serveur | `PersonFormType.php` | 1h | ✅ Complété |
 
-**Total estimé**: 3h30
+**Total estimé**: 3h30 - **Complété le 2026-01-06**
 
 ---
 
