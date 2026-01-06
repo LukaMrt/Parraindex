@@ -31,6 +31,5 @@
             <parameter name="dns-mock-namespaces" value="App" />
         </bootstrap>
         <bootstrap class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension" />
-        <extension class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
     </extensions>
 </phpunit>

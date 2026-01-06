@@ -176,7 +176,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Used in twig templates
+    /**
+     * Used in twig templates
+     */
     public function isAdmin(): bool
     {
         return in_array(Role::ADMIN, $this->getRolesEnum());
@@ -189,7 +191,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    // Used in twig templates
+    /**
+     * Used in twig templates
+     */
     public function getPicture(): string
     {
         return $this->picture ?? self::DEFAULT_PICTURE;

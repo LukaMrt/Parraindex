@@ -14,6 +14,9 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\NotCompromisedPassword;
 use Symfony\Component\Validator\Constraints\PasswordStrength;
 
+/**
+ * @extends AbstractType<array<string, mixed>>
+ */
 class ChangePasswordFormType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
@@ -29,11 +32,11 @@ class ChangePasswordFormType extends AbstractType
                 'first_options' => [
                     'constraints' => [
                         new NotBlank(message: 'Entrez un mot de passe'),
-                        new Length([
-                            'min'        => 12,
-                            'minMessage' => 'Le mot de passe doit faire au moins {{ limit }} caractères',
-                            'max'        => 4096,
-                        ]),
+                        new Length(
+                            min: 12,
+                            max: 4096,
+                            minMessage: 'Le mot de passe doit faire au moins {{ limit }} caractères',
+                        ),
                         new PasswordStrength(
                             minScore: PasswordStrength::STRENGTH_WEAK,
                             message: 'Le mot de passe est trop simple',

@@ -79,13 +79,15 @@ class SecurityController extends AbstractController
         }
 
         foreach ($form->getErrors(true) as $error) {
-            // @phpstan-ignore-next-line
             $this->addFlash('error', $error->getMessage());
         }
 
         return $this->render('register.html.twig', ['form' => $form]);
     }
 
+    /**
+     * @param FormInterface<User> $form
+     */
     private function handleForm(FormInterface $form, User $user): Response
     {
         /** @var string $password */

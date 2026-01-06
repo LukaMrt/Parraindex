@@ -106,7 +106,7 @@ class Contact
             new Assert\PasswordStrength(
                 minScore: Assert\PasswordStrength::STRENGTH_WEAK,
                 message: 'Votre mot de passe est trop simple'
-            )
+            ),
         ]
     )]
     private ?string $password = null;

@@ -10,6 +10,7 @@
 ###> phpunit/phpunit ###
 /phpunit.xml
 /.phpunit.cache/
+/.phpunit.result.cache
 ###< phpunit/phpunit ###
 
 ###> symfony/asset-mapper ###
@@ -132,3 +133,4 @@ phpstan.neon
 /.phpcs-cache
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
+/var/cache/phpstan

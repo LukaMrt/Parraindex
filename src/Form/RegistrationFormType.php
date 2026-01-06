@@ -12,6 +12,9 @@ use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
+/**
+ * @extends AbstractType<User>
+ */
 class RegistrationFormType extends AbstractType
 {
     #[\Override]

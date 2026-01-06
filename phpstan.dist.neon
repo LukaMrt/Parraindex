@@ -1,35 +1,45 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
 parameters:
     # Directories to be analyzed
     paths:
         - src
-#        - tests
+        - tests
 
-    # Level 0 is the loosest, level 9 is the strictest
-    level: max
+    # Level 0 is the loosest, level 10 is the strictest
+    level: 10
+
+    # Cache configuration for better performance
+    tmpDir: var/cache/phpstan
+    resultCachePath: var/cache/phpstan/resultCache.php
 
     # Exclude specific files or directories from analysis
     excludePaths:
         - */old/*
         - */Application/*
+        - */tests/bootstrap.php
 
-    # Custom rules or extensions
-    # E.g., if using Doctrine, Symfony, or other integrations, add the necessary extensions
-    # extensions:
-    #     - vendor/phpstan/phpstan-doctrine/extension.neon
-    #     - vendor/phpstan/phpstan-symfony/extension.neon
+    # Symfony configuration
+    # Note: Uncomment and generate container XML if needed
+    # symfony:
+    #     containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
 
     # Report uninitialized properties
     checkUninitializedProperties: true
 
-    # Report missing return types for methods and functions
-    # reportMissingReturnType: true
-
     # Enable stricter checks for arrays
     checkExplicitMixed: true
 
-    # Ignore specific error messages (if needed)
-#    ignoreErrors:
+    # Check missing parameter types
+    checkMissingCallableSignature: true
 
-    # If using Symfony, set up container parameters
-    # symfony:
-    #     container_xml_path: %currentWorkingDirectory%/var/cache/dev/App_KernelDevDebugContainer.xml
+    # Additional strict rules
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkDynamicProperties: true
+
+    # Ignore specific error messages (if needed)
+    # ignoreErrors:

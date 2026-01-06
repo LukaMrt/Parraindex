@@ -23,13 +23,13 @@ final class SponsorVoter extends Voter
     }
 
     /**
-     * @param ?Sponsor $subject
+     * @param Sponsor $subject
      */
     protected function voteOnAttribute(string $attribute, mixed $subject, TokenInterface $token, ?Vote $vote = null): bool
     {
         $user = $token->getUser();
 
-        if (!$user instanceof User || !$subject instanceof Sponsor) {
+        if (!$user instanceof User) {
             return false;
         }
 
