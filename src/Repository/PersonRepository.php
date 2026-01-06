@@ -25,10 +25,14 @@ class PersonRepository extends ServiceEntityRepository
      */
     public function getAll(string $orderBy = 'id'): array
     {
-        // Whitelist of allowed columns to prevent SQL injection
-        $allowedColumns = ['id', 'firstName', 'lastName', 'startYear', 'createdAt'];
+        $allowedColumns = [
+            'id',
+            'firstName',
+            'lastName',
+            'startYear',
+            'createdAt',
+        ];
 
-        // Validate orderBy parameter
         if (!in_array($orderBy, $allowedColumns, true)) {
             throw new \InvalidArgumentException(
                 sprintf('Invalid orderBy parameter: %s. Allowed values: %s', $orderBy, implode(', ', $allowedColumns))
