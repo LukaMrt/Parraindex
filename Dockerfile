@@ -13,7 +13,7 @@ ENV APP_RUNTIME=Runtime\\FrankenPhpSymfony\\Runtime
 ENV FRANKENPHP_CONFIG="worker /app/public/index.php"
 RUN echo "" > .env
 ENV APP_ENV=prod
-ENV APP_DEBUG=0
+ENV APP_DEBUG=false
 
 # Install netcat for database connection checking
 RUN apk add --no-cache netcat-openbsd

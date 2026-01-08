@@ -71,7 +71,7 @@ class PersonRepository extends ServiceEntityRepository
             ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
             ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
             ->leftJoin('p.characteristics', 'c')->addSelect('c')
-            ->leftJoin('c.type', 'ct')->addSelect('ct')
+            ->leftJoin('c.characteristicType', 'ct')->addSelect('ct')
             ->where('p.id = :id')
             ->setParameter('id', $id)
             ->getQuery()

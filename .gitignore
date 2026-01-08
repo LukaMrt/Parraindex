@@ -11,6 +11,8 @@
 /phpunit.xml
 /.phpunit.cache/
 /.phpunit.result.cache
+/coverage-html/
+/coverage-clover.xml
 ###< phpunit/phpunit ###
 
 ###> symfony/asset-mapper ###
@@ -134,3 +136,7 @@ phpstan.neon
 /phpcs.xml
 ###< squizlabs/php_codesniffer ###
 /var/cache/phpstan
+
+
+.claude
+nul
