@@ -26,8 +26,14 @@ class PersonController extends AbstractController
     }
 
     #[Route('/personne/{id}', name: 'person', methods: [Request::METHOD_GET])]
-    public function index(Person $person): Response
+    public function index(int $id): Response
     {
+        $person = $this->personRepository->findWithRelations($id);
+
+        if ($person === null) {
+            throw $this->createNotFoundException('Person not found');
+        }
+
         return $this->render('person.html.twig', ['person' => $person]);
     }
 
