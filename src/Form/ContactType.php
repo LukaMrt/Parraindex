@@ -69,9 +69,9 @@ class ContactType extends AbstractType
             Type::REMOVE_SPONSOR,
         ];
         if (in_array(Type::from(intval($data['type'])), $typesWithRelatedPerson)) {
-            $names = explode(' ', $data['relatedPerson']);
-            $data['relatedPersonFirstName'] = $names[0];
-            $data['relatedPersonLastName']  = $names[1];
+            $names = $this->splitFullName($data['relatedPerson'] ?? '');
+            $data['relatedPersonFirstName'] = $names['firstName'];
+            $data['relatedPersonLastName']  = $names['lastName'];
             unset($data['relatedPerson']);
         }
 
@@ -81,9 +81,9 @@ class ContactType extends AbstractType
             Type::CHOCKING_CONTENT,
         ];
         if (in_array(Type::from(intval($data['type'])), $typesWithRelatedPersonBis)) {
-            $names = explode(' ', $data['relatedPersonBis']);
-            $data['relatedPersonFirstName'] = $names[0];
-            $data['relatedPersonLastName']  = $names[1];
+            $names = $this->splitFullName($data['relatedPersonBis'] ?? '');
+            $data['relatedPersonFirstName'] = $names['firstName'];
+            $data['relatedPersonLastName']  = $names['lastName'];
             unset($data['relatedPerson']);
         }
 
@@ -93,9 +93,9 @@ class ContactType extends AbstractType
             Type::REMOVE_SPONSOR,
         ];
         if (in_array(Type::from(intval($data['type'])), $typesWithRelatedPerson2)) {
-            $names = explode(' ', $data['relatedPerson2']);
-            $data['relatedPerson2FirstName'] = $names[0];
-            $data['relatedPerson2LastName']  = $names[1];
+            $names = $this->splitFullName($data['relatedPerson2'] ?? '');
+            $data['relatedPerson2FirstName'] = $names['firstName'];
+            $data['relatedPerson2LastName']  = $names['lastName'];
             unset($data['relatedPerson2']);
         }
 
@@ -107,5 +107,20 @@ class ContactType extends AbstractType
         /** @var Contact $contact */
         $contact = $event->getForm()->getData();
         $contact->setCreatedAt(new \DateTime());
+    }
+
+    /**
+     * Split full name into first and last name parts.
+     *
+     * @return array{firstName: string, lastName: string}
+     */
+    private function splitFullName(string $fullName): array
+    {
+        $parts = explode(' ', trim($fullName), 2);
+
+        return [
+            'firstName' => $parts[0],
+            'lastName' => $parts[1] ?? '',
+        ];
     }
 }

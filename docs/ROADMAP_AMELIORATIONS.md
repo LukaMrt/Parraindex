@@ -25,30 +25,30 @@ priorité et domaine.
 
 ### Sécurité
 
-| #  | Tâche                               | Fichier                  | Effort |
-|----|-------------------------------------|--------------------------|--------|
-| S4 | Corriger parsing email              | `SecurityController.php` | 1h     |
-| S5 | Corriger parsing noms               | `ContactType.php`        | 1h     |
-| S6 | Utiliser POST/DELETE au lieu de GET | `AdminController.php`    | 1h     |
-| S7 | Mettre à jour les dépendances       | `composer update`        | 1h     |
+| #  | Tâche                               | Fichier                  | Effort | Statut     |
+|----|-------------------------------------|--------------------------|--------|------------|
+| S4 | Corriger parsing email              | `SecurityController.php` | 1h     | ✅ Complété |
+| S5 | Corriger parsing noms               | `ContactType.php`        | 1h     | ✅ Complété |
+| S6 | Utiliser POST/DELETE au lieu de GET | `AdminController.php`    | 1h     | ✅ Complété |
+| S7 | Mettre à jour les dépendances       | `composer update`        | 1h     | ✅ Complété |
 
 ### Qualité
 
-| #  | Tâche                                 | Fichier                  | Effort |
-|----|---------------------------------------|--------------------------|--------|
-| Q1 | Refactorer AdminController::resolve() | Nouveau pattern Resolver | 4h     |
-| Q2 | Écrire tests unitaires entités        | `tests/Unit/Entity/`     | 4h     |
-| Q3 | Écrire tests intégration repos        | `tests/Integration/`     | 4h     |
-| Q4 | Écrire tests fonctionnels auth        | `tests/Functional/`      | 3h     |
+| #  | Tâche                                 | Fichier                  | Effort | Statut       |
+|----|---------------------------------------|--------------------------|--------|--------------|
+| Q1 | Refactorer AdminController::resolve() | Nouveau pattern Resolver | 4h     | ✅ Complété   |
+| Q2 | Écrire tests unitaires entités        | `tests/Unit/Entity/`     | 4h     | ⏳ En attente |
+| Q3 | Écrire tests intégration repos        | `tests/Integration/`     | 4h     | ⏳ En attente |
+| Q4 | Écrire tests fonctionnels auth        | `tests/Functional/`      | 3h     | ⏳ En attente |
 
 ### Performance
 
-| #  | Tâche                 | Fichier                | Effort |
-|----|-----------------------|------------------------|--------|
-| P1 | Corriger requêtes N+1 | `PersonRepository.php` | 2h     |
-| P2 | Créer indexes DB      | Migration              | 1h     |
+| #  | Tâche                 | Fichier                | Effort | Statut     |
+|----|-----------------------|------------------------|--------|------------|
+| P1 | Corriger requêtes N+1 | `PersonRepository.php` | 2h     | ✅ Complété |
+| P2 | Créer indexes DB      | Migration              | 1h     | ✅ Complété |
 
-**Total estimé**: 22h (3 jours)
+**Total estimé**: 22h (3 jours) - **Complété: 11h / Restant: 11h (tests)** - **Complété le 2026-01-08**
 
 ---
 

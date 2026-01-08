@@ -148,16 +148,16 @@
                                             {% set color = 'red' %}
                                         {% endif %}
 
-                                        <a href="{{ url('admin_contact_resolve', {'id': contact.id}) }}"
-                                           class="contact__actions-button contact__actions-button--{{ color }}"
-                                           methods="post"
-                                        >{{ action }}</a>
+                                        <form action="{{ url('admin_contact_resolve', {'id': contact.id}) }}" method="POST" style="display: inline;">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('resolve_contact') }}">
+                                            <button type="submit" class="contact__actions-button contact__actions-button--{{ color }}">{{ action }}</button>
+                                        </form>
                                     {% endif %}
 
-                                    <a href="{{ url('admin_contact_delete', {'id': contact.id}) }}"
-                                       class="contact__actions-button contact__actions-button--blue"
-                                       methods="delete"
-                                    >Clore</a>
+                                    <form action="{{ url('admin_contact_delete', {'id': contact.id}) }}" method="POST" style="display: inline;">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('delete_contact') }}">
+                                        <button type="submit" class="contact__actions-button contact__actions-button--blue">Clore</button>
+                                    </form>
 
                                 {% else %}
 

@@ -62,6 +62,24 @@ class PersonRepository extends ServiceEntityRepository
         return $this->find($id);
     }
 
+    public function findWithRelations(int $id): ?Person
+    {
+        /** @var Person|null $result */
+        $result = $this->createQueryBuilder('p')
+            ->leftJoin('p.godFathers', 'gf')->addSelect('gf')
+            ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
+            ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
+            ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
+            ->leftJoin('p.characteristics', 'c')->addSelect('c')
+            ->leftJoin('c.type', 'ct')->addSelect('ct')
+            ->where('p.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result;
+    }
+
     public function getByEmail(string $email): ?Person
     {
         return $this->findOneBy(['email' => $email]);

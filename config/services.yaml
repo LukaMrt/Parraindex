@@ -4,6 +4,10 @@ services:
         autowire: true
         autoconfigure: true
 
+    _instanceof:
+        App\Service\Contact\ContactResolverInterface:
+            tags: ['app.contact_resolver']
+
     App\:
         resource: '%kernel.project_dir%/src/'
         exclude:
@@ -13,3 +17,7 @@ services:
 
     App\Security\LoginSuccessListener:
         tags: [kernel.event_listener]
+
+    App\Service\Contact\ContactResolverManager:
+        arguments:
+            $resolvers: !tagged_iterator app.contact_resolver
