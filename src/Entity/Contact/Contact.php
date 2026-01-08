@@ -91,25 +91,7 @@ class Contact
     private ?\DateTime $sponsorDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Assert\When(
-        expression: 'this.getType().value in [9]',
-        constraints: [
-            new Assert\NotNull(),
-            new Assert\Length(
-                min: 6,
-                max: 4096,
-                minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères'
-            ),
-            new Assert\NotCompromisedPassword(
-                message: 'Ce mot de passe a déjà été compromis. Veuillez en choisir un autre'
-            ),
-            new Assert\PasswordStrength(
-                minScore: Assert\PasswordStrength::STRENGTH_WEAK,
-                message: 'Votre mot de passe est trop simple'
-            ),
-        ]
-    )]
-    private ?string $password = null;
+    private ?string $registrationToken = null;
 
     public function getId(): ?int
     {
@@ -297,14 +279,14 @@ class Contact
         return $this;
     }
 
-    public function getPassword(): string
+    public function getRegistrationToken(): ?string
     {
-        return $this->password ?? '';
+        return $this->registrationToken;
     }
 
-    public function setPassword(?string $password): static
+    public function setRegistrationToken(?string $registrationToken): static
     {
-        $this->password = $password;
+        $this->registrationToken = $registrationToken;
 
         return $this;
     }

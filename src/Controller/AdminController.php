@@ -178,8 +178,15 @@ class AdminController extends AbstractController
                     throw $this->createNotFoundException('Personne non trouvée');
                 }
 
+                // Generate a secure registration token
+                $registrationToken = bin2hex(random_bytes(32));
+                $contact->setRegistrationToken($registrationToken);
+                $this->contactRepository->update($contact);
+
                 $user = new User()->setPerson($person)->setEmail($contact->getContacterEmail());
-                $user->setPassword($this->userPasswordHasher->hashPassword($user, $contact->getPassword()));
+                // Set a random secure password temporarily - user will set their own via token
+                $temporaryPassword = bin2hex(random_bytes(32));
+                $user->setPassword($this->userPasswordHasher->hashPassword($user, $temporaryPassword));
 
                 $this->userRepository->update($user);
                 $this->emailVerifier->sendEmailConfirmation(
@@ -187,8 +194,9 @@ class AdminController extends AbstractController
                     $user,
                     new TemplatedEmail()
                         ->to((string)$user->getEmail())
-                        ->subject('Confirmez votre email')
+                        ->subject('Confirmez votre email et définissez votre mot de passe')
                         ->htmlTemplate('registration/confirmation_email.html.twig')
+                        ->context(['registrationToken' => $registrationToken])
                 );
                 break;
 

@@ -11,8 +11,6 @@ use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Event\PostSubmitEvent;
 use Symfony\Component\Form\Event\PreSubmitEvent;
 use Symfony\Component\Form\Extension\Core\Type\EnumType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormEvents;
@@ -41,10 +39,6 @@ class ContactType extends AbstractType
             ->add('relatedPerson2LastName')
             ->add('sponsorType', EnumType::class, ['class' => SponsorType::class])
             ->add('sponsorDate')
-            ->add('password', RepeatedType::class, [
-                'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe ne correspondent pas.',
-            ])
             ->addEventListener(
                 FormEvents::PRE_SUBMIT,
                 fn(PreSubmitEvent $event) => $this->preSubmit($event)

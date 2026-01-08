@@ -25,6 +25,20 @@ class PersonRepository extends ServiceEntityRepository
      */
     public function getAll(string $orderBy = 'id'): array
     {
+        $allowedColumns = [
+            'id',
+            'firstName',
+            'lastName',
+            'startYear',
+            'createdAt',
+        ];
+
+        if (!in_array($orderBy, $allowedColumns, true)) {
+            throw new \InvalidArgumentException(
+                sprintf('Invalid orderBy parameter: %s. Allowed values: %s', $orderBy, implode(', ', $allowedColumns))
+            );
+        }
+
         /** @var Person[] $result */
         $result = $this->createQueryBuilder('p')
             ->orderBy('p.' . $orderBy, 'ASC')
