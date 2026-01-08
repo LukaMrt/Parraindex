@@ -34,12 +34,12 @@ priorité et domaine.
 
 ### Qualité
 
-| #  | Tâche                                 | Fichier                  | Effort | Statut       |
-|----|---------------------------------------|--------------------------|--------|--------------|
-| Q1 | Refactorer AdminController::resolve() | Nouveau pattern Resolver | 4h     | ✅ Complété   |
-| Q2 | Écrire tests unitaires entités        | `tests/Unit/Entity/`     | 4h     | ⏳ En attente |
-| Q3 | Écrire tests intégration repos        | `tests/Integration/`     | 4h     | ⏳ En attente |
-| Q4 | Écrire tests fonctionnels auth        | `tests/Functional/`      | 3h     | ⏳ En attente |
+| #  | Tâche                                 | Fichier                  | Effort | Statut     |
+|----|---------------------------------------|--------------------------|--------|------------|
+| Q1 | Refactorer AdminController::resolve() | Nouveau pattern Resolver | 4h     | ✅ Complété |
+| Q2 | Écrire tests unitaires entités        | `tests/Unit/Entity/`     | 4h     | ✅ Complété |
+| Q3 | Écrire tests intégration repos        | `tests/Integration/`     | 4h     | ✅ Complété |
+| Q4 | Écrire tests fonctionnels auth        | `tests/Functional/`      | 3h     | ✅ Complété |
 
 ### Performance
 
@@ -86,7 +86,6 @@ priorité et domaine.
 |----|---------------------------|--------|
 | Q7 | Migrer JS vers TypeScript | 8h     |
 | Q8 | Améliorer structure SCSS  | 4h     |
-| Q9 | Ajouter JSDoc             | 2h     |
 
 ### Performance
 
