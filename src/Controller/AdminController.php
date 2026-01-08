@@ -6,20 +6,12 @@ namespace App\Controller;
 
 use App\Entity\Contact\Contact;
 use App\Entity\Contact\Type;
-use App\Entity\Person\Person;
 use App\Entity\Person\Role;
-use App\Entity\Person\User;
-use App\Entity\Sponsor\Sponsor;
 use App\Repository\ContactRepository;
-use App\Repository\PersonRepository;
-use App\Repository\SponsorRepository;
-use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Service\Contact\ContactResolverManager;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -29,11 +21,7 @@ class AdminController extends AbstractController
 {
     public function __construct(
         private readonly ContactRepository $contactRepository,
-        private readonly PersonRepository $personRepository,
-        private readonly SponsorRepository $sponsorRepository,
-        private readonly UserRepository $userRepository,
-        private readonly EmailVerifier $emailVerifier,
-        private readonly UserPasswordHasherInterface $userPasswordHasher,
+        private readonly ContactResolverManager $resolverManager,
     ) {
     }
 
@@ -60,154 +48,14 @@ class AdminController extends AbstractController
         return $this->redirectToRoute('admin_contact');
     }
 
-    /**
-     * @throws \Exception If contact type is unknown.
-     */
     #[Route('/admin/contact/{id}/resolve', name: 'admin_contact_resolve', methods: [Request::METHOD_POST])]
     #[IsCsrfTokenValid('resolve_contact', tokenKey: '_token')]
     public function resolve(Contact $contact): Response
     {
-        switch ($contact->getType()) {
-            case Type::ADD_PERSON:
-                $person = new Person()
-                    ->setFirstName($contact->getRelatedPersonFirstName())
-                    ->setLastName($contact->getRelatedPersonLastName())
-                    ->setStartYear($contact->getEntryYear());
-                $this->personRepository->create($person);
-                break;
+        $response = $this->resolverManager->resolve($contact);
 
-            case Type::UPDATE_PERSON:
-            case Type::CHOCKING_CONTENT:
-                $person = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPersonFirstName(),
-                    $contact->getRelatedPersonLastName()
-                );
-                if ($person instanceof Person) {
-                    return $this->redirectToRoute('person_edit', ['id' => $person->getId()]);
-                }
-
-                $this->addFlash('error', 'Personne non trouvée');
-                return $this->redirectToRoute('admin_contact');
-
-            case Type::REMOVE_PERSON:
-                $person = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPersonFirstName(),
-                    $contact->getRelatedPersonLastName()
-                );
-                if ($person instanceof Person) {
-                    $this->personRepository->delete($person);
-                } else {
-                    $this->addFlash('error', 'Personne non trouvée');
-                }
-
-                break;
-
-            case Type::ADD_SPONSOR:
-                $person1 = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPersonFirstName(),
-                    $contact->getRelatedPersonLastName()
-                );
-                $person2 = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPerson2FirstName(),
-                    $contact->getRelatedPerson2LastName()
-                );
-                if (!$person1 instanceof Person || !$person2 instanceof Person) {
-                    $this->addFlash('error', 'Personnes non trouvées');
-                    return $this->redirectToRoute('admin_contact');
-                }
-
-                $sponsor = new Sponsor()
-                    ->setGodFather($person1)
-                    ->setGodChild($person2)
-                    ->setType($contact->getSponsorType())
-                    ->setDate($contact->getSponsorDate())
-                    ->setDescription($contact->getDescription());
-                $this->sponsorRepository->create($sponsor);
-                break;
-
-            case Type::UPDATE_SPONSOR:
-                $person1 = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPersonFirstName(),
-                    $contact->getRelatedPersonLastName()
-                );
-                $person2 = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPerson2FirstName(),
-                    $contact->getRelatedPerson2LastName()
-                );
-                if (!$person1 instanceof Person || !$person2 instanceof Person) {
-                    $this->addFlash('error', 'Personnes non trouvées');
-                    return $this->redirectToRoute('admin_contact');
-                }
-
-                $sponsor = $this->sponsorRepository->getByPeopleIds($person1->getId(), $person2->getId());
-
-                if (!$sponsor instanceof Sponsor) {
-                    $this->addFlash('error', 'Parrainage non trouvé');
-                    return $this->redirectToRoute('admin_contact');
-                }
-
-                return $this->redirectToRoute('sponsor_edit', ['id' => $sponsor->getId()]);
-
-            case Type::REMOVE_SPONSOR:
-                $person1 = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPersonFirstName(),
-                    $contact->getRelatedPersonLastName()
-                );
-                $person2 = $this->personRepository->getByIdentity(
-                    $contact->getRelatedPerson2FirstName(),
-                    $contact->getRelatedPerson2LastName()
-                );
-                if (!$person1 instanceof Person || !$person2 instanceof Person) {
-                    $this->addFlash('error', 'Personnes non trouvées');
-                    return $this->redirectToRoute('admin_contact');
-                }
-
-                $sponsor = $this->sponsorRepository->getByPeopleIds($person1->getId(), $person2->getId());
-
-                if (!$sponsor instanceof Sponsor) {
-                    $this->addFlash('error', 'Parrainage non trouvé');
-                    return $this->redirectToRoute('admin_contact');
-                }
-
-                $this->sponsorRepository->delete($sponsor);
-                break;
-
-            case Type::PASSWORD:
-                $person = $this->personRepository->getByIdentity(
-                    $contact->getContacterFirstName(),
-                    $contact->getContacterLastName()
-                );
-                if (!$person instanceof Person) {
-                    throw $this->createNotFoundException('Personne non trouvée');
-                }
-
-                // Generate a secure registration token
-                $registrationToken = bin2hex(random_bytes(32));
-                $contact->setRegistrationToken($registrationToken);
-                $this->contactRepository->update($contact);
-
-                $user = new User()->setPerson($person)->setEmail($contact->getContacterEmail());
-                // Set a random secure password temporarily - user will set their own via token
-                $temporaryPassword = bin2hex(random_bytes(32));
-                $user->setPassword($this->userPasswordHasher->hashPassword($user, $temporaryPassword));
-
-                $this->userRepository->update($user);
-                $this->emailVerifier->sendEmailConfirmation(
-                    'register_verify',
-                    $user,
-                    new TemplatedEmail()
-                        ->to((string)$user->getEmail())
-                        ->subject('Confirmez votre email et définissez votre mot de passe')
-                        ->htmlTemplate('registration/confirmation_email.html.twig')
-                        ->context(['registrationToken' => $registrationToken])
-                );
-                break;
-
-            case Type::BUG:
-            case Type::OTHER:
-                break;
-            default:
-                throw new \Exception('Type de contact inconnu');
+        if ($response !== null) {
+            return $response;
         }
 
         $contact->setResolutionDate(new \DateTime());
