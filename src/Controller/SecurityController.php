@@ -99,12 +99,13 @@ class SecurityController extends AbstractController
             return $this->redirectToRoute('register');
         }
 
-        $emailParts = explode('@', $email);
-        $emailParts = explode('.', $emailParts[0]);
+        $names = $this->extractNamesFromEmail($email);
+        if ($names === null) {
+            $this->addFlash('error', 'Format d\'email invalide');
+            return $this->redirectToRoute('register');
+        }
 
-        $firstName = ucfirst($emailParts[0]);
-        $lastName  = ucfirst($emailParts[1]);
-        $person    = $this->personRepository->findOneBy(['firstName' => $firstName, 'lastName' => $lastName]);
+        $person = $this->personRepository->findOneBy(['firstName' => $names['firstName'], 'lastName' => $names['lastName']]);
 
         if (null === $person) {
             $this->addFlash('error', 'Personne non trouvée');
@@ -156,5 +157,22 @@ class SecurityController extends AbstractController
     public function registerSuccess(): Response
     {
         return $this->render('signupConfirmation.html.twig');
+    }
+
+    /**
+     * Extract first and last name from university email format.
+     *
+     * @return array{firstName: string, lastName: string}|null
+     */
+    private function extractNamesFromEmail(string $email): ?array
+    {
+        if (!preg_match('/^([a-zA-Z-]+)\.([a-zA-Z-]+)@etu\.univ-lyon1\.fr$/', $email, $matches)) {
+            return null;
+        }
+
+        return [
+            'firstName' => ucfirst(strtolower($matches[1])),
+            'lastName' => ucfirst(strtolower($matches[2])),
+        ];
     }
 }
