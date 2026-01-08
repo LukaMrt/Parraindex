@@ -1,54 +1,63 @@
 name: Quality
 
 on:
-  push:
-    branches: [master, develop]
-  pull_request:
-    branches: [master, develop]
+    push:
+        branches: [ master, develop ]
+    pull_request:
+        branches: [ master, develop ]
 
 permissions:
-  contents: read
+    contents: read
 
 jobs:
 
-  tests:
-    name: Tests
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
+    tests:
+        name: Tests
+        runs-on: ubuntu-latest
+        steps:
+            -   uses: actions/checkout@v3
 
-      - name: Setup PHP 8.5
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.5'
-          extensions: curl, pdo_mysql, bcmath, ctype, date, fileinfo, gd, gmp, iconv, intl, json, mbstring, openssl, pcre, PDO, random, zip, zlib
+            -   name: Setup PHP 8.5
+                uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.5'
+                    extensions: curl, pdo_mysql, pdo_sqlite, sqlite3, bcmath, ctype, date, fileinfo, gd, gmp, iconv, intl, json, mbstring, openssl, pcre, PDO, random, zip, zlib
 
-      - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+            -   name: Validate composer.json and composer.lock
+                run: composer validate --strict
 
-      - name: Cache Composer packages
-        id: composer-cache
-        uses: actions/cache@v3
-        with:
-          path: vendor
-          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-php-
+            -   name: Cache Composer packages
+                id: composer-cache
+                uses: actions/cache@v3
+                with:
+                    path: vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+                    restore-keys: |
+                        ${{ runner.os }}-php-
 
-      - name: Install dependencies
-        run: composer install --prefer-dist --no-progress
+            -   name: Install dependencies
+                run: composer install --prefer-dist --no-progress
 
-      - name: Run PhpStan
-        run: composer phpstan
+            -   name: Run PhpStan
+                run: composer phpstan
 
-      - name: Run Php-CS
-        run: composer phpcs
+            -   name: Run Php-CS
+                run: composer phpcs
 
-      - name: Run Rector
-        run: composer rector:dry
+            -   name: Run Rector
+                run: composer rector:dry
 
-      - name: Run test suite
-        run: composer test
+            -   name: Create test database schema
+                run: php bin/console doctrine:schema:create --env=test
+
+            -   name: Load fixtures
+                run: php bin/console doctrine:fixtures:load --no-interaction --env=test
+
+            -   name: Build scss
+                run: composer scss:build
+
+            -   name: Run tests
+                run: php bin/phpunit
 
 #      - name: Run mutation tests
 #        run: vendor/bin/infection --threads=4 --min-msi=75
