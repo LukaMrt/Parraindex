@@ -101,7 +101,7 @@ class SecurityController extends AbstractController
 
         $names = $this->extractNamesFromEmail($email);
         if ($names === null) {
-            $this->addFlash('error', 'Format d\'email invalide');
+            $this->addFlash('error', "Format d'email invalide");
             return $this->redirectToRoute('register');
         }
 

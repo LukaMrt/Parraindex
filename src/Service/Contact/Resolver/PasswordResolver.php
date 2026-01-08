@@ -22,11 +22,11 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 final class PasswordResolver extends AbstractController implements ContactResolverInterface
 {
     public function __construct(
-        private PersonRepository $personRepository,
-        private UserRepository $userRepository,
-        private ContactRepository $contactRepository,
-        private EmailVerifier $emailVerifier,
-        private UserPasswordHasherInterface $userPasswordHasher,
+        private readonly PersonRepository $personRepository,
+        private readonly UserRepository $userRepository,
+        private readonly ContactRepository $contactRepository,
+        private readonly EmailVerifier $emailVerifier,
+        private readonly UserPasswordHasherInterface $userPasswordHasher,
     ) {
     }
 

@@ -13,8 +13,10 @@ final readonly class DefaultResolver implements ContactResolverInterface
 {
     public function supports(Contact $contact): bool
     {
-        return $contact->getType() === Type::BUG
-            || $contact->getType() === Type::OTHER;
+        if ($contact->getType() === Type::BUG) {
+            return true;
+        }
+        return $contact->getType() === Type::OTHER;
     }
 
     public function resolve(Contact $contact): ?Response

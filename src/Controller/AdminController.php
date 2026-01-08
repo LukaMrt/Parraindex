@@ -54,7 +54,7 @@ class AdminController extends AbstractController
     {
         $response = $this->resolverManager->resolve($contact);
 
-        if ($response !== null) {
+        if ($response instanceof Response) {
             return $response;
         }
 

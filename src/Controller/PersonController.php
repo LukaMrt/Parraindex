@@ -30,7 +30,7 @@ class PersonController extends AbstractController
     {
         $person = $this->personRepository->findWithRelations($id);
 
-        if ($person === null) {
+        if (!$person instanceof Person) {
             throw $this->createNotFoundException('Person not found');
         }
 

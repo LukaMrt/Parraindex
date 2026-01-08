@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service\Contact\Resolver;
 
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use App\Entity\Contact\Contact;
 use App\Entity\Contact\Type;
 use App\Entity\Person\Person;
@@ -12,13 +13,12 @@ use App\Repository\PersonRepository;
 use App\Repository\SponsorRepository;
 use App\Service\Contact\ContactResolverInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
 
 final class UpdateSponsorResolver extends AbstractController implements ContactResolverInterface
 {
     public function __construct(
-        private PersonRepository $personRepository,
-        private SponsorRepository $sponsorRepository,
+        private readonly PersonRepository $personRepository,
+        private readonly SponsorRepository $sponsorRepository,
     ) {
     }
 
@@ -27,7 +27,7 @@ final class UpdateSponsorResolver extends AbstractController implements ContactR
         return $contact->getType() === Type::UPDATE_SPONSOR;
     }
 
-    public function resolve(Contact $contact): Response
+    public function resolve(Contact $contact): RedirectResponse
     {
         $person1 = $this->personRepository->getByIdentity(
             $contact->getRelatedPersonFirstName(),

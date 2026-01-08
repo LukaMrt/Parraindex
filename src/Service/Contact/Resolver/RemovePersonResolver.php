@@ -15,7 +15,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class RemovePersonResolver extends AbstractController implements ContactResolverInterface
 {
     public function __construct(
-        private PersonRepository $personRepository,
+        private readonly PersonRepository $personRepository,
     ) {
     }
 

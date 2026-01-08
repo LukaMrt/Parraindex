@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service\Contact;
 
+use App\Entity\Contact\Type;
 use App\Entity\Contact\Contact;
 use Symfony\Component\HttpFoundation\Response;
 
-final class ContactResolverManager
+final readonly class ContactResolverManager
 {
     /**
      * @param iterable<ContactResolverInterface> $resolvers
@@ -28,7 +29,7 @@ final class ContactResolverManager
         $type = $contact->getType();
         throw new \RuntimeException(sprintf(
             'No resolver found for contact type "%s"',
-            $type !== null ? $type->value : 'null'
+            $type instanceof Type ? $type->value : 'null'
         ));
     }
 }
