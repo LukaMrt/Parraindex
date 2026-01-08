@@ -16,6 +16,7 @@ final readonly class DefaultResolver implements ContactResolverInterface
         if ($contact->getType() === Type::BUG) {
             return true;
         }
+
         return $contact->getType() === Type::OTHER;
     }
 

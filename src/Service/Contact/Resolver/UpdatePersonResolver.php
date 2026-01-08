@@ -24,6 +24,7 @@ final class UpdatePersonResolver extends AbstractController implements ContactRe
         if ($contact->getType() === Type::UPDATE_PERSON) {
             return true;
         }
+
         return $contact->getType() === Type::CHOCKING_CONTENT;
     }
 
