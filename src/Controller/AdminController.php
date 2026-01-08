@@ -21,6 +21,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[IsGranted(Role::ADMIN->value)]
@@ -48,7 +49,8 @@ class AdminController extends AbstractController
         ]);
     }
 
-    #[Route('/admin/contact/{id}/delete', name: 'admin_contact_delete', methods: [Request::METHOD_GET])]
+    #[Route('/admin/contact/{id}/delete', name: 'admin_contact_delete', methods: [Request::METHOD_POST])]
+    #[IsCsrfTokenValid('delete_contact', tokenKey: '_token')]
     public function delete(Contact $contact): Response
     {
         $contact->setResolutionDate(new \DateTime());
@@ -61,7 +63,8 @@ class AdminController extends AbstractController
     /**
      * @throws \Exception If contact type is unknown.
      */
-    #[Route('/admin/contact/{id}/resolve', name: 'admin_contact_resolve', methods: [Request::METHOD_GET])]
+    #[Route('/admin/contact/{id}/resolve', name: 'admin_contact_resolve', methods: [Request::METHOD_POST])]
+    #[IsCsrfTokenValid('resolve_contact', tokenKey: '_token')]
     public function resolve(Contact $contact): Response
     {
         switch ($contact->getType()) {
