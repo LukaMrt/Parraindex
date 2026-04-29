@@ -7,7 +7,7 @@ namespace App\Api;
 final readonly class ApiError
 {
     /**
-     * @param array<string, string[]> $violations field name → list of error messages
+     * @param array<string, string[]> $violations Field name → list of error messages.
      */
     public function __construct(
         public ErrorCode $code,

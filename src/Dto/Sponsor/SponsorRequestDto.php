@@ -13,15 +13,11 @@ final readonly class SponsorRequestDto
         #[Assert\NotBlank]
         #[Assert\Positive]
         public int $godFatherId,
-
         #[Assert\NotBlank]
         #[Assert\Positive]
         public int $godChildId,
-
         public Type $type = Type::CLASSIC,
-
         public ?string $description = null,
-
         public ?string $date = null,
     ) {
     }

@@ -63,7 +63,7 @@ final readonly class AuthService
     }
 
     /**
-     * @throws ResetPasswordExceptionInterface if the token is invalid or expired
+     * @throws ResetPasswordExceptionInterface if the token is invalid or expired.
      */
     public function validateTokenAndFetchUser(string $token): User
     {

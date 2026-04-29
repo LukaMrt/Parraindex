@@ -31,7 +31,7 @@ final readonly class UserService
     /**
      * Registers a user by linking them to a Person derived from their university email.
      *
-     * @throws \RuntimeException if the email format is invalid or the matching Person does not exist
+     * @throws \RuntimeException if the email format is invalid or the matching Person does not exist.
      */
     public function register(User $user, string $plainPassword): void
     {

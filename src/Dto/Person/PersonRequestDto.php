@@ -12,19 +12,14 @@ final readonly class PersonRequestDto
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
         public string $firstName,
-
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
         public string $lastName,
-
         #[Assert\Positive]
         #[Assert\Range(min: 1900, max: 2100)]
         public int $startYear,
-
         public ?string $biography = null,
-
         public ?string $description = null,
-
         #[Assert\CssColor([Assert\CssColor::HEX_LONG])]
         public ?string $color = null,
     ) {
