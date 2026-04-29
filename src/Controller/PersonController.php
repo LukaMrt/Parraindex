@@ -4,13 +4,11 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Entity\Characteristic\CharacteristicType;
 use App\Entity\Person\Person;
 use App\Entity\Person\Role;
 use App\Form\PersonFormType;
-use App\Repository\CharacteristicTypeRepository;
-use App\Repository\PersonRepository;
 use App\Security\Voter\PersonVoter;
+use App\Service\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,15 +18,14 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class PersonController extends AbstractController
 {
     public function __construct(
-        private readonly PersonRepository $personRepository,
-        private readonly CharacteristicTypeRepository $characteristicTypeRepository,
+        private readonly PersonService $personService,
     ) {
     }
 
     #[Route('/personne/{id}', name: 'person', methods: [Request::METHOD_GET])]
     public function index(int $id): Response
     {
-        $person = $this->personRepository->findWithRelations($id);
+        $person = $this->personService->getWithRelations($id);
 
         if (!$person instanceof Person) {
             throw $this->createNotFoundException('Person not found');
@@ -41,15 +38,14 @@ class PersonController extends AbstractController
     #[IsGranted(PersonVoter::EDIT, subject: 'person')]
     public function edit(Person $person): Response
     {
-        /** @var CharacteristicType[] $allTypes */
-        $allTypes = $this->characteristicTypeRepository->findAll();
-        $person->createMissingCharacteristics($allTypes);
+        $this->personService->prepareMissingCharacteristics($person);
 
         $form = $this->createForm(PersonFormType::class, $person);
         $form->get('characteristics')->setData($person->getCharacteristics());
+
         return $this->render('editPerson.html.twig', [
-            'person'              => $person,
-            'form'                => $form,
+            'person' => $person,
+            'form'   => $form,
         ]);
     }
 
@@ -61,8 +57,9 @@ class PersonController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->personRepository->update($person);
+            $this->personService->update($person);
             $this->addFlash('success', 'Personne modifiée');
+
             return $this->redirectToRoute('person', ['id' => $person->getId()]);
         }
 
@@ -76,8 +73,9 @@ class PersonController extends AbstractController
     #[IsGranted(Role::ADMIN->value)]
     public function delete(Person $person): Response
     {
-        $this->personRepository->delete($person);
+        $this->personService->delete($person);
         $this->addFlash('success', 'Personne supprimée');
+
         return $this->redirectToRoute('home');
     }
 }

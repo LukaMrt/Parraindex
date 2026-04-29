@@ -4,20 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use App\Entity\Person\User;
 use App\Form\RegistrationFormType;
-use App\Repository\PersonRepository;
-use App\Repository\UserRepository;
-use App\Security\EmailVerifier;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
-use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Core\Exception\AuthenticationException;
 use Symfony\Component\Security\Http\Attribute\IsCsrfTokenValid;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
@@ -25,11 +20,8 @@ class SecurityController extends AbstractController
 {
     public function __construct(
         private readonly Security $security,
-        private readonly EmailVerifier $emailVerifier,
-        private readonly UserRepository $userRepository,
-        private readonly PersonRepository $personRepository,
+        private readonly UserService $userService,
         private readonly AuthenticationUtils $authenticationUtils,
-        private readonly UserPasswordHasherInterface $userPasswordHasher,
     ) {
     }
 
@@ -53,14 +45,14 @@ class SecurityController extends AbstractController
     public function logoutSuccess(): Response
     {
         $this->addFlash('success', 'Vous êtes déconnecté');
+
         return $this->render('logoutConfirmation.html.twig');
     }
 
     #[Route('/register', name: 'register', methods: [Request::METHOD_GET])]
     public function register(): Response
     {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form = $this->createForm(RegistrationFormType::class, new User());
 
         return $this->render('register.html.twig', ['form' => $form]);
     }
@@ -71,85 +63,52 @@ class SecurityController extends AbstractController
     {
         $user = new User();
         $form = $this->createForm(RegistrationFormType::class, $user);
-
         $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            return $this->handleForm($form, $user);
+        if (!$form->isSubmitted() || !$form->isValid()) {
+            foreach ($form->getErrors(true) as $error) {
+                $this->addFlash('error', $error->getMessage());
+            }
+
+            return $this->render('register.html.twig', ['form' => $form]);
         }
 
-        foreach ($form->getErrors(true) as $error) {
-            $this->addFlash('error', $error->getMessage());
-        }
+        /** @var string $plainPassword */
+        $plainPassword = $form->get('password')->getData();
 
-        return $this->render('register.html.twig', ['form' => $form]);
-    }
+        try {
+            $this->userService->register($user, $plainPassword);
+        } catch (\RuntimeException $e) {
+            $this->addFlash('error', $e->getMessage());
 
-    /**
-     * @param FormInterface<User> $form
-     */
-    private function handleForm(FormInterface $form, User $user): Response
-    {
-        /** @var string $password */
-        $password = $form->get('password')->getData();
-        // Get firstName and lastName from email
-        $email = $form->get('email')->getData();
-        if (!is_string($email)) {
-            $this->addFlash('error', 'Email invalide');
             return $this->redirectToRoute('register');
         }
 
-        $names = $this->extractNamesFromEmail($email);
-        if ($names === null) {
-            $this->addFlash('error', "Format d'email invalide");
-            return $this->redirectToRoute('register');
-        }
-
-        $person = $this->personRepository->findOneBy(['firstName' => $names['firstName'], 'lastName' => $names['lastName']]);
-
-        if (null === $person) {
-            $this->addFlash('error', 'Personne non trouvée');
-            return $this->redirectToRoute('register');
-        }
-
-        $user->setPassword($this->userPasswordHasher->hashPassword($user, $password))
-            ->setPerson($person)
-            ->setCreatedAt(new \DateTimeImmutable());
-        $this->userRepository->update($user);
-
-        $this->emailVerifier->sendEmailConfirmation(
-            'register_verify',
-            $user,
-            new TemplatedEmail()
-                ->to((string)$user->getEmail())
-                ->subject('Confirmez votre email')
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-        );
+        $this->userService->sendVerificationEmail($user);
 
         $response = $this->security->login($user, 'form_login', 'main');
 
-        if ($response instanceof Response) {
-            return $response;
-        }
-
-        return $this->redirectToRoute('register_success');
+        return $response instanceof Response ? $response : $this->redirectToRoute('register_success');
     }
 
     #[Route('/register/verify', name: 'register_verify')]
     public function verifyUserEmail(Request $request): Response
     {
         $id = $request->query->get('id');
+
         if (null === $id) {
             return $this->redirectToRoute('register');
         }
 
-        $user = $this->userRepository->find($id);
+        $user = $this->userService->findById((int) $id);
+
         if (null === $user) {
             return $this->redirectToRoute('register');
         }
 
-        $this->emailVerifier->handleEmailConfirmation($request, $user);
+        $this->userService->verifyEmail($request, $user);
         $this->addFlash('success', 'Votre email a été vérifié');
+
         return $this->redirectToRoute('home');
     }
 
@@ -157,22 +116,5 @@ class SecurityController extends AbstractController
     public function registerSuccess(): Response
     {
         return $this->render('signupConfirmation.html.twig');
-    }
-
-    /**
-     * Extract first and last name from university email format.
-     *
-     * @return array{firstName: string, lastName: string}|null
-     */
-    private function extractNamesFromEmail(string $email): ?array
-    {
-        if (!preg_match('/^([a-zA-Z-]+)\.([a-zA-Z-]+)@etu\.univ-lyon1\.fr$/', $email, $matches)) {
-            return null;
-        }
-
-        return [
-            'firstName' => ucfirst(strtolower($matches[1])),
-            'lastName' => ucfirst(strtolower($matches[2])),
-        ];
     }
 }

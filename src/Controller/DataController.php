@@ -19,13 +19,11 @@ class DataController extends AbstractController
     #[IsGranted(PersonVoter::DOWNLOAD_DATA, subject: 'person')]
     public function download(?Person $person): JsonResponse
     {
-        $person = $this->getPerson($person);
+        $person = $this->resolvePerson($person);
 
         if (!$person instanceof Person) {
             return $this->json(
-                [
-                    'data' => "Aucune donnée n'a été trouvée",
-                ],
+                ['data' => "Aucune donnée n'a été trouvée"],
                 Response::HTTP_NOT_FOUND,
             );
         }
@@ -33,11 +31,15 @@ class DataController extends AbstractController
         return $this->json($person);
     }
 
-    public function getPerson(?Person $person): ?Person
+    private function resolvePerson(?Person $person): ?Person
     {
+        if ($person instanceof Person) {
+            return $person;
+        }
+
         /** @var ?User $user */
-        $user  = $this->getUser();
-        $admin = $user instanceof User && $user->isAdmin();
-        return $person instanceof Person ? $person : ($admin ? $user->getPerson() : null);
+        $user = $this->getUser();
+
+        return $user instanceof User && $user->isAdmin() ? $user->getPerson() : null;
     }
 }

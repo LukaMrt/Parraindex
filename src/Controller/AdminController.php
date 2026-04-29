@@ -7,8 +7,7 @@ namespace App\Controller;
 use App\Entity\Contact\Contact;
 use App\Entity\Contact\Type;
 use App\Entity\Person\Role;
-use App\Repository\ContactRepository;
-use App\Service\Contact\ContactResolverManager;
+use App\Service\ContactService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,20 +19,16 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class AdminController extends AbstractController
 {
     public function __construct(
-        private readonly ContactRepository $contactRepository,
-        private readonly ContactResolverManager $resolverManager,
+        private readonly ContactService $contactService,
     ) {
     }
 
     #[Route('/admin/contact', name: 'admin_contact', methods: [Request::METHOD_GET])]
     public function index(): Response
     {
-        $list  = $this->contactRepository->getAll();
-        $types = Type::allTitles();
-
         return $this->render('contactAdmin.html.twig', [
-            'contacts'    => $list,
-            'typeContact' => $types,
+            'contacts'    => $this->contactService->getAll(),
+            'typeContact' => Type::allTitles(),
         ]);
     }
 
@@ -41,10 +36,9 @@ class AdminController extends AbstractController
     #[IsCsrfTokenValid('delete_contact', tokenKey: '_token')]
     public function delete(Contact $contact): Response
     {
-        $contact->setResolutionDate(new \DateTime());
-        $this->contactRepository->update($contact);
-
+        $this->contactService->close($contact);
         $this->addFlash('success', 'Contact cloturé');
+
         return $this->redirectToRoute('admin_contact');
     }
 
@@ -52,15 +46,15 @@ class AdminController extends AbstractController
     #[IsCsrfTokenValid('resolve_contact', tokenKey: '_token')]
     public function resolve(Contact $contact): Response
     {
-        $response = $this->resolverManager->resolve($contact);
+        $response = $this->contactService->resolve($contact);
 
         if ($response instanceof Response) {
             return $response;
         }
 
-        $contact->setResolutionDate(new \DateTime());
-        $this->contactRepository->update($contact);
+        $this->contactService->close($contact);
         $this->addFlash('success', 'Contact résolu');
+
         return $this->redirectToRoute('admin_contact');
     }
 }

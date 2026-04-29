@@ -8,8 +8,8 @@ use App\Entity\Contact\Contact;
 use App\Entity\Contact\Type;
 use App\Entity\Sponsor\Type as SponsorType;
 use App\Form\ContactType;
-use App\Repository\ContactRepository;
-use App\Repository\PersonRepository;
+use App\Service\ContactService;
+use App\Service\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +19,8 @@ use Symfony\Component\Routing\Attribute\Route;
 class ContactController extends AbstractController
 {
     public function __construct(
-        private readonly PersonRepository $personRepository,
-        private readonly ContactRepository $contactRepository,
+        private readonly PersonService $personService,
+        private readonly ContactService $contactService,
     ) {
     }
 
@@ -29,8 +29,8 @@ class ContactController extends AbstractController
     {
         $form   = $this->createForm(ContactType::class);
         $people = [];
-        $data   = $this->personRepository->getAll(orderBy: 'lastName');
-        foreach ($data as $person) {
+
+        foreach ($this->personService->getAll(orderBy: 'lastName') as $person) {
             $people[$person->getFullName()] = $person->getFullName();
         }
 
@@ -51,7 +51,7 @@ class ContactController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var Contact $contact */
             $contact = $form->getData();
-            $this->contactRepository->create($contact);
+            $this->contactService->create($contact);
             $this->addFlash('success', 'Message enregistré');
         }
 

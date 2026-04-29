@@ -7,8 +7,8 @@ namespace App\Controller;
 use App\Entity\Sponsor\Sponsor;
 use App\Entity\Sponsor\Type;
 use App\Form\SponsorType;
-use App\Repository\SponsorRepository;
 use App\Security\Voter\SponsorVoter;
+use App\Service\SponsorService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 class SponsorController extends AbstractController
 {
     public function __construct(
-        private readonly SponsorRepository $sponsorRepository,
+        private readonly SponsorService $sponsorService,
     ) {
     }
 
@@ -33,14 +33,12 @@ class SponsorController extends AbstractController
     public function edit(Sponsor $sponsor): Response
     {
         $form = $this->createForm(SponsorType::class, $sponsor);
-        return $this->render(
-            'editSponsor.html.twig',
-            [
-                'sponsor'  => $sponsor,
-                'allTypes' => Type::allTitles(),
-                'form'     => $form,
-            ],
-        );
+
+        return $this->render('editSponsor.html.twig', [
+            'sponsor'  => $sponsor,
+            'allTypes' => Type::allTitles(),
+            'form'     => $form,
+        ]);
     }
 
     #[Route('/parrainage/{id}/edit', name: 'sponsor_edit_post', methods: [Request::METHOD_POST])]
@@ -51,8 +49,9 @@ class SponsorController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->sponsorRepository->update($sponsor);
+            $this->sponsorService->update($sponsor);
             $this->addFlash('success', 'Lien modifié');
+
             return $this->redirectToRoute('sponsor', ['id' => $sponsor->getId()]);
         }
 
@@ -63,8 +62,9 @@ class SponsorController extends AbstractController
     #[IsGranted(SponsorVoter::EDIT, subject: 'sponsor')]
     public function delete(Sponsor $sponsor): Response
     {
-        $this->sponsorRepository->delete($sponsor);
+        $this->sponsorService->delete($sponsor);
         $this->addFlash('success', 'Parrainage supprimé');
+
         return $this->redirectToRoute('home');
     }
 }
