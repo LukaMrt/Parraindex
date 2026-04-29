@@ -10,6 +10,7 @@ services:
       MYSQL_DATABASE: ${DATABASE_NAME}
     volumes:
       - ./var/lib/mysql:/var/lib/mysql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
   mail:
     image: mailhog/mailhog
     ports:
