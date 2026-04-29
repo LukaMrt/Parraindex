@@ -21,3 +21,10 @@ services:
     App\Service\Contact\ContactResolverManager:
         arguments:
             $resolvers: !tagged_iterator app.contact_resolver
+
+    Symfony\Component\ObjectMapper\ObjectMapper:
+        arguments:
+            $propertyAccessor: '@property_accessor'
+
+    Symfony\Component\ObjectMapper\ObjectMapperInterface:
+        alias: Symfony\Component\ObjectMapper\ObjectMapper
