@@ -102,7 +102,7 @@ final readonly class PersonService
             godChildren: array_map($this->mapSponsorToSummaryDto(...), $person->getGodChildren()->toArray()),
             characteristics: array_filter(
                 array_map($this->mapCharacteristicToDto(...), $person->getCharacteristics()->toArray()),
-                static fn(?CharacteristicDto $c): bool => $c !== null,
+                static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto,
             ),
         );
     }
@@ -124,7 +124,7 @@ final readonly class PersonService
     {
         $type = $characteristic->getType();
 
-        if ($type === null) {
+        if (!$type instanceof CharacteristicType) {
             return null;
         }
 

@@ -45,7 +45,7 @@ final readonly class AuthService
             return null;
         }
 
-        $email = (new TemplatedEmail())
+        $email = new TemplatedEmail()
             ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
             ->to((string) $user->getEmail())
             ->subject('Your password reset request')

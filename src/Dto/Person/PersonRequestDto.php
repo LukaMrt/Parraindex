@@ -6,27 +6,27 @@ namespace App\Dto\Person;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class PersonRequestDto
+final readonly class PersonRequestDto
 {
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
-        public readonly string $firstName,
+        public string $firstName,
 
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
-        public readonly string $lastName,
+        public string $lastName,
 
         #[Assert\Positive]
         #[Assert\Range(min: 1900, max: 2100)]
-        public readonly int $startYear,
+        public int $startYear,
 
-        public readonly ?string $biography = null,
+        public ?string $biography = null,
 
-        public readonly ?string $description = null,
+        public ?string $description = null,
 
         #[Assert\CssColor([Assert\CssColor::HEX_LONG])]
-        public readonly ?string $color = null,
+        public ?string $color = null,
     ) {
     }
 }

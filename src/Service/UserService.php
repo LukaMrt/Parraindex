@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Entity\Person\Person;
 use App\Entity\Person\User;
 use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
@@ -43,7 +44,7 @@ final readonly class UserService
 
         $person = $this->personRepository->getByIdentity($names['firstName'], $names['lastName']);
 
-        if ($person === null) {
+        if (!$person instanceof Person) {
             throw new \RuntimeException('Personne non trouvée');
         }
 
@@ -59,7 +60,7 @@ final readonly class UserService
         $this->emailVerifier->sendEmailConfirmation(
             'register_verify',
             $user,
-            (new TemplatedEmail())
+            new TemplatedEmail()
                 ->to((string) $user->getEmail())
                 ->subject('Confirmez votre email')
                 ->htmlTemplate('registration/confirmation_email.html.twig')

@@ -78,8 +78,8 @@ class SecurityController extends AbstractController
 
         try {
             $this->userService->register($user, $plainPassword);
-        } catch (\RuntimeException $e) {
-            $this->addFlash('error', $e->getMessage());
+        } catch (\RuntimeException $runtimeException) {
+            $this->addFlash('error', $runtimeException->getMessage());
 
             return $this->redirectToRoute('register');
         }
@@ -102,7 +102,7 @@ class SecurityController extends AbstractController
 
         $user = $this->userService->findById((int) $id);
 
-        if (null === $user) {
+        if (!$user instanceof User) {
             return $this->redirectToRoute('register');
         }
 

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Entity\Person\User;
 use App\Service\AuthService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\FormError;
@@ -71,8 +72,8 @@ class ResetPasswordController extends AbstractController
 
         try {
             $user = $this->authService->validateTokenAndFetchUser($token);
-        } catch (ResetPasswordExceptionInterface $e) {
-            $this->addFlash('reset_password_error', $this->authService->getTranslatedError($e));
+        } catch (ResetPasswordExceptionInterface $resetPasswordException) {
+            $this->addFlash('reset_password_error', $this->authService->getTranslatedError($resetPasswordException));
 
             return $this->redirectToRoute('forgot_password_request');
         }
@@ -105,13 +106,13 @@ class ResetPasswordController extends AbstractController
     {
         $user = $this->authService->findUserByEmail($email);
 
-        if ($user === null) {
+        if (!$user instanceof User) {
             return $this->redirectToRoute('check_email');
         }
 
         $resetToken = $this->authService->generateAndSendResetToken($user);
 
-        if ($resetToken === null) {
+        if (!$resetToken instanceof ResetPasswordToken) {
             return $this->redirectToRoute('check_email');
         }
 

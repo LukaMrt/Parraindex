@@ -6,15 +6,15 @@ namespace App\Dto\Auth;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
-final class LoginRequestDto
+final readonly class LoginRequestDto
 {
     public function __construct(
         #[Assert\NotBlank]
         #[Assert\Email]
-        public readonly string $email,
+        public string $email,
 
         #[Assert\NotBlank]
-        public readonly string $password,
+        public string $password,
     ) {
     }
 }
