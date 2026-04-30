@@ -10,6 +10,14 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|scripts)/
             security: false
+        api:
+            pattern: ^/api/
+            provider: app_user_provider
+            stateless: false
+            json_login:
+                check_path: api_auth_login
+                success_handler: App\Security\ApiAuthenticationSuccessHandler
+                failure_handler: App\Security\ApiAuthenticationFailureHandler
         main:
             lazy: true
             provider: app_user_provider
@@ -23,6 +31,7 @@ security:
 
     access_control:
          - { path: ^/admin, roles: ROLE_ADMIN }
+         - { path: ^/api/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:

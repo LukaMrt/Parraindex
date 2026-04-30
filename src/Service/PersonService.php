@@ -56,6 +56,14 @@ final readonly class PersonService
         $person->createMissingCharacteristics($allTypes);
     }
 
+    /**
+     * @return Person[]
+     */
+    public function getAllWithSponsors(): array
+    {
+        return $this->personRepository->findAllWithSponsors();
+    }
+
     public function update(Person $person): void
     {
         $this->personRepository->update($person);

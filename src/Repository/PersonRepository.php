@@ -80,6 +80,24 @@ class PersonRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @return Person[]
+     */
+    public function findAllWithSponsors(): array
+    {
+        /** @var Person[] $result */
+        $result = $this->createQueryBuilder('p')
+            ->leftJoin('p.godFathers', 'gf')->addSelect('gf')
+            ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
+            ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
+            ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
+            ->orderBy('p.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
     public function getByEmail(string $email): ?Person
     {
         return $this->findOneBy(['email' => $email]);

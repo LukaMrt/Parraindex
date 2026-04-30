@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 final class ApiResponse
 {
     /**
-     * @param array<string, mixed>|object|null $data
+     * @param array<mixed>|object|null $data
      */
     public static function success(array|object|null $data, int $status = Response::HTTP_OK): JsonResponse
     {
