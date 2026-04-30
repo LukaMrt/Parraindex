@@ -1,0 +1,31 @@
+import { get, put, del, postFormData } from './client';
+import type { Person, PersonSummary, PersonRequest } from '../../types/person';
+import type { Result } from '../../types/api';
+
+export type PersonOrderBy = 'id' | 'firstName' | 'lastName' | 'startYear' | 'createdAt';
+
+export function getPersons(orderBy: PersonOrderBy = 'id'): Promise<Result<PersonSummary[]>> {
+  return get<PersonSummary[]>(`/api/persons?orderBy=${orderBy}`);
+}
+
+export function getPerson(id: number): Promise<Result<Person>> {
+  return get<Person>(`/api/persons/${id}`);
+}
+
+export function updatePerson(id: number, data: PersonRequest): Promise<Result<Person>> {
+  return put<Person>(`/api/persons/${id}`, data);
+}
+
+export function deletePerson(id: number): Promise<Result<null>> {
+  return del(`/api/persons/${id}`);
+}
+
+export function uploadPicture(id: number, file: File): Promise<Result<{ picture: string }>> {
+  const formData = new FormData();
+  formData.append('picture', file);
+  return postFormData<{ picture: string }>(`/api/persons/${id}/picture`, formData);
+}
+
+export function exportPersonData(id: number): Promise<Result<Person>> {
+  return get<Person>(`/api/persons/${id}/export`);
+}
