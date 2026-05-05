@@ -15,9 +15,6 @@ services:
             - '%kernel.project_dir%/src/Entity/'
             - '%kernel.project_dir%/src/Kernel.php'
 
-    App\Security\LoginSuccessListener:
-        tags: [kernel.event_listener]
-
     App\Service\Contact\ContactResolverManager:
         arguments:
             $resolvers: !tagged_iterator app.contact_resolver
