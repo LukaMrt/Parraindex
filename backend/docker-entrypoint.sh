@@ -20,10 +20,6 @@ echo "Database is ready!"
 
 php bin/console cache:clear --no-warmup
 php bin/console cache:warmup
-php bin/console assets:install --symlink --relative
-php bin/console importmap:install
-php bin/console sass:build
-php bin/console asset-map:compile
 
 # Run migrations
 php bin/console doctrine:migrations:migrate --no-interaction

@@ -7,10 +7,11 @@ namespace App\Security;
 use App\Entity\Person\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
 
 readonly class EmailVerifier
@@ -23,7 +24,7 @@ readonly class EmailVerifier
     ) {
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, TemplatedEmail $email): void
+    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
@@ -32,12 +33,17 @@ readonly class EmailVerifier
             ['id' => $user->getId()]
         );
 
-        $context = $email->getContext();
-        $context['signedUrl'] = $signatureComponents->getSignedUrl();
-        $context['expiresAtMessageKey']  = $signatureComponents->getExpirationMessageKey();
-        $context['expiresAtMessageData'] = $signatureComponents->getExpirationMessageData();
+        $signedUrl = htmlspecialchars($signatureComponents->getSignedUrl(), ENT_QUOTES);
 
-        $email->context($context);
+        $email = (new Email())
+            ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
+            ->to((string) $user->getEmail())
+            ->subject('Confirmez votre email')
+            ->html(
+                '<h1>Bonjour !</h1>' .
+                '<p>Confirmez votre adresse email en cliquant sur le lien suivant :</p>' .
+                '<p><a href="' . $signedUrl . '">Confirmer mon email</a></p>'
+            );
 
         try {
             $this->mailer->send($email);

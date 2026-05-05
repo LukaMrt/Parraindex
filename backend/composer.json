@@ -15,8 +15,6 @@
         "doctrine/orm": "3.*",
         "phpdocumentor/reflection-docblock": "6.*",
         "phpstan/phpdoc-parser": "2.*",
-        "symfony/asset": "8.*",
-        "symfony/asset-mapper": "8.*",
         "symfony/console": "8.*",
         "symfony/doctrine-messenger": "8.*",
         "symfony/dotenv": "8.*",
@@ -40,15 +38,10 @@
         "symfony/serializer": "8.*",
         "symfony/string": "8.*",
         "symfony/translation": "8.*",
-        "symfony/twig-bundle": "8.*",
         "symfony/validator": "8.*",
-        "symfony/web-link": "8.*",
         "symfony/yaml": "8.*",
         "symfonycasts/reset-password-bundle": "1.*",
-        "symfonycasts/sass-bundle": "0.*",
-        "symfonycasts/verify-email-bundle": "1.*",
-        "twig/extra-bundle": "v3.*",
-        "twig/twig": "v3.*"
+        "symfonycasts/verify-email-bundle": "1.*"
     },
     "config": {
         "allow-plugins": {
@@ -71,9 +64,7 @@
     },
     "scripts": {
         "auto-scripts": {
-            "cache:clear": "symfony-cmd",
-            "assets:install %PUBLIC_DIR%": "symfony-cmd",
-            "importmap:install": "symfony-cmd"
+            "cache:clear": "symfony-cmd"
         },
         "post-install-cmd": "@auto-scripts",
         "post-update-cmd": "@auto-scripts",
@@ -98,10 +89,6 @@
         "server:restart": [
             "@server-stop",
             "@server-start"
-        ],
-        "scss:build": [
-            "php bin/console sass:build",
-            "php bin/console asset-map:compile"
         ],
         "docker": "docker buildx build --platform linux/arm64 -t lukamrt/parraindex --push ."
     },

@@ -86,11 +86,17 @@ final class AuthApiController extends AbstractController
         return ApiResponse::success(null, Response::HTTP_CREATED);
     }
 
-    #[Route('/api/auth/verify-email', name: 'api_auth_verify_email', methods: ['POST'])]
-    public function verifyEmail(Request $request, #[CurrentUser] ?User $user): JsonResponse
+    #[Route('/api/auth/verify-email', name: 'api_auth_verify_email', methods: ['GET'])]
+    public function verifyEmail(Request $request): JsonResponse
     {
+        $id = $request->query->getInt('id');
+        $user = $this->userService->findById($id);
+
         if (!$user instanceof User) {
-            return ApiResponse::unauthorized();
+            return ApiResponse::error(
+                new ApiError(ErrorCode::NOT_FOUND, 'Utilisateur introuvable'),
+                Response::HTTP_NOT_FOUND,
+            );
         }
 
         try {

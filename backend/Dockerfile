@@ -7,7 +7,7 @@ FROM dunglas/frankenphp:1.5-php8.5-alpine AS frankenphp
 # Copy Composer from stage 1
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-# Environment
+# Environment — SERVER_NAME can be overridden in compose.yaml (e.g. ":80" behind Nginx)
 ENV SERVER_NAME=parraindex.com
 ENV APP_RUNTIME=Runtime\\FrankenPhpSymfony\\Runtime
 ENV FRANKENPHP_CONFIG="worker /app/public/index.php"
@@ -34,10 +34,7 @@ COPY config config
 COPY migrations migrations
 COPY public public
 COPY src src
-COPY templates templates
-COPY composer.json composer.lock ./
-COPY importmap.php importmap.php
-COPY symfony.lock symfony.lock
+COPY composer.json composer.lock symfony.lock ./
 
 # Run post-install scripts now that everything is present
 RUN composer install --no-dev --optimize-autoloader --no-scripts

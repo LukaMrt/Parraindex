@@ -9,7 +9,6 @@ use App\Entity\Person\User;
 use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -57,14 +56,7 @@ final readonly class UserService
 
     public function sendVerificationEmail(User $user): void
     {
-        $this->emailVerifier->sendEmailConfirmation(
-            'register_verify',
-            $user,
-            new TemplatedEmail()
-                ->to((string) $user->getEmail())
-                ->subject('Confirmez votre email')
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-        );
+        $this->emailVerifier->sendEmailConfirmation('api_auth_verify_email', $user);
     }
 
     public function verifyEmail(Request $request, User $user): void

@@ -6,11 +6,10 @@ namespace App\Service;
 
 use App\Entity\Person\User;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
+use Symfony\Component\Mime\Email;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Contracts\Translation\TranslatorInterface;
 use SymfonyCasts\Bundle\ResetPassword\Exception\ResetPasswordExceptionInterface;
 use SymfonyCasts\Bundle\ResetPassword\Model\ResetPasswordToken;
 use SymfonyCasts\Bundle\ResetPassword\ResetPasswordHelperInterface;
@@ -21,22 +20,17 @@ final readonly class AuthService
         private EntityManagerInterface $entityManager,
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private UserPasswordHasherInterface $passwordHasher,
-        private TranslatorInterface $translator,
         private MailerInterface $mailer,
     ) {
     }
 
     public function findUserByEmail(string $email): ?User
     {
-        /** @var ?User $user */
         $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
 
         return $user;
     }
 
-    /**
-     * Generates a reset token and sends the reset email. Returns null if token generation fails.
-     */
     public function generateAndSendResetToken(User $user): ?ResetPasswordToken
     {
         try {
@@ -45,12 +39,17 @@ final readonly class AuthService
             return null;
         }
 
-        $email = new TemplatedEmail()
+        $resetUrl = htmlspecialchars('/reset-password?token=' . $resetToken->getToken(), ENT_QUOTES);
+
+        $email = (new Email())
             ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
             ->to((string) $user->getEmail())
-            ->subject('Your password reset request')
-            ->htmlTemplate('reset_password/email.html.twig')
-            ->context(['resetToken' => $resetToken]);
+            ->subject('Réinitialisation de votre mot de passe')
+            ->html(
+                '<h1>Bonjour !</h1>' .
+                '<p>Pour réinitialiser votre mot de passe, cliquez sur le lien suivant :</p>' .
+                '<p><a href="' . $resetUrl . '">Réinitialiser mon mot de passe</a></p>'
+            );
 
         $this->mailer->send($email);
 
@@ -62,28 +61,11 @@ final readonly class AuthService
         return $this->resetPasswordHelper->generateFakeResetToken();
     }
 
-    /**
-     * @throws ResetPasswordExceptionInterface if the token is invalid or expired.
-     */
     public function validateTokenAndFetchUser(string $token): User
     {
-        /** @var User $user */
         $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
 
         return $user;
-    }
-
-    public function getTranslatedError(ResetPasswordExceptionInterface $e): string
-    {
-        return sprintf(
-            '%s - %s',
-            $this->translator->trans(
-                ResetPasswordExceptionInterface::MESSAGE_PROBLEM_VALIDATE,
-                [],
-                'ResetPasswordBundle'
-            ),
-            $this->translator->trans($e->getReason(), [], 'ResetPasswordBundle')
-        );
     }
 
     public function removeResetRequest(string $token): void

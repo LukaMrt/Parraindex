@@ -18,20 +18,9 @@ security:
                 check_path: api_auth_login
                 success_handler: App\Security\ApiAuthenticationSuccessHandler
                 failure_handler: App\Security\ApiAuthenticationFailureHandler
-        main:
-            lazy: true
-            provider: app_user_provider
-            form_login:
-                login_path: login
-                check_path: login
-                enable_csrf: true
-            logout:
-                path: /logout
-                target: logout_success
 
     access_control:
-         - { path: ^/admin, roles: ROLE_ADMIN }
-         - { path: ^/api/admin, roles: ROLE_ADMIN }
+        - { path: ^/api/admin, roles: ROLE_ADMIN }
 
 when@test:
     security:
