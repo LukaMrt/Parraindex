@@ -6,31 +6,42 @@ interface PersonCardProps {
   person: PersonSummary;
   isCentered?: boolean;
   onClick?: (e: MouseEvent) => void;
+  animationDelay?: number;
 }
 
-export function PersonCard({ person, isCentered = false, onClick }: PersonCardProps) {
+export function PersonCard({ person, isCentered = false, onClick, animationDelay }: PersonCardProps) {
   return (
     <article
       onClick={onClick}
+      style={{
+        animationDelay: animationDelay !== undefined ? `${animationDelay}ms` : undefined,
+        boxShadow: isCentered ? `0 24px 64px -12px ${person.color}99` : undefined,
+      }}
       className={[
-        'flex w-52 shrink-0 flex-col overflow-hidden rounded-lg bg-white shadow transition-transform',
+        'card-fade-in relative flex w-48 shrink-0 flex-col overflow-hidden rounded-2xl bg-white transition-all duration-300',
         onClick !== undefined ? 'cursor-pointer' : '',
-        isCentered ? 'scale-105 shadow-md' : 'opacity-80',
+        isCentered ? 'z-10 scale-110' : 'scale-95 opacity-50 hover:opacity-70',
       ].join(' ')}
     >
-      <div className="relative h-36" style={{ backgroundColor: person.color }}>
+      <div className="h-1 w-full shrink-0" style={{ backgroundColor: person.color }} />
+
+      <div className="relative h-44 overflow-hidden" style={{ backgroundColor: `${person.color}22` }}>
         <img
           src={pictureUrl(person.picture)}
           alt={person.fullName}
-          className="h-full w-full object-cover"
+          className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"
         />
       </div>
 
-      <div className="flex flex-col gap-1 p-3">
-        <span className="text-sm font-bold uppercase text-dark-blue">{person.lastName}</span>
+      <div className="flex flex-col gap-0.5 p-4">
+        <span className="text-sm font-bold uppercase tracking-wide text-dark-blue leading-tight">
+          {person.lastName}
+        </span>
         <span className="text-sm text-medium-blue">{person.firstName}</span>
-        <span className="mt-auto text-xs text-dark-grey">{person.startYear}</span>
+        <span className="mt-2 text-xs font-medium" style={{ color: person.color }}>
+          {person.startYear} / {person.startYear + 1}
+        </span>
       </div>
     </article>
   );

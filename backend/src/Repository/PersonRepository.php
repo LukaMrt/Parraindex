@@ -98,6 +98,30 @@ class PersonRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @return Person[]
+     */
+    public function findPaginated(int $offset, int $limit): array
+    {
+        /** @var Person[] $result */
+        $result = $this->createQueryBuilder('p')
+            ->orderBy('p.id', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
+    public function countAll(): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function getByEmail(string $email): ?Person
     {
         return $this->findOneBy(['email' => $email]);

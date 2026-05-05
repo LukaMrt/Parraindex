@@ -64,6 +64,19 @@ final readonly class PersonService
         return $this->personRepository->findAllWithSponsors();
     }
 
+    /**
+     * @return Person[]
+     */
+    public function getPaginated(int $offset, int $limit): array
+    {
+        return $this->personRepository->findPaginated($offset, $limit);
+    }
+
+    public function countAll(): int
+    {
+        return $this->personRepository->countAll();
+    }
+
     public function update(Person $person): void
     {
         $this->personRepository->update($person);

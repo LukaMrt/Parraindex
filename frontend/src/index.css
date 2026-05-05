@@ -50,6 +50,73 @@
   --dark-green: hsl(120, 56%, 44%);
 }
 
+/* Range input custom pour la page tree */
+.tree-slider {
+  appearance: none;
+  height: 3px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+.tree-slider::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 9999px;
+  background: hsl(0 0% 85%);
+}
+
+.tree-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: hsl(216 48% 58%);
+  margin-top: -5.5px;
+  transition: transform 120ms ease, box-shadow 120ms ease;
+  box-shadow: 0 0 0 0 hsl(216 48% 58% / 0%);
+}
+
+.tree-slider:hover::-webkit-slider-thumb,
+.tree-slider:focus::-webkit-slider-thumb {
+  transform: scale(1.25);
+  box-shadow: 0 0 0 4px hsl(216 48% 58% / 20%);
+}
+
+.tree-slider::-moz-range-track {
+  height: 3px;
+  border-radius: 9999px;
+  background: hsl(0 0% 85%);
+}
+
+.tree-slider::-moz-range-thumb {
+  border: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: hsl(216 48% 58%);
+  transition: transform 120ms ease;
+}
+
+.tree-slider:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+@keyframes card-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.card-fade-in {
+  animation: card-fade-in 200ms ease-out both;
+}
+
 *,
 *::before,
 *::after {

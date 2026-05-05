@@ -24,7 +24,7 @@ final class TreeApiControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/api/tree');
 
         $this->assertResponseIsSuccessful();
-        $items = $this->responseDataList();
+        $items = $this->responseItems();
         $this->assertNotEmpty($items);
 
         $first = $items[0];
@@ -48,7 +48,7 @@ final class TreeApiControllerTest extends WebTestCase
         $this->client->request(Request::METHOD_GET, '/api/tree');
 
         $this->assertResponseIsSuccessful();
-        $items = $this->responseDataList();
+        $items = $this->responseItems();
 
         $ids       = array_column($items, 'id');
         $sortedIds = $ids;
@@ -56,12 +56,41 @@ final class TreeApiControllerTest extends WebTestCase
         $this->assertSame($sortedIds, $ids);
     }
 
+    public function testTreeReturnsTotalCount(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/api/tree');
+
+        $this->assertResponseIsSuccessful();
+        $data = $this->responseData();
+        $this->assertArrayHasKey('total', $data);
+        $this->assertGreaterThan(0, $data['total']);
+    }
+
+    public function testTreePaginationLimitsResults(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/api/tree?page=1&limit=2');
+
+        $this->assertResponseIsSuccessful();
+        $items = $this->responseItems();
+        $this->assertCount(2, $items);
+    }
+
     /**
      * @return array<int, array<string, mixed>>
      */
-    private function responseDataList(): array
+    private function responseItems(): array
     {
-        /** @var array<string, array<int, array<string, mixed>>> $body */
+        /** @var array<int, array<string, mixed>> $items */
+        $items = $this->responseData()['items'] ?? [];
+        return $items;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    private function responseData(): array
+    {
+        /** @var array<string, array<string, mixed>> $body */
         $body = json_decode((string) $this->client->getResponse()->getContent(), true);
         return $body['data'] ?? [];
     }
