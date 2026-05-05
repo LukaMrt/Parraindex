@@ -163,7 +163,6 @@ jobs:
 #            git pull &&
 #            composer update &&
 #            composer install --no-interaction --prefer-dist --optimize-autoloader &&
-#            sass --update scss:public/css'
 
 #  deploy-production:
 #    name: Deploy production
