@@ -16,7 +16,8 @@
 ###< phpunit/phpunit ###
 composer.phar
 
-.env
+.env.local
+.env.*.local
 
 *.css
 
