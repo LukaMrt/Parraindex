@@ -26,9 +26,7 @@ final readonly class AuthService
 
     public function findUserByEmail(string $email): ?User
     {
-        $user = $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
-
-        return $user;
+        return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
     }
 
     public function generateAndSendResetToken(User $user): ?ResetPasswordToken
@@ -41,7 +39,7 @@ final readonly class AuthService
 
         $resetUrl = htmlspecialchars('/reset-password?token=' . $resetToken->getToken(), ENT_QUOTES);
 
-        $email = (new Email())
+        $email = new Email()
             ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
             ->to((string) $user->getEmail())
             ->subject('Réinitialisation de votre mot de passe')
@@ -64,6 +62,7 @@ final readonly class AuthService
     public function validateTokenAndFetchUser(string $token): User
     {
         $user = $this->resetPasswordHelper->validateTokenAndFetchUser($token);
+        assert($user instanceof User);
 
         return $user;
     }

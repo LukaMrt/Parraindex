@@ -13,7 +13,6 @@ use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Service\Contact\ContactResolverInterface;
-use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -57,12 +56,7 @@ final class PasswordResolver extends AbstractController implements ContactResolv
         $this->userRepository->update($user);
         $this->emailVerifier->sendEmailConfirmation(
             'register_verify',
-            $user,
-            new TemplatedEmail()
-                ->to((string)$user->getEmail())
-                ->subject('Confirmez votre email et définissez votre mot de passe')
-                ->htmlTemplate('registration/confirmation_email.html.twig')
-                ->context(['registrationToken' => $registrationToken])
+            $user
         );
 
         return null;

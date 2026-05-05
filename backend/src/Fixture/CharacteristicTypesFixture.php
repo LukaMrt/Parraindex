@@ -19,44 +19,77 @@ class CharacteristicTypesFixture extends Fixture
 
     public const string PHONE = 'characteristic_type_phone';
 
+    public const string LINKEDIN = 'characteristic_type_linkedin';
+
+    public const string TWITTER = 'characteristic_type_twitter';
+
+    public const string DISCORD = 'characteristic_type_discord';
+
     #[\Override]
     public function load(ObjectManager $manager): void
     {
-        $characteristicType = new CharacteristicType()
+        $github = new CharacteristicType()
             ->setType(Type::URL)
             ->setTitle('Github')
             ->setImage('github.svg')
             ->setUrl('https://github.com/')
             ->setPlace(0);
-        $manager->persist($characteristicType);
-        $this->addReference(self::GITHUB, $characteristicType);
+        $manager->persist($github);
+        $this->addReference(self::GITHUB, $github);
 
-        $type2 = new CharacteristicType()
+        $instagram = new CharacteristicType()
             ->setType(Type::URL)
             ->setTitle('Instagram')
             ->setImage('instagram.svg')
             ->setUrl('https://www.instagram.com/')
             ->setPlace(1);
-        $manager->persist($type2);
-        $this->addReference(self::INSTAGRAM, $type2);
+        $manager->persist($instagram);
+        $this->addReference(self::INSTAGRAM, $instagram);
 
-        $type3 = new CharacteristicType()
+        $email = new CharacteristicType()
             ->setType(Type::EMAIL)
             ->setTitle('Email')
             ->setImage('mail.svg')
             ->setUrl('mailto:')
             ->setPlace(2);
-        $manager->persist($type3);
-        $this->addReference(self::EMAIL, $type3);
+        $manager->persist($email);
+        $this->addReference(self::EMAIL, $email);
 
-        $type4 = new CharacteristicType()
+        $phone = new CharacteristicType()
             ->setType(Type::PHONE)
             ->setTitle('Phone')
             ->setImage('telephone.svg')
             ->setUrl('tel:')
             ->setPlace(3);
-        $manager->persist($type4);
-        $this->addReference(self::PHONE, $type4);
+        $manager->persist($phone);
+        $this->addReference(self::PHONE, $phone);
+
+        $linkedin = new CharacteristicType()
+            ->setType(Type::URL)
+            ->setTitle('LinkedIn')
+            ->setImage('linkedin.svg')
+            ->setUrl('https://www.linkedin.com/in/')
+            ->setPlace(4);
+        $manager->persist($linkedin);
+        $this->addReference(self::LINKEDIN, $linkedin);
+
+        $twitter = new CharacteristicType()
+            ->setType(Type::URL)
+            ->setTitle('Twitter')
+            ->setImage('twitter.svg')
+            ->setUrl('https://twitter.com/')
+            ->setPlace(5);
+        $manager->persist($twitter);
+        $this->addReference(self::TWITTER, $twitter);
+
+        $discord = new CharacteristicType()
+            ->setType(Type::URL)
+            ->setTitle('Discord')
+            ->setImage('discord.svg')
+            ->setUrl('https://discord.com/users/')
+            ->setPlace(6);
+        $manager->persist($discord);
+        $this->addReference(self::DISCORD, $discord);
 
         $manager->flush();
     }

@@ -16,57 +16,164 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
     #[\Override]
     public function load(ObjectManager $manager): void
     {
-        /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, Person::class);
-        /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::GOD_CHILD_1, Person::class);
-        $sponsor1 = new Sponsor()
-            ->setGodFather($person)
-            ->setGodChild($person2)
-            ->setDate(new \DateTime('2022-09-01'))
-            ->setType(Type::CLASSIC)
-            ->setDescription('God child 1 a demandé Luka dans son formulaire de parrainage')
-            ->setCreatedAt(new \DateTime());
-        $manager->persist($sponsor1);
+        $sponsors = [
+            // ── Génération 2019 → 2020 ──────────────────────────────────────
+            [
+                PersonFixture::HENRI,
+                PersonFixture::LILIAN,
+                '2020-09-01',
+                Type::CLASSIC,
+                'Henri a repéré le potentiel de Lilian dès les journées d\'intégration.',
+            ],
+            [
+                PersonFixture::CAMILLE,
+                PersonFixture::MARINE,
+                '2020-09-05',
+                Type::CLASSIC,
+                "Camille et Marine ont eu un coup de foudre amical lors d'un atelier dev web.",
+            ],
+            [
+                PersonFixture::BAPTISTE,
+                PersonFixture::THOMAS,
+                '2020-09-10',
+                Type::CLASSIC,
+                'Baptiste a choisi Thomas pour sa curiosité débordante sur les réseaux.',
+            ],
+            [
+                PersonFixture::CAMILLE,
+                PersonFixture::PAULINE,
+                '2020-09-08',
+                Type::HEART,
+                'Camille a voulu transmettre sa passion pour l\'UX à Pauline lors d\'une soirée de la promo.',
+            ],
 
-        /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, Person::class);
-        /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::GOD_CHILD_2, Person::class);
-        $sponsor2 = new Sponsor()
-            ->setGodFather($person)
-            ->setGodChild($person2)
-            ->setDate(new \DateTime('2022-09-01'))
-            ->setType(Type::CLASSIC)
-            ->setDescription('Luka a choisi God child 2')
-            ->setCreatedAt(new \DateTime());
-        $manager->persist($sponsor2);
+            // ── Génération 2020 → 2021 ──────────────────────────────────────
+            [
+                PersonFixture::LILIAN,
+                PersonFixture::LUKA,
+                '2021-09-03',
+                Type::CLASSIC,
+                'Lilian a immédiatement vu en Luka un développeur en devenir et n\'a pas hésité.',
+            ],
+            [
+                PersonFixture::MARINE,
+                PersonFixture::MELVYN,
+                '2021-09-07',
+                Type::CLASSIC,
+                'Marine a choisi Melvyn pour sa passion de la sécurité, domaine qu\'elle affectionne.',
+            ],
+            [
+                PersonFixture::THOMAS,
+                PersonFixture::VINCENT,
+                '2021-09-02',
+                Type::CLASSIC,
+                'Thomas a sélectionné Vincent pour son attachement à la qualité du code.',
+            ],
+            [
+                PersonFixture::PAULINE,
+                PersonFixture::SARAH,
+                '2021-09-04',
+                Type::HEART,
+                'Pauline et Sarah se sont rencontrées lors d\'un hackathon et le courant est passé instantanément.',
+            ],
+            [
+                PersonFixture::THOMAS,
+                PersonFixture::JULIAN,
+                '2021-09-06',
+                Type::CLASSIC,
+                'Thomas a pris Julian sous son aile pour partager sa maîtrise des réseaux.',
+            ],
 
-        /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, Person::class);
-        /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::GOD_CHILD_3, Person::class);
-        $sponsor3 = new Sponsor()
-            ->setGodFather($person)
-            ->setGodChild($person2)
-            ->setDate(new \DateTime('2024-03-21'))
-            ->setType(Type::HEART)
-            ->setDescription('God child 3 a demandé Luka en parrain pendant une soirée')
-            ->setCreatedAt(new \DateTime());
-        $manager->persist($sponsor3);
+            // ── Génération 2021 → 2022 ──────────────────────────────────────
+            [
+                PersonFixture::LUKA,
+                PersonFixture::EMMA,
+                '2022-09-01',
+                Type::CLASSIC,
+                'Luka a choisi Emma pour son enthousiasme pour le développement web moderne.',
+            ],
+            [
+                PersonFixture::MELVYN,
+                PersonFixture::ROMAIN,
+                '2022-09-03',
+                Type::CLASSIC,
+                'Melvyn a repéré les talents de Romain lors des tests de rentrée.',
+            ],
+            [
+                PersonFixture::SARAH,
+                PersonFixture::CLARA,
+                '2022-09-05',
+                Type::HEART,
+                'Sarah et Clara ont sympathisé autour de leur intérêt commun pour l\'éco-conception.',
+            ],
+            [
+                PersonFixture::JULIAN,
+                PersonFixture::MAXIME,
+                '2022-09-02',
+                Type::CLASSIC,
+                'Julian a orienté Maxime vers les technologies décentralisées après une discussion passionnante.',
+            ],
+            [
+                PersonFixture::VINCENT,
+                PersonFixture::MAXIME,
+                '2022-10-15',
+                Type::HEART,
+                'Vincent a décidé d\'adopter Maxime en parrainage de coeur après plusieurs sessions de code ensemble.',
+            ],
 
-        /** @var Person $person */
-        $person = $this->getReference(PersonFixture::GOD_FATHER, Person::class);
-        /** @var Person $person2 */
-        $person2  = $this->getReference(PersonFixture::LUKA, Person::class);
-        $sponsor4 = new Sponsor()
-            ->setGodFather($person)
-            ->setGodChild($person2)
-            ->setDate(new \DateTime('2021-09-01'))
-            ->setType(Type::CLASSIC)
-            ->setDescription('God father a choisi Luka')
-            ->setCreatedAt(new \DateTime());
-        $manager->persist($sponsor4);
+            // ── Génération 2022 → 2023 ──────────────────────────────────────
+            [
+                PersonFixture::EMMA,
+                PersonFixture::ZOE,
+                '2023-09-01',
+                Type::CLASSIC,
+                'Emma a immédiatement su qu\'elle voulait être la marraine de Zoé en voyant son portfolio CSS.',
+            ],
+            [
+                PersonFixture::ROMAIN,
+                PersonFixture::LUCAS,
+                '2023-09-04',
+                Type::CLASSIC,
+                'Romain a choisi Lucas pour ses projets de robotique impressionnants.',
+            ],
+            [
+                PersonFixture::CLARA,
+                PersonFixture::INES,
+                '2023-09-02',
+                Type::CLASSIC,
+                'Clara a recruté Inès pour ses contributions open source déjà visibles sur GitHub.',
+            ],
+            [
+                PersonFixture::MAXIME,
+                PersonFixture::THEO,
+                '2023-09-06',
+                Type::CLASSIC,
+                'Maxime a vu en Théo un futur développeur Web3 après une discussion sur les jeux décentralisés.',
+            ],
+            [
+                PersonFixture::EMMA,
+                PersonFixture::MANON,
+                '2023-09-08',
+                Type::HEART,
+                'Emma a pris Manon en parrainage de cœur pour son approche unique mêlant droit et technique.',
+            ],
+        ];
+
+        foreach ($sponsors as [$godFatherRef, $godChildRef, $date, $type, $description]) {
+            /** @var Person $godFather */
+            $godFather = $this->getReference($godFatherRef, Person::class);
+            /** @var Person $godChild */
+            $godChild = $this->getReference($godChildRef, Person::class);
+
+            $sponsor = new Sponsor()
+                ->setGodFather($godFather)
+                ->setGodChild($godChild)
+                ->setDate(new \DateTime($date))
+                ->setType($type)
+                ->setDescription($description)
+                ->setCreatedAt(new \DateTime($date));
+            $manager->persist($sponsor);
+        }
 
         $manager->flush();
     }
@@ -77,8 +184,6 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
     #[\Override]
     public function getDependencies(): array
     {
-        return [
-            PersonFixture::class,
-        ];
+        return [PersonFixture::class];
     }
 }

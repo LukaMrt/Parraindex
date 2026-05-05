@@ -35,7 +35,7 @@ readonly class EmailVerifier
 
         $signedUrl = htmlspecialchars($signatureComponents->getSignedUrl(), ENT_QUOTES);
 
-        $email = (new Email())
+        $email = new Email()
             ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
             ->to((string) $user->getEmail())
             ->subject('Confirmez votre email')

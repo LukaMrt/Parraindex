@@ -7,6 +7,7 @@ namespace App\Fixture;
 use App\Entity\Person\Person;
 use App\Entity\Person\Role;
 use App\Entity\Person\User;
+use App\Repository\PersonRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -22,41 +23,72 @@ class UserFixture extends Fixture implements DependentFixtureInterface
     #[\Override]
     public function load(ObjectManager $manager): void
     {
-        /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LUKA, Person::class);
-        $user   = new User()
-            ->setEmail('luka.maret@etu.univ-lyon1.fr')
-            ->setPerson($person)
-            ->setRoles([Role::ADMIN, Role::USER])
-            ->setPicture('Luka.jpg')
-            ->setVerified(true)
-            ->setCreatedAt(new \DateTimeImmutable());
+        $accounts = [
+            // [personRef, email, roles, picture, password]
+            [
+                PersonFixture::LUKA,
+                'luka.maret@etu.univ-lyon1.fr',
+                [
+                    Role::ADMIN,
+                    Role::USER,
+                ],
+                'Luka.jpg',
+                'password',
+            ],
+            [
+                PersonFixture::LILIAN,
+                'lilian.baudry@etu.univ-lyon1.fr',
+                [Role::USER],
+                'Lilian.jpg',
+                'password',
+            ],
+            [
+                PersonFixture::VINCENT,
+                'vincent.chavot-dambrun@etu.univ-lyon1.fr',
+                [Role::USER],
+                PersonRepository::DEFAULT_PICTURE,
+                'password',
+            ],
+            [
+                PersonFixture::SARAH,
+                'sarah.fontaine@etu.univ-lyon1.fr',
+                [Role::USER],
+                PersonRepository::DEFAULT_PICTURE,
+                'password',
+            ],
+            [
+                PersonFixture::EMMA,
+                'emma.girard@etu.univ-lyon1.fr',
+                [Role::USER],
+                PersonRepository::DEFAULT_PICTURE,
+                'password',
+            ],
+        ];
 
-        $user->setPassword($this->passwordHasher->hashPassword($user, 'password'));
+        foreach ($accounts as [$personRef, $email, $roles, $picture, $password]) {
+            /** @var Person $person */
+            $person = $this->getReference($personRef, Person::class);
 
-        $manager->persist($user);
+            $user = new User()
+                ->setEmail($email)
+                ->setPerson($person)
+                ->setRoles($roles)
+                ->setPicture($picture)
+                ->setVerified(true)
+                ->setCreatedAt(new \DateTimeImmutable());
 
-        /** @var Person $person */
-        $person = $this->getReference(PersonFixture::LILIAN, Person::class);
-        $lilian = new User()
-            ->setEmail('lilian.baudry@etu.univ-lyon1.fr')
-            ->setPerson($person)
-            ->setRoles([Role::USER])
-            ->setPicture('Lilian.jpg')
-            ->setVerified(true)
-            ->setCreatedAt(new \DateTimeImmutable());
-
-        $lilian->setPassword($this->passwordHasher->hashPassword($lilian, 'password2'));
-
-        $manager->persist($lilian);
+            $user->setPassword($this->passwordHasher->hashPassword($user, $password));
+            $manager->persist($user);
+        }
 
         $manager->flush();
     }
 
+    /**
+     * @return string[]
+     */
     public function getDependencies(): array
     {
-        return [
-            PersonFixture::class,
-        ];
+        return [PersonFixture::class];
     }
 }
