@@ -1,0 +1,86 @@
+@theme {
+  /* ── Couleurs sémantiques — mode clair par défaut ── */
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-line: #e8e9ed;
+  --color-ink: #111318;
+  --color-ink-2: #4a4e5c;
+  --color-ink-3: #8a8f9f;
+  --color-ink-4: #c0c4cf;
+
+  /* ── Couleurs d'accent (fixes, hors thème) ── */
+  --color-success: #48bfa0;
+  --color-warning: #f4a236;
+  --color-danger: #e85d75;
+
+  /* ── Couleurs de types de parrainage ── */
+  --color-sponsor-iut: #2196f3;
+  --color-sponsor-heart: #e85d75;
+  --color-sponsor-faluche: #f4a236;
+  --color-sponsor-other: #8a8f97;
+
+  /* ── Typographie ── */
+  --font-sans: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+
+  --text-hero: clamp(40px, 6vw, 68px);
+  --text-h1: 1.875rem; /* 30px */
+  --text-h2: 1.375rem; /* 22px */
+  --text-h3: 1.125rem; /* 18px */
+  --text-body-lg: 1.0625rem; /* 17px */
+  --text-body: 0.875rem; /* 14px */
+  --text-body-sm: 0.8125rem; /* 13px */
+  --text-label: 0.6875rem; /* 11px */
+  --text-micro: 0.65625rem; /* 10.5px */
+
+  /* ── Espacement (base-4) ── */
+  --spacing-1: 0.25rem; /* 4px  */
+  --spacing-2: 0.5rem; /* 8px  */
+  --spacing-3: 0.75rem; /* 12px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-5: 1.25rem; /* 20px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-7: 1.75rem; /* 28px */
+  --spacing-8: 2rem; /* 32px */
+  --spacing-10: 2.5rem; /* 40px */
+  --spacing-12: 3rem; /* 48px */
+  --spacing-16: 4rem; /* 64px */
+
+  /* ── Rayons ── */
+  --radius-xs: 0.25rem; /* 4px  — mini tags */
+  --radius-sm: 0.4375rem; /* 7px  — inputs */
+  --radius-md: 0.5625rem; /* 9px  — boutons, search */
+  --radius-lg: 0.75rem; /* 12px — stat cards, list items */
+  --radius-xl: 0.875rem; /* 14px — cards génériques */
+  --radius-2xl: 1rem; /* 16px — hero cards, modals */
+  --radius-3xl: 1.25rem; /* 20px — grands avatars */
+  --radius-full: 9999px; /* pills */
+
+  /* ── Ombres ── */
+  --shadow-sm: 0 1px 3px rgb(0 0 0 / 0.06);
+  --shadow-md: 0 8px 24px rgb(0 0 0 / 0.08);
+  --shadow-modal: 0 24px 64px rgb(0 0 0 / 0.18);
+
+  /* ── Transitions ── */
+  --duration-fast: 120ms;
+  --duration-base: 150ms;
+  --duration-slow: 180ms;
+
+  /* ── Conteneurs ── */
+  --container-wide: 80rem; /* 1280px */
+  --container-default: 61.25rem; /* 980px  */
+  --container-narrow: 55rem; /* 880px  */
+
+  /* ── Layout ── */
+  --header-height: 3.75rem; /* 60px */
+}
+
+/* ── Mode sombre ── */
+[data-theme='dark'] {
+  --color-bg: #111318;
+  --color-surface: #1c1e24;
+  --color-line: #2e3038;
+  --color-ink: #f0f1f3;
+  --color-ink-2: #9ea3b2;
+  --color-ink-3: #666b7a;
+  --color-ink-4: #3e4250;
+}
