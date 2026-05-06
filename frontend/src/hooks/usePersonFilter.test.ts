@@ -16,7 +16,6 @@ function mkPerson(
     fullName: `${firstName} ${lastName}`,
     startYear,
     picture: null,
-    color: '#000',
   };
 }
 
@@ -31,7 +30,7 @@ describe('usePersonFilter', () => {
     const { result } = renderHook(() => usePersonFilter(people));
     expect(result.current.filtered).toHaveLength(3);
     expect(result.current.name).toBe('');
-    expect(result.current.year).toBeNull();
+    expect(result.current.years).toEqual([]);
     expect(result.current.alphabetical).toBe(false);
   });
 
@@ -45,25 +44,50 @@ describe('usePersonFilter', () => {
     expect(result.current.name).toBe('alice');
   });
 
-  it('setYear filtre par année', () => {
+  it('toggleYear filtre par année', () => {
     const { result } = renderHook(() => usePersonFilter(people));
     act(() => {
-      result.current.setYear(2021);
+      result.current.toggleYear(2021);
     });
     expect(result.current.filtered).toHaveLength(1);
     expect(result.current.filtered[0]?.id).toBe(2);
-    expect(result.current.year).toBe(2021);
+    expect(result.current.years).toEqual([2021]);
   });
 
-  it('setYear(null) supprime le filtre année', () => {
+  it('toggleYear sur la même année désélectionne', () => {
     const { result } = renderHook(() => usePersonFilter(people));
     act(() => {
-      result.current.setYear(2021);
+      result.current.toggleYear(2021);
     });
     act(() => {
-      result.current.setYear(null);
+      result.current.toggleYear(2021);
     });
     expect(result.current.filtered).toHaveLength(3);
+    expect(result.current.years).toEqual([]);
+  });
+
+  it('multi-sélection de plusieurs années', () => {
+    const { result } = renderHook(() => usePersonFilter(people));
+    act(() => {
+      result.current.toggleYear(2020);
+    });
+    act(() => {
+      result.current.toggleYear(2022);
+    });
+    expect(result.current.filtered).toHaveLength(2);
+    expect(result.current.years).toEqual([2020, 2022]);
+  });
+
+  it('clearYears supprime tous les filtres année', () => {
+    const { result } = renderHook(() => usePersonFilter(people));
+    act(() => {
+      result.current.toggleYear(2021);
+    });
+    act(() => {
+      result.current.clearYears();
+    });
+    expect(result.current.filtered).toHaveLength(3);
+    expect(result.current.years).toEqual([]);
   });
 
   it('toggleAlphabetical bascule le tri', () => {
@@ -93,7 +117,6 @@ describe('usePersonFilter', () => {
       initialProps: { persons: people },
     });
     expect(result.current.filtered).toHaveLength(3);
-
     const newPeople = [...people, mkPerson(4, 'Diana', 'Moreau', 2023)];
     rerender({ persons: newPeople });
     expect(result.current.filtered).toHaveLength(4);

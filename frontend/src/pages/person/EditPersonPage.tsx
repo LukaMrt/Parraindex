@@ -6,8 +6,6 @@ import { useAuth } from '../../hooks/useAuth';
 import { deletePerson, getPerson, updatePerson, uploadPicture } from '../../lib/api/persons';
 import type { Person, PersonRequest } from '../../types/person';
 
-const COLORS = ['#053259', '#A60303', '#03A62C', '#e0e0e0'];
-
 export function EditPersonPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
@@ -22,7 +20,6 @@ export function EditPersonPage() {
   const [lastName, setLastName] = useState('');
   const [biography, setBiography] = useState('');
   const [description, setDescription] = useState('');
-  const [color, setColor] = useState('#e0e0e0');
   const [pendingPicture, setPendingPicture] = useState<File | null>(null);
   const [picturePreview, setPicturePreview] = useState<string | null>(null);
 
@@ -42,7 +39,6 @@ export function EditPersonPage() {
       setLastName(p.lastName);
       setBiography(p.biography ?? '');
       setDescription(p.description ?? '');
-      setColor(p.color);
       setLoading(false);
     });
   }, [id]);
@@ -66,7 +62,6 @@ export function EditPersonPage() {
       startYear: person.startYear,
       biography: biography || null,
       description: description || null,
-      color,
     };
 
     const updateResult = await updatePerson(Number(id), data);
@@ -102,7 +97,6 @@ export function EditPersonPage() {
     ...person,
     firstName,
     lastName,
-    color,
     picture: picturePreview ?? person.picture,
     fullName: `${firstName} ${lastName}`,
   };
@@ -178,7 +172,7 @@ export function EditPersonPage() {
           )}
         </div>
 
-        {/* Preview + Personnalisation */}
+        {/* Preview + Photo */}
         <div className="flex flex-col items-center gap-4">
           <PersonCard person={previewPerson} isCentered />
 
@@ -206,49 +200,6 @@ export function EditPersonPage() {
               className="h-20 w-20 rounded-full object-cover shadow"
             />
           )}
-
-          <div className="mt-2">
-            <h2 className="mb-2 text-center text-sm font-semibold uppercase text-medium-blue">
-              Personnalisation
-            </h2>
-            <div className="flex gap-2">
-              {COLORS.map((c) => (
-                <label
-                  key={c}
-                  className="h-8 w-8 cursor-pointer rounded-full border-2 transition-transform hover:scale-110"
-                  style={{
-                    backgroundColor: c,
-                    borderColor: color === c ? '#053259' : 'transparent',
-                  }}
-                >
-                  <input
-                    type="radio"
-                    name="color"
-                    value={c}
-                    checked={color === c}
-                    onChange={() => {
-                      setColor(c);
-                    }}
-                    className="sr-only"
-                  />
-                </label>
-              ))}
-              <label
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full border-2 text-xs"
-                style={{ borderColor: color }}
-              >
-                <input
-                  type="color"
-                  value={color}
-                  onChange={(e) => {
-                    setColor(e.target.value);
-                  }}
-                  className="sr-only"
-                />
-                ✎
-              </label>
-            </div>
-          </div>
         </div>
       </div>
 

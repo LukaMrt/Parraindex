@@ -4,31 +4,39 @@ import type { PersonSummary } from '../types/person';
 
 export interface PersonFilterState {
   name: string;
-  year: number | null;
+  years: number[];
   alphabetical: boolean;
   filtered: PersonSummary[];
   setName: (name: string) => void;
-  setYear: (year: number | null) => void;
+  toggleYear: (year: number) => void;
+  clearYears: () => void;
   toggleAlphabetical: () => void;
 }
 
 export function usePersonFilter(persons: PersonSummary[]): PersonFilterState {
   const [name, setName] = useState('');
-  const [year, setYear] = useState<number | null>(null);
+  const [years, setYears] = useState<number[]>([]);
   const [alphabetical, setAlphabetical] = useState(false);
 
   const filtered = useMemo(
-    () => filterPersons(persons, { name, year, alphabetical }),
-    [persons, name, year, alphabetical],
+    () => filterPersons(persons, { name, years, alphabetical }),
+    [persons, name, years, alphabetical],
   );
+
+  function toggleYear(year: number) {
+    setYears((prev) => (prev.includes(year) ? prev.filter((y) => y !== year) : [...prev, year]));
+  }
 
   return {
     name,
-    year,
+    years,
     alphabetical,
     filtered,
     setName,
-    setYear,
+    toggleYear,
+    clearYears: () => {
+      setYears([]);
+    },
     toggleAlphabetical: () => {
       setAlphabetical((prev) => !prev);
     },

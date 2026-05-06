@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getPersons } from '../../lib/api/persons';
+import { promoColor } from '../../lib/colors';
 import type { PersonSummary } from '../../types/person';
 import type { PromoGroup } from './types';
 
@@ -21,18 +22,13 @@ export function useHomeStats(): HomeStats {
     });
   }, []);
 
-  const promoMap = new Map<number, { color: string; count: number }>();
+  const promoMap = new Map<number, number>();
   for (const p of persons) {
-    const existing = promoMap.get(p.startYear);
-    if (existing) {
-      existing.count++;
-    } else {
-      promoMap.set(p.startYear, { color: p.color, count: 1 });
-    }
+    promoMap.set(p.startYear, (promoMap.get(p.startYear) ?? 0) + 1);
   }
 
   const promoGroups: PromoGroup[] = Array.from(promoMap.entries())
-    .map(([year, { color, count }]) => ({ year, color, count }))
+    .map(([year, count]) => ({ year, color: promoColor(year), count }))
     .sort((a, b) => a.year - b.year);
 
   return {

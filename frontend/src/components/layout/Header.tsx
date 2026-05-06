@@ -6,53 +6,62 @@ export function Header() {
   const { user, logout } = useAuth();
 
   return (
-    <header className="flex items-center justify-between bg-white px-6 py-3 shadow-sm">
-      <Link to="/" className="flex items-center gap-2 font-semibold text-dark-blue">
+    <header className="flex h-[var(--header-height)] items-center justify-between border-b border-line bg-surface px-6">
+      <Link to="/" className="flex items-center gap-2 font-semibold text-ink">
         <img src="/images/icons/logo-blue.svg" alt="Logo" className="h-8 w-8" />
         <span>Parraindex</span>
       </Link>
 
-      <nav className="flex items-center gap-4 text-sm">
+      <nav className="flex items-center gap-1 text-sm">
         {user !== null ? (
           <>
             <Link
               to={`/personne/${user.person.id}`}
-              className="text-dark-blue hover:text-light-blue"
+              className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
             >
               Mon compte
             </Link>
             <Link
               to={`/personne/${user.person.id}/modifier`}
-              className="text-dark-blue hover:text-light-blue"
+              className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
             >
               Modifier
             </Link>
             {user.isAdmin && (
-              <Link to="/admin/contacts" className="text-dark-blue hover:text-light-blue">
+              <Link
+                to="/admin/contacts"
+                className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
+              >
                 Administration
               </Link>
             )}
             <img
               src={pictureUrl(user.person.picture)}
               alt={user.person.fullName}
-              className="h-8 w-8 rounded-full object-cover"
+              className="ml-2 h-8 w-8 rounded-full object-cover"
             />
             <button
               onClick={() => {
                 void logout();
               }}
-              className="text-dark-blue hover:text-light-blue"
+              className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
             >
-              {'Déconnexion'}
+              Déconnexion
             </button>
           </>
         ) : (
           <>
-            <Link to="/login" className="text-dark-blue hover:text-light-blue">
+            <Link
+              to="/login"
+              className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
+            >
               Se connecter
             </Link>
-            <Link to="/register" className="text-dark-blue hover:text-light-blue">
-              {"S'inscrire"}
+            <Link
+              to="/register"
+              className="rounded-md bg-ink px-3 py-1.5 text-white transition-opacity hover:opacity-90"
+            >
+              S&apos;inscrire
             </Link>
           </>
         )}

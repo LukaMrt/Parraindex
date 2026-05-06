@@ -10,7 +10,11 @@ interface StatCardProps extends HTMLAttributes<HTMLDivElement> {
 export function StatCard({ label, value, accent, className, ...props }: StatCardProps) {
   return (
     <div
-      className={cn('rounded-lg border border-line bg-surface px-[18px] py-4', className)}
+      className={cn(
+        'rounded-lg border border-line bg-surface px-[18px] py-4',
+        props.onClick !== undefined && 'cursor-pointer',
+        className,
+      )}
       {...props}
     >
       <div className="text-[11px] font-semibold uppercase tracking-[0.06em] text-ink-3">

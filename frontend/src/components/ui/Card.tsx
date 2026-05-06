@@ -16,7 +16,7 @@ const cardVariants = cva('border border-line bg-surface transition-all', {
       lg: 'p-8',
     },
     hoverable: {
-      true: 'cursor-pointer hover:-translate-y-0.5 hover:shadow-md',
+      true: 'cursor-pointer hover:-translate-y-0.5 hover:border-ink-4 hover:shadow-md',
       false: '',
     },
   },

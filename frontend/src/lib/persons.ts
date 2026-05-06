@@ -2,7 +2,7 @@ import type { PersonSummary } from '../types/person';
 
 export interface PersonFilter {
   name: string;
-  year: number | null;
+  years: number[];
   alphabetical: boolean;
 }
 
@@ -12,9 +12,10 @@ function normalize(s: string): string {
 
 export function filterPersons(persons: PersonSummary[], filter: PersonFilter): PersonSummary[] {
   const query = normalize(filter.name.trim());
+  const yearSet = new Set(filter.years);
 
   let result = persons.filter((p) => {
-    if (filter.year !== null && p.startYear !== filter.year) return false;
+    if (yearSet.size > 0 && !yearSet.has(p.startYear)) return false;
     if (query.length > 0) {
       const full = normalize(`${p.lastName} ${p.firstName}`);
       const reversed = normalize(`${p.firstName} ${p.lastName}`);

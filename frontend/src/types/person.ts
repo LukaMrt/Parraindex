@@ -6,7 +6,6 @@ export interface PersonSummary {
   lastName: string;
   fullName: string;
   picture: string | null;
-  color: string;
   startYear: number;
 }
 
@@ -24,7 +23,6 @@ export interface Person {
   lastName: string;
   fullName: string;
   picture: string | null;
-  color: string;
   startYear: number;
   birthdate: string | null;
   biography: string | null;
@@ -40,5 +38,4 @@ export interface PersonRequest {
   startYear: number;
   biography: string | null;
   description: string | null;
-  color: string | null;
 }

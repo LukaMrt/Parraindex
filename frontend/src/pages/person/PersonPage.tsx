@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useParams } from 'react-router';
 import { pictureUrl } from '../../lib/imageUrl';
+import { promoColor } from '../../lib/colors';
 import { getPerson } from '../../lib/api/persons';
 import { useAuth } from '../../hooks/useAuth';
 import type { Person } from '../../types/person';
@@ -60,7 +61,7 @@ export function PersonPage() {
           {/* Photo principale */}
           <div
             className="h-36 w-36 overflow-hidden rounded-full shadow-md"
-            style={{ backgroundColor: person.color }}
+            style={{ backgroundColor: promoColor(person.startYear) }}
           >
             <img
               src={pictureUrl(person.picture)}
