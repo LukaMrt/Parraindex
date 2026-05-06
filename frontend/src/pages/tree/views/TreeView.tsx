@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState, type MouseEvent, type WheelEvent } from 'react';
+import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { Avatar, Button, Skeleton } from '../../../components/ui';
 import { promoColor } from '../../../lib/colors';
@@ -136,6 +136,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
   const [showLabels, setShowLabels] = useState(true);
   const dragState = useRef({ active: false, startX: 0, startY: 0, originX: 0, originY: 0 });
   const didDrag = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
 
   const layout = useMemo(
     () => computeLayout(persons, allLinks, filterMode),
@@ -169,15 +170,22 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
     setIsDragging(false);
   };
 
-  const handleWheel = (e: WheelEvent) => {
-    e.preventDefault();
-    const factor = e.deltaY < 0 ? 1.1 : 0.9;
-    setZoom((z) => Math.max(0.3, Math.min(2.5, z * factor)));
-  };
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const onWheel = (e: globalThis.WheelEvent) => {
+      e.preventDefault();
+      setZoom((z) => Math.max(0.3, Math.min(2.5, e.deltaY < 0 ? z * 1.1 : z / 1.1)));
+    };
+    el.addEventListener('wheel', onWheel, { passive: false });
+    return () => {
+      el.removeEventListener('wheel', onWheel);
+    };
+  }, []);
 
   const handleNodeClick = (id: number) => {
     if (!didDrag.current) {
-      void navigate(`/person/${id}`);
+      void navigate(`/personne/${id}`);
     }
   };
 
@@ -209,14 +217,19 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
         backgroundSize: '24px 24px',
         cursor: isDragging ? 'grabbing' : 'grab',
       }}
+      ref={containerRef}
       onMouseDown={handleMouseDown}
       onMouseMove={handleMouseMove}
       onMouseUp={handleMouseUp}
       onMouseLeave={handleMouseUp}
-      onWheel={handleWheel}
     >
       {/* Filtres (haut-gauche) */}
-      <div className="absolute left-3 top-3 z-10 flex items-center gap-2">
+      <div
+        className="absolute left-3 top-3 z-10 flex cursor-default items-center gap-2"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <span className="text-[11.5px] text-ink-3">Afficher :</span>
         {(['all', 'connected', 'isolated'] as FilterMode[]).map((m) => (
           <Button
@@ -244,19 +257,24 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
       </div>
 
       {/* Zoom controls (haut-droite) */}
-      <div className="absolute right-3 top-3 z-10 flex flex-col gap-1.5">
+      <div
+        className="absolute right-3 top-3 z-10 flex cursor-default flex-col gap-1.5"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+        }}
+      >
         {(
           [
             {
               sym: '+',
               action: () => {
-                setZoom((z) => Math.min(2.5, z * 1.2));
+                setZoom((z) => Math.min(2.5, z * 1.1));
               },
             },
             {
               sym: '−',
               action: () => {
-                setZoom((z) => Math.max(0.3, z / 1.2));
+                setZoom((z) => Math.max(0.3, z / 1.1));
               },
             },
             {
@@ -274,7 +292,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
               e.stopPropagation();
               action();
             }}
-            className="flex h-8 w-8 items-center justify-center rounded-lg border border-line bg-surface text-sm font-semibold text-ink-2 transition-colors hover:border-ink hover:text-ink"
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg border border-line bg-surface text-sm font-semibold text-ink-2 transition-colors hover:border-ink hover:text-ink"
           >
             {sym}
           </button>
@@ -282,7 +300,12 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
       </div>
 
       {/* Status bar (bas-gauche) */}
-      <div className="absolute bottom-3 left-3 z-10 flex items-center gap-3 rounded-lg border border-line bg-surface px-3 py-1.5 text-[11.5px] text-ink-3">
+      <div
+        className="absolute bottom-3 left-3 z-10 flex cursor-default items-center gap-3 rounded-lg border border-line bg-surface px-3 py-1.5 text-[11.5px] text-ink-3"
+        onMouseDown={(e) => {
+          e.stopPropagation();
+        }}
+      >
         <span>
           {layout.nodes.length} nœuds · {layout.links.length} liens
           {layout.indirectLinks.length > 0 && ` · ${layout.indirectLinks.length} indirects`}
