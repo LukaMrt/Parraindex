@@ -36,13 +36,16 @@ export function TreePage() {
   } = useCarousel(filtered.length);
 
   useEffect(() => {
-    let cancelled = false;
+    const cancel: { current: boolean } = { current: false };
 
     async function loadAll() {
       const first = await getTreePage(1, PAGE_SIZE);
-      if (cancelled) return;
+      if (cancel.current) return;
 
-      if (!first.ok) { setLoading(false); return; }
+      if (!first.ok) {
+        setLoading(false);
+        return;
+      }
 
       setPersons(first.data.items);
       setTotal(first.data.total);
@@ -50,9 +53,11 @@ export function TreePage() {
 
       const pages = Math.ceil(first.data.total / PAGE_SIZE);
       for (let page = 2; page <= pages; page++) {
-        if (cancelled) break;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (cancel.current) break;
         const result = await getTreePage(page, PAGE_SIZE);
-        if (cancelled) break;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (cancel.current) break;
         if (result.ok) {
           setPersons((prev) => [...prev, ...result.data.items]);
         }
@@ -60,7 +65,9 @@ export function TreePage() {
     }
 
     void loadAll();
-    return () => { cancelled = true; };
+    return () => {
+      cancel.current = true;
+    };
   }, []);
 
   useEffect(() => {
@@ -120,7 +127,9 @@ export function TreePage() {
                   key={person.id}
                   person={person}
                   isCentered={i === centeredIndex}
-                  onClick={(e) => { handleCardClick(person.id, e); }}
+                  onClick={(e) => {
+                    handleCardClick(person.id, e);
+                  }}
                   animationDelay={Math.min(i * 35, 280)}
                 />
               ))
@@ -140,7 +149,9 @@ export function TreePage() {
             max={100}
             step={0.01}
             value={scrollProgress * 100}
-            onChange={(e) => { onProgressChange(Number(e.target.value) / 100); }}
+            onChange={(e) => {
+              onProgressChange(Number(e.target.value) / 100);
+            }}
             className="tree-slider flex-1"
             disabled={loading}
           />
@@ -160,7 +171,9 @@ export function TreePage() {
           {/* Recherche */}
           <div className="flex items-center gap-2">
             <button
-              onClick={() => { setSearchOpen((v) => !v); }}
+              onClick={() => {
+                setSearchOpen((v) => !v);
+              }}
               aria-label="Rechercher"
               className={[
                 'flex h-8 w-8 items-center justify-center rounded-lg transition-colors',
@@ -170,7 +183,12 @@ export function TreePage() {
               ].join(' ')}
             >
               <svg width="14" height="14" viewBox="0 0 15 15" fill="none">
-                <path d="M10 6.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0ZM9.38 10.44a5 5 0 1 1 1.06-1.06l3.07 3.07a.75.75 0 1 1-1.06 1.06L9.38 10.44Z" fill="currentColor" fillRule="evenodd" clipRule="evenodd"/>
+                <path
+                  d="M10 6.5a3.5 3.5 0 1 1-7 0 3.5 3.5 0 0 1 7 0ZM9.38 10.44a5 5 0 1 1 1.06-1.06l3.07 3.07a.75.75 0 1 1-1.06 1.06L9.38 10.44Z"
+                  fill="currentColor"
+                  fillRule="evenodd"
+                  clipRule="evenodd"
+                />
               </svg>
             </button>
             {searchOpen && (
@@ -178,7 +196,9 @@ export function TreePage() {
                 ref={searchInputRef}
                 type="text"
                 value={name}
-                onChange={(e) => { setName(e.target.value); }}
+                onChange={(e) => {
+                  setName(e.target.value);
+                }}
                 placeholder="Rechercher…"
                 className="h-8 rounded-lg border border-medium-grey/50 bg-light-grey px-3 text-sm text-dark-blue placeholder-medium-grey outline-none transition-colors focus:border-light-blue focus:bg-white"
               />
@@ -190,27 +210,33 @@ export function TreePage() {
           {/* Spinner année */}
           <div className="flex items-center gap-1">
             <button
-              onClick={() => { handleYearChange(-1); }}
+              onClick={() => {
+                handleYearChange(-1);
+              }}
               className="flex h-7 w-7 items-center justify-center rounded-lg text-medium-blue transition-colors hover:bg-light-grey hover:text-dark-blue"
               aria-label="Année précédente"
             >
               <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
-                <path d="M5 2L9 7H1L5 2Z"/>
+                <path d="M5 2L9 7H1L5 2Z" />
               </svg>
             </button>
             <button
-              onClick={() => { setYear(null); }}
+              onClick={() => {
+                setYear(null);
+              }}
               className="min-w-[5.5rem] rounded-lg px-2 py-1 text-center text-sm font-medium text-dark-blue transition-colors hover:bg-light-grey"
             >
               {year !== null ? `${year} / ${year + 1}` : '— / —'}
             </button>
             <button
-              onClick={() => { handleYearChange(1); }}
+              onClick={() => {
+                handleYearChange(1);
+              }}
               className="flex h-7 w-7 items-center justify-center rounded-lg text-medium-blue transition-colors hover:bg-light-grey hover:text-dark-blue"
               aria-label="Année suivante"
             >
               <svg width="10" height="10" viewBox="0 0 10 10" fill="currentColor">
-                <path d="M5 8L1 3H9L5 8Z"/>
+                <path d="M5 8L1 3H9L5 8Z" />
               </svg>
             </button>
           </div>
@@ -228,7 +254,12 @@ export function TreePage() {
             ].join(' ')}
           >
             <svg width="13" height="13" viewBox="0 0 13 13" fill="none">
-              <path d="M1 3h11M1 6.5h7M1 10h4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+              <path
+                d="M1 3h11M1 6.5h7M1 10h4"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+              />
             </svg>
             {'A → Z'}
           </button>

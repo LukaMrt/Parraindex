@@ -9,7 +9,12 @@ interface PersonCardProps {
   animationDelay?: number;
 }
 
-export function PersonCard({ person, isCentered = false, onClick, animationDelay }: PersonCardProps) {
+export function PersonCard({
+  person,
+  isCentered = false,
+  onClick,
+  animationDelay,
+}: PersonCardProps) {
   return (
     <article
       onClick={onClick}
@@ -25,7 +30,10 @@ export function PersonCard({ person, isCentered = false, onClick, animationDelay
     >
       <div className="h-1 w-full shrink-0" style={{ backgroundColor: person.color }} />
 
-      <div className="relative h-44 overflow-hidden" style={{ backgroundColor: `${person.color}22` }}>
+      <div
+        className="relative h-44 overflow-hidden"
+        style={{ backgroundColor: `${person.color}22` }}
+      >
         <img
           src={pictureUrl(person.picture)}
           alt={person.fullName}

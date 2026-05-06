@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { submitContact } from '../../lib/api/contact';
@@ -20,9 +20,9 @@ export function ContactPage() {
   const { user } = useAuth();
 
   const [type, setType] = useState<ContactType>('ADD_PERSON');
-  const [firstName, setFirstName] = useState('');
-  const [lastName, setLastName] = useState('');
-  const [email, setEmail] = useState('');
+  const [firstName, setFirstName] = useState(user?.person.firstName ?? '');
+  const [lastName, setLastName] = useState(user?.person.lastName ?? '');
+  const [email, setEmail] = useState(user?.email ?? '');
   const [relatedFirstName, setRelatedFirstName] = useState('');
   const [relatedLastName, setRelatedLastName] = useState('');
   const [related2FirstName, setRelated2FirstName] = useState('');
@@ -32,14 +32,6 @@ export function ContactPage() {
   const [sending, setSending] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
-
-  useEffect(() => {
-    if (user) {
-      setFirstName(user.person.firstName);
-      setLastName(user.person.lastName);
-      setEmail(user.email);
-    }
-  }, [user]);
 
   const isPersonType = PERSON_TYPES.includes(type);
   const isSponsorType = SPONSOR_TYPES.includes(type);
