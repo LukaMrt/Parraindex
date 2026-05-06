@@ -1,50 +1,73 @@
 import { Link } from 'react-router';
-import { useAuth } from '../hooks/useAuth';
+import { cn } from '../lib/cn';
+import { FeatureCards } from './home/FeatureCards';
+import { PromoStrip } from './home/PromoStrip';
+import { useHomeStats } from './home/useHomeStats';
 
 export function HomePage() {
-  const { user } = useAuth();
+  const { totalPersons, totalPromos, promoGroups, loading } = useHomeStats();
 
   return (
-    <div className="flex min-h-[calc(100vh-3.5rem)] flex-col items-center justify-center gap-8 text-center">
-      <img src="/images/icons/logo-blue.svg" alt="Logo Parraindex" className="h-24 w-24" />
+    <div className="flex min-h-[calc(100vh-var(--header-height))] items-center bg-bg px-6 py-10">
+      <div className="mx-auto w-full max-w-[1100px]">
+        {/* Hero */}
+        <div className="mb-16 text-center">
+          {/* Stats pill */}
+          <div className="mb-6 inline-flex items-center gap-2 rounded-full border border-line bg-surface px-3 py-1.5 text-[12.5px] text-ink-3">
+            <span className="h-1.5 w-1.5 rounded-full bg-success" />
+            {loading ? (
+              <span>Chargement…</span>
+            ) : (
+              <span>
+                {totalPersons} étudiants · {totalPromos} promotions
+              </span>
+            )}
+          </div>
 
-      <Link to="/tree" className="group">
-        <h1 className="text-4xl font-bold text-dark-blue">
-          <span className="font-normal text-medium-blue">Le</span> Parraindex
-        </h1>
-        <p className="mt-2 text-medium-blue transition-colors group-hover:text-light-blue">
-          {"L'annuaire des parrains de l'IUT Lyon 1"}
-        </p>
-      </Link>
-
-      <nav className="flex gap-6 text-dark-blue">
-        <Link to="/tree" className="transition-colors hover:text-light-blue">
-          {'Découvrir ma famille'}
-        </Link>
-        <Link to="/contact" className="transition-colors hover:text-light-blue">
-          Contact
-        </Link>
-        <Link to="/about" className="transition-colors hover:text-light-blue">
-          {'À propos du projet'}
-        </Link>
-      </nav>
-
-      {user === null && (
-        <div className="flex gap-4">
-          <Link
-            to="/login"
-            className="rounded bg-dark-blue px-6 py-2 text-white transition-colors hover:bg-medium-blue"
+          {/* Title */}
+          <h1
+            className="mb-5 font-semibold leading-[1.05] tracking-[-0.03em] text-ink"
+            style={{ fontSize: 'clamp(40px, 6vw, 68px)' }}
           >
-            Se connecter
-          </Link>
-          <Link
-            to="/register"
-            className="rounded border border-dark-blue px-6 py-2 text-dark-blue transition-colors hover:bg-dark-blue hover:text-white"
-          >
-            {"S'inscrire"}
-          </Link>
+            {"L'annuaire des parrains"}
+            <br />
+            <span className="text-ink-3">{"de l'IUT Lyon 1"}</span>
+          </h1>
+
+          <p className="mx-auto mb-8 max-w-[540px] text-[17px] leading-relaxed text-ink-2">
+            Visualisez les liens de parrainage entre étudiants, retrouvez votre famille, et explorez
+            les promotions au fil des années.
+          </p>
+
+          {/* CTAs */}
+          <div className="flex flex-wrap justify-center gap-3">
+            <Link
+              to="/tree"
+              className={cn(
+                'inline-flex h-[46px] items-center rounded-[10px] px-5 text-[14.5px] font-medium',
+                'bg-ink text-white transition-opacity hover:opacity-90',
+              )}
+            >
+              Explorer l&apos;annuaire →
+            </Link>
+            <Link
+              to="/about"
+              className={cn(
+                'inline-flex h-[46px] items-center rounded-[10px] px-5 text-[14.5px] font-medium',
+                'border border-line bg-surface text-ink transition-colors hover:border-ink',
+              )}
+            >
+              En savoir plus
+            </Link>
+          </div>
         </div>
-      )}
+
+        {/* Feature cards */}
+        <FeatureCards />
+
+        {/* Promos strip */}
+        <PromoStrip promoGroups={promoGroups} loading={loading} />
+      </div>
     </div>
   );
 }
