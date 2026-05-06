@@ -4,12 +4,15 @@ import { getYearRange } from '../../lib/persons';
 import { DirectoryToolbar } from './toolbar/DirectoryToolbar';
 import type { DirectoryView } from './types';
 import { usePersons } from './usePersons';
+import { useSponsorsGraph } from './useSponsorsGraph';
 import { GridView } from './views/GridView';
 import { ListView } from './views/ListView';
 import { TimelineView } from './views/TimelineView';
+import { TreeView } from './views/TreeView';
 
 export function TreePage() {
   const { persons, loading } = usePersons();
+  const { links, loading: linksLoading } = useSponsorsGraph(persons);
   const [view, setView] = useState<DirectoryView>('grid');
 
   const {
@@ -61,7 +64,9 @@ export function TreePage() {
         {view === 'grid' && <GridView persons={filtered} loading={loading} />}
         {view === 'list' && <ListView persons={filtered} loading={loading} />}
         {view === 'timeline' && <TimelineView persons={filtered} loading={loading} />}
-        {view === 'tree' && <GridView persons={filtered} loading={loading} />}
+        {view === 'tree' && (
+          <TreeView persons={filtered} links={links} loading={loading || linksLoading} />
+        )}
       </div>
     </div>
   );

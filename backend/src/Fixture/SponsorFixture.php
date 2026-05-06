@@ -121,6 +121,29 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 'Vincent a décidé d\'adopter Maxime en parrainage de coeur après plusieurs sessions de code ensemble.',
             ],
 
+            // ── Liens sautant une promotion ─────────────────────────────────
+            [
+                PersonFixture::HENRI,
+                PersonFixture::LUKA,
+                '2021-09-15',
+                Type::HEART,
+                'Henri a suivi Luka de loin depuis son entrée à l\'IUT et a voulu formaliser ce lien de parrainage de cœur, au-delà de la chaîne classique.',
+            ],
+            [
+                PersonFixture::CAMILLE,
+                PersonFixture::VINCENT,
+                '2021-10-01',
+                Type::CLASSIC,
+                'Camille a rencontré Vincent lors d\'un atelier clean code et a voulu transmettre directement sa rigueur de développeuse, sans attendre.',
+            ],
+            [
+                PersonFixture::THOMAS,
+                PersonFixture::EMMA,
+                '2022-09-20',
+                Type::CLASSIC,
+                'Thomas a repéré Emma lors d\'une session de mentorat inter-promos et a souhaité l\'accompagner malgré l\'écart de promotion.',
+            ],
+
             // ── Génération 2022 → 2023 ──────────────────────────────────────
             [
                 PersonFixture::EMMA,
