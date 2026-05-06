@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Parraindex</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300..700;1,9..40,300..700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'DM Sans', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'ss01';
+  }
+  /* Light theme (default) — sober, classy palette */
+  body, body[data-theme="light"] {
+    --bg: #f7f7f5;
+    --surface: #ffffff;
+    --line: #e8e8e3;
+    --ink: #14171a;
+    --ink-2: #4a4f57;
+    --ink-3: #8a8f97;
+    --ink-4: #b8bcc2;
+  }
+  body[data-theme="dark"] {
+    --bg: #0e0f12;
+    --surface: #17191e;
+    --line: #25282f;
+    --ink: #f5f5f0;
+    --ink-2: #c8cbd1;
+    --ink-3: #8a8f97;
+    --ink-4: #5a5e66;
+  }
+  input::placeholder { color: var(--ink-4); }
+  input:focus { border-color: var(--ink) !important; }
+  button:active { transform: scale(0.98); }
+  ::selection { background: var(--ink); color: var(--bg); }
+  @keyframes cardIn { from { opacity:0; transform:translateY(8px); } to { opacity:1; transform:translateY(0); } }
+  @keyframes modalIn { from { opacity:0; transform:scale(0.96); } to { opacity:1; transform:scale(1); } }
+  @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-thumb { background: var(--line); border-radius: 10px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--ink-4); }
+</style>
+</head>
+<body data-theme="light">
+<div id="root"></div>
+<script type="text/babel" src="data.jsx"></script>
+<script type="text/babel" src="ui.jsx"></script>
+<script type="text/babel" src="family-graph.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+<script type="text/babel" src="app.jsx"></script>
+</body>
+</html>
