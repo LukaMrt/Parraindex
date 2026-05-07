@@ -159,12 +159,6 @@ function PersonHero({ person, canEdit }: { person: Person; canEdit: boolean }) {
             >
               Modifier
             </Link>
-            <a
-              href={`/api/persons/${person.id}/export`}
-              className="inline-flex h-9 items-center justify-center rounded-[9px] border border-line bg-surface px-4 text-sm font-medium text-ink transition-colors hover:border-ink hover:bg-bg"
-            >
-              Mes données
-            </a>
           </div>
         )}
       </div>
@@ -192,6 +186,7 @@ function PersonPageSkeleton() {
 export function PersonPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [person, setPerson] = useState<Person | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
@@ -224,12 +219,7 @@ export function PersonPage() {
       <div className="mx-auto max-w-[980px] px-7 pb-20 pt-7">
         <Breadcrumb
           items={[
-            {
-              label: 'Annuaire',
-              onClick: () => {
-                history.back();
-              },
-            },
+            { label: 'Annuaire', onClick: () => void navigate('/tree') },
             { label: person.fullName },
           ]}
           className="mb-6"

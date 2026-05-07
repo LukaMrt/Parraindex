@@ -57,7 +57,7 @@ final class SponsorApiController extends AbstractController
         $sponsor = new Sponsor();
         $sponsor->setGodFather($godFather)
             ->setGodChild($godChild)
-            ->setType($dto->type)
+            ->setType($dto->type->toEntity())
             ->setDescription($dto->description);
 
         if ($dto->date !== null) {
@@ -88,7 +88,7 @@ final class SponsorApiController extends AbstractController
 
         $sponsor->setGodFather($godFather)
             ->setGodChild($godChild)
-            ->setType($dto->type)
+            ->setType($dto->type->toEntity())
             ->setDescription($dto->description);
 
         if ($dto->date !== null) {

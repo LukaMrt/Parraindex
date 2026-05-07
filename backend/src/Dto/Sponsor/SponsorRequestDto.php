@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace App\Dto\Sponsor;
 
-use App\Entity\Sponsor\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 
 final readonly class SponsorRequestDto
@@ -16,7 +15,7 @@ final readonly class SponsorRequestDto
         #[Assert\NotBlank]
         #[Assert\Positive]
         public int $godChildId,
-        public Type $type = Type::CLASSIC,
+        public SponsorTypeDto $type = SponsorTypeDto::CLASSIC,
         public ?string $description = null,
         public ?string $date = null,
     ) {
