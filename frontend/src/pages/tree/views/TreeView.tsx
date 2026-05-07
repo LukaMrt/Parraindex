@@ -1,7 +1,10 @@
-import { useEffect, useMemo, useRef, useState, type MouseEvent } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Avatar, Button, Skeleton } from '../../../components/ui';
+import { Button, Skeleton } from '../../../components/ui';
+import { PersonGraphNode } from '../../../components/graph/PersonGraphNode';
 import { promoColor } from '../../../lib/colors';
+import { usePanZoom } from '../../../hooks/usePanZoom';
+import { isNeighbor } from '../../person/familyGraphLayout';
 import type { PersonSummary } from '../../../types/person';
 import type { SponsorLink } from '../useSponsorsGraph';
 
@@ -129,64 +132,28 @@ interface Props {
 export function TreeView({ persons, links: allLinks, loading }: Props) {
   const navigate = useNavigate();
 
-  const [pan, setPan] = useState({ x: 0, y: 0 });
-  const [zoom, setZoom] = useState(1);
-  const [isDragging, setIsDragging] = useState(false);
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
-  const [showLabels, setShowLabels] = useState(true);
-  const dragState = useRef({ active: false, startX: 0, startY: 0, originX: 0, originY: 0 });
-  const didDrag = useRef(false);
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [hoverId, setHoverId] = useState<number | null>(null);
+  const {
+    pan,
+    zoom,
+    isDragging,
+    didDrag,
+    containerRef,
+    setZoom,
+    handleMouseDown,
+    handleMouseMove,
+    handleMouseUp,
+    resetView,
+  } = usePanZoom({ dragBlockSelector: '[data-node]', minZoom: 0.3 });
 
   const layout = useMemo(
     () => computeLayout(persons, allLinks, filterMode),
     [persons, allLinks, filterMode],
   );
 
-  const handleMouseDown = (e: MouseEvent) => {
-    if ((e.target as HTMLElement).closest('[data-node]')) return;
-    didDrag.current = false;
-    dragState.current = {
-      active: true,
-      startX: e.clientX,
-      startY: e.clientY,
-      originX: pan.x,
-      originY: pan.y,
-    };
-  };
-
-  const handleMouseMove = (e: MouseEvent) => {
-    if (!dragState.current.active) return;
-    didDrag.current = true;
-    if (!isDragging) setIsDragging(true);
-    setPan({
-      x: dragState.current.originX + (e.clientX - dragState.current.startX),
-      y: dragState.current.originY + (e.clientY - dragState.current.startY),
-    });
-  };
-
-  const handleMouseUp = () => {
-    dragState.current.active = false;
-    setIsDragging(false);
-  };
-
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) return;
-    const onWheel = (e: globalThis.WheelEvent) => {
-      e.preventDefault();
-      setZoom((z) => Math.max(0.3, Math.min(2.5, e.deltaY < 0 ? z * 1.1 : z / 1.1)));
-    };
-    el.addEventListener('wheel', onWheel, { passive: false });
-    return () => {
-      el.removeEventListener('wheel', onWheel);
-    };
-  }, []);
-
   const handleNodeClick = (id: number) => {
-    if (!didDrag.current) {
-      void navigate(`/person/${id}`);
-    }
+    if (!didDrag) void navigate(`/person/${id}`);
   };
 
   if (loading) {
@@ -244,16 +211,6 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
             {m === 'all' ? 'Tous' : m === 'connected' ? 'Avec liens' : 'Sans liens'}
           </Button>
         ))}
-        <Button
-          variant={showLabels ? 'pill-active' : 'pill-neutral'}
-          size="sm"
-          onClick={(e) => {
-            e.stopPropagation();
-            setShowLabels((v) => !v);
-          }}
-        >
-          Noms
-        </Button>
       </div>
 
       {/* Zoom controls (haut-droite) */}
@@ -279,10 +236,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
             },
             {
               sym: '⤓',
-              action: () => {
-                setZoom(1);
-                setPan({ x: 0, y: 0 });
-              },
+              action: resetView,
             },
           ] as const
         ).map(({ sym, action }) => (
@@ -380,6 +334,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
             const bx = b.x + r,
               by = b.y + r;
             const cy = (ay + by) / 2;
+            const dim = hoverId !== null;
             return (
               <path
                 key={`i-${i}`}
@@ -388,7 +343,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
                 strokeWidth={1.25}
                 fill="none"
                 strokeDasharray="3 4"
-                opacity={0.4}
+                opacity={dim ? 0.08 : 0.4}
                 strokeLinecap="round"
               />
             );
@@ -403,14 +358,17 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
             const bx = b.x + r,
               by = b.y + r;
             const cy = (ay + by) / 2;
+            const isHighlighted =
+              hoverId !== null && (l.godFatherId === hoverId || l.godChildId === hoverId);
+            const dim = hoverId !== null && !isHighlighted;
             return (
               <path
                 key={i}
                 d={`M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`}
                 stroke={promoColor(a.year)}
-                strokeWidth={1.5}
+                strokeWidth={isHighlighted ? 2.5 : 1.5}
                 fill="none"
-                opacity={0.5}
+                opacity={dim ? 0.1 : isHighlighted ? 0.95 : 0.5}
               />
             );
           })}
@@ -420,68 +378,26 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
         {layout.nodes.map((p) => {
           const pos = layout.positions[p.id];
           if (!pos) return null;
-          const color = promoColor(p.startYear);
+          const dim =
+            hoverId !== null && hoverId !== p.id && !isNeighbor(p.id, hoverId, layout.links);
           return (
-            <div
+            <PersonGraphNode
               key={p.id}
-              data-node
+              person={p}
+              diameter={NODE_D}
+              dim={dim}
+              dataAttr="data-node"
+              style={{ position: 'absolute', left: pos.x, top: pos.y }}
               onClick={() => {
                 handleNodeClick(p.id);
               }}
-              style={{
-                position: 'absolute',
-                left: pos.x,
-                top: pos.y,
-                width: NODE_D,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                gap: 4,
-                cursor: 'pointer',
-                transition: 'transform 0.15s',
+              onMouseEnter={() => {
+                setHoverId(p.id);
               }}
-              onMouseEnter={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = 'scale(1.08)';
+              onMouseLeave={() => {
+                setHoverId(null);
               }}
-              onMouseLeave={(e) => {
-                (e.currentTarget as HTMLElement).style.transform = '';
-              }}
-            >
-              <div
-                style={{
-                  width: NODE_D,
-                  height: NODE_D,
-                  borderRadius: '50%',
-                  overflow: 'hidden',
-                  border: `2px solid ${color}`,
-                  boxShadow: '0 2px 6px rgba(0,0,0,0.06)',
-                  background: 'white',
-                  flexShrink: 0,
-                }}
-              >
-                <Avatar person={p} size={NODE_D} fill />
-              </div>
-              {showLabels && (
-                <div
-                  style={{
-                    fontSize: 10.5,
-                    fontWeight: 500,
-                    color: 'var(--color-ink)',
-                    textAlign: 'center',
-                    lineHeight: 1.15,
-                    maxWidth: 80,
-                    whiteSpace: 'nowrap',
-                    overflow: 'hidden',
-                    textOverflow: 'ellipsis',
-                    background: 'var(--color-surface)',
-                    padding: '2px 5px',
-                    borderRadius: 4,
-                  }}
-                >
-                  {p.firstName}
-                </div>
-              )}
-            </div>
+            />
           );
         })}
       </div>

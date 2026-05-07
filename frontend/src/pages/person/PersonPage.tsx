@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link, useParams } from 'react-router';
+import { Link, useNavigate, useParams } from 'react-router';
 import { Avatar, Breadcrumb, Card, Skeleton, StatCard } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
 import { getPerson } from '../../lib/api/persons';
@@ -12,6 +12,7 @@ import { FamilyGraph } from './FamilyGraph';
 // ── Sub-components ────────────────────────────────────────────────────────────
 
 function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: number }) {
+  const navigate = useNavigate();
   const isGodFather = sponsor.godFatherId === personId;
   const relatedId = isGodFather ? sponsor.godChildId : sponsor.godFatherId;
   const relatedName = isGodFather ? sponsor.godChildName : sponsor.godFatherName;
@@ -20,9 +21,16 @@ function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: 
   const color = promoColor(startYear);
 
   return (
-    <Link
-      to={`/parrainage/${sponsor.id}`}
-      className="flex items-center gap-3 rounded-xl border border-line bg-surface p-4 transition-all hover:-translate-y-px hover:border-ink-4 hover:shadow-md"
+    <div
+      role="link"
+      tabIndex={0}
+      onClick={() => {
+        void navigate(`/parrainage/${sponsor.id}`);
+      }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter') void navigate(`/parrainage/${sponsor.id}`);
+      }}
+      className="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-surface p-4 transition-all hover:-translate-y-px hover:border-ink-4 hover:shadow-md"
     >
       <Link
         to={`/person/${relatedId}`}
@@ -50,7 +58,7 @@ function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: 
         </p>
       </div>
       <span className="shrink-0 text-base">{SPONSOR_TYPE_ICONS[sponsor.type]}</span>
-    </Link>
+    </div>
   );
 }
 
