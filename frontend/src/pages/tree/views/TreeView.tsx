@@ -2,10 +2,12 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router';
 import { Button, Skeleton } from '../../../components/ui';
 import { PersonGraphNode } from '../../../components/graph/PersonGraphNode';
+import { SponsorInfoCard } from '../../../components/graph/SponsorInfoCard';
 import { promoColor } from '../../../lib/colors';
 import { usePanZoom } from '../../../hooks/usePanZoom';
 import { isNeighbor } from '../../person/familyGraphLayout';
 import type { PersonSummary } from '../../../types/person';
+import type { SponsorSummary } from '../../../types/sponsor';
 import type { SponsorLink } from '../useSponsorsGraph';
 
 type FilterMode = 'all' | 'connected' | 'isolated';
@@ -134,6 +136,9 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
 
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [hoverId, setHoverId] = useState<number | null>(null);
+  const [selectedSponsor, setSelectedSponsor] = useState<SponsorSummary | null>(null);
+  const [hoveredLinkId, setHoveredLinkId] = useState<number | null>(null);
+  const [navigatingId, setNavigatingId] = useState<number | null>(null);
   const {
     pan,
     zoom,
@@ -153,7 +158,10 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
   );
 
   const handleNodeClick = (id: number) => {
-    if (!didDrag) void navigate(`/person/${id}`);
+    if (!didDrag) {
+      setNavigatingId(id);
+      void navigate(`/person/${id}`);
+    }
   };
 
   if (loading) {
@@ -321,7 +329,6 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
             inset: 0,
             width: '100%',
             height: '100%',
-            pointerEvents: 'none',
           }}
         >
           {layout.indirectLinks.map((l, i) => {
@@ -359,17 +366,47 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
               by = b.y + r;
             const cy = (ay + by) / 2;
             const isHighlighted =
-              hoverId !== null && (l.godFatherId === hoverId || l.godChildId === hoverId);
+              hoveredLinkId === l.id ||
+              (hoverId !== null && (l.godFatherId === hoverId || l.godChildId === hoverId));
             const dim = hoverId !== null && !isHighlighted;
+            const dPath = `M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`;
             return (
-              <path
-                key={i}
-                d={`M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`}
-                stroke={promoColor(a.year)}
-                strokeWidth={isHighlighted ? 2.5 : 1.5}
-                fill="none"
-                opacity={dim ? 0.1 : isHighlighted ? 0.95 : 0.5}
-              />
+              <g key={i}>
+                <path
+                  d={dPath}
+                  style={{ pointerEvents: 'none' }}
+                  stroke={promoColor(a.year)}
+                  strokeWidth={isHighlighted ? 2.5 : 1.5}
+                  fill="none"
+                  opacity={dim ? 0.1 : isHighlighted ? 0.95 : 0.5}
+                />
+                <path
+                  d={dPath}
+                  stroke="transparent"
+                  strokeWidth={12}
+                  fill="none"
+                  style={{ cursor: 'pointer' }}
+                  onMouseEnter={() => {
+                    setHoveredLinkId(l.id);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredLinkId(null);
+                  }}
+                  onClick={() => {
+                    const gf = layout.nodes.find((n) => n.id === l.godFatherId);
+                    const gc = layout.nodes.find((n) => n.id === l.godChildId);
+                    setSelectedSponsor({
+                      id: l.id,
+                      godFatherId: l.godFatherId,
+                      godFatherName: gf?.fullName ?? String(l.godFatherId),
+                      godChildId: l.godChildId,
+                      godChildName: gc?.fullName ?? String(l.godChildId),
+                      type: 'UNKNOWN',
+                      date: null,
+                    });
+                  }}
+                />
+              </g>
             );
           })}
         </svg>
@@ -386,6 +423,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
               person={p}
               diameter={NODE_D}
               dim={dim}
+              loading={navigatingId === p.id}
               dataAttr="data-node"
               style={{ position: 'absolute', left: pos.x, top: pos.y }}
               onClick={() => {
@@ -401,6 +439,19 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
           );
         })}
       </div>
+
+      {selectedSponsor && (
+        <SponsorInfoCard
+          summary={selectedSponsor}
+          godFatherStartYear={
+            layout.nodes.find((n) => n.id === selectedSponsor.godFatherId)?.startYear
+          }
+          position="top-right"
+          onClose={() => {
+            setSelectedSponsor(null);
+          }}
+        />
+      )}
     </div>
   );
 }

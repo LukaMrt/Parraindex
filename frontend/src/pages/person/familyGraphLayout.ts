@@ -7,6 +7,7 @@ export const NODE_D = 44;
 export const NODE_D_SELF = 56;
 
 export interface GraphLink {
+  id: number;
   godFatherId: number;
   godChildId: number;
 }
@@ -73,7 +74,7 @@ export function computeLayout(
       const key = `${s.godFatherId}-${s.godChildId}`;
       if (visibleIds.has(s.godFatherId) && visibleIds.has(s.godChildId) && !seen.has(key)) {
         seen.add(key);
-        links.push({ godFatherId: s.godFatherId, godChildId: s.godChildId });
+        links.push({ id: s.id, godFatherId: s.godFatherId, godChildId: s.godChildId });
       }
     }
   }

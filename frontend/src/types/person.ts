@@ -15,6 +15,7 @@ export interface Characteristic {
   visible: boolean;
   typeTitle: string;
   typeUrl: string | null;
+  typeImage: string | null;
 }
 
 export interface Person {

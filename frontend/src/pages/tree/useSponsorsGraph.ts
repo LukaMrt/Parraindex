@@ -3,6 +3,7 @@ import { getPerson } from '../../lib/api/persons';
 import type { PersonSummary } from '../../types/person';
 
 export interface SponsorLink {
+  id: number;
   godFatherId: number;
   godChildId: number;
 }
@@ -40,7 +41,7 @@ export function useSponsorsGraph(persons: PersonSummary[]): SponsorsGraphResult 
           const k = `${s.godFatherId}-${s.godChildId}`;
           if (!seen.has(k)) {
             seen.add(k);
-            deduped.push({ godFatherId: s.godFatherId, godChildId: s.godChildId });
+            deduped.push({ id: s.id, godFatherId: s.godFatherId, godChildId: s.godChildId });
           }
         }
       }

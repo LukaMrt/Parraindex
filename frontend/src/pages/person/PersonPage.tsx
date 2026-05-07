@@ -13,6 +13,7 @@ import { FamilyGraph } from './FamilyGraph';
 
 function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: number }) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const isGodFather = sponsor.godFatherId === personId;
   const relatedId = isGodFather ? sponsor.godChildId : sponsor.godFatherId;
   const relatedName = isGodFather ? sponsor.godChildName : sponsor.godFatherName;
@@ -20,25 +21,22 @@ function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: 
   const startYear = new Date(sponsor.date ?? '').getFullYear() || 2020;
   const color = promoColor(startYear);
 
+  const handleClick = () => {
+    setLoading(true);
+    void navigate(`/person/${relatedId}`);
+  };
+
   return (
     <div
       role="link"
       tabIndex={0}
-      onClick={() => {
-        void navigate(`/parrainage/${sponsor.id}`);
-      }}
+      onClick={handleClick}
       onKeyDown={(e) => {
-        if (e.key === 'Enter') void navigate(`/parrainage/${sponsor.id}`);
+        if (e.key === 'Enter') handleClick();
       }}
       className="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-surface p-4 transition-all hover:-translate-y-px hover:border-ink-4 hover:shadow-md"
     >
-      <Link
-        to={`/person/${relatedId}`}
-        onClick={(e) => {
-          e.stopPropagation();
-        }}
-        className="shrink-0"
-      >
+      <div className="relative shrink-0">
         <Avatar
           person={{
             firstName: relatedName.split(' ')[0] ?? '',
@@ -50,7 +48,12 @@ function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: 
           size={40}
           square
         />
-      </Link>
+        {loading && (
+          <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/35">
+            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/35 border-t-white" />
+          </div>
+        )}
+      </div>
       <div className="min-w-0 flex-1">
         <p className="truncate text-[13px] font-medium text-ink">{relatedName}</p>
         <p className="text-[11.5px]" style={{ color }}>
@@ -63,8 +66,27 @@ function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: 
 }
 
 function CharacteristicChip({ characteristic }: { characteristic: Characteristic }) {
+  const icon = characteristic.typeImage
+    ? `/images/icons/${characteristic.typeImage}`
+    : characteristic.typeUrl
+      ? `https://www.google.com/s2/favicons?domain=${new URL(characteristic.typeUrl).hostname}&sz=16`
+      : null;
+
   const inner = (
     <span className="flex items-center gap-2 rounded-lg border border-line bg-surface px-3 py-1.5 text-[12.5px] transition-colors hover:border-ink-3">
+      {icon && (
+        <img
+          src={icon}
+          alt=""
+          width={14}
+          height={14}
+          className="shrink-0 opacity-60"
+          style={{ filter: 'brightness(0)' }}
+          onError={(e) => {
+            e.currentTarget.style.display = 'none';
+          }}
+        />
+      )}
       <span className="text-ink-3">{characteristic.typeTitle}</span>
       <span className="font-medium text-ink">{characteristic.value}</span>
     </span>

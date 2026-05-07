@@ -1,9 +1,11 @@
-import type { MouseEvent } from 'react';
+import { useState, type MouseEvent } from 'react';
 import { useNavigate } from 'react-router';
 import { Skeleton } from '../../components/ui';
 import { PersonGraphNode } from '../../components/graph/PersonGraphNode';
+import { SponsorInfoCard } from '../../components/graph/SponsorInfoCard';
 import { promoColor } from '../../lib/colors';
 import type { Person } from '../../types/person';
+import type { SponsorSummary } from '../../types/sponsor';
 import { NODE_D, NODE_D_SELF, isNeighbor } from './familyGraphLayout';
 import type { GraphLink } from './familyGraphLayout';
 import { useFamilyGraph } from './useFamilyGraph';
@@ -15,6 +17,7 @@ function DepthControl({
   value,
   canShrink,
   canExpand,
+  loading,
   onMinus,
   onPlus,
 }: {
@@ -22,6 +25,7 @@ function DepthControl({
   value: number;
   canShrink: boolean;
   canExpand: boolean;
+  loading: boolean;
   onMinus: () => void;
   onPlus: () => void;
 }) {
@@ -34,7 +38,7 @@ function DepthControl({
       <span className="px-1 text-[10.5px] text-ink-3">{label}</span>
       <button
         onClick={stop(onMinus)}
-        disabled={!canShrink}
+        disabled={!canShrink || loading}
         className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full text-[12px] font-semibold text-ink-2 transition-colors disabled:cursor-default disabled:opacity-30 hover:enabled:text-ink"
       >
         −
@@ -42,10 +46,14 @@ function DepthControl({
       <span className="min-w-[14px] text-center text-[11.5px] font-semibold text-ink">{value}</span>
       <button
         onClick={stop(onPlus)}
-        disabled={!canExpand}
+        disabled={!canExpand || loading}
         className="flex h-5 w-5 cursor-pointer items-center justify-center rounded-full text-[12px] font-semibold text-ink-2 transition-colors disabled:cursor-default disabled:opacity-30 hover:enabled:text-ink"
       >
-        +
+        {loading ? (
+          <span className="h-2.5 w-2.5 animate-spin rounded-full border border-ink-3 border-t-transparent" />
+        ) : (
+          '+'
+        )}
       </button>
     </div>
   );
@@ -96,6 +104,8 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
     layout,
     containerHeight,
     initialLoading,
+    loadingAncestors,
+    loadingDescendants,
     pan,
     zoom,
     isDragging,
@@ -118,8 +128,30 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
     expandDescendants,
   } = useFamilyGraph(person);
 
+  const [selectedSponsor, setSelectedSponsor] = useState<SponsorSummary | null>(null);
+  const [hoveredLinkId, setHoveredLinkId] = useState<number | null>(null);
+  const [navigatingId, setNavigatingId] = useState<number | null>(null);
+
+  const handleLinkClick = (link: GraphLink) => {
+    const godFather = layout.allNodes.find((n) => n.id === link.godFatherId);
+    const godChild = layout.allNodes.find((n) => n.id === link.godChildId);
+    if (!godFather || !godChild) return;
+    const found = [...person.godFathers, ...person.godChildren].find((s) => s.id === link.id);
+    setSelectedSponsor(
+      found ?? {
+        id: link.id,
+        godFatherId: link.godFatherId,
+        godFatherName: godFather.fullName,
+        godChildId: link.godChildId,
+        godChildName: godChild.fullName,
+        type: 'UNKNOWN',
+        date: null,
+      },
+    );
+  };
+
   if (initialLoading) {
-    return <Skeleton className="w-full rounded-xl" style={{ height: 320 }} />;
+    return <Skeleton className="w-full rounded-xl" style={{ height: 410 }} />;
   }
 
   return (
@@ -151,6 +183,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
           value={ancestorGens.length}
           canShrink={ancestorGens.length > 0}
           canExpand={canExpandAncestors}
+          loading={loadingAncestors}
           onMinus={shrinkAncestors}
           onPlus={expandAncestors}
         />
@@ -159,6 +192,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
           value={descendantGens.length}
           canShrink={descendantGens.length > 0}
           canExpand={canExpandDescendants}
+          loading={loadingDescendants}
           onMinus={shrinkDescendants}
           onPlus={expandDescendants}
         />
@@ -214,7 +248,6 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
             inset: 0,
             width: '100%',
             height: '100%',
-            pointerEvents: 'none',
             overflow: 'visible',
           }}
         >
@@ -233,17 +266,37 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
               layout.allNodes.find((n) => n.id === l.godFatherId)?.startYear,
             );
             const isHighlighted =
-              hoverId !== null && (l.godFatherId === hoverId || l.godChildId === hoverId);
+              hoveredLinkId === l.id ||
+              (hoverId !== null && (l.godFatherId === hoverId || l.godChildId === hoverId));
             const dim = hoverId !== null && !isHighlighted;
+            const d = `M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`;
             return (
-              <path
-                key={i}
-                d={`M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`}
-                stroke={color}
-                strokeWidth={isHighlighted ? 2.5 : 1.5}
-                fill="none"
-                opacity={dim ? 0.12 : isHighlighted ? 0.95 : 0.55}
-              />
+              <g key={i}>
+                <path
+                  d={d}
+                  stroke={color}
+                  strokeWidth={isHighlighted ? 2.5 : 1.5}
+                  fill="none"
+                  opacity={dim ? 0.12 : isHighlighted ? 0.95 : 0.55}
+                  style={{ pointerEvents: 'none' }}
+                />
+                <path
+                  d={d}
+                  stroke="transparent"
+                  strokeWidth={12}
+                  fill="none"
+                  style={{ cursor: 'pointer' }}
+                  onMouseEnter={() => {
+                    setHoveredLinkId(l.id);
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredLinkId(null);
+                  }}
+                  onClick={() => {
+                    handleLinkClick(l);
+                  }}
+                />
+              </g>
             );
           })}
         </svg>
@@ -264,6 +317,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
               diameter={d}
               isSelf={isSelf}
               dim={dim}
+              loading={navigatingId === p.id}
               dataAttr="data-fg-node"
               style={{
                 position: 'absolute',
@@ -278,12 +332,25 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
               }}
               onClick={() => {
                 if (didDrag || isSelf) return;
+                setNavigatingId(p.id);
                 void navigate(`/person/${p.id}`);
               }}
             />
           );
         })}
       </div>
+
+      {selectedSponsor && (
+        <SponsorInfoCard
+          summary={selectedSponsor}
+          godFatherStartYear={
+            layout.allNodes.find((n) => n.id === selectedSponsor.godFatherId)?.startYear
+          }
+          onClose={() => {
+            setSelectedSponsor(null);
+          }}
+        />
+      )}
     </div>
   );
 }

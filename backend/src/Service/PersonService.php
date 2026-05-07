@@ -136,7 +136,7 @@ final readonly class PersonService
             godFatherName: $sponsor->getGodFather()->getFullName(),
             godChildId: $sponsor->getGodChild()->getId(),
             godChildName: $sponsor->getGodChild()->getFullName(),
-            type: $sponsor->getType()?->getTitle() ?? '',
+            type: $sponsor->getType()?->name ?? '',
             date: $sponsor->getDate()?->format('Y-m-d'),
         );
     }
@@ -155,6 +155,7 @@ final readonly class PersonService
             visible: (bool) $characteristic->isVisible(),
             typeTitle: $type->getTitle() ?? '',
             typeUrl: $type->getUrl(),
+            typeImage: $type->getImage(),
         );
     }
 }

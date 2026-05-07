@@ -8,6 +8,7 @@ interface PersonGraphNodeProps {
   diameter: number;
   isSelf?: boolean;
   dim?: boolean;
+  loading?: boolean;
   /** Nom de l'attribut data-* à poser sur le nœud (ex: "data-fg-node") pour le ciblage drag */
   dataAttr?: string;
   style?: CSSProperties;
@@ -21,6 +22,7 @@ export function PersonGraphNode({
   diameter,
   isSelf = false,
   dim = false,
+  loading = false,
   dataAttr,
   style,
   onClick,
@@ -49,6 +51,7 @@ export function PersonGraphNode({
     >
       <div
         style={{
+          position: 'relative',
           width: diameter,
           height: diameter,
           borderRadius: '50%',
@@ -60,6 +63,30 @@ export function PersonGraphNode({
         }}
       >
         <Avatar person={person} fill />
+        {loading && (
+          <div
+            style={{
+              position: 'absolute',
+              inset: 0,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              background: 'rgba(0,0,0,0.35)',
+              borderRadius: '50%',
+            }}
+          >
+            <div
+              style={{
+                width: diameter * 0.38,
+                height: diameter * 0.38,
+                borderRadius: '50%',
+                border: `2px solid rgba(255,255,255,0.35)`,
+                borderTopColor: '#fff',
+                animation: 'spin 0.7s linear infinite',
+              }}
+            />
+          </div>
+        )}
       </div>
       <div
         style={{

@@ -20,6 +20,8 @@ export interface FamilyGraphState extends UsePanZoomResult {
   layout: Layout;
   containerHeight: number;
   initialLoading: boolean;
+  loadingAncestors: boolean;
+  loadingDescendants: boolean;
   hoverId: number | null;
   ancestorGens: PersonSummary[][];
   descendantGens: PersonSummary[][];
@@ -49,6 +51,8 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
   const [ancestorGens, setAncestorGens] = useState<PersonSummary[][]>([]);
   const [descendantGens, setDescendantGens] = useState<PersonSummary[][]>([]);
   const [initialLoading, setInitialLoading] = useState(() => directIds.length > 0);
+  const [loadingAncestors, setLoadingAncestors] = useState(false);
+  const [loadingDescendants, setLoadingDescendants] = useState(false);
   const [hoverId, setHoverId] = useState<number | null>(null);
 
   const panZoom = usePanZoom({ dragBlockSelector: '[data-fg-node]', minZoom: 0.4 });
@@ -121,6 +125,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
     ];
     if (newIds.length === 0) return;
 
+    setLoadingAncestors(true);
     void fetchPersons(newIds.filter((id) => !fetchedPersons.has(id))).then((fetched) => {
       setFetchedPersons((prev) => new Map([...prev, ...fetched]));
       const allFetched = new Map([...fetchedPersons, ...fetched]);
@@ -129,6 +134,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
         .filter((p): p is Person => p !== undefined)
         .map(toSummary);
       setAncestorGens((prev) => [...prev, newGen]);
+      setLoadingAncestors(false);
     });
   };
 
@@ -145,6 +151,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
     ];
     if (newIds.length === 0) return;
 
+    setLoadingDescendants(true);
     void fetchPersons(newIds.filter((id) => !fetchedPersons.has(id))).then((fetched) => {
       setFetchedPersons((prev) => new Map([...prev, ...fetched]));
       const allFetched = new Map([...fetchedPersons, ...fetched]);
@@ -153,6 +160,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
         .filter((p): p is Person => p !== undefined)
         .map(toSummary);
       setDescendantGens((prev) => [...prev, newGen]);
+      setLoadingDescendants(false);
     });
   };
 
@@ -161,6 +169,8 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
     layout,
     containerHeight,
     initialLoading,
+    loadingAncestors,
+    loadingDescendants,
     hoverId,
     ancestorGens,
     descendantGens,

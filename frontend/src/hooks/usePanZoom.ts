@@ -43,7 +43,9 @@ export function usePanZoom({
         setZoom((z) => Math.max(minZoom, Math.min(maxZoom, e.deltaY < 0 ? z * 1.1 : z / 1.1)));
       };
       el.addEventListener('wheel', onWheel, { passive: false });
-      return () => { el.removeEventListener('wheel', onWheel); };
+      return () => {
+        el.removeEventListener('wheel', onWheel);
+      };
     },
     [minZoom, maxZoom],
   );
@@ -84,7 +86,9 @@ export function usePanZoom({
     pan,
     zoom,
     isDragging,
-    get didDrag() { return didDragRef.current; },
+    get didDrag() {
+      return didDragRef.current;
+    },
     containerRef,
     setPan,
     setZoom,

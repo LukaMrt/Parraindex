@@ -12,6 +12,7 @@ final readonly class CharacteristicDto
         public bool $visible,
         public string $typeTitle,
         public ?string $typeUrl,
+        public ?string $typeImage,
     ) {
     }
 }
