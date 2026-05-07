@@ -8,7 +8,14 @@ export function HomePage() {
   const { totalPersons, totalPromos, promoGroups, loading } = useHomeStats();
 
   return (
-    <div className="flex min-h-[calc(100vh-var(--header-height))] items-center bg-bg px-6 py-10">
+    <div className="relative flex min-h-[calc(100vh-var(--header-height))] items-center overflow-hidden bg-bg px-6 py-10">
+      {/* Logo décoratif flou en arrière-plan */}
+      <img
+        src="/images/icons/logo-blue.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute -left-32 -top-32 w-[680px] select-none opacity-[0.07] blur-[1px]"
+      />
       <div className="mx-auto w-full max-w-[1100px]">
         {/* Hero */}
         <div className="mb-16 text-center">
