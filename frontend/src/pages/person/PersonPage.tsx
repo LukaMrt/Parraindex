@@ -4,66 +4,10 @@ import { Avatar, Breadcrumb, Card, Skeleton, StatCard } from '../../components/u
 import { useAuth } from '../../hooks/useAuth';
 import { getPerson } from '../../lib/api/persons';
 import { promoColor } from '../../lib/colors';
-import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
 import type { Characteristic, Person } from '../../types/person';
-import type { SponsorSummary } from '../../types/sponsor';
 import { FamilyGraph } from './FamilyGraph';
 
 // ── Sub-components ────────────────────────────────────────────────────────────
-
-function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: number }) {
-  const navigate = useNavigate();
-  const [loading, setLoading] = useState(false);
-  const isGodFather = sponsor.godFatherId === personId;
-  const relatedId = isGodFather ? sponsor.godChildId : sponsor.godFatherId;
-  const relatedName = isGodFather ? sponsor.godChildName : sponsor.godFatherName;
-  const role = isGodFather ? 'Fillot' : 'Parrain';
-  const startYear = new Date(sponsor.date ?? '').getFullYear() || 2020;
-  const color = promoColor(startYear);
-
-  const handleClick = () => {
-    setLoading(true);
-    void navigate(`/person/${relatedId}`);
-  };
-
-  return (
-    <div
-      role="link"
-      tabIndex={0}
-      onClick={handleClick}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter') handleClick();
-      }}
-      className="flex cursor-pointer items-center gap-3 rounded-xl border border-line bg-surface p-4 transition-all hover:-translate-y-px hover:border-ink-4 hover:shadow-md"
-    >
-      <div className="relative shrink-0">
-        <Avatar
-          person={{
-            firstName: relatedName.split(' ')[0] ?? '',
-            lastName: relatedName.split(' ').slice(1).join(' '),
-            fullName: relatedName,
-            picture: null,
-            startYear,
-          }}
-          size={40}
-          square
-        />
-        {loading && (
-          <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black/35">
-            <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/35 border-t-white" />
-          </div>
-        )}
-      </div>
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-[13px] font-medium text-ink">{relatedName}</p>
-        <p className="text-[11.5px]" style={{ color }}>
-          {role} · Parrainage {SPONSOR_TYPE_LABELS[sponsor.type]}
-        </p>
-      </div>
-      <span className="shrink-0 text-base">{SPONSOR_TYPE_ICONS[sponsor.type]}</span>
-    </div>
-  );
-}
 
 function CharacteristicChip({ characteristic }: { characteristic: Characteristic }) {
   const icon = characteristic.typeImage
@@ -213,7 +157,6 @@ export function PersonPage() {
   const canEdit = user !== null && (user.isAdmin || user.person.id === person.id);
   const visibleCharacteristics = person.characteristics.filter((c) => c.visible && c.value);
   const allSponsors = [...person.godFathers, ...person.godChildren];
-
   return (
     <div className="min-h-[calc(100vh-var(--header-height))] bg-bg">
       <div className="mx-auto max-w-[980px] px-7 pb-20 pt-7">
@@ -241,37 +184,6 @@ export function PersonPage() {
               Arbre familial
             </h2>
             <FamilyGraph key={person.id} person={person} />
-          </Card>
-        )}
-
-        {/* Parrainages (liste) */}
-        {allSponsors.length > 0 && (
-          <Card radius="xl" padding="md" className="mb-5">
-            <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Parrainages</h2>
-            {person.godFathers.length > 0 && (
-              <div className="mb-4">
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
-                  Parrains
-                </p>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {person.godFathers.map((s) => (
-                    <FamilyChip key={s.id} sponsor={s} personId={person.id} />
-                  ))}
-                </div>
-              </div>
-            )}
-            {person.godChildren.length > 0 && (
-              <div>
-                <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
-                  Fillots
-                </p>
-                <div className="grid gap-2 sm:grid-cols-2">
-                  {person.godChildren.map((s) => (
-                    <FamilyChip key={s.id} sponsor={s} personId={person.id} />
-                  ))}
-                </div>
-              </div>
-            )}
           </Card>
         )}
 

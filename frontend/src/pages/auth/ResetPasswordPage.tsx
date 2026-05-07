@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { requestPasswordReset, confirmPasswordReset } from '../../lib/api/auth';
+import { Button, Input } from '../../components/ui';
 
 export function ResetPasswordPage() {
   const [searchParams] = useSearchParams();
@@ -36,56 +37,54 @@ export function ResetPasswordPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-light-grey">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow">
-        <h1 className="mb-6 text-2xl font-bold text-dark-blue">
-          {token !== null ? 'Nouveau mot de passe' : 'Réinitialiser le mot de passe'}
-        </h1>
+    <div className="mx-auto max-w-sm px-4 py-16">
+      <h1 className="mb-6 text-[22px] font-semibold tracking-tight text-ink">
+        {token !== null ? 'Nouveau mot de passe' : 'Réinitialiser le mot de passe'}
+      </h1>
 
-        {message !== null && (
-          <p className="mb-4 rounded bg-light-green p-3 text-dark-green">{message}</p>
+      {message !== null && (
+        <p className="mb-4 rounded-lg border border-success/20 bg-success/10 px-3 py-2 text-sm text-success">
+          {message}
+        </p>
+      )}
+      {error !== null && (
+        <p className="mb-4 rounded-lg border border-danger/20 bg-danger/10 px-3 py-2 text-sm text-danger">
+          {error}
+        </p>
+      )}
+
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void handleSubmit();
+        }}
+        className="flex flex-col gap-3"
+      >
+        {token !== null ? (
+          <Input
+            type="password"
+            placeholder="Nouveau mot de passe"
+            value={password}
+            onChange={(e) => {
+              setPassword(e.target.value);
+            }}
+            required
+          />
+        ) : (
+          <Input
+            type="email"
+            placeholder="Email universitaire"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+            }}
+            required
+          />
         )}
-        {error !== null && <p className="mb-4 rounded bg-light-red p-3 text-dark-red">{error}</p>}
-
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void handleSubmit();
-          }}
-          className="flex flex-col gap-4"
-        >
-          {token !== null ? (
-            <input
-              type="password"
-              placeholder="Nouveau mot de passe"
-              value={password}
-              onChange={(e) => {
-                setPassword(e.target.value);
-              }}
-              className="rounded border border-medium-grey px-3 py-2"
-              required
-            />
-          ) : (
-            <input
-              type="email"
-              placeholder="Email universitaire"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              className="rounded border border-medium-grey px-3 py-2"
-              required
-            />
-          )}
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded bg-dark-blue py-2 font-medium text-white disabled:opacity-50"
-          >
-            {submitting ? 'Envoi…' : 'Envoyer'}
-          </button>
-        </form>
-      </div>
+        <Button type="submit" size="lg" disabled={submitting} className="mt-1 w-full">
+          {submitting ? 'Envoi…' : 'Envoyer'}
+        </Button>
+      </form>
     </div>
   );
 }

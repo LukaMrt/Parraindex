@@ -16,6 +16,7 @@ security:
             stateless: false
             json_login:
                 check_path: api_auth_login
+                username_path: email
                 success_handler: App\Security\ApiAuthenticationSuccessHandler
                 failure_handler: App\Security\ApiAuthenticationFailureHandler
 

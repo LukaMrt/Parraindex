@@ -21,12 +21,6 @@ export function Header() {
             >
               Mon compte
             </Link>
-            <Link
-              to={`/person/${user.person.id}/edit`}
-              className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
-            >
-              Modifier
-            </Link>
             {user.isAdmin && (
               <Link
                 to="/admin/contacts"
@@ -44,7 +38,7 @@ export function Header() {
               onClick={() => {
                 void logout();
               }}
-              className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
+              className="rounded-md px-3 cursor-pointer py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
             >
               Déconnexion
             </button>

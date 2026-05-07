@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { register } from '../../lib/api/auth';
+import { Button, Input } from '../../components/ui';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -29,57 +30,53 @@ export function RegisterPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-light-grey">
-      <div className="w-full max-w-md rounded-lg bg-white p-8 shadow">
-        <h1 className="mb-6 text-2xl font-bold text-dark-blue">Créer un compte</h1>
+    <div className="mx-auto max-w-sm px-4 py-16">
+      <h1 className="mb-6 text-[22px] font-semibold tracking-tight text-ink">Créer un compte</h1>
 
-        {error !== null && <p className="mb-4 rounded bg-light-red p-3 text-dark-red">{error}</p>}
+      {error !== null && (
+        <p className="mb-4 rounded-lg border border-danger/20 bg-danger/10 px-3 py-2 text-sm text-danger">
+          {error}
+        </p>
+      )}
 
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            void handleSubmit();
-          }}
-          className="flex flex-col gap-4"
-        >
-          <div>
-            <input
-              type="email"
-              placeholder="prenom.nom@etu.univ-lyon1.fr"
-              value={email}
-              onChange={(e) => {
-                setEmail(e.target.value);
-              }}
-              className="w-full rounded border border-medium-grey px-3 py-2 focus:border-light-blue focus:outline-none"
-              required
-            />
-            <p className="mt-1 text-xs text-dark-grey">Email universitaire obligatoire</p>
-          </div>
-          <input
-            type="password"
-            placeholder="Mot de passe"
-            value={password}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          void handleSubmit();
+        }}
+        className="flex flex-col gap-3"
+      >
+        <div>
+          <Input
+            type="email"
+            placeholder="prenom.nom@etu.univ-lyon1.fr"
+            value={email}
             onChange={(e) => {
-              setPassword(e.target.value);
+              setEmail(e.target.value);
             }}
-            className="rounded border border-medium-grey px-3 py-2 focus:border-light-blue focus:outline-none"
             required
           />
-          <button
-            type="submit"
-            disabled={submitting}
-            className="rounded bg-dark-blue py-2 font-medium text-white disabled:opacity-50 hover:bg-medium-blue"
-          >
-            {submitting ? 'Inscription…' : "S'inscrire"}
-          </button>
-        </form>
+          <p className="mt-1 text-xs text-ink-3">Email universitaire obligatoire</p>
+        </div>
+        <Input
+          type="password"
+          placeholder="Mot de passe"
+          value={password}
+          onChange={(e) => {
+            setPassword(e.target.value);
+          }}
+          required
+        />
+        <Button type="submit" size="lg" disabled={submitting} className="mt-1 w-full">
+          {submitting ? 'Inscription…' : "S'inscrire"}
+        </Button>
+      </form>
 
-        <p className="mt-4 text-center text-sm text-medium-blue">
-          Déjà un compte ?{' '}
-          <Link to="/login" className="hover:text-dark-blue">
-            Se connecter
-          </Link>
-        </p>
+      <div className="mt-5 text-sm text-ink-3">
+        Déjà un compte ?{' '}
+        <Link to="/login" className="transition-colors hover:text-ink">
+          Se connecter
+        </Link>
       </div>
     </div>
   );

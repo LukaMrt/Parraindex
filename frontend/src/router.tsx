@@ -8,18 +8,16 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { HomePage } from './pages/HomePage';
 
 export const router = createBrowserRouter([
-  // Auth pages — pas de AppLayout
-  { path: '/login', element: <LoginPage /> },
-  { path: '/register', element: <RegisterPage /> },
-  { path: '/check-email', element: <CheckEmailPage /> },
-  { path: '/reset-password', element: <ResetPasswordPage /> },
-
   // Pages avec AppLayout
   {
     element: <AppLayout />,
     children: [
       // Pages publiques
       { path: '/', element: <HomePage /> },
+      { path: '/login', element: <LoginPage /> },
+      { path: '/register', element: <RegisterPage /> },
+      { path: '/check-email', element: <CheckEmailPage /> },
+      { path: '/reset-password', element: <ResetPasswordPage /> },
       {
         path: '/tree',
         lazy: () => import('./pages/tree/TreePage').then((m) => ({ Component: m.TreePage })),

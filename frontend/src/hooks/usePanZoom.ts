@@ -75,6 +75,10 @@ export function usePanZoom({
   const handleMouseUp = () => {
     dragRef.current.active = false;
     setIsDragging(false);
+    // Réinitialiser après un court délai pour que les onClick voient encore didDrag=true
+    setTimeout(() => {
+      didDragRef.current = false;
+    }, 0);
   };
 
   const resetView = () => {

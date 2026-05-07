@@ -18,7 +18,7 @@ final class ApiAuthenticationFailureHandler implements AuthenticationFailureHand
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): JsonResponse
     {
         return ApiResponse::error(
-            new ApiError(ErrorCode::UNAUTHORIZED, $exception->getMessageKey()),
+            new ApiError(ErrorCode::UNAUTHORIZED, 'Email ou mot de passe incorrect.'),
             Response::HTTP_UNAUTHORIZED,
         );
     }

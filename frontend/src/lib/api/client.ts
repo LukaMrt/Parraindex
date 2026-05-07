@@ -5,24 +5,40 @@ function getCsrfToken(): string {
   return match ? decodeURIComponent(match.split('=')[1] ?? '') : '';
 }
 
+const NETWORK_ERROR: ApiError = {
+  code: 'INTERNAL_ERROR',
+  message: 'Impossible de contacter le serveur. Vérifiez votre connexion.',
+  violations: {},
+};
+
 async function request<T>(method: string, url: string, body?: unknown): Promise<Result<T>> {
   const headers: Record<string, string> = {
     'Content-Type': 'application/json',
     'X-XSRF-TOKEN': getCsrfToken(),
   };
 
-  const response = await fetch(url, {
-    method,
-    headers,
-    credentials: 'same-origin',
-    body: body !== undefined ? JSON.stringify(body) : undefined,
-  });
+  let response: Response;
+  try {
+    response = await fetch(url, {
+      method,
+      headers,
+      credentials: 'same-origin',
+      body: body !== undefined ? JSON.stringify(body) : undefined,
+    });
+  } catch {
+    return { ok: false, error: NETWORK_ERROR };
+  }
 
   if (response.status === 204) {
     return { ok: true, data: null as T };
   }
 
-  const json: unknown = await response.json();
+  let json: unknown;
+  try {
+    json = await response.json();
+  } catch {
+    return { ok: false, error: NETWORK_ERROR };
+  }
 
   if (!response.ok) {
     const errorPayload = json as { error: ApiError };
