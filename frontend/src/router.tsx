@@ -39,7 +39,7 @@ export const router = createBrowserRouter([
           import('./pages/contact/ContactPage').then((m) => ({ Component: m.ContactPage })),
       },
       {
-        path: '/personne/:id',
+        path: '/person/:id',
         lazy: () => import('./pages/person/PersonPage').then((m) => ({ Component: m.PersonPage })),
       },
       {
@@ -53,7 +53,7 @@ export const router = createBrowserRouter([
         element: <ProtectedRoute />,
         children: [
           {
-            path: '/personne/:id/modifier',
+            path: '/person/:id/edit',
             lazy: () =>
               import('./pages/person/EditPersonPage').then((m) => ({
                 Component: m.EditPersonPage,

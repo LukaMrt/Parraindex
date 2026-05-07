@@ -29,7 +29,7 @@ function TimelinePerson({ person }: { person: PersonSummary }) {
   return (
     <div
       onClick={() => {
-        void navigate(`/personne/${person.id}`);
+        void navigate(`/person/${person.id}`);
       }}
       className="flex cursor-pointer items-center gap-3.5 rounded-xl border border-line bg-surface px-4 py-3 transition-all duration-150 hover:border-[var(--hover-color)] hover:translate-x-0.5"
       style={{ '--hover-color': color } as CSSProperties}

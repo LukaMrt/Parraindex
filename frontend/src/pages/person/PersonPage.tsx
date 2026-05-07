@@ -25,7 +25,7 @@ function FamilyChip({ sponsor, personId }: { sponsor: SponsorSummary; personId: 
       className="flex items-center gap-3 rounded-xl border border-line bg-surface p-4 transition-all hover:-translate-y-px hover:border-ink-4 hover:shadow-md"
     >
       <Link
-        to={`/personne/${relatedId}`}
+        to={`/person/${relatedId}`}
         onClick={(e) => {
           e.stopPropagation();
         }}
@@ -124,7 +124,7 @@ function PersonHero({ person, canEdit }: { person: Person; canEdit: boolean }) {
         {canEdit && (
           <div className="flex flex-col gap-2">
             <Link
-              to={`/personne/${person.id}/modifier`}
+              to={`/person/${person.id}/edit`}
               className="inline-flex h-9 items-center justify-center rounded-[9px] bg-ink px-4 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
             >
               Modifier

@@ -36,7 +36,7 @@ function ListRow({ person, last }: { person: PersonSummary; last: boolean }) {
   return (
     <div
       onClick={() => {
-        void navigate(`/personne/${person.id}`);
+        void navigate(`/person/${person.id}`);
       }}
       className={`${COL_GRID} cursor-pointer py-2.5 transition-colors duration-100 hover:bg-bg ${last ? '' : 'border-b border-line'}`}
     >

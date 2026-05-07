@@ -16,13 +16,13 @@ export function Header() {
         {user !== null ? (
           <>
             <Link
-              to={`/personne/${user.person.id}`}
+              to={`/person/${user.person.id}`}
               className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
             >
               Mon compte
             </Link>
             <Link
-              to={`/personne/${user.person.id}/modifier`}
+              to={`/person/${user.person.id}/edit`}
               className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
             >
               Modifier

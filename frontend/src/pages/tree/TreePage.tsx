@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router';
 import { usePersonFilter } from '../../hooks/usePersonFilter';
 import { getYearRange } from '../../lib/persons';
 import { DirectoryToolbar } from './toolbar/DirectoryToolbar';
@@ -14,6 +15,8 @@ export function TreePage() {
   const { persons, loading } = usePersons();
   const { links, loading: linksLoading } = useSponsorsGraph(persons);
   const [view, setView] = useState<DirectoryView>('grid');
+  const [searchParams] = useSearchParams();
+  const initialYear = searchParams.get('year') ? Number(searchParams.get('year')) : null;
 
   const {
     name,
@@ -24,7 +27,7 @@ export function TreePage() {
     toggleYear,
     clearYears,
     toggleAlphabetical,
-  } = usePersonFilter(persons);
+  } = usePersonFilter(persons, initialYear !== null ? [initialYear] : []);
 
   const yearRange = getYearRange(persons);
   const availableYears = useMemo(() => {

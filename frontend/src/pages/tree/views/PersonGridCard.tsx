@@ -17,7 +17,7 @@ export function PersonGridCard({ person, animationDelay }: PersonGridCardProps) 
   return (
     <article
       onClick={() => {
-        void navigate(`/personne/${person.id}`);
+        void navigate(`/person/${person.id}`);
       }}
       onMouseEnter={() => {
         setHovered(true);

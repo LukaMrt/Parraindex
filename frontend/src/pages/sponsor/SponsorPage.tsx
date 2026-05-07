@@ -53,7 +53,7 @@ export function SponsorPage() {
       {/* Les deux personnes */}
       <div className="flex items-center justify-center gap-8">
         <Link
-          to={`/personne/${sponsor.godFatherId}`}
+          to={`/person/${sponsor.godFatherId}`}
           className="flex flex-col items-center gap-2 text-center"
         >
           <div className="h-20 w-20 overflow-hidden rounded-full bg-medium-grey" />
@@ -67,7 +67,7 @@ export function SponsorPage() {
         </div>
 
         <Link
-          to={`/personne/${sponsor.godChildId}`}
+          to={`/person/${sponsor.godChildId}`}
           className="flex flex-col items-center gap-2 text-center"
         >
           <div className="h-20 w-20 overflow-hidden rounded-full bg-medium-grey" />

@@ -185,7 +185,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
 
   const handleNodeClick = (id: number) => {
     if (!didDrag.current) {
-      void navigate(`/personne/${id}`);
+      void navigate(`/person/${id}`);
     }
   };
 

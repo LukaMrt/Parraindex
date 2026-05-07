@@ -80,7 +80,7 @@ export function EditPersonPage() {
       }
     }
 
-    void navigate(`/personne/${id}`);
+    void navigate(`/person/${id}`);
   }
 
   async function handleDelete() {
@@ -208,7 +208,7 @@ export function EditPersonPage() {
         <button
           type="button"
           onClick={() => {
-            void navigate(`/personne/${id}`);
+            void navigate(`/person/${id}`);
           }}
           className="text-medium-blue hover:text-dark-blue"
         >

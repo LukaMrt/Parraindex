@@ -605,7 +605,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
               }}
               onClick={() => {
                 if (dragState.current.moved || isSelf) return;
-                void navigate(`/personne/${p.id}`);
+                void navigate(`/person/${p.id}`);
               }}
             />
           );

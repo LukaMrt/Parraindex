@@ -13,9 +13,12 @@ export interface PersonFilterState {
   toggleAlphabetical: () => void;
 }
 
-export function usePersonFilter(persons: PersonSummary[]): PersonFilterState {
+export function usePersonFilter(
+  persons: PersonSummary[],
+  initialYears: number[] = [],
+): PersonFilterState {
   const [name, setName] = useState('');
-  const [years, setYears] = useState<number[]>([]);
+  const [years, setYears] = useState<number[]>(initialYears);
   const [alphabetical, setAlphabetical] = useState(false);
 
   const filtered = useMemo(

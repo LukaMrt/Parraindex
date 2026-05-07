@@ -15,7 +15,7 @@ function PromoCard({ year, color, count }: PromoGroup) {
 
   return (
     <Link
-      to="/tree"
+      to={`/tree?year=${year}`}
       className="block rounded-xl border bg-surface p-3.5 text-left transition-colors duration-150"
       style={{ borderColor: hovered ? color : 'var(--color-line)' }}
       onMouseEnter={() => {
