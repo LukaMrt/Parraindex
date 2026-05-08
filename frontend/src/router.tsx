@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router';
 import { AppLayout } from './components/layout/AppLayout';
-import { ProtectedRoute } from './components/ProtectedRoute';
+import { AdminRoute } from './components/AdminRoute';
+import { PersonRoute } from './components/PersonRoute';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { CheckEmailPage } from './pages/auth/CheckEmailPage';
@@ -40,9 +41,9 @@ export const router = createBrowserRouter([
         path: '/person/:id',
         lazy: () => import('./pages/person/PersonPage').then((m) => ({ Component: m.PersonPage })),
       },
-      // Pages protégées (auth requise)
+      // Pages protégées : même personne ou admin
       {
-        element: <ProtectedRoute />,
+        element: <PersonRoute />,
         children: [
           {
             path: '/person/:id/edit',
@@ -51,6 +52,12 @@ export const router = createBrowserRouter([
                 Component: m.EditPersonPage,
               })),
           },
+        ],
+      },
+      // Pages protégées : admin uniquement
+      {
+        element: <AdminRoute />,
+        children: [
           {
             path: '/admin/contacts',
             lazy: () =>

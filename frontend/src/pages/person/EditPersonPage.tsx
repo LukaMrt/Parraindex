@@ -2,7 +2,7 @@ import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, KeyboardEvent, SyntheticEvent } from 'react';
 import type { ReactNode } from 'react';
-import { Navigate, useNavigate, useParams } from 'react-router';
+import { useNavigate, useParams } from 'react-router';
 import { Avatar, Breadcrumb, Button, Card, Input, Skeleton, StatCard } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
@@ -868,6 +868,7 @@ export function EditPersonPage() {
   }
 
   if (loading) return <EditPersonPageSkeleton />;
+  if (!user) return null;
   if (personQuery.isError || !person) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-[14px] text-ink-3">
@@ -875,9 +876,6 @@ export function EditPersonPage() {
       </div>
     );
   }
-
-  const canEdit = user !== null && (user.isAdmin || user.person.id === person.id);
-  if (!canEdit) return <Navigate to={`/person/${id}`} replace />;
 
   const color = promoColor(startYear);
   const canEditIdentity = user.isAdmin;
