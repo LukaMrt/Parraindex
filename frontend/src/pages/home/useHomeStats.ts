@@ -1,7 +1,6 @@
-import { useEffect, useState } from 'react';
-import { getPersons } from '../../lib/api/persons';
+import { useQuery } from '@tanstack/react-query';
+import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
-import type { PersonSummary } from '../../types/person';
 import type { PromoGroup } from './types';
 
 interface HomeStats {
@@ -12,15 +11,7 @@ interface HomeStats {
 }
 
 export function useHomeStats(): HomeStats {
-  const [persons, setPersons] = useState<PersonSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    void getPersons().then((result) => {
-      if (result.ok) setPersons(result.data);
-      setLoading(false);
-    });
-  }, []);
+  const { data: persons = [], isLoading } = useQuery(personQueries.list());
 
   const promoMap = new Map<number, number>();
   for (const p of persons) {
@@ -35,6 +26,6 @@ export function useHomeStats(): HomeStats {
     totalPersons: persons.length,
     totalPromos: promoGroups.length,
     promoGroups,
-    loading,
+    loading: isLoading,
   };
 }

@@ -1,20 +1,13 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
-import { getPerson } from '../../lib/api/persons';
 import { usePanZoom } from '../../hooks/usePanZoom';
+import { personQueries } from '../../lib/queries';
 import type { UsePanZoomResult } from '../../hooks/usePanZoom';
 import type { Person } from '../../types/person';
 import type { PersonSummary } from '../../types/person';
 import { COL_W, computeLayout, toSummary } from './familyGraphLayout';
 import type { Layout } from './familyGraphLayout';
-
-function fetchPersons(ids: number[]): Promise<Map<number, Person>> {
-  return Promise.all(ids.map((id) => getPerson(id))).then((results) => {
-    const map = new Map<number, Person>();
-    for (const r of results) if (r.ok) map.set(r.data.id, r.data);
-    return map;
-  });
-}
 
 export interface FamilyGraphState extends UsePanZoomResult {
   layout: Layout;
@@ -37,6 +30,18 @@ export interface FamilyGraphState extends UsePanZoomResult {
 }
 
 export function useFamilyGraph(person: Person): FamilyGraphState {
+  const queryClient = useQueryClient();
+
+  function fetchPersons(ids: number[]): Promise<Map<number, Person>> {
+    return Promise.all(ids.map((id) => queryClient.fetchQuery(personQueries.detail(id)))).then(
+      (results) => {
+        const map = new Map<number, Person>();
+        for (const p of results) map.set(p.id, p);
+        return map;
+      },
+    );
+  }
+
   const directIds = useMemo(
     () => [
       ...person.godFathers.map((s) => s.godFatherId),

@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react';
-import { closeContact, getAdminContacts, resolveContact } from '../../lib/api/admin';
-import type { AdminContact } from '../../types/admin';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState } from 'react';
+import { closeContact, resolveContact } from '../../lib/api/admin';
+import { adminQueries } from '../../lib/queries';
 import type { ContactType } from '../../types/contact';
 
 type FilterMode = 'all' | 'resolved' | ContactType;
@@ -35,29 +36,32 @@ const ACTION_CONFIG: Partial<Record<ContactType, { label: string; color: string 
 };
 
 export function AdminContactsPage() {
-  const [contacts, setContacts] = useState<AdminContact[]>([]);
-  const [loading, setLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [filter, setFilter] = useState<FilterMode>('all');
 
-  useEffect(() => {
-    void getAdminContacts().then((result) => {
-      if (result.ok) setContacts(result.data);
-      setLoading(false);
-    });
-  }, []);
+  const { data: contacts = [], isLoading: loading } = useQuery(adminQueries.contacts());
 
-  async function handleResolve(id: number) {
-    const result = await resolveContact(id);
-    if (result.ok)
-      setContacts((prev) =>
-        prev.map((c) => (c.id === id ? { ...c, resolutionDate: new Date().toISOString() } : c)),
+  const resolveMutation = useMutation({
+    mutationFn: resolveContact,
+    onSuccess: (result, id) => {
+      if (!result.ok) return;
+      queryClient.setQueryData(
+        adminQueries.contacts().queryKey,
+        contacts.map((c) => (c.id === id ? { ...c, resolutionDate: new Date().toISOString() } : c)),
       );
-  }
+    },
+  });
 
-  async function handleClose(id: number) {
-    const result = await closeContact(id);
-    if (result.ok) setContacts((prev) => prev.filter((c) => c.id !== id));
-  }
+  const closeMutation = useMutation({
+    mutationFn: closeContact,
+    onSuccess: (result, id) => {
+      if (!result.ok) return;
+      queryClient.setQueryData(
+        adminQueries.contacts().queryKey,
+        contacts.filter((c) => c.id !== id),
+      );
+    },
+  });
 
   const visible = contacts.filter((c) => {
     if (filter === 'all') return c.resolutionDate === null;
@@ -164,7 +168,7 @@ export function AdminContactsPage() {
                           {action && (
                             <button
                               onClick={() => {
-                                void handleResolve(contact.id);
+                                resolveMutation.mutate(contact.id);
                               }}
                               className={`rounded px-3 py-1 text-xs font-medium text-white bg-${action.color} hover:opacity-90`}
                             >
@@ -173,7 +177,7 @@ export function AdminContactsPage() {
                           )}
                           <button
                             onClick={() => {
-                              void handleClose(contact.id);
+                              closeMutation.mutate(contact.id);
                             }}
                             className="rounded border border-light-blue px-3 py-1 text-xs text-light-blue hover:bg-light-grey"
                           >

@@ -40,12 +40,6 @@ export const router = createBrowserRouter([
         path: '/person/:id',
         lazy: () => import('./pages/person/PersonPage').then((m) => ({ Component: m.PersonPage })),
       },
-      {
-        path: '/parrainage/:id',
-        lazy: () =>
-          import('./pages/sponsor/SponsorPage').then((m) => ({ Component: m.SponsorPage })),
-      },
-
       // Pages protégées (auth requise)
       {
         element: <ProtectedRoute />,
@@ -55,13 +49,6 @@ export const router = createBrowserRouter([
             lazy: () =>
               import('./pages/person/EditPersonPage').then((m) => ({
                 Component: m.EditPersonPage,
-              })),
-          },
-          {
-            path: '/parrainage/:id/modifier',
-            lazy: () =>
-              import('./pages/sponsor/EditSponsorPage').then((m) => ({
-                Component: m.EditSponsorPage,
               })),
           },
           {

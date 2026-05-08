@@ -1,5 +1,5 @@
 import { useState, type MouseEvent } from 'react';
-import { useNavigate } from 'react-router';
+import { usePersonNavigation } from '../../hooks/usePersonNavigation';
 import { Skeleton } from '../../components/ui';
 import { PersonGraphNode } from '../../components/graph/PersonGraphNode';
 import { SponsorInfoCard } from '../../components/graph/SponsorInfoCard';
@@ -99,7 +99,7 @@ interface FamilyGraphProps {
 }
 
 export function FamilyGraph({ person }: FamilyGraphProps) {
-  const navigate = useNavigate();
+  const { navigateTo } = usePersonNavigation();
   const {
     layout,
     containerHeight,
@@ -333,7 +333,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
               onClick={() => {
                 if (didDrag || isSelf) return;
                 setNavigatingId(p.id);
-                void navigate(`/person/${p.id}`);
+                void navigateTo(p.id);
               }}
             />
           );

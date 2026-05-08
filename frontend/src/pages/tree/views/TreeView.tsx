@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router';
+import { usePersonNavigation } from '../../../hooks/usePersonNavigation';
 import { Button, Skeleton } from '../../../components/ui';
 import { PersonGraphNode } from '../../../components/graph/PersonGraphNode';
 import { SponsorInfoCard } from '../../../components/graph/SponsorInfoCard';
@@ -132,7 +132,7 @@ interface Props {
 }
 
 export function TreeView({ persons, links: allLinks, loading }: Props) {
-  const navigate = useNavigate();
+  const { navigateTo } = usePersonNavigation();
 
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [hoverId, setHoverId] = useState<number | null>(null);
@@ -160,7 +160,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
   const handleNodeClick = (id: number) => {
     if (!didDrag) {
       setNavigatingId(id);
-      void navigate(`/person/${id}`);
+      void navigateTo(id);
     }
   };
 

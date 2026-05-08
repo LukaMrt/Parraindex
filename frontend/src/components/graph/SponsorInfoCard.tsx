@@ -1,9 +1,8 @@
-import { useEffect, useState } from 'react';
-import { getSponsor } from '../../lib/api/sponsors';
+import { useQuery } from '@tanstack/react-query';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
+import { sponsorQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import type { SponsorSummary } from '../../types/sponsor';
-import type { Sponsor } from '../../types/sponsor';
 
 interface SponsorInfoCardProps {
   summary: SponsorSummary;
@@ -18,20 +17,7 @@ export function SponsorInfoCard({
   onClose,
   position = 'bottom-right',
 }: SponsorInfoCardProps) {
-  const [sponsor, setSponsor] = useState<Sponsor | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    let cancelled = false;
-    void getSponsor(summary.id).then((r) => {
-      if (cancelled) return;
-      if (r.ok) setSponsor(r.data);
-      setLoading(false);
-    });
-    return () => {
-      cancelled = true;
-    };
-  }, [summary.id]);
+  const { data: sponsor, isLoading: loading } = useQuery(sponsorQueries.detail(summary.id));
 
   const resolved = sponsor ?? summary;
   const typeIcon = SPONSOR_TYPE_ICONS[resolved.type];

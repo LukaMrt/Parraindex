@@ -1,6 +1,6 @@
 import { useMemo, type CSSProperties } from 'react';
-import { useNavigate } from 'react-router';
 import { Avatar, Skeleton } from '../../../components/ui';
+import { usePersonNavigation } from '../../../hooks/usePersonNavigation';
 import { promoColor } from '../../../lib/colors';
 import type { PersonSummary } from '../../../types/person';
 
@@ -23,19 +23,35 @@ function TimelinePersonSkeleton() {
 }
 
 function TimelinePerson({ person }: { person: PersonSummary }) {
-  const navigate = useNavigate();
+  const { navigateTo, isPending } = usePersonNavigation();
   const color = promoColor(person.startYear);
 
   return (
     <div
       onClick={() => {
-        void navigate(`/person/${person.id}`);
+        void navigateTo(person.id);
       }}
       className="flex cursor-pointer items-center gap-3.5 rounded-xl border border-line bg-surface px-4 py-3 transition-all duration-150 hover:border-[var(--hover-color)] hover:translate-x-0.5"
       style={{ '--hover-color': color } as CSSProperties}
     >
-      <div className="h-11 w-11 shrink-0 overflow-hidden rounded-[14%]">
+      <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-[14%]">
         <Avatar person={person} size={44} square />
+        {isPending && (
+          <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-[14%]">
+            <svg
+              className="animate-spin text-white"
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+            >
+              <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+            </svg>
+          </div>
+        )}
       </div>
       <div className="min-w-0">
         <div className="truncate text-[13.5px] font-medium text-ink">{person.firstName}</div>

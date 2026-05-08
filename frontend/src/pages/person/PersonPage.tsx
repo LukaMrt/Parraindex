@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Avatar, Breadcrumb, Card, Skeleton, StatCard } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
-import { getPerson } from '../../lib/api/persons';
+import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import type { Characteristic, Person } from '../../types/person';
 import { FamilyGraph } from './FamilyGraph';
@@ -131,21 +131,18 @@ export function PersonPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [person, setPerson] = useState<Person | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(false);
 
-  useEffect(() => {
-    if (!id) return;
-    void getPerson(Number(id)).then((result) => {
-      if (result.ok) setPerson(result.data);
-      else setError(true);
-      setLoading(false);
-    });
-  }, [id]);
+  const {
+    data: person,
+    isLoading,
+    isError,
+  } = useQuery({
+    ...personQueries.detail(Number(id)),
+    enabled: !!id,
+  });
 
-  if (loading) return <PersonPageSkeleton />;
-  if (error || !person) {
+  if (isLoading) return <PersonPageSkeleton />;
+  if (isError || !person) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-[14px] text-ink-3">
         Personne introuvable.

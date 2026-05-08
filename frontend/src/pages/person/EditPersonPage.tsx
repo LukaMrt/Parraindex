@@ -1,3 +1,4 @@
+import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
 import type { ChangeEvent, KeyboardEvent, SyntheticEvent } from 'react';
 import type { ReactNode } from 'react';
@@ -5,16 +6,9 @@ import { Navigate, useNavigate, useParams } from 'react-router';
 import { Avatar, Breadcrumb, Button, Card, Input, Skeleton, StatCard } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
-import {
-  deletePerson,
-  getAccount,
-  getPerson,
-  getPersons,
-  updateAccount,
-  updatePerson,
-  uploadPicture,
-} from '../../lib/api/persons';
+import { deletePerson, updateAccount, updatePerson, uploadPicture } from '../../lib/api/persons';
 import { createSponsor, deleteSponsor, getSponsor, updateSponsor } from '../../lib/api/sponsors';
+import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
 import type { Person, PersonRequest, PersonSummary } from '../../types/person';
@@ -162,49 +156,49 @@ function AddSponsorForm({
   onAdded: (s: SponsorSummary) => void;
 }) {
   const { notify } = useNotification();
+  const queryClient = useQueryClient();
   const [role, setRole] = useState<'godChild' | 'godFather'>('godChild');
   const [otherPerson, setOtherPerson] = useState<PersonSummary | null>(null);
   const [type, setType] = useState<SponsorType>('CLASSIC');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
-  const [saving, setSaving] = useState(false);
 
-  async function handleAdd() {
+  const { mutate, isPending: saving } = useMutation({
+    mutationFn: createSponsor,
+    onSuccess: (result) => {
+      if (!result.ok) {
+        notify('error', result.error.message);
+        return;
+      }
+      onAdded({
+        id: result.data.id,
+        godFatherId: result.data.godFatherId,
+        godFatherName: result.data.godFatherName,
+        godChildId: result.data.godChildId,
+        godChildName: result.data.godChildName,
+        type: result.data.type,
+        date: result.data.date,
+      });
+      notify('success', 'Parrainage ajouté');
+      setOtherPerson(null);
+      setDate('');
+      setDescription('');
+      void queryClient.invalidateQueries({ queryKey: personQueries.detail(personId).queryKey });
+    },
+  });
+
+  function handleAdd() {
     if (!otherPerson) {
       notify('warning', 'Sélectionnez une personne');
       return;
     }
-    setSaving(true);
-
-    const result = await createSponsor({
+    mutate({
       godFatherId: role === 'godFather' ? personId : otherPerson.id,
       godChildId: role === 'godChild' ? personId : otherPerson.id,
       type,
       date: date || null,
       description: description || null,
     });
-
-    if (!result.ok) {
-      notify('error', result.error.message);
-      setSaving(false);
-      return;
-    }
-
-    onAdded({
-      id: result.data.id,
-      godFatherId: result.data.godFatherId,
-      godFatherName: result.data.godFatherName,
-      godChildId: result.data.godChildId,
-      godChildName: result.data.godChildName,
-      type: result.data.type,
-      date: result.data.date,
-    });
-
-    notify('success', 'Parrainage ajouté');
-    setOtherPerson(null);
-    setDate('');
-    setDescription('');
-    setSaving(false);
   }
 
   const TYPE_OPTIONS: { value: SponsorType; label: string }[] = [
@@ -309,7 +303,9 @@ function AddSponsorForm({
           type="button"
           size="sm"
           disabled={saving || !otherPerson}
-          onClick={() => void handleAdd()}
+          onClick={() => {
+            handleAdd();
+          }}
         >
           {saving ? 'Ajout…' : 'Ajouter'}
         </Button>
@@ -338,14 +334,13 @@ function SponsorRow({
   const color = promoColor(startYear);
 
   const { notify } = useNotification();
-  const [deleting, setDeleting] = useState(false);
+  const queryClient = useQueryClient();
 
   const [editing, setEditing] = useState(false);
   const [editType, setEditType] = useState<SponsorType>(sponsor.type);
   const [editDate, setEditDate] = useState(sponsor.date ?? '');
   const [editDescription, setEditDescription] = useState('');
   const [loadingEdit, setLoadingEdit] = useState(false);
-  const [saving, setSaving] = useState(false);
 
   const TYPE_OPTIONS: { value: SponsorType; label: string }[] = [
     { value: 'CLASSIC', label: 'IUT' },
@@ -353,18 +348,39 @@ function SponsorRow({
     { value: 'UNKNOWN', label: 'Inconnu' },
   ];
 
-  function handleDelete() {
-    setDeleting(true);
-    void deleteSponsor(sponsor.id).then((result) => {
-      if (result.ok) {
-        onDelete(sponsor.id);
-        notify('success', 'Parrainage supprimé');
-      } else {
+  const { mutate: doDelete, isPending: deleting } = useMutation({
+    mutationFn: () => deleteSponsor(sponsor.id),
+    onSuccess: (result) => {
+      if (!result.ok) {
         notify('error', result.error.message);
-        setDeleting(false);
+        return;
       }
-    });
-  }
+      onDelete(sponsor.id);
+      notify('success', 'Parrainage supprimé');
+      void queryClient.invalidateQueries({ queryKey: personQueries.detail(personId).queryKey });
+    },
+  });
+
+  const { mutate: doSaveEdit, isPending: saving } = useMutation({
+    mutationFn: () =>
+      updateSponsor(sponsor.id, {
+        godFatherId: sponsor.godFatherId,
+        godChildId: sponsor.godChildId,
+        type: editType,
+        date: editDate || null,
+        description: editDescription || null,
+      }),
+    onSuccess: (result) => {
+      if (!result.ok) {
+        notify('error', result.error.message);
+        return;
+      }
+      onUpdate({ ...sponsor, type: result.data.type, date: result.data.date });
+      notify('success', 'Parrainage mis à jour');
+      setEditing(false);
+      void queryClient.invalidateQueries({ queryKey: personQueries.detail(personId).queryKey });
+    },
+  });
 
   async function handleEditOpen() {
     setEditType(sponsor.type);
@@ -375,26 +391,6 @@ function SponsorRow({
     if (result.ok) setEditDescription(result.data.description ?? '');
     setLoadingEdit(false);
     setEditing(true);
-  }
-
-  async function handleSaveEdit() {
-    setSaving(true);
-    const result = await updateSponsor(sponsor.id, {
-      godFatherId: sponsor.godFatherId,
-      godChildId: sponsor.godChildId,
-      type: editType,
-      date: editDate || null,
-      description: editDescription || null,
-    });
-    if (!result.ok) {
-      notify('error', result.error.message);
-      setSaving(false);
-      return;
-    }
-    onUpdate({ ...sponsor, type: result.data.type, date: result.data.date });
-    notify('success', 'Parrainage mis à jour');
-    setEditing(false);
-    setSaving(false);
   }
 
   if (editing) {
@@ -456,7 +452,14 @@ function SponsorRow({
           >
             Annuler
           </Button>
-          <Button type="button" size="sm" disabled={saving} onClick={() => void handleSaveEdit()}>
+          <Button
+            type="button"
+            size="sm"
+            disabled={saving}
+            onClick={() => {
+              doSaveEdit();
+            }}
+          >
             {saving ? 'Enregistrement…' : 'Enregistrer'}
           </Button>
         </div>
@@ -534,7 +537,9 @@ function SponsorRow({
             <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
           </svg>
         }
-        onClick={handleDelete}
+        onClick={() => {
+          doDelete();
+        }}
         className="shrink-0 text-ink-4"
       />
     </div>
@@ -738,13 +743,28 @@ export function EditPersonPage() {
   const navigate = useNavigate();
   const { notify } = useNotification();
 
-  const [person, setPerson] = useState<Person | null>(null);
-  const [allPersons, setAllPersons] = useState<PersonSummary[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [loadError, setLoadError] = useState('');
+  const personId = Number(id);
+  const queryClient = useQueryClient();
+
+  const [personQuery, personsQuery, accountQuery] = useQueries({
+    queries: [
+      { ...personQueries.detail(personId), enabled: !!id },
+      { ...personQueries.list(), enabled: !!id },
+      { ...personQueries.account(personId), enabled: !!id },
+    ],
+  });
+
+  const person = personQuery.data ?? null;
+  const allPersons = personsQuery.data ?? [];
+  const loading = personQuery.isLoading || personsQuery.isLoading;
+
+  const initialized = useRef(false);
   const [saving, setSaving] = useState(false);
 
-  const [accountEmail, setAccountEmail] = useState<string | null>(null);
+  // null = pas de compte ; undefined = valeur non encore modifiée par l'utilisateur (on lit la query)
+  const [accountEmailDraft, setAccountEmailDraft] = useState<string | null | undefined>(undefined);
+  const accountEmail =
+    accountEmailDraft !== undefined ? accountEmailDraft : (accountQuery.data?.email ?? null);
   const [accountCurrentPassword, setAccountCurrentPassword] = useState('');
   const [accountNewPassword, setAccountNewPassword] = useState('');
   const [accountConfirmPassword, setAccountConfirmPassword] = useState('');
@@ -760,28 +780,15 @@ export function EditPersonPage() {
   const [sponsors, setSponsors] = useState<SponsorSummary[]>([]);
 
   useEffect(() => {
-    if (!id) return;
-    void Promise.all([getPerson(Number(id)), getPersons(), getAccount(Number(id))]).then(
-      ([personResult, personsResult, accountResult]) => {
-        if (!personResult.ok) {
-          setLoadError('Personne introuvable');
-          setLoading(false);
-          return;
-        }
-        const p = personResult.data;
-        setPerson(p);
-        setFirstName(p.firstName);
-        setLastName(p.lastName);
-        setStartYear(p.startYear);
-        setBiography(p.biography ?? '');
-        setDescription(p.description ?? '');
-        setSponsors([...p.godFathers, ...p.godChildren]);
-        if (personsResult.ok) setAllPersons(personsResult.data);
-        if (accountResult.ok) setAccountEmail(accountResult.data.email ?? '');
-        setLoading(false);
-      },
-    );
-  }, [id]);
+    if (!person || initialized.current) return;
+    initialized.current = true;
+    setFirstName(person.firstName);
+    setLastName(person.lastName);
+    setStartYear(person.startYear);
+    setBiography(person.biography ?? '');
+    setDescription(person.description ?? '');
+    setSponsors([...person.godFathers, ...person.godChildren]);
+  }, [person]);
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
@@ -812,6 +819,7 @@ export function EditPersonPage() {
       }
     }
 
+    await queryClient.invalidateQueries({ queryKey: personQueries.detail(personId).queryKey });
     void navigate(`/person/${id}`);
   }
 
@@ -837,6 +845,7 @@ export function EditPersonPage() {
       return;
     }
 
+    setAccountEmailDraft(undefined);
     setAccountCurrentPassword('');
     setAccountNewPassword('');
     setAccountConfirmPassword('');
@@ -859,10 +868,10 @@ export function EditPersonPage() {
   }
 
   if (loading) return <EditPersonPageSkeleton />;
-  if (!person) {
+  if (personQuery.isError || !person) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-[14px] text-ink-3">
-        {loadError || 'Personne introuvable.'}
+        Personne introuvable.
       </div>
     );
   }
@@ -1012,7 +1021,7 @@ export function EditPersonPage() {
                   type="email"
                   value={accountEmail}
                   onChange={(e) => {
-                    setAccountEmail(e.target.value);
+                    setAccountEmailDraft(e.target.value);
                   }}
                   placeholder="nouvelle@adresse.fr"
                 />
