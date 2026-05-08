@@ -1,5 +1,6 @@
 import type { Result } from '../types/api';
 import { getAdminContacts } from './api/admin';
+import { getHomeStats } from './api/home';
 import { getAccount, getPerson, getPersons } from './api/persons';
 import { getSponsor } from './api/sponsors';
 import { getTreePage } from './api/tree';
@@ -22,6 +23,14 @@ async function fetchAllTreePages() {
   );
   return [first.items, ...rest.map((r) => r.items)].flat();
 }
+
+export const homeQueries = {
+  stats: () => ({
+    queryKey: ['home-stats'] as const,
+    queryFn: () => getHomeStats().then(throwable),
+    staleTime: 5 * 60 * 1000,
+  }),
+};
 
 export const personQueries = {
   list: () => ({

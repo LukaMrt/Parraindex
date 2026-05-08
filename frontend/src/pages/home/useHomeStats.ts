@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { personQueries } from '../../lib/queries';
+import { homeQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import type { PromoGroup } from './types';
 
@@ -11,20 +11,17 @@ interface HomeStats {
 }
 
 export function useHomeStats(): HomeStats {
-  const { data: persons = [], isLoading } = useQuery(personQueries.list());
+  const { data, isLoading } = useQuery(homeQueries.stats());
 
-  const promoMap = new Map<number, number>();
-  for (const p of persons) {
-    promoMap.set(p.startYear, (promoMap.get(p.startYear) ?? 0) + 1);
-  }
-
-  const promoGroups: PromoGroup[] = Array.from(promoMap.entries())
-    .map(([year, count]) => ({ year, color: promoColor(year), count }))
-    .sort((a, b) => a.year - b.year);
+  const promoGroups: PromoGroup[] = (data?.promoGroups ?? []).map(({ startYear, count }) => ({
+    year: startYear,
+    color: promoColor(startYear),
+    count,
+  }));
 
   return {
-    totalPersons: persons.length,
-    totalPromos: promoGroups.length,
+    totalPersons: data?.totalPersons ?? 0,
+    totalPromos: data?.totalPromos ?? 0,
     promoGroups,
     loading: isLoading,
   };

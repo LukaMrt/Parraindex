@@ -122,6 +122,28 @@ class PersonRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * @return array<array{startYear: int, count: int}>
+     */
+    public function countByStartYear(): array
+    {
+        /** @var array<array{startYear: int, count: int}> $result */
+        $result = $this->createQueryBuilder('p')
+            ->select('p.startYear AS startYear, COUNT(p.id) AS count')
+            ->groupBy('p.startYear')
+            ->orderBy('p.startYear', 'ASC')
+            ->getQuery()
+            ->getScalarResult();
+
+        return array_map(
+            static fn (array $row): array => [
+                'startYear' => (int) $row['startYear'],
+                'count'     => (int) $row['count'],
+            ],
+            $result,
+        );
+    }
+
     public function getByEmail(string $email): ?Person
     {
         return $this->findOneBy(['email' => $email]);
