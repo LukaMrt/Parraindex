@@ -10,3 +10,4 @@ export { TabSwitcher } from './TabSwitcher';
 export { Breadcrumb } from './Breadcrumb';
 export { EmptyState } from './EmptyState';
 export { Skeleton } from './Skeleton';
+export { ToastContainer } from './Toast';

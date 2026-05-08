@@ -4,6 +4,7 @@ import type { ReactNode } from 'react';
 import { Navigate, useNavigate, useParams } from 'react-router';
 import { Avatar, Breadcrumb, Button, Card, Input, Skeleton, StatCard } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
+import { useNotification } from '../../hooks/useNotification';
 import {
   deletePerson,
   getAccount,
@@ -160,21 +161,20 @@ function AddSponsorForm({
   persons: PersonSummary[];
   onAdded: (s: SponsorSummary) => void;
 }) {
+  const { notify } = useNotification();
   const [role, setRole] = useState<'godChild' | 'godFather'>('godChild');
   const [otherPerson, setOtherPerson] = useState<PersonSummary | null>(null);
   const [type, setType] = useState<SponsorType>('CLASSIC');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
 
   async function handleAdd() {
     if (!otherPerson) {
-      setError('Sélectionnez une personne');
+      notify('warning', 'Sélectionnez une personne');
       return;
     }
     setSaving(true);
-    setError('');
 
     const result = await createSponsor({
       godFatherId: role === 'godFather' ? personId : otherPerson.id,
@@ -185,7 +185,7 @@ function AddSponsorForm({
     });
 
     if (!result.ok) {
-      setError(result.error.message);
+      notify('error', result.error.message);
       setSaving(false);
       return;
     }
@@ -200,6 +200,7 @@ function AddSponsorForm({
       date: result.data.date,
     });
 
+    notify('success', 'Parrainage ajouté');
     setOtherPerson(null);
     setDate('');
     setDescription('');
@@ -217,8 +218,6 @@ function AddSponsorForm({
       <p className="mb-3 text-[12px] font-semibold uppercase tracking-widest text-ink-3">
         Ajouter un parrainage
       </p>
-
-      {error && <p className="mb-3 text-[12px] text-red-600">{error}</p>}
 
       <div className="grid gap-3 sm:grid-cols-2">
         {/* Rôle */}
@@ -338,6 +337,7 @@ function SponsorRow({
   const startYear = new Date(sponsor.date ?? '').getFullYear() || 2020;
   const color = promoColor(startYear);
 
+  const { notify } = useNotification();
   const [deleting, setDeleting] = useState(false);
 
   const [editing, setEditing] = useState(false);
@@ -346,7 +346,6 @@ function SponsorRow({
   const [editDescription, setEditDescription] = useState('');
   const [loadingEdit, setLoadingEdit] = useState(false);
   const [saving, setSaving] = useState(false);
-  const [editError, setEditError] = useState('');
 
   const TYPE_OPTIONS: { value: SponsorType; label: string }[] = [
     { value: 'CLASSIC', label: 'IUT' },
@@ -357,8 +356,13 @@ function SponsorRow({
   function handleDelete() {
     setDeleting(true);
     void deleteSponsor(sponsor.id).then((result) => {
-      if (result.ok) onDelete(sponsor.id);
-      else setDeleting(false);
+      if (result.ok) {
+        onDelete(sponsor.id);
+        notify('success', 'Parrainage supprimé');
+      } else {
+        notify('error', result.error.message);
+        setDeleting(false);
+      }
     });
   }
 
@@ -366,7 +370,6 @@ function SponsorRow({
     setEditType(sponsor.type);
     setEditDate(sponsor.date ?? '');
     setEditDescription('');
-    setEditError('');
     setLoadingEdit(true);
     const result = await getSponsor(sponsor.id);
     if (result.ok) setEditDescription(result.data.description ?? '');
@@ -376,7 +379,6 @@ function SponsorRow({
 
   async function handleSaveEdit() {
     setSaving(true);
-    setEditError('');
     const result = await updateSponsor(sponsor.id, {
       godFatherId: sponsor.godFatherId,
       godChildId: sponsor.godChildId,
@@ -385,11 +387,12 @@ function SponsorRow({
       description: editDescription || null,
     });
     if (!result.ok) {
-      setEditError(result.error.message);
+      notify('error', result.error.message);
       setSaving(false);
       return;
     }
     onUpdate({ ...sponsor, type: result.data.type, date: result.data.date });
+    notify('success', 'Parrainage mis à jour');
     setEditing(false);
     setSaving(false);
   }
@@ -400,7 +403,6 @@ function SponsorRow({
         <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
           Modifier · {relatedName}
         </p>
-        {editError && <p className="mb-2 text-[12px] text-red-600">{editError}</p>}
         <div className="mb-3 flex flex-wrap gap-2">
           {TYPE_OPTIONS.map((o) => (
             <button
@@ -734,20 +736,19 @@ export function EditPersonPage() {
   const { id } = useParams<{ id: string }>();
   const { user } = useAuth();
   const navigate = useNavigate();
+  const { notify } = useNotification();
 
   const [person, setPerson] = useState<Person | null>(null);
   const [allPersons, setAllPersons] = useState<PersonSummary[]>([]);
   const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState('');
   const [saving, setSaving] = useState(false);
-  const [error, setError] = useState('');
 
   const [accountEmail, setAccountEmail] = useState<string | null>(null);
   const [accountCurrentPassword, setAccountCurrentPassword] = useState('');
   const [accountNewPassword, setAccountNewPassword] = useState('');
   const [accountConfirmPassword, setAccountConfirmPassword] = useState('');
   const [savingAccount, setSavingAccount] = useState(false);
-  const [accountError, setAccountError] = useState('');
-  const [accountSuccess, setAccountSuccess] = useState(false);
 
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -763,7 +764,7 @@ export function EditPersonPage() {
     void Promise.all([getPerson(Number(id)), getPersons(), getAccount(Number(id))]).then(
       ([personResult, personsResult, accountResult]) => {
         if (!personResult.ok) {
-          setError('Personne introuvable');
+          setLoadError('Personne introuvable');
           setLoading(false);
           return;
         }
@@ -786,7 +787,6 @@ export function EditPersonPage() {
     e.preventDefault();
     if (!person || !id) return;
     setSaving(true);
-    setError('');
 
     const data: PersonRequest = {
       firstName: user.isAdmin ? firstName : person.firstName,
@@ -798,7 +798,7 @@ export function EditPersonPage() {
 
     const updateResult = await updatePerson(Number(id), data);
     if (!updateResult.ok) {
-      setError(updateResult.error.message);
+      notify('error', updateResult.error.message);
       setSaving(false);
       return;
     }
@@ -806,7 +806,7 @@ export function EditPersonPage() {
     if (pendingPicture) {
       const picResult = await uploadPicture(Number(id), pendingPicture);
       if (!picResult.ok) {
-        setError(picResult.error.message);
+        notify('error', picResult.error.message);
         setSaving(false);
         return;
       }
@@ -818,12 +818,10 @@ export function EditPersonPage() {
   async function handleSaveAccount() {
     if (!person || !id) return;
     if (accountNewPassword && accountNewPassword !== accountConfirmPassword) {
-      setAccountError('Les mots de passe ne correspondent pas');
+      notify('error', 'Les mots de passe ne correspondent pas');
       return;
     }
     setSavingAccount(true);
-    setAccountError('');
-    setAccountSuccess(false);
 
     const isOwnProfile = user.person.id === person.id;
 
@@ -834,7 +832,7 @@ export function EditPersonPage() {
     });
 
     if (!result.ok) {
-      setAccountError(result.error.message);
+      notify('error', result.error.message);
       setSavingAccount(false);
       return;
     }
@@ -842,7 +840,7 @@ export function EditPersonPage() {
     setAccountCurrentPassword('');
     setAccountNewPassword('');
     setAccountConfirmPassword('');
-    setAccountSuccess(true);
+    notify('success', 'Compte mis à jour avec succès');
     setSavingAccount(false);
   }
 
@@ -854,7 +852,7 @@ export function EditPersonPage() {
     void deletePerson(Number(id)).then((result) => {
       if (result.ok) void navigate('/tree');
       else {
-        setError(result.error.message);
+        notify('error', result.error.message);
         setDeleting(false);
       }
     });
@@ -864,7 +862,7 @@ export function EditPersonPage() {
   if (!person) {
     return (
       <div className="flex min-h-[40vh] items-center justify-center text-[14px] text-ink-3">
-        {error || 'Personne introuvable.'}
+        {loadError || 'Personne introuvable.'}
       </div>
     );
   }
@@ -891,12 +889,6 @@ export function EditPersonPage() {
           ]}
           className="mb-6"
         />
-
-        {error && (
-          <div className="mb-5 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-700">
-            {error}
-          </div>
-        )}
 
         <EditPersonHero
           person={person}
@@ -1013,17 +1005,6 @@ export function EditPersonPage() {
           <Card radius="xl" padding="md" className="mb-5">
             <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Compte</h2>
 
-            {accountError && (
-              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-700">
-                {accountError}
-              </div>
-            )}
-            {accountSuccess && (
-              <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-[13px] text-green-700">
-                Compte mis à jour avec succès.
-              </div>
-            )}
-
             <div className="grid gap-3 sm:grid-cols-2">
               <div className="sm:col-span-2">
                 <FieldLabel>Nouvelle adresse e-mail universitaire</FieldLabel>
@@ -1032,7 +1013,6 @@ export function EditPersonPage() {
                   value={accountEmail}
                   onChange={(e) => {
                     setAccountEmail(e.target.value);
-                    setAccountSuccess(false);
                   }}
                   placeholder="nouvelle@adresse.fr"
                 />
@@ -1046,7 +1026,6 @@ export function EditPersonPage() {
                     value={accountCurrentPassword}
                     onChange={(e) => {
                       setAccountCurrentPassword(e.target.value);
-                      setAccountSuccess(false);
                     }}
                     placeholder="Requis pour modifier e-mail ou mot de passe"
                   />
@@ -1060,7 +1039,6 @@ export function EditPersonPage() {
                   value={accountNewPassword}
                   onChange={(e) => {
                     setAccountNewPassword(e.target.value);
-                    setAccountSuccess(false);
                   }}
                   placeholder="Laisser vide pour ne pas changer"
                 />
@@ -1073,7 +1051,6 @@ export function EditPersonPage() {
                   value={accountConfirmPassword}
                   onChange={(e) => {
                     setAccountConfirmPassword(e.target.value);
-                    setAccountSuccess(false);
                   }}
                   placeholder="Répéter le nouveau mot de passe"
                 />
