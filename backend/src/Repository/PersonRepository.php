@@ -103,11 +103,29 @@ class PersonRepository extends ServiceEntityRepository
      */
     public function findPaginated(int $offset, int $limit): array
     {
-        /** @var Person[] $result */
-        $result = $this->createQueryBuilder('p')
+        $ids = $this->createQueryBuilder('p')
+            ->select('p.id')
             ->orderBy('p.id', 'ASC')
             ->setFirstResult($offset)
             ->setMaxResults($limit)
+            ->getQuery()
+            ->getSingleColumnResult();
+
+        if ($ids === []) {
+            return [];
+        }
+
+        /** @var Person[] $result */
+        $result = $this->createQueryBuilder('p')
+            ->leftJoin('p.godFathers', 'gf')->addSelect('gf')
+            ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
+            ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
+            ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
+            ->leftJoin('p.characteristics', 'c')->addSelect('c')
+            ->leftJoin('c.characteristicType', 'ct')->addSelect('ct')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('p.id', 'ASC')
             ->getQuery()
             ->getResult();
 
