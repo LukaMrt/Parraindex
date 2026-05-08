@@ -34,11 +34,11 @@ final class SponsorVoter extends Voter
         }
 
         if ($attribute === self::EDIT) {
-            if ($subject->getGodChild()->equals($user->getPerson())) {
+            if ($subject->getGodChild()?->equals($user->getPerson()) === true) {
                 return true;
             }
 
-            return $subject->getGodFather()->equals($user->getPerson());
+            return $subject->getGodFather()?->equals($user->getPerson()) === true;
         }
 
         return false;

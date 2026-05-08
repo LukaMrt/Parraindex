@@ -99,6 +99,8 @@ final class SponsorApiControllerTest extends WebTestCase
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
         $sponsor = $this->getFirstSponsor();
 
+        $this->assertInstanceOf(Person::class, $sponsor->getGodFather());
+        $this->assertInstanceOf(Person::class, $sponsor->getGodChild());
         $this->client->jsonRequest('PUT', '/api/sponsors/' . $sponsor->getId(), [
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId'  => $sponsor->getGodChild()->getId(),
@@ -116,6 +118,8 @@ final class SponsorApiControllerTest extends WebTestCase
         $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
         $sponsor = $this->getFirstSponsor();
 
+        $this->assertInstanceOf(Person::class, $sponsor->getGodFather());
+        $this->assertInstanceOf(Person::class, $sponsor->getGodChild());
         $this->client->jsonRequest('PUT', '/api/sponsors/' . $sponsor->getId(), [
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId'  => $sponsor->getGodChild()->getId(),

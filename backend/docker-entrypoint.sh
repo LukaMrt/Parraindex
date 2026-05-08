@@ -24,6 +24,9 @@ php bin/console cache:warmup
 # Run migrations
 php bin/console doctrine:migrations:migrate --no-interaction
 
+# Publish bundle assets (EasyAdmin CSS/JS)
+php bin/console assets:install --no-interaction
+
 # Execute the original FrankenPHP entrypoint with CMD arguments
 echo "Starting FrankenPHP..."
 exec docker-php-entrypoint "$@"

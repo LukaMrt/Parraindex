@@ -22,12 +22,12 @@ export function Header() {
               Mon compte
             </Link>
             {user.isAdmin && (
-              <Link
-                to="/admin/contacts"
+              <a
+                href="/admin"
                 className="rounded-md px-3 py-1.5 text-ink-2 transition-colors hover:bg-bg hover:text-ink"
               >
                 Administration
-              </Link>
+              </a>
             )}
             <img
               src={pictureUrl(user.person.picture)}

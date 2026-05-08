@@ -17,7 +17,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 #[UniqueEntity(fields: ['firstName', 'lastName'], message: 'person.unique')]
-class Person
+class Person implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -338,5 +338,10 @@ class Person
     public function getFullName(): string
     {
         return ucfirst($this->getFirstName()) . ' ' . strtoupper($this->getLastName());
+    }
+
+    public function __toString(): string
+    {
+        return $this->getFullName();
     }
 }

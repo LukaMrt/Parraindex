@@ -50,11 +50,9 @@ class Sponsor
         return $this;
     }
 
-    public function getGodFather(): Person
+    public function getGodFather(): ?Person
     {
-        /** @var Person $godFather */
-        $godFather = $this->godFather;
-        return $godFather;
+        return $this->godFather;
     }
 
     public function setGodFather(?Person $person): static
@@ -64,11 +62,9 @@ class Sponsor
         return $this;
     }
 
-    public function getGodChild(): Person
+    public function getGodChild(): ?Person
     {
-        /** @var Person $godChild */
-        $godChild = $this->godChild;
-        return $godChild;
+        return $this->godChild;
     }
 
     public function setGodChild(?Person $person): static

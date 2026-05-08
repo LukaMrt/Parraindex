@@ -32,12 +32,15 @@ final readonly class SponsorService
 
     public function mapToResponseDto(Sponsor $sponsor): SponsorResponseDto
     {
+        $godFather = $sponsor->getGodFather() ?? throw new \LogicException('Sponsor has no godFather.');
+        $godChild  = $sponsor->getGodChild() ?? throw new \LogicException('Sponsor has no godChild.');
+
         return new SponsorResponseDto(
             id: (int) $sponsor->getId(),
-            godFatherId: $sponsor->getGodFather()->getId(),
-            godFatherName: $sponsor->getGodFather()->getFullName(),
-            godChildId: $sponsor->getGodChild()->getId(),
-            godChildName: $sponsor->getGodChild()->getFullName(),
+            godFatherId: $godFather->getId(),
+            godFatherName: $godFather->getFullName(),
+            godChildId: $godChild->getId(),
+            godChildName: $godChild->getFullName(),
             type: $sponsor->getType()->name ?? '',
             date: $sponsor->getDate()?->format('Y-m-d'),
             description: $sponsor->getDescription(),

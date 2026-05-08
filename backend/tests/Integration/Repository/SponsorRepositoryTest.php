@@ -81,6 +81,8 @@ final class SponsorRepositoryTest extends KernelTestCase
 
         // Then
         $this->assertInstanceOf(Sponsor::class, $result);
+        $this->assertInstanceOf(Person::class, $result->getGodFather());
+        $this->assertInstanceOf(Person::class, $result->getGodChild());
         $this->assertSame($godFather->getId(), $result->getGodFather()->getId());
         $this->assertSame($godChild->getId(), $result->getGodChild()->getId());
     }

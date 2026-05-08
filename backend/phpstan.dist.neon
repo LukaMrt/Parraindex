@@ -41,5 +41,4 @@ parameters:
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
     checkDynamicProperties: true
 
-    # Ignore specific error messages (if needed)
     # ignoreErrors:

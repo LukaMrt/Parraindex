@@ -10,8 +10,18 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|scripts)/
             security: false
+        admin:
+            pattern: ^/admin
+            context: main
+            provider: app_user_provider
+            stateless: false
+            entry_point: App\Security\AdminEntryPoint
+            logout:
+                path: app_admin_logout
+                target: /login
         api:
             pattern: ^/api/
+            context: main
             provider: app_user_provider
             stateless: false
             json_login:
@@ -21,6 +31,7 @@ security:
                 failure_handler: App\Security\ApiAuthenticationFailureHandler
 
     access_control:
+        - { path: ^/admin, roles: ROLE_ADMIN }
         - { path: ^/api/admin, roles: ROLE_ADMIN }
 
 when@test:

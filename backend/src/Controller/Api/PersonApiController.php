@@ -218,10 +218,10 @@ final class PersonApiController extends AbstractController
     public function batch(Request $request): JsonResponse
     {
         /** @var array<string, mixed>|null $body */
-        $body = json_decode((string) $request->getContent(), true);
+        $body   = json_decode((string) $request->getContent(), true);
         $rawIds = isset($body['ids']) && is_array($body['ids']) ? $body['ids'] : [];
         /** @var int[] $ids */
-        $ids    = array_filter(array_map(static fn(mixed $v): int|false => is_numeric($v) ? (int) $v : false, $rawIds));
+        $ids = array_filter(array_map(static fn(mixed $v): int|false => is_numeric($v) ? (int) $v : false, $rawIds));
 
         if ($ids === []) {
             return ApiResponse::success([]);
