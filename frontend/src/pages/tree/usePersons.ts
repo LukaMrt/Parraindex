@@ -25,11 +25,11 @@ export function usePersons(): PersonsState {
   useEffect(() => {
     if (queryClient.getQueryData<Person[]>(QUERY_KEY)) return;
 
-    const ctl = { cancelled: false };
+    const ac = new AbortController();
 
     async function load() {
       const first = throwable(await getTreePage(1, PAGE_SIZE));
-      if (ctl.cancelled) return;
+      if (ac.signal.aborted) return;
 
       setPersons(first.items);
       setLoading(false);
@@ -45,7 +45,8 @@ export function usePersons(): PersonsState {
 
       for (let i = 2; i <= pages; i++) {
         const page = throwable(await getTreePage(i, PAGE_SIZE));
-        if (ctl.cancelled) return;
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+        if (ac.signal.aborted) return;
         all.push(...page.items);
         setPersons([...all]);
       }
@@ -56,7 +57,7 @@ export function usePersons(): PersonsState {
 
     load().catch(console.error);
     return () => {
-      ctl.cancelled = true;
+      ac.abort();
     };
   }, [queryClient]);
 
