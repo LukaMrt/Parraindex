@@ -13,7 +13,7 @@ import {
   updatePerson,
   uploadPicture,
 } from '../../lib/api/persons';
-import { createSponsor, deleteSponsor } from '../../lib/api/sponsors';
+import { createSponsor, deleteSponsor, getSponsor, updateSponsor } from '../../lib/api/sponsors';
 import { promoColor } from '../../lib/colors';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
 import type { Person, PersonRequest, PersonSummary } from '../../types/person';
@@ -325,44 +325,141 @@ function SponsorRow({
   sponsor,
   personId,
   onDelete,
+  onUpdate,
 }: {
   sponsor: SponsorSummary;
   personId: number;
   onDelete: (id: number) => void;
+  onUpdate: (updated: SponsorSummary) => void;
 }) {
   const isGodFather = sponsor.godFatherId === personId;
   const relatedName = isGodFather ? sponsor.godChildName : sponsor.godFatherName;
   const role = isGodFather ? 'Fillot' : 'Parrain';
   const startYear = new Date(sponsor.date ?? '').getFullYear() || 2020;
   const color = promoColor(startYear);
-  const [confirm, setConfirm] = useState(false);
+
   const [deleting, setDeleting] = useState(false);
-  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  useEffect(
-    () => () => {
-      if (timerRef.current) clearTimeout(timerRef.current);
-    },
-    [],
-  );
+  const [editing, setEditing] = useState(false);
+  const [editType, setEditType] = useState<SponsorType>(sponsor.type);
+  const [editDate, setEditDate] = useState(sponsor.date ?? '');
+  const [editDescription, setEditDescription] = useState('');
+  const [loadingEdit, setLoadingEdit] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [editError, setEditError] = useState('');
 
-  function handleDeleteClick() {
-    if (!confirm) {
-      setConfirm(true);
-      timerRef.current = setTimeout(() => {
-        setConfirm(false);
-      }, 5000);
-      return;
-    }
-    if (timerRef.current) clearTimeout(timerRef.current);
+  const TYPE_OPTIONS: { value: SponsorType; label: string }[] = [
+    { value: 'CLASSIC', label: 'IUT' },
+    { value: 'HEART', label: 'De cœur' },
+    { value: 'UNKNOWN', label: 'Inconnu' },
+  ];
+
+  function handleDelete() {
     setDeleting(true);
     void deleteSponsor(sponsor.id).then((result) => {
       if (result.ok) onDelete(sponsor.id);
-      else {
-        setDeleting(false);
-        setConfirm(false);
-      }
+      else setDeleting(false);
     });
+  }
+
+  async function handleEditOpen() {
+    setEditType(sponsor.type);
+    setEditDate(sponsor.date ?? '');
+    setEditDescription('');
+    setEditError('');
+    setLoadingEdit(true);
+    const result = await getSponsor(sponsor.id);
+    if (result.ok) setEditDescription(result.data.description ?? '');
+    setLoadingEdit(false);
+    setEditing(true);
+  }
+
+  async function handleSaveEdit() {
+    setSaving(true);
+    setEditError('');
+    const result = await updateSponsor(sponsor.id, {
+      godFatherId: sponsor.godFatherId,
+      godChildId: sponsor.godChildId,
+      type: editType,
+      date: editDate || null,
+      description: editDescription || null,
+    });
+    if (!result.ok) {
+      setEditError(result.error.message);
+      setSaving(false);
+      return;
+    }
+    onUpdate({ ...sponsor, type: result.data.type, date: result.data.date });
+    setEditing(false);
+    setSaving(false);
+  }
+
+  if (editing) {
+    return (
+      <div className="rounded-xl border border-ink-3 bg-surface p-3">
+        <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
+          Modifier · {relatedName}
+        </p>
+        {editError && <p className="mb-2 text-[12px] text-red-600">{editError}</p>}
+        <div className="mb-3 flex flex-wrap gap-2">
+          {TYPE_OPTIONS.map((o) => (
+            <button
+              key={o.value}
+              type="button"
+              onClick={() => {
+                setEditType(o.value);
+              }}
+              className={`rounded-[9px] border px-2.5 py-1 text-[12px] font-medium transition-colors cursor-pointer ${
+                editType === o.value
+                  ? 'border-ink bg-ink text-white'
+                  : 'border-line bg-bg text-ink-2 hover:border-ink-3'
+              }`}
+            >
+              {SPONSOR_TYPE_ICONS[o.value]} {o.label}
+            </button>
+          ))}
+        </div>
+        <Input
+          type="date"
+          value={editDate}
+          onChange={(e) => {
+            setEditDate(e.target.value);
+          }}
+          className="mb-3"
+        />
+        <div className="mb-3">
+          <FieldLabel>Description (optionnel)</FieldLabel>
+          {loadingEdit ? (
+            <div className="h-16 animate-pulse rounded-[9px] bg-bg" />
+          ) : (
+            <textarea
+              value={editDescription}
+              onChange={(e) => {
+                setEditDescription(e.target.value);
+              }}
+              rows={2}
+              placeholder="Anecdote, contexte…"
+              className="w-full resize-none rounded-[9px] border border-line bg-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-ink-2"
+            />
+          )}
+        </div>
+        <div className="flex justify-end gap-2">
+          <Button
+            type="button"
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              setEditing(false);
+            }}
+          >
+            Annuler
+          </Button>
+          <Button type="button" size="sm" disabled={saving} onClick={() => void handleSaveEdit()}>
+            {saving ? 'Enregistrement…' : 'Enregistrer'}
+          </Button>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -385,23 +482,40 @@ function SponsorRow({
           {sponsor.date && ` · ${new Date(sponsor.date).getFullYear()}`}
         </p>
       </div>
-      <button
+      {/* Bouton éditer */}
+      <Button
         type="button"
-        disabled={deleting}
-        onClick={handleDeleteClick}
-        className={`shrink-0 cursor-pointer rounded-lg transition-all disabled:cursor-not-allowed disabled:opacity-40 ${
-          confirm
-            ? 'bg-red-500 px-2.5 py-1 text-[11.5px] font-semibold text-white hover:bg-red-600'
-            : 'p-1.5 text-ink-4 hover:bg-bg hover:text-red-500'
-        }`}
-      >
-        {confirm ? (
-          deleting ? (
-            '…'
-          ) : (
-            'Confirmer'
-          )
-        ) : (
+        variant="ghost"
+        size="sm"
+        loading={loadingEdit}
+        icon={
+          <svg
+            width="15"
+            height="15"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+            <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+          </svg>
+        }
+        onClick={() => void handleEditOpen()}
+        className="shrink-0 text-ink-4"
+        title="Modifier ce parrainage"
+      />
+      {/* Bouton supprimer */}
+      <Button
+        type="button"
+        variant="ghost"
+        confirmVariant="danger"
+        size="sm"
+        confirm
+        loading={deleting}
+        icon={
           <svg
             width="15"
             height="15"
@@ -417,8 +531,10 @@ function SponsorRow({
             <path d="M10 11v6M14 11v6" />
             <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
           </svg>
-        )}
-      </button>
+        }
+        onClick={handleDelete}
+        className="shrink-0 text-ink-4"
+      />
     </div>
   );
 }
@@ -730,11 +846,18 @@ export function EditPersonPage() {
     setSavingAccount(false);
   }
 
-  async function handleDelete() {
-    if (!id || !window.confirm('Supprimer définitivement ce profil ?')) return;
-    const result = await deletePerson(Number(id));
-    if (result.ok) void navigate('/tree');
-    else setError(result.error.message);
+  const [deleting, setDeleting] = useState(false);
+
+  function handleDelete() {
+    if (!id) return;
+    setDeleting(true);
+    void deletePerson(Number(id)).then((result) => {
+      if (result.ok) void navigate('/tree');
+      else {
+        setError(result.error.message);
+        setDeleting(false);
+      }
+    });
   }
 
   if (loading) return <EditPersonPageSkeleton />;
@@ -811,7 +934,7 @@ export function EditPersonPage() {
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
                 Parrains
               </p>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-2 sm:grid-cols-2 sm:items-start">
                 {godFathers.map((s) => (
                   <SponsorRow
                     key={s.id}
@@ -819,6 +942,9 @@ export function EditPersonPage() {
                     personId={person.id}
                     onDelete={(sid) => {
                       setSponsors((prev) => prev.filter((x) => x.id !== sid));
+                    }}
+                    onUpdate={(updated) => {
+                      setSponsors((prev) => prev.map((x) => (x.id === updated.id ? updated : x)));
                     }}
                   />
                 ))}
@@ -831,7 +957,7 @@ export function EditPersonPage() {
               <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
                 Fillots
               </p>
-              <div className="grid gap-2 sm:grid-cols-2">
+              <div className="grid gap-2 sm:grid-cols-2 sm:items-start">
                 {godChildren.map((s) => (
                   <SponsorRow
                     key={s.id}
@@ -839,6 +965,9 @@ export function EditPersonPage() {
                     personId={person.id}
                     onDelete={(sid) => {
                       setSponsors((prev) => prev.filter((x) => x.id !== sid));
+                    }}
+                    onUpdate={(updated) => {
+                      setSponsors((prev) => prev.map((x) => (x.id === updated.id ? updated : x)));
                     }}
                   />
                 ))}
@@ -865,7 +994,14 @@ export function EditPersonPage() {
               <p className="text-[13px] text-ink-3">
                 Supprime définitivement ce profil et tous ses parrainages.
               </p>
-              <Button type="button" variant="danger" size="sm" onClick={() => void handleDelete()}>
+              <Button
+                type="button"
+                variant="danger"
+                size="sm"
+                confirm
+                loading={deleting}
+                onClick={handleDelete}
+              >
                 Supprimer ce profil
               </Button>
             </div>
