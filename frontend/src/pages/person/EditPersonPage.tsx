@@ -6,8 +6,10 @@ import { Avatar, Breadcrumb, Button, Card, Input, Skeleton, StatCard } from '../
 import { useAuth } from '../../hooks/useAuth';
 import {
   deletePerson,
+  getAccount,
   getPerson,
   getPersons,
+  updateAccount,
   updatePerson,
   uploadPicture,
 } from '../../lib/api/persons';
@@ -623,6 +625,14 @@ export function EditPersonPage() {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
 
+  const [accountEmail, setAccountEmail] = useState<string | null>(null);
+  const [accountCurrentPassword, setAccountCurrentPassword] = useState('');
+  const [accountNewPassword, setAccountNewPassword] = useState('');
+  const [accountConfirmPassword, setAccountConfirmPassword] = useState('');
+  const [savingAccount, setSavingAccount] = useState(false);
+  const [accountError, setAccountError] = useState('');
+  const [accountSuccess, setAccountSuccess] = useState(false);
+
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
   const [startYear, setStartYear] = useState(new Date().getFullYear());
@@ -634,8 +644,8 @@ export function EditPersonPage() {
 
   useEffect(() => {
     if (!id) return;
-    void Promise.all([getPerson(Number(id)), getPersons()]).then(
-      ([personResult, personsResult]) => {
+    void Promise.all([getPerson(Number(id)), getPersons(), getAccount(Number(id))]).then(
+      ([personResult, personsResult, accountResult]) => {
         if (!personResult.ok) {
           setError('Personne introuvable');
           setLoading(false);
@@ -650,6 +660,7 @@ export function EditPersonPage() {
         setDescription(p.description ?? '');
         setSponsors([...p.godFathers, ...p.godChildren]);
         if (personsResult.ok) setAllPersons(personsResult.data);
+        if (accountResult.ok) setAccountEmail(accountResult.data.email ?? '');
         setLoading(false);
       },
     );
@@ -686,6 +697,37 @@ export function EditPersonPage() {
     }
 
     void navigate(`/person/${id}`);
+  }
+
+  async function handleSaveAccount() {
+    if (!person || !id) return;
+    if (accountNewPassword && accountNewPassword !== accountConfirmPassword) {
+      setAccountError('Les mots de passe ne correspondent pas');
+      return;
+    }
+    setSavingAccount(true);
+    setAccountError('');
+    setAccountSuccess(false);
+
+    const isOwnProfile = user.person.id === person.id;
+
+    const result = await updateAccount(person.id, {
+      email: accountEmail !== '' ? accountEmail : undefined,
+      currentPassword: isOwnProfile ? accountCurrentPassword || undefined : undefined,
+      newPassword: accountNewPassword || undefined,
+    });
+
+    if (!result.ok) {
+      setAccountError(result.error.message);
+      setSavingAccount(false);
+      return;
+    }
+
+    setAccountCurrentPassword('');
+    setAccountNewPassword('');
+    setAccountConfirmPassword('');
+    setAccountSuccess(true);
+    setSavingAccount(false);
   }
 
   async function handleDelete() {
@@ -830,6 +872,91 @@ export function EditPersonPage() {
           </Card>
         )}
 
+        {/* Compte */}
+        {accountEmail !== null && (
+          <Card radius="xl" padding="md" className="mb-5">
+            <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Compte</h2>
+
+            {accountError && (
+              <div className="mb-4 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] text-red-700">
+                {accountError}
+              </div>
+            )}
+            {accountSuccess && (
+              <div className="mb-4 rounded-xl border border-green-200 bg-green-50 px-4 py-3 text-[13px] text-green-700">
+                Compte mis à jour avec succès.
+              </div>
+            )}
+
+            <div className="grid gap-3 sm:grid-cols-2">
+              <div className="sm:col-span-2">
+                <FieldLabel>Nouvelle adresse e-mail universitaire</FieldLabel>
+                <Input
+                  type="email"
+                  value={accountEmail}
+                  onChange={(e) => {
+                    setAccountEmail(e.target.value);
+                    setAccountSuccess(false);
+                  }}
+                  placeholder="nouvelle@adresse.fr"
+                />
+              </div>
+
+              {user.person.id === person.id && (
+                <div className="sm:col-span-2">
+                  <FieldLabel>Mot de passe actuel</FieldLabel>
+                  <Input
+                    type="password"
+                    value={accountCurrentPassword}
+                    onChange={(e) => {
+                      setAccountCurrentPassword(e.target.value);
+                      setAccountSuccess(false);
+                    }}
+                    placeholder="Requis pour modifier e-mail ou mot de passe"
+                  />
+                </div>
+              )}
+
+              <div>
+                <FieldLabel>Nouveau mot de passe</FieldLabel>
+                <Input
+                  type="password"
+                  value={accountNewPassword}
+                  onChange={(e) => {
+                    setAccountNewPassword(e.target.value);
+                    setAccountSuccess(false);
+                  }}
+                  placeholder="Laisser vide pour ne pas changer"
+                />
+              </div>
+
+              <div>
+                <FieldLabel>Confirmer le mot de passe</FieldLabel>
+                <Input
+                  type="password"
+                  value={accountConfirmPassword}
+                  onChange={(e) => {
+                    setAccountConfirmPassword(e.target.value);
+                    setAccountSuccess(false);
+                  }}
+                  placeholder="Répéter le nouveau mot de passe"
+                />
+              </div>
+            </div>
+
+            <div className="mt-4 flex justify-end">
+              <Button
+                type="button"
+                size="sm"
+                disabled={savingAccount || (!accountEmail && !accountNewPassword)}
+                onClick={() => void handleSaveAccount()}
+              >
+                {savingAccount ? 'Enregistrement…' : 'Mettre à jour le compte'}
+              </Button>
+            </div>
+          </Card>
+        )}
+
         {/* Barre d'actions */}
         <div className="flex items-center justify-between border-t border-line pt-5">
           <Button
@@ -841,12 +968,6 @@ export function EditPersonPage() {
             ← Annuler
           </Button>
           <div className="flex items-center gap-3">
-            <a
-              href={`/api/persons/${person.id}/export`}
-              className="inline-flex h-9 items-center gap-1.5 rounded-[9px] border border-line bg-surface px-4 text-sm text-ink-2 transition-colors hover:border-ink-2 hover:text-ink"
-            >
-              Exporter mes données
-            </a>
             <Button type="submit" disabled={saving}>
               {saving ? 'Enregistrement…' : 'Enregistrer'}
             </Button>

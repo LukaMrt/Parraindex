@@ -12,13 +12,16 @@ use App\Api\ErrorCode;
 use App\Dto\Person\PersonRequestDto;
 use App\Entity\Person\Person;
 use App\Entity\Person\Role;
+use App\Entity\Person\User;
 use App\Security\Voter\PersonVoter;
 use App\Service\PersonService;
+use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -26,6 +29,7 @@ final class PersonApiController extends AbstractController
 {
     public function __construct(
         private readonly PersonService $personService,
+        private readonly UserService $userService,
     ) {
     }
 
@@ -89,6 +93,7 @@ final class PersonApiController extends AbstractController
     #[IsGranted(Role::ADMIN->value)]
     public function delete(Person $person): JsonResponse
     {
+        $this->userService->deleteByPersonId($person->getId());
         $this->personService->delete($person);
 
         return ApiResponse::success(null, Response::HTTP_NO_CONTENT);
@@ -124,6 +129,89 @@ final class PersonApiController extends AbstractController
         $this->personService->update($person);
 
         return ApiResponse::success(['picture' => $filename]);
+    }
+
+    #[Route('/api/persons/{id}/account', name: 'api_persons_get_account', methods: ['GET'])]
+    public function getAccount(Person $person, #[CurrentUser] ?User $currentUser): JsonResponse
+    {
+        if (!$currentUser instanceof User) {
+            return ApiResponse::unauthorized();
+        }
+
+        $isOwnProfile = $currentUser->getPerson()?->getId() === $person->getId();
+
+        if (!$isOwnProfile && !$currentUser->isAdmin()) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Accès refusé'),
+                Response::HTTP_FORBIDDEN,
+            );
+        }
+
+        $targetUser = $this->userService->findByPersonId($person->getId());
+
+        if (!$targetUser instanceof User) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Aucun compte associé à cette personne'),
+                Response::HTTP_NOT_FOUND,
+            );
+        }
+
+        return ApiResponse::success(['email' => $targetUser->getEmail()]);
+    }
+
+    #[Route('/api/persons/{id}/account', name: 'api_persons_update_account', methods: ['PATCH'])]
+    public function updateAccount(Person $person, Request $request, #[CurrentUser] ?User $currentUser): JsonResponse
+    {
+        if (!$currentUser instanceof User) {
+            return ApiResponse::unauthorized();
+        }
+
+        $isOwnProfile = $currentUser->getPerson()?->getId() === $person->getId();
+        $isAdmin      = $currentUser->isAdmin();
+
+        if (!$isOwnProfile && !$isAdmin) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Accès refusé'),
+                Response::HTTP_FORBIDDEN,
+            );
+        }
+
+        /** @var array<string, mixed>|null $data */
+        $data = json_decode((string) $request->getContent(), true);
+
+        if (!is_array($data)) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Corps de requête invalide'),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
+
+        $targetUser = $this->userService->findByPersonId($person->getId());
+
+        if (!$targetUser instanceof User) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Aucun compte associé à cette personne'),
+                Response::HTTP_NOT_FOUND,
+            );
+        }
+
+        $newEmail        = isset($data['email']) && is_string($data['email']) ? $data['email'] : null;
+        $currentPassword = isset($data['currentPassword']) && is_string($data['currentPassword']) ? $data['currentPassword'] : null;
+        $newPassword     = isset($data['newPassword']) && is_string($data['newPassword']) ? $data['newPassword'] : null;
+
+        // Admins editing another user's account don't need the current password
+        $skipPasswordCheck = $isAdmin && !$isOwnProfile;
+
+        try {
+            $this->userService->updateCredentials($targetUser, $newEmail, $currentPassword, $newPassword, $skipPasswordCheck);
+        } catch (\RuntimeException $runtimeException) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, $runtimeException->getMessage()),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
+
+        return ApiResponse::success(null);
     }
 
     #[Route('/api/persons/{id}/export', name: 'api_persons_export', methods: ['GET'])]

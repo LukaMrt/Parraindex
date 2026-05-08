@@ -1,4 +1,4 @@
-import { get, put, del, postFormData } from './client';
+import { get, put, patch, del, postFormData } from './client';
 import type { Person, PersonSummary, PersonRequest } from '../../types/person';
 import type { Result } from '../../types/api';
 
@@ -24,6 +24,20 @@ export function uploadPicture(id: number, file: File): Promise<Result<{ picture:
   const formData = new FormData();
   formData.append('picture', file);
   return postFormData<{ picture: string }>(`/api/persons/${id}/picture`, formData);
+}
+
+export interface AccountUpdateRequest {
+  email?: string;
+  currentPassword?: string;
+  newPassword?: string;
+}
+
+export function getAccount(personId: number): Promise<Result<{ email: string | null }>> {
+  return get<{ email: string | null }>(`/api/persons/${personId}/account`);
+}
+
+export function updateAccount(personId: number, data: AccountUpdateRequest): Promise<Result<null>> {
+  return patch<null>(`/api/persons/${personId}/account`, data);
 }
 
 export function exportPersonData(id: number): Promise<Result<Person>> {

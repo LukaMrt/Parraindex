@@ -31,6 +31,25 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    public function delete(User $user): void
+    {
+        $this->getEntityManager()->remove($user);
+        $this->getEntityManager()->flush();
+    }
+
+    public function findByPerson(int $personId): ?User
+    {
+        /** @var User|null $result */
+        $result = $this->createQueryBuilder('u')
+            ->join('u.person', 'p')
+            ->where('p.id = :personId')
+            ->setParameter('personId', $personId)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $result;
+    }
+
     #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {

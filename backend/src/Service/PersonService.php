@@ -136,7 +136,7 @@ final readonly class PersonService
             godFatherName: $sponsor->getGodFather()->getFullName(),
             godChildId: $sponsor->getGodChild()->getId(),
             godChildName: $sponsor->getGodChild()->getFullName(),
-            type: $sponsor->getType()?->name ?? '',
+            type: $sponsor->getType()->name ?? '',
             date: $sponsor->getDate()?->format('Y-m-d'),
         );
     }

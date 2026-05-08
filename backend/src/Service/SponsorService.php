@@ -38,7 +38,7 @@ final readonly class SponsorService
             godFatherName: $sponsor->getGodFather()->getFullName(),
             godChildId: $sponsor->getGodChild()->getId(),
             godChildName: $sponsor->getGodChild()->getFullName(),
-            type: $sponsor->getType()?->name ?? '',
+            type: $sponsor->getType()->name ?? '',
             date: $sponsor->getDate()?->format('Y-m-d'),
             description: $sponsor->getDescription(),
         );

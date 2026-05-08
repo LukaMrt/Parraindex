@@ -54,6 +54,62 @@ final readonly class UserService
         $this->userRepository->update($user);
     }
 
+    public function deleteByPersonId(int $personId): void
+    {
+        $user = $this->userRepository->findByPerson($personId);
+
+        if ($user instanceof User) {
+            $this->userRepository->delete($user);
+        }
+    }
+
+    public function findByPersonId(int $personId): ?User
+    {
+        return $this->userRepository->findByPerson($personId);
+    }
+
+    /**
+     * @throws \RuntimeException if the current password is wrong, email is invalid, or password is too weak.
+     */
+    public function updateCredentials(
+        User $user,
+        ?string $newEmail,
+        ?string $currentPassword,
+        ?string $newPassword,
+        bool $skipCurrentPasswordCheck = false,
+    ): void {
+        $changingPassword = $newPassword !== null && $newPassword !== '';
+        $changingEmail    = !in_array($newEmail, [null, '', $user->getEmail()], true);
+
+        if (!$changingEmail && !$changingPassword) {
+            return;
+        }
+
+        if (!$skipCurrentPasswordCheck) {
+            if ($currentPassword === null || $currentPassword === '') {
+                throw new \RuntimeException('Le mot de passe actuel est requis');
+            }
+
+            if (!$this->passwordHasher->isPasswordValid($user, $currentPassword)) {
+                throw new \RuntimeException('Mot de passe actuel incorrect');
+            }
+        }
+
+        if ($changingEmail) {
+            $user->setEmail($newEmail);
+        }
+
+        if ($changingPassword) {
+            if (strlen($newPassword) < 6) {
+                throw new \RuntimeException('Le mot de passe doit faire au moins 6 caractères');
+            }
+
+            $user->setPassword($this->passwordHasher->hashPassword($user, $newPassword));
+        }
+
+        $this->userRepository->update($user);
+    }
+
     public function sendVerificationEmail(User $user): void
     {
         $this->emailVerifier->sendEmailConfirmation('api_auth_verify_email', $user);
