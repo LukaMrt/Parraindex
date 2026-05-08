@@ -13,9 +13,9 @@ vi.mock('../lib/api/auth', () => ({
 
 import * as authApi from '../lib/api/auth';
 import type { Me } from '../types/auth';
-import type { PersonSummary } from '../types/person';
+import type { Person } from '../types/person';
 
-const mockPerson: PersonSummary = {
+const mockPerson: Person = {
   id: 42,
   firstName: 'Alice',
   lastName: 'Dupont',

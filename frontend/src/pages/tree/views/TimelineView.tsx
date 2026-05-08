@@ -2,7 +2,7 @@ import { useMemo, type CSSProperties } from 'react';
 import { Avatar, Skeleton } from '../../../components/ui';
 import { usePersonNavigation } from '../../../hooks/usePersonNavigation';
 import { promoColor } from '../../../lib/colors';
-import type { PersonSummary } from '../../../types/person';
+import type { Person } from '../../../types/person';
 
 const SKELETON_GROUPS = [
   { year: 0, count: 5 },
@@ -22,7 +22,7 @@ function TimelinePersonSkeleton() {
   );
 }
 
-function TimelinePerson({ person }: { person: PersonSummary }) {
+function TimelinePerson({ person }: { person: Person }) {
   const { navigateTo, isPending } = usePersonNavigation();
   const color = promoColor(person.startYear);
 
@@ -62,13 +62,13 @@ function TimelinePerson({ person }: { person: PersonSummary }) {
 }
 
 interface TimelineViewProps {
-  persons: PersonSummary[];
+  persons: Person[];
   loading: boolean;
 }
 
 export function TimelineView({ persons, loading }: TimelineViewProps) {
   const groups = useMemo(() => {
-    const map = new Map<number, PersonSummary[]>();
+    const map = new Map<number, Person[]>();
     for (const p of persons) {
       const list = map.get(p.startYear) ?? [];
       list.push(p);

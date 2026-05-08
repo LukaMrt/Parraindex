@@ -6,22 +6,19 @@ namespace App\Service;
 
 use App\Dto\Person\CharacteristicDto;
 use App\Dto\Person\PersonResponseDto;
-use App\Dto\Person\PersonSummaryDto;
-use App\Dto\Sponsor\SponsorSummaryDto;
+use App\Dto\Sponsor\SponsorResponseDto;
 use App\Entity\Characteristic\Characteristic;
 use App\Entity\Characteristic\CharacteristicType;
 use App\Entity\Person\Person;
 use App\Entity\Sponsor\Sponsor;
 use App\Repository\CharacteristicTypeRepository;
 use App\Repository\PersonRepository;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 
 final readonly class PersonService
 {
     public function __construct(
         private PersonRepository $personRepository,
         private CharacteristicTypeRepository $characteristicTypeRepository,
-        private ObjectMapperInterface $objectMapper,
     ) {
     }
 
@@ -98,14 +95,6 @@ final readonly class PersonService
         return $people;
     }
 
-    public function mapToSummaryDto(Person $person): PersonSummaryDto
-    {
-        /** @var PersonSummaryDto $dto */
-        $dto = $this->objectMapper->map($person, PersonSummaryDto::class);
-
-        return $dto;
-    }
-
     public function mapToResponseDto(Person $person): PersonResponseDto
     {
         return new PersonResponseDto(
@@ -119,8 +108,8 @@ final readonly class PersonService
             birthdate: $person->getBirthdate()?->format('Y-m-d'),
             biography: $person->getBiography(),
             description: $person->getDescription(),
-            godFathers: array_map($this->mapSponsorToSummaryDto(...), $person->getGodFathers()->toArray()),
-            godChildren: array_map($this->mapSponsorToSummaryDto(...), $person->getGodChildren()->toArray()),
+            godFathers: array_map($this->mapSponsorToResponseDto(...), $person->getGodFathers()->toArray()),
+            godChildren: array_map($this->mapSponsorToResponseDto(...), $person->getGodChildren()->toArray()),
             characteristics: array_filter(
                 array_map($this->mapCharacteristicToDto(...), $person->getCharacteristics()->toArray()),
                 static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto,
@@ -128,9 +117,9 @@ final readonly class PersonService
         );
     }
 
-    private function mapSponsorToSummaryDto(Sponsor $sponsor): SponsorSummaryDto
+    private function mapSponsorToResponseDto(Sponsor $sponsor): SponsorResponseDto
     {
-        return new SponsorSummaryDto(
+        return new SponsorResponseDto(
             id: (int) $sponsor->getId(),
             godFatherId: $sponsor->getGodFather()->getId(),
             godFatherName: $sponsor->getGodFather()->getFullName(),
@@ -138,6 +127,7 @@ final readonly class PersonService
             godChildName: $sponsor->getGodChild()->getFullName(),
             type: $sponsor->getType()->name ?? '',
             date: $sponsor->getDate()?->format('Y-m-d'),
+            description: $sponsor->getDescription(),
         );
     }
 

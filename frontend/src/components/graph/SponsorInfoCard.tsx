@@ -1,11 +1,9 @@
-import { useQuery } from '@tanstack/react-query';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
-import { sponsorQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
-import type { SponsorSummary } from '../../types/sponsor';
+import type { Sponsor } from '../../types/sponsor';
 
 interface SponsorInfoCardProps {
-  summary: SponsorSummary;
+  summary: Sponsor;
   godFatherStartYear?: number;
   onClose: () => void;
   position?: 'bottom-right' | 'top-right';
@@ -17,12 +15,9 @@ export function SponsorInfoCard({
   onClose,
   position = 'bottom-right',
 }: SponsorInfoCardProps) {
-  const { data: sponsor, isLoading: loading } = useQuery(sponsorQueries.detail(summary.id));
-
-  const resolved = sponsor ?? summary;
-  const typeIcon = SPONSOR_TYPE_ICONS[resolved.type];
-  const typeLabel = SPONSOR_TYPE_LABELS[resolved.type];
-  const rawDate = resolved.date;
+  const typeIcon = SPONSOR_TYPE_ICONS[summary.type];
+  const typeLabel = SPONSOR_TYPE_LABELS[summary.type];
+  const rawDate = summary.date;
   const date = rawDate
     ? new Date(rawDate).toLocaleDateString('fr-FR', { year: 'numeric', month: 'long' })
     : null;
@@ -42,14 +37,8 @@ export function SponsorInfoCard({
         style={{ borderBottom: `1px solid ${color}30`, background: `${color}10` }}
       >
         <div className="flex items-center gap-1.5 text-[12px] font-semibold" style={{ color }}>
-          {loading && resolved.type === 'UNKNOWN' ? (
-            <div className="h-3 w-32 animate-pulse rounded bg-line" />
-          ) : (
-            <>
-              <span className="text-base">{typeIcon}</span>
-              <span>Parrainage {typeLabel}</span>
-            </>
-          )}
+          <span className="text-base">{typeIcon}</span>
+          <span>Parrainage {typeLabel}</span>
         </div>
         <button
           onClick={onClose}
@@ -70,16 +59,11 @@ export function SponsorInfoCard({
       </div>
 
       {/* Description */}
-      {loading ? (
+      {summary.description && (
         <div className="border-t border-line px-3 py-2.5">
-          <div className="h-3 w-3/4 animate-pulse rounded bg-line" />
-          <div className="mt-1.5 h-3 w-1/2 animate-pulse rounded bg-line" />
+          <p className="text-[12px] leading-relaxed text-ink-2">{summary.description}</p>
         </div>
-      ) : sponsor?.description ? (
-        <div className="border-t border-line px-3 py-2.5">
-          <p className="text-[12px] leading-relaxed text-ink-2">{sponsor.description}</p>
-        </div>
-      ) : null}
+      )}
     </div>
   );
 }

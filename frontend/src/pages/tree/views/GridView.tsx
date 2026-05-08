@@ -1,6 +1,6 @@
 import { Skeleton } from '../../../components/ui';
 import { EmptyState } from '../../../components/ui';
-import type { PersonSummary } from '../../../types/person';
+import type { Person } from '../../../types/person';
 import { PersonGridCard } from './PersonGridCard';
 
 const SKELETON_COUNT = 18;
@@ -19,7 +19,7 @@ function PersonGridSkeleton() {
 }
 
 interface GridViewProps {
-  persons: PersonSummary[];
+  persons: Person[];
   loading: boolean;
 }
 

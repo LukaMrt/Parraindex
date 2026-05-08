@@ -1,10 +1,10 @@
 import type { CSSProperties } from 'react';
 import { Avatar } from '../ui';
 import { promoColor } from '../../lib/colors';
-import type { PersonSummary } from '../../types/person';
+import type { Person } from '../../types/person';
 
 interface PersonGraphNodeProps {
-  person: PersonSummary;
+  person: Person;
   diameter: number;
   isSelf?: boolean;
   dim?: boolean;

@@ -9,24 +9,23 @@ use App\Api\ApiError;
 use App\Api\ApiResponse;
 use App\Api\ErrorCode;
 use App\Dto\Auth\MeResponseDto;
-use App\Dto\Person\PersonSummaryDto;
 use App\Entity\Person\User;
 use App\Service\AuthService;
+use App\Service\PersonService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 final class AuthApiController extends AbstractController
 {
     public function __construct(
-        private readonly ObjectMapperInterface $objectMapper,
         private readonly UserService $userService,
         private readonly AuthService $authService,
+        private readonly PersonService $personService,
     ) {
     }
 
@@ -158,14 +157,14 @@ final class AuthApiController extends AbstractController
             throw new \LogicException('User has no associated person.');
         }
 
-        $personDto = $this->objectMapper->map($person, PersonSummaryDto::class);
+        $loaded = $this->personService->getWithRelations($person->getId()) ?? $person;
 
         return new MeResponseDto(
             id: (int) $user->getId(),
             email: (string) $user->getEmail(),
             isAdmin: $user->isAdmin(),
             isVerified: $user->isVerified(),
-            person: $personDto,
+            person: $this->personService->mapToResponseDto($loaded),
         );
     }
 }

@@ -1,4 +1,4 @@
-import type { PersonSummary } from '../types/person';
+import type { Person } from '../types/person';
 
 export interface PersonFilter {
   name: string;
@@ -10,7 +10,7 @@ function normalize(s: string): string {
   return s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '');
 }
 
-export function filterPersons(persons: PersonSummary[], filter: PersonFilter): PersonSummary[] {
+export function filterPersons(persons: Person[], filter: PersonFilter): Person[] {
   const query = normalize(filter.name.trim());
   const yearSet = new Set(filter.years);
 
@@ -33,7 +33,7 @@ export function filterPersons(persons: PersonSummary[], filter: PersonFilter): P
   return result;
 }
 
-export function getYearRange(persons: PersonSummary[]): { min: number; max: number } | null {
+export function getYearRange(persons: Person[]): { min: number; max: number } | null {
   if (persons.length === 0) return null;
   let min = persons[0]?.startYear ?? 0;
   let max = min;

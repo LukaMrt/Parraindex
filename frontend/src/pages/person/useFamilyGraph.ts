@@ -5,7 +5,6 @@ import { usePanZoom } from '../../hooks/usePanZoom';
 import { personQueries } from '../../lib/queries';
 import type { UsePanZoomResult } from '../../hooks/usePanZoom';
 import type { Person } from '../../types/person';
-import type { PersonSummary } from '../../types/person';
 import { COL_W, computeLayout, toSummary } from './familyGraphLayout';
 import type { Layout } from './familyGraphLayout';
 
@@ -16,8 +15,8 @@ export interface FamilyGraphState extends UsePanZoomResult {
   loadingAncestors: boolean;
   loadingDescendants: boolean;
   hoverId: number | null;
-  ancestorGens: PersonSummary[][];
-  descendantGens: PersonSummary[][];
+  ancestorGens: Person[][];
+  descendantGens: Person[][];
   canExpandAncestors: boolean;
   canExpandDescendants: boolean;
   setHoverId: (id: number | null) => void;
@@ -53,8 +52,8 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
   const [fetchedPersons, setFetchedPersons] = useState<Map<number, Person>>(
     () => new Map([[person.id, person]]),
   );
-  const [ancestorGens, setAncestorGens] = useState<PersonSummary[][]>([]);
-  const [descendantGens, setDescendantGens] = useState<PersonSummary[][]>([]);
+  const [ancestorGens, setAncestorGens] = useState<Person[][]>([]);
+  const [descendantGens, setDescendantGens] = useState<Person[][]>([]);
   const [initialLoading, setInitialLoading] = useState(() => directIds.length > 0);
   const [loadingAncestors, setLoadingAncestors] = useState(false);
   const [loadingDescendants, setLoadingDescendants] = useState(false);

@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { Avatar } from '../../../components/ui';
 import { usePersonNavigation } from '../../../hooks/usePersonNavigation';
 import { promoColor } from '../../../lib/colors';
-import type { PersonSummary } from '../../../types/person';
+import type { Person } from '../../../types/person';
 
 interface PersonGridCardProps {
-  person: PersonSummary;
+  person: Person;
   animationDelay?: number;
 }
 

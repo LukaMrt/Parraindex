@@ -1,11 +1,11 @@
-import type { PersonSummary } from './person';
+import type { Person } from './person';
 
 export interface Me {
   id: number;
   email: string;
   isAdmin: boolean;
   isVerified: boolean;
-  person: PersonSummary;
+  person: Person;
 }
 
 export interface LoginRequest {

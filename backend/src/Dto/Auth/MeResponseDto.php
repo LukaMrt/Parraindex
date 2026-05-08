@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto\Auth;
 
-use App\Dto\Person\PersonSummaryDto;
+use App\Dto\Person\PersonResponseDto;
 
 final readonly class MeResponseDto
 {
@@ -13,7 +13,7 @@ final readonly class MeResponseDto
         public string $email,
         public bool $isAdmin,
         public bool $isVerified,
-        public PersonSummaryDto $person,
+        public PersonResponseDto $person,
     ) {
     }
 }

@@ -1,10 +1,10 @@
 import type { MouseEvent } from 'react';
 import { pictureUrl } from '../lib/imageUrl';
 import { promoColor } from '../lib/colors';
-import type { PersonSummary } from '../types/person';
+import type { Person } from '../types/person';
 
 interface PersonCardProps {
-  person: PersonSummary;
+  person: Person;
   isCentered?: boolean;
   onClick?: (e: MouseEvent) => void;
   animationDelay?: number;

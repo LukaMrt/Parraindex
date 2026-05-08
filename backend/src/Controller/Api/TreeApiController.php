@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use App\Api\ApiResponse;
-use App\Dto\Person\PersonSummaryDto;
+use App\Dto\Person\PersonResponseDto;
 use App\Service\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -31,9 +31,9 @@ final class TreeApiController extends AbstractController
         $people = $this->personService->getPaginated($offset, $limit);
         $total  = $this->personService->countAll();
 
-        /** @var PersonSummaryDto[] $dtos */
+        /** @var PersonResponseDto[] $dtos */
         $dtos = array_map(
-            $this->personService->mapToSummaryDto(...),
+            $this->personService->mapToResponseDto(...),
             $people,
         );
 

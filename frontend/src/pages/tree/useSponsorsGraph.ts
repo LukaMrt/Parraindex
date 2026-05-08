@@ -1,6 +1,4 @@
-import { useQueries } from '@tanstack/react-query';
-import { personQueries } from '../../lib/queries';
-import type { PersonSummary } from '../../types/person';
+import type { Person } from '../../types/person';
 
 export interface SponsorLink {
   id: number;
@@ -13,21 +11,12 @@ export interface SponsorsGraphResult {
   loading: boolean;
 }
 
-export function useSponsorsGraph(persons: PersonSummary[]): SponsorsGraphResult {
-  const results = useQueries({
-    queries: persons.map((p) => ({
-      ...personQueries.detail(p.id),
-      staleTime: 5 * 60 * 1000,
-    })),
-  });
-
-  const loading = results.some((r) => r.isLoading);
-
+export function useSponsorsGraph(persons: Person[]): SponsorsGraphResult {
   const seen = new Set<string>();
   const links: SponsorLink[] = [];
-  for (const r of results) {
-    if (!r.data) continue;
-    for (const s of r.data.godChildren) {
+
+  for (const p of persons) {
+    for (const s of p.godChildren) {
       const k = `${s.godFatherId}-${s.godChildId}`;
       if (!seen.has(k)) {
         seen.add(k);
@@ -36,5 +25,5 @@ export function useSponsorsGraph(persons: PersonSummary[]): SponsorsGraphResult 
     }
   }
 
-  return { links, loading };
+  return { links, loading: false };
 }

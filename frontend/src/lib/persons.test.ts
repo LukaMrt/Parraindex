@@ -1,14 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { filterPersons, getYearRange } from './persons';
 import type { PersonFilter } from './persons';
-import type { PersonSummary } from '../types/person';
+import type { Person } from '../types/person';
 
-function mkPerson(
-  id: number,
-  firstName: string,
-  lastName: string,
-  startYear: number,
-): PersonSummary {
+function mkPerson(id: number, firstName: string, lastName: string, startYear: number): Person {
   return {
     id,
     firstName,
@@ -20,7 +15,7 @@ function mkPerson(
   };
 }
 
-const people: PersonSummary[] = [
+const people: Person[] = [
   mkPerson(1, 'Alice', 'Dupont', 2020),
   mkPerson(2, 'Bob', 'Martin', 2021),
   mkPerson(3, 'Élodie', 'Lefebvre', 2020),
@@ -97,7 +92,7 @@ describe('getYearRange', () => {
   });
 
   it('retourne min=max pour un seul élément', () => {
-    const one: PersonSummary[] = [mkPerson(1, 'A', 'B', 2020)];
+    const one: Person[] = [mkPerson(1, 'A', 'B', 2020)];
     expect(getYearRange(one)).toEqual({ min: 2020, max: 2020 });
   });
 

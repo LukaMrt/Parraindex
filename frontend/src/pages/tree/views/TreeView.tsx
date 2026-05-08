@@ -6,8 +6,8 @@ import { SponsorInfoCard } from '../../../components/graph/SponsorInfoCard';
 import { promoColor } from '../../../lib/colors';
 import { usePanZoom } from '../../../hooks/usePanZoom';
 import { isNeighbor } from '../../person/familyGraphLayout';
-import type { PersonSummary } from '../../../types/person';
-import type { SponsorSummary } from '../../../types/sponsor';
+import type { Person } from '../../../types/person';
+import type { Sponsor } from '../../../types/sponsor';
 import type { SponsorLink } from '../useSponsorsGraph';
 
 type FilterMode = 'all' | 'connected' | 'isolated';
@@ -23,7 +23,7 @@ interface NodePos {
 }
 
 interface Layout {
-  nodes: PersonSummary[];
+  nodes: Person[];
   links: SponsorLink[];
   indirectLinks: (SponsorLink & { hops: number })[];
   positions: Record<number, NodePos>;
@@ -32,11 +32,7 @@ interface Layout {
   height: number;
 }
 
-function computeLayout(
-  persons: PersonSummary[],
-  allLinks: SponsorLink[],
-  filterMode: FilterMode,
-): Layout {
+function computeLayout(persons: Person[], allLinks: SponsorLink[], filterMode: FilterMode): Layout {
   const visibleIds = new Set(persons.map((p) => p.id));
   let links = allLinks.filter((l) => visibleIds.has(l.godFatherId) && visibleIds.has(l.godChildId));
   let nodes = persons;
@@ -94,7 +90,7 @@ function computeLayout(
     }
   });
 
-  const byYear: Record<number, PersonSummary[]> = {};
+  const byYear: Record<number, Person[]> = {};
   nodes.forEach((p) => {
     byYear[p.startYear] ??= [];
     byYear[p.startYear].push(p);
@@ -126,7 +122,7 @@ function computeLayout(
 }
 
 interface Props {
-  persons: PersonSummary[];
+  persons: Person[];
   links: SponsorLink[];
   loading: boolean;
 }
@@ -136,7 +132,7 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
 
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [hoverId, setHoverId] = useState<number | null>(null);
-  const [selectedSponsor, setSelectedSponsor] = useState<SponsorSummary | null>(null);
+  const [selectedSponsor, setSelectedSponsor] = useState<Sponsor | null>(null);
   const [hoveredLinkId, setHoveredLinkId] = useState<number | null>(null);
   const [navigatingId, setNavigatingId] = useState<number | null>(null);
   const {

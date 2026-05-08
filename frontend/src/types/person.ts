@@ -1,13 +1,4 @@
-import type { SponsorSummary } from './sponsor';
-
-export interface PersonSummary {
-  id: number;
-  firstName: string;
-  lastName: string;
-  fullName: string;
-  picture: string | null;
-  startYear: number;
-}
+import type { Sponsor } from './sponsor';
 
 export interface Characteristic {
   id: number;
@@ -28,8 +19,8 @@ export interface Person {
   birthdate: string | null;
   biography: string | null;
   description: string | null;
-  godFathers: SponsorSummary[];
-  godChildren: SponsorSummary[];
+  godFathers: Sponsor[];
+  godChildren: Sponsor[];
   characteristics: Characteristic[];
 }
 

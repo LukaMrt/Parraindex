@@ -7,12 +7,12 @@ import { Avatar, Breadcrumb, Button, Card, Input, Skeleton, StatCard } from '../
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
 import { deletePerson, updateAccount, updatePerson, uploadPicture } from '../../lib/api/persons';
-import { createSponsor, deleteSponsor, getSponsor, updateSponsor } from '../../lib/api/sponsors';
+import { createSponsor, deleteSponsor, updateSponsor } from '../../lib/api/sponsors';
 import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
-import type { Person, PersonRequest, PersonSummary } from '../../types/person';
-import type { SponsorSummary, SponsorType } from '../../types/sponsor';
+import type { Person, PersonRequest } from '../../types/person';
+import type { Sponsor, SponsorType } from '../../types/sponsor';
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
@@ -50,10 +50,10 @@ function PersonAutocomplete({
   onSelect,
   placeholder,
 }: {
-  persons: PersonSummary[];
+  persons: Person[];
   excludeId: number;
-  value: PersonSummary | null;
-  onSelect: (p: PersonSummary | null) => void;
+  value: Person | null;
+  onSelect: (p: Person | null) => void;
   placeholder?: string;
 }) {
   const [query, setQuery] = useState(value?.fullName ?? '');
@@ -79,7 +79,7 @@ function PersonAutocomplete({
     };
   }, []);
 
-  function pick(p: PersonSummary) {
+  function pick(p: Person) {
     onSelect(p);
     setQuery(p.fullName);
     setOpen(false);
@@ -152,13 +152,13 @@ function AddSponsorForm({
   onAdded,
 }: {
   personId: number;
-  persons: PersonSummary[];
-  onAdded: (s: SponsorSummary) => void;
+  persons: Person[];
+  onAdded: (s: Sponsor) => void;
 }) {
   const { notify } = useNotification();
   const queryClient = useQueryClient();
   const [role, setRole] = useState<'godChild' | 'godFather'>('godChild');
-  const [otherPerson, setOtherPerson] = useState<PersonSummary | null>(null);
+  const [otherPerson, setOtherPerson] = useState<Person | null>(null);
   const [type, setType] = useState<SponsorType>('CLASSIC');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
@@ -322,10 +322,10 @@ function SponsorRow({
   onDelete,
   onUpdate,
 }: {
-  sponsor: SponsorSummary;
+  sponsor: Sponsor;
   personId: number;
   onDelete: (id: number) => void;
-  onUpdate: (updated: SponsorSummary) => void;
+  onUpdate: (updated: Sponsor) => void;
 }) {
   const isGodFather = sponsor.godFatherId === personId;
   const relatedName = isGodFather ? sponsor.godChildName : sponsor.godFatherName;
@@ -339,8 +339,7 @@ function SponsorRow({
   const [editing, setEditing] = useState(false);
   const [editType, setEditType] = useState<SponsorType>(sponsor.type);
   const [editDate, setEditDate] = useState(sponsor.date ?? '');
-  const [editDescription, setEditDescription] = useState('');
-  const [loadingEdit, setLoadingEdit] = useState(false);
+  const [editDescription, setEditDescription] = useState(sponsor.description ?? '');
 
   const TYPE_OPTIONS: { value: SponsorType; label: string }[] = [
     { value: 'CLASSIC', label: 'IUT' },
@@ -382,14 +381,10 @@ function SponsorRow({
     },
   });
 
-  async function handleEditOpen() {
+  function handleEditOpen() {
     setEditType(sponsor.type);
     setEditDate(sponsor.date ?? '');
-    setEditDescription('');
-    setLoadingEdit(true);
-    const result = await getSponsor(sponsor.id);
-    if (result.ok) setEditDescription(result.data.description ?? '');
-    setLoadingEdit(false);
+    setEditDescription(sponsor.description ?? '');
     setEditing(true);
   }
 
@@ -427,19 +422,15 @@ function SponsorRow({
         />
         <div className="mb-3">
           <FieldLabel>Description (optionnel)</FieldLabel>
-          {loadingEdit ? (
-            <div className="h-16 animate-pulse rounded-[9px] bg-bg" />
-          ) : (
-            <textarea
-              value={editDescription}
-              onChange={(e) => {
-                setEditDescription(e.target.value);
-              }}
-              rows={2}
-              placeholder="Anecdote, contexte…"
-              className="w-full resize-none rounded-[9px] border border-line bg-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-ink-2"
-            />
-          )}
+          <textarea
+            value={editDescription}
+            onChange={(e) => {
+              setEditDescription(e.target.value);
+            }}
+            rows={2}
+            placeholder="Anecdote, contexte…"
+            className="w-full resize-none rounded-[9px] border border-line bg-bg px-3.5 py-2.5 text-sm text-ink outline-none transition-colors placeholder:text-ink-4 focus:border-ink-2"
+          />
         </div>
         <div className="flex justify-end gap-2">
           <Button
@@ -492,7 +483,6 @@ function SponsorRow({
         type="button"
         variant="ghost"
         size="sm"
-        loading={loadingEdit}
         icon={
           <svg
             width="15"
@@ -508,7 +498,7 @@ function SponsorRow({
             <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
           </svg>
         }
-        onClick={() => void handleEditOpen()}
+        onClick={handleEditOpen}
         className="shrink-0 text-ink-4"
         title="Modifier ce parrainage"
       />
@@ -777,7 +767,7 @@ export function EditPersonPage() {
   const [description, setDescription] = useState('');
   const [pendingPicture, setPendingPicture] = useState<File | null>(null);
   const [picturePreview, setPicturePreview] = useState<string | null>(null);
-  const [sponsors, setSponsors] = useState<SponsorSummary[]>([]);
+  const [sponsors, setSponsors] = useState<Sponsor[]>([]);
 
   useEffect(() => {
     if (!person || initialized.current) return;

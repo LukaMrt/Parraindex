@@ -1,5 +1,4 @@
 import type { Person } from '../../types/person';
-import type { PersonSummary } from '../../types/person';
 
 export const COL_W = 110;
 export const ROW_H = 110;
@@ -18,7 +17,7 @@ export interface NodePos {
 }
 
 export interface Layout {
-  allNodes: PersonSummary[];
+  allNodes: Person[];
   positions: Record<number, NodePos>;
   links: GraphLink[];
   canvasWidth: number;
@@ -26,7 +25,7 @@ export interface Layout {
   rowCount: number;
 }
 
-export function toSummary(p: Person): PersonSummary {
+export function toSummary(p: Person): Person {
   return {
     id: p.id,
     firstName: p.firstName,
@@ -46,13 +45,13 @@ export function isNeighbor(id: number, pivotId: number, links: GraphLink[]): boo
 }
 
 export function computeLayout(
-  root: PersonSummary,
-  ancestorGens: PersonSummary[][],
-  descendantGens: PersonSummary[][],
+  root: Person,
+  ancestorGens: Person[][],
+  descendantGens: Person[][],
   fetchedPersons: Map<number, Person>,
 ): Layout {
   // Top → bottom: oldest ancestors, ..., parents, root, children, ..., youngest descendants
-  const rows: PersonSummary[][] = [...[...ancestorGens].reverse(), [root], ...descendantGens];
+  const rows: Person[][] = [...[...ancestorGens].reverse(), [root], ...descendantGens];
 
   let maxCols = 1;
   const positions: Record<number, NodePos> = {};

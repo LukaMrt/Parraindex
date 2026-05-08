@@ -1,7 +1,7 @@
 import { Avatar, Skeleton } from '../../../components/ui';
 import { usePersonNavigation } from '../../../hooks/usePersonNavigation';
 import { promoColor } from '../../../lib/colors';
-import type { PersonSummary } from '../../../types/person';
+import type { Person } from '../../../types/person';
 
 const SKELETON_COUNT = 12;
 
@@ -29,7 +29,7 @@ function ListRowSkeleton({ last }: { last: boolean }) {
   );
 }
 
-function ListRow({ person, last }: { person: PersonSummary; last: boolean }) {
+function ListRow({ person, last }: { person: Person; last: boolean }) {
   const { navigateTo, isPending } = usePersonNavigation();
   const color = promoColor(person.startYear);
 
@@ -71,7 +71,7 @@ function ListRow({ person, last }: { person: PersonSummary; last: boolean }) {
 }
 
 interface ListViewProps {
-  persons: PersonSummary[];
+  persons: Person[];
   loading: boolean;
 }
 

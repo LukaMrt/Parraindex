@@ -1,9 +1,9 @@
 import { get } from './client';
-import type { PersonSummary } from '../../types/person';
+import type { Person } from '../../types/person';
 import type { Result } from '../../types/api';
 
 export interface TreePageResult {
-  items: PersonSummary[];
+  items: Person[];
   total: number;
 }
 

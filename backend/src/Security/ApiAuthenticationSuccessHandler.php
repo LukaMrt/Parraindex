@@ -7,19 +7,18 @@ namespace App\Security;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use App\Api\ApiResponse;
 use App\Dto\Auth\MeResponseDto;
-use App\Dto\Person\PersonSummaryDto;
 use App\Entity\Person\Person;
 use App\Entity\Person\User;
+use App\Service\PersonService;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\ObjectMapper\ObjectMapperInterface;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationSuccessHandlerInterface;
 
 final readonly class ApiAuthenticationSuccessHandler implements AuthenticationSuccessHandlerInterface
 {
     public function __construct(
-        private ObjectMapperInterface $objectMapper,
+        private PersonService $personService,
     ) {
     }
 
@@ -37,14 +36,14 @@ final readonly class ApiAuthenticationSuccessHandler implements AuthenticationSu
             return ApiResponse::unauthorized('Profil introuvable');
         }
 
-        $personDto = $this->objectMapper->map($person, PersonSummaryDto::class);
+        $loaded = $this->personService->getWithRelations($person->getId()) ?? $person;
 
         $dto = new MeResponseDto(
             id: (int) $user->getId(),
             email: (string) $user->getEmail(),
             isAdmin: $user->isAdmin(),
             isVerified: $user->isVerified(),
-            person: $personDto,
+            person: $this->personService->mapToResponseDto($loaded),
         );
 
         $response = ApiResponse::success($dto);

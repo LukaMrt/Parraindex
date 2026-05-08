@@ -1,9 +1,9 @@
 import { useQuery } from '@tanstack/react-query';
 import { personQueries } from '../../lib/queries';
-import type { PersonSummary } from '../../types/person';
+import type { Person } from '../../types/person';
 
 interface PersonsState {
-  persons: PersonSummary[];
+  persons: Person[];
   total: number | null;
   loading: boolean;
   loadingMore: boolean;

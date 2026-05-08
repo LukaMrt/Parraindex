@@ -1,22 +1,19 @@
 import { useMemo, useState } from 'react';
 import { filterPersons } from '../lib/persons';
-import type { PersonSummary } from '../types/person';
+import type { Person } from '../types/person';
 
 export interface PersonFilterState {
   name: string;
   years: number[];
   alphabetical: boolean;
-  filtered: PersonSummary[];
+  filtered: Person[];
   setName: (name: string) => void;
   toggleYear: (year: number) => void;
   clearYears: () => void;
   toggleAlphabetical: () => void;
 }
 
-export function usePersonFilter(
-  persons: PersonSummary[],
-  initialYears: number[] = [],
-): PersonFilterState {
+export function usePersonFilter(persons: Person[], initialYears: number[] = []): PersonFilterState {
   const [name, setName] = useState('');
   const [years, setYears] = useState<number[]>(initialYears);
   const [alphabetical, setAlphabetical] = useState(false);

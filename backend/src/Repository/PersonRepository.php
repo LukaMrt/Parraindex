@@ -137,8 +137,8 @@ class PersonRepository extends ServiceEntityRepository
 
         return array_map(
             static fn (array $row): array => [
-                'startYear' => (int) $row['startYear'],
-                'count'     => (int) $row['count'],
+                'startYear' => $row['startYear'],
+                'count'     => $row['count'],
             ],
             $result,
         );

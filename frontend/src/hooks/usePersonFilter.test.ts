@@ -1,14 +1,9 @@
 import { describe, it, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { usePersonFilter } from './usePersonFilter';
-import type { PersonSummary } from '../types/person';
+import type { Person } from '../types/person';
 
-function mkPerson(
-  id: number,
-  firstName: string,
-  lastName: string,
-  startYear: number,
-): PersonSummary {
+function mkPerson(id: number, firstName: string, lastName: string, startYear: number): Person {
   return {
     id,
     firstName,
@@ -19,7 +14,7 @@ function mkPerson(
   };
 }
 
-const people: PersonSummary[] = [
+const people: Person[] = [
   mkPerson(1, 'Alice', 'Dupont', 2020),
   mkPerson(2, 'Bob', 'Martin', 2021),
   mkPerson(3, 'Charles', 'Bernard', 2022),

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use App\Dto\Person\PersonSummaryDto;
+use App\Dto\Person\PersonResponseDto;
 use App\Api\ApiError;
 use App\Api\ApiResponse;
 use App\Api\ErrorCode;
@@ -47,9 +47,9 @@ final class PersonApiController extends AbstractController
         $orderBy        = in_array($orderByParam, $allowedOrderBy, true) ? $orderByParam : 'id';
         $people = $this->personService->getAll($orderBy);
 
-        /** @var PersonSummaryDto[] $dtos */
+        /** @var PersonResponseDto[] $dtos */
         $dtos = array_map(
-            $this->personService->mapToSummaryDto(...),
+            $this->personService->mapToResponseDto(...),
             $people,
         );
 

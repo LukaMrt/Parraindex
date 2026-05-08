@@ -1,15 +1,5 @@
 export type SponsorType = 'HEART' | 'CLASSIC' | 'UNKNOWN';
 
-export interface SponsorSummary {
-  id: number;
-  godFatherId: number;
-  godFatherName: string;
-  godChildId: number;
-  godChildName: string;
-  type: SponsorType;
-  date: string | null;
-}
-
 export interface Sponsor {
   id: number;
   godFatherId: number;

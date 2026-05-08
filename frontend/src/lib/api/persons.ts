@@ -1,11 +1,11 @@
 import { get, put, patch, del, postFormData } from './client';
-import type { Person, PersonSummary, PersonRequest } from '../../types/person';
+import type { Person, PersonRequest } from '../../types/person';
 import type { Result } from '../../types/api';
 
 export type PersonOrderBy = 'id' | 'firstName' | 'lastName' | 'startYear' | 'createdAt';
 
-export function getPersons(orderBy: PersonOrderBy = 'id'): Promise<Result<PersonSummary[]>> {
-  return get<PersonSummary[]>(`/api/persons?orderBy=${orderBy}`);
+export function getPersons(orderBy: PersonOrderBy = 'id'): Promise<Result<Person[]>> {
+  return get<Person[]>(`/api/persons?orderBy=${orderBy}`);
 }
 
 export function getPerson(id: number): Promise<Result<Person>> {

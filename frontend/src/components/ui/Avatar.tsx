@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { cn } from '../../lib/cn';
 import { promoColor } from '../../lib/colors';
 import { pictureUrl } from '../../lib/imageUrl';
-import type { PersonSummary } from '../../types/person';
+import type { Person } from '../../types/person';
 
 interface AvatarProps {
-  person: Pick<PersonSummary, 'firstName' | 'lastName' | 'fullName' | 'picture' | 'startYear'>;
+  person: Pick<Person, 'firstName' | 'lastName' | 'fullName' | 'picture' | 'startYear'>;
   size?: number;
   /** true = coins arrondis (carré), false = rond */
   square?: boolean;

@@ -4,14 +4,14 @@ declare(strict_types=1);
 
 namespace App\Dto\Person;
 
-use App\Dto\Sponsor\SponsorSummaryDto;
+use App\Dto\Sponsor\SponsorResponseDto;
 
 final readonly class PersonResponseDto
 {
     /**
-     * @param SponsorSummaryDto[] $godFathers
-     * @param SponsorSummaryDto[] $godChildren
-     * @param CharacteristicDto[] $characteristics
+     * @param SponsorResponseDto[] $godFathers
+     * @param SponsorResponseDto[] $godChildren
+     * @param CharacteristicDto[]  $characteristics
      */
     public function __construct(
         public int $id,

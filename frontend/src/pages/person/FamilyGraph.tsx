@@ -5,7 +5,7 @@ import { PersonGraphNode } from '../../components/graph/PersonGraphNode';
 import { SponsorInfoCard } from '../../components/graph/SponsorInfoCard';
 import { promoColor } from '../../lib/colors';
 import type { Person } from '../../types/person';
-import type { SponsorSummary } from '../../types/sponsor';
+import type { Sponsor } from '../../types/sponsor';
 import { NODE_D, NODE_D_SELF, isNeighbor } from './familyGraphLayout';
 import type { GraphLink } from './familyGraphLayout';
 import { useFamilyGraph } from './useFamilyGraph';
@@ -128,7 +128,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
     expandDescendants,
   } = useFamilyGraph(person);
 
-  const [selectedSponsor, setSelectedSponsor] = useState<SponsorSummary | null>(null);
+  const [selectedSponsor, setSelectedSponsor] = useState<Sponsor | null>(null);
   const [hoveredLinkId, setHoveredLinkId] = useState<number | null>(null);
   const [navigatingId, setNavigatingId] = useState<number | null>(null);
 
