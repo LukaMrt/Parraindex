@@ -3,10 +3,7 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Doctrine\Set\DoctrineSetList;
-use Rector\PHPUnit\Set\PHPUnitSetList;
 use Rector\Symfony\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector;
-use Rector\Symfony\Set\SymfonySetList;
 
 return RectorConfig::configure()
     ->withRootFiles()
