@@ -6,7 +6,7 @@ import { SponsorInfoCard } from '../../components/graph/SponsorInfoCard';
 import { promoColor } from '../../lib/colors';
 import type { Person } from '../../types/person';
 import type { Sponsor } from '../../types/sponsor';
-import { NODE_D, NODE_D_SELF, isNeighbor } from './familyGraphLayout';
+import { NODE_D, NODE_D_SELF, shortestPath } from './familyGraphLayout';
 import type { GraphLink } from './familyGraphLayout';
 import { useFamilyGraph } from './useFamilyGraph';
 
@@ -251,93 +251,97 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
             overflow: 'visible',
           }}
         >
-          {layout.links.map((l: GraphLink, i: number) => {
-            const a = layout.positions[l.godFatherId];
-            const b = layout.positions[l.godChildId];
-            if (!a || !b) return null;
-            const half = layout.canvasWidth / 2;
-            const r = NODE_D / 2;
-            const ax = a.x + half,
-              ay = a.y + r;
-            const bx = b.x + half,
-              by = b.y + r;
-            const cy = (ay + by) / 2;
-            const color = promoColor(
-              layout.allNodes.find((n) => n.id === l.godFatherId)?.startYear,
-            );
-            const isHighlighted =
-              hoveredLinkId === l.id ||
-              (hoverId !== null && (l.godFatherId === hoverId || l.godChildId === hoverId));
-            const dim = hoverId !== null && !isHighlighted;
-            const d = `M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`;
-            return (
-              <g key={i}>
-                <path
-                  d={d}
-                  stroke={color}
-                  strokeWidth={isHighlighted ? 2.5 : 1.5}
-                  fill="none"
-                  opacity={dim ? 0.12 : isHighlighted ? 0.95 : 0.55}
-                  style={{ pointerEvents: 'none' }}
-                />
-                <path
-                  d={d}
-                  stroke="transparent"
-                  strokeWidth={12}
-                  fill="none"
-                  style={{ cursor: 'pointer' }}
-                  onMouseEnter={() => {
-                    setHoveredLinkId(l.id);
-                  }}
-                  onMouseLeave={() => {
-                    setHoveredLinkId(null);
-                  }}
-                  onClick={() => {
-                    handleLinkClick(l);
-                  }}
-                />
-              </g>
-            );
-          })}
+          {(() => {
+            const path = hoverId !== null ? shortestPath(hoverId, person.id, layout.links) : null;
+            return layout.links.map((l: GraphLink, i: number) => {
+              const a = layout.positions[l.godFatherId];
+              const b = layout.positions[l.godChildId];
+              if (!a || !b) return null;
+              const half = layout.canvasWidth / 2;
+              const r = NODE_D / 2;
+              const ax = a.x + half,
+                ay = a.y + r;
+              const bx = b.x + half,
+                by = b.y + r;
+              const cy = (ay + by) / 2;
+              const color = promoColor(
+                layout.allNodes.find((n) => n.id === l.godFatherId)?.startYear,
+              );
+              const isOnPath = path?.linkIds.has(l.id) ?? false;
+              const isHighlighted = hoveredLinkId === l.id || isOnPath;
+              const dim = hoverId !== null && !isOnPath;
+              const d = `M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`;
+              return (
+                <g key={i}>
+                  <path
+                    d={d}
+                    stroke={color}
+                    strokeWidth={isHighlighted ? 2.5 : 1.5}
+                    fill="none"
+                    opacity={dim ? 0.12 : isHighlighted ? 0.95 : 0.55}
+                    style={{ pointerEvents: 'none' }}
+                  />
+                  <path
+                    d={d}
+                    stroke="transparent"
+                    strokeWidth={12}
+                    fill="none"
+                    style={{ cursor: 'pointer' }}
+                    onMouseEnter={() => {
+                      setHoveredLinkId(l.id);
+                    }}
+                    onMouseLeave={() => {
+                      setHoveredLinkId(null);
+                    }}
+                    onClick={() => {
+                      handleLinkClick(l);
+                    }}
+                  />
+                </g>
+              );
+            });
+          })()}
         </svg>
 
         {/* Nodes */}
-        {layout.allNodes.map((p) => {
-          const pos = layout.positions[p.id];
-          if (!pos) return null;
-          const isSelf = p.id === person.id;
-          const d = isSelf ? NODE_D_SELF : NODE_D;
-          const offset = isSelf ? -(NODE_D_SELF - NODE_D) / 2 : 0;
-          const dim =
-            hoverId !== null && hoverId !== p.id && !isNeighbor(p.id, hoverId, layout.links);
-          return (
-            <PersonGraphNode
-              key={p.id}
-              person={p}
-              diameter={d}
-              isSelf={isSelf}
-              dim={dim}
-              loading={navigatingId === p.id}
-              dataAttr="data-fg-node"
-              style={{
-                position: 'absolute',
-                left: pos.x + layout.canvasWidth / 2 - NODE_D / 2 + offset,
-                top: pos.y + offset,
-              }}
-              onMouseEnter={() => {
-                setHoverId(p.id);
-              }}
-              onMouseLeave={() => {
-                setHoverId(null);
-              }}
-              onClick={() => {
-                if (didDrag || isSelf) return;
-                setNavigatingId(p.id);
-                void navigateTo(p.id);
-              }}
-            />
-          );
-        })}
+        {(() => {
+          const path = hoverId !== null ? shortestPath(hoverId, person.id, layout.links) : null;
+          return layout.allNodes.map((p) => {
+            const pos = layout.positions[p.id];
+            if (!pos) return null;
+            const isSelf = p.id === person.id;
+            const d = isSelf ? NODE_D_SELF : NODE_D;
+            const offset = isSelf ? -(NODE_D_SELF - NODE_D) / 2 : 0;
+            const dim = hoverId !== null && !(path?.nodeIds.has(p.id) ?? false);
+            return (
+              <PersonGraphNode
+                key={p.id}
+                person={p}
+                diameter={d}
+                isSelf={isSelf}
+                dim={dim}
+                loading={navigatingId === p.id}
+                dataAttr="data-fg-node"
+                style={{
+                  position: 'absolute',
+                  left: pos.x + layout.canvasWidth / 2 - NODE_D / 2 + offset,
+                  top: pos.y + offset,
+                }}
+                onMouseEnter={() => {
+                  setHoverId(p.id);
+                }}
+                onMouseLeave={() => {
+                  setHoverId(null);
+                }}
+                onClick={() => {
+                  if (didDrag || isSelf) return;
+                  setNavigatingId(p.id);
+                  void navigateTo(p.id);
+                }}
+              />
+            );
+          });
+        })()}
       </div>
 
       {selectedSponsor && (

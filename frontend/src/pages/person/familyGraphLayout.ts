@@ -44,6 +44,46 @@ export function isNeighbor(id: number, pivotId: number, links: GraphLink[]): boo
   );
 }
 
+/** BFS non-directionnel — retourne les IDs de nœuds et les IDs de liens sur le chemin le plus court entre src et dst, ou null si aucun chemin. */
+export function shortestPath(
+  srcId: number,
+  dstId: number,
+  links: GraphLink[],
+): { nodeIds: Set<number>; linkIds: Set<number> } | null {
+  if (srcId === dstId) return { nodeIds: new Set([srcId]), linkIds: new Set() };
+
+  const prev = new Map<number, { nodeId: number; linkId: number }>();
+  const queue: number[] = [srcId];
+  prev.set(srcId, { nodeId: -1, linkId: -1 });
+
+  while (queue.length > 0) {
+    const cur = queue.shift();
+    if (cur === undefined) break;
+    for (const l of links) {
+      const neighbor =
+        l.godFatherId === cur ? l.godChildId : l.godChildId === cur ? l.godFatherId : null;
+      if (neighbor === null || prev.has(neighbor)) continue;
+      prev.set(neighbor, { nodeId: cur, linkId: l.id });
+      if (neighbor === dstId) {
+        const nodeIds = new Set<number>();
+        const linkIds = new Set<number>();
+        let n = dstId;
+        while (n !== srcId) {
+          nodeIds.add(n);
+          const p = prev.get(n);
+          if (!p) break;
+          linkIds.add(p.linkId);
+          n = p.nodeId;
+        }
+        nodeIds.add(srcId);
+        return { nodeIds, linkIds };
+      }
+      queue.push(neighbor);
+    }
+  }
+  return null;
+}
+
 export function computeLayout(
   root: Person,
   ancestorGens: Person[][],
