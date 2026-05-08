@@ -263,14 +263,34 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
                 ay = a.y + r;
               const bx = b.x + half,
                 by = b.y + r;
-              const cy = (ay + by) / 2;
               const color = promoColor(
                 layout.allNodes.find((n) => n.id === l.godFatherId)?.startYear,
               );
               const isOnPath = path?.linkIds.has(l.id) ?? false;
               const isHighlighted = hoveredLinkId === l.id || isOnPath;
               const dim = hoverId !== null && !isOnPath;
-              const d = `M${ax},${ay} C${ax},${cy} ${bx},${cy} ${bx},${by}`;
+
+              // Liens latéraux (même rangée) : arche dont le sens dépend de la position relative à person
+              // - au-dessus de person (rangée de parrains) → arche vers le haut
+              // - en-dessous de person (rangée de fillots) → arche vers le bas
+              // - même rangée que person → dépend du rôle de person dans le lien
+              const isSameLevel = Math.abs(ay - by) < 20;
+              const personY = (layout.positions[person.id]?.y ?? 0) + NODE_D / 2;
+              const bowDir = isSameLevel
+                ? ay < personY - 10
+                  ? -1
+                  : ay > personY + 10
+                    ? 1
+                    : l.godChildId === person.id
+                      ? -1
+                      : 1
+                : 0;
+              const bow = isSameLevel ? Math.min(100, Math.abs(bx - ax) * 0.45) : 0;
+              const c1x = isSameLevel ? ax + (bx - ax) * 0.33 : ax;
+              const c1y = isSameLevel ? ay + bowDir * bow : (ay + by) / 2;
+              const c2x = isSameLevel ? ax + (bx - ax) * 0.67 : bx;
+              const c2y = isSameLevel ? ay + bowDir * bow : (ay + by) / 2;
+              const d = `M${ax},${ay} C${c1x},${c1y} ${c2x},${c2y} ${bx},${by}`;
               return (
                 <g key={i}>
                   <path
@@ -281,6 +301,25 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
                     opacity={dim ? 0.12 : isHighlighted ? 0.95 : 0.55}
                     style={{ pointerEvents: 'none' }}
                   />
+                  {(() => {
+                    // Midpoint et tangente du bezier cubique à t=0.5 : formule générale
+                    const mx = 0.125 * ax + 0.375 * c1x + 0.375 * c2x + 0.125 * bx;
+                    const my = 0.125 * ay + 0.375 * c1y + 0.375 * c2y + 0.125 * by;
+                    const tdx = 0.75 * (bx - ax + (c2x - c1x));
+                    const tdy = 0.75 * (by - ay + (c2y - c1y));
+                    const tlen = Math.sqrt(tdx * tdx + tdy * tdy) || 1;
+                    const ux = tdx / tlen;
+                    const uy = tdy / tlen;
+                    const s = 5;
+                    return (
+                      <polygon
+                        points={`${mx + ux * s},${my + uy * s} ${mx - ux * s - uy * s * 0.6},${my - uy * s + ux * s * 0.6} ${mx - ux * s + uy * s * 0.6},${my - uy * s - ux * s * 0.6}`}
+                        fill={color}
+                        opacity={dim ? 0.12 : isHighlighted ? 0.95 : 0.55}
+                        style={{ pointerEvents: 'none' }}
+                      />
+                    );
+                  })()}
                   <path
                     d={d}
                     stroke="transparent"

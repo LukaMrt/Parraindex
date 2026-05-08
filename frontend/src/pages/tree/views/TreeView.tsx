@@ -376,6 +376,24 @@ export function TreeView({ persons, links: allLinks, loading }: Props) {
                   fill="none"
                   opacity={dim ? 0.1 : isHighlighted ? 0.95 : 0.5}
                 />
+                {(() => {
+                  const mx = (ax + bx) / 2;
+                  const my = (ay + by) / 2;
+                  const tdx = 1.5 * (bx - ax);
+                  const tdy = 0.75 * (by - ay);
+                  const tlen = Math.sqrt(tdx * tdx + tdy * tdy) || 1;
+                  const ux = tdx / tlen;
+                  const uy = tdy / tlen;
+                  const s = 5;
+                  return (
+                    <polygon
+                      points={`${mx + ux * s},${my + uy * s} ${mx - ux * s - uy * s * 0.6},${my - uy * s + ux * s * 0.6} ${mx - ux * s + uy * s * 0.6},${my - uy * s - ux * s * 0.6}`}
+                      fill={promoColor(a.year)}
+                      opacity={dim ? 0.1 : isHighlighted ? 0.95 : 0.5}
+                      style={{ pointerEvents: 'none' }}
+                    />
+                  );
+                })()}
                 <path
                   d={dPath}
                   stroke="transparent"

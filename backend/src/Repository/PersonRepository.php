@@ -132,6 +132,30 @@ class PersonRepository extends ServiceEntityRepository
         return $result;
     }
 
+    /**
+     * @param int[] $ids
+     * @return Person[]
+     */
+    public function findAllWithRelationsByIds(array $ids): array
+    {
+        if ($ids === []) {
+            return [];
+        }
+
+        /** @var Person[] $result */
+        $result = $this->createQueryBuilder('p')
+            ->leftJoin('p.godFathers', 'gf')->addSelect('gf')
+            ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
+            ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
+            ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
     public function countAll(): int
     {
         return (int) $this->createQueryBuilder('p')

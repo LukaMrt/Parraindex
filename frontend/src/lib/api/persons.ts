@@ -1,4 +1,4 @@
-import { get, put, patch, del, postFormData } from './client';
+import { get, post, put, patch, del, postFormData } from './client';
 import type { Person, PersonRequest } from '../../types/person';
 import type { Result } from '../../types/api';
 
@@ -38,6 +38,11 @@ export function getAccount(personId: number): Promise<Result<{ email: string | n
 
 export function updateAccount(personId: number, data: AccountUpdateRequest): Promise<Result<null>> {
   return patch<null>(`/api/persons/${personId}/account`, data);
+}
+
+export function fetchPersonsBatch(ids: number[]): Promise<Result<Person[]>> {
+  if (ids.length === 0) return Promise.resolve({ ok: true as const, data: [] });
+  return post<Person[]>('/api/persons/batch', { ids });
 }
 
 export function exportPersonData(id: number): Promise<Result<Person>> {

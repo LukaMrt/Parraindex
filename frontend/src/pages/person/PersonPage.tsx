@@ -80,7 +80,8 @@ function PersonHero({ person, canEdit }: { person: Person; canEdit: boolean }) {
             Promo {person.startYear}
           </div>
           <h1 className="mb-4 text-[34px] font-semibold leading-tight tracking-tight text-ink">
-            {person.firstName} <span className="text-ink-2">{person.lastName}</span>
+            <span className="capitalize">{person.firstName.toLowerCase()}</span>{' '}
+            <span className="capitalize text-ink-2">{person.lastName.toLowerCase()}</span>
           </h1>
           {person.description && (
             <p className="mb-3 max-w-[540px] text-[14px] leading-relaxed text-ink-2">

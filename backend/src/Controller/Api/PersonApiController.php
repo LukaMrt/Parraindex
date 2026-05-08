@@ -214,6 +214,24 @@ final class PersonApiController extends AbstractController
         return ApiResponse::success(null);
     }
 
+    #[Route('/api/persons/batch', name: 'api_persons_batch', methods: ['POST'])]
+    public function batch(Request $request): JsonResponse
+    {
+        /** @var array<string, mixed>|null $body */
+        $body = json_decode((string) $request->getContent(), true);
+        $rawIds = isset($body['ids']) && is_array($body['ids']) ? $body['ids'] : [];
+        /** @var int[] $ids */
+        $ids    = array_filter(array_map(static fn(mixed $v): int|false => is_numeric($v) ? (int) $v : false, $rawIds));
+
+        if ($ids === []) {
+            return ApiResponse::success([]);
+        }
+
+        $persons = $this->personService->getByIds($ids);
+
+        return ApiResponse::success(array_map($this->personService->mapToResponseDto(...), $persons));
+    }
+
     #[Route('/api/persons/{id}/export', name: 'api_persons_export', methods: ['GET'])]
     #[IsGranted(PersonVoter::DOWNLOAD_DATA, subject: 'person')]
     public function export(Person $person): JsonResponse

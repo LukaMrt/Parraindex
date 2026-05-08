@@ -10,6 +10,7 @@ import { GridView } from './views/GridView';
 import { ListView } from './views/ListView';
 import { TimelineView } from './views/TimelineView';
 import { TreeView } from './views/TreeView';
+import { EgoGraphView } from './views/EgoGraphView';
 
 export function TreePage() {
   const { persons, loading } = usePersons();
@@ -69,6 +70,9 @@ export function TreePage() {
         {view === 'timeline' && <TimelineView persons={filtered} loading={loading} />}
         {view === 'tree' && (
           <TreeView persons={filtered} links={links} loading={loading || linksLoading} />
+        )}
+        {view === 'ego' && (
+          <EgoGraphView persons={persons} links={links} loading={loading || linksLoading} />
         )}
       </div>
     </div>

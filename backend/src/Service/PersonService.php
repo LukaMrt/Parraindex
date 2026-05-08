@@ -95,6 +95,15 @@ final readonly class PersonService
         return $people;
     }
 
+    /**
+     * @param int[] $ids
+     * @return Person[]
+     */
+    public function getByIds(array $ids): array
+    {
+        return $this->personRepository->findAllWithRelationsByIds($ids);
+    }
+
     public function mapToResponseDto(Person $person): PersonResponseDto
     {
         return new PersonResponseDto(

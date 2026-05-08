@@ -2,6 +2,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useEffect, useMemo, useState } from 'react';
 import type { Dispatch, SetStateAction } from 'react';
 import { usePanZoom } from '../../hooks/usePanZoom';
+import { fetchPersonsBatch } from '../../lib/api/persons';
 import { personQueries } from '../../lib/queries';
 import type { UsePanZoomResult } from '../../hooks/usePanZoom';
 import type { Person } from '../../types/person';
@@ -31,16 +32,28 @@ export interface FamilyGraphState extends UsePanZoomResult {
 export function useFamilyGraph(person: Person): FamilyGraphState {
   const queryClient = useQueryClient();
 
-  function fetchPersons(ids: number[]): Promise<Map<number, Person>> {
-    return Promise.all(ids.map((id) => queryClient.fetchQuery(personQueries.detail(id)))).then(
-      (results) => {
-        const map = new Map<number, Person>();
-        for (const p of results) map.set(p.id, p);
-        return map;
-      },
-    );
-  }
+  const batchFetch = (ids: number[]): Promise<Map<number, Person>> => {
+    const cached = new Map<number, Person>();
+    const missing: number[] = [];
 
+    for (const id of ids) {
+      const hit = queryClient.getQueryData<Person>(personQueries.detail(id).queryKey);
+      if (hit) cached.set(id, hit);
+      else missing.push(id);
+    }
+
+    if (missing.length === 0) return Promise.resolve(cached);
+
+    return fetchPersonsBatch(missing).then((result) => {
+      if (result.ok) {
+        result.data.forEach((p) => {
+          queryClient.setQueryData(personQueries.detail(p.id).queryKey, p);
+          cached.set(p.id, p);
+        });
+      }
+      return cached;
+    });
+  };
   const directIds = useMemo(
     () => [
       ...person.godFathers.map((s) => s.godFatherId),
@@ -66,7 +79,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
   useEffect(() => {
     if (directIds.length === 0) return;
 
-    void fetchPersons(directIds).then((fetched) => {
+    void batchFetch(directIds).then((fetched) => {
       setFetchedPersons((prev) => new Map([...prev, ...fetched]));
 
       const parents = person.godFathers
@@ -130,7 +143,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
     if (newIds.length === 0) return;
 
     setLoadingAncestors(true);
-    void fetchPersons(newIds.filter((id) => !fetchedPersons.has(id))).then((fetched) => {
+    void batchFetch(newIds).then((fetched) => {
       setFetchedPersons((prev) => new Map([...prev, ...fetched]));
       const allFetched = new Map([...fetchedPersons, ...fetched]);
       const newGen = newIds
@@ -156,7 +169,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
     if (newIds.length === 0) return;
 
     setLoadingDescendants(true);
-    void fetchPersons(newIds.filter((id) => !fetchedPersons.has(id))).then((fetched) => {
+    void batchFetch(newIds).then((fetched) => {
       setFetchedPersons((prev) => new Map([...prev, ...fetched]));
       const allFetched = new Map([...fetchedPersons, ...fetched]);
       const newGen = newIds
