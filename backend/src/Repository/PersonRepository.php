@@ -13,8 +13,6 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class PersonRepository extends ServiceEntityRepository
 {
-    public const string DEFAULT_PICTURE = 'no-picture.svg';
-
     public function __construct(ManagerRegistry $managerRegistry)
     {
         parent::__construct($managerRegistry, Person::class);
@@ -200,10 +198,6 @@ class PersonRepository extends ServiceEntityRepository
     {
         if (!$person->getCreatedAt() instanceof \DateTimeInterface) {
             $person->setCreatedAt(new \DateTimeImmutable());
-        }
-
-        if ($person->getPicture() === null) {
-            $person->setPicture(self::DEFAULT_PICTURE);
         }
 
         $this->getEntityManager()->persist($person);

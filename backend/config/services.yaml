@@ -18,3 +18,7 @@ services:
     App\Service\Contact\ContactResolverManager:
         arguments:
             $resolvers: !tagged_iterator app.contact_resolver
+
+    App\Command\MigratePicturesCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'

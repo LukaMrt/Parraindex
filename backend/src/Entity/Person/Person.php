@@ -43,7 +43,12 @@ class Person implements \Stringable
     #[Vich\UploadableField(mapping: 'person_avatar', fileNameProperty: 'picture')]
     #[Assert\Image(
         maxSize: '5M',
-        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+        mimeTypes: [
+            'image/jpeg',
+            'image/png',
+            'image/webp',
+            'image/gif',
+        ],
         maxWidth: 4096,
         maxHeight: 4096,
         detectCorrupted: true,

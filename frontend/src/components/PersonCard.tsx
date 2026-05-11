@@ -35,7 +35,7 @@ export function PersonCard({
 
       <div className="relative h-44 overflow-hidden" style={{ backgroundColor: `${color}22` }}>
         <img
-          src={pictureUrl(person.picture)}
+          src={pictureUrl(person.picture, 'full')}
           alt={person.fullName}
           className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
           loading="lazy"

@@ -7,7 +7,6 @@ namespace App\Fixture;
 use App\Entity\Person\Person;
 use App\Entity\Person\Role;
 use App\Entity\Person\User;
-use App\Repository\PersonRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -46,21 +45,21 @@ class UserFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::VINCENT,
                 'vincent.chavot-dambrun@etu.univ-lyon1.fr',
                 [Role::USER],
-                PersonRepository::DEFAULT_PICTURE,
+                null,
                 'password',
             ],
             [
                 PersonFixture::SARAH,
                 'sarah.fontaine@etu.univ-lyon1.fr',
                 [Role::USER],
-                PersonRepository::DEFAULT_PICTURE,
+                null,
                 'password',
             ],
             [
                 PersonFixture::EMMA,
                 'emma.girard@etu.univ-lyon1.fr',
                 [Role::USER],
-                PersonRepository::DEFAULT_PICTURE,
+                null,
                 'password',
             ],
         ];

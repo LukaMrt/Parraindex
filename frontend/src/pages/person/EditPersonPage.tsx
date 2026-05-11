@@ -609,7 +609,7 @@ function EditPersonHero({
             }}
             title="Changer la photo"
           >
-            <Avatar person={displayPerson} fill />
+            <Avatar person={displayPerson} fill imageSize="full" />
             {avatarHover && (
               <div className="absolute inset-0 flex flex-col items-center justify-center gap-1 bg-black/50">
                 <svg

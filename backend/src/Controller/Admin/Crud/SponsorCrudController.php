@@ -34,10 +34,11 @@ final class SponsorCrudController extends AbstractCrudController
     public function createEntity(string $entityFqcn): Sponsor
     {
         $sponsor = new Sponsor();
-        $request = $this->getContext()->getRequest();
+        $context = $this->getContext();
+        $request = $context?->getRequest();
 
-        $godFatherId = $request->query->getInt('godFather');
-        $godChildId  = $request->query->getInt('godChild');
+        $godFatherId = $request?->query->getInt('godFather') ?? 0;
+        $godChildId  = $request?->query->getInt('godChild') ?? 0;
 
         if ($godFatherId > 0) {
             $sponsor->setGodFather($this->personRepository->find($godFatherId));

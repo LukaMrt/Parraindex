@@ -11,6 +11,7 @@ interface AvatarProps {
   square?: boolean;
   /** Remplit le conteneur parent (pour les cartes grille) */
   fill?: boolean;
+  imageSize?: 'thumb' | 'full';
   className?: string;
 }
 
@@ -19,6 +20,7 @@ export function Avatar({
   size = 80,
   square = false,
   fill = false,
+  imageSize = 'thumb',
   className,
 }: AvatarProps) {
   const [imgError, setImgError] = useState(false);
@@ -27,12 +29,12 @@ export function Avatar({
   const initials = ((person.firstName[0] ?? '') + (person.lastName[0] ?? '')).toUpperCase();
   const radius = square ? '14%' : '50%';
   const dims = fill ? { width: '100%', height: '100%' } : { width: size, height: size };
-  const fontSize = fill ? 32 : size * 0.36;
+  const fontSize = fill ? 32 : size * 0.5;
 
   if (person.picture && !imgError) {
     return (
       <img
-        src={pictureUrl(person.picture)}
+        src={pictureUrl(person.picture, imageSize)}
         alt={person.fullName}
         loading="lazy"
         onError={() => {

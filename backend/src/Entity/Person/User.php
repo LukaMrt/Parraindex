@@ -17,8 +17,6 @@ use Symfony\Component\Validator\Constraints as Assert;
 #[UniqueEntity(fields: 'email', message: 'Un compte existe déjà avec cette adresse email')]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
-    private const string DEFAULT_PICTURE = 'no-picture.svg';
-
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -184,7 +182,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return in_array(Role::ADMIN, $this->getRolesEnum());
     }
 
-    public function setPicture(string $picture): static
+    public function setPicture(?string $picture): static
     {
         $this->picture = $picture;
 
@@ -194,9 +192,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * Used in twig templates
      */
-    public function getPicture(): string
+    public function getPicture(): ?string
     {
-        return $this->picture ?? self::DEFAULT_PICTURE;
+        return $this->picture;
     }
 
     public function isVerified(): bool

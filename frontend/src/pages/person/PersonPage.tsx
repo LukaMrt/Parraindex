@@ -67,7 +67,7 @@ function PersonHero({ person, canEdit }: { person: Person; canEdit: boolean }) {
             boxShadow: `0 0 0 3px ${color}, 0 12px 32px ${color}30`,
           }}
         >
-          <Avatar person={person} fill />
+          <Avatar person={person} fill imageSize="full" />
         </div>
 
         {/* Infos */}

@@ -38,7 +38,7 @@ export function PersonGridCard({ person, animationDelay }: PersonGridCardProps) 
         className="relative aspect-square overflow-hidden"
         style={{ backgroundColor: `${color}10` }}
       >
-        <Avatar person={person} fill />
+        <Avatar person={person} fill imageSize="full" />
         {isPending && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/30">
             <svg
