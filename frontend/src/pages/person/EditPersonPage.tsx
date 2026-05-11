@@ -746,7 +746,7 @@ function EditPersonHero({
 
 export function EditPersonPage() {
   const { id } = useParams<{ id: string }>();
-  const { user } = useAuth();
+  const { user, refreshUser } = useAuth();
   const navigate = useNavigate();
   const { notify } = useNotification();
 
@@ -827,7 +827,10 @@ export function EditPersonPage() {
       }
     }
 
-    await queryClient.invalidateQueries({ queryKey: personQueries.detail(personId).queryKey });
+    queryClient.removeQueries({ queryKey: ['tree'] });
+    await queryClient.invalidateQueries({ queryKey: ['persons'] });
+    if (pendingPicture && user.person.id === personId) await refreshUser();
+    notify('success', 'Profil mis à jour');
     void navigate(`/person/${id}`);
   }
 
@@ -932,6 +935,7 @@ export function EditPersonPage() {
           onConfirm={(file, preview) => {
             setPendingPicture(file);
             setPicturePreview(preview);
+            notify('info', "Photo sélectionnée — cliquez sur Enregistrer pour l'appliquer");
           }}
         />
 
