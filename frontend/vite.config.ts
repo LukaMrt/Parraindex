@@ -28,6 +28,11 @@ export default defineConfig({
         changeOrigin: true,
         secure: false,
       },
+      '/uploads': {
+        target: process.env['VITE_API_BASE_URL'] ?? 'https://127.0.0.1:8000',
+        changeOrigin: true,
+        secure: false,
+      },
       '/_wdt': {
         target: process.env['VITE_API_BASE_URL'] ?? 'https://127.0.0.1:8000',
         changeOrigin: true,

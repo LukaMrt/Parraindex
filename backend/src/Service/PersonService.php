@@ -106,12 +106,17 @@ final readonly class PersonService
 
     public function mapToResponseDto(Person $person): PersonResponseDto
     {
+        $filename = $person->getPicture();
+        $picture  = $filename !== null && str_ends_with($filename, '.gif')
+            ? '/uploads/avatars/' . $filename
+            : $filename;
+
         return new PersonResponseDto(
             id: $person->getId(),
             firstName: $person->getFirstName(),
             lastName: $person->getLastName(),
             fullName: $person->getFullName(),
-            picture: $person->getPicture(),
+            picture: $picture,
             color: $person->getColor() ?? '#000000',
             startYear: $person->getStartYear() ?? 0,
             birthdate: $person->getBirthdate()?->format('Y-m-d'),

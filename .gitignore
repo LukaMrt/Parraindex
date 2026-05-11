@@ -5,3 +5,11 @@ out/
 .claude
 
 nul
+
+# Avatars uploadés — on ignore tout sauf les images de fixtures
+backend/public/uploads/avatars/*
+!backend/public/uploads/avatars/04d04249801564c92579b9f8237de49a2c03e1a1.jpg
+!backend/public/uploads/avatars/f85ab55cafa6746471f601a71c1d7ccc425a37c5.jpg
+
+# Cache LiipImagine — entièrement régénéré, rien à commiter
+backend/public/media/

@@ -140,6 +140,7 @@ final class PersonApiController extends AbstractController
         }
 
         $this->personService->update($person);
+        $person->setPictureFile(null);
 
         return ApiResponse::success(['picture' => $person->getPicture()]);
     }

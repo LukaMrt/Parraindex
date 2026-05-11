@@ -1,9 +1,18 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import type { ChangeEvent, KeyboardEvent, SyntheticEvent } from 'react';
+import type { KeyboardEvent, SyntheticEvent } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
-import { Avatar, Breadcrumb, Button, Card, Input, Skeleton, StatCard } from '../../components/ui';
+import {
+  Avatar,
+  Breadcrumb,
+  Button,
+  Card,
+  ImagePickerModal,
+  Input,
+  Skeleton,
+  StatCard,
+} from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
 import { deletePerson, updateAccount, updatePerson, uploadPicture } from '../../lib/api/persons';
@@ -552,7 +561,7 @@ function EditPersonHero({
   onStartYearChange,
   onBiographyChange,
   onDescriptionChange,
-  onFileChange,
+  onOpenPicker,
 }: {
   person: Person;
   firstName: string;
@@ -567,9 +576,8 @@ function EditPersonHero({
   onStartYearChange: (v: number) => void;
   onBiographyChange: (v: string) => void;
   onDescriptionChange: (v: string) => void;
-  onFileChange: (file: File) => void;
+  onOpenPicker: () => void;
 }) {
-  const fileRef = useRef<HTMLInputElement>(null);
   const [avatarHover, setAvatarHover] = useState(false);
   const color = promoColor(startYear);
 
@@ -600,7 +608,7 @@ function EditPersonHero({
               height: 140,
               boxShadow: `0 0 0 3px ${color}, 0 12px 32px ${color}30`,
             }}
-            onClick={() => fileRef.current?.click()}
+            onClick={onOpenPicker}
             onMouseEnter={() => {
               setAvatarHover(true);
             }}
@@ -629,16 +637,25 @@ function EditPersonHero({
               </div>
             )}
           </button>
-          <input
-            ref={fileRef}
-            type="file"
-            accept="image/*"
-            className="hidden"
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              const file = e.target.files?.[0];
-              if (file) onFileChange(file);
-            }}
-          />
+          {picturePreview && (
+            <p className="mt-2 flex items-center justify-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-[11px] font-medium text-amber-500">
+              <svg
+                width="11"
+                height="11"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+              Non sauvegardé
+            </p>
+          )}
         </div>
 
         {/* Champs */}
@@ -767,6 +784,7 @@ export function EditPersonPage() {
   const [description, setDescription] = useState('');
   const [pendingPicture, setPendingPicture] = useState<File | null>(null);
   const [picturePreview, setPicturePreview] = useState<string | null>(null);
+  const [pickerOpen, setPickerOpen] = useState(false);
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
 
   useEffect(() => {
@@ -901,9 +919,19 @@ export function EditPersonPage() {
           onStartYearChange={setStartYear}
           onBiographyChange={setBiography}
           onDescriptionChange={setDescription}
-          onFileChange={(file) => {
+          onOpenPicker={() => {
+            setPickerOpen(true);
+          }}
+        />
+
+        <ImagePickerModal
+          open={pickerOpen}
+          onClose={() => {
+            setPickerOpen(false);
+          }}
+          onConfirm={(file, preview) => {
             setPendingPicture(file);
-            setPicturePreview(URL.createObjectURL(file));
+            setPicturePreview(preview);
           }}
         />
 
