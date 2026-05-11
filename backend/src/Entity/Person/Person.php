@@ -13,10 +13,13 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
+use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 #[UniqueEntity(fields: ['firstName', 'lastName'], message: 'person.unique')]
+#[Vich\Uploadable]
 class Person implements \Stringable
 {
     #[ORM\Id]
@@ -36,6 +39,19 @@ class Person implements \Stringable
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $picture = null;
+
+    #[Vich\UploadableField(mapping: 'person_avatar', fileNameProperty: 'picture')]
+    #[Assert\Image(
+        maxSize: '5M',
+        mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+        maxWidth: 4096,
+        maxHeight: 4096,
+        detectCorrupted: true,
+    )]
+    private ?File $pictureFile = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeInterface $birthdate = null;
@@ -138,6 +154,27 @@ class Person implements \Stringable
         $this->picture = $picture;
 
         return $this;
+    }
+
+    public function getPictureFile(): ?File
+    {
+        return $this->pictureFile;
+    }
+
+    public function setPictureFile(?File $pictureFile): static
+    {
+        $this->pictureFile = $pictureFile;
+
+        if ($pictureFile instanceof File) {
+            $this->updatedAt = new \DateTimeImmutable();
+        }
+
+        return $this;
+    }
+
+    public function getUpdatedAt(): ?\DateTimeImmutable
+    {
+        return $this->updatedAt;
     }
 
     public function getBirthdate(): ?\DateTimeInterface

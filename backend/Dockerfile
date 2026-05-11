@@ -18,12 +18,14 @@ ENV APP_DEBUG=false
 # Install netcat for database connection checking
 RUN apk add --no-cache netcat-openbsd
 
-# Install PHP extension intl
-RUN apk add --no-cache icu-dev \
+# Install PHP extensions (intl, pdo, opcache, gd for image processing)
+RUN apk add --no-cache icu-dev libpng-dev libjpeg-turbo-dev libwebp-dev \
+    && docker-php-ext-configure gd --with-jpeg --with-webp \
     && docker-php-ext-install -j$(nproc) intl \
         pdo \
         pdo_mysql \
-        opcache
+        opcache \
+        gd
 
 WORKDIR /app
 

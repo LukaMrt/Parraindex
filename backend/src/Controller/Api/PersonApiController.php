@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Api;
 
 use Symfony\Component\HttpFoundation\File\UploadedFile;
+use Symfony\Component\Validator\Constraints\Image;
 use App\Dto\Person\PersonResponseDto;
 use App\Api\ApiError;
 use App\Api\ApiResponse;
@@ -24,12 +25,14 @@ use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 final class PersonApiController extends AbstractController
 {
     public function __construct(
         private readonly PersonService $personService,
         private readonly UserService $userService,
+        private readonly ValidatorInterface $validator,
     ) {
     }
 
@@ -105,30 +108,35 @@ final class PersonApiController extends AbstractController
     {
         $file = $request->files->get('picture');
 
-        if ($file === null) {
+        if (!$file instanceof UploadedFile) {
             return ApiResponse::error(
                 new ApiError(ErrorCode::VALIDATION_ERROR, 'Aucun fichier envoyé'),
                 Response::HTTP_UNPROCESSABLE_ENTITY,
             );
         }
 
-        if (!$file instanceof UploadedFile) {
+        $person->setPictureFile($file);
+
+        $errors = $this->validator->validate($person->getPictureFile(), [
+            new Image(
+                maxSize: '5M',
+                mimeTypes: ['image/jpeg', 'image/png', 'image/webp', 'image/gif'],
+                maxWidth: 4096,
+                maxHeight: 4096,
+                detectCorrupted: true,
+            ),
+        ]);
+
+        if (count($errors) > 0) {
             return ApiResponse::error(
-                new ApiError(ErrorCode::VALIDATION_ERROR, 'Fichier invalide'),
+                new ApiError(ErrorCode::VALIDATION_ERROR, (string) $errors->get(0)->getMessage()),
                 Response::HTTP_UNPROCESSABLE_ENTITY,
             );
         }
 
-        $extension = $file->guessExtension() ?? 'bin';
-        $filename  = sprintf('%d_%s.%s', $person->getId(), uniqid(), $extension);
-        /** @var string $projectDir */
-        $projectDir = $this->getParameter('kernel.project_dir');
-        $file->move($projectDir . '/public/uploads/pictures', $filename);
-
-        $person->setPicture($filename);
         $this->personService->update($person);
 
-        return ApiResponse::success(['picture' => $filename]);
+        return ApiResponse::success(['picture' => $person->getPicture()]);
     }
 
     #[Route('/api/persons/{id}/account', name: 'api_persons_get_account', methods: ['GET'])]
