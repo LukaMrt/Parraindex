@@ -6,6 +6,10 @@ namespace App\Controller\Admin\Crud;
 
 use App\Entity\Sponsor\Sponsor;
 use App\Entity\Sponsor\Type;
+use App\Repository\PersonRepository;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
+use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\ChoiceField;
@@ -16,9 +20,54 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextareaField;
 /** @extends AbstractCrudController<Sponsor> */
 final class SponsorCrudController extends AbstractCrudController
 {
+    public function __construct(
+        private readonly PersonRepository $personRepository,
+    ) {
+    }
+
     public static function getEntityFqcn(): string
     {
         return Sponsor::class;
+    }
+
+    #[\Override]
+    public function createEntity(string $entityFqcn): Sponsor
+    {
+        $sponsor = new Sponsor();
+        $request = $this->getContext()->getRequest();
+
+        $godFatherId = $request->query->getInt('godFather');
+        $godChildId  = $request->query->getInt('godChild');
+
+        if ($godFatherId > 0) {
+            $sponsor->setGodFather($this->personRepository->find($godFatherId));
+        }
+
+        if ($godChildId > 0) {
+            $sponsor->setGodChild($this->personRepository->find($godChildId));
+        }
+
+        return $sponsor;
+    }
+
+    #[\Override]
+    public function configureActions(Actions $actions): Actions
+    {
+        return $actions
+            ->add(Crud::PAGE_INDEX, Action::DETAIL)
+            ->add(Crud::PAGE_DETAIL, Action::EDIT)
+            ->add(Crud::PAGE_DETAIL, Action::DELETE);
+    }
+
+    #[\Override]
+    public function configureCrud(Crud $crud): Crud
+    {
+        return $crud
+            ->setEntityLabelInSingular('Parrainage')
+            ->setEntityLabelInPlural('Parrainages')
+            ->setPageTitle(Crud::PAGE_INDEX, 'Liste des parrainages')
+            ->setPageTitle(Crud::PAGE_NEW, 'Nouveau parrainage')
+            ->setDefaultSort(['id' => 'DESC']);
     }
 
     #[\Override]

@@ -58,16 +58,25 @@ final class PersonCrudController extends AbstractCrudController
     #[\Override]
     public function configureActions(Actions $actions): Actions
     {
-        $addSponsorAction = Action::new('addSponsor', 'Ajouter un parrainage', 'fa fa-link')
+        $addGodChildAction = Action::new('addGodChild', 'Ajouter un filleul', 'fa fa-user-plus')
             ->linkToUrl(fn(Person $person): string => $this->adminUrlGenerator
                 ->setController(SponsorCrudController::class)
                 ->setAction(Action::NEW)
+                ->set('godFather', $person->getId())
                 ->generateUrl())
-            ->addCssClass('btn btn-info btn-sm')
-            ->displayIf(static fn (): bool => true);
+            ->addCssClass('btn btn-success btn-sm');
+
+        $addGodFatherAction = Action::new('addGodFather', 'Ajouter un parrain', 'fa fa-heart')
+            ->linkToUrl(fn(Person $person): string => $this->adminUrlGenerator
+                ->setController(SponsorCrudController::class)
+                ->setAction(Action::NEW)
+                ->set('godChild', $person->getId())
+                ->generateUrl())
+            ->addCssClass('btn btn-warning btn-sm');
 
         return $actions
-            ->add(Crud::PAGE_DETAIL, $addSponsorAction)
+            ->add(Crud::PAGE_DETAIL, $addGodChildAction)
+            ->add(Crud::PAGE_DETAIL, $addGodFatherAction)
             ->add(Crud::PAGE_INDEX, Action::new('downloadTemplate', 'Télécharger le template CSV', 'fa fa-download')
                 ->linkToUrl('/api/admin/persons/import/template')
                 ->addCssClass('btn btn-secondary btn-sm')
