@@ -37,6 +37,7 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
         yield MenuItem::section('Personnes');
         yield MenuItem::linkTo(PersonCrudController::class, 'Personnes', 'fa fa-user');
+        yield MenuItem::linkToRoute('Importer CSV', 'fa fa-upload', 'admin_csv_import');
         yield MenuItem::linkTo(UserCrudController::class, 'Comptes', 'fa fa-lock');
         yield MenuItem::section('Parrainages');
         yield MenuItem::linkTo(SponsorCrudController::class, 'Parrainages', 'fa fa-link');

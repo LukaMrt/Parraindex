@@ -11,7 +11,7 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SponsorRepository::class)]
-class Sponsor
+class Sponsor implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -129,5 +129,14 @@ class Sponsor
         }
 
         return '';
+    }
+
+    public function __toString(): string
+    {
+        $godFatherName = $this->godFather?->getFullName() ?? '?';
+        $godChildName  = $this->godChild?->getFullName() ?? '?';
+        $typeName      = $this->type?->getTitle() ?? 'Inconnu';
+
+        return sprintf('%s \u{2192} %s (%s)', $godFatherName, $godChildName, $typeName);
     }
 }

@@ -12,10 +12,14 @@ use App\Entity\Contact\Contact;
 use App\Entity\Person\Person;
 use App\Entity\Person\Role;
 use App\Service\ContactService;
+use App\Service\CsvImportService;
 use App\Service\PersonService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\HttpKernel\Attribute\MapRequestPayload;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
@@ -26,6 +30,7 @@ final class AdminApiController extends AbstractController
     public function __construct(
         private readonly ContactService $contactService,
         private readonly PersonService $personService,
+        private readonly CsvImportService $csvImportService,
     ) {
     }
 
@@ -93,5 +98,62 @@ final class AdminApiController extends AbstractController
         $this->personService->update($person);
 
         return ApiResponse::success($this->personService->mapToResponseDto($person), Response::HTTP_CREATED);
+    }
+
+    #[Route('/api/admin/persons/import/template', name: 'api_admin_persons_import_template', methods: ['GET'])]
+    public function downloadImportTemplate(): StreamedResponse
+    {
+        $csvContent = $this->csvImportService->generateTemplate();
+
+        $response = new StreamedResponse(static function () use ($csvContent): void {
+            echo $csvContent;
+        });
+
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="import_personnes_template.csv"');
+
+        return $response;
+    }
+
+    #[Route('/api/admin/persons/import/csv', name: 'api_admin_persons_import_csv', methods: ['POST'])]
+    public function importPersonsCsv(Request $request): JsonResponse
+    {
+        $file = $request->files->get('file');
+
+        if (!$file instanceof UploadedFile) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Aucun fichier envoyé. Utilisez le champ "file".'),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
+
+        $mimeType  = $file->getMimeType() ?? '';
+        $extension = strtolower($file->getClientOriginalExtension());
+
+        $allowedMimes = [
+            'text/csv',
+            'text/plain',
+            'application/csv',
+            'application/vnd.ms-excel',
+        ];
+        if ($extension !== 'csv' && !in_array($mimeType, $allowedMimes, true)) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Le fichier doit être au format CSV.'),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
+
+        $csvContent = file_get_contents($file->getPathname());
+
+        if ($csvContent === false || trim($csvContent) === '') {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Le fichier CSV est vide ou illisible.'),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
+
+        $result = $this->csvImportService->import($csvContent);
+
+        return ApiResponse::success($result, Response::HTTP_OK);
     }
 }
