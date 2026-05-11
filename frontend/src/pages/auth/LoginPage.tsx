@@ -61,6 +61,20 @@ export function LoginPage() {
           }}
           required
         />
+        {import.meta.env.DEV && (
+          <Button
+            type="button"
+            size="md"
+            variant="secondary"
+            className="w-full border-dashed font-mono text-xs tracking-wide"
+            onClick={() => {
+              setEmail('luka.maret@etu.univ-lyon1.fr');
+              setPassword('password');
+            }}
+          >
+            ⚙ DEV — Remplir avec Luka
+          </Button>
+        )}
         <Button type="submit" size="lg" disabled={submitting} className="mt-1 w-full">
           {submitting ? 'Connexion…' : 'Se connecter'}
         </Button>
