@@ -68,15 +68,15 @@ class UserFixture extends Fixture implements DependentFixtureInterface
             /** @var Person $person */
             $person = $this->getReference($personRef, Person::class);
 
-            $user = new User()
-                ->setEmail($email)
+            $user = new User();
+            $user->setEmail($email)
                 ->setPerson($person)
                 ->setRoles($roles)
                 ->setPicture($picture)
-                ->setVerified(true)
-                ->setCreatedAt(new \DateTimeImmutable());
+                ->setValidated(true)
+                ->setCreatedAt(new \DateTimeImmutable())
+                ->setPassword($this->passwordHasher->hashPassword($user, $password));
 
-            $user->setPassword($this->passwordHasher->hashPassword($user, $password));
             $manager->persist($user);
         }
 

@@ -12,7 +12,7 @@ final readonly class MeResponseDto
         public int $id,
         public string $email,
         public bool $isAdmin,
-        public bool $isVerified,
+        public bool $isValidated,
         public PersonResponseDto $person,
     ) {
     }

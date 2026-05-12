@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Person\User;
+use Doctrine\ORM\Query\Expr\Join;
 use App\Entity\Person\Person;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -187,6 +189,85 @@ class PersonRepository extends ServiceEntityRepository
     public function getByEmail(string $email): ?Person
     {
         return $this->findOneBy(['email' => $email]);
+    }
+
+    /**
+     * @return Person[]
+     */
+    public function findWithoutUser(): array
+    {
+        /** @var Person[] $result */
+        $result = $this->createQueryBuilder('p')
+            ->leftJoin(
+                User::class,
+                'u',
+                Join::WITH,
+                'u.person = p.id'
+            )
+            ->where('u.id IS NULL')
+            ->orderBy('p.lastName', 'ASC')
+            ->addOrderBy('p.firstName', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
+    /**
+     * @return Person[]
+     */
+    public function findWithoutUserPaginated(int $offset, int $limit): array
+    {
+        /** @var Person[] $result */
+        $result = $this->createQueryBuilder('p')
+            ->leftJoin(
+                User::class,
+                'u',
+                Join::WITH,
+                'u.person = p.id'
+            )
+            ->where('u.id IS NULL')
+            ->orderBy('p.lastName', 'ASC')
+            ->addOrderBy('p.firstName', 'ASC')
+            ->setFirstResult($offset)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
+    public function countWithoutUser(): int
+    {
+        return (int) $this->createQueryBuilder('p')
+            ->select('COUNT(p.id)')
+            ->leftJoin(
+                User::class,
+                'u',
+                Join::WITH,
+                'u.person = p.id'
+            )
+            ->where('u.id IS NULL')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function hasLinkedUser(int $personId): bool
+    {
+        $count = (int) $this->createQueryBuilder('p')
+            ->select('COUNT(u.id)')
+            ->join(
+                User::class,
+                'u',
+                Join::WITH,
+                'u.person = p.id'
+            )
+            ->where('p.id = :personId')
+            ->setParameter('personId', $personId)
+            ->getQuery()
+            ->getSingleScalarResult();
+
+        return $count > 0;
     }
 
     public function create(Person $person): void

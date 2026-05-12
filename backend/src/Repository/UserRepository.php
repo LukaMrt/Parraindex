@@ -50,6 +50,21 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         return $result;
     }
 
+    /**
+     * @return User[]
+     */
+    public function findPendingValidation(): array
+    {
+        /** @var User[] $result */
+        $result = $this->createQueryBuilder('u')
+            ->where('u.isValidated = false')
+            ->orderBy('u.createdAt', 'ASC')
+            ->getQuery()
+            ->getResult();
+
+        return $result;
+    }
+
     #[\Override]
     public function upgradePassword(PasswordAuthenticatedUserInterface $user, string $newHashedPassword): void
     {

@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ContactRepository::class)]
+#[ORM\Index(name: 'idx_contact_resolution', fields: ['resolutionDate'])]
+#[ORM\Index(name: 'idx_contact_type', fields: ['type'])]
 class Contact
 {
     #[ORM\Id]

@@ -29,6 +29,8 @@ security:
                 username_path: email
                 success_handler: App\Security\ApiAuthenticationSuccessHandler
                 failure_handler: App\Security\ApiAuthenticationFailureHandler
+            logout:
+                path: api_auth_logout
 
     access_control:
         - { path: ^/admin, roles: ROLE_ADMIN }

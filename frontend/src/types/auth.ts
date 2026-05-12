@@ -4,7 +4,7 @@ export interface Me {
   id: number;
   email: string;
   isAdmin: boolean;
-  isVerified: boolean;
+  isValidated: boolean;
   person: Person;
 }
 
@@ -16,4 +16,18 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
+  personId?: number;
+}
+
+export interface RegisterResponse {
+  isValidated: boolean;
+}
+
+export interface AvailablePerson {
+  id: number;
+  firstName: string;
+  lastName: string;
+  fullName: string;
+  startYear: number;
+  color: string;
 }

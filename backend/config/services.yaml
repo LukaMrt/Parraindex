@@ -22,3 +22,7 @@ services:
     App\Command\MigratePicturesCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
+
+    App\Security\EmailVerifier:
+        arguments:
+            $frontendUrl: '%env(FRONTEND_URL)%'

@@ -13,6 +13,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 use SymfonyCasts\Bundle\VerifyEmail\VerifyEmailHelperInterface;
+use Twig\Environment;
 
 readonly class EmailVerifier
 {
@@ -21,6 +22,8 @@ readonly class EmailVerifier
         private MailerInterface $mailer,
         private EntityManagerInterface $entityManager,
         private LoggerInterface $logger,
+        private Environment $twig,
+        private string $frontendUrl,
     ) {
     }
 
@@ -33,17 +36,20 @@ readonly class EmailVerifier
             ['id' => $user->getId()]
         );
 
-        $signedUrl = htmlspecialchars($signatureComponents->getSignedUrl(), ENT_QUOTES);
+        $query     = parse_url($signatureComponents->getSignedUrl(), PHP_URL_QUERY) ?? '';
+        $signedUrl = rtrim($this->frontendUrl, '/') . '/verify-email?' . $query;
+        $firstName = $user->getPerson()?->getFirstName() ?? 'Nouvel utilisateur';
+
+        $html = $this->twig->render('email/verify.html.twig', [
+            'firstName' => $firstName,
+            'signedUrl' => $signedUrl,
+        ]);
 
         $email = new Email()
             ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
             ->to((string) $user->getEmail())
-            ->subject('Confirmez votre email')
-            ->html(
-                '<h1>Bonjour !</h1>' .
-                '<p>Confirmez votre adresse email en cliquant sur le lien suivant :</p>' .
-                '<p><a href="' . $signedUrl . '">Confirmer mon email</a></p>'
-            );
+            ->subject('Confirmez votre compte Parraindex')
+            ->html($html);
 
         try {
             $this->mailer->send($email);
@@ -63,7 +69,7 @@ readonly class EmailVerifier
             (string) $user->getEmail()
         );
 
-        $user->setVerified(true);
+        $user->setValidated(true);
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();

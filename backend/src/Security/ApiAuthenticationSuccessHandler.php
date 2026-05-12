@@ -42,7 +42,7 @@ final readonly class ApiAuthenticationSuccessHandler implements AuthenticationSu
             id: (int) $user->getId(),
             email: (string) $user->getEmail(),
             isAdmin: $user->isAdmin(),
-            isVerified: $user->isVerified(),
+            isValidated: $user->isValidated(),
             person: $this->personService->mapToResponseDto($loaded),
         );
 

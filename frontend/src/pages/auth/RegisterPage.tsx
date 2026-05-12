@@ -2,9 +2,13 @@ import { useState } from 'react';
 import { useNavigate, Link } from 'react-router';
 import { register } from '../../lib/api/auth';
 import { Button, Input } from '../../components/ui';
+import { useNotification } from '../../hooks/useNotification';
+
+const UNIVERSITY_EMAIL_REGEX = /^[a-zA-Z-]+\.[a-zA-Z-]+@etu\.univ-lyon1\.fr$/;
 
 export function RegisterPage() {
   const navigate = useNavigate();
+  const { notify } = useNotification();
 
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -15,18 +19,29 @@ export function RegisterPage() {
     setSubmitting(true);
     setError(null);
 
-    // TODO: implémenter la logique d'inscription
-    // Appelle register({ email, password })
-    // En cas de succès (201), navigue vers '/check-email'
-    // En cas d'erreur VALIDATION_ERROR, afficher les violations champ par champ
-    const result = await register({ email, password });
-    if (result.ok) {
-      void navigate('/check-email');
-    } else {
-      setError(result.error.message);
+    const isUniversityEmail = UNIVERSITY_EMAIL_REGEX.test(email);
+
+    if (!isUniversityEmail) {
+      void navigate('/select-person', { state: { email, password } });
+      return;
     }
 
-    setSubmitting(false);
+    const result = await register({ email, password });
+
+    if (result.ok) {
+      notify('success', 'Compte créé ! Un email de confirmation vous a été envoyé.');
+      void navigate('/login');
+    } else {
+      const msg = result.error.message;
+      const needsManualSelection = msg.includes('Aucune personne') || msg.includes('manuellement');
+
+      if (needsManualSelection) {
+        void navigate('/select-person', { state: { email, password } });
+      } else {
+        setError(msg);
+        setSubmitting(false);
+      }
+    }
   }
 
   return (
@@ -49,14 +64,16 @@ export function RegisterPage() {
         <div>
           <Input
             type="email"
-            placeholder="prenom.nom@etu.univ-lyon1.fr"
+            placeholder="votre@email.com"
             value={email}
             onChange={(e) => {
               setEmail(e.target.value);
             }}
             required
           />
-          <p className="mt-1 text-xs text-ink-3">Email universitaire obligatoire</p>
+          <p className="mt-1 text-xs text-ink-3">
+            Email universitaire Lyon 1 ou adresse personnelle
+          </p>
         </div>
         <Input
           type="password"

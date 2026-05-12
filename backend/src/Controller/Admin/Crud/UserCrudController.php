@@ -60,7 +60,7 @@ final class UserCrudController extends AbstractCrudController
             ->hideOnIndex()
             ->hideOnDetail()
             ->setHelp('Laisser vide pour ne pas modifier');
-        yield BooleanField::new('isVerified', 'Email vérifié');
+        yield BooleanField::new('isValidated', 'Compte validé');
         yield DateTimeField::new('createdAt', 'Créé le')->hideOnForm();
     }
 

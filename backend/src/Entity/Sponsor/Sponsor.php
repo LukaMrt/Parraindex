@@ -11,6 +11,8 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: SponsorRepository::class)]
+#[ORM\Index(name: 'idx_sponsor_godfather', fields: ['godFather'])]
+#[ORM\Index(name: 'idx_sponsor_godchild', fields: ['godChild'])]
 class Sponsor implements \Stringable
 {
     #[ORM\Id]

@@ -38,6 +38,10 @@ final class PersonVoter extends Voter
             return false;
         }
 
+        if (!$user->isValidated()) {
+            return false;
+        }
+
         return match ($attribute) {
             self::EDIT, self::DOWNLOAD_DATA => $subject->getId() === $user->getPerson()?->getId(),
             default => false,

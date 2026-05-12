@@ -25,10 +25,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 180)]
     #[Assert\Email]
     #[Assert\NotBlank]
-    #[Assert\Regex(
-        pattern: '/^[a-zA-Z-]+\.[a-zA-Z-]+@etu\.univ-lyon1\.fr$/',
-        message: 'L\'adresse mail doit être une adresse universitaire de Lyon 1'
-    )]
     private ?string $email = null;
 
     /**
@@ -65,7 +61,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private ?string $picture = null;
 
     #[ORM\Column]
-    private bool $isVerified = false;
+    private bool $isValidated = false;
 
     public function getId(): ?int
     {
@@ -197,14 +193,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->picture;
     }
 
-    public function isVerified(): bool
+    public function isValidated(): bool
     {
-        return $this->isVerified;
+        return $this->isValidated;
     }
 
-    public function setVerified(bool $isVerified): static
+    public function setValidated(bool $isValidated): static
     {
-        $this->isVerified = $isVerified;
+        $this->isValidated = $isValidated;
 
         return $this;
     }

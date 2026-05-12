@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller\Admin;
 
 use App\Controller\Admin\Crud\ContactCrudController;
+use App\Controller\Admin\Crud\PendingUserCrudController;
 use App\Controller\Admin\Crud\PersonCrudController;
 use App\Controller\Admin\Crud\SponsorCrudController;
 use App\Controller\Admin\Crud\UserCrudController;
@@ -39,6 +40,7 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(PersonCrudController::class, 'Personnes', 'fa fa-user');
         yield MenuItem::linkToRoute('Importer CSV', 'fa fa-upload', 'admin_csv_import');
         yield MenuItem::linkTo(UserCrudController::class, 'Comptes', 'fa fa-lock');
+        yield MenuItem::linkTo(PendingUserCrudController::class, 'En attente de validation', 'fa fa-clock');
         yield MenuItem::section('Parrainages');
         yield MenuItem::linkTo(SponsorCrudController::class, 'Parrainages', 'fa fa-link');
         yield MenuItem::section('Demandes');

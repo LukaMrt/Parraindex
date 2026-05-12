@@ -4,8 +4,9 @@ import { AdminRoute } from './components/AdminRoute';
 import { PersonRoute } from './components/PersonRoute';
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
-import { CheckEmailPage } from './pages/auth/CheckEmailPage';
+import { SelectPersonPage } from './pages/auth/SelectPersonPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
+import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
 import { HomePage } from './pages/HomePage';
 
 export const router = createBrowserRouter([
@@ -17,8 +18,9 @@ export const router = createBrowserRouter([
       { path: '/', element: <HomePage /> },
       { path: '/login', element: <LoginPage /> },
       { path: '/register', element: <RegisterPage /> },
-      { path: '/check-email', element: <CheckEmailPage /> },
+      { path: '/select-person', element: <SelectPersonPage /> },
       { path: '/reset-password', element: <ResetPasswordPage /> },
+      { path: '/verify-email', element: <VerifyEmailPage /> },
       {
         path: '/tree',
         lazy: () => import('./pages/tree/TreePage').then((m) => ({ Component: m.TreePage })),

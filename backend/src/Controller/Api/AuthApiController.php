@@ -10,6 +10,7 @@ use App\Api\ApiResponse;
 use App\Api\ErrorCode;
 use App\Dto\Auth\MeResponseDto;
 use App\Entity\Person\User;
+use App\Repository\PersonRepository;
 use App\Service\AuthService;
 use App\Service\PersonService;
 use App\Service\UserService;
@@ -26,6 +27,7 @@ final class AuthApiController extends AbstractController
         private readonly UserService $userService,
         private readonly AuthService $authService,
         private readonly PersonService $personService,
+        private readonly PersonRepository $personRepository,
     ) {
     }
 
@@ -38,12 +40,13 @@ final class AuthApiController extends AbstractController
         throw new \LogicException('This method should not be reached — intercepted by json_login authenticator.');
     }
 
+    /**
+     * Intercepted by the api firewall logout listener — this method is never reached.
+     */
     #[Route('/api/auth/logout', name: 'api_auth_logout', methods: ['POST'])]
-    public function logout(Request $request): JsonResponse
+    public function logout(): never
     {
-        $request->getSession()->invalidate();
-
-        return ApiResponse::success(null);
+        throw new \LogicException('This method should not be reached — intercepted by the api firewall logout listener.');
     }
 
     #[Route('/api/auth/me', name: 'api_auth_me', methods: ['GET'])]
@@ -69,12 +72,16 @@ final class AuthApiController extends AbstractController
         $email    = is_string($data['email']) ? $data['email'] : '';
         $password = is_string($data['password']) ? $data['password'] : '';
 
+        $personId = isset($data['personId']) && is_int($data['personId']) ? $data['personId'] : null;
+
         $user = new User();
         $user->setEmail($email);
 
         try {
-            $this->userService->register($user, $password);
-            $this->userService->sendVerificationEmail($user);
+            $this->userService->register($user, $password, $personId);
+            if ($personId === null) {
+                $this->userService->sendVerificationEmail($user);
+            }
         } catch (\RuntimeException $runtimeException) {
             return ApiResponse::error(
                 new ApiError(ErrorCode::VALIDATION_ERROR, $runtimeException->getMessage()),
@@ -82,7 +89,32 @@ final class AuthApiController extends AbstractController
             );
         }
 
-        return ApiResponse::success(null, Response::HTTP_CREATED);
+        return ApiResponse::success(['isValidated' => $user->isValidated()], Response::HTTP_CREATED);
+    }
+
+    #[Route('/api/auth/persons-available', name: 'api_auth_persons_available', methods: ['GET'])]
+    public function personsAvailable(Request $request): JsonResponse
+    {
+        $page    = max(1, (int) $request->query->get('page', '1'));
+        $limit   = min(50, max(1, (int) $request->query->get('limit', '20')));
+        $offset  = ($page - 1) * $limit;
+        $persons = $this->personRepository->findWithoutUserPaginated($offset, $limit);
+        $total   = $this->personRepository->countWithoutUser();
+
+        return ApiResponse::success([
+            'items' => array_map(
+                static fn (Person $p): array => [
+                    'id'        => $p->getId(),
+                    'firstName' => $p->getFirstName(),
+                    'lastName'  => $p->getLastName(),
+                    'fullName'  => $p->getFirstName() . ' ' . $p->getLastName(),
+                    'startYear' => $p->getStartYear(),
+                    'color'     => $p->getColor(),
+                ],
+                $persons,
+            ),
+            'total' => $total,
+        ]);
     }
 
     #[Route('/api/auth/verify-email', name: 'api_auth_verify_email', methods: ['GET'])]
@@ -163,7 +195,7 @@ final class AuthApiController extends AbstractController
             id: (int) $user->getId(),
             email: (string) $user->getEmail(),
             isAdmin: $user->isAdmin(),
-            isVerified: $user->isVerified(),
+            isValidated: $user->isValidated(),
             person: $this->personService->mapToResponseDto($loaded),
         );
     }

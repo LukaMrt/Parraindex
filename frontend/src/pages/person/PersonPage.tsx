@@ -152,7 +152,8 @@ export function PersonPage() {
   }
 
   const color = promoColor(person.startYear);
-  const canEdit = user !== null && (user.isAdmin || user.person.id === person.id);
+  const canEdit =
+    user !== null && user.isValidated && (user.isAdmin || user.person.id === person.id);
   const visibleCharacteristics = person.characteristics.filter((c) => c.visible && c.value);
   const allSponsors = [...person.godFathers, ...person.godChildren];
   return (

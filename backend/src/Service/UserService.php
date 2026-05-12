@@ -28,28 +28,53 @@ final readonly class UserService
     }
 
     /**
-     * Registers a user by linking them to a Person derived from their university email.
+     * Registers a user.
      *
-     * @throws \RuntimeException if the email format is invalid or the matching Person does not exist.
+     * If personId is provided, links to that person (isValidated = false, requires admin approval).
+     * Otherwise, tries to auto-detect a matching Person from a university email (isValidated = true).
+     *
+     * @throws \RuntimeException if auto-detection fails or the person is already linked.
      */
-    public function register(User $user, string $plainPassword): void
+    public function register(User $user, string $plainPassword, ?int $personId = null): void
     {
-        $email = (string) $user->getEmail();
-        $names = $this->extractNamesFromEmail($email);
+        if ($personId !== null) {
+            $person = $this->personRepository->getById($personId);
 
-        if ($names === null) {
-            throw new \RuntimeException("Format d'email invalide");
+            if (!$person instanceof Person) {
+                throw new \RuntimeException('Personne introuvable');
+            }
+
+            if ($this->personRepository->hasLinkedUser($personId)) {
+                throw new \RuntimeException('Cette personne est déjà liée à un compte');
+            }
+
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword))
+                ->setPerson($person)
+                ->setValidated(false)
+                ->setCreatedAt(new \DateTimeImmutable());
+        } else {
+            $email = (string) $user->getEmail();
+            $names = $this->extractNamesFromEmail($email);
+
+            if ($names === null) {
+                throw new \RuntimeException("Format d'email non universitaire. Veuillez sélectionner votre profil manuellement.");
+            }
+
+            $person = $this->personRepository->getByIdentity($names['firstName'], $names['lastName']);
+
+            if (!$person instanceof Person) {
+                throw new \RuntimeException('Aucune personne ne correspond à cet email universitaire. Veuillez sélectionner votre profil manuellement.');
+            }
+
+            if ($this->personRepository->hasLinkedUser($person->getId())) {
+                throw new \RuntimeException('Un compte existe déjà pour cette personne');
+            }
+
+            $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword))
+                ->setPerson($person)
+                ->setValidated(false)
+                ->setCreatedAt(new \DateTimeImmutable());
         }
-
-        $person = $this->personRepository->getByIdentity($names['firstName'], $names['lastName']);
-
-        if (!$person instanceof Person) {
-            throw new \RuntimeException('Personne non trouvée');
-        }
-
-        $user->setPassword($this->passwordHasher->hashPassword($user, $plainPassword))
-            ->setPerson($person)
-            ->setCreatedAt(new \DateTimeImmutable());
 
         $this->userRepository->update($user);
     }

@@ -18,6 +18,8 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
+#[ORM\Index(name: 'idx_person_start_year', fields: ['startYear'])]
+#[ORM\Index(name: 'idx_person_name', fields: ['firstName', 'lastName'])]
 #[UniqueEntity(fields: ['firstName', 'lastName'], message: 'person.unique')]
 #[Vich\Uploadable]
 class Person implements \Stringable

@@ -45,7 +45,7 @@ export function LoginPage() {
       >
         <Input
           type="email"
-          placeholder="Email universitaire"
+          placeholder="Email"
           value={email}
           onChange={(e) => {
             setEmail(e.target.value);
