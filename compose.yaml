@@ -1,16 +1,10 @@
 services:
-  nginx:
+  app:
     build:
       context: .
-      dockerfile: docker/nginx/Dockerfile
+      dockerfile: docker/Dockerfile
     ports:
       - "80:80"
-    depends_on:
-      - frankenphp
-
-  frankenphp:
-    build:
-      context: ./backend
     environment:
       SERVER_NAME: ":80"
       DATABASE_HOST: database
@@ -20,6 +14,15 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       APP_SECRET: ${APP_SECRET}
       MAILER_DSN: "smtp://mail:1025"
+      DEFAULT_URI: "http://localhost"
+      FRONTEND_URL: "http://localhost"
+      MAIL_USER: "admin@localhost.com"
+      MAIL_PASSWORD: "password"
+      MAIL_HOST: "mail"
+      MAIL_PORT: "1025"
+      MAIL_NAME: "Parraindex"
+    volumes:
+      - ./backend/public/uploads:/app/public/uploads
     depends_on:
       - database
 
