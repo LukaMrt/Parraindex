@@ -4,7 +4,8 @@ import { register } from '../../lib/api/auth';
 import { Button, Input } from '../../components/ui';
 import { useNotification } from '../../hooks/useNotification';
 
-const UNIVERSITY_EMAIL_REGEX = /^[a-zA-Z-]+\.[a-zA-Z-]+@(?:etu\.univ-lyon1\.fr|cpe\.fr|insa-lyon\.fr)$/;
+const UNIVERSITY_EMAIL_REGEX =
+  /^[a-zA-Z-]+\.[a-zA-Z-]+@(?:etu\.univ-lyon1\.fr|cpe\.fr|insa-lyon\.fr)$/;
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -88,8 +89,8 @@ export function RegisterPage() {
               Détection automatique avec{' '}
               <span className="font-medium text-ink-2">@etu.univ-lyon1.fr</span>,{' '}
               <span className="font-medium text-ink-2">@cpe.fr</span> ou{' '}
-              <span className="font-medium text-ink-2">@insa-lyon.fr</span>
-              {' '}— l&apos;email peut être modifié ensuite.
+              <span className="font-medium text-ink-2">@insa-lyon.fr</span> — l&apos;email peut être
+              modifié ensuite.
             </p>
           )}
         </div>

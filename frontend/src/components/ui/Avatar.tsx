@@ -7,6 +7,7 @@ import type { Person } from '../../types/person';
 interface AvatarProps {
   person: Pick<Person, 'firstName' | 'lastName' | 'fullName' | 'picture' | 'startYear'>;
   size?: number;
+  initialsScale?: number;
   /** true = coins arrondis (carré), false = rond */
   square?: boolean;
   /** Remplit le conteneur parent (pour les cartes grille) */
@@ -18,6 +19,7 @@ interface AvatarProps {
 export function Avatar({
   person,
   size = 80,
+  initialsScale = 0.5,
   square = false,
   fill = false,
   imageSize = 'thumb',
@@ -29,7 +31,7 @@ export function Avatar({
   const initials = ((person.firstName[0] ?? '') + (person.lastName[0] ?? '')).toUpperCase();
   const radius = square ? '14%' : '50%';
   const dims = fill ? { width: '100%', height: '100%' } : { width: size, height: size };
-  const fontSize = fill ? 32 : size * 0.5;
+  const fontSize = fill ? 32 : size * initialsScale;
 
   if (person.picture && !imgError) {
     return (

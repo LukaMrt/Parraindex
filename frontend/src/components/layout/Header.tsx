@@ -1,6 +1,6 @@
 import { Link } from 'react-router';
+import { Avatar } from '../ui';
 import { useAuth } from '../../hooks/useAuth';
-import { pictureUrl } from '../../lib/imageUrl';
 
 export function Header() {
   const { user, logout } = useAuth();
@@ -29,11 +29,7 @@ export function Header() {
                 Administration
               </a>
             )}
-            <img
-              src={pictureUrl(user.person.picture)}
-              alt={user.person.fullName}
-              className="ml-2 h-8 w-8 rounded-full object-cover"
-            />
+            <Avatar person={user.person} size={32} initialsScale={0.38} className="ml-2" />
             <button
               onClick={() => {
                 void logout();
