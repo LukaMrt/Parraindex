@@ -73,6 +73,7 @@ jobs:
                     key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
                     restore-keys: ${{ runner.os }}-php-
             -   run: composer install --prefer-dist --no-progress --no-scripts
+            -   run: mkdir -p var/cache
             -   run: composer phpcs
 
 #    backend-tests:
