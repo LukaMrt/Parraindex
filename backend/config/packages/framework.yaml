@@ -1,0 +1,14 @@
+framework:
+    secret: '%env(APP_SECRET)%'
+    session: true
+    trusted_proxies: '127.0.0.1'
+    trusted_headers: ['x-forwarded-for', 'x-forwarded-host', 'x-forwarded-port', 'x-forwarded-proto']
+    form:
+        csrf_protection:
+            enabled: false
+
+when@test:
+    framework:
+        test: true
+        session:
+            storage_factory_id: session.storage.factory.mock_file

@@ -1,0 +1,150 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Importer des personnes via CSV{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        {% if result is defined and result is not null %}
+            <div class="alert {% if result.errors|length > 0 %}alert-warning{% else %}alert-success{% endif %}">
+                <h5 class="alert-heading">Résultat de l'import</h5>
+                <ul class="mb-0">
+                    <li><strong>Personnes créées :</strong> {{ result.personsCreated }}</li>
+                    <li><strong>Personnes ignorées (déjà existantes) :</strong> {{ result.personsSkipped }}</li>
+                    <li><strong>Parrainages créés :</strong> {{ result.sponsorsCreated }}</li>
+                    <li><strong>Parrainages ignorés (déjà existants) :</strong> {{ result.sponsorsSkipped }}</li>
+                </ul>
+                {% if result.errors|length > 0 %}
+                    <hr>
+                    <p class="mb-1"><strong>Erreurs :</strong></p>
+                    <ul class="mb-0">
+                        {% for error in result.errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Importer un fichier CSV</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Importez des personnes et leurs liens de parrainage en une seule fois via un fichier CSV.
+                    Téléchargez d'abord le template pour connaître le format attendu.
+                </p>
+                <a href="{{ path('api_admin_persons_import_template') }}" class="btn btn-outline-secondary mb-3">
+                    <i class="fa fa-download me-1"></i> Télécharger le template CSV
+                </a>
+
+                <form method="post" action="{{ path('admin_csv_import') }}" enctype="multipart/form-data">
+                    <input type="hidden" name="_token" value="{{ csrf_token('csv_import') }}">
+                    <div class="mb-3">
+                        <label for="csv_file" class="form-label fw-bold">Fichier CSV</label>
+                        <input type="file" class="form-control" id="csv_file" name="file" accept=".csv,text/csv" required>
+                        <div class="form-text">Formats acceptés : .csv — Encodage recommandé : UTF-8</div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-upload me-1"></i> Lancer l'import
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Format du fichier CSV</h5>
+            </div>
+            <div class="card-body">
+                <p>Le fichier doit contenir les colonnes suivantes (séparées par des virgules) :</p>
+                <div class="table-responsive">
+                    <table class="table table-bordered table-sm">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Colonne</th>
+                                <th>Obligatoire</th>
+                                <th>Description</th>
+                                <th>Exemple</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>firstName</code></td>
+                                <td><span class="badge bg-danger">Oui</span></td>
+                                <td>Prénom de la personne</td>
+                                <td>Jean</td>
+                            </tr>
+                            <tr>
+                                <td><code>lastName</code></td>
+                                <td><span class="badge bg-danger">Oui</span></td>
+                                <td>Nom de la personne</td>
+                                <td>Dupont</td>
+                            </tr>
+                            <tr>
+                                <td><code>startYear</code></td>
+                                <td><span class="badge bg-warning text-dark">Création</span></td>
+                                <td>Année d'entrée (1900–2100) — obligatoire uniquement si la personne n'existe pas encore</td>
+                                <td>2020</td>
+                            </tr>
+                            <tr>
+                                <td><code>biography</code></td>
+                                <td><span class="badge bg-secondary">Non</span></td>
+                                <td>Biographie libre</td>
+                                <td>Étudiant en BUT</td>
+                            </tr>
+                            <tr>
+                                <td><code>description</code></td>
+                                <td><span class="badge bg-secondary">Non</span></td>
+                                <td>Description courte</td>
+                                <td>Promo 2020</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td><code>godFatherFirstName</code></td>
+                                <td><span class="badge bg-secondary">Non</span></td>
+                                <td>Prénom du parrain (doit exister ou être dans le CSV)</td>
+                                <td>Marie</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td><code>godFatherLastName</code></td>
+                                <td><span class="badge bg-secondary">Non</span></td>
+                                <td>Nom du parrain</td>
+                                <td>Martin</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td><code>sponsorType</code></td>
+                                <td><span class="badge bg-secondary">Non</span></td>
+                                <td>Type : <code>HEART</code>, <code>CLASSIC</code> ou <code>UNKNOWN</code></td>
+                                <td>CLASSIC</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td><code>sponsorDate</code></td>
+                                <td><span class="badge bg-secondary">Non</span></td>
+                                <td>Date du parrainage (format YYYY-MM-DD)</td>
+                                <td>2021-09-01</td>
+                            </tr>
+                            <tr class="table-info">
+                                <td><code>sponsorDescription</code></td>
+                                <td><span class="badge bg-secondary">Non</span></td>
+                                <td>Description du lien de parrainage</td>
+                                <td>Parrainage de promo</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="alert alert-info mt-3 mb-0">
+                    <i class="fa fa-info-circle me-1"></i>
+                    Les colonnes surlignées en bleu concernent les liens de parrainage.
+                    Si <code>godFatherFirstName</code> et <code>godFatherLastName</code> sont renseignés,
+                    un lien de parrainage sera créé entre le parrain et le filleul de cette ligne.
+                    Si la personne existe déjà en base (même prénom et nom), elle est ignorée et l'on passe
+                    directement à la création du lien de parrainage — <code>startYear</code> peut alors être vide.
+                    Il est ainsi possible d'ajouter plusieurs liens en un seul fichier : répétez simplement
+                    le prénom et le nom du parrain sur plusieurs lignes avec des parrainages différents.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

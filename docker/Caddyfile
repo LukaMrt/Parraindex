@@ -1,0 +1,30 @@
+{
+    frankenphp
+    admin off
+}
+
+:80 {
+    # PHP backend routes
+    @backend path /api/* /api /admin* /bundles/* /media/* /uploads/* /_wdt* /_profiler*
+
+    handle @backend {
+        root * /app/public
+        php_server
+    }
+
+    # Vite hashed assets — long-lived cache
+    @hashed path_regexp \.(js|css|woff2?|ttf|eot|svg|png|jpg|jpeg|gif|ico|webp)$
+
+    handle @hashed {
+        root * /app/front
+        header Cache-Control "public, max-age=31536000, immutable"
+        file_server
+    }
+
+    # SPA fallback — all other routes → React Router
+    handle {
+        root * /app/front
+        try_files {path} /index.html
+        file_server
+    }
+}

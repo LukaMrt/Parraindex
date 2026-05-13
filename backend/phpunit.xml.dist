@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- https://phpunit.readthedocs.io/en/latest/configuration.html -->
+<phpunit xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="vendor/phpunit/phpunit/phpunit.xsd" colors="true" bootstrap="tests/bootstrap.php" displayDetailsOnTestsThatTriggerDeprecations="true" displayDetailsOnTestsThatTriggerErrors="true" displayDetailsOnTestsThatTriggerNotices="true" displayDetailsOnTestsThatTriggerWarnings="true" displayDetailsOnPhpunitDeprecations="true">
+  <php>
+    <ini name="display_errors" value="1"/>
+    <ini name="error_reporting" value="-1"/>
+    <server name="APP_ENV" value="test" force="true"/>
+    <server name="SHELL_VERBOSITY" value="-1"/>
+    <server name="SYMFONY_PHPUNIT_REMOVE" value=""/>
+    <env name="KERNEL_CLASS" value="App\Kernel"/>
+  </php>
+  <testsuites>
+    <testsuite name="Project Test Suite">
+      <directory>tests</directory>
+    </testsuite>
+  </testsuites>
+  <source>
+    <include>
+      <directory>src</directory>
+    </include>
+    <exclude>
+      <directory>src/Fixture</directory>
+      <file>src/Kernel.php</file>
+    </exclude>
+  </source>
+  <coverage includeUncoveredFiles="true" pathCoverage="false" ignoreDeprecatedCodeUnits="true" disableCodeCoverageIgnore="false">
+    <report>
+      <html outputDirectory="coverage-html" lowUpperBound="50" highLowerBound="90"/>
+      <text outputFile="php://stdout" showUncoveredFiles="false" showOnlySummary="true"/>
+      <clover outputFile="coverage-clover.xml"/>
+    </report>
+  </coverage>
+  <extensions>
+    <bootstrap class="Symfony\Bridge\PhpUnit\SymfonyExtension">
+      <parameter name="clock-mock-namespaces" value="App"/>
+      <parameter name="dns-mock-namespaces" value="App"/>
+    </bootstrap>
+    <bootstrap class="DAMA\DoctrineTestBundle\PHPUnit\PHPUnitExtension"/>
+  </extensions>
+</phpunit>

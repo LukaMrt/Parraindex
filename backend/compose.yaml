@@ -1,0 +1,18 @@
+services:
+  database:
+    image: mysql:9
+    ports:
+      - "${DATABASE_PORT}:3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "no"
+      MYSQL_USER: ${DATABASE_USER}
+      MYSQL_PASSWORD: ${DATABASE_PASSWORD}
+      MYSQL_DATABASE: ${DATABASE_NAME}
+    volumes:
+      - ./var/lib/mysql:/var/lib/mysql
+      - ./docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "${MAIL_PORT}:1025"
+      - "${MAIL_WEB_PORT}:8025"

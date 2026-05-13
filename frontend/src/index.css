@@ -1,0 +1,67 @@
+@import 'tailwindcss';
+@import './styles/tokens.css';
+@import './styles/keyframes.css';
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background-color: var(--color-bg);
+  color: var(--color-ink);
+}
+
+/* ── Scrollbar input range (arbre) ── */
+.tree-slider {
+  appearance: none;
+  height: 3px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+}
+
+.tree-slider::-webkit-slider-runnable-track {
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--color-line);
+}
+
+.tree-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-ink-2);
+  margin-top: -5.5px;
+  transition:
+    transform 120ms ease,
+    box-shadow 120ms ease;
+}
+
+.tree-slider:hover::-webkit-slider-thumb,
+.tree-slider:focus::-webkit-slider-thumb {
+  transform: scale(1.25);
+}
+
+.tree-slider::-moz-range-track {
+  height: 3px;
+  border-radius: 9999px;
+  background: var(--color-line);
+}
+
+.tree-slider::-moz-range-thumb {
+  border: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--color-ink-2);
+}
+
+.tree-slider:disabled {
+  opacity: 0.3;
+  cursor: default;
+}

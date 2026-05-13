@@ -1,6 +1,6 @@
 # Parraindex
 
-[![Version](https://img.shields.io/badge/version-1.0.0-blue)]()
+[![Version](https://img.shields.io/badge/version-2.0.0-blue)]()
 [![Lines of Code](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=ncloc)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=coverage)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=LukaMrt_Parraindex&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=LukaMrt_Parraindex)
@@ -10,87 +10,240 @@
 [![All Contributors](https://img.shields.io/badge/all_contributors-4-orange.svg?style=flat)](#contributors)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
 
-## About the project
+## À propos
 
-This project is a school project made for the third semester of the Bachelor's degree in Computer Science at the
-University of Lyon 1. The objective of this project is to create a web application with a visual interface and
-an administration interface used to manage the application.
+Parraindex est une application web qui visualise les relations de parrainage entre étudiants de l'IUT Lyon 1. Chaque étudiant peut créer son profil, voir les liens qui existent entre les personnes, et soumettre des demandes de parrainage validées par les administrateurs.
 
-We decided to create a website which presents the relationship existing between students of the Institute of
-Technology. There are many sponsor relationships between students, and we wanted to create a website that would
-allow students to see all the links between people. This website will also allow students to create their own
-profile and to add their own sponsor relationships (through a contact form because administrators need to validate
-those creations). Administrators are able to manage the website and the users (add, delete, modify, etc.) with an
-admin panel which is accessible only to them and gathers all the requests made by users with the contact form.
+Le site est accessible à l'adresse : [https://parraindex.com](https://parraindex.com)
 
-This project is kind of a social network. You can see the relationships between people and customize your profile.
-You can't post anything, you can't follow people, you can't chat with people, etc...
+## Architecture
 
-You can visit the final website at this address : [https://parraindex.com](https://parraindex.com)
-You can also find the source code of the website at this
-address : [https://github.com/LukaMrt/Parraindex](https://github.com/LukaMrt/Parraindex)
+L'application suit une architecture **SPA découplée** :
 
-## Built with
+```
+parraindex/
+├── backend/       # API Symfony 8 — FrankenPHP
+├── frontend/      # SPA React 19 — Vite
+├── docker/        # Config Nginx (prod)
+└── compose.yaml   # Orchestration Docker (prod)
+```
 
-The school imposed to not use any framework, so we decided to use the following technologies to create the website:
+**Backend** — `backend/`
 
-* Twig for the front-end
-* SCSS for styling
-* JavaScript for front-end interactions
-* PHP and some libraries for back-end with Composer to manage these dependencies
-* MariaDB for the database
+| Technologie  | Version | Rôle                            |
+| ------------ | ------- | ------------------------------- |
+| PHP          | 8.5     | Runtime                         |
+| Symfony      | 8       | Framework HTTP + DI             |
+| FrankenPHP   | 1.5     | Serveur HTTP (remplace PHP-FPM) |
+| Doctrine ORM | 3       | Accès base de données           |
+| MySQL        | 9       | Base de données                 |
 
-## Installation
+Structure interne du backend :
+```
+backend/src/
+  Api/          # Wrappers de réponse JSON (ApiResponse, ApiError, ErrorCode)
+  Controller/   # Controllers API (orchestration uniquement, pas de logique métier)
+  Dto/          # DTOs de requête et réponse (Person, Sponsor, Contact, Auth…)
+  Entity/       # Entités Doctrine
+  Repository/   # Accès aux données
+  Security/     # Voters (PersonVoter, AdminVoter…)
+  Service/      # Logique métier (PersonService, SponsorService…)
+```
 
-### Requirements
+**Frontend** — `frontend/`
 
-To launch the project, you need to have the following software installed on your computer (or on a server and reachable
-from your computer, for example the MariaDB database):
+| Technologie  | Version  | Rôle        |
+| ------------ | -------- | ----------- |
+| React        | 19       | UI          |
+| Vite         | 6        | Bundler     |
+| TypeScript   | 5 strict | Typage      |
+| Tailwind CSS | 4.2      | Styles      |
+| React Router | 7        | Routing SPA |
+| Vitest       | latest   | Tests       |
 
-* PHP
-* MariaDB
-* Composer
-* SCSS
+Structure interne du frontend :
+```
+frontend/src/
+  components/   # Composants React purs (UI uniquement)
+  context/      # Contextes React (AuthContext…)
+  hooks/        # Hooks React (useAuth, useCarousel, usePersonFilter…)
+  lib/          # Fonctions pures sans React (api client, utils)
+  pages/        # Un dossier par route
+  types/        # Types TypeScript partagés (DTOs, enums)
+  router.tsx    # Définition des routes React Router
+  main.tsx      # Point d'entrée
+```
 
-You also need to have a working mail server to send emails.
+**En production**, Nginx sert les fichiers statiques Vite et fait office de reverse proxy :
+```
+Nginx :80
+  ├── /api/*  →  FrankenPHP (Symfony)
+  └── /*      →  dist/ React (SPA fallback index.html)
+```
 
-### Launching the project
+---
 
-To launch the project, you need to follow these steps:
+## Développement local (sans Docker)
 
-1. Clone the repository
-2. Install the dependencies with `composer install`
-3. Create a database and import the `creation.sql` file located in the `database` folder
-4. Create a `.env` file in the root folder of the project and fill it with the following information (follow the
-   example of the `.env.example` file):
+### Prérequis
 
-   ```properties
-    # Environment
-   DEBUG="false"               # Set to "true" to enable debug mode
-   
-   # Database
-   DRIVER="mysql"              # Database driver (mysql, pgsql, sqlite, ...)
-   HOST="host"                 # Host of the database (ip or domain name)
-   PORT="3306"                 # Port of the database (default for mariadb: 3306)
-   DATABASE="database"         # Name of the used database
-   USERNAME="user"             # Username used to connect to the database
-   PASSWORD="password"         # Password of the user used to connect to the database
-   
-   # Mail
-   MAIL_HOST="host"            # Host of the mail server (ip or domain name)
-   MAIL_PORT="587"             # Port of the mail server (default: 587)
-   MAIL_USERNAME="username"    # Username used to connect to the mail server
-   MAIL_PASSWORD="password"    # Password of the user used to connect to the mail server
-   ```
+- PHP 8.5+ avec extensions `pdo_mysql`, `intl`, `ctype`, `iconv`
+- Composer 2
+- Node.js 22+ et npm
+- MySQL 9 (ou MariaDB 10.11+)
+- Symfony CLI (recommandé pour le serveur de développement)
 
-5. Build the CSS files with `sass --update scss:public/css` or `composer sass` if you want to watch the changes
-   in the SCSS files and automatically rebuild the CSS files
-6. Launch the project with `php -S localhost:8000 -t public` or `composer server`
+### 1 — Cloner le dépôt
 
-## Contributing
+```bash
+git clone https://github.com/LukaMrt/Parraindex.git
+cd Parraindex
+```
 
-Feel free to contribute to the project by creating a pull request or by opening an issue. If you want to contribute
-to the project, please read the [CONTRIBUTING.md](CONTRIBUTING.md) file.
+### 2 — Configurer le backend
+
+```bash
+cd backend
+composer install
+```
+
+Créer le fichier `.env.local` (jamais commité) :
+
+```properties
+APP_ENV=dev
+APP_SECRET=une_chaine_aleatoire_longue
+
+DATABASE_URL="mysql://user:password@127.0.0.1:3306/parraindex"
+
+MAILER_DSN="smtp://localhost:1025"   # Mailhog en local, ou null://null pour ignorer
+```
+
+Initialiser la base de données :
+
+```bash
+php bin/console doctrine:database:create
+php bin/console doctrine:migrations:migrate
+php bin/console doctrine:fixtures:load   # données de test (optionnel)
+```
+
+Démarrer le serveur backend :
+
+```bash
+symfony serve --port=8000
+# ou sans la CLI Symfony :
+php -S localhost:8000 public/index.php
+```
+
+L'API répond sur `http://localhost:8000/api/`.
+
+### 3 — Configurer le frontend
+
+```bash
+cd ../frontend
+npm install
+```
+
+Créer le fichier `.env.local` pour pointer vers le backend local :
+
+```properties
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+Démarrer le serveur de développement :
+
+```bash
+npm run dev
+```
+
+Le frontend répond sur `http://localhost:5173` avec hot-reload.
+
+### Commandes utiles (développement)
+
+**Backend :**
+
+```bash
+# Qualité
+composer phpstan          # Analyse statique niveau max
+composer phpcs            # Style de code
+composer test             # Tests PHPUnit
+composer infection        # Tests de mutation
+
+# Base de données
+php bin/console doctrine:migrations:migrate
+php bin/console doctrine:migrations:diff   # Générer une migration
+```
+
+**Frontend :**
+
+```bash
+npm run dev           # Serveur de développement
+npm run typecheck     # Vérification TypeScript
+npm run lint          # ESLint (0 warning toléré)
+npm run format        # Prettier
+npm run test          # Vitest (watch mode)
+npm run test:coverage # Rapport de couverture
+npm run build         # Build de production
+```
+
+---
+
+## Production (Docker)
+
+### Prérequis
+
+- Docker Engine 24+
+- Docker Compose v2
+
+### 1 — Variables d'environnement
+
+Créer un fichier `.env` à la racine du projet (à côté de `compose.yaml`) :
+
+```properties
+DATABASE_NAME=parraindex
+DATABASE_USER=app
+DATABASE_PASSWORD=mot_de_passe_securise
+APP_SECRET=une_chaine_aleatoire_longue_32_chars
+MAIL_WEB_PORT=8025   # Port exposé pour l'interface Mailhog
+```
+
+### 2 — Démarrer les services
+
+```bash
+docker compose up --build -d
+```
+
+Les services démarrés :
+
+| Service      | Image                  | Port exposé                     |
+| ------------ | ---------------------- | ------------------------------- |
+| `nginx`      | build local            | 80                              |
+| `frankenphp` | build local (backend/) | —                               |
+| `database`   | mysql:9                | —                               |
+| `mail`       | mailhog/mailhog        | `MAIL_WEB_PORT` (défaut : 8025) |
+
+### 3 — Initialiser la base de données (premier démarrage)
+
+```bash
+docker compose exec frankenphp php bin/console doctrine:migrations:migrate --no-interaction
+```
+
+### 4 — Accéder à l'application
+
+- Application : `http://localhost`
+- Interface mail (Mailhog) : `http://localhost:8025`
+
+### Arrêter les services
+
+```bash
+docker compose down          # Arrêter sans supprimer les volumes
+docker compose down -v       # Arrêter et supprimer les données
+```
+
+---
+
+## Contribuer
+
+Les contributions sont les bienvenues. Merci de lire [CONTRIBUTING.md](CONTRIBUTING.md) avant d'ouvrir une pull request.
 
 ## Contributors
 
@@ -109,15 +262,12 @@ Thanks goes to these wonderful people ([emoji key](https://allcontributors.org/d
     </tr>
   </tbody>
 </table>
-
 <!-- markdownlint-restore -->
 <!-- prettier-ignore-end -->
-
 <!-- ALL-CONTRIBUTORS-LIST:END -->
 
-This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification.
-Contributions of any kind welcome!
+This project follows the [all-contributors](https://github.com/all-contributors/all-contributors) specification. Contributions of any kind welcome!
 
-## License
+## Licence
 
-The Parraindex is licensed under the [MIT License](LICENSE).
+Parraindex est distribué sous la [licence MIT](LICENSE).

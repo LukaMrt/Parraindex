@@ -1,0 +1,30 @@
+# yaml-language-server: $schema=../vendor/symfony/dependency-injection/Loader/schema/services.schema.json
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+
+    _instanceof:
+        App\Service\Contact\ContactResolverInterface:
+            tags: ['app.contact_resolver']
+
+    App\:
+        resource: '%kernel.project_dir%/src/'
+        exclude:
+            - '%kernel.project_dir%/src/DependencyInjection/'
+            - '%kernel.project_dir%/src/Entity/'
+            - '%kernel.project_dir%/src/Kernel.php'
+
+    App\Service\Contact\ContactResolverManager:
+        arguments:
+            $resolvers: !tagged_iterator app.contact_resolver
+
+    App\Command\MigratePicturesCommand:
+        arguments:
+            $projectDir: '%kernel.project_dir%'
+
+    App\Security\EmailVerifier: ~
+
+    App\Service\Contact\Resolver\PasswordResolver:
+        arguments:
+            $appUrl: '%env(APP_URL)%'

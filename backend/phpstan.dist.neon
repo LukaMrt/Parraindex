@@ -1,0 +1,44 @@
+includes:
+    - vendor/phpstan/phpstan-symfony/extension.neon
+    - vendor/phpstan/phpstan-doctrine/extension.neon
+    - vendor/phpstan/phpstan-phpunit/extension.neon
+    - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+
+parameters:
+    # Directories to be analyzed
+    paths:
+        - src
+        - tests
+
+    # Level 0 is the loosest, level 10 is the strictest
+    level: 10
+
+    # Cache configuration for better performance
+    tmpDir: var/cache/phpstan
+    resultCachePath: var/cache/phpstan/resultCache.php
+
+    # Exclude specific files or directories from analysis
+    excludePaths:
+        - */old/*
+        - */Application/*
+        - */tests/bootstrap.php
+
+    # Symfony configuration
+    # Note: Uncomment and generate container XML if needed
+    # symfony:
+    #     containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+
+    # Report uninitialized properties
+    checkUninitializedProperties: true
+
+    # Enable stricter checks for arrays
+    checkExplicitMixed: true
+
+    # Check missing parameter types
+    checkMissingCallableSignature: true
+
+    # Additional strict rules
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkDynamicProperties: true
+
+    # ignoreErrors:

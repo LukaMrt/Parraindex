@@ -1,0 +1,131 @@
+{
+    "name": "lukamrt/parraindex",
+    "description": "School project that stores the list of godfathers and godchildren at the IUT Lyon 1",
+    "type": "project",
+    "license": "proprietary",
+    "minimum-stability": "stable",
+    "prefer-stable": true,
+    "require": {
+        "php": ">=8.5",
+        "ext-ctype": "*",
+        "ext-iconv": "*",
+        "doctrine/dbal": "4.*",
+        "doctrine/doctrine-bundle": "3.*",
+        "doctrine/doctrine-migrations-bundle": "4.*",
+        "doctrine/orm": "3.*",
+        "easycorp/easyadmin-bundle": "^5.0",
+        "liip/imagine-bundle": "^2.17",
+        "phpdocumentor/reflection-docblock": "6.*",
+        "phpstan/phpdoc-parser": "2.*",
+        "symfony/console": "8.*",
+        "symfony/doctrine-messenger": "8.*",
+        "symfony/dotenv": "8.*",
+        "symfony/expression-language": "8.*",
+        "symfony/flex": "^v2.10",
+        "symfony/form": "8.*",
+        "symfony/framework-bundle": "8.*",
+        "symfony/http-client": "8.*",
+        "symfony/intl": "8.*",
+        "symfony/mailer": "8.*",
+        "symfony/mime": "8.*",
+        "symfony/monolog-bundle": "v4.*",
+        "symfony/notifier": "8.*",
+        "symfony/object-mapper": "8.*",
+        "symfony/process": "8.*",
+        "symfony/property-access": "8.*",
+        "symfony/property-info": "8.*",
+        "symfony/runtime": "8.*",
+        "symfony/security-bundle": "8.*",
+        "symfony/security-csrf": "8.*",
+        "symfony/serializer": "8.*",
+        "symfony/string": "8.*",
+        "symfony/translation": "8.*",
+        "symfony/validator": "8.*",
+        "symfony/yaml": "8.*",
+        "symfonycasts/reset-password-bundle": "1.*",
+        "symfonycasts/verify-email-bundle": "1.*",
+        "vich/uploader-bundle": "^2.9"
+    },
+    "config": {
+        "allow-plugins": {
+            "infection/extension-installer": true,
+            "php-http/discovery": true,
+            "symfony/flex": true,
+            "symfony/runtime": true
+        },
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "App\\Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "auto-scripts": {},
+        "post-install-cmd": "php -d memory_limit=512M bin/console cache:clear",
+        "post-update-cmd": "php -d memory_limit=512M bin/console cache:clear",
+        "fixtures": "php bin/console doctrine:fixtures:load --no-interaction",
+        "database:reset": [
+            "php bin/console doctrine:database:drop --if-exists --force",
+            "php bin/console doctrine:database:create",
+            "php bin/console doctrine:migrations:migrate --no-interaction",
+            "@fixtures"
+        ],
+        "migration:new": "php bin/console make:migration",
+        "migration:run": "php bin/console doctrine:migrations:migrate --no-interaction",
+        "test": [
+            "php bin/console doctrine:database:create --if-not-exists --env=test",
+            "php bin/console doctrine:migrations:migrate --no-interaction --env=test",
+            "php bin/console doctrine:fixtures:load --no-interaction --env=test",
+            "XDEBUG_MODE=coverage php bin/phpunit --coverage-html var/coverage/html"
+        ],
+        "rector": "php vendor/bin/rector process",
+        "rector:dry": "php vendor/bin/rector process --dry-run",
+        "phpstan": "php vendor/bin/phpstan --memory-limit=1G",
+        "phpcs": "php vendor/bin/phpcs --cache=var/cache/phpcs",
+        "phpcs:fix": "php vendor/bin/phpcbf",
+        "cache:clear": "php bin/console cache:clear",
+        "server:start": "symfony server:start -d",
+        "server:stop": "symfony server:stop",
+        "server:log": "symfony server:log",
+        "server:restart": [
+            "@server-stop",
+            "@server-start"
+        ],
+        "docker": "docker buildx build --platform linux/arm64 -t lukamrt/parraindex --push ."
+    },
+    "conflict": {
+        "symfony/symfony": "*"
+    },
+    "extra": {
+        "symfony": {
+            "allow-contrib": false,
+            "require": "8.*"
+        }
+    },
+    "require-dev": {
+        "dama/doctrine-test-bundle": "8.*",
+        "doctrine/doctrine-fixtures-bundle": "4.*",
+        "infection/infection": "0.*",
+        "phpstan/phpstan": "2.*",
+        "phpstan/phpstan-deprecation-rules": "*",
+        "phpstan/phpstan-doctrine": "*",
+        "phpstan/phpstan-phpunit": "*",
+        "phpstan/phpstan-symfony": "*",
+        "phpunit/phpunit": "13.*",
+        "rector/rector": "2.*",
+        "squizlabs/php_codesniffer": "4.*",
+        "symfony/browser-kit": "8.*",
+        "symfony/css-selector": "8.*",
+        "symfony/debug-bundle": "8.*",
+        "symfony/maker-bundle": "1.*",
+        "symfony/phpunit-bridge": "8.*",
+        "symfony/stopwatch": "8.*",
+        "symfony/web-profiler-bundle": "8.*"
+    }
+}
