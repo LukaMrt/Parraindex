@@ -84,8 +84,8 @@
                             </tr>
                             <tr>
                                 <td><code>startYear</code></td>
-                                <td><span class="badge bg-danger">Oui</span></td>
-                                <td>Année d'entrée (1900–2100)</td>
+                                <td><span class="badge bg-warning text-dark">Création</span></td>
+                                <td>Année d'entrée (1900–2100) — obligatoire uniquement si la personne n'existe pas encore</td>
                                 <td>2020</td>
                             </tr>
                             <tr>
@@ -138,11 +138,10 @@
                     Les colonnes surlignées en bleu concernent les liens de parrainage.
                     Si <code>godFatherFirstName</code> et <code>godFatherLastName</code> sont renseignés,
                     un lien de parrainage sera créé entre le parrain et le filleul de cette ligne.
-                    Les personnes sont d'abord toutes créées, puis les liens sont établis.
-                    Il est possible d'ajouter plusieurs liens en un seul fichier pour une personne,
-                    pour cela, ajoutez simplement plusieurs ligne avec les premiers champs de cette personne
-                    et avec des liens de parrainage différents. Elle ne sera pas dupliquées mais tous les
-                    liens seront créés.
+                    Si la personne existe déjà en base (même prénom et nom), elle est ignorée et l'on passe
+                    directement à la création du lien de parrainage — <code>startYear</code> peut alors être vide.
+                    Il est ainsi possible d'ajouter plusieurs liens en un seul fichier : répétez simplement
+                    le prénom et le nom du parrain sur plusieurs lignes avec des parrainages différents.
                 </div>
             </div>
         </div>

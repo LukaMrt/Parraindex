@@ -81,6 +81,8 @@ final readonly class CsvImportService
 
             if (count($row) < count($headers)) {
                 $row = array_pad($row, count($headers), '');
+            } elseif (count($row) > count($headers)) {
+                $row = array_slice($row, 0, count($headers));
             }
 
             /** @var array<string, string> $data */
@@ -161,14 +163,9 @@ final readonly class CsvImportService
     {
         $firstName = trim($data['firstName'] ?? '');
         $lastName  = trim($data['lastName'] ?? '');
-        $startYear = trim($data['startYear'] ?? '');
 
         if ($firstName === '' || $lastName === '') {
             return sprintf('Ligne %d: prénom et nom sont obligatoires.', $lineNumber);
-        }
-
-        if (!is_numeric($startYear) || (int) $startYear < 1900 || (int) $startYear > 2100) {
-            return sprintf('Ligne %d: année d\'entrée invalide "%s" (doit être entre 1900 et 2100).', $lineNumber, $startYear);
         }
 
         $normalizedFirst = ucfirst(strtolower($firstName));
@@ -177,12 +174,17 @@ final readonly class CsvImportService
         $existing = $this->personRepository->getByIdentity($normalizedFirst, $normalizedLast);
 
         if ($existing instanceof Person) {
-            // Add to importedPersons so they can be referenced as godFathers
             if (!in_array($existing, $importedPersons, true)) {
                 $importedPersons[] = $existing;
             }
 
             return null;
+        }
+
+        $startYear = trim($data['startYear'] ?? '');
+
+        if (!is_numeric($startYear) || (int) $startYear < 1900 || (int) $startYear > 2100) {
+            return sprintf('Ligne %d: année d\'entrée invalide "%s" (doit être entre 1900 et 2100).', $lineNumber, $startYear);
         }
 
         $person = new Person();

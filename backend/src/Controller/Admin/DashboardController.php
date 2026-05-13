@@ -13,11 +13,16 @@ use EasyCorp\Bundle\EasyAdminBundle\Attribute\AdminDashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
+use EasyCorp\Bundle\EasyAdminBundle\Router\AdminUrlGenerator;
 use Symfony\Component\HttpFoundation\Response;
 
 #[AdminDashboard(routePath: '/admin', routeName: 'admin')]
 final class DashboardController extends AbstractDashboardController
 {
+    public function __construct(private readonly AdminUrlGenerator $adminUrlGenerator)
+    {
+    }
+
     #[\Override]
     public function index(): Response
     {
@@ -38,7 +43,7 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToDashboard('Tableau de bord', 'fa fa-home');
         yield MenuItem::section('Personnes');
         yield MenuItem::linkTo(PersonCrudController::class, 'Personnes', 'fa fa-user');
-        yield MenuItem::linkToRoute('Importer CSV', 'fa fa-upload', 'admin_csv_import');
+        yield MenuItem::linkToUrl('Importer CSV', 'fa fa-upload', $this->adminUrlGenerator->setRoute('admin_csv_import')->generateUrl());
         yield MenuItem::linkTo(UserCrudController::class, 'Comptes', 'fa fa-lock');
         yield MenuItem::linkTo(PendingUserCrudController::class, 'En attente de validation', 'fa fa-clock');
         yield MenuItem::section('Parrainages');
