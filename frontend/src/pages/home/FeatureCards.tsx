@@ -1,4 +1,5 @@
 import { Link } from 'react-router';
+import { useAuth } from '../../hooks/useAuth';
 
 interface FeatureCard {
   title: string;
@@ -7,18 +8,12 @@ interface FeatureCard {
   iconPath: string;
 }
 
-const CARDS: FeatureCard[] = [
+const BASE_CARDS: FeatureCard[] = [
   {
     title: 'Annuaire',
     description: 'Parcourez tous les étudiants en grille, liste ou arbre de parrainage.',
     to: '/tree',
     iconPath: 'M3 4h14M3 9h14M3 14h14',
-  },
-  {
-    title: 'Profil',
-    description: 'Découvrez les parrains, fillots, biographie et liens de chaque étudiant.',
-    to: '/tree',
-    iconPath: 'M10 10a3 3 0 100-6 3 3 0 000 6zM2 17a8 8 0 0116 0',
   },
   {
     title: 'À propos',
@@ -28,13 +23,25 @@ const CARDS: FeatureCard[] = [
   },
 ];
 
+const PROFILE_CARD_BASE = {
+  title: 'Mon profil',
+  description: 'Découvrez vos parrains, fillots, biographie et liens.',
+  iconPath: 'M10 10a3 3 0 100-6 3 3 0 000 6zM2 17a8 8 0 0116 0',
+};
+
 export function FeatureCards() {
+  const { user } = useAuth();
+
+  const cards: FeatureCard[] = user
+    ? [BASE_CARDS[0], { ...PROFILE_CARD_BASE, to: `/person/${user.person.id}` }, BASE_CARDS[1]]
+    : BASE_CARDS;
+
   return (
     <div
       className="grid gap-4"
       style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))' }}
     >
-      {CARDS.map((card) => (
+      {cards.map((card) => (
         <Link
           key={card.title}
           to={card.to}
