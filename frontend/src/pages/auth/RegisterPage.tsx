@@ -4,7 +4,7 @@ import { register } from '../../lib/api/auth';
 import { Button, Input } from '../../components/ui';
 import { useNotification } from '../../hooks/useNotification';
 
-const UNIVERSITY_EMAIL_REGEX = /^[a-zA-Z-]+\.[a-zA-Z-]+@etu\.univ-lyon1\.fr$/;
+const UNIVERSITY_EMAIL_REGEX = /^[a-zA-Z-]+\.[a-zA-Z-]+@(?:etu\.univ-lyon1\.fr|cpe\.fr|insa-lyon\.fr)$/;
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -61,7 +61,7 @@ export function RegisterPage() {
         }}
         className="flex flex-col gap-3"
       >
-        <div>
+        <div className="flex flex-col gap-2">
           <Input
             type="email"
             placeholder="votre@email.com"
@@ -71,9 +71,27 @@ export function RegisterPage() {
             }}
             required
           />
-          <p className="mt-1 text-xs text-ink-3">
-            Email universitaire Lyon 1 ou adresse personnelle
-          </p>
+          {email.length > 0 ? (
+            UNIVERSITY_EMAIL_REGEX.test(email) ? (
+              <p className="flex items-center gap-1.5 text-xs text-emerald-600 dark:text-emerald-400">
+                <span>✓</span>
+                <span>Profil détecté automatiquement depuis votre email</span>
+              </p>
+            ) : (
+              <p className="flex items-center gap-1.5 text-xs text-amber-600 dark:text-amber-400">
+                <span>⚠</span>
+                <span>Votre compte devra être validé par un admin</span>
+              </p>
+            )
+          ) : (
+            <p className="text-xs text-ink-3">
+              Détection automatique avec{' '}
+              <span className="font-medium text-ink-2">@etu.univ-lyon1.fr</span>,{' '}
+              <span className="font-medium text-ink-2">@cpe.fr</span> ou{' '}
+              <span className="font-medium text-ink-2">@insa-lyon.fr</span>
+              {' '}— l&apos;email peut être modifié ensuite.
+            </p>
+          )}
         </div>
         <Input
           type="password"
