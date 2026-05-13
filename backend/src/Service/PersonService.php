@@ -117,7 +117,6 @@ final readonly class PersonService
             lastName: $person->getLastName(),
             fullName: $person->getFullName(),
             picture: $picture,
-            color: $person->getColor() ?? '#000000',
             startYear: $person->getStartYear() ?? 0,
             birthdate: $person->getBirthdate()?->format('Y-m-d'),
             biography: $person->getBiography(),

@@ -74,17 +74,6 @@ final class PersonTest extends TestCase
         $this->assertSame('John DOE', $result);
     }
 
-    public function testConstructorGeneratesHexColor(): void
-    {
-        // Given & When
-        $person = new Person();
-
-        // Then
-        $color = $person->getColor();
-        $this->assertNotNull($color);
-        $this->assertMatchesRegularExpression('/^#[0-9A-F]{6}$/i', $color);
-    }
-
     public function testConstructorInitializesCollections(): void
     {
         // Given & When

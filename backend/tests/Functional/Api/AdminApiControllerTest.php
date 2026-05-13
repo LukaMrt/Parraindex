@@ -148,8 +148,8 @@ final class AdminApiControllerTest extends WebTestCase
     {
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
 
-        $csvContent = "firstName,lastName,startYear,biography,description,color,godFatherFirstName,godFatherLastName,sponsorType,sponsorDate,sponsorDescription\n"
-            . "Import,Testperson,2025,,,,,,,\n";
+        $csvContent = "firstName,lastName,startYear,biography,description,godFatherFirstName,godFatherLastName,sponsorType,sponsorDate,sponsorDescription\n"
+            . "Import,Testperson,2025,,,,,,\n";
 
         $tmpFile = tempnam(sys_get_temp_dir(), 'csv_test_');
         $this->assertNotFalse($tmpFile);
@@ -178,9 +178,9 @@ final class AdminApiControllerTest extends WebTestCase
     {
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
 
-        $csvContent = "firstName,lastName,startYear,biography,description,color,godFatherFirstName,godFatherLastName,sponsorType,sponsorDate,sponsorDescription\n"
-            . "CsvParrain,Test,2025,,,,,,,,\n"
-            . "CsvFilleul,Test,2025,,,,CsvParrain,Test,CLASSIC,2025-01-01,Test parrainage\n";
+        $csvContent = "firstName,lastName,startYear,biography,description,godFatherFirstName,godFatherLastName,sponsorType,sponsorDate,sponsorDescription\n"
+            . "CsvParrain,Test,2025,,,,,,,\n"
+            . "CsvFilleul,Test,2025,,,CsvParrain,Test,CLASSIC,2025-01-01,Test parrainage\n";
 
         $tmpFile = tempnam(sys_get_temp_dir(), 'csv_sponsor_test_');
         $this->assertNotFalse($tmpFile);

@@ -21,7 +21,6 @@ final readonly class CsvImportService
     private const array OPTIONAL_PERSON_HEADERS = [
         'biography',
         'description',
-        'color',
     ];
 
     private const array SPONSOR_HEADERS = [
@@ -126,7 +125,6 @@ final readonly class CsvImportService
             '2020',
             'Biographie optionnelle',
             'Description optionnelle',
-            '#FF5733',
             '',
             '',
             '',
@@ -140,7 +138,6 @@ final readonly class CsvImportService
             '2021',
             '',
             '',
-            '#33FF57',
             'Jean',
             'Dupont',
             'CLASSIC',
@@ -201,11 +198,6 @@ final readonly class CsvImportService
         $description = trim($data['description'] ?? '');
         if ($description !== '') {
             $person->setDescription($description);
-        }
-
-        $color = trim($data['color'] ?? '');
-        if ($color !== '' && preg_match('/^#[0-9A-Fa-f]{6}$/', $color) === 1) {
-            $person->setColor($color);
         }
 
         $this->personRepository->update($person);

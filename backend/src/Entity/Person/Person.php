@@ -66,10 +66,6 @@ class Person implements \Stringable
     #[ORM\Column(type: Types::TEXT, length: 65_535, nullable: true)]
     private ?string $biography = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\CssColor([Assert\CssColor::HEX_LONG])]
-    private string $color;
-
     #[ORM\Column(type: Types::TEXT, length: 65_535, nullable: true)]
     private ?string $description = null;
 
@@ -106,7 +102,6 @@ class Person implements \Stringable
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
         $this->createdAt       = new \DateTime();
-        $this->color = sprintf('#%06X', mt_rand(0, 0xFFFFFF));
     }
 
     public function getId(): int
@@ -204,18 +199,6 @@ class Person implements \Stringable
     public function setBiography(?string $biography): static
     {
         $this->biography = $biography;
-
-        return $this;
-    }
-
-    public function getColor(): ?string
-    {
-        return $this->color;
-    }
-
-    public function setColor(string $color): static
-    {
-        $this->color = $color;
 
         return $this;
     }

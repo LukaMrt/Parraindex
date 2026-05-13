@@ -10,7 +10,6 @@ use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
-use EasyCorp\Bundle\EasyAdminBundle\Field\ColorField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -38,7 +37,6 @@ final class PersonCrudController extends AbstractCrudController
         yield TextField::new('firstName', 'Prénom');
         yield TextField::new('lastName', 'Nom');
         yield IntegerField::new('startYear', 'Année d\'entrée');
-        yield ColorField::new('color', 'Couleur');
         yield DateField::new('birthdate', 'Date de naissance')->hideOnIndex();
         yield TextareaField::new('biography', 'Biographie')->hideOnIndex();
         yield TextareaField::new('description', 'Description')->hideOnIndex();

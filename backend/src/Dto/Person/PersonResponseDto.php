@@ -19,7 +19,6 @@ final readonly class PersonResponseDto
         public string $lastName,
         public string $fullName,
         public ?string $picture,
-        public string $color,
         public int $startYear,
         public ?string $birthdate,
         public ?string $biography,

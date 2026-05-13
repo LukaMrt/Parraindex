@@ -109,7 +109,6 @@ final class AuthApiController extends AbstractController
                     'lastName'  => $p->getLastName(),
                     'fullName'  => $p->getFirstName() . ' ' . $p->getLastName(),
                     'startYear' => $p->getStartYear(),
-                    'color'     => $p->getColor(),
                 ],
                 $persons,
             ),

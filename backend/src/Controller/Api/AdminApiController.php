@@ -91,10 +91,6 @@ final class AdminApiController extends AbstractController
             ->setBiography($dto->biography)
             ->setDescription($dto->description);
 
-        if ($dto->color !== null) {
-            $person->setColor($dto->color);
-        }
-
         $this->personService->update($person);
 
         return ApiResponse::success($this->personService->mapToResponseDto($person), Response::HTTP_CREATED);

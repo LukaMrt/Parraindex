@@ -33,7 +33,6 @@ final class TreeApiControllerTest extends WebTestCase
         $this->assertArrayHasKey('lastName', $first);
         $this->assertArrayHasKey('startYear', $first);
         $this->assertArrayHasKey('picture', $first);
-        $this->assertArrayHasKey('color', $first);
     }
 
     public function testTreeIsAccessibleWithoutAuthentication(): void

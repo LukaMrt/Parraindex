@@ -20,8 +20,6 @@ final readonly class PersonRequestDto
         public int $startYear,
         public ?string $biography = null,
         public ?string $description = null,
-        #[Assert\CssColor([Assert\CssColor::HEX_LONG])]
-        public ?string $color = null,
     ) {
     }
 }
