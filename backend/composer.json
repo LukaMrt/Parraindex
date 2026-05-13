@@ -14,7 +14,7 @@
         "doctrine/doctrine-migrations-bundle": "4.*",
         "doctrine/orm": "3.*",
         "easycorp/easyadmin-bundle": "^5.0",
-        "liip/imagine-bundle": "*",
+        "liip/imagine-bundle": "^2.17",
         "phpdocumentor/reflection-docblock": "6.*",
         "phpstan/phpdoc-parser": "2.*",
         "symfony/console": "8.*",
@@ -44,7 +44,7 @@
         "symfony/yaml": "8.*",
         "symfonycasts/reset-password-bundle": "1.*",
         "symfonycasts/verify-email-bundle": "1.*",
-        "vich/uploader-bundle": "*"
+        "vich/uploader-bundle": "^2.9"
     },
     "config": {
         "allow-plugins": {
@@ -66,11 +66,9 @@
         }
     },
     "scripts": {
-        "auto-scripts": {
-            "cache:clear": "symfony-cmd"
-        },
-        "post-install-cmd": "@auto-scripts",
-        "post-update-cmd": "@auto-scripts",
+        "auto-scripts": {},
+        "post-install-cmd": "php -d memory_limit=512M bin/console cache:clear",
+        "post-update-cmd": "php -d memory_limit=512M bin/console cache:clear",
         "fixtures": "php bin/console doctrine:fixtures:load --no-interaction",
         "database:reset": [
             "php bin/console doctrine:database:drop --if-exists --force",

@@ -11,43 +11,69 @@ permissions:
 
 jobs:
 
-    backend-quality:
-        name: Backend Quality
+    # ── Backend ────────────────────────────────────────────────────────────────
+
+    backend-rector:
+        name: Rector
         runs-on: ubuntu-latest
         defaults:
             run:
                 working-directory: backend
         steps:
             -   uses: actions/checkout@v3
-
-            -   name: Setup PHP 8.5
-                uses: shivammathur/setup-php@v2
+            -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.5'
                     extensions: curl, pdo_mysql, pdo_sqlite
-
-            -   name: Validate composer.json and composer.lock
+            -   name: Validate composer.json
                 run: composer validate --strict
-
-            -   name: Cache Composer packages
-                uses: actions/cache@v3
+            -   uses: actions/cache@v3
                 with:
                     path: backend/vendor
                     key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
-                    restore-keys: |
-                        ${{ runner.os }}-php-
+                    restore-keys: ${{ runner.os }}-php-
+            -   run: composer install --prefer-dist --no-progress --no-scripts
+            -   run: composer rector:dry
 
-            -   name: Install dependencies
-                run: composer install --prefer-dist --no-progress
+    backend-phpstan:
+        name: PHPStan
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: backend
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.5'
+                    extensions: curl, pdo_mysql, pdo_sqlite
+            -   uses: actions/cache@v3
+                with:
+                    path: backend/vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-php-
+            -   run: composer install --prefer-dist --no-progress --no-scripts
+            -   run: composer phpstan
 
-            -   name: Run Rector
-                run: composer rector:dry
-
-            -   name: Run PhpStan
-                run: composer phpstan
-
-            -   name: Run Php-CS
-                run: composer phpcs
+    backend-phpcs:
+        name: PHP-CS
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: backend
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.5'
+                    extensions: curl, pdo_mysql, pdo_sqlite
+            -   uses: actions/cache@v3
+                with:
+                    path: backend/vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-php-
+            -   run: composer install --prefer-dist --no-progress --no-scripts
+            -   run: composer phpcs
 
 #    backend-tests:
 #        name: Backend Tests
@@ -57,81 +83,123 @@ jobs:
 #                working-directory: backend
 #        steps:
 #            -   uses: actions/checkout@v3
-#
-#            -   name: Setup PHP 8.5
-#                uses: shivammathur/setup-php@v2
+#            -   uses: shivammathur/setup-php@v2
 #                with:
 #                    php-version: '8.5'
 #                    extensions: curl, pdo_mysql, pdo_sqlite, sqlite3, bcmath, ctype, date, fileinfo, gd, gmp, iconv, intl, json, mbstring, openssl, pcre, PDO, random, zip, zlib
-#
-#            -   name: Cache Composer packages
-#                uses: actions/cache@v3
+#            -   uses: actions/cache@v3
 #                with:
 #                    path: backend/vendor
 #                    key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
-#                    restore-keys: |
-#                        ${{ runner.os }}-php-
-#
-#            -   name: Install dependencies
-#                run: composer install --prefer-dist --no-progress
-#
-#            -   name: Create test database schema
-#                run: php bin/console doctrine:schema:create --env=test
-#
-#            -   name: Load fixtures
-#                run: php bin/console doctrine:fixtures:load --no-interaction --env=test
-#
-#            -   name: Run tests
-#                run: php bin/phpunit
+#                    restore-keys: ${{ runner.os }}-php-
+#            -   run: composer install --prefer-dist --no-progress --no-scripts
+#            -   run: php bin/console doctrine:schema:create --env=test
+#            -   run: php bin/console doctrine:fixtures:load --no-interaction --env=test
+#            -   run: php bin/phpunit
 
-    frontend-quality:
-        name: Frontend Quality
+    # ── Frontend ───────────────────────────────────────────────────────────────
+
+    frontend-format:
+        name: Format
         runs-on: ubuntu-latest
         defaults:
             run:
                 working-directory: frontend
         steps:
             -   uses: actions/checkout@v3
-
-            -   name: Setup Node.js 22
-                uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v4
                 with:
                     node-version: '22'
                     cache: 'npm'
                     cache-dependency-path: frontend/package-lock.json
+            -   run: npm ci
+            -   run: npm run format:check
 
-            -   name: Install dependencies
-                run: npm ci
+    frontend-build:
+        name: Build
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: frontend
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version: '22'
+                    cache: 'npm'
+                    cache-dependency-path: frontend/package-lock.json
+            -   run: npm ci
+            -   run: npm run build
 
-            -   name: Format check
-                run: npm run format:check
+    frontend-typecheck:
+        name: Typecheck
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: frontend
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version: '22'
+                    cache: 'npm'
+                    cache-dependency-path: frontend/package-lock.json
+            -   run: npm ci
+            -   run: npm run typecheck
 
-            -   name: Build
-                run: npm run build
+    frontend-lint:
+        name: Lint
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: frontend
+        steps:
+            -   uses: actions/checkout@v3
+            -   uses: actions/setup-node@v4
+                with:
+                    node-version: '22'
+                    cache: 'npm'
+                    cache-dependency-path: frontend/package-lock.json
+            -   run: npm ci
+            -   run: npm run lint
 
-            -   name: Typecheck
-                run: npm run typecheck
+#    frontend-tests:
+#        name: Frontend Tests
+#        runs-on: ubuntu-latest
+#        defaults:
+#            run:
+#                working-directory: frontend
+#        steps:
+#            -   uses: actions/checkout@v3
+#            -   uses: actions/setup-node@v4
+#                with:
+#                    node-version: '22'
+#                    cache: 'npm'
+#                    cache-dependency-path: frontend/package-lock.json
+#            -   run: npm ci
+#            -   run: npm test -- --run
 
-            -   name: Lint
-                run: npm run lint
-
-#            -   name: Tests
-#                run: npm test -- --run
+    # ── Docker ─────────────────────────────────────────────────────────────────
 
     docker:
         name: Build & Push Docker image
-        needs: [ backend-quality, frontend-quality ]
+        needs:
+            - backend-rector
+            - backend-phpstan
+            - backend-phpcs
+            - frontend-format
+            - frontend-build
+            - frontend-typecheck
+            - frontend-lint
         if: github.ref == 'refs/heads/master' && github.event_name == 'push'
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v3
-
             -   name: Log in to Docker Hub
                 uses: docker/login-action@v3
                 with:
                     username: ${{ secrets.DOCKERHUB_USERNAME }}
                     password: ${{ secrets.DOCKERHUB_PASSWORD }}
-
             -   name: Build and push
                 uses: docker/build-push-action@v5
                 with:
