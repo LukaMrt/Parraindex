@@ -6,7 +6,6 @@ services:
     ports:
       - "80:80"
     environment:
-      SERVER_NAME: ":80"
       DATABASE_HOST: database
       DATABASE_PORT: 3306
       DATABASE_NAME: ${DATABASE_NAME}
@@ -14,8 +13,7 @@ services:
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       APP_SECRET: ${APP_SECRET}
       MAILER_DSN: "smtp://mail:1025"
-      DEFAULT_URI: "http://localhost"
-      FRONTEND_URL: "http://localhost"
+      APP_URL: "http://localhost"
       MAIL_USER: "admin@localhost.com"
       MAIL_PASSWORD: "password"
       MAIL_HOST: "mail"

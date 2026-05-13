@@ -23,6 +23,8 @@ services:
         arguments:
             $projectDir: '%kernel.project_dir%'
 
-    App\Security\EmailVerifier:
+    App\Security\EmailVerifier: ~
+
+    App\Service\Contact\Resolver\PasswordResolver:
         arguments:
-            $frontendUrl: '%env(FRONTEND_URL)%'
+            $appUrl: '%env(APP_URL)%'

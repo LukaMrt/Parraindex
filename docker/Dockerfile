@@ -16,6 +16,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 ENV APP_ENV=prod
 ENV APP_DEBUG=false
+ENV SERVER_NAME=":80"
 
 RUN apk add --no-cache netcat-openbsd
 

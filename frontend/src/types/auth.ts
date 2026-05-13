@@ -16,6 +16,7 @@ export interface LoginRequest {
 export interface RegisterRequest {
   email: string;
   password: string;
+  callbackUrl?: string;
   personId?: number;
 }
 

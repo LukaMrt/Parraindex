@@ -25,7 +25,7 @@ export function ResetPasswordPage() {
         setError(result.error.message);
       }
     } else {
-      const result = await requestPasswordReset(email);
+      const result = await requestPasswordReset(email, `${window.location.origin}/reset-password`);
       if (result.ok) {
         setMessage('Si un compte existe, un email de réinitialisation a été envoyé.');
       } else {

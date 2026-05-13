@@ -29,7 +29,7 @@ final readonly class AuthService
         return $this->entityManager->getRepository(User::class)->findOneBy(['email' => $email]);
     }
 
-    public function generateAndSendResetToken(User $user): ?ResetPasswordToken
+    public function generateAndSendResetToken(User $user, string $callbackUrl): ?ResetPasswordToken
     {
         try {
             $resetToken = $this->resetPasswordHelper->generateResetToken($user);
@@ -37,7 +37,7 @@ final readonly class AuthService
             return null;
         }
 
-        $resetUrl = htmlspecialchars('/reset-password?token=' . $resetToken->getToken(), ENT_QUOTES);
+        $resetUrl = htmlspecialchars(rtrim($callbackUrl, '/') . '?token=' . $resetToken->getToken(), ENT_QUOTES);
 
         $email = new Email()
             ->from(new Address('parraindex@parraindex.com', 'Parraindex'))

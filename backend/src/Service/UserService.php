@@ -135,9 +135,9 @@ final readonly class UserService
         $this->userRepository->update($user);
     }
 
-    public function sendVerificationEmail(User $user): void
+    public function sendVerificationEmail(User $user, string $callbackUrl): void
     {
-        $this->emailVerifier->sendEmailConfirmation('api_auth_verify_email', $user);
+        $this->emailVerifier->sendEmailConfirmation('api_auth_verify_email', $user, $callbackUrl);
     }
 
     public function verifyEmail(Request $request, User $user): void

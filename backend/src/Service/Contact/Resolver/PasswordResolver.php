@@ -26,6 +26,7 @@ final class PasswordResolver extends AbstractController implements ContactResolv
         private readonly ContactRepository $contactRepository,
         private readonly EmailVerifier $emailVerifier,
         private readonly UserPasswordHasherInterface $userPasswordHasher,
+        private readonly string $appUrl,
     ) {
     }
 
@@ -55,8 +56,9 @@ final class PasswordResolver extends AbstractController implements ContactResolv
 
         $this->userRepository->update($user);
         $this->emailVerifier->sendEmailConfirmation(
-            'register_verify',
-            $user
+            'api_auth_verify_email',
+            $user,
+            rtrim($this->appUrl, '/') . '/verify-email'
         );
 
         return null;

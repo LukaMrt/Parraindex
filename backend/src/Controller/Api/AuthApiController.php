@@ -69,10 +69,14 @@ final class AuthApiController extends AbstractController
             return ApiResponse::validationError(['email' => ['Requis'], 'password' => ['Requis']]);
         }
 
-        $email    = is_string($data['email']) ? $data['email'] : '';
-        $password = is_string($data['password']) ? $data['password'] : '';
+        $email       = is_string($data['email']) ? $data['email'] : '';
+        $password    = is_string($data['password']) ? $data['password'] : '';
+        $callbackUrl = is_string($data['callbackUrl'] ?? null) ? $data['callbackUrl'] : '';
+        $personId    = isset($data['personId']) && is_int($data['personId']) ? $data['personId'] : null;
 
-        $personId = isset($data['personId']) && is_int($data['personId']) ? $data['personId'] : null;
+        if ($personId === null && $callbackUrl === '') {
+            return ApiResponse::validationError(['callbackUrl' => ['Requis']]);
+        }
 
         $user = new User();
         $user->setEmail($email);
@@ -80,7 +84,7 @@ final class AuthApiController extends AbstractController
         try {
             $this->userService->register($user, $password, $personId);
             if ($personId === null) {
-                $this->userService->sendVerificationEmail($user);
+                $this->userService->sendVerificationEmail($user, $callbackUrl);
             }
         } catch (\RuntimeException $runtimeException) {
             return ApiResponse::error(
@@ -145,13 +149,18 @@ final class AuthApiController extends AbstractController
     public function resetPasswordRequest(Request $request): JsonResponse
     {
         /** @var array<string, mixed>|null $data */
-        $data  = json_decode((string) $request->getContent(), true);
-        $email = is_array($data) && is_string($data['email'] ?? null) ? $data['email'] : '';
+        $data        = json_decode((string) $request->getContent(), true);
+        $email       = is_array($data) && is_string($data['email'] ?? null) ? $data['email'] : '';
+        $callbackUrl = is_array($data) && is_string($data['callbackUrl'] ?? null) ? $data['callbackUrl'] : '';
+
+        if ($callbackUrl === '') {
+            return ApiResponse::validationError(['callbackUrl' => ['Requis']]);
+        }
 
         $user = $this->authService->findUserByEmail($email);
 
         if ($user instanceof User) {
-            $this->authService->generateAndSendResetToken($user);
+            $this->authService->generateAndSendResetToken($user, $callbackUrl);
         }
 
         return ApiResponse::success(null);

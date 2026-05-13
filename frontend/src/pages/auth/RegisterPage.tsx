@@ -27,7 +27,11 @@ export function RegisterPage() {
       return;
     }
 
-    const result = await register({ email, password });
+    const result = await register({
+      email,
+      password,
+      callbackUrl: `${window.location.origin}/verify-email`,
+    });
 
     if (result.ok) {
       notify('success', 'Compte créé ! Un email de confirmation vous a été envoyé.');

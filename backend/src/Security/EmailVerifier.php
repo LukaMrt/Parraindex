@@ -23,11 +23,10 @@ readonly class EmailVerifier
         private EntityManagerInterface $entityManager,
         private LoggerInterface $logger,
         private Environment $twig,
-        private string $frontendUrl,
     ) {
     }
 
-    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user): void
+    public function sendEmailConfirmation(string $verifyEmailRouteName, User $user, string $callbackUrl): void
     {
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
@@ -37,7 +36,7 @@ readonly class EmailVerifier
         );
 
         $query     = parse_url($signatureComponents->getSignedUrl(), PHP_URL_QUERY) ?? '';
-        $signedUrl = rtrim($this->frontendUrl, '/') . '/verify-email?' . $query;
+        $signedUrl = rtrim($callbackUrl, '/') . '?' . $query;
         $firstName = $user->getPerson()?->getFirstName() ?? 'Nouvel utilisateur';
 
         $html = $this->twig->render('email/verify.html.twig', [
