@@ -1,5 +1,4 @@
 import type { Result } from '../types/api';
-import { getAdminContacts } from './api/admin';
 import { getHomeStats } from './api/home';
 import { getAccount, getPerson, getPersons } from './api/persons';
 import { getSponsor } from './api/sponsors';
@@ -40,13 +39,5 @@ export const sponsorQueries = {
     queryKey: ['sponsors', id] as const,
     queryFn: () => getSponsor(id).then(throwable),
     staleTime: 2 * 60 * 1000,
-  }),
-};
-
-export const adminQueries = {
-  contacts: () => ({
-    queryKey: ['admin', 'contacts'] as const,
-    queryFn: () => getAdminContacts().then(throwable),
-    staleTime: 0,
   }),
 };

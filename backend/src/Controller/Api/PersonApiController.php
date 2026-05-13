@@ -241,11 +241,4 @@ final class PersonApiController extends AbstractController
 
         return ApiResponse::success(array_map($this->personService->mapToResponseDto(...), $persons));
     }
-
-    #[Route('/api/persons/{id}/export', name: 'api_persons_export', methods: ['GET'])]
-    #[IsGranted(PersonVoter::DOWNLOAD_DATA, subject: 'person')]
-    public function export(Person $person): JsonResponse
-    {
-        return ApiResponse::success($this->personService->mapToResponseDto($person));
-    }
 }

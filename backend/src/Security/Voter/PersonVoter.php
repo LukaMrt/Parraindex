@@ -17,13 +17,10 @@ final class PersonVoter extends Voter
 {
     public const string EDIT = 'RIGHT_PERSON_EDIT';
 
-    public const string DOWNLOAD_DATA = 'RIGHT_PERSON_DOWNLOAD_DATA';
-
     #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {
-        return in_array($attribute, [self::EDIT, self::DOWNLOAD_DATA], true)
-            && $subject instanceof Person;
+        return $attribute === self::EDIT && $subject instanceof Person;
     }
 
     /**
@@ -42,9 +39,6 @@ final class PersonVoter extends Voter
             return false;
         }
 
-        return match ($attribute) {
-            self::EDIT, self::DOWNLOAD_DATA => $subject->getId() === $user->getPerson()?->getId(),
-            default => false,
-        };
+        return $subject->getId() === $user->getPerson()?->getId();
     }
 }

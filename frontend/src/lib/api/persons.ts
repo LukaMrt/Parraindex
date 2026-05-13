@@ -44,7 +44,3 @@ export function fetchPersonsBatch(ids: number[]): Promise<Result<Person[]>> {
   if (ids.length === 0) return Promise.resolve({ ok: true as const, data: [] });
   return post<Person[]>('/api/persons/batch', { ids });
 }
-
-export function exportPersonData(id: number): Promise<Result<Person>> {
-  return get<Person>(`/api/persons/${id}/export`);
-}

@@ -6,7 +6,6 @@ export { Card } from './Card';
 export { Input } from './Input';
 export { Modal } from './Modal';
 export { StatCard } from './StatCard';
-export { TabSwitcher } from './TabSwitcher';
 export { Breadcrumb } from './Breadcrumb';
 export { EmptyState } from './EmptyState';
 export { Skeleton } from './Skeleton';
