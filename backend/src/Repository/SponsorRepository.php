@@ -39,10 +39,6 @@ class SponsorRepository extends ServiceEntityRepository
 
     public function update(Sponsor $sponsor): void
     {
-        if (!$sponsor->getCreatedAt() instanceof \DateTimeInterface) {
-            $sponsor->setCreatedAt(new \DateTime());
-        }
-
         if (!$sponsor->getType() instanceof Type) {
             $sponsor->setType(Type::UNKNOWN);
         }
