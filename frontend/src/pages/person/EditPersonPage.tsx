@@ -213,6 +213,7 @@ function AddSponsorForm({
   const TYPE_OPTIONS: { value: SponsorType; label: string }[] = [
     { value: 'CLASSIC', label: 'IUT' },
     { value: 'HEART', label: 'De cœur' },
+    { value: 'FALUCHE', label: 'Faluche' },
     { value: 'UNKNOWN', label: 'Inconnu' },
   ];
 
@@ -353,6 +354,7 @@ function SponsorRow({
   const TYPE_OPTIONS: { value: SponsorType; label: string }[] = [
     { value: 'CLASSIC', label: 'IUT' },
     { value: 'HEART', label: 'De cœur' },
+    { value: 'FALUCHE', label: 'Faluche' },
     { value: 'UNKNOWN', label: 'Inconnu' },
   ];
 

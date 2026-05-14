@@ -1,4 +1,4 @@
-export type SponsorType = 'HEART' | 'CLASSIC' | 'UNKNOWN';
+export type SponsorType = 'HEART' | 'CLASSIC' | 'UNKNOWN' | 'FALUCHE';
 
 export interface Sponsor {
   id: number;

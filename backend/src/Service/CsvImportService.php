@@ -284,6 +284,7 @@ final readonly class CsvImportService
         return match (strtoupper(trim($type))) {
             'HEART'   => SponsorType::HEART,
             'CLASSIC' => SponsorType::CLASSIC,
+            'FALUCHE' => SponsorType::FALUCHE,
             default   => SponsorType::UNKNOWN,
         };
     }

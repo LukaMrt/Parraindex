@@ -11,13 +11,15 @@ enum SponsorTypeDto: string
     case HEART   = 'HEART';
     case CLASSIC = 'CLASSIC';
     case UNKNOWN = 'UNKNOWN';
+    case FALUCHE = 'FALUCHE';
 
     public function toEntity(): Type
     {
         return match ($this) {
-            self::HEART   => Type::HEART,
-            self::CLASSIC => Type::CLASSIC,
-            self::UNKNOWN => Type::UNKNOWN,
+            self::HEART    => Type::HEART,
+            self::CLASSIC  => Type::CLASSIC,
+            self::UNKNOWN  => Type::UNKNOWN,
+            self::FALUCHE  => Type::FALUCHE,
         };
     }
 }

@@ -80,6 +80,7 @@ final class SponsorCrudController extends AbstractCrudController
                 'Parrainage de cœur' => Type::HEART,
                 'Parrainage IUT'     => Type::CLASSIC,
                 'Inconnu'            => Type::UNKNOWN,
+                'Faluche'            => Type::FALUCHE,
             ]);
         yield DateField::new('date', 'Date')->hideOnIndex();
         yield TextareaField::new('description', 'Description')->hideOnIndex();
