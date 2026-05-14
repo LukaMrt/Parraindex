@@ -23,6 +23,8 @@ readonly class EmailVerifier
         private EntityManagerInterface $entityManager,
         private LoggerInterface $logger,
         private Environment $twig,
+        private string $mailUser,
+        private string $mailName,
     ) {
     }
 
@@ -45,7 +47,7 @@ readonly class EmailVerifier
         ]);
 
         $email = new Email()
-            ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
+            ->from(new Address($this->mailUser, $this->mailName))
             ->to((string) $user->getEmail())
             ->subject('Confirmez votre compte Parraindex')
             ->html($html);

@@ -12,7 +12,6 @@ services:
       DATABASE_USER: ${DATABASE_USER}
       DATABASE_PASSWORD: ${DATABASE_PASSWORD}
       APP_SECRET: ${APP_SECRET}
-      MAILER_DSN: "smtp://mail:1025"
       APP_URL: "http://localhost"
       MAIL_USER: "admin@localhost.com"
       MAIL_PASSWORD: "password"

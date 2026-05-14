@@ -21,6 +21,8 @@ final readonly class AuthService
         private ResetPasswordHelperInterface $resetPasswordHelper,
         private UserPasswordHasherInterface $passwordHasher,
         private MailerInterface $mailer,
+        private string $mailUser,
+        private string $mailName,
     ) {
     }
 
@@ -40,7 +42,7 @@ final readonly class AuthService
         $resetUrl = htmlspecialchars(rtrim($callbackUrl, '/') . '?token=' . $resetToken->getToken(), ENT_QUOTES);
 
         $email = new Email()
-            ->from(new Address('parraindex@parraindex.com', 'Parraindex'))
+            ->from(new Address($this->mailUser, $this->mailName))
             ->to((string) $user->getEmail())
             ->subject('Réinitialisation de votre mot de passe')
             ->html(

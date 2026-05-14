@@ -14,7 +14,6 @@
 
 Parraindex est une application web qui visualise les relations de parrainage entre étudiants de l'IUT Lyon 1. Chaque étudiant peut créer son profil, voir les liens qui existent entre les personnes, et soumettre des demandes de parrainage validées par les administrateurs.
 
-Le site est accessible à l'adresse : [https://parraindex.com](https://parraindex.com)
 
 ## Architecture
 
