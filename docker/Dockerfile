@@ -46,7 +46,8 @@ COPY docker/Caddyfile /etc/caddy/Caddyfile
 
 # Entrypoint
 COPY docker/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
-RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+RUN sed -i 's/\r//' /usr/local/bin/docker-entrypoint.sh \
+    && chmod +x /usr/local/bin/docker-entrypoint.sh
 
 CMD ["--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
