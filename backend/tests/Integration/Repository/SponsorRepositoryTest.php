@@ -110,7 +110,7 @@ final class SponsorRepositoryTest extends KernelTestCase
         $this->repository->create($sponsor);
 
         // Then
-        $this->assertInstanceOf(\DateTimeInterface::class, $sponsor->getCreatedAt());
+        $this->assertEqualsWithDelta(time(), $sponsor->getCreatedAt()->getTimestamp(), 5);
     }
 
     public function testCreateSetsDefaultTypeWhenNull(): void
