@@ -17,6 +17,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Component\Validator\Constraints\NotBlank;
 
 /** @extends AbstractCrudController<User> */
 final class UserCrudController extends AbstractCrudController
@@ -53,9 +54,10 @@ final class UserCrudController extends AbstractCrudController
                     return Role::from($r);
                 }, $roles)
             ));
-        yield TextField::new('password', 'Mot de passe')
+        yield TextField::new('plainPassword', 'Mot de passe')
             ->setFormType(PasswordType::class)
-            ->setFormTypeOption('empty_data', '')
+            ->setFormTypeOption('empty_data', null)
+            ->setFormTypeOption('constraints', $pageName === 'new' ? [new NotBlank(message: 'Le mot de passe est requis')] : [])
             ->setRequired($pageName === 'new')
             ->hideOnIndex()
             ->hideOnDetail()
@@ -84,7 +86,7 @@ final class UserCrudController extends AbstractCrudController
             return;
         }
 
-        $plain = $entityInstance->getPassword();
+        $plain = $entityInstance->getPlainPassword();
         if ($plain === null || $plain === '') {
             return;
         }
