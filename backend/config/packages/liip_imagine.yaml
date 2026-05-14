@@ -1,4 +1,6 @@
 liip_imagine:
+    twig:
+        mode: lazy
     driver: gd
     resolvers:
         default:
