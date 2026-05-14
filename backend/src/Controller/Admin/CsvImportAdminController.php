@@ -13,6 +13,7 @@ use Symfony\Component\HttpFoundation\Session\FlashBagAwareSessionInterface;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
@@ -23,6 +24,21 @@ final class CsvImportAdminController extends AbstractController
         private readonly CsvImportService $csvImportService,
         private readonly AdminUrlGenerator $adminUrlGenerator,
     ) {
+    }
+
+    #[Route('/admin/persons/import/template', name: 'api_admin_persons_import_template', methods: ['GET'])]
+    public function downloadTemplate(): StreamedResponse
+    {
+        $csvContent = $this->csvImportService->generateTemplate();
+
+        $response = new StreamedResponse(static function () use ($csvContent): void {
+            echo $csvContent;
+        });
+
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="import_personnes_template.csv"');
+
+        return $response;
     }
 
     #[Route('/admin/persons/import', name: 'admin_csv_import', methods: ['GET', 'POST'])]
