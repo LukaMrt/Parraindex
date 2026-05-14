@@ -26,7 +26,7 @@ final class DashboardController extends AbstractDashboardController
     #[\Override]
     public function index(): Response
     {
-        return $this->render('@EasyAdmin/page/content.html.twig');
+        return $this->render('admin/dashboard.html.twig');
     }
 
     #[\Override]
@@ -50,6 +50,8 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::linkTo(SponsorCrudController::class, 'Parrainages', 'fa fa-link');
         yield MenuItem::section('Demandes');
         yield MenuItem::linkTo(ContactCrudController::class, 'Contacts', 'fa fa-envelope');
+        yield MenuItem::section('Outils');
+        yield MenuItem::linkToUrl('Test mail', 'fa fa-paper-plane', $this->adminUrlGenerator->setRoute('admin_test_mail')->generateUrl());
         yield MenuItem::section();
         yield MenuItem::linkToUrl('Retour au site', 'fa fa-arrow-left', '/');
     }

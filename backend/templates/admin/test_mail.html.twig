@@ -1,0 +1,49 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Test d'envoi d'email{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12 col-lg-6">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                <i class="fa fa-check-circle me-1"></i> {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                <i class="fa fa-times-circle me-1"></i> {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Envoyer un email de test</h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Envoyez un email de test pour vérifier que la configuration SMTP fonctionne correctement.
+                </p>
+                <form method="post" action="{{ path('admin_test_mail') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('test_mail') }}">
+                    <div class="mb-3">
+                        <label for="test_mail_email" class="form-label fw-bold">Adresse email destinataire</label>
+                        <input
+                            type="email"
+                            class="form-control"
+                            id="test_mail_email"
+                            name="email"
+                            placeholder="exemple@domaine.fr"
+                            required
+                            autofocus
+                        >
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-paper-plane me-1"></i> Envoyer l'email de test
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

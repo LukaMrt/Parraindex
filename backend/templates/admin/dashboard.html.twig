@@ -1,0 +1,49 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Tableau de bord{% endblock %}
+
+{% block content %}
+<div class="row g-4">
+    <div class="col-12 col-lg-6">
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success">
+                <i class="fa fa-check-circle me-1"></i> {{ message }}
+            </div>
+        {% endfor %}
+        {% for message in app.flashes('danger') %}
+            <div class="alert alert-danger">
+                <i class="fa fa-times-circle me-1"></i> {{ message }}
+            </div>
+        {% endfor %}
+
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">
+                    <i class="fa fa-paper-plane me-2"></i>Test d'envoi d'email
+                </h5>
+            </div>
+            <div class="card-body">
+                <p class="text-muted">
+                    Vérifiez que la configuration SMTP fonctionne en envoyant un email de test.
+                </p>
+                <form method="post" action="{{ path('admin_test_mail') }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('test_mail') }}">
+                    <input type="hidden" name="_origin" value="dashboard">
+                    <div class="input-group">
+                        <input
+                            type="email"
+                            class="form-control"
+                            name="email"
+                            placeholder="destinataire@exemple.fr"
+                            required
+                        >
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fa fa-paper-plane me-1"></i> Envoyer
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
