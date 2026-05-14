@@ -92,7 +92,7 @@ composer scss:build          # Compiler SCSS et assets
 
 **Sponsor** - Relation de parrainage
 - `godFather` → `godChild`
-- `type`: HEART (0), CLASSIC (1), UNKNOWN (2)
+- `type`: HEART (0), CLASSIC (1), UNKNOWN (2), FALUCHE (3)
 
 **Contact** - Demande utilisateur
 - Types: ADD_PERSON, UPDATE_PERSON, REMOVE_PERSON, ADD_SPONSOR, etc.

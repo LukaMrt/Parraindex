@@ -81,18 +81,44 @@ final class TypeTest extends TestCase
         $this->assertSame('interrogation.svg', $result);
     }
 
-    public function testAllTitlesReturnsAssociativeArrayWithThreeEntries(): void
+    public function testGetTitleReturnsCorrectTitleForFaluche(): void
+    {
+        // Given
+        $type = Type::FALUCHE;
+
+        // When
+        $result = $type->getTitle();
+
+        // Then
+        $this->assertSame('Faluche', $result);
+    }
+
+    public function testGetIconReturnsCorrectIconForFaluche(): void
+    {
+        // Given
+        $type = Type::FALUCHE;
+
+        // When
+        $result = $type->getIcon();
+
+        // Then
+        $this->assertSame('faluche.svg', $result);
+    }
+
+    public function testAllTitlesReturnsAssociativeArrayWithFourEntries(): void
     {
         // Given & When
         $result = Type::allTitles();
 
         // Then
-        $this->assertCount(3, $result);
+        $this->assertCount(4, $result);
         $this->assertArrayHasKey(0, $result); // HEART
         $this->assertArrayHasKey(1, $result); // CLASSIC
         $this->assertArrayHasKey(2, $result); // UNKNOWN
+        $this->assertArrayHasKey(3, $result); // FALUCHE
         $this->assertSame('Parrainage de coeur', $result[0]);
         $this->assertSame('Parrainage IUT', $result[1]);
         $this->assertSame('Inconnu', $result[2]);
+        $this->assertSame('Faluche', $result[3]);
     }
 }
