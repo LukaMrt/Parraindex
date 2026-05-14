@@ -3,7 +3,7 @@ import { useNavigate, useLocation, Link } from 'react-router';
 import { register, getAvailablePersons } from '../../lib/api/auth';
 import type { AvailablePerson } from '../../types/auth';
 import { Button, Input } from '../../components/ui';
-import { contrastColor } from '../../lib/colors';
+import { promoColor, contrastColor } from '../../lib/colors';
 import { useNotification } from '../../hooks/useNotification';
 
 const PAGE_SIZE = 20;
@@ -138,8 +138,8 @@ export function SelectPersonPage() {
               <div
                 className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full text-xs font-semibold"
                 style={{
-                  backgroundColor: person.color,
-                  color: contrastColor(person.color),
+                  backgroundColor: promoColor(person.startYear),
+                  color: contrastColor(promoColor(person.startYear)),
                 }}
               >
                 {person.firstName[0]}

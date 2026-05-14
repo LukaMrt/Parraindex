@@ -145,46 +145,45 @@ final class AuthApiController extends AbstractController
         return ApiResponse::success(null);
     }
 
-    #[Route('/api/auth/reset-password/request', name: 'api_auth_reset_password_request', methods: ['POST'])]
-    public function resetPasswordRequest(Request $request): JsonResponse
+    #[Route('/api/auth/resend-verification', name: 'api_auth_resend_verification', methods: ['POST'])]
+    public function resendVerification(#[CurrentUser] ?User $user, Request $request): JsonResponse
     {
+        if (!$user instanceof User) {
+            return ApiResponse::unauthorized();
+        }
+
+        if ($user->isValidated()) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, 'Votre compte est déjà validé'),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
+
         /** @var array<string, mixed>|null $data */
         $data        = json_decode((string) $request->getContent(), true);
-        $email       = is_array($data) && is_string($data['email'] ?? null) ? $data['email'] : '';
         $callbackUrl = is_array($data) && is_string($data['callbackUrl'] ?? null) ? $data['callbackUrl'] : '';
 
         if ($callbackUrl === '') {
             return ApiResponse::validationError(['callbackUrl' => ['Requis']]);
         }
 
-        $user = $this->authService->findUserByEmail($email);
-
-        if ($user instanceof User) {
-            $this->authService->generateAndSendResetToken($user, $callbackUrl);
-        }
+        $this->userService->sendVerificationEmail($user, $callbackUrl);
 
         return ApiResponse::success(null);
     }
 
-    #[Route('/api/auth/reset-password/confirm', name: 'api_auth_reset_password_confirm', methods: ['POST'])]
-    public function resetPasswordConfirm(Request $request): JsonResponse
+    #[Route('/api/auth/reset-password/request', name: 'api_auth_reset_password_request', methods: ['POST'])]
+    public function resetPasswordRequest(Request $request): JsonResponse
     {
         /** @var array<string, mixed>|null $data */
-        $data     = json_decode((string) $request->getContent(), true);
-        $token    = is_array($data) && is_string($data['token'] ?? null) ? $data['token'] : '';
-        $password = is_array($data) && is_string($data['password'] ?? null) ? $data['password'] : '';
+        $data  = json_decode((string) $request->getContent(), true);
+        $email = is_array($data) && is_string($data['email'] ?? null) ? $data['email'] : '';
 
-        try {
-            $user = $this->authService->validateTokenAndFetchUser($token);
-        } catch (\Exception $exception) {
-            return ApiResponse::error(
-                new ApiError(ErrorCode::VALIDATION_ERROR, $exception->getMessage()),
-                Response::HTTP_UNPROCESSABLE_ENTITY,
-            );
+        $user = $this->authService->findUserByEmail($email);
+
+        if ($user instanceof User) {
+            $this->authService->generateRandomPasswordAndNotify($user);
         }
-
-        $this->authService->removeResetRequest($token);
-        $this->authService->resetPassword($user, $password);
 
         return ApiResponse::success(null);
     }
