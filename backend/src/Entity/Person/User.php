@@ -37,18 +37,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @var ?string The hashed password
      */
     #[ORM\Column]
-    #[Assert\Length(
-        min: 6,
-        max: 4096,
-        minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères'
-    )]
-    #[Assert\NotBlank]
-    #[Assert\NotCompromisedPassword(message: 'Ce mot de passe a déjà été compromis. Veuillez en choisir un autre')]
-    #[Assert\PasswordStrength(
-        minScore: Assert\PasswordStrength::STRENGTH_WEAK,
-        message: 'Votre mot de passe est trop simple'
-    )]
     private ?string $password = null;
+
+    #[Assert\When(
+        expression: "value !== null and value !== ''",
+        constraints: [
+            new Assert\Length(min: 6, max: 4096, minMessage: 'Votre mot de passe doit faire au moins {{ limit }} caractères'),
+            new Assert\NotCompromisedPassword(message: 'Ce mot de passe a déjà été compromis. Veuillez en choisir un autre'),
+            new Assert\PasswordStrength(minScore: Assert\PasswordStrength::STRENGTH_WEAK, message: 'Votre mot de passe est trop simple'),
+        ]
+    )]
+    private ?string $plainPassword = null;
 
     #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     private ?\DateTimeInterface $createdAt = null;
@@ -147,6 +146,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $plainPassword): static
+    {
+        $this->plainPassword = $plainPassword;
 
         return $this;
     }
