@@ -4,12 +4,12 @@ export const SPONSOR_TYPE_ICONS: Record<SponsorType, string> = {
   HEART: '♥',
   CLASSIC: '⚒︎',
   UNKNOWN: '?',
-  FALUCHE: '🎓',
+  FALUCHE: '🎩',
 };
 
 export const SPONSOR_TYPE_LABELS: Record<SponsorType, string> = {
   HEART: 'de cœur',
   CLASSIC: 'IUT',
   UNKNOWN: 'inconnu',
-  FALUCHE: 'Faluche',
+  FALUCHE: 'faluchard',
 };
