@@ -6,6 +6,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { resendVerificationEmail } from '../../lib/api/auth';
+import { isUniversityEmail } from '../../lib/email';
 import type { Characteristic, Person } from '../../types/person';
 import { FamilyGraph } from './FamilyGraph';
 
@@ -204,8 +205,9 @@ export function PersonPage() {
 
   const color = promoColor(person.startYear);
   const isOwnProfile = user !== null && user.person.id === person.id;
-  const canEdit = isOwnProfile && (user.isValidated || user.isAdmin);
-  const needsVerification = isOwnProfile && !user.isValidated && !user.isAdmin;
+  const canEdit = user !== null && (user.isAdmin || (isOwnProfile && user.isValidated));
+  const needsVerification =
+    isOwnProfile && !user.isValidated && !user.isAdmin && isUniversityEmail(user.email);
   const visibleCharacteristics = person.characteristics.filter((c) => c.visible && c.value);
   const allSponsors = [...person.godFathers, ...person.godChildren];
   return (

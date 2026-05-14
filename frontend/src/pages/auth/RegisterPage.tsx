@@ -3,9 +3,7 @@ import { useNavigate, Link } from 'react-router';
 import { register } from '../../lib/api/auth';
 import { Button, Input } from '../../components/ui';
 import { useNotification } from '../../hooks/useNotification';
-
-const UNIVERSITY_EMAIL_REGEX =
-  /^[a-zA-Z-]+\.[a-zA-Z-]+@(?:etu\.univ-lyon1\.fr|cpe\.fr|insa-lyon\.fr)$/;
+import { UNIVERSITY_EMAIL_REGEX, isUniversityEmail } from '../../lib/email';
 
 export function RegisterPage() {
   const navigate = useNavigate();
@@ -20,9 +18,9 @@ export function RegisterPage() {
     setSubmitting(true);
     setError(null);
 
-    const isUniversityEmail = UNIVERSITY_EMAIL_REGEX.test(email);
+    const isUniEmail = isUniversityEmail(email);
 
-    if (!isUniversityEmail) {
+    if (!isUniEmail) {
       void navigate('/select-person', { state: { email, password } });
       return;
     }
