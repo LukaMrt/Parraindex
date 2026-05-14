@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { usePersonFilter } from '../../hooks/usePersonFilter';
-import { getYearRange } from '../../lib/persons';
 import { DirectoryToolbar } from './toolbar/DirectoryToolbar';
 import type { DirectoryView } from './types';
 import { usePersons } from './usePersons';
@@ -30,11 +29,10 @@ export function TreePage() {
     toggleAlphabetical,
   } = usePersonFilter(persons, initialYear !== null ? [initialYear] : []);
 
-  const yearRange = getYearRange(persons);
   const availableYears = useMemo(() => {
-    if (!yearRange) return [];
-    return Array.from({ length: yearRange.max - yearRange.min + 1 }, (_, i) => yearRange.min + i);
-  }, [yearRange]);
+    const yearSet = new Set(persons.map((p) => p.startYear));
+    return Array.from(yearSet).sort((a, b) => a - b);
+  }, [persons]);
 
   return (
     <div className="flex min-h-[calc(100vh-var(--header-height))] flex-col bg-bg">
