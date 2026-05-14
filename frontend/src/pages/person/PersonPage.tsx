@@ -69,9 +69,7 @@ function PersonHero({
   async function handleResendVerification() {
     setVerifying(true);
     setVerifyError(null);
-    const result = await resendVerificationEmail(
-      `${window.location.origin}/verify-email`,
-    );
+    const result = await resendVerificationEmail(`${window.location.origin}/verify-email`);
     if (result.ok) {
       setVerifyDone(true);
     } else {
