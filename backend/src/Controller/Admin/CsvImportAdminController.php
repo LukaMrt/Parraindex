@@ -29,31 +29,14 @@ final class CsvImportAdminController extends AbstractController
     #[Route('/admin/persons/import/template', name: 'api_admin_persons_import_template', methods: ['GET'])]
     public function downloadTemplate(): StreamedResponse
     {
-        $headers = [
-            'firstName',
-            'lastName',
-            'startYear',
-            'biography',
-            'description',
-            'godFatherFirstName',
-            'godFatherLastName',
-            'sponsorType',
-            'sponsorDate',
-            'sponsorDescription',
-        ];
+        $csvContent = $this->csvImportService->generateTemplate();
 
-        $response = new StreamedResponse(function () use ($headers): void {
-            $handle = fopen('php://output', 'w');
-            if ($handle === false) {
-                return;
-            }
-            fputcsv($handle, $headers);
-            fputcsv($handle, ['Jean', 'Dupont', '2020', 'Étudiant en BUT', 'Promo 2020', 'Marie', 'Martin', 'CLASSIC', '2021-09-01', 'Parrainage de promo']);
-            fclose($handle);
+        $response = new StreamedResponse(static function () use ($csvContent): void {
+            echo $csvContent;
         });
 
-        $response->headers->set('Content-Type', 'text/csv; charset=UTF-8');
-        $response->headers->set('Content-Disposition', 'attachment; filename="template_import.csv"');
+        $response->headers->set('Content-Type', 'text/csv; charset=utf-8');
+        $response->headers->set('Content-Disposition', 'attachment; filename="import_personnes_template.csv"');
 
         return $response;
     }
