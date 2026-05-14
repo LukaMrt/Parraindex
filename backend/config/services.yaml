@@ -6,6 +6,7 @@ services:
         bind:
             string $mailUser: '%env(MAIL_USER)%'
             string $mailName: '%env(MAIL_NAME)%'
+            string $appSecret: '%kernel.secret%'
 
     _instanceof:
         App\Service\Contact\ContactResolverInterface:

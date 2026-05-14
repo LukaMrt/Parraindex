@@ -42,7 +42,6 @@
         "symfony/translation": "8.*",
         "symfony/validator": "8.*",
         "symfony/yaml": "8.*",
-        "symfonycasts/reset-password-bundle": "1.*",
         "symfonycasts/verify-email-bundle": "1.*",
         "vich/uploader-bundle": "^2.9"
     },

@@ -152,6 +152,10 @@ final class AuthApiController extends AbstractController
             return ApiResponse::unauthorized();
         }
 
+        if ($this->userService->extractNamesFromEmail((string) $user->getEmail()) === null) {
+            return ApiResponse::forbidden('La vérification par email n\'est disponible que pour les comptes avec un email universitaire reconnu');
+        }
+
         if ($user->isValidated()) {
             return ApiResponse::error(
                 new ApiError(ErrorCode::VALIDATION_ERROR, 'Votre compte est déjà validé'),
@@ -176,16 +180,40 @@ final class AuthApiController extends AbstractController
     public function resetPasswordRequest(Request $request): JsonResponse
     {
         /** @var array<string, mixed>|null $data */
-        $data  = json_decode((string) $request->getContent(), true);
-        $email = is_array($data) && is_string($data['email'] ?? null) ? $data['email'] : '';
+        $data        = json_decode((string) $request->getContent(), true);
+        $email       = is_array($data) && is_string($data['email'] ?? null) ? $data['email'] : '';
+        $callbackUrl = is_array($data) && is_string($data['callbackUrl'] ?? null) ? $data['callbackUrl'] : '';
+
+        if ($callbackUrl === '') {
+            return ApiResponse::validationError(['callbackUrl' => ['Requis']]);
+        }
 
         $user = $this->authService->findUserByEmail($email);
 
         if ($user instanceof User) {
-            $this->authService->generateRandomPasswordAndNotify($user);
+            $this->authService->sendResetLink($user, $callbackUrl);
         }
 
         return ApiResponse::success(null);
+    }
+
+    #[Route('/api/auth/reset-password/confirm', name: 'api_auth_reset_password_confirm', methods: ['POST'])]
+    public function resetPasswordConfirm(Request $request): JsonResponse
+    {
+        /** @var array<string, mixed>|null $data */
+        $data  = json_decode((string) $request->getContent(), true);
+        $token = is_array($data) && is_string($data['token'] ?? null) ? $data['token'] : '';
+
+        try {
+            $newPassword = $this->authService->validateAndApplyRandomPassword($token);
+        } catch (\InvalidArgumentException $invalidArgumentException) {
+            return ApiResponse::error(
+                new ApiError(ErrorCode::VALIDATION_ERROR, $invalidArgumentException->getMessage()),
+                Response::HTTP_UNPROCESSABLE_ENTITY,
+            );
+        }
+
+        return ApiResponse::success(['password' => $newPassword]);
     }
 
     private function buildMeDto(User $user): MeResponseDto
