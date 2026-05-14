@@ -37,7 +37,7 @@ services:
       - ./backend/docker/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
 
   mail:
-    image: mailhog/mailhog
+    image: axllent/mailpit
     ports:
       - "${MAIL_WEB_PORT:-8025}:8025"
       - "${MAIL_SMTP_PORT:-1025}:1025"
