@@ -30,5 +30,4 @@ export interface AvailablePerson {
   lastName: string;
   fullName: string;
   startYear: number;
-  color: string;
 }

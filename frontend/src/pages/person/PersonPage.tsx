@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Avatar, Breadcrumb, Card, Skeleton, StatCard } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
 import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
+import { resendVerificationEmail } from '../../lib/api/auth';
 import type { Characteristic, Person } from '../../types/person';
 import { FamilyGraph } from './FamilyGraph';
 
@@ -49,8 +51,33 @@ function CharacteristicChip({ characteristic }: { characteristic: Characteristic
   return inner;
 }
 
-function PersonHero({ person, canEdit }: { person: Person; canEdit: boolean }) {
+function PersonHero({
+  person,
+  canEdit,
+  needsVerification,
+}: {
+  person: Person;
+  canEdit: boolean;
+  needsVerification: boolean;
+}) {
+  const [verifying, setVerifying] = useState(false);
+  const [verifyDone, setVerifyDone] = useState(false);
+  const [verifyError, setVerifyError] = useState<string | null>(null);
+
   const color = promoColor(person.startYear);
+
+  async function handleResendVerification() {
+    setVerifying(true);
+    setVerifyError(null);
+    const result = await resendVerificationEmail(`${window.location.origin}/verify-email`);
+    if (result.ok) {
+      setVerifyDone(true);
+    } else {
+      setVerifyError(result.error.message);
+    }
+    setVerifying(false);
+  }
+
   return (
     <div className="relative mb-5 overflow-hidden rounded-2xl border border-line bg-surface p-8">
       <div
@@ -96,16 +123,40 @@ function PersonHero({ person, canEdit }: { person: Person; canEdit: boolean }) {
         </div>
 
         {/* Actions */}
-        {canEdit && (
-          <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-2">
+          {canEdit && (
             <Link
               to={`/person/${person.id}/edit`}
               className="inline-flex h-9 items-center justify-center rounded-[9px] bg-ink px-4 text-sm font-medium text-white transition-all hover:-translate-y-0.5 hover:opacity-90"
             >
               Modifier
             </Link>
-          </div>
-        )}
+          )}
+          {needsVerification && (
+            <>
+              {verifyDone ? (
+                <p className="rounded-lg border border-success/20 bg-success/10 px-3 py-2 text-[13px] text-success">
+                  Email envoyé ! Vérifiez votre boîte.
+                </p>
+              ) : (
+                <button
+                  onClick={() => {
+                    void handleResendVerification();
+                  }}
+                  disabled={verifying}
+                  className="inline-flex h-9 items-center justify-center rounded-[9px] border border-line bg-surface px-4 text-sm font-medium text-ink-2 transition-all hover:-translate-y-0.5 hover:border-ink hover:text-ink disabled:opacity-50"
+                >
+                  {verifying ? 'Envoi…' : 'Vérifier mon compte'}
+                </button>
+              )}
+              {verifyError !== null && (
+                <p className="max-w-[220px] rounded-lg border border-danger/20 bg-danger/10 px-3 py-2 text-[12px] text-danger">
+                  {verifyError}
+                </p>
+              )}
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
@@ -152,8 +203,9 @@ export function PersonPage() {
   }
 
   const color = promoColor(person.startYear);
-  const canEdit =
-    user !== null && user.isValidated && (user.isAdmin || user.person.id === person.id);
+  const isOwnProfile = user !== null && user.person.id === person.id;
+  const canEdit = isOwnProfile && (user.isValidated || user.isAdmin);
+  const needsVerification = isOwnProfile && !user.isValidated && !user.isAdmin;
   const visibleCharacteristics = person.characteristics.filter((c) => c.visible && c.value);
   const allSponsors = [...person.godFathers, ...person.godChildren];
   return (
@@ -167,7 +219,7 @@ export function PersonPage() {
           className="mb-6"
         />
 
-        <PersonHero person={person} canEdit={canEdit} />
+        <PersonHero person={person} canEdit={canEdit} needsVerification={needsVerification} />
 
         {/* Stats */}
         <div className="mb-5 grid grid-cols-3 gap-3">

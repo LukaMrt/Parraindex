@@ -37,10 +37,10 @@ export function verifyEmail(queryString: string): Promise<Result<null>> {
   return get<null>(`/api/auth/verify-email?${queryString}`);
 }
 
-export function requestPasswordReset(email: string, callbackUrl: string): Promise<Result<null>> {
-  return post<null>('/api/auth/reset-password/request', { email, callbackUrl });
+export function requestPasswordReset(email: string): Promise<Result<null>> {
+  return post<null>('/api/auth/reset-password/request', { email });
 }
 
-export function confirmPasswordReset(token: string, password: string): Promise<Result<null>> {
-  return post<null>('/api/auth/reset-password/confirm', { token, password });
+export function resendVerificationEmail(callbackUrl: string): Promise<Result<null>> {
+  return post<null>('/api/auth/resend-verification', { callbackUrl });
 }
