@@ -20,9 +20,9 @@ ENV SERVER_NAME=":80"
 
 RUN apk add --no-cache netcat-openbsd
 
-RUN apk add --no-cache icu-dev libpng-dev libjpeg-turbo-dev libwebp-dev \
+RUN apk add --no-cache libpng-dev libjpeg-turbo-dev libwebp-dev \
     && docker-php-ext-configure gd --with-jpeg --with-webp \
-    && docker-php-ext-install intl pdo_mysql gd
+    && docker-php-ext-install pdo_mysql gd
 
 WORKDIR /app
 
