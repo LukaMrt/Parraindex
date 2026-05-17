@@ -127,6 +127,14 @@ final readonly class PersonService
                 array_map($this->mapCharacteristicToDto(...), $person->getCharacteristics()->toArray()),
                 static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto,
             ),
+            filieres: array_map(
+                static fn($personFiliere) => [
+                    'name' => $personFiliere->getFiliere()->getName(),
+                    'startYear' => $personFiliere->getStartYear(),
+                    'endYear' => $personFiliere->getEndYear(),
+                ],
+                $person->getFilieres()->toArray()
+            )
         );
     }
 
