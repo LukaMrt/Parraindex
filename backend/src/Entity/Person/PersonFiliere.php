@@ -1,0 +1,83 @@
+<?php
+
+namespace App\Entity\Person;
+
+use App\Entity\Person\Filiere;
+use App\Repository\Person\PersonFiliereRepository;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity(repositoryClass: PersonFiliereRepository::class)]
+class PersonFiliere
+{
+    #[ORM\Id]
+    #[ORM\GeneratedValue]
+    #[ORM\Column]
+    private ?int $id = null;
+
+    #[ORM\ManyToOne(inversedBy: 'filieres')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Person $person = null;
+
+    #[ORM\ManyToOne(inversedBy: 'persons')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Filiere $filiere = null;
+
+    #[ORM\Column]
+    private ?int $startYear = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?int $endYear = null;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getPerson(): ?Person
+    {
+        return $this->person;
+    }
+
+    public function setPerson(?Person $person): static
+    {
+        $this->person = $person;
+
+        return $this;
+    }
+
+    public function getFiliere(): ?Filiere
+    {
+        return $this->filiere;
+    }
+
+    public function setFiliere(?Filiere $filiere): static
+    {
+        $this->filiere = $filiere;
+
+        return $this;
+    }
+
+    public function getStartYear(): ?int
+    {
+        return $this->startYear;
+    }
+
+    public function setStartYear(int $startYear): static
+    {
+        $this->startYear = $startYear;
+
+        return $this;
+    }
+
+    public function getEndYear(): ?int
+    {
+        return $this->endYear;
+    }
+
+    public function setEndYear(?int $endYear): static
+    {
+        $this->endYear = $endYear;
+
+        return $this;
+    }
+}

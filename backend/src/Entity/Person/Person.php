@@ -96,12 +96,19 @@ class Person implements \Stringable
     #[ORM\OneToMany(targetEntity: Characteristic::class, mappedBy: 'person', orphanRemoval: true)]
     private Collection $characteristics;
 
+    /**
+     * @var Collection<int, PersonFiliere>
+     */
+    #[ORM\OneToMany(targetEntity: PersonFiliere::class, mappedBy: 'person', orphanRemoval: true)]
+    private Collection $filieres;
+
     public function __construct()
     {
         $this->godFathers      = new ArrayCollection();
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
         $this->createdAt       = new \DateTime();
+        $this->filieres = new ArrayCollection();
     }
 
     public function getId(): int
@@ -370,5 +377,35 @@ class Person implements \Stringable
     public function __toString(): string
     {
         return $this->getFullName();
+    }
+
+    /**
+     * @return Collection<int, PersonFiliere>
+     */
+    public function getFilieres(): Collection
+    {
+        return $this->filieres;
+    }
+
+    public function addFiliere(PersonFiliere $filiere): static
+    {
+        if (!$this->filieres->contains($filiere)) {
+            $this->filieres->add($filiere);
+            $filiere->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFiliere(PersonFiliere $filiere): static
+    {
+        if ($this->filieres->removeElement($filiere)) {
+            // set the owning side to null (unless already changed)
+            if ($filiere->getPerson() === $this) {
+                $filiere->setPerson(null);
+            }
+        }
+
+        return $this;
     }
 }
