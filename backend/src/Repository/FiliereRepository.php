@@ -40,4 +40,61 @@ class FiliereRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findAllOrderedByName(): array
+    {
+        return $this->createQueryBuilder('f')
+            ->orderBy('f.name', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function existsByName(string $name): bool
+    {
+        return (bool) $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->andWhere('f.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function findByName(string $name): ?Filiere
+    {
+        return $this->createQueryBuilder('f')
+            ->andWhere('f.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
+    public function update(Filiere $filiere): void
+    {
+        $this->getEntityManager()->persist($filiere);
+        $this->getEntityManager()->flush();
+    }
+
+    public function delete(Filiere $filiere): void
+    {
+        $this->getEntityManager()->remove($filiere);
+        $this->getEntityManager()->flush();
+    }
+
+    public function countAll(): int
+    {
+        return (int) $this->createQueryBuilder('f')
+            ->select('COUNT(f.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    public function create(string $name): Filiere
+    {
+        $filiere = new Filiere();
+        $filiere->setName($name);
+        $this->getEntityManager()->persist($filiere);
+        $this->getEntityManager()->flush();
+
+        return $filiere;
+    }
 }

@@ -20,6 +20,7 @@ final readonly class PersonRequestDto
         public int $startYear,
         public ?string $biography = null,
         public ?string $description = null,
+        public ?array $filieres = null,
     ) {
     }
 }

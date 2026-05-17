@@ -81,7 +81,8 @@ final class PersonApiController extends AbstractController
             ->setLastName($dto->lastName)
             ->setStartYear($dto->startYear)
             ->setBiography($dto->biography)
-            ->setDescription($dto->description);
+            ->setDescription($dto->description)
+            ->setFilieres($dto->filieres);
 
         $this->personService->update($person);
 
