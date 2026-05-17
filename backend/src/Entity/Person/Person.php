@@ -99,7 +99,7 @@ class Person implements \Stringable
     /**
      * @var Collection<int, PersonFiliere>
      */
-    #[ORM\OneToMany(targetEntity: PersonFiliere::class, mappedBy: 'person', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: PersonFiliere::class, mappedBy: 'person', orphanRemoval: true, cascade: ['persist'])]
     private Collection $filieres;
 
     public function __construct()

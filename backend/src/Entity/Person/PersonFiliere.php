@@ -7,7 +7,7 @@ use App\Repository\Person\PersonFiliereRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: PersonFiliereRepository::class)]
-class PersonFiliere
+class PersonFiliere implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,7 +18,7 @@ class PersonFiliere
     #[ORM\JoinColumn(nullable: false)]
     private ?Person $person = null;
 
-    #[ORM\ManyToOne(inversedBy: 'persons')]
+    #[ORM\ManyToOne(inversedBy: 'persons', cascade: ['persist'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Filiere $filiere = null;
 
@@ -79,5 +79,9 @@ class PersonFiliere
         $this->endYear = $endYear;
 
         return $this;
+    }
+    public function __toString(): string
+    {
+        return $this->filiere?->getName() ?? 'Nouvelle filière';
     }
 }

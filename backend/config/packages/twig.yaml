@@ -1,0 +1,3 @@
+twig:
+    form_themes:
+        - 'admin/form/person_filiere_theme.html.twig'

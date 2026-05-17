@@ -1,0 +1,15 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Form;
+
+use Symfony\Component\Form\Extension\Core\Type\TextType;
+
+class FiliereNameType extends TextType
+{
+    public function getBlockPrefix(): string
+    {
+        return 'filiere_name';
+    }
+}

@@ -1,0 +1,8 @@
+{% block filiere_name_widget %}
+    <datalist id="{{ datalist_id }}">
+        {% for name in filiere_names %}
+            <option value="{{ name }}"></option>
+        {% endfor %}
+    </datalist>
+    {{ block('form_widget_simple') }}
+{% endblock %}
