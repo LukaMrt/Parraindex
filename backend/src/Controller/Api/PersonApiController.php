@@ -81,9 +81,9 @@ final class PersonApiController extends AbstractController
             ->setLastName($dto->lastName)
             ->setStartYear($dto->startYear)
             ->setBiography($dto->biography)
-            ->setDescription($dto->description)
-            ->setFilieres($dto->filieres);
+            ->setDescription($dto->description);
 
+        $this->personService->syncFilieres($person, $dto->filieres ?? []);
         $this->personService->update($person);
 
         return ApiResponse::success($this->personService->mapToResponseDto($person));

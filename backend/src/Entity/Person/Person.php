@@ -410,22 +410,11 @@ class Person implements \Stringable
     }
 
     /**
-     * @param Collection<FiliereDto> $filieres
+     * @param Collection<int, PersonFiliere> $filieres
      */
     public function setFilieres(Collection $filieres): static
     {
-
-        // Map FiliereDto to PersonFiliere
-        $personFilieres = new ArrayCollection();
-        foreach ($filieres as $filiereDto) {
-            $personFiliere = new PersonFiliere();
-            $personFiliere->setFiliere((new Filiere())->setName($filiereDto->name));
-            $personFiliere->setStartYear($filiereDto->startYear);
-            $personFiliere->setEndYear($filiereDto->endYear);
-            $personFilieres->add($personFiliere);
-        }   
-        $this->filieres = $personFilieres;
-
+        $this->filieres = $filieres;
         return $this;
     }
 }

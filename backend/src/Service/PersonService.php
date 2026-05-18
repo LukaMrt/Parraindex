@@ -13,12 +13,16 @@ use App\Entity\Person\Person;
 use App\Entity\Sponsor\Sponsor;
 use App\Repository\CharacteristicTypeRepository;
 use App\Repository\PersonRepository;
+use App\Repository\FiliereRepository;
+use App\Entity\Person\PersonFiliere;
+use Doctrine\Common\Collections\ArrayCollection;
 
 final readonly class PersonService
 {
     public function __construct(
         private PersonRepository $personRepository,
         private CharacteristicTypeRepository $characteristicTypeRepository,
+        private FiliereRepository $filiereRepository,
     ) {
     }
 
@@ -171,5 +175,34 @@ final readonly class PersonService
             typeUrl: $type->getUrl(),
             typeImage: $type->getImage(),
         );
+    }
+
+    public function syncFilieres(Person $person, array $filiereDtos): void
+    {
+        $personFilieres = new ArrayCollection();
+
+        foreach ($filiereDtos as $dto) {
+            if (is_array($dto)) {
+                $dto = new FiliereDto(
+                    name: $dto['name'] ?? '',
+                    startYear: (int) ($dto['startYear'] ?? 0),
+                    endYear: isset($dto['endYear']) ? (int) $dto['endYear'] : null,
+                );
+            }
+            $canonical = ucfirst(strtolower(trim($dto->name)));
+
+            $filiere = $this->filiereRepository->findByName($canonical)
+                ?? (new Filiere())->setName($canonical);
+
+            $personFiliere = new PersonFiliere();
+            $personFiliere->setPerson($person);
+            $personFiliere->setFiliere($filiere);
+            $personFiliere->setStartYear($dto->startYear);
+            $personFiliere->setEndYear($dto->endYear);
+
+            $personFilieres->add($personFiliere);
+        }
+
+        $person->setFilieres($personFilieres);
     }
 }
