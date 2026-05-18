@@ -15,6 +15,7 @@ use App\Repository\CharacteristicTypeRepository;
 use App\Repository\PersonRepository;
 use App\Repository\FiliereRepository;
 use App\Entity\Person\PersonFiliere;
+use App\Entity\Person\Filiere;
 use Doctrine\Common\Collections\ArrayCollection;
 
 final readonly class PersonService
