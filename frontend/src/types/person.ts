@@ -31,6 +31,7 @@ export interface PersonRequest {
   startYear: number;
   biography: string | null;
   description: string | null;
+  filieres: Filiere[];
 }
 
 export interface Filiere {
