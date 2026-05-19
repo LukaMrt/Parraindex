@@ -13,3 +13,9 @@ backend/public/uploads/avatars/*
 
 # Cache LiipImagine — entièrement régénéré, rien à commiter
 backend/public/media/
+
+# E2E
+e2e/node_modules
+e2e/playwright-report
+e2e/test-results
+e2e/.cache
