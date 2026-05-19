@@ -30,6 +30,10 @@ e2e-install:
 e2e-test:
     cd e2e; npm test
 
+# Mode UI Playwright (lancement interactif, watch, visualisation des traces)
+e2e-ui:
+    cd e2e; npm run test:ui
+
 # Recipe combinée : up → install → test (idempotent, à utiliser pour un run complet)
 e2e: e2e-up e2e-install e2e-test
 
