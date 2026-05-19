@@ -106,7 +106,7 @@ export function TimelineView({ persons, loading }: TimelineViewProps) {
   }
 
   return (
-    <div className="flex flex-col gap-8">
+    <div data-testid="view-timeline-container" className="flex flex-col gap-8">
       {groups.map(({ year, persons: list, color }) => (
         <div key={year}>
           <div className="mb-3.5 flex items-baseline gap-3.5">

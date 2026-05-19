@@ -6,16 +6,14 @@ RUN npm ci
 COPY frontend/ ./
 RUN npm run build
 
-# Stage 2: Composer dependencies
+# Stage 2: Composer binary
 FROM composer:2 AS composer
 
-# Stage 3: FrankenPHP runtime
-FROM dunglas/frankenphp:1.12-php8.5-alpine
+# Stage 3: Common base (everything except the composer install)
+FROM dunglas/frankenphp:1.12-php8.5-alpine AS base
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-ENV APP_ENV=prod
-ENV APP_DEBUG=false
 ENV SERVER_NAME=":80"
 
 RUN apk add --no-cache netcat-openbsd
@@ -38,7 +36,6 @@ COPY backend/src src
 COPY backend/templates templates
 COPY backend/composer.json backend/composer.lock backend/symfony.lock ./
 RUN echo "" > .env
-RUN composer install --no-dev --optimize-autoloader --no-scripts
 
 # Copy built frontend assets
 COPY --from=frontend /app/dist /app/front
@@ -53,3 +50,15 @@ RUN sed -i 's/\r//' /usr/local/bin/docker-entrypoint.sh \
 
 CMD ["--config", "/etc/caddy/Caddyfile", "--adapter", "caddyfile"]
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+
+# Stage 4a: Production image (no dev deps, optimized autoloader)
+FROM base AS prod
+ENV APP_ENV=prod
+ENV APP_DEBUG=0
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Stage 4b: Test image (dev deps for fixtures/profiler, dev env)
+FROM base AS test
+ENV APP_ENV=dev
+ENV APP_DEBUG=0
+RUN composer install --no-scripts

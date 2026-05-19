@@ -1,0 +1,7 @@
+services:
+  app:
+    build:
+      target: test
+    environment:
+      APP_ENV: dev
+      APP_DEBUG: "0"
