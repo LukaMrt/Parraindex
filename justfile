@@ -17,6 +17,18 @@ e2e-up:
 e2e-down:
     docker compose -f compose.yaml -f compose.e2e.yaml down
 
+# Démarre la stack en mode DEV (hot reload frontend Vite + backend volumes)
+# Le frontend est sur :3000, les tests doivent pointer dessus.
+e2e-up-dev:
+    docker compose -f compose.yaml -f compose.dev.yaml up -d --build
+
+e2e-down-dev:
+    docker compose -f compose.yaml -f compose.dev.yaml down
+
+# Lance les tests en mode dev (hot reload, baseURL=:3000)
+e2e-test-dev:
+    cd e2e; E2E_BASE_URL=http://localhost:3000 npm test
+
 # Recharge la base avec les fixtures (utile pour debug, sinon les tests le font tout seuls)
 e2e-fixtures:
     docker compose -f compose.yaml -f compose.e2e.yaml exec -T app php bin/console doctrine:fixtures:load --no-interaction

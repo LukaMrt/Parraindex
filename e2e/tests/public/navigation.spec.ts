@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { resetFixtures, clearMailpit } from '../helpers/fixtures';
+import { resetFixtures, clearMailpit } from '../../helpers/fixtures';
 
 test.beforeEach(() => {
   resetFixtures();

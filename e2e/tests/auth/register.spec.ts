@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
-import { resetFixtures, clearMailpit } from '../helpers/fixtures';
-import { waitForEmailTo, extractVerificationLink } from '../helpers/mailpit';
+import { resetFixtures, clearMailpit } from '../../helpers/fixtures';
+import { waitForEmailTo, extractLinkMatching } from '../../helpers/mailpit';
 
 const EMAIL = 'henri.durand@etu.univ-lyon1.fr';
 const PASSWORD = 'SuperPassword123!';
@@ -21,7 +21,10 @@ test('register → verify email → login → user validated', async ({ page }) 
 
   // 2. Récupération du mail via Mailpit + extraction du lien
   const message = await waitForEmailTo(EMAIL);
-  const verifyLink = await extractVerificationLink(message.ID);
+  const verifyLink = await extractLinkMatching(
+    message.ID,
+    /https?:\/\/[^\s"'<>]+\/verify-email[^\s"'<>]*/i,
+  );
   expect(verifyLink).toContain('/verify-email');
 
   // 3. Clic sur le lien de vérification (redirige vers /login après succès)

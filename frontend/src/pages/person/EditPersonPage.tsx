@@ -401,7 +401,10 @@ function SponsorRow({
 
   if (editing) {
     return (
-      <div className="rounded-xl border border-ink-3 bg-surface p-3">
+      <div
+        data-testid={`sponsor-row-${String(sponsor.id)}`}
+        className="rounded-xl border border-ink-3 bg-surface p-3"
+      >
         <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
           Modifier · {relatedName}
         </p>
@@ -470,7 +473,10 @@ function SponsorRow({
   }
 
   return (
-    <div className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3">
+    <div
+      data-testid={`sponsor-row-${String(sponsor.id)}`}
+      className="flex items-center gap-3 rounded-xl border border-line bg-surface p-3"
+    >
       <Avatar
         person={{
           firstName: relatedName.split(' ')[0] ?? '',
@@ -521,6 +527,7 @@ function SponsorRow({
         size="sm"
         confirm
         loading={deleting}
+        title="Supprimer ce parrainage"
         icon={
           <svg
             width="15"

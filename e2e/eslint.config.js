@@ -5,6 +5,9 @@ import tsParser from '@typescript-eslint/parser';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
+  {
+    ignores: ['node_modules', 'playwright-report', 'test-results', '.cache'],
+  },
   js.configs.recommended,
   {
     files: ['**/*.ts'],

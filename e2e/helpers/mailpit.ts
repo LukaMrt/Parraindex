@@ -22,7 +22,7 @@ interface MailpitMessageDetail {
 async function fetchJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
   if (!res.ok) {
-    throw new Error(`Mailpit request failed (${res.status}): ${url}`);
+    throw new Error(`Mailpit request failed (${res.status.toString()}): ${url}`);
   }
   return (await res.json()) as T;
 }
@@ -42,22 +42,22 @@ export async function waitForEmailTo(
     await new Promise((r) => setTimeout(r, pollMs));
   }
 
-  throw new Error(`Timed out waiting for email to ${toAddress} (after ${timeoutMs}ms)`);
+  throw new Error(`Timed out waiting for email to ${toAddress} (after ${timeoutMs.toString()}ms)`);
 }
 
-export async function extractVerificationLink(messageId: string): Promise<string> {
+/**
+ * Extracts the first link in the message body matching the given pattern.
+ * Reads the plain-text body to avoid HTML entity encoding (e.g. "&amp;").
+ */
+export async function extractLinkMatching(messageId: string, pattern: RegExp): Promise<string> {
   const message = await fetchJson<MailpitMessageDetail>(
     `${MAILPIT_URL}/api/v1/message/${messageId}`,
   );
-  // Prefer the plain-text body so we don't have to deal with HTML entity encoding
-  // (e.g. "&amp;" in URL query strings).
   const body = message.Text || message.HTML;
-
-  const linkPattern = /https?:\/\/[^\s"'<>]+\/verify-email[^\s"'<>]*/i;
-  const match = linkPattern.exec(body);
+  const match = pattern.exec(body);
 
   if (!match) {
-    throw new Error(`No /verify-email link found in message ${messageId}`);
+    throw new Error(`No link matching ${pattern.toString()} found in message ${messageId}`);
   }
   return match[0];
 }
