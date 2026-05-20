@@ -775,9 +775,11 @@ function FilieresEditor({
       {
         _id: crypto.randomUUID(),
         name: '',
+        color: null,
         startYear: new Date().getFullYear(),
         endYear: null,
         schoolName: null,
+        schoolLogoUrl: null,
       },
     ]);
   }

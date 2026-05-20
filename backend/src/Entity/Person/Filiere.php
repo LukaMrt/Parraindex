@@ -21,6 +21,9 @@ final class Filiere
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
+    #[ORM\Column(length: 7, nullable: true)]
+    private ?string $color = null;
+
     /**
      * @var Collection<int, PersonFiliere>
      */
@@ -30,11 +33,17 @@ final class Filiere
     public function __construct()
     {
         $this->persons = new ArrayCollection();
+        $this->color   = self::randomColor();
     }
 
     public static function normalize(string $name): string
     {
         return ucfirst(strtolower(trim($name)));
+    }
+
+    public static function randomColor(): string
+    {
+        return sprintf('#%06x', random_int(0, 0xFFFFFF));
     }
 
     public function getId(): ?int
@@ -50,6 +59,18 @@ final class Filiere
     public function setName(string $name): static
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getColor(): ?string
+    {
+        return $this->color;
+    }
+
+    public function setColor(?string $color): static
+    {
+        $this->color = $color;
 
         return $this;
     }

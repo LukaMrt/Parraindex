@@ -37,7 +37,9 @@ export interface PersonRequest {
 export interface Filiere {
   _id?: string;
   name: string;
+  color: string | null;
   startYear: number;
   endYear: number | null;
   schoolName: string | null;
+  schoolLogoUrl: string | null;
 }

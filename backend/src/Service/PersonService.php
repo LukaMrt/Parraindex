@@ -139,9 +139,13 @@ final readonly class PersonService
             filieres: array_map(
                 static fn(PersonFiliere $personFiliere): FiliereResponseDto => new FiliereResponseDto(
                     name: $personFiliere->getFiliere()?->getName() ?? throw new \LogicException('PersonFiliere has no Filiere.'),
+                    color: $personFiliere->getFiliere()->getColor(),
                     startYear: $personFiliere->getStartYear(),
                     endYear: $personFiliere->getEndYear(),
                     schoolName: $personFiliere->getSchool()?->getName(),
+                    schoolLogoUrl: $personFiliere->getSchool()?->getLogo() !== null
+                        ? '/uploads/schools/' . $personFiliere->getSchool()->getLogo()
+                        : null,
                 ),
                 $person->getFilieres()->toArray()
             )
