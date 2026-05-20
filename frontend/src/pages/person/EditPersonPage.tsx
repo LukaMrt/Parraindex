@@ -766,7 +766,10 @@ function FilieresEditor({
   const datalistId = 'filiere-datalist';
 
   function addRow() {
-    onChange([...filieres, { name: '', startYear: new Date().getFullYear(), endYear: null }]);
+    onChange([
+      ...filieres,
+      { _id: crypto.randomUUID(), name: '', startYear: new Date().getFullYear(), endYear: null },
+    ]);
   }
 
   function removeRow(index: number) {
@@ -787,7 +790,7 @@ function FilieresEditor({
 
       <div className="space-y-2">
         {filieres.map((f, i) => (
-          <div key={i} className="flex items-end gap-2">
+          <div key={f._id ?? i} className="flex items-end gap-2">
             <div className="flex-1">
               {i === 0 && <FieldLabel>Filière</FieldLabel>}
               <Input
@@ -920,18 +923,38 @@ export function EditPersonPage() {
     setBiography(person.biography ?? '');
     setDescription(person.description ?? '');
     setSponsors([...person.godFathers, ...person.godChildren]);
-    setFilieres(person.filieres);
+    setFilieres(person.filieres.map((f) => ({ ...f, _id: crypto.randomUUID() })));
   }, [person]);
+
+  useEffect(() => {
+    initialized.current = false;
+  }, [personId]);
 
   useEffect(() => {
     void getFilieres().then((result) => {
       if (result.ok) setAllFilieres(result.data);
+      else notify('error', 'Impossible de charger les filières');
     });
-  }, []);
+  }, [notify]);
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
     if (!person || !id) return;
+
+    for (const f of filieres) {
+      if (!f.name.trim()) {
+        notify('error', 'Le nom de la filière ne peut pas être vide');
+        return;
+      }
+      if (f.endYear !== null && f.endYear <= f.startYear) {
+        notify(
+          'error',
+          `La filière "${f.name}" : l'année de fin doit être supérieure à l'année de début`,
+        );
+        return;
+      }
+    }
+
     setSaving(true);
 
     const data: PersonRequest = {

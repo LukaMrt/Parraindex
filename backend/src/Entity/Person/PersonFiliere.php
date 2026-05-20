@@ -5,11 +5,10 @@ declare(strict_types=1);
 namespace App\Entity\Person;
 
 use App\Entity\Person\Filiere;
-use App\Repository\Person\PersonFiliereRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: PersonFiliereRepository::class)]
-class PersonFiliere implements \Stringable
+#[ORM\Entity]
+final class PersonFiliere implements \Stringable
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]

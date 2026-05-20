@@ -5,13 +5,13 @@ declare(strict_types=1);
 namespace App\Entity\Person;
 
 use App\Entity\Person\PersonFiliere;
-use App\Repository\FiliereRepository;
+use App\Repository\Person\FiliereRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: FiliereRepository::class)]
-class Filiere
+final class Filiere
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -30,6 +30,11 @@ class Filiere
     public function __construct()
     {
         $this->persons = new ArrayCollection();
+    }
+
+    public static function normalize(string $name): string
+    {
+        return ucfirst(strtolower(trim($name)));
     }
 
     public function getId(): ?int

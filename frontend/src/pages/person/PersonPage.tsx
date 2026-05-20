@@ -241,8 +241,11 @@ export function PersonPage() {
               <div className="space-y-3">
                 {[...person.filieres]
                   .sort((a, b) => a.startYear - b.startYear)
-                  .map((f, i) => (
-                    <div key={i} className="relative flex items-start gap-3">
+                  .map((f) => (
+                    <div
+                      key={`${f.name}-${f.startYear}`}
+                      className="relative flex items-start gap-3"
+                    >
                       {/* Point */}
                       <div
                         className="absolute -left-4 mt-[5px] h-2 w-2 rounded-full border-2 border-surface"

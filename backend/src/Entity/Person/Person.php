@@ -408,11 +408,13 @@ class Person implements \Stringable
     }
 
     /**
-     * @param Collection<int, PersonFiliere> $filieres
+     * @param PersonFiliere[] $personFilieres
      */
-    public function setFilieres(Collection $filieres): static
+    public function replaceFilieres(array $personFilieres): void
     {
-        $this->filieres = $filieres;
-        return $this;
+        $this->filieres->clear();
+        foreach ($personFilieres as $pf) {
+            $this->addFiliere($pf);
+        }
     }
 }

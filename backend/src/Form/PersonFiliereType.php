@@ -6,7 +6,7 @@ namespace App\Form;
 
 use App\Entity\Person\Filiere;
 use App\Entity\Person\PersonFiliere;
-use App\Repository\FiliereRepository;
+use App\Repository\Person\FiliereRepository;
 use App\Form\FiliereNameType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -66,9 +66,9 @@ class PersonFiliereType extends AbstractType
                 return;
             }
 
-            $canonical = ucfirst(strtolower(trim($name)));
+            $canonical = Filiere::normalize($name);
 
-            $filiere = $this->filiereRepository->findOneBy(['name' => $canonical])
+            $filiere = $this->filiereRepository->findByName($canonical)
                 ?? new Filiere()->setName($canonical);
 
             $personFiliere->setFiliere($filiere);

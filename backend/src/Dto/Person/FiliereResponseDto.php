@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace App\Dto\Person;
 
-final readonly class FiliereDto
+final readonly class FiliereResponseDto
 {
     public function __construct(
         public string $name,
-        public int $startYear,
+        public ?int $startYear,
         public ?int $endYear,
     ) {
     }

@@ -21,7 +21,7 @@ final readonly class PersonRequestDto
         public ?string $biography = null,
         public ?string $description = null,
         /**
-         * @var FiliereDto[]|null
+         * @var FiliereRequestDto[]|null
          */
         #[Assert\Valid]
         public ?array $filieres = null,

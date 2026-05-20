@@ -35,6 +35,7 @@ export interface PersonRequest {
 }
 
 export interface Filiere {
+  _id?: string;
   name: string;
   startYear: number;
   endYear: number | null;

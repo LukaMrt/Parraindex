@@ -7,7 +7,7 @@ namespace App\Controller\Admin\Crud;
 use App\Entity\Person\Filiere;
 use App\Entity\Person\Person;
 use App\Form\PersonFiliereType;
-use App\Repository\FiliereRepository;
+use App\Repository\Person\FiliereRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
@@ -59,7 +59,7 @@ final class PersonCrudController extends AbstractCrudController
 
         $filiereNames = array_map(
             fn (Filiere $f): string => $f->getName() ?? '',
-            $this->filiereRepository->findAll()
+            $this->filiereRepository->findAllOrderedByName()
         );
 
         yield CollectionField::new('filieres', 'Filières')

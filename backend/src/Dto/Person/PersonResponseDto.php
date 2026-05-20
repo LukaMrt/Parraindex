@@ -12,7 +12,7 @@ final readonly class PersonResponseDto
      * @param SponsorResponseDto[] $godFathers
      * @param SponsorResponseDto[] $godChildren
      * @param CharacteristicDto[]  $characteristics
-     * @param FiliereDto[]         $filieres
+     * @param FiliereResponseDto[] $filieres
      */
     public function __construct(
         public int $id,

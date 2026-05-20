@@ -5,19 +5,19 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Dto\Person\CharacteristicDto;
-use App\Dto\Person\FiliereDto;
+use App\Dto\Person\FiliereRequestDto;
+use App\Dto\Person\FiliereResponseDto;
 use App\Dto\Person\PersonResponseDto;
 use App\Dto\Sponsor\SponsorResponseDto;
 use App\Entity\Characteristic\Characteristic;
 use App\Entity\Characteristic\CharacteristicType;
 use App\Entity\Person\Person;
 use App\Entity\Sponsor\Sponsor;
-use App\Repository\CharacteristicTypeRepository;
-use App\Repository\PersonRepository;
-use App\Repository\FiliereRepository;
-use App\Entity\Person\PersonFiliere;
 use App\Entity\Person\Filiere;
-use Doctrine\Common\Collections\ArrayCollection;
+use App\Entity\Person\PersonFiliere;
+use App\Repository\CharacteristicTypeRepository;
+use App\Repository\Person\FiliereRepository;
+use App\Repository\PersonRepository;
 
 final readonly class PersonService
 {
@@ -134,9 +134,9 @@ final readonly class PersonService
                 static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto,
             ),
             filieres: array_map(
-                static fn(PersonFiliere $personFiliere): FiliereDto => new FiliereDto(
-                    name: $personFiliere->getFiliere()?->getName() ?? '',
-                    startYear: $personFiliere->getStartYear() ?? 0,
+                static fn(PersonFiliere $personFiliere): FiliereResponseDto => new FiliereResponseDto(
+                    name: $personFiliere->getFiliere()?->getName() ?? throw new \LogicException('PersonFiliere has no Filiere.'),
+                    startYear: $personFiliere->getStartYear(),
                     endYear: $personFiliere->getEndYear(),
                 ),
                 $person->getFilieres()->toArray()
@@ -180,27 +180,25 @@ final readonly class PersonService
     }
 
     /**
-     * @param FiliereDto[] $filiereDtos
+     * @param FiliereRequestDto[] $filiereDtos
      */
     public function syncFilieres(Person $person, array $filiereDtos): void
     {
-        $personFilieres = new ArrayCollection();
+        $person->replaceFilieres(array_map($this->buildPersonFiliere(...), $filiereDtos));
+    }
 
-        foreach ($filiereDtos as $dto) {
-            $canonical = ucfirst(strtolower(trim($dto->name)));
+    private function buildPersonFiliere(FiliereRequestDto $dto): PersonFiliere
+    {
+        $canonical = Filiere::normalize($dto->name);
 
-            $filiere = $this->filiereRepository->findByName($canonical)
-                ?? new Filiere()->setName($canonical);
+        $filiere = $this->filiereRepository->findByName($canonical)
+            ?? new Filiere()->setName($canonical);
 
-            $personFiliere = new PersonFiliere();
-            $personFiliere->setPerson($person);
-            $personFiliere->setFiliere($filiere);
-            $personFiliere->setStartYear($dto->startYear);
-            $personFiliere->setEndYear($dto->endYear);
+        $personFiliere = new PersonFiliere();
+        $personFiliere->setFiliere($filiere);
+        $personFiliere->setStartYear($dto->startYear ?? throw new \InvalidArgumentException('startYear is required.'));
+        $personFiliere->setEndYear($dto->endYear);
 
-            $personFilieres->add($personFiliere);
-        }
-
-        $person->setFilieres($personFilieres);
+        return $personFiliere;
     }
 }
