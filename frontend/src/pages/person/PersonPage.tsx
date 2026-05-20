@@ -233,13 +233,11 @@ export function PersonPage() {
         {/* Filières */}
         {person.filieres.length > 0 && (
           <Card radius="xl" padding="md" className="mb-5">
-            <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">
-              Parcours
-            </h2>
+            <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Parcours</h2>
             <div className="relative pl-4">
               {/* Ligne verticale */}
               <div className="absolute bottom-1 left-[7px] top-1 w-px bg-line" />
-        
+
               <div className="space-y-3">
                 {[...person.filieres]
                   .sort((a, b) => a.startYear - b.startYear)
@@ -253,7 +251,12 @@ export function PersonPage() {
                       <div>
                         <p className="text-[13.5px] font-semibold text-ink">{f.name}</p>
                         <p className="text-[12px] text-ink-3">
-                          {f.startYear} — {f.endYear ?? <span style={{ color }} className="font-medium">En cours</span>}
+                          {f.startYear} —{' '}
+                          {f.endYear ?? (
+                            <span style={{ color }} className="font-medium">
+                              En cours
+                            </span>
+                          )}
                         </p>
                       </div>
                     </div>

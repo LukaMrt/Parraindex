@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Dto\Person\CharacteristicDto;
+use App\Dto\Person\FiliereDto;
 use App\Dto\Person\PersonResponseDto;
 use App\Dto\Sponsor\SponsorResponseDto;
 use App\Entity\Characteristic\Characteristic;
@@ -133,11 +134,11 @@ final readonly class PersonService
                 static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto,
             ),
             filieres: array_map(
-                static fn($personFiliere) => [
-                    'name' => $personFiliere->getFiliere()->getName(),
-                    'startYear' => $personFiliere->getStartYear(),
-                    'endYear' => $personFiliere->getEndYear(),
-                ],
+                static fn(PersonFiliere $personFiliere): FiliereDto => new FiliereDto(
+                    name: $personFiliere->getFiliere()?->getName() ?? '',
+                    startYear: $personFiliere->getStartYear() ?? 0,
+                    endYear: $personFiliere->getEndYear(),
+                ),
                 $person->getFilieres()->toArray()
             )
         );
@@ -178,22 +179,18 @@ final readonly class PersonService
         );
     }
 
+    /**
+     * @param FiliereDto[] $filiereDtos
+     */
     public function syncFilieres(Person $person, array $filiereDtos): void
     {
         $personFilieres = new ArrayCollection();
 
         foreach ($filiereDtos as $dto) {
-            if (is_array($dto)) {
-                $dto = new FiliereDto(
-                    name: $dto['name'] ?? '',
-                    startYear: (int) ($dto['startYear'] ?? 0),
-                    endYear: isset($dto['endYear']) ? (int) $dto['endYear'] : null,
-                );
-            }
             $canonical = ucfirst(strtolower(trim($dto->name)));
 
             $filiere = $this->filiereRepository->findByName($canonical)
-                ?? (new Filiere())->setName($canonical);
+                ?? new Filiere()->setName($canonical);
 
             $personFiliere = new PersonFiliere();
             $personFiliere->setPerson($person);

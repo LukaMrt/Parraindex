@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Person;
 
 use App\Entity\Person\Filiere;
@@ -18,7 +20,7 @@ class PersonFiliere implements \Stringable
     #[ORM\JoinColumn(nullable: false)]
     private ?Person $person = null;
 
-    #[ORM\ManyToOne(inversedBy: 'persons', cascade: ['persist'])]
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'persons')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Filiere $filiere = null;
 
@@ -80,6 +82,7 @@ class PersonFiliere implements \Stringable
 
         return $this;
     }
+
     public function __toString(): string
     {
         return $this->filiere?->getName() ?? 'Nouvelle filière';

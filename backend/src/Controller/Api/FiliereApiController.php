@@ -4,14 +4,15 @@ declare(strict_types=1);
 
 namespace App\Controller\Api;
 
+use App\Entity\Person\Filiere;
 use App\Api\ApiResponse;
-use App\Dto\Person\FiliereDto;
 use App\Repository\FiliereRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Attribute\Route;
 
-final class FiliereApiController extends AbstractController {
+final class FiliereApiController extends AbstractController
+{
     public function __construct(
         private readonly FiliereRepository $filiereRepository,
     ) {
@@ -23,7 +24,7 @@ final class FiliereApiController extends AbstractController {
         $filieres = $this->filiereRepository->findAll();
 
         $ret = array_map(
-            static fn($filiere) => $filiere->getName(),
+            static fn(Filiere $filiere): ?string => $filiere->getName(),
             $filieres,
         );
 

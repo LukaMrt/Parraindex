@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Entity\Person;
 
 use App\Entity\Person\PersonFiliere;
@@ -67,11 +69,9 @@ class Filiere
 
     public function removePerson(PersonFiliere $person): static
     {
-        if ($this->persons->removeElement($person)) {
-            // set the owning side to null (unless already changed)
-            if ($person->getFiliere() === $this) {
-                $person->setFiliere(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->persons->removeElement($person) && $person->getFiliere() === $this) {
+            $person->setFiliere(null);
         }
 
         return $this;

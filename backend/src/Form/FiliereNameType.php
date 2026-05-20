@@ -8,6 +8,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class FiliereNameType extends TextType
 {
+    #[\Override]
     public function getBlockPrefix(): string
     {
         return 'filiere_name';

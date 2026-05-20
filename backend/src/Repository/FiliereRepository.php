@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Repository;
 
 use App\Entity\Person\Filiere;
@@ -16,37 +18,19 @@ class FiliereRepository extends ServiceEntityRepository
         parent::__construct($registry, Filiere::class);
     }
 
-    //    /**
-    //     * @return Filiere[] Returns an array of Filiere objects
-    //     */
-    //    public function findByExampleField($value): array
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->orderBy('f.id', 'ASC')
-    //            ->setMaxResults(10)
-    //            ->getQuery()
-    //            ->getResult()
-    //        ;
-    //    }
 
-    //    public function findOneBySomeField($value): ?Filiere
-    //    {
-    //        return $this->createQueryBuilder('f')
-    //            ->andWhere('f.exampleField = :val')
-    //            ->setParameter('val', $value)
-    //            ->getQuery()
-    //            ->getOneOrNullResult()
-    //        ;
-    //    }
-
+    /**
+     * @return Filiere[]
+     */
     public function findAllOrderedByName(): array
     {
-        return $this->createQueryBuilder('f')
+        /** @var Filiere[] $result */
+        $result = $this->createQueryBuilder('f')
             ->orderBy('f.name', 'ASC')
             ->getQuery()
             ->getResult();
+
+        return $result;
     }
 
     public function existsByName(string $name): bool
@@ -61,11 +45,14 @@ class FiliereRepository extends ServiceEntityRepository
 
     public function findByName(string $name): ?Filiere
     {
-        return $this->createQueryBuilder('f')
+        /** @var Filiere|null $result */
+        $result = $this->createQueryBuilder('f')
             ->andWhere('f.name = :name')
             ->setParameter('name', $name)
             ->getQuery()
             ->getOneOrNullResult();
+
+        return $result;
     }
 
     public function update(Filiere $filiere): void

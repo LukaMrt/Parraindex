@@ -58,7 +58,7 @@ final class PersonCrudController extends AbstractCrudController
             ->setHelp('Liens de parrainage où cette personne est parrain');
 
         $filiereNames = array_map(
-            fn (Filiere $f): string => $f->getName(),
+            fn (Filiere $f): string => $f->getName() ?? '',
             $this->filiereRepository->findAll()
         );
 

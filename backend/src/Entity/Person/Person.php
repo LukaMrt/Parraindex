@@ -99,7 +99,7 @@ class Person implements \Stringable
     /**
      * @var Collection<int, PersonFiliere>
      */
-    #[ORM\OneToMany(targetEntity: PersonFiliere::class, mappedBy: 'person', orphanRemoval: true, cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: PersonFiliere::class, mappedBy: 'person', cascade: ['persist'], orphanRemoval: true)]
     private Collection $filieres;
 
     public function __construct()
@@ -108,7 +108,7 @@ class Person implements \Stringable
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
         $this->createdAt       = new \DateTime();
-        $this->filieres = new ArrayCollection();
+        $this->filieres        = new ArrayCollection();
     }
 
     public function getId(): int
@@ -399,11 +399,9 @@ class Person implements \Stringable
 
     public function removeFiliere(PersonFiliere $filiere): static
     {
-        if ($this->filieres->removeElement($filiere)) {
-            // set the owning side to null (unless already changed)
-            if ($filiere->getPerson() === $this) {
-                $filiere->setPerson(null);
-            }
+        // set the owning side to null (unless already changed)
+        if ($this->filieres->removeElement($filiere) && $filiere->getPerson() === $this) {
+            $filiere->setPerson(null);
         }
 
         return $this;

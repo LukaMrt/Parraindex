@@ -19,6 +19,7 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Positive;
 
+/** @extends AbstractType<PersonFiliere> */
 class PersonFiliereType extends AbstractType
 {
     public function __construct(
@@ -36,7 +37,10 @@ class PersonFiliereType extends AbstractType
             ])
             ->add('startYear', IntegerType::class, [
                 'label'       => 'Année de début',
-                'constraints' => [new NotBlank(), new Positive()],
+                'constraints' => [
+                    new NotBlank(),
+                    new Positive(),
+                ],
             ])
             ->add('endYear', IntegerType::class, [
                 'label'    => 'Année de fin',
@@ -65,7 +69,7 @@ class PersonFiliereType extends AbstractType
             $canonical = ucfirst(strtolower(trim($name)));
 
             $filiere = $this->filiereRepository->findOneBy(['name' => $canonical])
-                ?? (new Filiere())->setName($canonical);
+                ?? new Filiere()->setName($canonical);
 
             $personFiliere->setFiliere($filiere);
         });
@@ -73,8 +77,12 @@ class PersonFiliereType extends AbstractType
 
     public function finishView(FormView $view, FormInterface $form, array $options): void
     {
-        $datalistId = 'filiere-dl-' . $view['filiereName']->vars['id'];
-        $view['filiereName']->vars['attr']['list'] = $datalistId;
+        $id = $view['filiereName']->vars['id'];
+        $datalistId = 'filiere-dl-' . (is_string($id) || is_int($id) ? $id : '');
+        /** @var array<string, mixed> $attr */
+        $attr = $view['filiereName']->vars['attr'];
+        $attr['list'] = $datalistId;
+        $view['filiereName']->vars['attr'] = $attr;
         $view['filiereName']->vars['filiere_names'] = $options['filiere_names'];
         $view['filiereName']->vars['datalist_id']   = $datalistId;
     }

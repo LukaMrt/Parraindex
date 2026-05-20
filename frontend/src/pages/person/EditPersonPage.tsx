@@ -752,7 +752,6 @@ function EditPersonHero({
   );
 }
 
-
 // -- Composant d'édition de filieres --------------------------------------------
 
 function FilieresEditor({
@@ -793,7 +792,9 @@ function FilieresEditor({
               {i === 0 && <FieldLabel>Filière</FieldLabel>}
               <Input
                 value={f.name}
-                onChange={(e) => {updateRow(i, { name: e.target.value })}}
+                onChange={(e) => {
+                  updateRow(i, { name: e.target.value });
+                }}
                 placeholder="Filière"
                 list={datalistId}
               />
@@ -803,7 +804,9 @@ function FilieresEditor({
               <Input
                 type="number"
                 value={f.startYear}
-                onChange={(e) => {updateRow(i, { startYear: Number(e.target.value) })}}
+                onChange={(e) => {
+                  updateRow(i, { startYear: Number(e.target.value) });
+                }}
                 min={1900}
                 max={2100}
               />
@@ -814,7 +817,7 @@ function FilieresEditor({
                 type="number"
                 value={f.endYear ?? ''}
                 onChange={(e) => {
-                  updateRow(i, { endYear: e.target.value ? Number(e.target.value) : null })
+                  updateRow(i, { endYear: e.target.value ? Number(e.target.value) : null });
                 }}
                 min={1900}
                 max={2100}
@@ -827,10 +830,21 @@ function FilieresEditor({
                 type="button"
                 variant="ghost"
                 size="sm"
-                onClick={() => {removeRow(i)}}
+                onClick={() => {
+                  removeRow(i);
+                }}
                 className="text-ink-4"
                 icon={
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
                     <polyline points="3 6 5 6 21 6" />
                     <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
                     <path d="M10 11v6M14 11v6" />
@@ -843,21 +857,12 @@ function FilieresEditor({
         ))}
       </div>
 
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        className="mt-2 text-ink-3"
-        onClick={addRow}
-      >
+      <Button type="button" variant="ghost" size="sm" className="mt-2 text-ink-3" onClick={addRow}>
         + Ajouter une filière
       </Button>
     </div>
   );
 }
-
-
-
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -935,7 +940,7 @@ export function EditPersonPage() {
       startYear: user.isAdmin ? startYear : person.startYear,
       biography: biography || null,
       description: description || null,
-      filieres
+      filieres,
     };
 
     const updateResult = await updatePerson(Number(id), data);
@@ -1076,11 +1081,7 @@ export function EditPersonPage() {
         {/* Filières */}
         <Card radius="xl" padding="md" className="mb-5">
           <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Filières</h2>
-          <FilieresEditor
-            filieres={filieres}
-            allFilieres={allFilieres}
-            onChange={setFilieres}
-          />
+          <FilieresEditor filieres={filieres} allFilieres={allFilieres} onChange={setFilieres} />
         </Card>
 
         {/* Parrainages */}
