@@ -39,4 +39,5 @@ export interface Filiere {
   name: string;
   startYear: number;
   endYear: number | null;
+  schoolName: string | null;
 }

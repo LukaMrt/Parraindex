@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Entity\Person;
 
 use App\Entity\Person\Filiere;
+use App\Entity\Person\School;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -28,6 +29,10 @@ final class PersonFiliere implements \Stringable
 
     #[ORM\Column(nullable: true)]
     private ?int $endYear = null;
+
+    #[ORM\ManyToOne(cascade: ['persist'], inversedBy: 'personFilieres')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?School $school = null;
 
     public function getId(): ?int
     {
@@ -78,6 +83,18 @@ final class PersonFiliere implements \Stringable
     public function setEndYear(?int $endYear): static
     {
         $this->endYear = $endYear;
+
+        return $this;
+    }
+
+    public function getSchool(): ?School
+    {
+        return $this->school;
+    }
+
+    public function setSchool(?School $school): static
+    {
+        $this->school = $school;
 
         return $this;
     }

@@ -10,6 +10,7 @@ final readonly class FiliereResponseDto
         public string $name,
         public ?int $startYear,
         public ?int $endYear,
+        public ?string $schoolName,
     ) {
     }
 }

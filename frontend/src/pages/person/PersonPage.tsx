@@ -253,6 +253,7 @@ export function PersonPage() {
                       />
                       <div>
                         <p className="text-[13.5px] font-semibold text-ink">{f.name}</p>
+                        {f.schoolName && <p className="text-[12px] text-ink-3">{f.schoolName}</p>}
                         <p className="text-[12px] text-ink-3">
                           {f.startYear} —{' '}
                           {f.endYear ?? (

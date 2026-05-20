@@ -21,6 +21,8 @@ final readonly class FiliereRequestDto
         public ?int $startYear,
         #[Assert\Range(min: 1900, max: 2100)]
         public ?int $endYear,
+        #[Assert\Length(max: 255)]
+        public ?string $schoolName = null,
     ) {
     }
 }

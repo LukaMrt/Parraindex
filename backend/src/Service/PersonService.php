@@ -15,8 +15,10 @@ use App\Entity\Person\Person;
 use App\Entity\Sponsor\Sponsor;
 use App\Entity\Person\Filiere;
 use App\Entity\Person\PersonFiliere;
+use App\Entity\Person\School;
 use App\Repository\CharacteristicTypeRepository;
 use App\Repository\Person\FiliereRepository;
+use App\Repository\Person\SchoolRepository;
 use App\Repository\PersonRepository;
 
 final readonly class PersonService
@@ -25,6 +27,7 @@ final readonly class PersonService
         private PersonRepository $personRepository,
         private CharacteristicTypeRepository $characteristicTypeRepository,
         private FiliereRepository $filiereRepository,
+        private SchoolRepository $schoolRepository,
     ) {
     }
 
@@ -138,6 +141,7 @@ final readonly class PersonService
                     name: $personFiliere->getFiliere()?->getName() ?? throw new \LogicException('PersonFiliere has no Filiere.'),
                     startYear: $personFiliere->getStartYear(),
                     endYear: $personFiliere->getEndYear(),
+                    schoolName: $personFiliere->getSchool()?->getName(),
                 ),
                 $person->getFilieres()->toArray()
             )
@@ -194,10 +198,18 @@ final readonly class PersonService
         $filiere = $this->filiereRepository->findByName($canonical)
             ?? new Filiere()->setName($canonical);
 
+        $school = null;
+        if ($dto->schoolName !== null && $dto->schoolName !== '') {
+            $canonical = School::normalize($dto->schoolName);
+            $school    = $this->schoolRepository->findByName($canonical)
+                ?? new School()->setName($canonical);
+        }
+
         $personFiliere = new PersonFiliere();
         $personFiliere->setFiliere($filiere);
         $personFiliere->setStartYear($dto->startYear ?? throw new \InvalidArgumentException('startYear is required.'));
         $personFiliere->setEndYear($dto->endYear);
+        $personFiliere->setSchool($school);
 
         return $personFiliere;
     }

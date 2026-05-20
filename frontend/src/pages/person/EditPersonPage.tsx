@@ -23,6 +23,7 @@ import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes'
 import type { Filiere, Person, PersonRequest } from '../../types/person';
 import type { Sponsor, SponsorType } from '../../types/sponsor';
 import { getFilieres } from '../../lib/api/filieres';
+import { getSchools } from '../../lib/api/schools';
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
@@ -757,18 +758,27 @@ function EditPersonHero({
 function FilieresEditor({
   filieres,
   allFilieres,
+  allSchools,
   onChange,
 }: {
   filieres: Filiere[];
   allFilieres: string[];
+  allSchools: string[];
   onChange: (filieres: Filiere[]) => void;
 }) {
   const datalistId = 'filiere-datalist';
+  const schoolDatalistId = 'school-datalist';
 
   function addRow() {
     onChange([
       ...filieres,
-      { _id: crypto.randomUUID(), name: '', startYear: new Date().getFullYear(), endYear: null },
+      {
+        _id: crypto.randomUUID(),
+        name: '',
+        startYear: new Date().getFullYear(),
+        endYear: null,
+        schoolName: null,
+      },
     ]);
   }
 
@@ -787,6 +797,11 @@ function FilieresEditor({
           <option key={name} value={name} />
         ))}
       </datalist>
+      <datalist id={schoolDatalistId}>
+        {allSchools.map((name) => (
+          <option key={name} value={name} />
+        ))}
+      </datalist>
 
       <div className="space-y-2">
         {filieres.map((f, i) => (
@@ -800,6 +815,17 @@ function FilieresEditor({
                 }}
                 placeholder="Filière"
                 list={datalistId}
+              />
+            </div>
+            <div className="flex-1">
+              {i === 0 && <FieldLabel>École</FieldLabel>}
+              <Input
+                value={f.schoolName ?? ''}
+                onChange={(e) => {
+                  updateRow(i, { schoolName: e.target.value || null });
+                }}
+                placeholder="École (optionnel)"
+                list={schoolDatalistId}
               />
             </div>
             <div className="w-24">
@@ -913,6 +939,7 @@ export function EditPersonPage() {
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
   const [filieres, setFilieres] = useState<Filiere[]>([]);
   const [allFilieres, setAllFilieres] = useState<string[]>([]);
+  const [allSchools, setAllSchools] = useState<string[]>([]);
 
   useEffect(() => {
     if (!person || initialized.current) return;
@@ -934,6 +961,9 @@ export function EditPersonPage() {
     void getFilieres().then((result) => {
       if (result.ok) setAllFilieres(result.data);
       else notify('error', 'Impossible de charger les filières');
+    });
+    void getSchools().then((result) => {
+      if (result.ok) setAllSchools(result.data);
     });
   }, [notify]);
 
@@ -1104,7 +1134,12 @@ export function EditPersonPage() {
         {/* Filières */}
         <Card radius="xl" padding="md" className="mb-5">
           <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Filières</h2>
-          <FilieresEditor filieres={filieres} allFilieres={allFilieres} onChange={setFilieres} />
+          <FilieresEditor
+            filieres={filieres}
+            allFilieres={allFilieres}
+            allSchools={allSchools}
+            onChange={setFilieres}
+          />
         </Card>
 
         {/* Parrainages */}
