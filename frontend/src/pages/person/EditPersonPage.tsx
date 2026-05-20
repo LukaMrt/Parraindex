@@ -717,6 +717,7 @@ function EditPersonHero({
                 className="w-24"
                 min={2000}
                 max={2099}
+                data-testid="person-start-year"
               />
             </div>
           </div>
@@ -865,6 +866,7 @@ function FilieresEditor({
                   removeRow(i);
                 }}
                 className="text-ink-4"
+                data-testid="filiere-remove"
                 icon={
                   <svg
                     width="14"

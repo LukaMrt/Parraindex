@@ -19,7 +19,8 @@ test('admin edits firstName, lastName, startYear and biography of own profile', 
 
   await page.getByPlaceholder('Prénom', { exact: true }).fill('Lucas');
   await page.getByPlaceholder('Nom', { exact: true }).fill('Marais');
-  await page.getByRole('spinbutton').fill('2020');
+  await expect(page.getByTestId('person-start-year')).toBeVisible();
+  await page.getByTestId('person-start-year').fill('2020');
   const newBio = `Bio mise à jour par les tests e2e à ${Date.now().toString()}.`;
   await page.getByPlaceholder(/Biographie affichée/i).fill(newBio);
 
