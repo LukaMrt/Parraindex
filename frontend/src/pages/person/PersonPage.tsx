@@ -7,7 +7,7 @@ import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { resendVerificationEmail } from '../../lib/api/auth';
 import { isUniversityEmail } from '../../lib/email';
-import type { Characteristic, Person } from '../../types/person';
+import type { Association, Characteristic, Person } from '../../types/person';
 import { FamilyGraph } from './FamilyGraph';
 
 // ── Sub-components ────────────────────────────────────────────────────────────
@@ -277,6 +277,30 @@ export function PersonPage() {
                     </div>
                   ))}
               </div>
+            </div>
+          </Card>
+        )}
+
+        {/* Associations */}
+        {person.associations.length > 0 && (
+          <Card radius="xl" padding="md" className="mb-5">
+            <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Associations</h2>
+            <div className="space-y-2">
+              {person.associations.map((a: Association) => (
+                <div key={`${a.name}-${a.poste}`} className="flex items-center gap-3">
+                  {a.logoUrl && (
+                    <img
+                      src={a.logoUrl}
+                      alt=""
+                      className="h-6 w-6 shrink-0 object-contain opacity-70"
+                    />
+                  )}
+                  <div>
+                    <p className="text-sm font-semibold text-ink">{a.name}</p>
+                    <p className="text-xs text-ink-3">{a.poste}</p>
+                  </div>
+                </div>
+              ))}
             </div>
           </Card>
         )}

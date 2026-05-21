@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin;
 
+use App\Controller\Admin\Crud\AssociationCrudController;
 use App\Controller\Admin\Crud\ContactCrudController;
 use App\Controller\Admin\Crud\FiliereCrudController;
 use App\Controller\Admin\Crud\PendingUserCrudController;
@@ -51,6 +52,7 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Référentiel');
         yield MenuItem::linkTo(FiliereCrudController::class, 'Filières', 'fa fa-graduation-cap');
         yield MenuItem::linkTo(SchoolCrudController::class, 'Écoles', 'fa fa-school');
+        yield MenuItem::linkTo(AssociationCrudController::class, 'Associations', 'fa fa-users');
         yield MenuItem::section('Parrainages');
         yield MenuItem::linkTo(SponsorCrudController::class, 'Parrainages', 'fa fa-link');
         yield MenuItem::section('Demandes');
