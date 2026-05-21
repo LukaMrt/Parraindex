@@ -28,34 +28,46 @@ class PersonAssociationFixture extends Fixture implements DependentFixtureInterf
                 PersonFixture::LUKA,
                 $bde,
                 'Président',
+                new \DateTimeImmutable('2022-09-01'),
+                new \DateTimeImmutable('2023-06-30'),
             ],
             [
                 PersonFixture::LUKA,
                 $juniorEntreprise,
                 'Membre',
+                new \DateTimeImmutable('2022-10-01'),
+                null,
             ],
             [
                 PersonFixture::MELVYN,
                 $bde,
                 'Vice-Président',
+                new \DateTimeImmutable('2022-09-01'),
+                new \DateTimeImmutable('2023-06-30'),
             ],
             [
                 PersonFixture::SARAH,
                 $bds,
                 'Secrétaire',
+                new \DateTimeImmutable('2022-09-01'),
+                new \DateTimeImmutable('2023-06-30'),
             ],
             [
                 PersonFixture::VINCENT,
                 $bds,
                 'Trésorier',
+                new \DateTimeImmutable('2022-09-01'),
+                new \DateTimeImmutable('2023-06-30'),
             ],
         ];
 
-        foreach ($entries as [$personRef, $association, $poste]) {
+        foreach ($entries as [$personRef, $association, $poste, $startDate, $endDate]) {
             $pa = new PersonAssociation()
                 ->setPerson($this->getReference($personRef, Person::class))
                 ->setAssociation($association)
-                ->setPoste($poste);
+                ->setPoste($poste)
+                ->setStartDate($startDate)
+                ->setEndDate($endDate);
             $manager->persist($pa);
         }
 

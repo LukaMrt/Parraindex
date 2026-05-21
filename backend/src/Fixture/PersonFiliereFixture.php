@@ -33,6 +33,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2019,
                 2022,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::CAMILLE,
@@ -40,6 +41,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2019,
                 2022,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::BAPTISTE,
@@ -47,6 +49,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2019,
                 2022,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::LILIAN,
@@ -54,6 +57,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2020,
                 2023,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::LILIAN,
@@ -61,6 +65,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $insa,
                 2023,
                 null,
+                'Master Informatique',
             ],
             [
                 PersonFixture::MARINE,
@@ -68,6 +73,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2020,
                 2023,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::THOMAS,
@@ -75,6 +81,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2020,
                 2023,
+                'BUT Réseaux & Télécommunications',
             ],
             [
                 PersonFixture::PAULINE,
@@ -82,6 +89,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2020,
                 2023,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::LUKA,
@@ -89,6 +97,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2021,
                 2024,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::LUKA,
@@ -96,6 +105,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $insa,
                 2024,
                 null,
+                'Master Informatique',
             ],
             [
                 PersonFixture::MELVYN,
@@ -103,6 +113,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2021,
                 2024,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::VINCENT,
@@ -110,6 +121,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2021,
                 2024,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::SARAH,
@@ -117,6 +129,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2021,
                 2024,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::JULIAN,
@@ -124,6 +137,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2021,
                 2024,
+                'BUT Réseaux & Télécommunications',
             ],
             [
                 PersonFixture::EMMA,
@@ -131,6 +145,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2022,
                 2025,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::ROMAIN,
@@ -138,6 +153,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2022,
                 2025,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::CLARA,
@@ -145,6 +161,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2022,
                 2025,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::MAXIME,
@@ -152,6 +169,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2022,
                 2025,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::ZOE,
@@ -159,6 +177,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2023,
                 null,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::LUCAS,
@@ -166,6 +185,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2023,
                 null,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::INES,
@@ -173,6 +193,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2023,
                 null,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::THEO,
@@ -180,6 +201,7 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2023,
                 null,
+                'BUT Informatique',
             ],
             [
                 PersonFixture::MANON,
@@ -187,16 +209,18 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
                 $iut,
                 2023,
                 null,
+                'BUT Informatique',
             ],
         ];
 
-        foreach ($entries as [$personRef, $filiere, $school, $startYear, $endYear]) {
+        foreach ($entries as [$personRef, $filiere, $school, $startYear, $endYear, $diplomaName]) {
             $pf = new PersonFiliere()
                 ->setPerson($this->getReference($personRef, Person::class))
                 ->setFiliere($filiere)
                 ->setSchool($school)
                 ->setStartYear($startYear)
-                ->setEndYear($endYear);
+                ->setEndYear($endYear)
+                ->setDiplomaName($diplomaName);
             $manager->persist($pf);
         }
 
