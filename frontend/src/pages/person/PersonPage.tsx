@@ -265,6 +265,9 @@ export function PersonPage() {
                           </div>
                         )}
                         <p className="text-xs text-ink-3">{f.name}</p>
+                        {f.diplomaName && (
+                          <p className="text-xs font-medium text-ink-2">{f.diplomaName}</p>
+                        )}
                         <p className="mt-0.5 text-xs text-ink-3">
                           {f.startYear} —{' '}
                           {f.endYear ?? (
@@ -298,6 +301,11 @@ export function PersonPage() {
                   <div>
                     <p className="text-sm font-semibold text-ink">{a.name}</p>
                     <p className="text-xs text-ink-3">{a.poste}</p>
+                    {(a.startDate ?? a.endDate) && (
+                      <p className="text-xs text-ink-4">
+                        {a.startDate ?? '?'} — {a.endDate ?? 'En cours'}
+                      </p>
+                    )}
                   </div>
                 </div>
               ))}
