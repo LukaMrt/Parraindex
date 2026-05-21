@@ -300,6 +300,7 @@ function AddSponsorForm({
             onChange={(e) => {
               setDate(e.target.value);
             }}
+            data-testid="sponsor-date"
           />
         </div>
 

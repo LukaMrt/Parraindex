@@ -29,7 +29,7 @@ test('add a HEART sponsor link from Luka to Henri', async ({ page }) => {
   await page.getByRole('button', { name: /De cœur/i }).click();
 
   // Date
-  await page.locator('input[type="date"]').fill('2023-09-01');
+  await page.getByTestId('sponsor-date').fill('2023-09-01');
 
   // Bouton "Ajouter"
   await page.getByRole('button', { name: 'Ajouter', exact: true }).click();
