@@ -20,7 +20,14 @@ import { createSponsor, deleteSponsor, updateSponsor } from '../../lib/api/spons
 import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
-import type { Association, Filiere, Person, PersonRequest } from '../../types/person';
+import type {
+  Association,
+  AssociationRequest,
+  Filiere,
+  FiliereRequest,
+  Person,
+  PersonRequest,
+} from '../../types/person';
 import type { Sponsor, SponsorType } from '../../types/sponsor';
 import { getFilieres } from '../../lib/api/filieres';
 import { getSchools } from '../../lib/api/schools';
@@ -1121,8 +1128,15 @@ export function EditPersonPage() {
       startYear: user.isAdmin ? startYear : person.startYear,
       biography: biography || null,
       description: description || null,
-      filieres,
-      associations,
+      filieres: filieres.map(
+        ({ name, startYear: sy, endYear, schoolName }): FiliereRequest => ({
+          name,
+          startYear: sy,
+          endYear,
+          schoolName,
+        }),
+      ),
+      associations: associations.map(({ name, poste }): AssociationRequest => ({ name, poste })),
     };
 
     const updateResult = await updatePerson(Number(id), data);
