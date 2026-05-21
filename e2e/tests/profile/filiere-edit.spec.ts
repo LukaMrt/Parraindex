@@ -84,12 +84,9 @@ test('filiere autocomplete suggests existing filieres', async ({ page }) => {
   const newFiliereInput = page.getByPlaceholder('Filière').last();
   await newFiliereInput.fill('Info');
 
-  // Le datalist doit contenir "Informatique"
-  const datalistId = await newFiliereInput.getAttribute('list');
-  expect(datalistId).toBeTruthy();
-  if (!datalistId) return;
-  const option = page.locator(`#${datalistId} option[value="Informatique"]`);
-  await expect(option).toBeAttached();
+  // Le dropdown custom doit proposer "Informatique"
+  const suggestion = page.locator('ul li', { hasText: 'Informatique' });
+  await expect(suggestion).toBeVisible();
 });
 
 test('school autocomplete suggests existing schools', async ({ page }) => {
@@ -103,9 +100,7 @@ test('school autocomplete suggests existing schools', async ({ page }) => {
   const newSchoolInput = page.getByPlaceholder('École (optionnel)').last();
   await newSchoolInput.fill('IUT');
 
-  const datalistId = await newSchoolInput.getAttribute('list');
-  expect(datalistId).toBeTruthy();
-  if (!datalistId) return;
-  const option = page.locator(`#${datalistId} option[value="IUT Lyon 1"]`);
-  await expect(option).toBeAttached();
+  // Le dropdown custom doit proposer "IUT Lyon 1"
+  const suggestion = page.locator('ul li', { hasText: 'IUT Lyon 1' });
+  await expect(suggestion).toBeVisible();
 });

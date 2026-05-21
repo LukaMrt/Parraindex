@@ -77,12 +77,9 @@ test('association autocomplete suggests existing associations', async ({ page })
   const newAssocInput = page.getByPlaceholder('Association').last();
   await newAssocInput.fill('BD');
 
-  // Le datalist doit contenir "BDE"
-  const datalistId = await newAssocInput.getAttribute('list');
-  expect(datalistId).toBeTruthy();
-  if (!datalistId) return;
-  const option = page.locator(`#${datalistId} option[value="BDE"]`);
-  await expect(option).toBeAttached();
+  // Le dropdown custom doit proposer "BDE"
+  const suggestion = page.locator('ul li', { hasText: 'BDE' });
+  await expect(suggestion).toBeVisible();
 });
 
 test('cannot save association with empty name', async ({ page }) => {
