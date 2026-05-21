@@ -31,11 +31,14 @@ export interface FiliereRequest {
   startYear: number;
   endYear: number | null;
   schoolName: string | null;
+  diplomaName: string | null;
 }
 
 export interface AssociationRequest {
   name: string;
   poste: string;
+  startDate: string | null;
+  endDate: string | null;
 }
 
 export interface PersonRequest {
@@ -56,6 +59,7 @@ export interface Filiere {
   endYear: number | null;
   schoolName: string | null;
   schoolLogoUrl: string | null;
+  diplomaName: string | null;
 }
 
 export interface Association {
@@ -63,4 +67,6 @@ export interface Association {
   name: string;
   logoUrl: string | null;
   poste: string;
+  startDate: string | null;
+  endDate: string | null;
 }

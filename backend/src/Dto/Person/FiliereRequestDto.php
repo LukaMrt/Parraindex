@@ -23,6 +23,8 @@ final readonly class FiliereRequestDto
         public ?int $endYear,
         #[Assert\Length(max: 255)]
         public ?string $schoolName = null,
+        #[Assert\Length(max: 255)]
+        public ?string $diplomaName = null,
     ) {
     }
 }

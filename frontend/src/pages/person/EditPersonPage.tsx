@@ -789,6 +789,7 @@ function FilieresEditor({
         endYear: null,
         schoolName: null,
         schoolLogoUrl: null,
+        diplomaName: null,
       },
     ]);
   }
@@ -864,6 +865,16 @@ function FilieresEditor({
                 placeholder="—"
               />
             </div>
+            <div className="flex-1">
+              {i === 0 && <FieldLabel>Diplôme</FieldLabel>}
+              <Input
+                value={f.diplomaName ?? ''}
+                onChange={(e) => {
+                  updateRow(i, { diplomaName: e.target.value || null });
+                }}
+                placeholder="Nom du diplôme (optionnel)"
+              />
+            </div>
             <div className={i === 0 ? 'mb-0' : ''}>
               {i === 0 && <div className="mb-1 h-[14px]" />}
               <Button
@@ -926,6 +937,8 @@ function AssociationsEditor({
         name: '',
         logoUrl: null,
         poste: '',
+        startDate: null,
+        endDate: null,
       },
     ]);
   }
@@ -968,6 +981,26 @@ function AssociationsEditor({
                   updateRow(i, { poste: e.target.value });
                 }}
                 placeholder="Poste (ex : Président)"
+              />
+            </div>
+            <div className="w-36">
+              {i === 0 && <FieldLabel>Début</FieldLabel>}
+              <Input
+                type="date"
+                value={a.startDate ?? ''}
+                onChange={(e) => {
+                  updateRow(i, { startDate: e.target.value || null });
+                }}
+              />
+            </div>
+            <div className="w-36">
+              {i === 0 && <FieldLabel>Fin</FieldLabel>}
+              <Input
+                type="date"
+                value={a.endDate ?? ''}
+                onChange={(e) => {
+                  updateRow(i, { endDate: e.target.value || null });
+                }}
               />
             </div>
             <div className={i === 0 ? 'mb-0' : ''}>
@@ -1070,8 +1103,8 @@ export function EditPersonPage() {
     setBiography(person.biography ?? '');
     setDescription(person.description ?? '');
     setSponsors([...person.godFathers, ...person.godChildren]);
-    setFilieres(person.filieres.map((f) => ({ ...f, _id: crypto.randomUUID() })));
-    setAssociations(person.associations.map((a) => ({ ...a, _id: crypto.randomUUID() })));
+    setFilieres(person.filieres.map((f) => ({ ...f, _id: crypto.randomUUID(), diplomaName: f.diplomaName ?? null })));
+    setAssociations(person.associations.map((a) => ({ ...a, _id: crypto.randomUUID(), startDate: a.startDate ?? null, endDate: a.endDate ?? null })));
   }, [person]);
 
   useEffect(() => {
@@ -1129,14 +1162,22 @@ export function EditPersonPage() {
       biography: biography || null,
       description: description || null,
       filieres: filieres.map(
-        ({ name, startYear: sy, endYear, schoolName }): FiliereRequest => ({
+        ({ name, startYear: sy, endYear, schoolName, diplomaName }): FiliereRequest => ({
           name,
           startYear: sy,
           endYear,
           schoolName,
+          diplomaName,
         }),
       ),
-      associations: associations.map(({ name, poste }): AssociationRequest => ({ name, poste })),
+      associations: associations.map(
+        ({ name, poste, startDate, endDate }): AssociationRequest => ({
+          name,
+          poste,
+          startDate,
+          endDate,
+        }),
+      ),
     };
 
     const updateResult = await updatePerson(Number(id), data);

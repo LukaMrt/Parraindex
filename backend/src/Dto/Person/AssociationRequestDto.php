@@ -15,6 +15,10 @@ final readonly class AssociationRequestDto
         #[Assert\NotBlank]
         #[Assert\Length(max: 255)]
         public string $poste,
+        #[Assert\Date]
+        public ?string $startDate = null,
+        #[Assert\Date]
+        public ?string $endDate = null,
     ) {
     }
 }

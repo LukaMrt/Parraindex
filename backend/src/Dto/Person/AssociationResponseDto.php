@@ -10,6 +10,8 @@ final readonly class AssociationResponseDto
         public string $name,
         public ?string $logoUrl,
         public string $poste,
+        public ?string $startDate = null,
+        public ?string $endDate = null,
     ) {
     }
 }

@@ -13,6 +13,7 @@ final readonly class FiliereResponseDto
         public ?int $endYear,
         public ?string $schoolName,
         public ?string $schoolLogoUrl,
+        public ?string $diplomaName = null,
     ) {
     }
 }

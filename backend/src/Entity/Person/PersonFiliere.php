@@ -34,6 +34,9 @@ final class PersonFiliere implements \Stringable
     #[ORM\JoinColumn(nullable: true)]
     private ?School $school = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $diplomaName = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -95,6 +98,18 @@ final class PersonFiliere implements \Stringable
     public function setSchool(?School $school): static
     {
         $this->school = $school;
+
+        return $this;
+    }
+
+    public function getDiplomaName(): ?string
+    {
+        return $this->diplomaName;
+    }
+
+    public function setDiplomaName(?string $diplomaName): static
+    {
+        $this->diplomaName = $diplomaName;
 
         return $this;
     }

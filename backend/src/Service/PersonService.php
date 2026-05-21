@@ -152,6 +152,7 @@ final readonly class PersonService
                     schoolLogoUrl: $personFiliere->getSchool()?->getLogo() !== null
                         ? '/uploads/schools/' . $personFiliere->getSchool()->getLogo()
                         : null,
+                    diplomaName: $personFiliere->getDiplomaName(),
                 ),
                 $person->getFilieres()->toArray()
             ),
@@ -162,6 +163,8 @@ final readonly class PersonService
                         ? '/uploads/associations/' . $pa->getAssociation()->getLogo()
                         : null,
                     poste: $pa->getPoste() ?? throw new \LogicException('PersonAssociation has no poste.'),
+                    startDate: $pa->getStartDate()?->format('Y-m-d'),
+                    endDate: $pa->getEndDate()?->format('Y-m-d'),
                 ),
                 $person->getAssociations()->toArray()
             )
@@ -229,6 +232,12 @@ final readonly class PersonService
         $personAssociation = new PersonAssociation();
         $personAssociation->setAssociation($association);
         $personAssociation->setPoste($dto->poste);
+        $personAssociation->setStartDate(
+            $dto->startDate !== null ? new \DateTimeImmutable($dto->startDate) : null
+        );
+        $personAssociation->setEndDate(
+            $dto->endDate !== null ? new \DateTimeImmutable($dto->endDate) : null
+        );
 
         return $personAssociation;
     }
@@ -252,6 +261,7 @@ final readonly class PersonService
         $personFiliere->setStartYear($dto->startYear ?? throw new \InvalidArgumentException('startYear is required.'));
         $personFiliere->setEndYear($dto->endYear);
         $personFiliere->setSchool($school);
+        $personFiliere->setDiplomaName($dto->diplomaName);
 
         return $personFiliere;
     }
