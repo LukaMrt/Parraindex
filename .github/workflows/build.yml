@@ -134,16 +134,36 @@ jobs:
             -   name: Run existing migrations
                 run: php bin/console doctrine:migrations:migrate --no-interaction
                 env:
-                    DATABASE_URL: mysql://parraindex:parraindex@127.0.0.1:3306/parraindex_test
+                    APP_ENV: dev
                     APP_SECRET: ci-not-for-production
+                    DATABASE_HOST: 127.0.0.1
+                    DATABASE_PORT: 3306
+                    DATABASE_USER: parraindex
+                    DATABASE_PASSWORD: parraindex
+                    DATABASE_NAME: parraindex_test
+                    MAIL_USER: ci@example.com
+                    MAIL_PASSWORD: password
+                    MAIL_HOST: localhost
+                    MAIL_PORT: 587
+                    MAIL_NAME: Parraindex
             -   name: Check no pending migrations
                 run: |
                     OUTPUT=$(php bin/console make:migration --no-interaction 2>&1)
                     echo "$OUTPUT"
                     echo "$OUTPUT" | grep -q "No database changes" || { echo "ERROR: Pending schema changes detected — run make:migration and commit the result."; exit 1; }
                 env:
-                    DATABASE_URL: mysql://parraindex:parraindex@127.0.0.1:3306/parraindex_test
+                    APP_ENV: dev
                     APP_SECRET: ci-not-for-production
+                    DATABASE_HOST: 127.0.0.1
+                    DATABASE_PORT: 3306
+                    DATABASE_USER: parraindex
+                    DATABASE_PASSWORD: parraindex
+                    DATABASE_NAME: parraindex_test
+                    MAIL_USER: ci@example.com
+                    MAIL_PASSWORD: password
+                    MAIL_HOST: localhost
+                    MAIL_PORT: 587
+                    MAIL_NAME: Parraindex
 
     # ── Frontend ───────────────────────────────────────────────────────────────
 
