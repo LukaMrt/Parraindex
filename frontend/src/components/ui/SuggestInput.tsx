@@ -1,5 +1,5 @@
-import { useEffect, useRef, useState } from 'react';
-import type { InputHTMLAttributes } from 'react';
+import { useRef, useState } from 'react';
+import type { InputHTMLAttributes, KeyboardEvent } from 'react';
 import { cn } from '../../lib/cn';
 
 interface SuggestInputProps extends Omit<
@@ -32,16 +32,13 @@ export function SuggestInput({
         .slice(0, 8)
     : [];
 
-  useEffect(() => {
-    setCursor(0);
-  }, [value]);
-
   function pick(s: string) {
     onChange(s);
     setOpen(false);
+    setCursor(0);
   }
 
-  function handleKeyDown(e: React.KeyboardEvent) {
+  function handleKeyDown(e: KeyboardEvent) {
     if (!open || filtered.length === 0) return;
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -64,6 +61,7 @@ export function SuggestInput({
         value={value}
         onChange={(e) => {
           onChange(e.target.value);
+          setCursor(0);
           setOpen(true);
         }}
         onFocus={(e) => {

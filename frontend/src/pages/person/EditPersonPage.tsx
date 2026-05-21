@@ -146,7 +146,8 @@ function PersonAutocomplete({
           {filtered.map((p, i) => (
             <li
               key={p.id}
-              onMouseDown={() => {
+              onPointerDown={(e) => {
+                e.preventDefault();
                 pick(p);
               }}
               className={`flex cursor-pointer select-none items-center gap-2.5 px-3 py-2 text-[13px] transition-colors ${
@@ -238,7 +239,7 @@ function AddSponsorForm({
         {/* Rôle */}
         <div>
           <FieldLabel>Mon rôle</FieldLabel>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {(['godFather', 'godChild'] as const).map((r) => (
               <button
                 key={r}
@@ -272,7 +273,7 @@ function AddSponsorForm({
         {/* Type */}
         <div>
           <FieldLabel>Type</FieldLabel>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {TYPE_OPTIONS.map((o) => (
               <button
                 key={o.value}
@@ -280,11 +281,11 @@ function AddSponsorForm({
                 onClick={() => {
                   setType(o.value);
                 }}
-                className={`flex-1 rounded-[9px] border px-2 py-1.5 text-[12px] font-medium transition-colors ${
+                className={`rounded-[9px] border px-2 py-1.5 text-[12px] font-medium transition-colors cursor-pointer ${
                   type === o.value
                     ? 'border-ink bg-ink text-white'
                     : 'border-line bg-surface text-ink-2 hover:border-ink-3'
-                } cursor-pointer`}
+                }`}
               >
                 {SPONSOR_TYPE_ICONS[o.value]} {o.label}
               </button>
@@ -612,23 +613,19 @@ function EditPersonHero({
   };
 
   return (
-    <div className="relative mb-5 overflow-hidden rounded-2xl border border-line bg-surface p-8">
+    <div className="relative mb-5 overflow-hidden rounded-2xl border border-line bg-surface p-4 sm:p-8">
       <div
         className="pointer-events-none absolute inset-0"
         style={{ background: `linear-gradient(135deg, ${color}12 0%, transparent 55%)` }}
       />
-      <div className="relative flex flex-wrap items-start gap-7">
+      <div className="relative flex flex-col gap-5 sm:flex-row sm:flex-wrap sm:items-start sm:gap-7">
         {/* Avatar cliquable */}
-        <div className="shrink-0">
+        <div className="flex flex-col items-center sm:items-start">
           <FieldLabel>Photo</FieldLabel>
           <button
             type="button"
-            className="relative cursor-pointer overflow-hidden rounded-[18px] focus:outline-none"
-            style={{
-              width: 140,
-              height: 140,
-              boxShadow: `0 0 0 3px ${color}, 0 12px 32px ${color}30`,
-            }}
+            className="relative h-24 w-24 cursor-pointer overflow-hidden rounded-[18px] focus:outline-none sm:h-[140px] sm:w-[140px]"
+            style={{ boxShadow: `0 0 0 3px ${color}, 0 8px 24px ${color}30` }}
             onClick={onOpenPicker}
             onMouseEnter={() => {
               setAvatarHover(true);
@@ -659,7 +656,7 @@ function EditPersonHero({
             )}
           </button>
           {picturePreview && (
-            <p className="mt-2 flex items-center justify-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-[11px] font-medium text-amber-500">
+            <p className="mt-2 flex items-center gap-1 rounded-md bg-amber-500/10 px-2 py-1 text-[11px] font-medium text-amber-500">
               <svg
                 width="11"
                 height="11"
@@ -680,11 +677,11 @@ function EditPersonHero({
         </div>
 
         {/* Champs */}
-        <div className="min-w-[240px] flex-1">
+        <div className="min-w-0 flex-1">
           <div className="mb-4 flex flex-wrap gap-3">
             {canEditIdentity && (
               <>
-                <div>
+                <div className="flex-1 min-w-[120px]">
                   <FieldLabel>Prénom</FieldLabel>
                   <Input
                     value={firstName}
@@ -692,10 +689,9 @@ function EditPersonHero({
                       onFirstNameChange(e.target.value);
                     }}
                     placeholder="Prénom"
-                    className="w-40"
                   />
                 </div>
-                <div>
+                <div className="flex-1 min-w-[120px]">
                   <FieldLabel>Nom</FieldLabel>
                   <Input
                     value={lastName}
@@ -703,7 +699,6 @@ function EditPersonHero({
                       onLastNameChange(e.target.value);
                     }}
                     placeholder="Nom"
-                    className="w-40"
                   />
                 </div>
               </>
@@ -711,7 +706,7 @@ function EditPersonHero({
             {!canEditIdentity && (
               <div>
                 <FieldLabel>Nom</FieldLabel>
-                <p className="text-[22px] font-semibold leading-tight tracking-tight text-ink">
+                <p className="text-[20px] font-semibold leading-tight tracking-tight text-ink sm:text-[22px]">
                   {firstName} <span className="text-ink-2">{lastName}</span>
                 </p>
               </div>
@@ -732,7 +727,7 @@ function EditPersonHero({
             </div>
           </div>
 
-          <div className="space-y-2 max-w-[540px]">
+          <div className="space-y-2">
             <div>
               <FieldLabel>Description</FieldLabel>
               <textarea
@@ -801,69 +796,154 @@ function FilieresEditor({
     onChange(filieres.map((f, i) => (i === index ? { ...f, ...patch } : f)));
   }
 
+  const trashIcon = (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+    </svg>
+  );
+
   return (
     <div>
-      <div className="space-y-2">
+      <div className="space-y-3 sm:space-y-2">
         {filieres.map((f, i) => (
-          <div key={f._id ?? i} className="flex items-end gap-2">
-            <div className="flex-1">
-              {i === 0 && <FieldLabel>Filière</FieldLabel>}
-              <SuggestInput
-                value={f.name}
-                onChange={(v) => {
-                  updateRow(i, { name: v });
+          // Mobile : carte avec labels toujours visibles
+          // Desktop (sm+) : flex row — sm:contents sur le wrapper grid rend les enfants
+          // transparents pour le flex parent
+          <div
+            key={f._id ?? i}
+            className="rounded-xl border border-line bg-surface p-3 sm:flex sm:items-end sm:gap-2 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0"
+          >
+            {/* En-tête mobile : numéro + bouton supprimer */}
+            <div className="mb-2 flex items-center justify-between sm:hidden">
+              <span className="text-[10.5px] font-semibold uppercase tracking-widest text-ink-3">
+                Filière {i + 1}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  removeRow(i);
                 }}
-                suggestions={allFilieres}
-                placeholder="Filière"
+                className="text-ink-4"
+                data-testid="filiere-remove"
+                icon={trashIcon}
               />
             </div>
-            <div className="flex-1">
-              {i === 0 && <FieldLabel>École</FieldLabel>}
-              <SuggestInput
-                value={f.schoolName ?? ''}
-                onChange={(v) => {
-                  updateRow(i, { schoolName: v || null });
-                }}
-                suggestions={allSchools}
-                placeholder="École (optionnel)"
-              />
+
+            <div className="grid grid-cols-2 gap-2 sm:contents">
+              <div className="col-span-2 sm:flex-1">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Filière
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Filière
+                  </p>
+                )}
+                <SuggestInput
+                  value={f.name}
+                  onChange={(v) => {
+                    updateRow(i, { name: v });
+                  }}
+                  suggestions={allFilieres}
+                  placeholder="Filière"
+                />
+              </div>
+
+              <div className="col-span-2 sm:flex-1">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  École
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    École
+                  </p>
+                )}
+                <SuggestInput
+                  value={f.schoolName ?? ''}
+                  onChange={(v) => {
+                    updateRow(i, { schoolName: v || null });
+                  }}
+                  suggestions={allSchools}
+                  placeholder="École (optionnel)"
+                />
+              </div>
+
+              <div className="sm:w-24">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Début
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Début
+                  </p>
+                )}
+                <Input
+                  type="number"
+                  value={f.startYear}
+                  onChange={(e) => {
+                    updateRow(i, { startYear: Number(e.target.value) });
+                  }}
+                  min={1900}
+                  max={2100}
+                />
+              </div>
+
+              <div className="sm:w-24">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Fin
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Fin
+                  </p>
+                )}
+                <Input
+                  type="number"
+                  value={f.endYear ?? ''}
+                  onChange={(e) => {
+                    updateRow(i, { endYear: e.target.value ? Number(e.target.value) : null });
+                  }}
+                  min={1900}
+                  max={2100}
+                  placeholder="—"
+                />
+              </div>
+
+              <div className="col-span-2 sm:flex-1">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Diplôme
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Diplôme
+                  </p>
+                )}
+                <Input
+                  value={f.diplomaName ?? ''}
+                  onChange={(e) => {
+                    updateRow(i, { diplomaName: e.target.value || null });
+                  }}
+                  placeholder="Nom du diplôme (optionnel)"
+                />
+              </div>
             </div>
-            <div className="w-24">
-              {i === 0 && <FieldLabel>Début</FieldLabel>}
-              <Input
-                type="number"
-                value={f.startYear}
-                onChange={(e) => {
-                  updateRow(i, { startYear: Number(e.target.value) });
-                }}
-                min={1900}
-                max={2100}
-              />
-            </div>
-            <div className="w-24">
-              {i === 0 && <FieldLabel>Fin</FieldLabel>}
-              <Input
-                type="number"
-                value={f.endYear ?? ''}
-                onChange={(e) => {
-                  updateRow(i, { endYear: e.target.value ? Number(e.target.value) : null });
-                }}
-                min={1900}
-                max={2100}
-                placeholder="—"
-              />
-            </div>
-            <div className="flex-1">
-              {i === 0 && <FieldLabel>Diplôme</FieldLabel>}
-              <Input
-                value={f.diplomaName ?? ''}
-                onChange={(e) => {
-                  updateRow(i, { diplomaName: e.target.value || null });
-                }}
-                placeholder="Nom du diplôme (optionnel)"
-              />
-            </div>
-            <div className={i === 0 ? 'mb-0' : ''}>
+
+            {/* Bouton supprimer — desktop seulement */}
+            <div className="hidden sm:block">
               {i === 0 && <div className="mb-1 h-[14px]" />}
               <Button
                 type="button"
@@ -874,23 +954,7 @@ function FilieresEditor({
                 }}
                 className="text-ink-4"
                 data-testid="filiere-remove"
-                icon={
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="3 6 5 6 21 6" />
-                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                    <path d="M10 11v6M14 11v6" />
-                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                  </svg>
-                }
+                icon={trashIcon}
               />
             </div>
           </div>
@@ -937,53 +1001,127 @@ function AssociationsEditor({
     onChange(associations.map((a, i) => (i === index ? { ...a, ...patch } : a)));
   }
 
+  const trashIcon = (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+    </svg>
+  );
+
   return (
     <div>
-      <div className="space-y-2">
+      <div className="space-y-3 sm:space-y-2">
         {associations.map((a, i) => (
-          <div key={a._id ?? i} className="flex items-end gap-2">
-            <div className="flex-1">
-              {i === 0 && <FieldLabel>Association</FieldLabel>}
-              <SuggestInput
-                value={a.name}
-                onChange={(v) => {
-                  updateRow(i, { name: v });
+          <div
+            key={a._id ?? i}
+            className="rounded-xl border border-line bg-surface p-3 sm:flex sm:items-end sm:gap-2 sm:rounded-none sm:border-0 sm:bg-transparent sm:p-0"
+          >
+            {/* En-tête mobile */}
+            <div className="mb-2 flex items-center justify-between sm:hidden">
+              <span className="text-[10.5px] font-semibold uppercase tracking-widest text-ink-3">
+                Association {i + 1}
+              </span>
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  removeRow(i);
                 }}
-                suggestions={allAssociations}
-                placeholder="Association"
+                className="text-ink-4"
+                data-testid="association-remove"
+                icon={trashIcon}
               />
             </div>
-            <div className="flex-1">
-              {i === 0 && <FieldLabel>Poste</FieldLabel>}
-              <Input
-                value={a.poste}
-                onChange={(e) => {
-                  updateRow(i, { poste: e.target.value });
-                }}
-                placeholder="Poste (ex : Président)"
-              />
+
+            <div className="grid grid-cols-2 gap-2 sm:contents">
+              <div className="col-span-2 sm:flex-1">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Association
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Association
+                  </p>
+                )}
+                <SuggestInput
+                  value={a.name}
+                  onChange={(v) => {
+                    updateRow(i, { name: v });
+                  }}
+                  suggestions={allAssociations}
+                  placeholder="Association"
+                />
+              </div>
+
+              <div className="col-span-2 sm:flex-1">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Poste
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Poste
+                  </p>
+                )}
+                <Input
+                  value={a.poste}
+                  onChange={(e) => {
+                    updateRow(i, { poste: e.target.value });
+                  }}
+                  placeholder="Poste (ex : Président)"
+                />
+              </div>
+
+              <div className="sm:w-36">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Début
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Début
+                  </p>
+                )}
+                <Input
+                  type="date"
+                  value={a.startDate ?? ''}
+                  onChange={(e) => {
+                    updateRow(i, { startDate: e.target.value || null });
+                  }}
+                />
+              </div>
+
+              <div className="sm:w-36">
+                <p className="mb-1 text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:hidden">
+                  Fin
+                </p>
+                {i === 0 && (
+                  <p className="mb-1 hidden text-[10.5px] font-semibold uppercase tracking-widest text-ink-3 sm:block">
+                    Fin
+                  </p>
+                )}
+                <Input
+                  type="date"
+                  value={a.endDate ?? ''}
+                  onChange={(e) => {
+                    updateRow(i, { endDate: e.target.value || null });
+                  }}
+                />
+              </div>
             </div>
-            <div className="w-36">
-              {i === 0 && <FieldLabel>Début</FieldLabel>}
-              <Input
-                type="date"
-                value={a.startDate ?? ''}
-                onChange={(e) => {
-                  updateRow(i, { startDate: e.target.value || null });
-                }}
-              />
-            </div>
-            <div className="w-36">
-              {i === 0 && <FieldLabel>Fin</FieldLabel>}
-              <Input
-                type="date"
-                value={a.endDate ?? ''}
-                onChange={(e) => {
-                  updateRow(i, { endDate: e.target.value || null });
-                }}
-              />
-            </div>
-            <div className={i === 0 ? 'mb-0' : ''}>
+
+            {/* Bouton supprimer — desktop seulement */}
+            <div className="hidden sm:block">
               {i === 0 && <div className="mb-1 h-[14px]" />}
               <Button
                 type="button"
@@ -994,23 +1132,7 @@ function AssociationsEditor({
                 }}
                 className="text-ink-4"
                 data-testid="association-remove"
-                icon={
-                  <svg
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="3 6 5 6 21 6" />
-                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
-                    <path d="M10 11v6M14 11v6" />
-                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
-                  </svg>
-                }
+                icon={trashIcon}
               />
             </div>
           </div>
@@ -1259,7 +1381,7 @@ export function EditPersonPage() {
     <div className="min-h-[calc(100vh-var(--header-height))] bg-bg">
       <form
         onSubmit={(e) => void handleSubmit(e)}
-        className="mx-auto max-w-[980px] px-7 pb-20 pt-7"
+        className="mx-auto max-w-[980px] px-4 pb-20 pt-5 sm:px-7 sm:pt-7"
       >
         <Breadcrumb
           items={[

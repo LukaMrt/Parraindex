@@ -80,26 +80,22 @@ function PersonHero({
   }
 
   return (
-    <div className="relative mb-5 overflow-hidden rounded-2xl border border-line bg-surface p-8">
+    <div className="relative mb-5 overflow-hidden rounded-2xl border border-line bg-surface p-4 sm:p-8">
       <div
         className="pointer-events-none absolute inset-0"
         style={{ background: `linear-gradient(135deg, ${color}12 0%, transparent 55%)` }}
       />
-      <div className="relative flex flex-wrap items-start gap-7">
+      <div className="relative flex flex-col items-center gap-4 sm:flex-row sm:flex-wrap sm:items-start sm:gap-7">
         {/* Avatar */}
         <div
-          className="shrink-0 overflow-hidden rounded-[18px]"
-          style={{
-            width: 140,
-            height: 140,
-            boxShadow: `0 0 0 3px ${color}, 0 12px 32px ${color}30`,
-          }}
+          className="shrink-0 overflow-hidden rounded-[18px] h-24 w-24 sm:h-[140px] sm:w-[140px]"
+          style={{ boxShadow: `0 0 0 3px ${color}, 0 12px 32px ${color}30` }}
         >
           <Avatar person={person} fill imageSize="full" />
         </div>
 
         {/* Infos */}
-        <div className="min-w-[240px] flex-1">
+        <div className="min-w-0 flex-1 text-center sm:text-left">
           <div
             className="mb-3 inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-[12px] font-medium"
             style={{ background: `${color}18`, color }}
@@ -107,24 +103,20 @@ function PersonHero({
             <span className="h-1.5 w-1.5 rounded-full" style={{ background: color }} />
             Promo {person.startYear}
           </div>
-          <h1 className="mb-4 text-[34px] font-semibold leading-tight tracking-tight text-ink">
+          <h1 className="mb-3 text-[26px] font-semibold leading-tight tracking-tight text-ink sm:mb-4 sm:text-[34px]">
             <span className="capitalize">{person.firstName.toLowerCase()}</span>{' '}
             <span className="capitalize text-ink-2">{person.lastName.toLowerCase()}</span>
           </h1>
           {person.description && (
-            <p className="mb-3 max-w-[540px] text-[14px] leading-relaxed text-ink-2">
-              {person.description}
-            </p>
+            <p className="mb-3 text-[14px] leading-relaxed text-ink-2">{person.description}</p>
           )}
           {person.biography && (
-            <p className="max-w-[540px] text-[13.5px] italic leading-relaxed text-ink-3">
-              {person.biography}
-            </p>
+            <p className="text-[13.5px] italic leading-relaxed text-ink-3">{person.biography}</p>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex flex-col gap-2">
+        <div className="flex w-full flex-col gap-2 sm:w-auto">
           {canEdit && (
             <Link
               to={`/person/${person.id}/edit`}
@@ -151,7 +143,7 @@ function PersonHero({
                 </button>
               )}
               {verifyError !== null && (
-                <p className="max-w-[220px] rounded-lg border border-danger/20 bg-danger/10 px-3 py-2 text-[12px] text-danger">
+                <p className="rounded-lg border border-danger/20 bg-danger/10 px-3 py-2 text-[12px] text-danger">
                   {verifyError}
                 </p>
               )}
@@ -165,7 +157,7 @@ function PersonHero({
 
 function PersonPageSkeleton() {
   return (
-    <div className="mx-auto max-w-[980px] px-7 py-7">
+    <div className="mx-auto max-w-[980px] px-4 py-5 sm:px-7 sm:py-7">
       <Skeleton className="mb-6 h-4 w-48" />
       <Skeleton className="mb-5 h-52 w-full rounded-2xl" />
       <div className="mb-5 grid grid-cols-3 gap-3">
@@ -212,7 +204,7 @@ export function PersonPage() {
   const allSponsors = [...person.godFathers, ...person.godChildren];
   return (
     <div className="min-h-[calc(100vh-var(--header-height))] bg-bg">
-      <div className="mx-auto max-w-[980px] px-7 pb-20 pt-7">
+      <div className="mx-auto max-w-[980px] px-4 pb-20 pt-5 sm:px-7 sm:pt-7">
         <Breadcrumb
           items={[
             { label: 'Annuaire', onClick: () => void navigate('/tree') },

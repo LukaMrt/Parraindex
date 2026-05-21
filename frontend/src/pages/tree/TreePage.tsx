@@ -37,8 +37,10 @@ export function TreePage() {
   return (
     <div className="flex min-h-[calc(100vh-var(--header-height))] flex-col bg-bg">
       {/* En-tête */}
-      <div className="border-b border-line bg-surface px-7 pb-5 pt-7">
-        <h1 className="text-[30px] font-semibold tracking-tight text-ink">Annuaire</h1>
+      <div className="border-b border-line bg-surface px-4 pb-5 pt-6 sm:px-7 sm:pt-7">
+        <h1 className="text-[26px] font-semibold tracking-tight text-ink sm:text-[30px]">
+          Annuaire
+        </h1>
         <p className="mt-1 text-[14px] text-ink-3">
           {loading
             ? 'Chargement…'
@@ -62,7 +64,7 @@ export function TreePage() {
       />
 
       {/* Contenu */}
-      <div className="flex-1 px-7 py-6">
+      <div className="flex-1 px-4 py-5 sm:px-7 sm:py-6">
         {view === 'grid' && <GridView persons={filtered} loading={loading} />}
         {view === 'list' && <ListView persons={filtered} loading={loading} />}
         {view === 'timeline' && <TimelineView persons={filtered} loading={loading} />}

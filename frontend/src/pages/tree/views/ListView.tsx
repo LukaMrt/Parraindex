@@ -5,7 +5,8 @@ import type { Person } from '../../../types/person';
 
 const SKELETON_COUNT = 12;
 
-const COL_GRID = 'grid grid-cols-[44px_1fr_160px] gap-4 px-5 items-center';
+const COL_GRID =
+  'grid grid-cols-[36px_1fr] sm:grid-cols-[44px_1fr_160px] gap-3 sm:gap-4 px-4 sm:px-5 items-center';
 
 function ListHeader() {
   return (
@@ -14,7 +15,7 @@ function ListHeader() {
     >
       <span />
       <span>Nom</span>
-      <span>Promotion</span>
+      <span className="hidden sm:block">Promotion</span>
     </div>
   );
 }
@@ -23,8 +24,11 @@ function ListRowSkeleton({ last }: { last: boolean }) {
   return (
     <div className={`${COL_GRID} py-2.5 ${last ? '' : 'border-b border-line'}`}>
       <Skeleton className="h-8 w-8 rounded-[14%]" />
-      <Skeleton className="h-4 w-40" />
-      <Skeleton className="h-4 w-24" />
+      <div>
+        <Skeleton className="mb-1.5 h-4 w-40" />
+        <Skeleton className="h-3 w-20 sm:hidden" />
+      </div>
+      <Skeleton className="hidden h-4 w-24 sm:block" />
     </div>
   );
 }
@@ -40,10 +44,10 @@ function ListRow({ person, last }: { person: Person; last: boolean }) {
       }}
       className={`${COL_GRID} cursor-pointer py-2.5 transition-colors duration-100 hover:bg-bg ${last ? '' : 'border-b border-line'}`}
     >
-      <div className="relative h-8 w-8 overflow-hidden rounded-[14%]">
+      <div className="relative h-8 w-8 overflow-hidden rounded-[14%] sm:h-9 sm:w-9">
         <Avatar person={person} size={32} square />
         {isPending && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/30 rounded-[14%]">
+          <div className="absolute inset-0 flex items-center justify-center rounded-[14%] bg-black/30">
             <svg
               className="animate-spin text-white"
               width="14"
@@ -59,10 +63,20 @@ function ListRow({ person, last }: { person: Person; last: boolean }) {
           </div>
         )}
       </div>
-      <span className="text-[13.5px] font-medium text-ink">
-        {person.firstName} {person.lastName}
-      </span>
-      <div className="flex items-center gap-2 text-[13px] text-ink-2">
+
+      <div>
+        <span className="text-[13.5px] font-medium text-ink">
+          {person.firstName} {person.lastName}
+        </span>
+        {/* Promo visible uniquement sur mobile sous le nom */}
+        <div className="mt-0.5 flex items-center gap-1.5 text-[11.5px] text-ink-3 sm:hidden">
+          <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
+          {person.startYear} / {String(person.startYear + 1).slice(2)}
+        </div>
+      </div>
+
+      {/* Promo en colonne sur desktop */}
+      <div className="hidden items-center gap-2 text-[13px] text-ink-2 sm:flex">
         <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: color }} />
         {person.startYear} / {String(person.startYear + 1).slice(2)}
       </div>
