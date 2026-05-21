@@ -72,7 +72,7 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
   const [loadingDescendants, setLoadingDescendants] = useState(false);
   const [hoverId, setHoverId] = useState<number | null>(null);
 
-  const panZoom = usePanZoom({ dragBlockSelector: '[data-fg-node]', minZoom: 0.4 });
+  const panZoom = usePanZoom({ dragBlockSelector: '[data-fg-node]', minZoom: 0.1 });
 
   // ── Initial fetch: load direct family members
 
@@ -112,27 +112,49 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
   // ── Depth expansion
 
   const canExpandAncestors = useMemo(() => {
-    const frontier =
-      ancestorGens.length > 0 ? (ancestorGens[ancestorGens.length - 1] ?? []) : [rootSummary];
     const existingIds = new Set([person.id, ...ancestorGens.flat().map((p) => p.id)]);
-    return frontier.some((p) =>
-      (fetchedPersons.get(p.id)?.godFathers ?? []).some((s) => !existingIds.has(s.godFatherId)),
-    );
-  }, [ancestorGens, fetchedPersons, rootSummary, person.id]);
+    const currentDepth = ancestorGens.length;
+    // Parrains non encore chargés
+    for (const id of existingIds) {
+      const p = fetchedPersons.get(id);
+      if ((p?.godFathers ?? []).some((s) => !existingIds.has(s.godFatherId))) return true;
+    }
+    // Liens chargés mais pas encore affichés (cross-links au-delà de la profondeur courante)
+    for (const p of fetchedPersons.values()) {
+      for (const s of p.godChildren) {
+        if (!existingIds.has(s.godFatherId) || !existingIds.has(s.godChildId)) continue;
+        const childDist = layout.ancestorDist.get(s.godChildId);
+        if (childDist !== undefined && childDist + 1 > currentDepth) return true;
+      }
+    }
+    return false;
+  }, [ancestorGens, fetchedPersons, person.id, layout]);
 
   const canExpandDescendants = useMemo(() => {
-    const frontier =
-      descendantGens.length > 0 ? (descendantGens[descendantGens.length - 1] ?? []) : [rootSummary];
     const existingIds = new Set([person.id, ...descendantGens.flat().map((p) => p.id)]);
-    return frontier.some((p) =>
-      (fetchedPersons.get(p.id)?.godChildren ?? []).some((s) => !existingIds.has(s.godChildId)),
-    );
-  }, [descendantGens, fetchedPersons, rootSummary, person.id]);
+    const currentDepth = descendantGens.length;
+    for (const id of existingIds) {
+      const p = fetchedPersons.get(id);
+      if ((p?.godChildren ?? []).some((s) => !existingIds.has(s.godChildId))) return true;
+    }
+    for (const p of fetchedPersons.values()) {
+      for (const s of p.godChildren) {
+        if (!existingIds.has(s.godFatherId) || !existingIds.has(s.godChildId)) continue;
+        const fatherDist = layout.descendantDist.get(s.godFatherId);
+        if (fatherDist !== undefined && fatherDist + 1 > currentDepth) return true;
+      }
+    }
+    return false;
+  }, [descendantGens, fetchedPersons, person.id, layout]);
 
   const expandAncestors = () => {
     const frontier =
       ancestorGens.length > 0 ? (ancestorGens[ancestorGens.length - 1] ?? []) : [rootSummary];
-    const existingIds = new Set([person.id, ...ancestorGens.flat().map((p) => p.id)]);
+    const existingIds = new Set([
+      person.id,
+      ...ancestorGens.flat().map((p) => p.id),
+      ...descendantGens.flat().map((p) => p.id),
+    ]);
     const newIds = [
       ...new Set(
         frontier
@@ -140,7 +162,11 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
           .filter((id) => !existingIds.has(id)),
       ),
     ];
-    if (newIds.length === 0) return;
+    if (newIds.length === 0) {
+      // Pas de nouveaux nœuds, mais on incrémente la profondeur pour révéler les cross-links
+      setAncestorGens((prev) => [...prev, []]);
+      return;
+    }
 
     setLoadingAncestors(true);
     void batchFetch(newIds).then((fetched) => {
@@ -158,7 +184,11 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
   const expandDescendants = () => {
     const frontier =
       descendantGens.length > 0 ? (descendantGens[descendantGens.length - 1] ?? []) : [rootSummary];
-    const existingIds = new Set([person.id, ...descendantGens.flat().map((p) => p.id)]);
+    const existingIds = new Set([
+      person.id,
+      ...ancestorGens.flat().map((p) => p.id),
+      ...descendantGens.flat().map((p) => p.id),
+    ]);
     const newIds = [
       ...new Set(
         frontier
@@ -166,7 +196,10 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
           .filter((id) => !existingIds.has(id)),
       ),
     ];
-    if (newIds.length === 0) return;
+    if (newIds.length === 0) {
+      setDescendantGens((prev) => [...prev, []]);
+      return;
+    }
 
     setLoadingDescendants(true);
     void batchFetch(newIds).then((fetched) => {

@@ -131,6 +131,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
   const [selectedSponsor, setSelectedSponsor] = useState<Sponsor | null>(null);
   const [hoveredLinkId, setHoveredLinkId] = useState<number | null>(null);
   const [navigatingId, setNavigatingId] = useState<number | null>(null);
+  const [showDiagonal, setShowDiagonal] = useState(true);
 
   const handleLinkClick = (link: GraphLink) => {
     const godFather = layout.allNodes.find((n) => n.id === link.godFatherId);
@@ -210,7 +211,7 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
             setZoom((z) => Math.min(2.5, z * 1.1));
           }}
           onMinus={() => {
-            setZoom((z) => Math.max(0.4, z / 1.1));
+            setZoom((z) => Math.max(0.1, z / 1.1));
           }}
           onReset={resetView}
         />
@@ -227,6 +228,15 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
           {layout.allNodes.length} personnes · {layout.links.length} liens
         </span>
         <span className="text-ink-4">{Math.round(zoom * 100)}%</span>
+        <button
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowDiagonal((v) => !v);
+          }}
+          className={`cursor-pointer rounded px-1.5 py-0.5 text-[10.5px] font-medium transition-colors ${showDiagonal ? 'bg-ink/10 text-ink-2' : 'text-ink-4 hover:text-ink-3'}`}
+        >
+          ⤢ diagonales
+        </button>
       </div>
 
       {/* Transformed canvas */}
@@ -274,8 +284,12 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
               // - au-dessus de person (rangée de parrains) → arche vers le haut
               // - en-dessous de person (rangée de fillots) → arche vers le bas
               // - même rangée que person → dépend du rôle de person dans le lien
+              // Liens diagonaux (parrain côté amont, fillot côté aval) : courbe latérale pour éviter
+              // la superposition avec les liens directs qui passent par root
               const isSameLevel = Math.abs(ay - by) < 20;
               const personY = (layout.positions[person.id]?.y ?? 0) + NODE_D / 2;
+              const isDiagonal = ay < personY - 10 && by > personY + 10;
+              if (isDiagonal && !showDiagonal) return null;
               const bowDir = isSameLevel
                 ? ay < personY - 10
                   ? -1
@@ -286,9 +300,10 @@ export function FamilyGraph({ person }: FamilyGraphProps) {
                       : 1
                 : 0;
               const bow = isSameLevel ? Math.min(100, Math.abs(bx - ax) * 0.45) : 0;
-              const c1x = isSameLevel ? ax + (bx - ax) * 0.33 : ax;
+              const diagOffset = isDiagonal ? Math.abs(by - ay) * 0.45 : 0;
+              const c1x = isSameLevel ? ax + (bx - ax) * 0.33 : ax + diagOffset;
               const c1y = isSameLevel ? ay + bowDir * bow : (ay + by) / 2;
-              const c2x = isSameLevel ? ax + (bx - ax) * 0.67 : bx;
+              const c2x = isSameLevel ? ax + (bx - ax) * 0.67 : bx + diagOffset;
               const c2y = isSameLevel ? ay + bowDir * bow : (ay + by) / 2;
               const d = `M${ax},${ay} C${c1x},${c1y} ${c2x},${c2y} ${bx},${by}`;
               return (
