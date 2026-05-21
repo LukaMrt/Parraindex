@@ -12,6 +12,7 @@ import {
   Input,
   Skeleton,
   StatCard,
+  SuggestInput,
 } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
 import { useNotification } from '../../hooks/useNotification';
@@ -776,9 +777,6 @@ function FilieresEditor({
   allSchools: string[];
   onChange: (filieres: Filiere[]) => void;
 }) {
-  const datalistId = 'filiere-datalist';
-  const schoolDatalistId = 'school-datalist';
-
   function addRow() {
     onChange([
       ...filieres,
@@ -805,40 +803,29 @@ function FilieresEditor({
 
   return (
     <div>
-      <datalist id={datalistId}>
-        {allFilieres.map((name) => (
-          <option key={name} value={name} />
-        ))}
-      </datalist>
-      <datalist id={schoolDatalistId}>
-        {allSchools.map((name) => (
-          <option key={name} value={name} />
-        ))}
-      </datalist>
-
       <div className="space-y-2">
         {filieres.map((f, i) => (
           <div key={f._id ?? i} className="flex items-end gap-2">
             <div className="flex-1">
               {i === 0 && <FieldLabel>Filière</FieldLabel>}
-              <Input
+              <SuggestInput
                 value={f.name}
-                onChange={(e) => {
-                  updateRow(i, { name: e.target.value });
+                onChange={(v) => {
+                  updateRow(i, { name: v });
                 }}
+                suggestions={allFilieres}
                 placeholder="Filière"
-                list={datalistId}
               />
             </div>
             <div className="flex-1">
               {i === 0 && <FieldLabel>École</FieldLabel>}
-              <Input
+              <SuggestInput
                 value={f.schoolName ?? ''}
-                onChange={(e) => {
-                  updateRow(i, { schoolName: e.target.value || null });
+                onChange={(v) => {
+                  updateRow(i, { schoolName: v || null });
                 }}
+                suggestions={allSchools}
                 placeholder="École (optionnel)"
-                list={schoolDatalistId}
               />
             </div>
             <div className="w-24">
@@ -928,8 +915,6 @@ function AssociationsEditor({
   allAssociations: string[];
   onChange: (associations: Association[]) => void;
 }) {
-  const datalistId = 'association-datalist';
-
   function addRow() {
     onChange([
       ...associations,
@@ -954,24 +939,18 @@ function AssociationsEditor({
 
   return (
     <div>
-      <datalist id={datalistId}>
-        {allAssociations.map((name) => (
-          <option key={name} value={name} />
-        ))}
-      </datalist>
-
       <div className="space-y-2">
         {associations.map((a, i) => (
           <div key={a._id ?? i} className="flex items-end gap-2">
             <div className="flex-1">
               {i === 0 && <FieldLabel>Association</FieldLabel>}
-              <Input
+              <SuggestInput
                 value={a.name}
-                onChange={(e) => {
-                  updateRow(i, { name: e.target.value });
+                onChange={(v) => {
+                  updateRow(i, { name: v });
                 }}
+                suggestions={allAssociations}
                 placeholder="Association"
-                list={datalistId}
               />
             </div>
             <div className="flex-1">

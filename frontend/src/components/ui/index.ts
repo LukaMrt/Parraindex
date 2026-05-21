@@ -11,3 +11,4 @@ export { EmptyState } from './EmptyState';
 export { Skeleton } from './Skeleton';
 export { ToastContainer } from './Toast';
 export { ImagePickerModal } from './ImagePickerModal';
+export { SuggestInput } from './SuggestInput';
