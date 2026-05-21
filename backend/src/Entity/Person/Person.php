@@ -16,6 +16,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\Validator\Constraints as Assert;
 use Vich\UploaderBundle\Mapping\Attribute as Vich;
+use App\Entity\Person\PersonAssociation;
 
 #[ORM\Entity(repositoryClass: PersonRepository::class)]
 #[ORM\Index(name: 'idx_person_start_year', fields: ['startYear'])]
@@ -96,12 +97,26 @@ class Person implements \Stringable
     #[ORM\OneToMany(targetEntity: Characteristic::class, mappedBy: 'person', orphanRemoval: true)]
     private Collection $characteristics;
 
+    /**
+     * @var Collection<int, PersonFiliere>
+     */
+    #[ORM\OneToMany(targetEntity: PersonFiliere::class, mappedBy: 'person', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $filieres;
+
+    /**
+     * @var Collection<int, PersonAssociation>
+     */
+    #[ORM\OneToMany(targetEntity: PersonAssociation::class, mappedBy: 'person', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $associations;
+
     public function __construct()
     {
         $this->godFathers      = new ArrayCollection();
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
         $this->createdAt       = new \DateTime();
+        $this->filieres        = new ArrayCollection();
+        $this->associations    = new ArrayCollection();
     }
 
     public function getId(): int
@@ -370,5 +385,82 @@ class Person implements \Stringable
     public function __toString(): string
     {
         return $this->getFullName();
+    }
+
+    /**
+     * @return Collection<int, PersonFiliere>
+     */
+    public function getFilieres(): Collection
+    {
+        return $this->filieres;
+    }
+
+    public function addFiliere(PersonFiliere $filiere): static
+    {
+        if (!$this->filieres->contains($filiere)) {
+            $this->filieres->add($filiere);
+            $filiere->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFiliere(PersonFiliere $filiere): static
+    {
+        // set the owning side to null (unless already changed)
+        if ($this->filieres->removeElement($filiere) && $filiere->getPerson() === $this) {
+            $filiere->setPerson(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PersonFiliere[] $personFilieres
+     */
+    public function replaceFilieres(array $personFilieres): void
+    {
+        $this->filieres->clear();
+        foreach ($personFilieres as $pf) {
+            $this->addFiliere($pf);
+        }
+    }
+
+    /**
+     * @return Collection<int, PersonAssociation>
+     */
+    public function getAssociations(): Collection
+    {
+        return $this->associations;
+    }
+
+    public function addAssociation(PersonAssociation $association): static
+    {
+        if (!$this->associations->contains($association)) {
+            $this->associations->add($association);
+            $association->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAssociation(PersonAssociation $association): static
+    {
+        if ($this->associations->removeElement($association) && $association->getPerson() === $this) {
+            $association->setPerson(null);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PersonAssociation[] $personAssociations
+     */
+    public function replaceAssociations(array $personAssociations): void
+    {
+        $this->associations->clear();
+        foreach ($personAssociations as $pa) {
+            $this->addAssociation($pa);
+        }
     }
 }

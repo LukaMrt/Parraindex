@@ -33,6 +33,7 @@ export function PersonGraphNode({
 
   return (
     <div
+      data-testid={`family-node-${String(person.id)}`}
       {...(dataAttr ? { [dataAttr]: true } : {})}
       onClick={onClick}
       onMouseEnter={onMouseEnter}

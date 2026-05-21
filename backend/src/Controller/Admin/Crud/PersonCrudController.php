@@ -4,12 +4,16 @@ declare(strict_types=1);
 
 namespace App\Controller\Admin\Crud;
 
+use App\Entity\Person\Filiere;
 use App\Entity\Person\Person;
+use App\Form\PersonFiliereType;
+use App\Repository\Person\FiliereRepository;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Crud;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
+use EasyCorp\Bundle\EasyAdminBundle\Field\CollectionField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\DateField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IntegerField;
@@ -22,6 +26,7 @@ final class PersonCrudController extends AbstractCrudController
 {
     public function __construct(
         private readonly AdminUrlGenerator $adminUrlGenerator,
+        private readonly FiliereRepository $filiereRepository,
     ) {
     }
 
@@ -51,13 +56,29 @@ final class PersonCrudController extends AbstractCrudController
             ->onlyOnDetail()
             ->setCrudController(SponsorCrudController::class)
             ->setHelp('Liens de parrainage où cette personne est parrain');
+
+        $filiereNames = array_map(
+            fn (Filiere $f): string => $f->getName() ?? '',
+            $this->filiereRepository->findAllOrderedByName()
+        );
+
+        yield CollectionField::new('filieres', 'Filières')
+            ->setEntryType(PersonFiliereType::class)
+            ->allowAdd()
+            ->allowDelete()
+            ->setFormTypeOptions([
+                'by_reference'  => false,
+                'entry_options' => ['filiere_names' => $filiereNames],
+            ])
+            ->hideOnIndex()
+            ->onlyOnForms();
     }
 
     #[\Override]
     public function configureActions(Actions $actions): Actions
     {
         $addGodChildAction = Action::new('addGodChild', 'Ajouter un filleul', 'fa fa-user-plus')
-            ->linkToUrl(fn(Person $person): string => $this->adminUrlGenerator
+            ->linkToUrl(fn (Person $person): string => $this->adminUrlGenerator
                 ->setController(SponsorCrudController::class)
                 ->setAction(Action::NEW)
                 ->set('godFather', $person->getId())
@@ -65,7 +86,7 @@ final class PersonCrudController extends AbstractCrudController
             ->addCssClass('btn btn-success btn-sm');
 
         $addGodFatherAction = Action::new('addGodFather', 'Ajouter un parrain', 'fa fa-heart')
-            ->linkToUrl(fn(Person $person): string => $this->adminUrlGenerator
+            ->linkToUrl(fn (Person $person): string => $this->adminUrlGenerator
                 ->setController(SponsorCrudController::class)
                 ->setAction(Action::NEW)
                 ->set('godChild', $person->getId())
@@ -93,6 +114,7 @@ final class PersonCrudController extends AbstractCrudController
             ->setPageTitle(Crud::PAGE_DETAIL, fn (Person $person): string => $person->getFullName())
             ->setPageTitle(Crud::PAGE_EDIT, fn (Person $person): string => 'Modifier ' . $person->getFullName())
             ->setPageTitle(Crud::PAGE_NEW, 'Nouvelle personne')
-            ->setDefaultSort(['lastName' => 'ASC']);
+            ->setDefaultSort(['lastName' => 'ASC'])
+            ->setFormThemes(['@EasyAdmin/crud/form_theme.html.twig', 'admin/form/person_filiere_theme.html.twig']);
     }
 }

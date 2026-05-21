@@ -16,6 +16,7 @@ export function PersonGridCard({ person, animationDelay }: PersonGridCardProps) 
 
   return (
     <article
+      data-testid={`person-card-${person.id}`}
       onClick={() => {
         void navigateTo(person.id);
       }}

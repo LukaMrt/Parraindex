@@ -4,14 +4,26 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Dto\Person\AssociationRequestDto;
+use App\Dto\Person\AssociationResponseDto;
 use App\Dto\Person\CharacteristicDto;
+use App\Dto\Person\FiliereRequestDto;
+use App\Dto\Person\FiliereResponseDto;
 use App\Dto\Person\PersonResponseDto;
 use App\Dto\Sponsor\SponsorResponseDto;
 use App\Entity\Characteristic\Characteristic;
 use App\Entity\Characteristic\CharacteristicType;
+use App\Entity\Person\Association;
 use App\Entity\Person\Person;
+use App\Entity\Person\PersonAssociation;
 use App\Entity\Sponsor\Sponsor;
+use App\Entity\Person\Filiere;
+use App\Entity\Person\PersonFiliere;
+use App\Entity\Person\School;
 use App\Repository\CharacteristicTypeRepository;
+use App\Repository\Person\AssociationRepository;
+use App\Repository\Person\FiliereRepository;
+use App\Repository\Person\SchoolRepository;
 use App\Repository\PersonRepository;
 
 final readonly class PersonService
@@ -19,6 +31,9 @@ final readonly class PersonService
     public function __construct(
         private PersonRepository $personRepository,
         private CharacteristicTypeRepository $characteristicTypeRepository,
+        private FiliereRepository $filiereRepository,
+        private SchoolRepository $schoolRepository,
+        private AssociationRepository $associationRepository,
     ) {
     }
 
@@ -127,6 +142,29 @@ final readonly class PersonService
                 array_map($this->mapCharacteristicToDto(...), $person->getCharacteristics()->toArray()),
                 static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto,
             ),
+            filieres: array_map(
+                static fn(PersonFiliere $personFiliere): FiliereResponseDto => new FiliereResponseDto(
+                    name: $personFiliere->getFiliere()?->getName() ?? throw new \LogicException('PersonFiliere has no Filiere.'),
+                    color: $personFiliere->getFiliere()->getColor(),
+                    startYear: $personFiliere->getStartYear(),
+                    endYear: $personFiliere->getEndYear(),
+                    schoolName: $personFiliere->getSchool()?->getName(),
+                    schoolLogoUrl: $personFiliere->getSchool()?->getLogo() !== null
+                        ? '/uploads/schools/' . $personFiliere->getSchool()->getLogo()
+                        : null,
+                ),
+                $person->getFilieres()->toArray()
+            ),
+            associations: array_map(
+                static fn(PersonAssociation $pa): AssociationResponseDto => new AssociationResponseDto(
+                    name: $pa->getAssociation()?->getName() ?? throw new \LogicException('PersonAssociation has no Association.'),
+                    logoUrl: $pa->getAssociation()->getLogo() !== null
+                        ? '/uploads/associations/' . $pa->getAssociation()->getLogo()
+                        : null,
+                    poste: $pa->getPoste() ?? throw new \LogicException('PersonAssociation has no poste.'),
+                ),
+                $person->getAssociations()->toArray()
+            )
         );
     }
 
@@ -163,5 +201,58 @@ final readonly class PersonService
             typeUrl: $type->getUrl(),
             typeImage: $type->getImage(),
         );
+    }
+
+    /**
+     * @param FiliereRequestDto[] $filiereDtos
+     */
+    public function syncFilieres(Person $person, array $filiereDtos): void
+    {
+        $person->replaceFilieres(array_map($this->buildPersonFiliere(...), $filiereDtos));
+    }
+
+    /**
+     * @param AssociationRequestDto[] $associationDtos
+     */
+    public function syncAssociations(Person $person, array $associationDtos): void
+    {
+        $person->replaceAssociations(array_map($this->buildPersonAssociation(...), $associationDtos));
+    }
+
+    private function buildPersonAssociation(AssociationRequestDto $dto): PersonAssociation
+    {
+        $canonical = Association::normalize($dto->name);
+
+        $association = $this->associationRepository->findByName($canonical)
+            ?? new Association()->setName($canonical);
+
+        $personAssociation = new PersonAssociation();
+        $personAssociation->setAssociation($association);
+        $personAssociation->setPoste($dto->poste);
+
+        return $personAssociation;
+    }
+
+    private function buildPersonFiliere(FiliereRequestDto $dto): PersonFiliere
+    {
+        $canonical = Filiere::normalize($dto->name);
+
+        $filiere = $this->filiereRepository->findByName($canonical)
+            ?? new Filiere()->setName($canonical);
+
+        $school = null;
+        if ($dto->schoolName !== null && $dto->schoolName !== '') {
+            $canonical = School::normalize($dto->schoolName);
+            $school    = $this->schoolRepository->findByName($canonical)
+                ?? new School()->setName($canonical);
+        }
+
+        $personFiliere = new PersonFiliere();
+        $personFiliere->setFiliere($filiere);
+        $personFiliere->setStartYear($dto->startYear ?? throw new \InvalidArgumentException('startYear is required.'));
+        $personFiliere->setEndYear($dto->endYear);
+        $personFiliere->setSchool($school);
+
+        return $personFiliere;
     }
 }

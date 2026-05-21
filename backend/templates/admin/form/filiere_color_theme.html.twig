@@ -1,0 +1,23 @@
+{% block color_widget %}
+    <div class="d-flex align-items-center gap-2">
+        <input
+            type="color"
+            {{ block('widget_attributes') }}
+            {% if value is not empty %}value="{{ value }}"{% endif %}
+        />
+        {% if attr['data-randomize'] is defined %}
+            <button
+                type="button"
+                class="btn btn-sm btn-outline-secondary"
+                onclick="(function(btn) {
+                    var color = '#' + Math.floor(Math.random() * 0xFFFFFF).toString(16).padStart(6, '0');
+                    var input = btn.previousElementSibling;
+                    input.value = color;
+                    input.dispatchEvent(new Event('change', { bubbles: true }));
+                })(this)"
+            >
+                <i class="fa fa-shuffle"></i> Randomize
+            </button>
+        {% endif %}
+    </div>
+{% endblock %}

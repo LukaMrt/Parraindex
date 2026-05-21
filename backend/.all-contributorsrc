@@ -53,6 +53,15 @@
         "code"
       ]
     },
+    {
+      "login": "dvachette",
+      "name": "Donatien Vachette",
+      "avatar_url": "https://avatars.githubusercontent.com/u/116256964?v=4",
+      "profile": "dvachette.fr",
+      "contributions": [
+        "code"
+      ]
+    }
   ],
   "contributorsPerLine": 7,
   "skipCi": true,

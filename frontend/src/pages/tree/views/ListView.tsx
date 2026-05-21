@@ -77,7 +77,10 @@ interface ListViewProps {
 
 export function ListView({ persons, loading }: ListViewProps) {
   return (
-    <div className="overflow-hidden rounded-xl border border-line bg-surface">
+    <div
+      data-testid="view-list-container"
+      className="overflow-hidden rounded-xl border border-line bg-surface"
+    >
       <ListHeader />
       {loading
         ? Array.from({ length: SKELETON_COUNT }, (_, i) => (
