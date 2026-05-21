@@ -230,6 +230,57 @@ export function PersonPage() {
           <StatCard label="Promo" value={person.startYear} />
         </div>
 
+        {/* Filières */}
+        {person.filieres.length > 0 && (
+          <Card radius="xl" padding="md" className="mb-5">
+            <h2 className="mb-5 text-[17px] font-semibold tracking-tight text-ink">Parcours</h2>
+            <div className="relative pl-6">
+              {/* Ligne verticale centrée sur les points */}
+              <div className="absolute bottom-1 left-[9px] top-1 w-px bg-line" />
+
+              <div className="space-y-4">
+                {[...person.filieres]
+                  .sort((a, b) => a.startYear - b.startYear)
+                  .map((f) => (
+                    <div
+                      key={`${f.name}-${f.startYear}`}
+                      className="relative flex w-full items-start gap-3"
+                    >
+                      {/* Point aligné avec la ligne (left-[9px] = centre du point de 10px) */}
+                      <div
+                        className="absolute -left-[19.5px] mt-[6px] h-[10px] w-[10px] rounded-full border-2 border-surface"
+                        style={{ background: f.color ?? color }}
+                      />
+                      <div className="flex-1">
+                        {f.schoolName && (
+                          <div className="flex items-center gap-1.5">
+                            {f.schoolLogoUrl && (
+                              <img
+                                src={f.schoolLogoUrl}
+                                alt=""
+                                className="h-4 w-4 object-contain opacity-70"
+                              />
+                            )}
+                            <p className="text-sm font-semibold text-ink">{f.schoolName}</p>
+                          </div>
+                        )}
+                        <p className="text-xs text-ink-3">{f.name}</p>
+                        <p className="mt-0.5 text-xs text-ink-3">
+                          {f.startYear} —{' '}
+                          {f.endYear ?? (
+                            <span style={{ color }} className="font-medium">
+                              En cours
+                            </span>
+                          )}
+                        </p>
+                      </div>
+                    </div>
+                  ))}
+              </div>
+            </div>
+          </Card>
+        )}
+
         {/* Arbre familial */}
         {allSponsors.length > 0 && (
           <Card radius="xl" padding="md" className="mb-5">

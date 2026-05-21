@@ -20,8 +20,10 @@ import { createSponsor, deleteSponsor, updateSponsor } from '../../lib/api/spons
 import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
-import type { Person, PersonRequest } from '../../types/person';
+import type { Filiere, Person, PersonRequest } from '../../types/person';
 import type { Sponsor, SponsorType } from '../../types/sponsor';
+import { getFilieres } from '../../lib/api/filieres';
+import { getSchools } from '../../lib/api/schools';
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
@@ -715,6 +717,7 @@ function EditPersonHero({
                 className="w-24"
                 min={2000}
                 max={2099}
+                data-testid="person-start-year"
               />
             </div>
           </div>
@@ -747,6 +750,149 @@ function EditPersonHero({
           </div>
         </div>
       </div>
+    </div>
+  );
+}
+
+// -- Composant d'édition de filieres --------------------------------------------
+
+function FilieresEditor({
+  filieres,
+  allFilieres,
+  allSchools,
+  onChange,
+}: {
+  filieres: Filiere[];
+  allFilieres: string[];
+  allSchools: string[];
+  onChange: (filieres: Filiere[]) => void;
+}) {
+  const datalistId = 'filiere-datalist';
+  const schoolDatalistId = 'school-datalist';
+
+  function addRow() {
+    onChange([
+      ...filieres,
+      {
+        _id: crypto.randomUUID(),
+        name: '',
+        color: null,
+        startYear: new Date().getFullYear(),
+        endYear: null,
+        schoolName: null,
+        schoolLogoUrl: null,
+      },
+    ]);
+  }
+
+  function removeRow(index: number) {
+    onChange(filieres.filter((_, i) => i !== index));
+  }
+
+  function updateRow(index: number, patch: Partial<Filiere>) {
+    onChange(filieres.map((f, i) => (i === index ? { ...f, ...patch } : f)));
+  }
+
+  return (
+    <div>
+      <datalist id={datalistId}>
+        {allFilieres.map((name) => (
+          <option key={name} value={name} />
+        ))}
+      </datalist>
+      <datalist id={schoolDatalistId}>
+        {allSchools.map((name) => (
+          <option key={name} value={name} />
+        ))}
+      </datalist>
+
+      <div className="space-y-2">
+        {filieres.map((f, i) => (
+          <div key={f._id ?? i} className="flex items-end gap-2">
+            <div className="flex-1">
+              {i === 0 && <FieldLabel>Filière</FieldLabel>}
+              <Input
+                value={f.name}
+                onChange={(e) => {
+                  updateRow(i, { name: e.target.value });
+                }}
+                placeholder="Filière"
+                list={datalistId}
+              />
+            </div>
+            <div className="flex-1">
+              {i === 0 && <FieldLabel>École</FieldLabel>}
+              <Input
+                value={f.schoolName ?? ''}
+                onChange={(e) => {
+                  updateRow(i, { schoolName: e.target.value || null });
+                }}
+                placeholder="École (optionnel)"
+                list={schoolDatalistId}
+              />
+            </div>
+            <div className="w-24">
+              {i === 0 && <FieldLabel>Début</FieldLabel>}
+              <Input
+                type="number"
+                value={f.startYear}
+                onChange={(e) => {
+                  updateRow(i, { startYear: Number(e.target.value) });
+                }}
+                min={1900}
+                max={2100}
+              />
+            </div>
+            <div className="w-24">
+              {i === 0 && <FieldLabel>Fin</FieldLabel>}
+              <Input
+                type="number"
+                value={f.endYear ?? ''}
+                onChange={(e) => {
+                  updateRow(i, { endYear: e.target.value ? Number(e.target.value) : null });
+                }}
+                min={1900}
+                max={2100}
+                placeholder="—"
+              />
+            </div>
+            <div className={i === 0 ? 'mb-0' : ''}>
+              {i === 0 && <div className="mb-1 h-[14px]" />}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  removeRow(i);
+                }}
+                className="text-ink-4"
+                data-testid="filiere-remove"
+                icon={
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                }
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Button type="button" variant="ghost" size="sm" className="mt-2 text-ink-3" onClick={addRow}>
+        + Ajouter une filière
+      </Button>
     </div>
   );
 }
@@ -795,6 +941,9 @@ export function EditPersonPage() {
   const [picturePreview, setPicturePreview] = useState<string | null>(null);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [sponsors, setSponsors] = useState<Sponsor[]>([]);
+  const [filieres, setFilieres] = useState<Filiere[]>([]);
+  const [allFilieres, setAllFilieres] = useState<string[]>([]);
+  const [allSchools, setAllSchools] = useState<string[]>([]);
 
   useEffect(() => {
     if (!person || initialized.current) return;
@@ -805,11 +954,41 @@ export function EditPersonPage() {
     setBiography(person.biography ?? '');
     setDescription(person.description ?? '');
     setSponsors([...person.godFathers, ...person.godChildren]);
+    setFilieres(person.filieres.map((f) => ({ ...f, _id: crypto.randomUUID() })));
   }, [person]);
+
+  useEffect(() => {
+    initialized.current = false;
+  }, [personId]);
+
+  useEffect(() => {
+    void getFilieres().then((result) => {
+      if (result.ok) setAllFilieres(result.data);
+      else notify('error', 'Impossible de charger les filières');
+    });
+    void getSchools().then((result) => {
+      if (result.ok) setAllSchools(result.data);
+    });
+  }, [notify]);
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
     if (!person || !id) return;
+
+    for (const f of filieres) {
+      if (!f.name.trim()) {
+        notify('error', 'Le nom de la filière ne peut pas être vide');
+        return;
+      }
+      if (f.endYear !== null && f.endYear <= f.startYear) {
+        notify(
+          'error',
+          `La filière "${f.name}" : l'année de fin doit être supérieure à l'année de début`,
+        );
+        return;
+      }
+    }
+
     setSaving(true);
 
     const data: PersonRequest = {
@@ -818,6 +997,7 @@ export function EditPersonPage() {
       startYear: user.isAdmin ? startYear : person.startYear,
       biography: biography || null,
       description: description || null,
+      filieres,
     };
 
     const updateResult = await updatePerson(Number(id), data);
@@ -954,6 +1134,17 @@ export function EditPersonPage() {
           <StatCard label="Fillots" value={godChildren.length} accent={color} />
           <StatCard label="Promo" value={startYear} />
         </div>
+
+        {/* Filières */}
+        <Card radius="xl" padding="md" className="mb-5">
+          <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Filières</h2>
+          <FilieresEditor
+            filieres={filieres}
+            allFilieres={allFilieres}
+            allSchools={allSchools}
+            onChange={setFilieres}
+          />
+        </Card>
 
         {/* Parrainages */}
         <Card radius="xl" padding="md" className="mb-5">

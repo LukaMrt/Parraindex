@@ -22,6 +22,7 @@ export interface Person {
   godFathers: Sponsor[];
   godChildren: Sponsor[];
   characteristics: Characteristic[];
+  filieres: Filiere[];
 }
 
 export interface PersonRequest {
@@ -30,4 +31,15 @@ export interface PersonRequest {
   startYear: number;
   biography: string | null;
   description: string | null;
+  filieres: Filiere[];
+}
+
+export interface Filiere {
+  _id?: string;
+  name: string;
+  color: string | null;
+  startYear: number;
+  endYear: number | null;
+  schoolName: string | null;
+  schoolLogoUrl: string | null;
 }
