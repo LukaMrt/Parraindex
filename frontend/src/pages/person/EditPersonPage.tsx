@@ -20,10 +20,11 @@ import { createSponsor, deleteSponsor, updateSponsor } from '../../lib/api/spons
 import { personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes';
-import type { Filiere, Person, PersonRequest } from '../../types/person';
+import type { Association, Filiere, Person, PersonRequest } from '../../types/person';
 import type { Sponsor, SponsorType } from '../../types/sponsor';
 import { getFilieres } from '../../lib/api/filieres';
 import { getSchools } from '../../lib/api/schools';
+import { getAssociations } from '../../lib/api/associations';
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
@@ -897,6 +898,112 @@ function FilieresEditor({
   );
 }
 
+// -- Composant d'édition des associations ---------------------------------------
+
+function AssociationsEditor({
+  associations,
+  allAssociations,
+  onChange,
+}: {
+  associations: Association[];
+  allAssociations: string[];
+  onChange: (associations: Association[]) => void;
+}) {
+  const datalistId = 'association-datalist';
+
+  function addRow() {
+    onChange([
+      ...associations,
+      {
+        _id: crypto.randomUUID(),
+        name: '',
+        logoUrl: null,
+        poste: '',
+      },
+    ]);
+  }
+
+  function removeRow(index: number) {
+    onChange(associations.filter((_, i) => i !== index));
+  }
+
+  function updateRow(index: number, patch: Partial<Association>) {
+    onChange(associations.map((a, i) => (i === index ? { ...a, ...patch } : a)));
+  }
+
+  return (
+    <div>
+      <datalist id={datalistId}>
+        {allAssociations.map((name) => (
+          <option key={name} value={name} />
+        ))}
+      </datalist>
+
+      <div className="space-y-2">
+        {associations.map((a, i) => (
+          <div key={a._id ?? i} className="flex items-end gap-2">
+            <div className="flex-1">
+              {i === 0 && <FieldLabel>Association</FieldLabel>}
+              <Input
+                value={a.name}
+                onChange={(e) => {
+                  updateRow(i, { name: e.target.value });
+                }}
+                placeholder="Association"
+                list={datalistId}
+              />
+            </div>
+            <div className="flex-1">
+              {i === 0 && <FieldLabel>Poste</FieldLabel>}
+              <Input
+                value={a.poste}
+                onChange={(e) => {
+                  updateRow(i, { poste: e.target.value });
+                }}
+                placeholder="Poste (ex : Président)"
+              />
+            </div>
+            <div className={i === 0 ? 'mb-0' : ''}>
+              {i === 0 && <div className="mb-1 h-[14px]" />}
+              <Button
+                type="button"
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  removeRow(i);
+                }}
+                className="text-ink-4"
+                data-testid="association-remove"
+                icon={
+                  <svg
+                    width="14"
+                    height="14"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <polyline points="3 6 5 6 21 6" />
+                    <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+                    <path d="M10 11v6M14 11v6" />
+                    <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+                  </svg>
+                }
+              />
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <Button type="button" variant="ghost" size="sm" className="mt-2 text-ink-3" onClick={addRow}>
+        + Ajouter une association
+      </Button>
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export function EditPersonPage() {
@@ -944,6 +1051,8 @@ export function EditPersonPage() {
   const [filieres, setFilieres] = useState<Filiere[]>([]);
   const [allFilieres, setAllFilieres] = useState<string[]>([]);
   const [allSchools, setAllSchools] = useState<string[]>([]);
+  const [associations, setAssociations] = useState<Association[]>([]);
+  const [allAssociations, setAllAssociations] = useState<string[]>([]);
 
   useEffect(() => {
     if (!person || initialized.current) return;
@@ -955,6 +1064,7 @@ export function EditPersonPage() {
     setDescription(person.description ?? '');
     setSponsors([...person.godFathers, ...person.godChildren]);
     setFilieres(person.filieres.map((f) => ({ ...f, _id: crypto.randomUUID() })));
+    setAssociations(person.associations.map((a) => ({ ...a, _id: crypto.randomUUID() })));
   }, [person]);
 
   useEffect(() => {
@@ -968,6 +1078,9 @@ export function EditPersonPage() {
     });
     void getSchools().then((result) => {
       if (result.ok) setAllSchools(result.data);
+    });
+    void getAssociations().then((result) => {
+      if (result.ok) setAllAssociations(result.data);
     });
   }, [notify]);
 
@@ -989,6 +1102,17 @@ export function EditPersonPage() {
       }
     }
 
+    for (const a of associations) {
+      if (!a.name.trim()) {
+        notify('error', "Le nom de l'association ne peut pas être vide");
+        return;
+      }
+      if (!a.poste.trim()) {
+        notify('error', `L'association "${a.name}" : le poste ne peut pas être vide`);
+        return;
+      }
+    }
+
     setSaving(true);
 
     const data: PersonRequest = {
@@ -998,6 +1122,7 @@ export function EditPersonPage() {
       biography: biography || null,
       description: description || null,
       filieres,
+      associations,
     };
 
     const updateResult = await updatePerson(Number(id), data);
@@ -1143,6 +1268,16 @@ export function EditPersonPage() {
             allFilieres={allFilieres}
             allSchools={allSchools}
             onChange={setFilieres}
+          />
+        </Card>
+
+        {/* Associations */}
+        <Card radius="xl" padding="md" className="mb-5">
+          <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Associations</h2>
+          <AssociationsEditor
+            associations={associations}
+            allAssociations={allAssociations}
+            onChange={setAssociations}
           />
         </Card>
 

@@ -25,6 +25,11 @@ final readonly class PersonRequestDto
          */
         #[Assert\Valid]
         public ?array $filieres = null,
+        /**
+         * @var AssociationRequestDto[]|null
+         */
+        #[Assert\Valid]
+        public ?array $associations = null,
     ) {
     }
 }

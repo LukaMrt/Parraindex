@@ -9,10 +9,11 @@ use App\Dto\Sponsor\SponsorResponseDto;
 final readonly class PersonResponseDto
 {
     /**
-     * @param SponsorResponseDto[] $godFathers
-     * @param SponsorResponseDto[] $godChildren
-     * @param CharacteristicDto[]  $characteristics
-     * @param FiliereResponseDto[] $filieres
+     * @param SponsorResponseDto[]     $godFathers
+     * @param SponsorResponseDto[]     $godChildren
+     * @param CharacteristicDto[]      $characteristics
+     * @param FiliereResponseDto[]     $filieres
+     * @param AssociationResponseDto[] $associations
      */
     public function __construct(
         public int $id,
@@ -28,6 +29,7 @@ final readonly class PersonResponseDto
         public array $godChildren,
         public array $characteristics,
         public array $filieres,
+        public array $associations,
     ) {
     }
 }

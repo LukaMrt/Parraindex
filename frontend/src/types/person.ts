@@ -23,6 +23,7 @@ export interface Person {
   godChildren: Sponsor[];
   characteristics: Characteristic[];
   filieres: Filiere[];
+  associations: Association[];
 }
 
 export interface PersonRequest {
@@ -32,6 +33,7 @@ export interface PersonRequest {
   biography: string | null;
   description: string | null;
   filieres: Filiere[];
+  associations: Association[];
 }
 
 export interface Filiere {
@@ -42,4 +44,11 @@ export interface Filiere {
   endYear: number | null;
   schoolName: string | null;
   schoolLogoUrl: string | null;
+}
+
+export interface Association {
+  _id?: string;
+  name: string;
+  logoUrl: string | null;
+  poste: string;
 }
