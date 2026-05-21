@@ -124,7 +124,7 @@ jobs:
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.5'
-                    extensions: curl, pdo_mysql, intl
+                    extensions: curl, pdo_mysql, pdo_sqlite, intl
             -   uses: actions/cache@v3
                 with:
                     path: backend/vendor
@@ -135,6 +135,7 @@ jobs:
                 run: php bin/console doctrine:migrations:migrate --no-interaction
                 env:
                     DATABASE_URL: mysql://parraindex:parraindex@127.0.0.1:3306/parraindex_test
+                    APP_SECRET: ci-not-for-production
             -   name: Check no pending migrations
                 run: |
                     OUTPUT=$(php bin/console make:migration --no-interaction 2>&1)
@@ -142,6 +143,7 @@ jobs:
                     echo "$OUTPUT" | grep -q "No database changes" || { echo "ERROR: Pending schema changes detected — run make:migration and commit the result."; exit 1; }
                 env:
                     DATABASE_URL: mysql://parraindex:parraindex@127.0.0.1:3306/parraindex_test
+                    APP_SECRET: ci-not-for-production
 
     # ── Frontend ───────────────────────────────────────────────────────────────
 
