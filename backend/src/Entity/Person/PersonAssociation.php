@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Entity\Person;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -25,10 +26,10 @@ final class PersonAssociation implements \Stringable
     #[ORM\Column(length: 255)]
     private ?string $poste = null;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $startDate = null;
 
-    #[ORM\Column(type: 'date', nullable: true)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $endDate = null;
 
     public function getId(): ?int

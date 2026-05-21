@@ -1103,8 +1103,21 @@ export function EditPersonPage() {
     setBiography(person.biography ?? '');
     setDescription(person.description ?? '');
     setSponsors([...person.godFathers, ...person.godChildren]);
-    setFilieres(person.filieres.map((f) => ({ ...f, _id: crypto.randomUUID(), diplomaName: f.diplomaName ?? null })));
-    setAssociations(person.associations.map((a) => ({ ...a, _id: crypto.randomUUID(), startDate: a.startDate ?? null, endDate: a.endDate ?? null })));
+    setFilieres(
+      person.filieres.map((f) => ({
+        ...f,
+        _id: crypto.randomUUID(),
+        diplomaName: f.diplomaName ?? null,
+      })),
+    );
+    setAssociations(
+      person.associations.map((a) => ({
+        ...a,
+        _id: crypto.randomUUID(),
+        startDate: a.startDate ?? null,
+        endDate: a.endDate ?? null,
+      })),
+    );
   }, [person]);
 
   useEffect(() => {
