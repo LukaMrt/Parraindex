@@ -24,15 +24,21 @@ import { SPONSOR_TYPE_ICONS, SPONSOR_TYPE_LABELS } from '../../lib/sponsorTypes'
 import type {
   Association,
   AssociationRequest,
+  Characteristic,
+  CharacteristicRequest,
   Filiere,
   FiliereRequest,
   Person,
+  PersonLink,
+  PersonLinkRequest,
   PersonRequest,
 } from '../../types/person';
 import type { Sponsor, SponsorType } from '../../types/sponsor';
 import { getFilieres } from '../../lib/api/filieres';
 import { getSchools } from '../../lib/api/schools';
 import { getAssociations } from '../../lib/api/associations';
+import { getCharacteristicTypes } from '../../lib/api/characteristicTypes';
+import type { CharacteristicType } from '../../lib/api/characteristicTypes';
 
 // ── Skeleton ──────────────────────────────────────────────────────────────────
 
@@ -1068,6 +1074,296 @@ function AssociationsEditor({
   );
 }
 
+// ── Éditeur de liens (caractéristiques) ──────────────────────────────────────
+
+const EyeIcon = ({ open }: { open: boolean }) => (
+  <svg
+    width="13"
+    height="13"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+  >
+    {open ? (
+      <>
+        <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+        <circle cx="12" cy="12" r="3" />
+      </>
+    ) : (
+      <>
+        <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+        <line x1="1" y1="1" x2="23" y2="23" />
+      </>
+    )}
+  </svg>
+);
+
+function CharacteristicRow({
+  characteristic,
+  onUpdate,
+  onRemove,
+}: {
+  characteristic: Characteristic;
+  onUpdate: (patch: Partial<Characteristic>) => void;
+  onRemove: () => void;
+}) {
+  const icon = characteristic.typeImage
+    ? `/images/icons/${characteristic.typeImage}`
+    : characteristic.typeUrl
+      ? `https://www.google.com/s2/favicons?domain=${new URL(characteristic.typeUrl).hostname}&sz=16`
+      : null;
+
+  return (
+    <div className="flex items-center gap-3">
+      <button
+        type="button"
+        title={characteristic.visible ? 'Masquer ce lien' : 'Afficher ce lien'}
+        onClick={() => {
+          onUpdate({ visible: !characteristic.visible });
+        }}
+        className={`shrink-0 rounded-[7px] border p-1.5 transition-colors cursor-pointer ${
+          characteristic.visible
+            ? 'border-ink bg-ink text-white'
+            : 'border-line bg-surface text-ink-4 hover:border-ink-3'
+        }`}
+      >
+        <EyeIcon open={characteristic.visible} />
+      </button>
+
+      <div className="flex w-36 shrink-0 items-center gap-1.5">
+        {icon && (
+          <img
+            src={icon}
+            alt=""
+            width={13}
+            height={13}
+            className="shrink-0 opacity-50"
+            style={{ filter: 'brightness(0)' }}
+            onError={(e) => {
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        )}
+        <span className="truncate text-[12px] font-medium text-ink-3">
+          {characteristic.typeTitle}
+        </span>
+      </div>
+
+      <Input
+        value={characteristic.value ?? ''}
+        onChange={(e) => {
+          onUpdate({ value: e.target.value || null });
+        }}
+        placeholder={
+          characteristic.typeUrl ? characteristic.typeUrl.replace(/https?:\/\//, '') : 'Valeur…'
+        }
+        className="flex-1"
+      />
+
+      <Button
+        type="button"
+        variant="ghost"
+        size="sm"
+        onClick={onRemove}
+        className="shrink-0 text-ink-4"
+        title="Supprimer ce lien"
+        icon={
+          <svg
+            width="13"
+            height="13"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <polyline points="3 6 5 6 21 6" />
+            <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+            <path d="M10 11v6M14 11v6" />
+            <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+          </svg>
+        }
+      />
+    </div>
+  );
+}
+
+function CharacteristicsEditor({
+  characteristics,
+  allTypes,
+  onChange,
+}: {
+  characteristics: Characteristic[];
+  allTypes: CharacteristicType[];
+  onChange: (updated: Characteristic[]) => void;
+}) {
+  const tempCounter = useRef(-1);
+  const addableTypes = allTypes.filter(
+    (t) => !characteristics.some((c) => c.typeTitle === t.title),
+  );
+
+  function update(id: number, patch: Partial<Characteristic>) {
+    onChange(characteristics.map((c) => (c.id === id ? { ...c, ...patch } : c)));
+  }
+
+  function remove(id: number) {
+    onChange(characteristics.filter((c) => c.id !== id));
+  }
+
+  function addType(type: CharacteristicType) {
+    const tempId = tempCounter.current--;
+    onChange([
+      ...characteristics,
+      {
+        id: tempId,
+        value: null,
+        visible: true,
+        typeTitle: type.title,
+        typeUrl: type.url,
+        typeImage: type.image,
+        _typeId: type.id,
+      } as Characteristic & { _typeId: number },
+    ]);
+  }
+
+  return (
+    <div>
+      <div className="space-y-3">
+        {characteristics.map((c) => (
+          <CharacteristicRow
+            key={c.id}
+            characteristic={c}
+            onUpdate={(patch) => {
+              update(c.id, patch);
+            }}
+            onRemove={() => {
+              remove(c.id);
+            }}
+          />
+        ))}
+      </div>
+
+      {addableTypes.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {addableTypes.map((type) => (
+            <button
+              key={type.id}
+              type="button"
+              onClick={() => {
+                addType(type);
+              }}
+              className="flex items-center gap-1.5 rounded-[7px] border border-dashed border-line px-2.5 py-1 text-[12px] text-ink-3 transition-colors hover:border-ink-3 hover:text-ink-2 cursor-pointer"
+            >
+              {type.image && (
+                <img
+                  src={`/images/icons/${type.image}`}
+                  alt=""
+                  width={11}
+                  height={11}
+                  className="opacity-40"
+                  style={{ filter: 'brightness(0)' }}
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              )}
+              + {type.title}
+            </button>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ── Éditeur de liens libres ───────────────────────────────────────────────────
+
+function LinksEditor({
+  links,
+  onChange,
+}: {
+  links: PersonLink[];
+  onChange: (updated: PersonLink[]) => void;
+}) {
+  const tempCounter = useRef(-1);
+
+  function addRow() {
+    onChange([...links, { id: tempCounter.current--, title: '', url: '' }]);
+  }
+
+  function updateRow(id: number, patch: Partial<PersonLink>) {
+    onChange(links.map((l) => (l.id === id ? { ...l, ...patch } : l)));
+  }
+
+  function removeRow(id: number) {
+    onChange(links.filter((l) => l.id !== id));
+  }
+
+  const trashIcon = (
+    <svg
+      width="14"
+      height="14"
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+    >
+      <polyline points="3 6 5 6 21 6" />
+      <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6" />
+      <path d="M10 11v6M14 11v6" />
+      <path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2" />
+    </svg>
+  );
+
+  return (
+    <div>
+      <div className="space-y-2">
+        {links.map((l) => (
+          <div key={l.id} className="flex items-center gap-2">
+            <div className="w-36 shrink-0">
+              <Input
+                value={l.title}
+                onChange={(e) => {
+                  updateRow(l.id, { title: e.target.value });
+                }}
+                placeholder="Titre (ex: Portfolio)"
+              />
+            </div>
+            <div className="min-w-0 flex-1">
+              <Input
+                value={l.url}
+                onChange={(e) => {
+                  updateRow(l.id, { url: e.target.value });
+                }}
+                placeholder="https://…"
+              />
+            </div>
+            <Button
+              type="button"
+              variant="ghost"
+              size="sm"
+              onClick={() => {
+                removeRow(l.id);
+              }}
+              className="shrink-0 text-ink-4"
+              icon={trashIcon}
+            />
+          </div>
+        ))}
+      </div>
+      <Button type="button" variant="ghost" size="sm" className="mt-2 text-ink-3" onClick={addRow}>
+        + Ajouter un lien
+      </Button>
+    </div>
+  );
+}
+
 // ── Page ──────────────────────────────────────────────────────────────────────
 
 export function EditPersonPage() {
@@ -1115,6 +1411,9 @@ export function EditPersonPage() {
   const [allSchools, setAllSchools] = useState<string[]>([]);
   const [associations, setAssociations] = useState<Association[]>([]);
   const [allAssociations, setAllAssociations] = useState<string[]>([]);
+  const [characteristics, setCharacteristics] = useState<Characteristic[]>([]);
+  const [allCharacteristicTypes, setAllCharacteristicTypes] = useState<CharacteristicType[]>([]);
+  const [freeLinks, setFreeLinks] = useState<PersonLink[]>([]);
 
   useEffect(() => {
     if (!person || initialized.current) return;
@@ -1140,6 +1439,8 @@ export function EditPersonPage() {
         endDate: a.endDate ?? null,
       })),
     );
+    setCharacteristics([...person.characteristics]);
+    setFreeLinks([...person.links]);
   }, [person]);
 
   useEffect(() => {
@@ -1156,6 +1457,9 @@ export function EditPersonPage() {
     });
     void getAssociations().then((result) => {
       if (result.ok) setAllAssociations(result.data);
+    });
+    void getCharacteristicTypes().then((result) => {
+      if (result.ok) setAllCharacteristicTypes(result.data);
     });
   }, [notify]);
 
@@ -1213,6 +1517,17 @@ export function EditPersonPage() {
           endDate,
         }),
       ),
+      links: freeLinks
+        .filter((l) => l.title.trim() && l.url.trim())
+        .map(({ title, url }): PersonLinkRequest => ({ title, url })),
+      characteristics: characteristics.map((c): CharacteristicRequest => {
+        if (c.id < 0) {
+          // nouvelle caractéristique — on envoie typeId sans id
+          const typeId = (c as Characteristic & { _typeId?: number })._typeId;
+          return { id: null, typeId, value: c.value, visible: c.visible };
+        }
+        return { id: c.id, value: c.value, visible: c.visible };
+      }),
     };
 
     const updateResult = await updatePerson(Number(id), data);
@@ -1369,6 +1684,28 @@ export function EditPersonPage() {
             allAssociations={allAssociations}
             onChange={setAssociations}
           />
+        </Card>
+
+        {/* Liens */}
+        <Card radius="xl" padding="md" className="mb-5">
+          <h2 className="mb-4 text-[17px] font-semibold tracking-tight text-ink">Liens</h2>
+          {characteristics.length > 0 && (
+            <>
+              <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
+                Réseaux &amp; services
+              </p>
+              <CharacteristicsEditor
+                characteristics={characteristics}
+                allTypes={allCharacteristicTypes}
+                onChange={setCharacteristics}
+              />
+              <div className="my-4 h-px bg-line" />
+            </>
+          )}
+          <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-ink-3">
+            Liens libres
+          </p>
+          <LinksEditor links={freeLinks} onChange={setFreeLinks} />
         </Card>
 
         {/* Parrainages */}

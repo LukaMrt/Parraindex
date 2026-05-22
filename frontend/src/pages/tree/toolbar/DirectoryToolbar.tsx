@@ -2,7 +2,7 @@ import { Input } from '../../../components/ui';
 import { cn } from '../../../lib/cn';
 import type { DirectoryView } from '../types';
 import { ViewSwitcher } from './ViewSwitcher';
-import { YearFilter } from './YearFilter';
+import { FilterCombobox } from './FilterCombobox';
 
 const SearchIcon = () => (
   <svg width={14} height={14} viewBox="0 0 15 15" fill="currentColor">
@@ -24,6 +24,14 @@ interface DirectoryToolbarProps {
   selectedYears: number[];
   onToggleYear: (year: number) => void;
   onClearYears: () => void;
+  availableFilieres: string[];
+  selectedFilieres: string[];
+  onToggleFiliere: (f: string) => void;
+  onClearFilieres: () => void;
+  availableSchools: string[];
+  selectedSchools: string[];
+  onToggleSchool: (s: string) => void;
+  onClearSchools: () => void;
   resultCount: number;
   loading: boolean;
 }
@@ -39,12 +47,20 @@ export function DirectoryToolbar({
   selectedYears,
   onToggleYear,
   onClearYears,
+  availableFilieres,
+  selectedFilieres,
+  onToggleFiliere,
+  onClearFilieres,
+  availableSchools,
+  selectedSchools,
+  onToggleSchool,
+  onClearSchools,
   resultCount,
   loading,
 }: DirectoryToolbarProps) {
   return (
     <div className="border-b border-line bg-surface px-4 py-4 sm:px-7 sm:py-5">
-      {/* Ligne 1 : recherche + sélecteurs */}
+      {/* Ligne 1 : recherche + sélecteurs de vue */}
       <div className="flex flex-wrap items-center gap-2.5">
         <Input
           leadingIcon={<SearchIcon />}
@@ -84,23 +100,41 @@ export function DirectoryToolbar({
         </button>
       </div>
 
-      {/* Ligne 2 : filtre années + compteur */}
-      <div className="mt-3.5 flex flex-wrap items-center justify-between gap-3">
+      {/* Ligne 2 : filtres + compteur */}
+      <div className="mt-3.5 flex flex-wrap items-center gap-2">
         {loading ? (
-          <div className="h-7 w-64 animate-pulse rounded-full bg-line" />
+          <div className="h-9 w-64 animate-pulse rounded-[9px] bg-line" />
         ) : (
-          <YearFilter
-            years={years}
-            selected={selectedYears}
-            onToggle={onToggleYear}
-            onClear={onClearYears}
-          />
-        )}
+          <>
+            <FilterCombobox
+              label="Promo"
+              items={years.map(String)}
+              selected={selectedYears.map(String)}
+              onToggle={(y) => {
+                onToggleYear(Number(y));
+              }}
+              onClear={onClearYears}
+              formatItem={(y) => `${y} / ${String(Number(y) + 1).slice(2)}`}
+            />
+            <FilterCombobox
+              label="Filière"
+              items={availableFilieres}
+              selected={selectedFilieres}
+              onToggle={onToggleFiliere}
+              onClear={onClearFilieres}
+            />
+            <FilterCombobox
+              label="École"
+              items={availableSchools}
+              selected={selectedSchools}
+              onToggle={onToggleSchool}
+              onClear={onClearSchools}
+            />
 
-        {!loading && (
-          <span className="shrink-0 text-[12.5px] font-medium text-ink-3">
-            {resultCount} résultat{resultCount > 1 ? 's' : ''}
-          </span>
+            <span className="ml-auto text-[12.5px] font-medium text-ink-3">
+              {resultCount} résultat{resultCount > 1 ? 's' : ''}
+            </span>
+          </>
         )}
       </div>
     </div>

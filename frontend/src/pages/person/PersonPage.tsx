@@ -315,15 +315,49 @@ export function PersonPage() {
           </Card>
         )}
 
-        {/* Caractéristiques */}
-        {visibleCharacteristics.length > 0 && (
+        {/* Caractéristiques + Liens libres */}
+        {(visibleCharacteristics.length > 0 || person.links.length > 0) && (
           <Card radius="xl" padding="md">
             <h2 className="mb-3 text-[17px] font-semibold tracking-tight text-ink">Liens</h2>
-            <div className="flex flex-wrap gap-2">
-              {visibleCharacteristics.map((c) => (
-                <CharacteristicChip key={c.id} characteristic={c} />
-              ))}
-            </div>
+            {visibleCharacteristics.length > 0 && (
+              <div className="flex flex-wrap gap-2">
+                {visibleCharacteristics.map((c) => (
+                  <CharacteristicChip key={c.id} characteristic={c} />
+                ))}
+              </div>
+            )}
+            {person.links.length > 0 && (
+              <div
+                className={`flex flex-wrap gap-2 ${visibleCharacteristics.length > 0 ? 'mt-2' : ''}`}
+              >
+                {person.links.map((link) => (
+                  <a
+                    key={link.id}
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 rounded-full border border-line bg-surface px-3 py-1 text-[12px] font-medium text-ink transition-colors hover:border-ink-3"
+                  >
+                    <svg
+                      width="11"
+                      height="11"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="text-ink-3"
+                    >
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+                      <polyline points="15 3 21 3 21 9" />
+                      <line x1="10" y1="14" x2="21" y2="3" />
+                    </svg>
+                    {link.title}
+                  </a>
+                ))}
+              </div>
+            )}
           </Card>
         )}
       </div>

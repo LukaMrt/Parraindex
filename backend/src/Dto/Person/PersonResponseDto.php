@@ -14,6 +14,7 @@ final readonly class PersonResponseDto
      * @param CharacteristicDto[]      $characteristics
      * @param FiliereResponseDto[]     $filieres
      * @param AssociationResponseDto[] $associations
+     * @param PersonLinkDto[]          $links
      */
     public function __construct(
         public int $id,
@@ -30,6 +31,7 @@ final readonly class PersonResponseDto
         public array $characteristics,
         public array $filieres,
         public array $associations,
+        public array $links = [],
     ) {
     }
 }
