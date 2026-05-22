@@ -54,9 +54,7 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     await page.waitForTimeout(400); // debounce + réseau
 
     // Son propre nom ne doit pas apparaître dans la liste
-    await expect(
-      page.getByRole('listitem').filter({ hasText: myFullName }),
-    ).not.toBeVisible();
+    await expect(page.getByRole('listitem').filter({ hasText: myFullName })).not.toBeVisible();
   });
 
   test('selecting a result resets if the user types again', async ({ page }) => {
