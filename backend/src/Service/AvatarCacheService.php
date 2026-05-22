@@ -19,7 +19,7 @@ final readonly class AvatarCacheService
 
     public function warmUp(string $filename): void
     {
-        $path = '/uploads/avatars/' . $filename;
+        $path = 'uploads/avatars/' . $filename;
 
         foreach (self::FILTERS as $filter) {
             $this->filterService->warmUpCache($path, $filter, null, true);
@@ -28,7 +28,7 @@ final readonly class AvatarCacheService
 
     public function bust(string $filename): void
     {
-        $path = '/uploads/avatars/' . $filename;
+        $path = 'uploads/avatars/' . $filename;
 
         foreach (self::FILTERS as $filter) {
             $this->filterService->bustCache($path, $filter);

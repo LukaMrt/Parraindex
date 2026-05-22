@@ -236,14 +236,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     }
 
     /**
-     * @param array{id: int|null, email: string|null, password: string|null, roles: string[], isValidated: bool} $data
+     * @param array{id?: int|null, email?: string|null, password?: string|null, roles?: string[], isValidated?: bool} $data
      */
     public function __unserialize(array $data): void
     {
-        $this->id       = $data['id'];
-        $this->email    = $data['email'];
-        $this->password = $data['password'];
-        $this->roles    = $data['roles'];
-        $this->isValidated = $data['isValidated'];
+        $this->id          = $data['id'] ?? null;
+        $this->email       = $data['email'] ?? null;
+        $this->password    = $data['password'] ?? null;
+        $this->roles       = $data['roles'] ?? [Role::USER->value];
+        $this->isValidated = $data['isValidated'] ?? false;
     }
 }

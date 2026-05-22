@@ -17,7 +17,7 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     await autocomplete.fill('H');
 
     // minChars = 2 : aucune liste ne doit apparaître
-    await expect(page.getByRole('list')).not.toBeVisible();
+    await expect(page.getByRole('listbox')).not.toBeVisible();
   });
 
   test('shows loading state then results after debounce', async ({ page }) => {
@@ -32,7 +32,7 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     await expect(page.getByText('Recherche…')).toBeVisible({ timeout: 1_000 });
 
     // Résultats après la requête réseau
-    const henriOption = page.getByRole('listitem').filter({ hasText: 'Henri Durand' }).first();
+    const henriOption = page.getByRole('option').filter({ hasText: 'Henri Durand' }).first();
     await expect(henriOption).toBeVisible({ timeout: 5_000 });
   });
 
@@ -54,7 +54,7 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     await page.waitForTimeout(400); // debounce + réseau
 
     // Son propre nom ne doit pas apparaître dans la liste
-    await expect(page.getByRole('listitem').filter({ hasText: myFullName })).not.toBeVisible();
+    await expect(page.getByRole('option').filter({ hasText: myFullName })).not.toBeVisible();
   });
 
   test('selecting a result resets if the user types again', async ({ page }) => {
@@ -65,7 +65,7 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     const autocomplete = page.getByPlaceholder('Rechercher une personne…');
     await autocomplete.fill('Hen');
 
-    const henriOption = page.getByRole('listitem').filter({ hasText: 'Henri Durand' }).first();
+    const henriOption = page.getByRole('option').filter({ hasText: 'Henri Durand' }).first();
     await expect(henriOption).toBeVisible({ timeout: 5_000 });
     await henriOption.click();
 
@@ -93,7 +93,7 @@ test('add a HEART sponsor link from Luka to Henri', async ({ page }) => {
   // Autocomplete : taper "Henri" → attendre les résultats → cliquer sur "Henri Durand"
   const autocomplete = page.getByPlaceholder('Rechercher une personne…');
   await autocomplete.fill('Henri');
-  const henriOption = page.getByRole('listitem').filter({ hasText: 'Henri Durand' }).first();
+  const henriOption = page.getByRole('option').filter({ hasText: 'Henri Durand' }).first();
   await expect(henriOption).toBeVisible({ timeout: 5_000 });
   await henriOption.click();
 

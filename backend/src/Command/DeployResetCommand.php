@@ -42,8 +42,11 @@ final class DeployResetCommand extends Command
             $finder->files()->in($sessionDir);
 
             foreach ($finder as $file) {
-                unlink($file->getRealPath());
-                ++$cleared;
+                $path = $file->getRealPath();
+
+                if ($path !== false && is_file($path) && unlink($path)) {
+                    ++$cleared;
+                }
             }
         }
 

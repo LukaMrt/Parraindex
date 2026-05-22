@@ -242,7 +242,10 @@ function AsyncSuggestInput<T>({
         {...rest}
       />
       {showDropdown && (loading || items.length > 0 || showEmpty) && (
-        <ul className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
+        <ul
+          role="listbox"
+          className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-line bg-surface shadow-lg"
+        >
           {loading && items.length === 0 && (
             <li className="px-3.5 py-2 text-[13px] text-ink-4">Recherche…</li>
           )}
@@ -254,6 +257,8 @@ function AsyncSuggestInput<T>({
             return (
               <li
                 key={getKey(item)}
+                role="option"
+                aria-selected={active}
                 onPointerDown={(e) => {
                   e.preventDefault();
                   pick(item);

@@ -1,5 +1,5 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import type { SyntheticEvent } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
@@ -79,10 +79,13 @@ function AddSponsorForm({
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
 
-  const searchOtherPersons = async (q: string): Promise<Person[]> => {
-    const data = await queryClient.fetchQuery(personQueries.search(q, 20));
-    return data.filter((p) => p.id !== personId);
-  };
+  const searchOtherPersons = useCallback(
+    async (q: string): Promise<Person[]> => {
+      const data = await queryClient.fetchQuery(personQueries.search(q, 20));
+      return data.filter((p) => p.id !== personId);
+    },
+    [queryClient, personId],
+  );
 
   const { mutate, isPending: saving } = useMutation({
     mutationFn: createSponsor,
@@ -102,6 +105,7 @@ function AddSponsorForm({
       });
       notify('success', 'Parrainage ajouté');
       setOtherPerson(null);
+      setOtherQuery('');
       setDate('');
       setDescription('');
       void queryClient.invalidateQueries({ queryKey: personQueries.detail(personId).queryKey });
