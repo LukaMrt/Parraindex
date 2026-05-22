@@ -37,8 +37,7 @@ test('tree directory filters: search, year, count', async ({ page }) => {
   const cards = page.locator('[data-testid^="person-card-"]');
   await expect(cards).toHaveCount(filteredCount);
 
-  // 4. Reset filtre années : rouvrir le combobox et désélectionner "2021 / 22"
-  await page.getByText(/Promo · \d+/).click();
+  // 4. Reset filtre années : le dropdown est encore ouvert, cliquer l'option pour désélectionner
   await page.getByRole('button', { name: /^2021 \/ 22$/ }).click();
   await expect(counter).toHaveText(new RegExp(`^${initialCount.toString()} résultats?$`));
 
