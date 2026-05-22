@@ -1,0 +1,69 @@
+{% extends '@EasyAdmin/page/content.html.twig' %}
+
+{% block page_title %}Fusionner des référentiels{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <p class="text-muted mb-4">
+            Fusionnez deux éléments d'un référentiel : tous les liens de la <strong>source</strong> seront
+            réassignés vers la <strong>cible</strong>, puis la source sera supprimée.
+            Les champs annexes (dates, poste, diplôme…) sont conservés.
+        </p>
+
+        {% macro merge_card(title, icon, type, items, merge_url) %}
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">
+                        <i class="fa {{ icon }} me-2"></i>{{ title }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <form method="post" action="{{ merge_url }}"
+                          onsubmit="return confirm('Confirmer la fusion ? La source sera définitivement supprimée.')">
+                        <input type="hidden" name="_token" value="{{ csrf_token('admin_merge') }}">
+                        <input type="hidden" name="type" value="{{ type }}">
+
+                        <div class="d-flex gap-3 align-items-end">
+                            <div class="flex-grow-1">
+                                <label class="form-label fw-bold">
+                                    Source <span class="badge bg-danger">sera supprimée</span>
+                                </label>
+                                <select name="source_id" class="form-select" required>
+                                    <option value="">— Choisir —</option>
+                                    {% for item in items %}
+                                        <option value="{{ item.id }}">{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="pb-1 text-muted">
+                                <i class="fa fa-arrow-right fa-lg"></i>
+                            </div>
+                            <div class="flex-grow-1">
+                                <label class="form-label fw-bold">
+                                    Cible <span class="badge bg-success">sera conservée</span>
+                                </label>
+                                <select name="target_id" class="form-select" required>
+                                    <option value="">— Choisir —</option>
+                                    {% for item in items %}
+                                        <option value="{{ item.id }}">{{ item.name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                            <div class="pb-1">
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa fa-code-merge me-1"></i> Fusionner
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        {% endmacro %}
+
+        {{ _self.merge_card('Filières', 'fa-graduation-cap', 'filiere', filieres, merge_url) }}
+        {{ _self.merge_card('Associations', 'fa-users', 'association', associations, merge_url) }}
+        {{ _self.merge_card('Écoles', 'fa-school', 'school', schools, merge_url) }}
+    </div>
+</div>
+{% endblock %}
