@@ -29,7 +29,7 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     await autocomplete.fill('Hen');
 
     // Résultats visibles après debounce + requête réseau
-    const henriOption = page.getByRole('option').filter({ hasText: 'Henri Durand' }).first();
+    const henriOption = page.getByRole('option').filter({ hasText: 'Henri DURAND' }).first();
     await expect(henriOption).toBeVisible({ timeout: 5_000 });
 
     // La liste dropdown est bien un listbox
@@ -65,12 +65,12 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     const autocomplete = page.getByPlaceholder('Rechercher une personne…');
     await autocomplete.fill('Hen');
 
-    const henriOption = page.getByRole('option').filter({ hasText: 'Henri Durand' }).first();
+    const henriOption = page.getByRole('option').filter({ hasText: 'Henri DURAND' }).first();
     await expect(henriOption).toBeVisible({ timeout: 5_000 });
     await henriOption.click();
 
     // L'input affiche le nom complet sélectionné
-    await expect(autocomplete).toHaveValue('Henri Durand');
+    await expect(autocomplete).toHaveValue('Henri DURAND');
 
     // Si on retape, la sélection est effacée (bouton Ajouter reste disabled)
     await autocomplete.fill('Hen');
@@ -93,7 +93,7 @@ test('add a HEART sponsor link from Luka to Henri', async ({ page }) => {
   // Autocomplete : taper "Henri" → attendre les résultats → cliquer sur "Henri Durand"
   const autocomplete = page.getByPlaceholder('Rechercher une personne…');
   await autocomplete.fill('Henri');
-  const henriOption = page.getByRole('option').filter({ hasText: 'Henri Durand' }).first();
+  const henriOption = page.getByRole('option').filter({ hasText: 'Henri DURAND' }).first();
   await expect(henriOption).toBeVisible({ timeout: 5_000 });
   await henriOption.click();
 
