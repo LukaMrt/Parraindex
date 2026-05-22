@@ -76,6 +76,8 @@ final class MergeAdminController extends AbstractController
             $this->addFlash('success', sprintf('Fusion effectuée : %d enregistrement(s) réassigné(s).', $count));
         } catch (\InvalidArgumentException $invalidArgumentException) {
             $this->addFlash('danger', $invalidArgumentException->getMessage());
+        } catch (\Throwable) {
+            $this->addFlash('danger', 'Une erreur inattendue est survenue lors de la fusion.');
         }
 
         return $this->redirect($mergeUrl);

@@ -11,7 +11,15 @@ function mkPerson(id: number, firstName: string, lastName: string, startYear: nu
     fullName: `${firstName} ${lastName}`,
     startYear,
     picture: null,
-    color: '#000',
+    birthdate: null,
+    biography: null,
+    description: null,
+    godFathers: [],
+    godChildren: [],
+    characteristics: [],
+    filieres: [],
+    associations: [],
+    links: [],
   };
 }
 
@@ -22,7 +30,7 @@ const people: Person[] = [
   mkPerson(4, 'Charles', 'Bernard', 2022),
 ];
 
-const base: PersonFilter = { name: '', year: null, alphabetical: false };
+const base: PersonFilter = { name: '', years: [], alphabetical: false, filieres: [], schools: [] };
 
 describe('filterPersons', () => {
   it('retourne tous les éléments sans filtre', () => {
@@ -30,7 +38,7 @@ describe('filterPersons', () => {
   });
 
   it('filtre par année', () => {
-    const result = filterPersons(people, { ...base, year: 2020 });
+    const result = filterPersons(people, { ...base, years: [2020] });
     expect(result).toHaveLength(2);
     expect(result.map((p) => p.id)).toEqual([1, 3]);
   });
@@ -64,7 +72,13 @@ describe('filterPersons', () => {
   });
 
   it('combine filtre nom et année', () => {
-    const result = filterPersons(people, { name: 'alice', year: 2020, alphabetical: false });
+    const result = filterPersons(people, {
+      name: 'alice',
+      years: [2020],
+      alphabetical: false,
+      filieres: [],
+      schools: [],
+    });
     expect(result).toHaveLength(1);
     expect(result[0]?.id).toBe(1);
   });

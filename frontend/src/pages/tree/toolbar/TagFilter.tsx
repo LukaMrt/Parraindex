@@ -18,6 +18,7 @@ export function TagFilter({ label, items, selected, onToggle, onClear }: TagFilt
         {label}
       </span>
       <button
+        type="button"
         onClick={onClear}
         className={cn(
           'h-7 cursor-pointer rounded-full border px-3 text-xs font-medium transition-all duration-100',
@@ -33,6 +34,7 @@ export function TagFilter({ label, items, selected, onToggle, onClear }: TagFilt
         return (
           <button
             key={item}
+            type="button"
             onClick={() => {
               onToggle(item);
             }}

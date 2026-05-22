@@ -33,16 +33,16 @@ function shuffleReducer(state: Person[], action: ShuffleAction): Person[] {
 }
 
 export function TreePage() {
-  const { persons, loading } = usePersons();
+  const { persons, loading, loadingMore } = usePersons();
   const { links, loading: linksLoading } = useSponsorsGraph(persons);
   const [view, setView] = useState<DirectoryView>('grid');
   const [shuffledPersons, dispatch] = useReducer(shuffleReducer, []);
 
   useEffect(() => {
-    if (!loading && persons.length > 0) {
+    if (!loading && !loadingMore && persons.length > 0) {
       dispatch({ type: 'SET', persons });
     }
-  }, [loading, persons]);
+  }, [loading, loadingMore, persons]);
 
   const displayPersons = shuffledPersons.length > 0 ? shuffledPersons : persons;
   const [searchParams] = useSearchParams();

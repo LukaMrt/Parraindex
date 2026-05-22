@@ -62,7 +62,8 @@ final class DashboardController extends AbstractDashboardController
         yield MenuItem::section('Demandes');
         yield MenuItem::linkTo(ContactCrudController::class, 'Contacts', 'fa fa-envelope');
         yield MenuItem::section('Outils');
-        yield MenuItem::linkToUrl('Fusionner référentiels', 'fa fa-code-merge', $this->adminUrlGenerator->setRoute('admin_merge')->generateUrl());
+        $mergeUrl = $this->adminUrlGenerator->setRoute('admin_merge')->generateUrl();
+        yield MenuItem::linkToUrl('Fusionner référentiels', 'fa fa-code-merge', $mergeUrl);
         yield MenuItem::linkToUrl('Test mail', 'fa fa-paper-plane', $this->adminUrlGenerator->setRoute('admin_test_mail')->generateUrl());
         yield MenuItem::section();
         yield MenuItem::linkToUrl('Retour au site', 'fa fa-arrow-left', '/');

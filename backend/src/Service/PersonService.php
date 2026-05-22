@@ -270,11 +270,14 @@ final readonly class PersonService
             }
         }
 
+        $seenIds = [];
+
         foreach ($dtos as $dto) {
             if ($dto->id !== null && isset($existingById[$dto->id])) {
                 // Update existing
                 $existingById[$dto->id]->setValue($dto->value ?? '');
                 $existingById[$dto->id]->setVisible($dto->visible);
+                $seenIds[] = $dto->id;
             } elseif ($dto->typeId !== null) {
                 // Create new characteristic for this type if not already present
                 $type = $this->characteristicTypeRepository->find($dto->typeId);
@@ -296,6 +299,14 @@ final readonly class PersonService
                 $characteristic->setVisible($dto->visible);
                 $person->addCharacteristic($characteristic);
                 $this->characteristicRepository->create($characteristic);
+                $seenIds[] = $characteristic->getId();
+            }
+        }
+
+        // Remove characteristics absent from the payload (orphanRemoval handles DELETE)
+        foreach ($existingById as $id => $characteristic) {
+            if (!in_array($id, $seenIds, true)) {
+                $person->removeCharacteristic($characteristic);
             }
         }
     }

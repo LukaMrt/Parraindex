@@ -1202,7 +1202,6 @@ function CharacteristicsEditor({
   onChange: (updated: Characteristic[]) => void;
 }) {
   const tempCounter = useRef(-1);
-  const usedTypeIds = new Set(characteristics.map((c) => c.id));
   const addableTypes = allTypes.filter(
     (t) => !characteristics.some((c) => c.typeTitle === t.title),
   );
@@ -1230,9 +1229,6 @@ function CharacteristicsEditor({
       } as Characteristic & { _typeId: number },
     ]);
   }
-
-  // suppress unused variable warning
-  void usedTypeIds;
 
   return (
     <div>

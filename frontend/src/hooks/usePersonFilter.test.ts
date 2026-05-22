@@ -11,6 +11,15 @@ function mkPerson(id: number, firstName: string, lastName: string, startYear: nu
     fullName: `${firstName} ${lastName}`,
     startYear,
     picture: null,
+    birthdate: null,
+    biography: null,
+    description: null,
+    godFathers: [],
+    godChildren: [],
+    characteristics: [],
+    filieres: [],
+    associations: [],
+    links: [],
   };
 }
 
