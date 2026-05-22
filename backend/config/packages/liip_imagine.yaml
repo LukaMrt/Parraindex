@@ -1,7 +1,7 @@
 liip_imagine:
     twig:
         mode: lazy
-    driver: gd
+    driver: imagick
     resolvers:
         default:
             web_path:
@@ -14,6 +14,7 @@ liip_imagine:
     filter_sets:
         avatar_thumb:
             quality: 85
+            format: webp
             filters:
                 thumbnail:
                     size: [200, 200]
@@ -22,6 +23,7 @@ liip_imagine:
                     ~
         avatar_full:
             quality: 90
+            format: webp
             filters:
                 thumbnail:
                     size: [400, 400]

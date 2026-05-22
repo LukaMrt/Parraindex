@@ -1,6 +1,6 @@
 import type { Result } from '../types/api';
 import { getHomeStats } from './api/home';
-import { getAccount, getPerson, getPersons } from './api/persons';
+import { getAccount, getPerson, searchPersons } from './api/persons';
 import { getSponsor } from './api/sponsors';
 
 /** Converts a Result<T> into a resolved T or a thrown Error. */
@@ -18,10 +18,11 @@ export const homeQueries = {
 };
 
 export const personQueries = {
-  list: () => ({
-    queryKey: ['persons'] as const,
-    queryFn: () => getPersons().then(throwable),
-    staleTime: 5 * 60 * 1000,
+  search: (q: string, limit = 20) => ({
+    queryKey: ['persons', 'search', q, limit] as const,
+    queryFn: () => searchPersons({ q, limit }).then(throwable),
+    staleTime: 60 * 1000,
+    enabled: q.trim().length >= 2,
   }),
   detail: (id: number) => ({
     queryKey: ['persons', id] as const,

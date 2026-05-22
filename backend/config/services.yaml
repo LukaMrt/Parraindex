@@ -23,7 +23,7 @@ services:
         arguments:
             $resolvers: !tagged_iterator app.contact_resolver
 
-    App\Command\MigratePicturesCommand:
+    App\Command\DeployResetCommand:
         arguments:
             $projectDir: '%kernel.project_dir%'
 

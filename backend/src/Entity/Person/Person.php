@@ -52,8 +52,8 @@ class Person implements \Stringable
             'image/webp',
             'image/gif',
         ],
-        maxWidth: 4096,
-        maxHeight: 4096,
+        maxWidth: 2000,
+        maxHeight: 2000,
         detectCorrupted: true,
     )]
     private ?File $pictureFile = null;

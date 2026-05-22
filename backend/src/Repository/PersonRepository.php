@@ -23,7 +23,7 @@ class PersonRepository extends ServiceEntityRepository
     /**
      * @return Person[]
      */
-    public function getAll(string $orderBy = 'id'): array
+    public function getAll(string $orderBy = 'id', ?string $q = null, int $limit = 20): array
     {
         $allowedColumns = [
             'id',
@@ -39,16 +39,23 @@ class PersonRepository extends ServiceEntityRepository
             );
         }
 
-        /** @var Person[] $result */
-        $result = $this->createQueryBuilder('p')
+        $qb = $this->createQueryBuilder('p')
             ->leftJoin('p.filieres', 'pf')->addSelect('pf')
             ->leftJoin('pf.filiere', 'f')->addSelect('f')
             ->leftJoin('pf.school', 's')->addSelect('s')
             ->leftJoin('p.associations', 'pa')->addSelect('pa')
             ->leftJoin('pa.association', 'assoc')->addSelect('assoc')
-            ->orderBy('p.' . $orderBy, 'ASC')
-            ->getQuery()
-            ->getResult();
+            ->orderBy('p.' . $orderBy, 'ASC');
+
+        if ($q !== null && trim($q) !== '') {
+            $escaped = addcslashes(trim($q), '%_\\');
+            $qb->andWhere('LOWER(p.firstName) LIKE LOWER(:q) OR LOWER(p.lastName) LIKE LOWER(:q)')
+                ->setParameter('q', '%' . $escaped . '%')
+                ->setMaxResults(max(1, min($limit, 100)));
+        }
+
+        /** @var Person[] $result */
+        $result = $qb->getQuery()->getResult();
         return $result;
     }
 
