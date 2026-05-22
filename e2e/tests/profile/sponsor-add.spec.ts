@@ -7,6 +7,80 @@ test.beforeEach(() => {
   clearMailpit();
 });
 
+test.describe('person autocomplete (async SuggestInput)', () => {
+  test('no dropdown with fewer than 2 characters', async ({ page }) => {
+    await loginAs(page, LUKA_EMAIL, DEFAULT_PASSWORD);
+    const me = await getMe(page);
+    await page.goto(`/person/${me.person.id.toString()}/edit`);
+
+    const autocomplete = page.getByPlaceholder('Rechercher une personne…');
+    await autocomplete.fill('H');
+
+    // minChars = 2 : aucune liste ne doit apparaître
+    await expect(page.getByRole('list')).not.toBeVisible();
+  });
+
+  test('shows loading state then results after debounce', async ({ page }) => {
+    await loginAs(page, LUKA_EMAIL, DEFAULT_PASSWORD);
+    const me = await getMe(page);
+    await page.goto(`/person/${me.person.id.toString()}/edit`);
+
+    const autocomplete = page.getByPlaceholder('Rechercher une personne…');
+    await autocomplete.fill('Hen');
+
+    // État intermédiaire "Recherche…" pendant le debounce
+    await expect(page.getByText('Recherche…')).toBeVisible({ timeout: 1_000 });
+
+    // Résultats après la requête réseau
+    const henriOption = page.getByRole('listitem').filter({ hasText: 'Henri Durand' }).first();
+    await expect(henriOption).toBeVisible({ timeout: 5_000 });
+  });
+
+  test('current person is excluded from results', async ({ page }) => {
+    await loginAs(page, LUKA_EMAIL, DEFAULT_PASSWORD);
+    const me = await getMe(page);
+    await page.goto(`/person/${me.person.id.toString()}/edit`);
+
+    // Récupère le nom complet de l'utilisateur connecté
+    const personResp = await page.request.get(`/api/persons/${me.person.id.toString()}`);
+    const personBody = (await personResp.json()) as { data: { fullName: string } };
+    const myFullName = personBody.data.fullName;
+
+    // Cherche son propre prénom dans l'autocomplete
+    const firstName = myFullName.split(' ')[0] ?? 'Luka';
+    const autocomplete = page.getByPlaceholder('Rechercher une personne…');
+    await autocomplete.fill(firstName);
+
+    await page.waitForTimeout(400); // debounce + réseau
+
+    // Son propre nom ne doit pas apparaître dans la liste
+    await expect(
+      page.getByRole('listitem').filter({ hasText: myFullName }),
+    ).not.toBeVisible();
+  });
+
+  test('selecting a result resets if the user types again', async ({ page }) => {
+    await loginAs(page, LUKA_EMAIL, DEFAULT_PASSWORD);
+    const me = await getMe(page);
+    await page.goto(`/person/${me.person.id.toString()}/edit`);
+
+    const autocomplete = page.getByPlaceholder('Rechercher une personne…');
+    await autocomplete.fill('Hen');
+
+    const henriOption = page.getByRole('listitem').filter({ hasText: 'Henri Durand' }).first();
+    await expect(henriOption).toBeVisible({ timeout: 5_000 });
+    await henriOption.click();
+
+    // L'input affiche le nom complet sélectionné
+    await expect(autocomplete).toHaveValue('Henri Durand');
+
+    // Si on retape, la sélection est effacée (bouton Ajouter reste disabled)
+    await autocomplete.fill('Hen');
+    const addButton = page.getByRole('button', { name: 'Ajouter', exact: true });
+    await expect(addButton).toBeDisabled();
+  });
+});
+
 test('add a HEART sponsor link from Luka to Henri', async ({ page }) => {
   await loginAs(page, LUKA_EMAIL, DEFAULT_PASSWORD);
   const me = await getMe(page);
@@ -18,7 +92,7 @@ test('add a HEART sponsor link from Luka to Henri', async ({ page }) => {
   // Rôle Parrain (Luka devient parrain de quelqu'un)
   await page.getByRole('button', { name: 'Parrain', exact: true }).click();
 
-  // Autocomplete : taper "Henri" → cliquer sur "Henri Durand"
+  // Autocomplete : taper "Henri" → attendre les résultats → cliquer sur "Henri Durand"
   const autocomplete = page.getByPlaceholder('Rechercher une personne…');
   await autocomplete.fill('Henri');
   const henriOption = page.getByRole('listitem').filter({ hasText: 'Henri Durand' }).first();
@@ -38,7 +112,6 @@ test('add a HEART sponsor link from Luka to Henri', async ({ page }) => {
   await expect(page.getByText('Parrainage ajouté')).toBeVisible({ timeout: 5_000 });
 
   // Une SponsorRow avec Henri Durand apparaît dans la section "Fillots"
-  // (le nom est rendu en MAJUSCULES dans la SponsorRow)
   await expect(page.getByText('Henri DURAND').first()).toBeVisible();
 
   // Vérification API : Luka a maintenant Henri parmi ses godChildren

@@ -220,4 +220,30 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->createdAt;
     }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function __serialize(): array
+    {
+        return [
+            'id'          => $this->id,
+            'email'       => $this->email,
+            'password'    => $this->password,
+            'roles'       => $this->roles,
+            'isValidated' => $this->isValidated,
+        ];
+    }
+
+    /**
+     * @param array{id: int|null, email: string|null, password: string|null, roles: string[], isValidated: bool} $data
+     */
+    public function __unserialize(array $data): void
+    {
+        $this->id       = $data['id'];
+        $this->email    = $data['email'];
+        $this->password = $data['password'];
+        $this->roles    = $data['roles'];
+        $this->isValidated = $data['isValidated'];
+    }
 }

@@ -51,9 +51,9 @@ final readonly class PersonService
      * @param 'id'|'firstName'|'lastName'|'startYear'|'createdAt' $orderBy
      * @return Person[]
      */
-    public function getAll(string $orderBy = 'id'): array
+    public function getAll(string $orderBy = 'id', ?string $q = null, int $limit = 20): array
     {
-        return $this->personRepository->getAll($orderBy);
+        return $this->personRepository->getAll($orderBy, $q, $limit);
     }
 
     public function findByIdentity(string $firstName, string $lastName): ?Person

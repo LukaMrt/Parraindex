@@ -4,8 +4,19 @@ import type { Result } from '../../types/api';
 
 export type PersonOrderBy = 'id' | 'firstName' | 'lastName' | 'startYear' | 'createdAt';
 
-export function getPersons(orderBy: PersonOrderBy = 'id'): Promise<Result<Person[]>> {
-  return get<Person[]>(`/api/persons?orderBy=${orderBy}`);
+export interface SearchPersonsParams {
+  q: string;
+  orderBy?: PersonOrderBy;
+  limit?: number;
+}
+
+export function searchPersons({
+  q,
+  orderBy = 'lastName',
+  limit = 20,
+}: SearchPersonsParams): Promise<Result<Person[]>> {
+  const params = new URLSearchParams({ q, orderBy, limit: String(limit) });
+  return get<Person[]>(`/api/persons?${params.toString()}`);
 }
 
 export function getPerson(id: number): Promise<Result<Person>> {

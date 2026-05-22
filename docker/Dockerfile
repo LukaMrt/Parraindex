@@ -18,11 +18,13 @@ ENV SERVER_NAME=":80"
 
 RUN apk add --no-cache netcat-openbsd
 
-RUN apk add --no-cache --virtual .build-deps libpng-dev libjpeg-turbo-dev libwebp-dev icu-dev \
+RUN apk add --no-cache --virtual .build-deps libpng-dev libjpeg-turbo-dev libwebp-dev icu-dev imagemagick-dev \
     && docker-php-ext-configure gd --with-jpeg --with-webp \
     && docker-php-ext-install pdo_mysql gd intl \
+    && pecl install imagick \
+    && docker-php-ext-enable imagick \
     && apk del .build-deps \
-    && apk add --no-cache libpng libjpeg-turbo libwebp icu-libs
+    && apk add --no-cache libpng libjpeg-turbo libwebp icu-libs imagemagick
 
 WORKDIR /app
 

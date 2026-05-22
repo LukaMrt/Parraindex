@@ -1,6 +1,6 @@
 import { useMutation, useQueries, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useRef, useState } from 'react';
-import type { KeyboardEvent, SyntheticEvent } from 'react';
+import type { SyntheticEvent } from 'react';
 import type { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import {
@@ -61,128 +61,28 @@ function FieldLabel({ children }: { children: ReactNode }) {
   );
 }
 
-// ── Autocomplete personne ─────────────────────────────────────────────────────
-
-function PersonAutocomplete({
-  persons,
-  excludeId,
-  value,
-  onSelect,
-  placeholder,
-}: {
-  persons: Person[];
-  excludeId: number;
-  value: Person | null;
-  onSelect: (p: Person | null) => void;
-  placeholder?: string;
-}) {
-  const [query, setQuery] = useState(value?.fullName ?? '');
-  const [open, setOpen] = useState(false);
-  const [cursor, setCursor] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-
-  const filtered = query.trim()
-    ? persons
-        .filter((p) => p.id !== excludeId && p.fullName.toLowerCase().includes(query.toLowerCase()))
-        .slice(0, 8)
-    : [];
-
-  const displayQuery = value ? value.fullName : query;
-
-  useEffect(() => {
-    function onClickOutside(e: MouseEvent) {
-      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
-    }
-    document.addEventListener('mousedown', onClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', onClickOutside);
-    };
-  }, []);
-
-  function pick(p: Person) {
-    onSelect(p);
-    setQuery(p.fullName);
-    setOpen(false);
-  }
-
-  function handleKeyDown(e: KeyboardEvent) {
-    if (!open || filtered.length === 0) return;
-    if (e.key === 'ArrowDown') {
-      e.preventDefault();
-      setCursor((c) => Math.min(c + 1, filtered.length - 1));
-    }
-    if (e.key === 'ArrowUp') {
-      e.preventDefault();
-      setCursor((c) => Math.max(c - 1, 0));
-    }
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      const p = filtered[cursor];
-      if (p) pick(p);
-    }
-    if (e.key === 'Escape') {
-      setOpen(false);
-    }
-  }
-
-  return (
-    <div ref={ref} className="relative">
-      <Input
-        value={displayQuery}
-        onChange={(e) => {
-          setQuery(e.target.value);
-          onSelect(null);
-          setOpen(true);
-          setCursor(0);
-        }}
-        onFocus={() => {
-          if (displayQuery) setOpen(true);
-        }}
-        onKeyDown={handleKeyDown}
-        placeholder={placeholder ?? 'Rechercher une personne…'}
-      />
-      {open && filtered.length > 0 && (
-        <ul className="absolute left-0 right-0 top-full z-50 mt-1 overflow-hidden rounded-xl border border-line bg-surface shadow-lg">
-          {filtered.map((p, i) => (
-            <li
-              key={p.id}
-              onPointerDown={(e) => {
-                e.preventDefault();
-                pick(p);
-              }}
-              className={`flex cursor-pointer select-none items-center gap-2.5 px-3 py-2 text-[13px] transition-colors ${
-                i === cursor ? 'bg-bg text-ink' : 'text-ink-2 hover:bg-bg'
-              }`}
-            >
-              <Avatar person={p} size={24} square />
-              <span className="font-medium">{p.fullName}</span>
-              <span className="ml-auto text-[11px] text-ink-4">Promo {p.startYear}</span>
-            </li>
-          ))}
-        </ul>
-      )}
-    </div>
-  );
-}
-
 // ── Formulaire ajout parrainage ───────────────────────────────────────────────
 
 function AddSponsorForm({
   personId,
-  persons,
   onAdded,
 }: {
   personId: number;
-  persons: Person[];
   onAdded: (s: Sponsor) => void;
 }) {
   const { notify } = useNotification();
   const queryClient = useQueryClient();
   const [role, setRole] = useState<'godChild' | 'godFather'>('godChild');
   const [otherPerson, setOtherPerson] = useState<Person | null>(null);
+  const [otherQuery, setOtherQuery] = useState('');
   const [type, setType] = useState<SponsorType>('CLASSIC');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
+
+  const searchOtherPersons = async (q: string): Promise<Person[]> => {
+    const data = await queryClient.fetchQuery(personQueries.search(q, 20));
+    return data.filter((p) => p.id !== personId);
+  };
 
   const { mutate, isPending: saving } = useMutation({
     mutationFn: createSponsor,
@@ -262,11 +162,29 @@ function AddSponsorForm({
         {/* Personne */}
         <div>
           <FieldLabel>{role === 'godFather' ? 'Fillot' : 'Parrain'}</FieldLabel>
-          <PersonAutocomplete
-            persons={persons}
-            excludeId={personId}
-            value={otherPerson}
-            onSelect={setOtherPerson}
+          <SuggestInput<Person>
+            value={otherQuery}
+            onChange={(v) => {
+              setOtherQuery(v);
+              if (otherPerson && v !== otherPerson.fullName) setOtherPerson(null);
+            }}
+            search={searchOtherPersons}
+            getLabel={(p) => p.fullName}
+            getKey={(p) => p.id}
+            renderItem={(p, active) => (
+              <div className="flex items-center gap-2.5">
+                <Avatar person={p} size={24} square />
+                <span className="font-medium">{p.fullName}</span>
+                <span className={`ml-auto text-[11px] ${active ? 'text-ink-3' : 'text-ink-4'}`}>
+                  Promo {p.startYear}
+                </span>
+              </div>
+            )}
+            onPick={(p) => {
+              setOtherPerson(p);
+              setOtherQuery(p.fullName);
+            }}
+            placeholder="Rechercher une personne…"
           />
         </div>
 
@@ -1157,17 +1075,15 @@ export function EditPersonPage() {
   const personId = Number(id);
   const queryClient = useQueryClient();
 
-  const [personQuery, personsQuery, accountQuery] = useQueries({
+  const [personQuery, accountQuery] = useQueries({
     queries: [
       { ...personQueries.detail(personId), enabled: !!id },
-      { ...personQueries.list(), enabled: !!id },
       { ...personQueries.account(personId), enabled: !!id },
     ],
   });
 
   const person = personQuery.data ?? null;
-  const allPersons = personsQuery.data ?? [];
-  const loading = personQuery.isLoading || personsQuery.isLoading;
+  const loading = personQuery.isLoading;
 
   const initialized = useRef(false);
   const [saving, setSaving] = useState(false);
@@ -1503,7 +1419,6 @@ export function EditPersonPage() {
 
           <AddSponsorForm
             personId={person.id}
-            persons={allPersons}
             onAdded={(s) => {
               setSponsors((prev) => [...prev, s]);
             }}

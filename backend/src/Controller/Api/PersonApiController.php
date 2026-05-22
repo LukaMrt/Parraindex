@@ -15,6 +15,7 @@ use App\Entity\Person\Person;
 use App\Entity\Person\Role;
 use App\Entity\Person\User;
 use App\Security\Voter\PersonVoter;
+use App\Service\AvatarCacheService;
 use App\Service\PersonService;
 use App\Service\UserService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -33,6 +34,7 @@ final class PersonApiController extends AbstractController
         private readonly PersonService $personService,
         private readonly UserService $userService,
         private readonly ValidatorInterface $validator,
+        private readonly AvatarCacheService $avatarCacheService,
     ) {
     }
 
@@ -48,7 +50,15 @@ final class PersonApiController extends AbstractController
         ];
         $orderByParam   = $request->query->getString('orderBy', 'id');
         $orderBy        = in_array($orderByParam, $allowedOrderBy, true) ? $orderByParam : 'id';
-        $people = $this->personService->getAll($orderBy);
+
+        $q     = trim($request->query->getString('q', ''));
+        $limit = $request->query->getInt('limit', 20);
+
+        if ($q === '') {
+            return ApiResponse::success([]);
+        }
+
+        $people = $this->personService->getAll($orderBy, $q, $limit);
 
         /** @var PersonResponseDto[] $dtos */
         $dtos = array_map(
@@ -124,8 +134,8 @@ final class PersonApiController extends AbstractController
                     'image/webp',
                     'image/gif',
                 ],
-                maxWidth: 4096,
-                maxHeight: 4096,
+                maxWidth: 2000,
+                maxHeight: 2000,
                 detectCorrupted: true,
             ),
         ]);
@@ -137,10 +147,20 @@ final class PersonApiController extends AbstractController
             );
         }
 
+        $oldPicture = $person->getPicture();
+        if ($oldPicture !== null) {
+            $this->avatarCacheService->bust($oldPicture);
+        }
+
         $this->personService->update($person);
         $person->setPictureFile(null);
 
-        return ApiResponse::success(['picture' => $person->getPicture()]);
+        $newPicture = $person->getPicture();
+        if ($newPicture !== null) {
+            $this->avatarCacheService->warmUp($newPicture);
+        }
+
+        return ApiResponse::success(['picture' => $newPicture]);
     }
 
     #[Route('/api/persons/{id}/account', name: 'api_persons_get_account', methods: ['GET'])]
