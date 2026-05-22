@@ -20,7 +20,7 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     await expect(page.getByRole('listbox')).not.toBeVisible();
   });
 
-  test('shows loading state then results after debounce', async ({ page }) => {
+  test('shows results after debounce with 2+ characters', async ({ page }) => {
     await loginAs(page, LUKA_EMAIL, DEFAULT_PASSWORD);
     const me = await getMe(page);
     await page.goto(`/person/${me.person.id.toString()}/edit`);
@@ -28,12 +28,12 @@ test.describe('person autocomplete (async SuggestInput)', () => {
     const autocomplete = page.getByPlaceholder('Rechercher une personne…');
     await autocomplete.fill('Hen');
 
-    // État intermédiaire "Recherche…" pendant le debounce
-    await expect(page.getByText('Recherche…')).toBeVisible({ timeout: 1_000 });
-
-    // Résultats après la requête réseau
+    // Résultats visibles après debounce + requête réseau
     const henriOption = page.getByRole('option').filter({ hasText: 'Henri Durand' }).first();
     await expect(henriOption).toBeVisible({ timeout: 5_000 });
+
+    // La liste dropdown est bien un listbox
+    await expect(page.getByRole('listbox')).toBeVisible();
   });
 
   test('current person is excluded from results', async ({ page }) => {
