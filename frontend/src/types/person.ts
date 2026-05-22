@@ -24,6 +24,7 @@ export interface Person {
   characteristics: Characteristic[];
   filieres: Filiere[];
   associations: Association[];
+  links: PersonLink[];
 }
 
 export interface FiliereRequest {
@@ -41,6 +42,24 @@ export interface AssociationRequest {
   endDate: string | null;
 }
 
+export interface CharacteristicRequest {
+  id: number | null;
+  typeId?: number;
+  value: string | null;
+  visible: boolean;
+}
+
+export interface PersonLink {
+  id: number;
+  title: string;
+  url: string;
+}
+
+export interface PersonLinkRequest {
+  title: string;
+  url: string;
+}
+
 export interface PersonRequest {
   firstName: string;
   lastName: string;
@@ -49,6 +68,8 @@ export interface PersonRequest {
   description: string | null;
   filieres: FiliereRequest[];
   associations: AssociationRequest[];
+  characteristics?: CharacteristicRequest[];
+  links?: PersonLinkRequest[];
 }
 
 export interface Filiere {

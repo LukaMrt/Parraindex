@@ -109,6 +109,12 @@ class Person implements \Stringable
     #[ORM\OneToMany(targetEntity: PersonAssociation::class, mappedBy: 'person', cascade: ['persist'], orphanRemoval: true)]
     private Collection $associations;
 
+    /**
+     * @var Collection<int, PersonLink>
+     */
+    #[ORM\OneToMany(targetEntity: PersonLink::class, mappedBy: 'person', cascade: ['persist'], orphanRemoval: true)]
+    private Collection $links;
+
     public function __construct()
     {
         $this->godFathers      = new ArrayCollection();
@@ -117,6 +123,7 @@ class Person implements \Stringable
         $this->createdAt       = new \DateTime();
         $this->filieres        = new ArrayCollection();
         $this->associations    = new ArrayCollection();
+        $this->links = new ArrayCollection();
     }
 
     public function getId(): int
@@ -461,6 +468,35 @@ class Person implements \Stringable
         $this->associations->clear();
         foreach ($personAssociations as $pa) {
             $this->addAssociation($pa);
+        }
+    }
+
+    /**
+     * @return Collection<int, PersonLink>
+     */
+    public function getLinks(): Collection
+    {
+        return $this->links;
+    }
+
+    public function addLink(PersonLink $link): static
+    {
+        if (!$this->links->contains($link)) {
+            $this->links->add($link);
+            $link->setPerson($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @param PersonLink[] $links
+     */
+    public function replaceLinks(array $links): void
+    {
+        $this->links->clear();
+        foreach ($links as $link) {
+            $this->addLink($link);
         }
     }
 }

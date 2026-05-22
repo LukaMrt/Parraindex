@@ -7,8 +7,11 @@ namespace App\Service;
 use App\Dto\Person\AssociationRequestDto;
 use App\Dto\Person\AssociationResponseDto;
 use App\Dto\Person\CharacteristicDto;
+use App\Dto\Person\CharacteristicRequestDto;
 use App\Dto\Person\FiliereRequestDto;
 use App\Dto\Person\FiliereResponseDto;
+use App\Dto\Person\PersonLinkDto;
+use App\Dto\Person\PersonLinkRequestDto;
 use App\Dto\Person\PersonResponseDto;
 use App\Dto\Sponsor\SponsorResponseDto;
 use App\Entity\Characteristic\Characteristic;
@@ -16,10 +19,12 @@ use App\Entity\Characteristic\CharacteristicType;
 use App\Entity\Person\Association;
 use App\Entity\Person\Person;
 use App\Entity\Person\PersonAssociation;
+use App\Entity\Person\PersonLink;
 use App\Entity\Sponsor\Sponsor;
 use App\Entity\Person\Filiere;
 use App\Entity\Person\PersonFiliere;
 use App\Entity\Person\School;
+use App\Repository\CharacteristicRepository;
 use App\Repository\CharacteristicTypeRepository;
 use App\Repository\Person\AssociationRepository;
 use App\Repository\Person\FiliereRepository;
@@ -31,6 +36,7 @@ final readonly class PersonService
     public function __construct(
         private PersonRepository $personRepository,
         private CharacteristicTypeRepository $characteristicTypeRepository,
+        private CharacteristicRepository $characteristicRepository,
         private FiliereRepository $filiereRepository,
         private SchoolRepository $schoolRepository,
         private AssociationRepository $associationRepository,
@@ -167,7 +173,15 @@ final readonly class PersonService
                     endDate: $pa->getEndDate()?->format('Y-m-d'),
                 ),
                 $person->getAssociations()->toArray()
-            )
+            ),
+            links: array_map(
+                static fn(PersonLink $l): PersonLinkDto => new PersonLinkDto(
+                    id: (int) $l->getId(),
+                    title: $l->getTitle(),
+                    url: $l->getUrl(),
+                ),
+                $person->getLinks()->toArray()
+            ),
         );
     }
 
@@ -240,6 +254,63 @@ final readonly class PersonService
         );
 
         return $personAssociation;
+    }
+
+    /**
+     * @param CharacteristicRequestDto[] $dtos
+     */
+    public function syncCharacteristics(Person $person, array $dtos): void
+    {
+        // Build a map of existing characteristics by id for fast lookup
+        $existingById = [];
+        foreach ($person->getCharacteristics() as $characteristic) {
+            $id = $characteristic->getId();
+            if ($id !== null) {
+                $existingById[$id] = $characteristic;
+            }
+        }
+
+        foreach ($dtos as $dto) {
+            if ($dto->id !== null && isset($existingById[$dto->id])) {
+                // Update existing
+                $existingById[$dto->id]->setValue($dto->value ?? '');
+                $existingById[$dto->id]->setVisible($dto->visible);
+            } elseif ($dto->typeId !== null) {
+                // Create new characteristic for this type if not already present
+                $type = $this->characteristicTypeRepository->find($dto->typeId);
+                if ($type === null) {
+                    continue;
+                }
+
+                $alreadyExists = $person->getCharacteristics()->exists(
+                    static fn(int $key, Characteristic $c): bool => $c->getType()?->getId() === $type->getId(),
+                );
+                if ($alreadyExists) {
+                    continue;
+                }
+
+                $characteristic = new Characteristic();
+                $characteristic->setPerson($person);
+                $characteristic->setType($type);
+                $characteristic->setValue($dto->value ?? '');
+                $characteristic->setVisible($dto->visible);
+                $person->addCharacteristic($characteristic);
+                $this->characteristicRepository->create($characteristic);
+            }
+        }
+    }
+
+    /**
+     * @param PersonLinkRequestDto[] $dtos
+     */
+    public function syncLinks(Person $person, array $dtos): void
+    {
+        $person->replaceLinks(array_map(
+            static fn(PersonLinkRequestDto $dto): PersonLink => new PersonLink()
+                ->setTitle($dto->title)
+                ->setUrl($dto->url),
+            $dtos,
+        ));
     }
 
     private function buildPersonFiliere(FiliereRequestDto $dto): PersonFiliere

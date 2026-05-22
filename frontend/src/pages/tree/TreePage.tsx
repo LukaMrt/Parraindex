@@ -1,8 +1,9 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useReducer, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router';
 import { usePersonFilter } from '../../hooks/usePersonFilter';
 import { DirectoryToolbar } from './toolbar/DirectoryToolbar';
 import type { DirectoryView } from './types';
+import type { Person } from '../../types/person';
 import { usePersons } from './usePersons';
 import { useSponsorsGraph } from './useSponsorsGraph';
 import { GridView } from './views/GridView';
@@ -11,10 +12,39 @@ import { TimelineView } from './views/TimelineView';
 import { TreeView } from './views/TreeView';
 import { EgoGraphView } from './views/EgoGraphView';
 
+interface ShuffleAction {
+  type: 'SET';
+  persons: Person[];
+}
+
+function shuffleReducer(state: Person[], action: ShuffleAction): Person[] {
+  if (state.length > 0) return state;
+  const copy = [...action.persons];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const a = copy[i];
+    const b = copy[j];
+    if (a !== undefined && b !== undefined) {
+      copy[i] = b;
+      copy[j] = a;
+    }
+  }
+  return copy;
+}
+
 export function TreePage() {
   const { persons, loading } = usePersons();
   const { links, loading: linksLoading } = useSponsorsGraph(persons);
   const [view, setView] = useState<DirectoryView>('grid');
+  const [shuffledPersons, dispatch] = useReducer(shuffleReducer, []);
+
+  useEffect(() => {
+    if (!loading && persons.length > 0) {
+      dispatch({ type: 'SET', persons });
+    }
+  }, [loading, persons]);
+
+  const displayPersons = shuffledPersons.length > 0 ? shuffledPersons : persons;
   const [searchParams] = useSearchParams();
   const initialYear = searchParams.get('year') ? Number(searchParams.get('year')) : null;
 
@@ -22,16 +52,40 @@ export function TreePage() {
     name,
     years: selectedYears,
     alphabetical,
+    filieres: selectedFilieres,
+    schools: selectedSchools,
     filtered,
     setName,
     toggleYear,
     clearYears,
     toggleAlphabetical,
-  } = usePersonFilter(persons, initialYear !== null ? [initialYear] : []);
+    toggleFiliere,
+    clearFilieres,
+    toggleSchool,
+    clearSchools,
+  } = usePersonFilter(displayPersons, initialYear !== null ? [initialYear] : []);
 
   const availableYears = useMemo(() => {
     const yearSet = new Set(persons.map((p) => p.startYear));
     return Array.from(yearSet).sort((a, b) => a - b);
+  }, [persons]);
+
+  const availableFilieres = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of persons) {
+      for (const f of p.filieres) set.add(f.name);
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'fr'));
+  }, [persons]);
+
+  const availableSchools = useMemo(() => {
+    const set = new Set<string>();
+    for (const p of persons) {
+      for (const f of p.filieres) {
+        if (f.schoolName) set.add(f.schoolName);
+      }
+    }
+    return Array.from(set).sort((a, b) => a.localeCompare(b, 'fr'));
   }, [persons]);
 
   return (
@@ -59,6 +113,14 @@ export function TreePage() {
         selectedYears={selectedYears}
         onToggleYear={toggleYear}
         onClearYears={clearYears}
+        availableFilieres={availableFilieres}
+        selectedFilieres={selectedFilieres}
+        onToggleFiliere={toggleFiliere}
+        onClearFilieres={clearFilieres}
+        availableSchools={availableSchools}
+        selectedSchools={selectedSchools}
+        onToggleSchool={toggleSchool}
+        onClearSchools={clearSchools}
         resultCount={filtered.length}
         loading={loading}
       />

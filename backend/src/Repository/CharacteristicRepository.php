@@ -17,4 +17,9 @@ class CharacteristicRepository extends ServiceEntityRepository
     {
         parent::__construct($managerRegistry, Characteristic::class);
     }
+
+    public function create(Characteristic $characteristic): void
+    {
+        $this->getEntityManager()->persist($characteristic);
+    }
 }

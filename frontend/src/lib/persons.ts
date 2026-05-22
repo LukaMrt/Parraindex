@@ -4,6 +4,8 @@ export interface PersonFilter {
   name: string;
   years: number[];
   alphabetical: boolean;
+  filieres: string[];
+  schools: string[];
 }
 
 function normalize(s: string): string {
@@ -13,9 +15,17 @@ function normalize(s: string): string {
 export function filterPersons(persons: Person[], filter: PersonFilter): Person[] {
   const query = normalize(filter.name.trim());
   const yearSet = new Set(filter.years);
+  const filiereSet = new Set(filter.filieres);
+  const schoolSet = new Set(filter.schools);
 
   let result = persons.filter((p) => {
     if (yearSet.size > 0 && !yearSet.has(p.startYear)) return false;
+    if (filiereSet.size > 0 && !p.filieres.some((f) => filiereSet.has(f.name))) return false;
+    if (
+      schoolSet.size > 0 &&
+      !p.filieres.some((f) => f.schoolName !== null && schoolSet.has(f.schoolName))
+    )
+      return false;
     if (query.length > 0) {
       const full = normalize(`${p.lastName} ${p.firstName}`);
       const reversed = normalize(`${p.firstName} ${p.lastName}`);
