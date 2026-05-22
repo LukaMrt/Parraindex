@@ -240,10 +240,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function __unserialize(array $data): void
     {
-        $this->id          = $data['id'] ?? null;
-        $this->email       = $data['email'] ?? null;
-        $this->password    = $data['password'] ?? null;
-        $this->roles       = $data['roles'] ?? [Role::USER->value];
+        $this->id       = $data['id'] ?? null;
+        $this->email    = $data['email'] ?? null;
+        $this->password = $data['password'] ?? null;
+        $this->roles    = $data['roles'] ?? [Role::USER->value];
         $this->isValidated = $data['isValidated'] ?? false;
     }
 }
