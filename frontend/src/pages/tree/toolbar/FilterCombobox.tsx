@@ -184,7 +184,7 @@ export function FilterCombobox({
                       setQuery('');
                     }}
                     className={cn(
-                      'flex w-full cursor-pointer items-center justify-between gap-3 rounded-[7px] px-3 py-1.5 text-[12.5px] transition-colors',
+                      'flex w-full cursor-pointer items-center justify-between gap-3 rounded-[7px] px-3 py-1.5 text-left text-[12.5px] transition-colors',
                       isSelected ? 'bg-ink/8 font-medium text-ink' : 'text-ink-2 hover:bg-bg',
                     )}
                   >
