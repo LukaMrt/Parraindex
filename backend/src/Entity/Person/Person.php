@@ -89,7 +89,7 @@ class Person implements \Stringable
     private Collection $godChildren;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeInterface $createdAt;
 
     /**
      * @var Collection<int, Characteristic>

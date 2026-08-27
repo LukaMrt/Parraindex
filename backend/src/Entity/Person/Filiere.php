@@ -22,7 +22,7 @@ final class Filiere
     private ?string $name = null;
 
     #[ORM\Column(length: 7, nullable: true)]
-    private ?string $color = null;
+    private ?string $color;
 
     /**
      * @var Collection<int, PersonFiliere>

@@ -95,7 +95,7 @@ final class UserTest extends TestCase
 
         // Then
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The email of the user is not set.');
+        $this->expectExceptionMessageIsOrContains('The email of the user is not set.');
 
         // When
         $user->getUserIdentifier();
