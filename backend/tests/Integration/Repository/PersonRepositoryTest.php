@@ -57,7 +57,7 @@ final class PersonRepositoryTest extends KernelTestCase
     {
         // Then
         $this->expectException(\InvalidArgumentException::class);
-        $this->expectExceptionMessage('Invalid orderBy parameter: invalidColumn');
+        $this->expectExceptionMessageIsOrContains('Invalid orderBy parameter: invalidColumn');
 
         // When
         $this->repository->getAll('invalidColumn');

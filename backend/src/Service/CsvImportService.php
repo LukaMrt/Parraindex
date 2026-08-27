@@ -294,7 +294,7 @@ final readonly class CsvImportService
      */
     private function validateHeaders(array $headers): bool
     {
-        return array_all(self::REQUIRED_HEADERS, fn($required): bool => in_array($required, $headers, true));
+        return array_all(self::REQUIRED_HEADERS, fn(string $required): bool => in_array($required, $headers, true));
     }
 
     /**

@@ -53,7 +53,7 @@ final readonly class ApiAuthenticationSuccessHandler implements AuthenticationSu
             name: 'XSRF-TOKEN',
             value: $xsrfToken,
             httpOnly: false,
-            sameSite: 'lax',
+            sameSite: Cookie::SAMESITE_LAX,
         ));
         $request->getSession()->set('_xsrf_token', $xsrfToken);
 

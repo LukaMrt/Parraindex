@@ -87,7 +87,7 @@ function AddSponsorForm({
 
   const searchOtherPersons = useCallback(
     async (q: string): Promise<Person[]> => {
-      const data = await queryClient.fetchQuery(personQueries.search(q, 20));
+      const data = await queryClient.query(personQueries.search(q, 20));
       return data.filter((p) => p.id !== personId);
     },
     [queryClient, personId],
@@ -1509,14 +1509,12 @@ export function EditPersonPage() {
           diplomaName,
         }),
       ),
-      associations: associations.map(
-        ({ name, poste, startDate, endDate }): AssociationRequest => ({
-          name,
-          poste,
-          startDate,
-          endDate,
-        }),
-      ),
+      associations: associations.map(({ name, poste, startDate, endDate }): AssociationRequest => ({
+        name,
+        poste,
+        startDate,
+        endDate,
+      })),
       links: freeLinks
         .filter((l) => l.title.trim() && l.url.trim())
         .map(({ title, url }): PersonLinkRequest => ({ title, url })),

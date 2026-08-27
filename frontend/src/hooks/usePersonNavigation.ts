@@ -10,7 +10,7 @@ export function usePersonNavigation() {
 
   async function navigateTo(id: number) {
     setIsPending(true);
-    await queryClient.prefetchQuery(personQueries.detail(id));
+    await queryClient.query(personQueries.detail(id)).catch(() => undefined);
     void navigate(`/person/${id}`);
   }
 

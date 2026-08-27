@@ -20,7 +20,6 @@ return RectorConfig::configure()
         __DIR__ . '/src/Kernel.php',
         __DIR__ . '/config/bundles.php',
         __DIR__ . '/config/reference.php',
-        ControllerMethodInjectionToConstructorRector::class,
     ])
     ->withPhpSets(
         php85: true
@@ -45,7 +44,6 @@ return RectorConfig::configure()
         naming: false,
         instanceOf: true,
         earlyReturn: true,
-        strictBooleans: false,
         carbon: false,
         rectorPreset: true,
         phpunitCodeQuality: true,
