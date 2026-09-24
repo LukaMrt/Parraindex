@@ -43,7 +43,7 @@
         "symfony/validator": "8.*",
         "symfony/yaml": "8.*",
         "symfonycasts/verify-email-bundle": "1.*",
-        "vich/uploader-bundle": "^2.9"
+        "vich/uploader-bundle": "^3.0"
     },
     "config": {
         "allow-plugins": {
