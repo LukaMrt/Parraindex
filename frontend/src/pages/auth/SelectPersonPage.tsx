@@ -60,7 +60,7 @@ export function SelectPersonPage() {
     return () => {
       abortRef.current?.abort();
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
 
   const filtered = persons.filter((p) => p.fullName.toLowerCase().includes(search.toLowerCase()));
 
