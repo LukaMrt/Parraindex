@@ -95,7 +95,6 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
       if (children.length > 0) setDescendantGens([children]);
       setInitialLoading(false);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [directIds]);
 
   // ── Layout
