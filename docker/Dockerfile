@@ -16,7 +16,7 @@ COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 ENV SERVER_NAME=":80"
 
-RUN apk add --no-cache netcat-openbsd
+RUN apk upgrade --no-cache && apk add --no-cache netcat-openbsd
 
 RUN apk add --no-cache --virtual .build-deps autoconf build-base libpng-dev libjpeg-turbo-dev libwebp-dev icu-dev imagemagick-dev \
     && docker-php-ext-configure gd --with-jpeg --with-webp \
