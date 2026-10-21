@@ -10,7 +10,7 @@ RUN npm run build
 FROM composer:2 AS composer
 
 # Stage 3: Common base (everything except the composer install)
-FROM dunglas/frankenphp:1.12-php8.5-alpine AS base
+FROM dunglas/frankenphp:1.13-php8.5-alpine AS base
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
