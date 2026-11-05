@@ -1,6 +1,11 @@
 name: Quality
 
 on:
+    # Monthly rebuild without cache: picks up base image and OS package
+    # fixes even when the code does not change (trivy scan runs on the 5th).
+    schedule:
+        - cron: '0 4 1 * *'
+    workflow_dispatch:
     push:
         branches: [ master ]
     pull_request:
@@ -383,7 +388,7 @@ jobs:
             - e2e-lint
             - e2e-typecheck
             - e2e-tests
-        if: github.ref == 'refs/heads/master' && github.event_name == 'push'
+        if: github.ref == 'refs/heads/master' && github.event_name != 'pull_request'
         runs-on: ubuntu-latest
         permissions:
             contents: read
@@ -403,6 +408,7 @@ jobs:
             -   name: Build and push
                 uses: docker/build-push-action@v6
                 with:
+                    no-cache: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
                     context: .
                     file: docker/Dockerfile
                     target: prod
