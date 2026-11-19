@@ -28,6 +28,9 @@ test('tree directory filters: search, year, count', async ({ page }) => {
   // Ouvrir le combobox "Promo" puis sélectionner "2021 / 22"
   await page.getByPlaceholder('Promo').click();
   await page.getByRole('button', { name: /^2021 \/ 22$/ }).click();
+  // Le filtre passe par l'URL (navigation asynchrone) : attendre que le compteur bouge
+  // avant de le lire, sinon on relit la valeur d'avant le filtre.
+  await expect(counter).not.toHaveText(initialText);
   const filteredText = (await counter.textContent()) ?? '';
   const filteredCount = parseInt(/(\d+)/.exec(filteredText)?.[1] ?? '0', 10);
   expect(filteredCount).toBeGreaterThan(0);
