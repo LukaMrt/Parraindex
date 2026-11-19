@@ -9,6 +9,7 @@ use App\Entity\Characteristic\CharacteristicType;
 use App\Entity\Person\Person;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class CharacteristicsFixture extends Fixture implements DependentFixtureInterface
@@ -543,7 +544,7 @@ class CharacteristicsFixture extends Fixture implements DependentFixtureInterfac
     }
 
     /**
-     * @return string[]
+     * @return list<class-string<FixtureInterface>>
      */
     #[\Override]
     public function getDependencies(): array

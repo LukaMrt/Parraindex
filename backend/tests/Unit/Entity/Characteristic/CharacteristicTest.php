@@ -19,7 +19,7 @@ final class CharacteristicTest extends TestCase
         $result = (string) $characteristic;
 
         // Then
-        $this->assertSame('test@example.com', $result);
+        self::assertSame('test@example.com', $result);
     }
 
     public function testToStringReturnsEmptyStringWhenValueIsNull(): void
@@ -31,6 +31,6 @@ final class CharacteristicTest extends TestCase
         $result = (string) $characteristic;
 
         // Then
-        $this->assertSame('', $result);
+        self::assertSame('', $result);
     }
 }

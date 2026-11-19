@@ -19,7 +19,7 @@ final class ContactTest extends TestCase
         $result = $contact->getEntryYear();
 
         // Then
-        $this->assertSame(2022, $result);
+        self::assertSame(2022, $result);
     }
 
     public function testGetEntryYearReturnsActualValueWhenSet(): void
@@ -32,7 +32,7 @@ final class ContactTest extends TestCase
         $result = $contact->getEntryYear();
 
         // Then
-        $this->assertSame(2024, $result);
+        self::assertSame(2024, $result);
     }
 
     public function testGetRelatedPersonFirstNameReturnsEmptyStringByDefault(): void
@@ -44,7 +44,7 @@ final class ContactTest extends TestCase
         $result = $contact->getRelatedPersonFirstName();
 
         // Then
-        $this->assertSame('', $result);
+        self::assertSame('', $result);
     }
 
     public function testGetRelatedPersonLastNameReturnsEmptyStringByDefault(): void
@@ -56,7 +56,7 @@ final class ContactTest extends TestCase
         $result = $contact->getRelatedPersonLastName();
 
         // Then
-        $this->assertSame('', $result);
+        self::assertSame('', $result);
     }
 
     public function testGetRelatedPerson2FirstNameReturnsEmptyStringByDefault(): void
@@ -68,7 +68,7 @@ final class ContactTest extends TestCase
         $result = $contact->getRelatedPerson2FirstName();
 
         // Then
-        $this->assertSame('', $result);
+        self::assertSame('', $result);
     }
 
     public function testGetRelatedPerson2LastNameReturnsEmptyStringByDefault(): void
@@ -80,7 +80,7 @@ final class ContactTest extends TestCase
         $result = $contact->getRelatedPerson2LastName();
 
         // Then
-        $this->assertSame('', $result);
+        self::assertSame('', $result);
     }
 
     public function testGetSponsorTypeReturnsUnknownByDefault(): void
@@ -92,6 +92,6 @@ final class ContactTest extends TestCase
         $result = $contact->getSponsorType();
 
         // Then
-        $this->assertSame(SponsorType::UNKNOWN, $result);
+        self::assertSame(SponsorType::UNKNOWN, $result);
     }
 }

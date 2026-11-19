@@ -22,7 +22,7 @@ final class CharacteristicTypeTest extends TestCase
         $result = $type1->equals($type2);
 
         // Then
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testEqualsReturnsFalseForDifferentId(): void
@@ -38,6 +38,6 @@ final class CharacteristicTypeTest extends TestCase
         $result = $type1->equals($type2);
 
         // Then
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 }

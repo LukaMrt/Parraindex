@@ -49,7 +49,7 @@ final class UserRepositoryTest extends KernelTestCase
         $this->repository->update($user);
 
         // Then
-        $this->assertInstanceOf(\DateTimeInterface::class, $user->getCreatedAt());
+        self::assertInstanceOf(\DateTimeInterface::class, $user->getCreatedAt());
     }
 
     public function testUpdateDoesNotOverrideExistingCreatedAt(): void
@@ -69,7 +69,7 @@ final class UserRepositoryTest extends KernelTestCase
         $this->repository->update($user);
 
         // Then
-        $this->assertEquals($existingDate, $user->getCreatedAt());
+        self::assertEquals($existingDate, $user->getCreatedAt());
     }
 
     public function testUpgradePasswordUpdatesPasswordHash(): void
@@ -77,7 +77,6 @@ final class UserRepositoryTest extends KernelTestCase
         // Given
         $person = $this->createPerson('Test', 'Upgrade', 2024);
 
-        /** @var UserPasswordHasherInterface $hasher */
         $hasher = self::getContainer()->get(UserPasswordHasherInterface::class);
 
         $user = new User();
@@ -94,12 +93,12 @@ final class UserRepositoryTest extends KernelTestCase
         $this->repository->upgradePassword($user, $newPassword);
 
         // Then
-        $this->assertSame($newPassword, $user->getPassword());
+        self::assertSame($newPassword, $user->getPassword());
 
         // Verify in database
         $updatedUser = $this->repository->findOneBy(['email' => 'test.upgrade@etu.univ-lyon1.fr']);
-        $this->assertInstanceOf(User::class, $updatedUser);
-        $this->assertSame($newPassword, $updatedUser->getPassword());
+        self::assertInstanceOf(User::class, $updatedUser);
+        self::assertSame($newPassword, $updatedUser->getPassword());
     }
 
     public function testUpgradePasswordThrowsExceptionForInvalidUser(): void

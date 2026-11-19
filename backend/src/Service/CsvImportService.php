@@ -298,7 +298,7 @@ final readonly class CsvImportService
     }
 
     /**
-     * @return string[][]
+     * @return list<list<string>>
      */
     private function parseCsv(string $content): array
     {
@@ -312,7 +312,7 @@ final readonly class CsvImportService
 
         return array_map(
             static function (string $line): array {
-                /** @var string[] $parsed */
+                /** @var list<string> $parsed */
                 $parsed = str_getcsv($line, escape: '\\');
                 return $parsed;
             },

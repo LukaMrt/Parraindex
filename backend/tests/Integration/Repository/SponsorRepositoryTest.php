@@ -46,12 +46,12 @@ final class SponsorRepositoryTest extends KernelTestCase
         $sponsorId = $sponsor->getId();
 
         // When
-        $this->assertNotNull($sponsorId);
+        self::assertNotNull($sponsorId);
         $result = $this->repository->getById($sponsorId);
 
         // Then
-        $this->assertInstanceOf(Sponsor::class, $result);
-        $this->assertSame($sponsorId, $result->getId());
+        self::assertInstanceOf(Sponsor::class, $result);
+        self::assertSame($sponsorId, $result->getId());
     }
 
     public function testGetByIdReturnsNullForNonExistentId(): void
@@ -60,7 +60,7 @@ final class SponsorRepositoryTest extends KernelTestCase
         $result = $this->repository->getById(999999);
 
         // Then
-        $this->assertNotInstanceOf(Sponsor::class, $result);
+        self::assertNotInstanceOf(Sponsor::class, $result);
     }
 
     public function testGetByPeopleIdsReturnsExistingSponsor(): void
@@ -80,11 +80,11 @@ final class SponsorRepositoryTest extends KernelTestCase
         $result = $this->repository->getByPeopleIds($godFather->getId(), $godChild->getId());
 
         // Then
-        $this->assertInstanceOf(Sponsor::class, $result);
-        $this->assertInstanceOf(Person::class, $result->getGodFather());
-        $this->assertInstanceOf(Person::class, $result->getGodChild());
-        $this->assertSame($godFather->getId(), $result->getGodFather()->getId());
-        $this->assertSame($godChild->getId(), $result->getGodChild()->getId());
+        self::assertInstanceOf(Sponsor::class, $result);
+        self::assertInstanceOf(Person::class, $result->getGodFather());
+        self::assertInstanceOf(Person::class, $result->getGodChild());
+        self::assertSame($godFather->getId(), $result->getGodFather()->getId());
+        self::assertSame($godChild->getId(), $result->getGodChild()->getId());
     }
 
     public function testGetByPeopleIdsReturnsNullWhenNotFound(): void
@@ -93,7 +93,7 @@ final class SponsorRepositoryTest extends KernelTestCase
         $result = $this->repository->getByPeopleIds(999999, 999998);
 
         // Then
-        $this->assertNotInstanceOf(Sponsor::class, $result);
+        self::assertNotInstanceOf(Sponsor::class, $result);
     }
 
     public function testCreateSetsCreatedAtWhenNull(): void
@@ -110,7 +110,7 @@ final class SponsorRepositoryTest extends KernelTestCase
         $this->repository->create($sponsor);
 
         // Then
-        $this->assertEqualsWithDelta(time(), $sponsor->getCreatedAt()->getTimestamp(), 5);
+        self::assertEqualsWithDelta(time(), $sponsor->getCreatedAt()->getTimestamp(), 5);
     }
 
     public function testCreateSetsDefaultTypeWhenNull(): void
@@ -127,7 +127,7 @@ final class SponsorRepositoryTest extends KernelTestCase
         $this->repository->create($sponsor);
 
         // Then
-        $this->assertSame(Type::UNKNOWN, $sponsor->getType());
+        self::assertSame(Type::UNKNOWN, $sponsor->getType());
     }
 
     public function testUpdateModifiesExistingSponsor(): void
@@ -149,10 +149,10 @@ final class SponsorRepositoryTest extends KernelTestCase
 
         // Then
         $sponsorId = $sponsor->getId();
-        $this->assertNotNull($sponsorId);
+        self::assertNotNull($sponsorId);
         $updatedSponsor = $this->repository->getById($sponsorId);
-        $this->assertInstanceOf(Sponsor::class, $updatedSponsor);
-        $this->assertSame(Type::HEART, $updatedSponsor->getType());
+        self::assertInstanceOf(Sponsor::class, $updatedSponsor);
+        self::assertSame(Type::HEART, $updatedSponsor->getType());
     }
 
     public function testDeleteRemovesSponsor(): void
@@ -169,12 +169,12 @@ final class SponsorRepositoryTest extends KernelTestCase
         $sponsorId = $sponsor->getId();
 
         // When
-        $this->assertNotNull($sponsorId);
+        self::assertNotNull($sponsorId);
         $this->repository->delete($sponsor);
 
         // Then
         $result = $this->repository->getById($sponsorId);
-        $this->assertNotInstanceOf(Sponsor::class, $result);
+        self::assertNotInstanceOf(Sponsor::class, $result);
     }
 
     private function createPerson(string $firstName, string $lastName, int $startYear): Person

@@ -20,7 +20,7 @@ final class SponsorTest extends TestCase
         $result = $sponsor->formatDate('Y-m-d');
 
         // Then
-        $this->assertSame('2024-01-15', $result);
+        self::assertSame('2024-01-15', $result);
     }
 
     public function testFormatDateReturnsEmptyStringWhenDateIsNull(): void
@@ -32,7 +32,7 @@ final class SponsorTest extends TestCase
         $result = $sponsor->formatDate('Y-m-d');
 
         // Then
-        $this->assertSame('', $result);
+        self::assertSame('', $result);
     }
 
     public function testFormatDateSupportsCustomFormat(): void
@@ -46,6 +46,6 @@ final class SponsorTest extends TestCase
         $result = $sponsor->formatDate('d/m/Y H:i');
 
         // Then
-        $this->assertSame('15/01/2024 14:30', $result);
+        self::assertSame('15/01/2024 14:30', $result);
     }
 }

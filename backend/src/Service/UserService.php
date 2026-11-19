@@ -150,7 +150,7 @@ final readonly class UserService
      */
     public function extractNamesFromEmail(string $email): ?array
     {
-        if (!preg_match('/^([a-zA-Z-]+)\.([a-zA-Z-]+)@(?:etu\.univ-lyon1\.fr|cpe\.fr|insa-lyon\.fr)$/', $email, $matches)) {
+        if (preg_match('/^([a-zA-Z-]+)\.([a-zA-Z-]+)@(?:etu\.univ-lyon1\.fr|cpe\.fr|insa-lyon\.fr)$/', $email, $matches) !== 1) {
             return null;
         }
 

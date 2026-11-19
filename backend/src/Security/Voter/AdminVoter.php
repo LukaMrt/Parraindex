@@ -15,9 +15,6 @@ use Symfony\Component\Security\Core\Authorization\Voter\Voter;
  */
 final class AdminVoter extends Voter
 {
-    /**
-     * @param Person $subject
-     */
     #[\Override]
     protected function supports(string $attribute, mixed $subject): bool
     {

@@ -10,6 +10,7 @@ use App\Entity\Person\PersonFiliere;
 use App\Entity\Person\School;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
@@ -227,6 +228,9 @@ class PersonFiliereFixture extends Fixture implements DependentFixtureInterface
         $manager->flush();
     }
 
+    /**
+     * @return list<class-string<FixtureInterface>>
+     */
     #[\Override]
     public function getDependencies(): array
     {

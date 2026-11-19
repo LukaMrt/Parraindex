@@ -9,6 +9,7 @@ use App\Entity\Sponsor\Sponsor;
 use App\Entity\Sponsor\Type;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class SponsorFixture extends Fixture implements DependentFixtureInterface
@@ -202,7 +203,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @return string[]
+     * @return list<class-string<FixtureInterface>>
      */
     #[\Override]
     public function getDependencies(): array

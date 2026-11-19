@@ -26,12 +26,12 @@ final class AuthApiControllerTest extends WebTestCase
             'password' => 'password',
         ]);
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $data = $this->responseData();
-        $this->assertArrayHasKey('email', $data);
-        $this->assertSame('luka.maret@etu.univ-lyon1.fr', $data['email']);
-        $this->assertArrayHasKey('isAdmin', $data);
-        $this->assertTrue((bool) $data['isAdmin']);
+        self::assertArrayHasKey('email', $data);
+        self::assertSame('luka.maret@etu.univ-lyon1.fr', $data['email']);
+        self::assertArrayHasKey('isAdmin', $data);
+        self::assertTrue((bool) $data['isAdmin']);
     }
 
     public function testLoginWithInvalidCredentialsReturnsUnauthorized(): void
@@ -41,9 +41,9 @@ final class AuthApiControllerTest extends WebTestCase
             'password' => 'wrong_password',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         $error = $this->responseError();
-        $this->assertArrayHasKey('code', $error);
+        self::assertArrayHasKey('code', $error);
     }
 
     public function testLoginWithUnknownEmailReturnsUnauthorized(): void
@@ -53,7 +53,7 @@ final class AuthApiControllerTest extends WebTestCase
             'password' => 'password',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testMeWhenAuthenticatedReturnsUserProfile(): void
@@ -62,19 +62,19 @@ final class AuthApiControllerTest extends WebTestCase
 
         $this->client->request(Request::METHOD_GET, '/api/auth/me');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $data = $this->responseData();
-        $this->assertSame('luka.maret@etu.univ-lyon1.fr', $data['email']);
-        $this->assertArrayHasKey('person', $data);
+        self::assertSame('luka.maret@etu.univ-lyon1.fr', $data['email']);
+        self::assertArrayHasKey('person', $data);
     }
 
     public function testMeWhenNotAuthenticatedReturnsUnauthorized(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/auth/me');
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         $error = $this->responseError();
-        $this->assertSame('UNAUTHORIZED', $error['code']);
+        self::assertSame('UNAUTHORIZED', $error['code']);
     }
 
     public function testLogoutWhenAuthenticatedReturnsSuccess(): void
@@ -83,7 +83,7 @@ final class AuthApiControllerTest extends WebTestCase
 
         $this->client->jsonRequest('POST', '/api/auth/logout');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testRegisterWithMissingFieldsReturnsValidationError(): void
@@ -92,9 +92,9 @@ final class AuthApiControllerTest extends WebTestCase
             'email' => 'test@etu.univ-lyon1.fr',
         ]);
 
-        $this->assertResponseIsUnprocessable();
+        self::assertResponseIsUnprocessable();
         $error = $this->responseError();
-        $this->assertSame('VALIDATION_ERROR', $error['code']);
+        self::assertSame('VALIDATION_ERROR', $error['code']);
     }
 
     public function testResetPasswordRequestAlwaysReturnsSuccess(): void
@@ -104,7 +104,7 @@ final class AuthApiControllerTest extends WebTestCase
             'callbackUrl' => 'http://localhost/reset-password',
         ]);
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testResetPasswordRequestWithoutCallbackUrlReturnsValidationError(): void
@@ -113,8 +113,8 @@ final class AuthApiControllerTest extends WebTestCase
             'email' => 'unknown@etu.univ-lyon1.fr',
         ]);
 
-        $this->assertResponseIsUnprocessable();
-        $this->assertSame('VALIDATION_ERROR', $this->responseError()['code']);
+        self::assertResponseIsUnprocessable();
+        self::assertSame('VALIDATION_ERROR', $this->responseError()['code']);
     }
 
     public function testResetPasswordConfirmWithInvalidTokenReturnsError(): void
@@ -124,8 +124,8 @@ final class AuthApiControllerTest extends WebTestCase
             'password' => 'NewStr0ng!Pass',
         ]);
 
-        $this->assertResponseIsUnprocessable();
+        self::assertResponseIsUnprocessable();
         $error = $this->responseError();
-        $this->assertSame('VALIDATION_ERROR', $error['code']);
+        self::assertSame('VALIDATION_ERROR', $error['code']);
     }
 }

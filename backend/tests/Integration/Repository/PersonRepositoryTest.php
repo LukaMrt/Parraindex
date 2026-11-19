@@ -28,14 +28,14 @@ final class PersonRepositoryTest extends KernelTestCase
         $persons = $this->repository->getAll('id');
 
         // Then
-        $this->assertNotEmpty($persons);
-        $this->assertContainsOnlyInstancesOf(Person::class, $persons);
+        self::assertNotEmpty($persons);
+        self::assertContainsOnlyInstancesOf(Person::class, $persons);
 
         // Verify ordering
         $ids       = array_map(static fn (Person $p): int => $p->getId(), $persons);
         $sortedIds = $ids;
         sort($sortedIds);
-        $this->assertSame($sortedIds, $ids);
+        self::assertSame($sortedIds, $ids);
     }
 
     public function testGetAllOrderByFirstNameReturnsPersonsOrderedByFirstName(): void
@@ -44,16 +44,17 @@ final class PersonRepositoryTest extends KernelTestCase
         $persons = $this->repository->getAll('firstName');
 
         // Then
-        $this->assertNotEmpty($persons);
+        self::assertNotEmpty($persons);
 
         // Verify ordering
         $firstNames = array_map(static fn (Person $p): string => $p->getFirstName(), $persons);
         // MySQL trie avec une collation insensible aux accents (« Théo » < « Thomas ») :
         // on compare avec un tri ICU plutôt qu'avec sort(), qui trie octet par octet.
         $sortedFirstNames = $firstNames;
-        $collator = new \Collator('fr_FR');
-        $collator->sort($sortedFirstNames);
-        $this->assertSame($sortedFirstNames, $firstNames);
+        $collator = collator_create('fr_FR');
+        self::assertInstanceOf(\Collator::class, $collator);
+        collator_sort($collator, $sortedFirstNames);
+        self::assertSame($sortedFirstNames, $firstNames);
     }
 
     public function testGetAllThrowsExceptionForInvalidOrderBy(): void
@@ -70,7 +71,7 @@ final class PersonRepositoryTest extends KernelTestCase
     {
         // Given
         $persons = $this->repository->getAll();
-        $this->assertNotEmpty($persons);
+        self::assertNotEmpty($persons);
 
         $existingPerson = $persons[0];
 
@@ -81,8 +82,8 @@ final class PersonRepositoryTest extends KernelTestCase
         );
 
         // Then
-        $this->assertInstanceOf(Person::class, $result);
-        $this->assertSame($existingPerson->getId(), $result->getId());
+        self::assertInstanceOf(Person::class, $result);
+        self::assertSame($existingPerson->getId(), $result->getId());
     }
 
     public function testGetByIdentityReturnsNullWhenNotFound(): void
@@ -91,14 +92,14 @@ final class PersonRepositoryTest extends KernelTestCase
         $result = $this->repository->getByIdentity('NonExistent', 'Person');
 
         // Then
-        $this->assertNotInstanceOf(Person::class, $result);
+        self::assertNotInstanceOf(Person::class, $result);
     }
 
     public function testFindWithRelationsLoadsAllRelations(): void
     {
         // Given
         $persons = $this->repository->getAll();
-        $this->assertNotEmpty($persons);
+        self::assertNotEmpty($persons);
 
         $personId = $persons[0]->getId();
 
@@ -106,14 +107,14 @@ final class PersonRepositoryTest extends KernelTestCase
         $result = $this->repository->findWithRelations($personId);
 
         // Then
-        $this->assertInstanceOf(Person::class, $result);
-        $this->assertSame($personId, $result->getId());
+        self::assertInstanceOf(Person::class, $result);
+        self::assertSame($personId, $result->getId());
 
         // Verify relations are loaded (no lazy loading queries)
         // Access collections to ensure they're initialized and counted
-        $this->assertGreaterThanOrEqual(0, $result->getGodFathers()->count());
-        $this->assertGreaterThanOrEqual(0, $result->getGodChildren()->count());
-        $this->assertGreaterThanOrEqual(0, $result->getCharacteristics()->count());
+        self::assertGreaterThanOrEqual(0, $result->getGodFathers()->count());
+        self::assertGreaterThanOrEqual(0, $result->getGodChildren()->count());
+        self::assertGreaterThanOrEqual(0, $result->getCharacteristics()->count());
     }
 
     public function testUpdateSetsCreatedAtWhenNull(): void
@@ -128,7 +129,7 @@ final class PersonRepositoryTest extends KernelTestCase
         $this->repository->update($person);
 
         // Then
-        $this->assertInstanceOf(\DateTimeInterface::class, $person->getCreatedAt());
+        self::assertInstanceOf(\DateTimeInterface::class, $person->getCreatedAt());
     }
 
     public function testUpdateKeepsPictureNullWhenNotSet(): void
@@ -144,6 +145,6 @@ final class PersonRepositoryTest extends KernelTestCase
 
         // Then
         // L'avatar par défaut est géré par le front : aucune valeur n'est forcée en base
-        $this->assertNull($person->getPicture());
+        self::assertNull($person->getPicture());
     }
 }

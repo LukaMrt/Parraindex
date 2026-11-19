@@ -22,55 +22,55 @@ final class TreeApiControllerTest extends WebTestCase
     {
         $this->client->request(Request::METHOD_GET, '/api/tree');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $items = $this->responseItems();
-        $this->assertNotEmpty($items);
+        self::assertNotEmpty($items);
 
         $first = $items[0];
-        $this->assertArrayHasKey('id', $first);
-        $this->assertArrayHasKey('firstName', $first);
-        $this->assertArrayHasKey('lastName', $first);
-        $this->assertArrayHasKey('startYear', $first);
-        $this->assertArrayHasKey('picture', $first);
+        self::assertArrayHasKey('id', $first);
+        self::assertArrayHasKey('firstName', $first);
+        self::assertArrayHasKey('lastName', $first);
+        self::assertArrayHasKey('startYear', $first);
+        self::assertArrayHasKey('picture', $first);
     }
 
     public function testTreeIsAccessibleWithoutAuthentication(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/tree');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testTreeReturnsPersonsOrderedById(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/tree');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $items = $this->responseItems();
 
         $ids       = array_column($items, 'id');
         $sortedIds = $ids;
         sort($sortedIds);
-        $this->assertSame($sortedIds, $ids);
+        self::assertSame($sortedIds, $ids);
     }
 
     public function testTreeReturnsTotalCount(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/tree');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $data = $this->responseData();
-        $this->assertArrayHasKey('total', $data);
-        $this->assertGreaterThan(0, $data['total']);
+        self::assertArrayHasKey('total', $data);
+        self::assertGreaterThan(0, $data['total']);
     }
 
     public function testTreePaginationLimitsResults(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/tree?page=1&limit=2');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $items = $this->responseItems();
-        $this->assertCount(2, $items);
+        self::assertCount(2, $items);
     }
 
     /**

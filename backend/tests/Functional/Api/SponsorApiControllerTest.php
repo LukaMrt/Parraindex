@@ -30,23 +30,23 @@ final class SponsorApiControllerTest extends WebTestCase
     {
         $sponsor = $this->getFirstSponsor();
 
-        $this->client->request(Request::METHOD_GET, '/api/sponsors/' . $sponsor->getId());
+        $this->client->request(Request::METHOD_GET, '/api/sponsors/' . $this->idOf($sponsor));
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $data = $this->responseData();
-        $this->assertSame($sponsor->getId(), $data['id']);
-        $this->assertArrayHasKey('godFatherId', $data);
-        $this->assertArrayHasKey('godChildId', $data);
-        $this->assertArrayHasKey('type', $data);
+        self::assertSame($sponsor->getId(), $data['id']);
+        self::assertArrayHasKey('godFatherId', $data);
+        self::assertArrayHasKey('godChildId', $data);
+        self::assertArrayHasKey('type', $data);
     }
 
     public function testShowReturnsNotFoundForUnknownId(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/sponsors/999999');
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
         $error = $this->responseError();
-        $this->assertSame('SPONSOR_NOT_FOUND', $error['code']);
+        self::assertSame('SPONSOR_NOT_FOUND', $error['code']);
     }
 
     public function testCreateSponsorAsAuthenticatedUserReturnsCreated(): void
@@ -63,10 +63,10 @@ final class SponsorApiControllerTest extends WebTestCase
             'type'        => SponsorTypeDto::CLASSIC->value,
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
         $data = $this->responseData();
-        $this->assertSame($godFather->getId(), $data['godFatherId']);
-        $this->assertSame($godChild->getId(), $data['godChildId']);
+        self::assertSame($godFather->getId(), $data['godFatherId']);
+        self::assertSame($godChild->getId(), $data['godChildId']);
     }
 
     public function testCreateSponsorRequiresAuthentication(): void
@@ -76,7 +76,7 @@ final class SponsorApiControllerTest extends WebTestCase
             'godChildId'  => 2,
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testCreateSponsorWithUnknownPersonReturnsNotFound(): void
@@ -88,7 +88,7 @@ final class SponsorApiControllerTest extends WebTestCase
             'godChildId'  => 999999,
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
     public function testUpdateSponsorAsParticipantReturnsUpdatedData(): void
@@ -96,18 +96,18 @@ final class SponsorApiControllerTest extends WebTestCase
         $luka    = $this->loginAs('luka.maret@etu.univ-lyon1.fr');
         $sponsor = $this->findSponsor($luka, involved: true);
 
-        $this->assertInstanceOf(Person::class, $sponsor->getGodFather());
-        $this->assertInstanceOf(Person::class, $sponsor->getGodChild());
-        $this->client->jsonRequest('PUT', '/api/sponsors/' . $sponsor->getId(), [
+        self::assertInstanceOf(Person::class, $sponsor->getGodFather());
+        self::assertInstanceOf(Person::class, $sponsor->getGodChild());
+        $this->client->jsonRequest('PUT', '/api/sponsors/' . $this->idOf($sponsor), [
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId'  => $sponsor->getGodChild()->getId(),
             'type'        => SponsorTypeDto::CLASSIC->value,
             'description' => 'Description modifiée',
         ]);
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $data = $this->responseData();
-        $this->assertSame('Description modifiée', $data['description']);
+        self::assertSame('Description modifiée', $data['description']);
     }
 
     public function testUpdateSponsorAsUnrelatedUserReturnsForbidden(): void
@@ -115,26 +115,26 @@ final class SponsorApiControllerTest extends WebTestCase
         $lilian  = $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
         $sponsor = $this->findSponsor($lilian, involved: false);
 
-        $this->assertInstanceOf(Person::class, $sponsor->getGodFather());
-        $this->assertInstanceOf(Person::class, $sponsor->getGodChild());
-        $this->client->jsonRequest('PUT', '/api/sponsors/' . $sponsor->getId(), [
+        self::assertInstanceOf(Person::class, $sponsor->getGodFather());
+        self::assertInstanceOf(Person::class, $sponsor->getGodChild());
+        $this->client->jsonRequest('PUT', '/api/sponsors/' . $this->idOf($sponsor), [
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId'  => $sponsor->getGodChild()->getId(),
             'type'        => SponsorTypeDto::CLASSIC->value,
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testDeleteSponsorAsParticipantReturnsNoContent(): void
     {
         $lukaUser = $this->loginAs('luka.maret@etu.univ-lyon1.fr');
         $luka     = $lukaUser->getPerson();
-        $this->assertInstanceOf(Person::class, $luka);
+        self::assertInstanceOf(Person::class, $luka);
 
         $persons = $this->getAllPersons();
-        $other   = array_find($persons, fn($p): bool => $p->getId() !== $luka->getId());
-        $this->assertInstanceOf(Person::class, $other);
+        $other   = array_find($persons, fn(Person $p): bool => $p->getId() !== $luka->getId());
+        self::assertInstanceOf(Person::class, $other);
 
         $sponsor = new Sponsor();
         $sponsor->setGodFather($luka)->setGodChild($other)->setType(Type::UNKNOWN)->setCreatedAt(new \DateTime());
@@ -142,8 +142,8 @@ final class SponsorApiControllerTest extends WebTestCase
         $sponsorRepo = self::getContainer()->get(SponsorRepository::class);
         $sponsorRepo->update($sponsor);
 
-        $this->client->request(Request::METHOD_DELETE, '/api/sponsors/' . $sponsor->getId());
-        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+        $this->client->request(Request::METHOD_DELETE, '/api/sponsors/' . $this->idOf($sponsor));
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testDeleteSponsorAsUnrelatedUserReturnsForbidden(): void
@@ -151,9 +151,9 @@ final class SponsorApiControllerTest extends WebTestCase
         $lilian  = $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
         $sponsor = $this->findSponsor($lilian, involved: false);
 
-        $this->client->request(Request::METHOD_DELETE, '/api/sponsors/' . $sponsor->getId());
+        $this->client->request(Request::METHOD_DELETE, '/api/sponsors/' . $this->idOf($sponsor));
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
 
@@ -172,7 +172,7 @@ final class SponsorApiControllerTest extends WebTestCase
                 $s->getGodFather()?->equals($person) === true || $s->getGodChild()?->equals($person) === true
             ),
         );
-        $this->assertInstanceOf(Sponsor::class, $sponsor);
+        self::assertInstanceOf(Sponsor::class, $sponsor);
 
         return $sponsor;
     }
@@ -182,7 +182,7 @@ final class SponsorApiControllerTest extends WebTestCase
         /** @var SponsorRepository $sponsorRepository */
         $sponsorRepository = self::getContainer()->get(SponsorRepository::class);
         $sponsors = $sponsorRepository->findAll();
-        $this->assertNotEmpty($sponsors);
+        self::assertNotEmpty($sponsors);
         return $sponsors[0];
     }
 

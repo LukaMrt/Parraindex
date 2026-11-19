@@ -87,7 +87,8 @@ final readonly class AuthService
 
     private function generateResetToken(User $user): string
     {
-        $payload   = $user->getId() . '.' . (time() + 3600);
+        $userId    = $user->getId() ?? throw new \LogicException('Cannot generate a reset token for an unsaved user.');
+        $payload   = $userId . '.' . (time() + 3600);
         $signature = hash_hmac('sha256', $payload, $this->appSecret);
 
         return rtrim(strtr(base64_encode($payload . '.' . $signature), '+/', '-_'), '=');

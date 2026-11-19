@@ -28,9 +28,9 @@ final class AdminApiControllerTest extends WebTestCase
 
         $this->client->request(Request::METHOD_GET, '/api/admin/contacts');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $items = $this->responseDataList();
-        $this->assertGreaterThanOrEqual(0, count($items));
+        self::assertGreaterThanOrEqual(0, count($items));
     }
 
     public function testListContactsAsNonAdminReturnsForbidden(): void
@@ -39,14 +39,14 @@ final class AdminApiControllerTest extends WebTestCase
 
         $this->client->request(Request::METHOD_GET, '/api/admin/contacts');
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testListContactsRequiresAuthentication(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/admin/contacts');
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testResolveContactAsAdminReturnsSuccess(): void
@@ -54,9 +54,9 @@ final class AdminApiControllerTest extends WebTestCase
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
         $contact = $this->createPendingContact();
 
-        $this->client->jsonRequest('PUT', '/api/admin/contacts/' . $contact->getId());
+        $this->client->jsonRequest('PUT', '/api/admin/contacts/' . $this->idOf($contact));
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testResolveAlreadyResolvedContactReturnsError(): void
@@ -64,11 +64,11 @@ final class AdminApiControllerTest extends WebTestCase
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
         $contact = $this->createPendingContact();
 
-        $this->client->jsonRequest('PUT', '/api/admin/contacts/' . $contact->getId());
-        $this->assertResponseIsSuccessful();
+        $this->client->jsonRequest('PUT', '/api/admin/contacts/' . $this->idOf($contact));
+        self::assertResponseIsSuccessful();
 
-        $this->client->jsonRequest('PUT', '/api/admin/contacts/' . $contact->getId());
-        $this->assertResponseIsUnprocessable();
+        $this->client->jsonRequest('PUT', '/api/admin/contacts/' . $this->idOf($contact));
+        self::assertResponseIsUnprocessable();
     }
 
     private function createPendingContact(): Contact

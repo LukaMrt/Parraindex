@@ -3,6 +3,16 @@ includes:
     - vendor/phpstan/phpstan-doctrine/extension.neon
     - vendor/phpstan/phpstan-phpunit/extension.neon
     - vendor/phpstan/phpstan-deprecation-rules/rules.neon
+    - vendor/phpstan/phpstan-strict-rules/rules.neon
+    - vendor/phpstan/phpstan/conf/bleedingEdge.neon
+    - vendor/shipmonk/phpstan-rules/rules.neon
+    - vendor/shipmonk/dead-code-detector/rules.neon
+
+services:
+    -
+        class: App\Tests\PHPStan\AppUsageProvider
+        tags:
+            - shipmonk.deadCode.memberUsageProvider
 
 parameters:
     # Directories to be analyzed
@@ -23,10 +33,16 @@ parameters:
         - */Application/*
         - */tests/bootstrap.php
 
-    # Symfony configuration
-    # Note: Uncomment and generate container XML if needed
-    # symfony:
-    #     containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+    # Container compilé (bin/console cache:warmup) : utilisé par phpstan-symfony
+    # et par dead-code-detector pour savoir quels services/constructeurs le DIC appelle.
+    symfony:
+        containerXmlPath: var/cache/dev/App_KernelDevDebugContainer.xml
+
+    shipmonkDeadCode:
+        usageExcluders:
+            # Un membre de src/ utilisé uniquement par les tests est considéré mort
+            tests:
+                enabled: true
 
     # Report uninitialized properties
     checkUninitializedProperties: true
@@ -40,6 +56,16 @@ parameters:
     # Additional strict rules
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
     checkDynamicProperties: true
+    checkBenevolentUnionTypes: true
+    reportAlwaysTrueInLastCondition: true
+    reportIgnoresWithoutComments: true
+
+    # Exceptions de programmation/exécution non vérifiées (convention standard) :
+    # utilisé par shipmonk.checkedExceptionInCallable
+    exceptions:
+        uncheckedExceptionClasses:
+            - LogicException
+            - RuntimeException
 
     ignoreErrors:
         # DBAL 4.6 deprecie les types de date mutables. Le passage des entites

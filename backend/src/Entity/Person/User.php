@@ -109,7 +109,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[\Override]
     public function getRoles(): array
     {
-        if (!in_array(Role::USER->value, $this->roles)) {
+        if (!in_array(Role::USER->value, $this->roles, true)) {
             $this->roles[] = Role::USER->value;
         }
 
@@ -186,7 +186,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     public function isAdmin(): bool
     {
-        return in_array(Role::ADMIN, $this->getRolesEnum());
+        return in_array(Role::ADMIN, $this->getRolesEnum(), true);
     }
 
     public function setPicture(?string $picture): static

@@ -20,8 +20,8 @@ final class UserTest extends TestCase
         $result = $user->getRoles();
 
         // Then
-        $this->assertContains('ROLE_USER', $result);
-        $this->assertContains('ROLE_ADMIN', $result);
+        self::assertContains('ROLE_USER', $result);
+        self::assertContains('ROLE_ADMIN', $result);
     }
 
     public function testGetRolesDoesNotDuplicateUserRole(): void
@@ -33,8 +33,8 @@ final class UserTest extends TestCase
         $result = $user->getRoles();
 
         // Then
-        $this->assertCount(1, $result);
-        $this->assertSame(['ROLE_USER'], $result);
+        self::assertCount(1, $result);
+        self::assertSame(['ROLE_USER'], $result);
     }
 
     public function testIsAdminReturnsTrueWhenUserHasAdminRole(): void
@@ -47,7 +47,7 @@ final class UserTest extends TestCase
         $result = $user->isAdmin();
 
         // Then
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testIsAdminReturnsFalseWhenUserHasNoAdminRole(): void
@@ -60,7 +60,7 @@ final class UserTest extends TestCase
         $result = $user->isAdmin();
 
         // Then
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testGetPictureReturnsNullWhenNotSet(): void
@@ -72,7 +72,7 @@ final class UserTest extends TestCase
         $result = $user->getPicture();
 
         // Then
-        $this->assertNull($result);
+        self::assertNull($result);
     }
 
     public function testGetPictureReturnsActualPictureWhenSet(): void
@@ -85,7 +85,7 @@ final class UserTest extends TestCase
         $result = $user->getPicture();
 
         // Then
-        $this->assertSame('custom.jpg', $result);
+        self::assertSame('custom.jpg', $result);
     }
 
     public function testGetUserIdentifierThrowsExceptionWhenEmailIsNull(): void
@@ -111,7 +111,7 @@ final class UserTest extends TestCase
         $result = $user->getUserIdentifier();
 
         // Then
-        $this->assertSame('john.doe@etu.univ-lyon1.fr', $result);
+        self::assertSame('john.doe@etu.univ-lyon1.fr', $result);
     }
 
     public function testGetRolesEnumConvertsStringsToEnums(): void
@@ -124,10 +124,10 @@ final class UserTest extends TestCase
         $result = $user->getRolesEnum();
 
         // Then
-        $this->assertCount(2, $result);
-        $this->assertContainsOnlyInstancesOf(Role::class, $result);
-        $this->assertContains(Role::ADMIN, $result);
-        $this->assertContains(Role::USER, $result);
+        self::assertCount(2, $result);
+        self::assertContainsOnlyInstancesOf(Role::class, $result);
+        self::assertContains(Role::ADMIN, $result);
+        self::assertContains(Role::USER, $result);
     }
 
     public function testSetRolesConvertsEnumsToStrings(): void
@@ -141,7 +141,7 @@ final class UserTest extends TestCase
         $result = $user->getRoles();
 
         // Then
-        $this->assertContains('ROLE_ADMIN', $result);
-        $this->assertContains('ROLE_USER', $result);
+        self::assertContains('ROLE_ADMIN', $result);
+        self::assertContains('ROLE_USER', $result);
     }
 }

@@ -5,7 +5,10 @@ declare(strict_types=1);
 namespace App\Tests\Traits;
 
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Entity\Contact\Contact;
+use App\Entity\Person\Person;
 use App\Entity\Person\User;
+use App\Entity\Sponsor\Sponsor;
 use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 
@@ -27,10 +30,21 @@ trait ApiTestTrait
         /** @var UserRepository $userRepository */
         $userRepository = self::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => $email]);
-        $this->assertInstanceOf(User::class, $user);
+        self::assertInstanceOf(User::class, $user);
         $this->client->loginUser($user);
 
         return $user;
+    }
+
+    /**
+     * Id d'une entité déjà persistée (échoue explicitement plutôt que d'interpoler null).
+     */
+    private function idOf(Contact|Person|Sponsor $entity): int
+    {
+        $id = $entity->getId();
+        self::assertNotNull($id);
+
+        return $id;
     }
 
     /**
@@ -72,7 +86,7 @@ trait ApiTestTrait
     private function responseBody(): array
     {
         $body = json_decode((string) $this->client->getResponse()->getContent(), true, flags: JSON_THROW_ON_ERROR);
-        $this->assertIsArray($body);
+        self::assertIsArray($body);
 
         /** @var array<string, mixed> $body */
         return $body;

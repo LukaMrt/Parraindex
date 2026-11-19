@@ -25,7 +25,7 @@ jobs:
             run:
                 working-directory: backend
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
             -   uses: shivammathur/setup-php@v2
@@ -34,7 +34,7 @@ jobs:
                     extensions: curl, pdo_mysql, pdo_sqlite
             -   name: Validate composer.json
                 run: composer validate --strict
-            -   uses: actions/cache@v3
+            -   uses: actions/cache@v6
                 with:
                     path: backend/vendor
                     key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
@@ -49,19 +49,21 @@ jobs:
             run:
                 working-directory: backend
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.5'
                     extensions: curl, pdo_mysql, pdo_sqlite
-            -   uses: actions/cache@v3
+            -   uses: actions/cache@v6
                 with:
                     path: backend/vendor
                     key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
                     restore-keys: ${{ runner.os }}-php-
             -   run: composer install --prefer-dist --no-progress --no-scripts
+            # Container compilé requis par phpstan-symfony et dead-code-detector (containerXmlPath)
+            -   run: php bin/console cache:warmup --env=dev
             -   run: composer phpstan
 
     backend-phpcs:
@@ -71,14 +73,14 @@ jobs:
             run:
                 working-directory: backend
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.5'
                     extensions: curl, pdo_mysql, pdo_sqlite
-            -   uses: actions/cache@v3
+            -   uses: actions/cache@v6
                 with:
                     path: backend/vendor
                     key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
@@ -87,27 +89,59 @@ jobs:
             -   run: mkdir -p var/cache
             -   run: composer phpcs
 
-#    backend-tests:
-#        name: Backend Tests
-#        runs-on: ubuntu-latest
-#        defaults:
-#            run:
-#                working-directory: backend
-#        steps:
-#            -   uses: actions/checkout@v3
-#            -   uses: shivammathur/setup-php@v2
-#                with:
-#                    php-version: '8.5'
-#                    extensions: curl, pdo_mysql, pdo_sqlite, sqlite3, bcmath, ctype, date, fileinfo, gd, gmp, iconv, intl, json, mbstring, openssl, pcre, PDO, random, zip, zlib
-#            -   uses: actions/cache@v3
-#                with:
-#                    path: backend/vendor
-#                    key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
-#                    restore-keys: ${{ runner.os }}-php-
-#            -   run: composer install --prefer-dist --no-progress --no-scripts
-#            -   run: php bin/console doctrine:schema:create --env=test
-#            -   run: php bin/console doctrine:fixtures:load --no-interaction --env=test
-#            -   run: php bin/phpunit
+    backend-tests:
+        name: Backend Tests
+        runs-on: ubuntu-latest
+        defaults:
+            run:
+                working-directory: backend
+        services:
+            mysql:
+                image: mysql:9
+                env:
+                    # dbname_suffix "_test" (when@test) : DATABASE_NAME=parraindex -> parraindex_test
+                    MYSQL_DATABASE: parraindex_test
+                    MYSQL_USER: parraindex
+                    MYSQL_PASSWORD: parraindex
+                    MYSQL_ROOT_PASSWORD: root
+                ports:
+                    - 3306:3306
+                options: >-
+                    --health-cmd="mysqladmin ping"
+                    --health-interval=10s
+                    --health-timeout=5s
+                    --health-retries=3
+        env:
+            APP_ENV: test
+            APP_SECRET: ci-not-for-production
+            DATABASE_HOST: 127.0.0.1
+            DATABASE_PORT: 3306
+            DATABASE_USER: parraindex
+            DATABASE_PASSWORD: parraindex
+            DATABASE_NAME: parraindex
+            MAIL_USER: ci@example.com
+            MAIL_PASSWORD: password
+            MAIL_HOST: localhost
+            MAIL_PORT: 587
+            MAIL_NAME: Parraindex
+        steps:
+            -   uses: actions/checkout@v7
+                with:
+                    persist-credentials: false
+            -   uses: shivammathur/setup-php@v2
+                with:
+                    php-version: '8.5'
+                    extensions: curl, pdo_mysql, intl, gd, fileinfo, mbstring
+                    coverage: none
+            -   uses: actions/cache@v6
+                with:
+                    path: backend/vendor
+                    key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
+                    restore-keys: ${{ runner.os }}-php-
+            -   run: composer install --prefer-dist --no-progress --no-scripts
+            -   run: php bin/console doctrine:migrations:migrate --no-interaction
+            -   run: php bin/console doctrine:fixtures:load --no-interaction
+            -   run: php bin/phpunit --no-coverage
 
     backend-migrations:
         name: No pending migrations
@@ -131,14 +165,14 @@ jobs:
                     --health-timeout=5s
                     --health-retries=3
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
             -   uses: shivammathur/setup-php@v2
                 with:
                     php-version: '8.5'
                     extensions: curl, pdo_mysql, pdo_sqlite, intl
-            -   uses: actions/cache@v3
+            -   uses: actions/cache@v6
                 with:
                     path: backend/vendor
                     key: ${{ runner.os }}-php-${{ hashFiles('backend/composer.lock') }}
@@ -187,10 +221,10 @@ jobs:
             run:
                 working-directory: frontend
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -205,10 +239,10 @@ jobs:
             run:
                 working-directory: frontend
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -223,10 +257,10 @@ jobs:
             run:
                 working-directory: frontend
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -241,10 +275,10 @@ jobs:
             run:
                 working-directory: frontend
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -259,8 +293,8 @@ jobs:
 #            run:
 #                working-directory: frontend
 #        steps:
-#            -   uses: actions/checkout@v3
-#            -   uses: actions/setup-node@v4
+#            -   uses: actions/checkout@v7
+#            -   uses: actions/setup-node@v7
 #                with:
 #                    node-version: '24'
 #                    cache: 'npm'
@@ -277,10 +311,10 @@ jobs:
             run:
                 working-directory: e2e
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -295,10 +329,10 @@ jobs:
             run:
                 working-directory: e2e
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -313,10 +347,10 @@ jobs:
             run:
                 working-directory: e2e
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -328,7 +362,7 @@ jobs:
         name: E2E Tests
         runs-on: ubuntu-latest
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
             -   name: Create .env file
@@ -347,7 +381,7 @@ jobs:
                 run: |
                     timeout 120 bash -c 'until curl -sf http://localhost/ > /dev/null; do sleep 2; done'
                     timeout 30  bash -c 'until curl -sf http://localhost:8025/api/v1/messages > /dev/null; do sleep 2; done'
-            -   uses: actions/setup-node@v4
+            -   uses: actions/setup-node@v7
                 with:
                     node-version: '24'
                     cache: 'npm'
@@ -362,7 +396,7 @@ jobs:
                 run: npm test
             -   name: Upload Playwright report
                 if: always()
-                uses: actions/upload-artifact@v4
+                uses: actions/upload-artifact@v7
                 with:
                     name: playwright-report
                     path: e2e/playwright-report/
@@ -379,6 +413,7 @@ jobs:
             - backend-rector
             - backend-phpstan
             - backend-phpcs
+            - backend-tests
             - backend-migrations
             - frontend-format
             - frontend-build
@@ -394,19 +429,19 @@ jobs:
             contents: read
             packages: write
         steps:
-            -   uses: actions/checkout@v3
+            -   uses: actions/checkout@v7
                 with:
                     persist-credentials: false
             -   name: Set up Docker Buildx
-                uses: docker/setup-buildx-action@v3
+                uses: docker/setup-buildx-action@v4
             -   name: Log in to GitHub Container Registry
-                uses: docker/login-action@v3
+                uses: docker/login-action@v4
                 with:
                     registry: ghcr.io
                     username: ${{ github.actor }}
                     password: ${{ secrets.GITHUB_TOKEN }}
             -   name: Build and push
-                uses: docker/build-push-action@v6
+                uses: docker/build-push-action@v7
                 with:
                     no-cache: ${{ github.event_name == 'schedule' || github.event_name == 'workflow_dispatch' }}
                     context: .

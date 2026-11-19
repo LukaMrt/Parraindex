@@ -23,7 +23,7 @@ final readonly class ContactService
     }
 
     /**
-     * @return Contact[]
+     * @return list<Contact>
      */
     public function getAll(): array
     {

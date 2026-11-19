@@ -66,7 +66,7 @@ class PersonRepository extends ServiceEntityRepository
                 'firstName' => $firstName,
                 'lastName' => $lastName
             ]
-        ) ?? null;
+        );
     }
 
     public function getById(int $id): ?Person
@@ -93,24 +93,6 @@ class PersonRepository extends ServiceEntityRepository
             ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
-
-        return $result;
-    }
-
-    /**
-     * @return Person[]
-     */
-    public function findAllWithSponsors(): array
-    {
-        /** @var Person[] $result */
-        $result = $this->createQueryBuilder('p')
-            ->leftJoin('p.godFathers', 'gf')->addSelect('gf')
-            ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
-            ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
-            ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
-            ->orderBy('p.id', 'ASC')
-            ->getQuery()
-            ->getResult();
 
         return $result;
     }
@@ -211,33 +193,6 @@ class PersonRepository extends ServiceEntityRepository
             ],
             $result,
         );
-    }
-
-    public function getByEmail(string $email): ?Person
-    {
-        return $this->findOneBy(['email' => $email]);
-    }
-
-    /**
-     * @return Person[]
-     */
-    public function findWithoutUser(): array
-    {
-        /** @var Person[] $result */
-        $result = $this->createQueryBuilder('p')
-            ->leftJoin(
-                User::class,
-                'u',
-                Join::WITH,
-                'u.person = p.id'
-            )
-            ->where('u.id IS NULL')
-            ->orderBy('p.lastName', 'ASC')
-            ->addOrderBy('p.firstName', 'ASC')
-            ->getQuery()
-            ->getResult();
-
-        return $result;
     }
 
     /**

@@ -113,7 +113,7 @@ final class PendingUserCrudController extends AbstractCrudController
     {
         /** @var User $user */
         $user = $context->getEntity()->getInstance();
-        $name = $user->getPerson()?->getFirstName() . ' ' . $user->getPerson()?->getLastName();
+        $name = $user->getPerson()?->getFullName() ?? (string) $user->getEmail();
         $this->userRepository->delete($user);
 
         $this->addFlash('warning', sprintf('Compte de %s rejeté et supprimé.', $name));

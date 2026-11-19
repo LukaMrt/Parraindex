@@ -21,19 +21,6 @@ enum Type: int
         };
     }
 
-    /**
-     * @return array<int, string>
-     */
-    public static function allTitles(): array
-    {
-        return [
-            self::HEART->value    => 'Parrainage de coeur',
-            self::CLASSIC->value  => 'Parrainage IUT',
-            self::UNKNOWN->value  => 'Inconnu',
-            self::FALUCHE->value  => 'Faluche',
-        ];
-    }
-
     public function getIcon(): string
     {
         return match ($this) {

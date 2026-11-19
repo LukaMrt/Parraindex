@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Dto\Contact;
 
+use App\Dto\Sponsor\SponsorTypeDto;
 use App\Entity\Contact\Type;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -28,7 +29,7 @@ final readonly class ContactRequestDto
         public ?string $relatedPerson2FirstName = null,
         public ?string $relatedPerson2LastName = null,
         public ?int $entryYear = null,
-        public ?string $sponsorType = null,
+        public ?SponsorTypeDto $sponsorType = null,
         public ?string $sponsorDate = null,
         public ?string $registrationToken = null,
     ) {

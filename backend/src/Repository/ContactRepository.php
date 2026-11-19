@@ -24,7 +24,7 @@ class ContactRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Contact[]
+     * @return list<Contact>
      */
     public function getAll(): array
     {

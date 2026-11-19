@@ -6,8 +6,8 @@ namespace App\Controller\Api;
 
 use App\Api\ApiResponse;
 use App\Dto\Contact\ContactRequestDto;
+use App\Dto\Sponsor\SponsorTypeDto;
 use App\Entity\Contact\Contact;
-use App\Entity\Sponsor\Type as SponsorType;
 use App\Service\ContactService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -42,11 +42,8 @@ final class ContactApiController extends AbstractController
             $contact->setEntryYear($dto->entryYear);
         }
 
-        if ($dto->sponsorType !== null) {
-            $sponsorType = SponsorType::tryFrom($dto->sponsorType);
-            if ($sponsorType !== null) {
-                $contact->setSponsorType($sponsorType);
-            }
+        if ($dto->sponsorType instanceof SponsorTypeDto) {
+            $contact->setSponsorType($dto->sponsorType->toEntity());
         }
 
         if ($dto->sponsorDate !== null) {

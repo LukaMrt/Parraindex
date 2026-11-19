@@ -56,7 +56,7 @@ readonly class EmailVerifier
             $this->mailer->send($email);
         } catch (TransportExceptionInterface $transportException) {
             $this->logger->warning(
-                'Email could not be sent to ' . $user->getEmail(),
+                sprintf('Email could not be sent to %s', $user->getEmail() ?? '?'),
                 ['exception' => $transportException]
             );
         }

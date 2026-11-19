@@ -3,7 +3,8 @@
 declare(strict_types=1);
 
 use Rector\Config\RectorConfig;
-use Rector\Symfony\CodeQuality\Rector\Class_\ControllerMethodInjectionToConstructorRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitSelfCallRector;
+use Rector\PHPUnit\CodeQuality\Rector\Class_\PreferPHPUnitThisCallRector;
 
 return RectorConfig::configure()
     ->withRootFiles()
@@ -20,6 +21,11 @@ return RectorConfig::configure()
         __DIR__ . '/src/Kernel.php',
         __DIR__ . '/config/bundles.php',
         __DIR__ . '/config/reference.php',
+        // Les assertions PHPUnit sont statiques : self::assertX() (exigé par phpstan-strict-rules)
+        PreferPHPUnitThisCallRector::class,
+    ])
+    ->withRules([
+        PreferPHPUnitSelfCallRector::class,
     ])
     ->withPhpSets(
         php85: true

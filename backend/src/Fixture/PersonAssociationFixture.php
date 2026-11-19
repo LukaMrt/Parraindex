@@ -9,6 +9,7 @@ use App\Entity\Person\Person;
 use App\Entity\Person\PersonAssociation;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class PersonAssociationFixture extends Fixture implements DependentFixtureInterface
@@ -74,6 +75,9 @@ class PersonAssociationFixture extends Fixture implements DependentFixtureInterf
         $manager->flush();
     }
 
+    /**
+     * @return list<class-string<FixtureInterface>>
+     */
     #[\Override]
     public function getDependencies(): array
     {

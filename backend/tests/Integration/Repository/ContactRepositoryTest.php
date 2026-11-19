@@ -40,13 +40,13 @@ final class ContactRepositoryTest extends KernelTestCase
         $this->repository->create($contact);
 
         // Then
-        $this->assertGreaterThan(0, $contact->getId());
+        self::assertGreaterThan(0, $contact->getId());
 
         // Verify in database
         $savedContact = $this->repository->find($contact->getId());
-        $this->assertInstanceOf(Contact::class, $savedContact);
-        $this->assertSame(Type::ADD_PERSON, $savedContact->getType());
-        $this->assertSame('John', $savedContact->getRelatedPersonFirstName());
+        self::assertInstanceOf(Contact::class, $savedContact);
+        self::assertSame(Type::ADD_PERSON, $savedContact->getType());
+        self::assertSame('John', $savedContact->getRelatedPersonFirstName());
     }
 
     public function testGetAllReturnsAllContacts(): void
@@ -75,8 +75,8 @@ final class ContactRepositoryTest extends KernelTestCase
         $result = $this->repository->getAll();
 
         // Then
-        $this->assertNotEmpty($result);
-        $this->assertContainsOnlyInstancesOf(Contact::class, $result);
+        self::assertNotEmpty($result);
+        self::assertContainsOnlyInstancesOf(Contact::class, $result);
     }
 
     public function testUpdateModifiesContact(): void
@@ -98,8 +98,8 @@ final class ContactRepositoryTest extends KernelTestCase
 
         // Then
         $updatedContact = $this->repository->find($contact->getId());
-        $this->assertInstanceOf(Contact::class, $updatedContact);
-        $this->assertSame('Updated message', $updatedContact->getDescription());
+        self::assertInstanceOf(Contact::class, $updatedContact);
+        self::assertSame('Updated message', $updatedContact->getDescription());
     }
 
     public function testCreateContactWithAllFields(): void
@@ -124,12 +124,12 @@ final class ContactRepositoryTest extends KernelTestCase
 
         // Then
         $savedContact = $this->repository->find($contact->getId());
-        $this->assertInstanceOf(Contact::class, $savedContact);
-        $this->assertSame('Alice', $savedContact->getRelatedPersonFirstName());
-        $this->assertSame('Smith', $savedContact->getRelatedPersonLastName());
-        $this->assertSame('Bob', $savedContact->getRelatedPerson2FirstName());
-        $this->assertSame('Johnson', $savedContact->getRelatedPerson2LastName());
-        $this->assertSame(2024, $savedContact->getEntryYear());
-        $this->assertSame(\App\Entity\Sponsor\Type::HEART, $savedContact->getSponsorType());
+        self::assertInstanceOf(Contact::class, $savedContact);
+        self::assertSame('Alice', $savedContact->getRelatedPersonFirstName());
+        self::assertSame('Smith', $savedContact->getRelatedPersonLastName());
+        self::assertSame('Bob', $savedContact->getRelatedPerson2FirstName());
+        self::assertSame('Johnson', $savedContact->getRelatedPerson2LastName());
+        self::assertSame(2024, $savedContact->getEntryYear());
+        self::assertSame(\App\Entity\Sponsor\Type::HEART, $savedContact->getSponsorType());
     }
 }

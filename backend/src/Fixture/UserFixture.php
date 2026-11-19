@@ -9,6 +9,7 @@ use App\Entity\Person\Role;
 use App\Entity\Person\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
@@ -84,7 +85,7 @@ class UserFixture extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @return string[]
+     * @return list<class-string<FixtureInterface>>
      */
     public function getDependencies(): array
     {

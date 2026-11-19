@@ -18,14 +18,8 @@ class CharacteristicTypeRepository extends ServiceEntityRepository
         parent::__construct($managerRegistry, CharacteristicType::class);
     }
 
-    public function update(CharacteristicType $characteristicType): void
-    {
-        $this->getEntityManager()->persist($characteristicType);
-        $this->getEntityManager()->flush();
-    }
-
     /**
-     * @return CharacteristicType[]
+     * @return list<CharacteristicType>
      */
     public function getAll(): array
     {

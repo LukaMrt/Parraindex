@@ -65,7 +65,9 @@ composer database:reset    # drop + create + migrate + fixtures
 Tests organisés en `tests/Unit` (entités), `tests/Integration/Repository` (vraie BDD), `tests/Functional/Api` (endpoints).
 
 ## Conventions
-- `declare(strict_types=1)`, typage fort partout, PHPStan niveau 10.
+- `declare(strict_types=1)`, typage fort partout, PHPStan niveau 10 + strict-rules + shipmonk (`phpstan-rules`, `dead-code-detector`, qui exige `bin/console cache:warmup`).
+- Code appelé par le framework (réflexion, PropertyAccess, serializer) : le déclarer dans `tests/PHPStan/AppUsageProvider.php` plutôt que d'ignorer l'erreur `shipmonk.dead*`.
+- Tests : assertions en `self::assertX()` (statiques, imposé par Rector + strict-rules).
 - Setters fluent (`return static`).
 - Repositories exposent `create()` / `update()` (gère les timestamps) / `delete()`.
 - Ne jamais exposer une entité en JSON : passer par un DTO de réponse.

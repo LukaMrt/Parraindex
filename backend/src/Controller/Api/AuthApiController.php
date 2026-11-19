@@ -63,7 +63,7 @@ final class AuthApiController extends AbstractController
     public function register(Request $request): JsonResponse
     {
         /** @var array<string, mixed>|null $data */
-        $data = json_decode((string) $request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
 
         if (!is_array($data) || !isset($data['email'], $data['password'])) {
             return ApiResponse::validationError(['email' => ['Requis'], 'password' => ['Requis']]);
@@ -164,7 +164,7 @@ final class AuthApiController extends AbstractController
         }
 
         /** @var array<string, mixed>|null $data */
-        $data        = json_decode((string) $request->getContent(), true);
+        $data        = json_decode($request->getContent(), true);
         $callbackUrl = is_array($data) && is_string($data['callbackUrl'] ?? null) ? $data['callbackUrl'] : '';
 
         if ($callbackUrl === '') {
@@ -180,7 +180,7 @@ final class AuthApiController extends AbstractController
     public function resetPasswordRequest(Request $request): JsonResponse
     {
         /** @var array<string, mixed>|null $data */
-        $data        = json_decode((string) $request->getContent(), true);
+        $data        = json_decode($request->getContent(), true);
         $email       = is_array($data) && is_string($data['email'] ?? null) ? $data['email'] : '';
         $callbackUrl = is_array($data) && is_string($data['callbackUrl'] ?? null) ? $data['callbackUrl'] : '';
 
@@ -201,7 +201,7 @@ final class AuthApiController extends AbstractController
     public function resetPasswordConfirm(Request $request): JsonResponse
     {
         /** @var array<string, mixed>|null $data */
-        $data  = json_decode((string) $request->getContent(), true);
+        $data  = json_decode($request->getContent(), true);
         $token = is_array($data) && is_string($data['token'] ?? null) ? $data['token'] : '';
 
         try {

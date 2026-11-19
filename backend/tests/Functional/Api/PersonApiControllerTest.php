@@ -27,38 +27,38 @@ final class PersonApiControllerTest extends WebTestCase
     {
         $this->client->request(Request::METHOD_GET, '/api/persons');
 
-        $this->assertResponseIsSuccessful();
-        $this->assertSame([], $this->responseDataList());
+        self::assertResponseIsSuccessful();
+        self::assertSame([], $this->responseDataList());
     }
 
     public function testSearchReturnsMatchingPersons(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/persons?q=Maret');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $items = $this->responseDataList();
-        $this->assertNotEmpty($items);
+        self::assertNotEmpty($items);
 
         $first = $items[0];
-        $this->assertArrayHasKey('id', $first);
-        $this->assertArrayHasKey('firstName', $first);
-        $this->assertArrayHasKey('lastName', $first);
-        $this->assertArrayHasKey('startYear', $first);
-        $this->assertSame('Maret', $first['lastName']);
+        self::assertArrayHasKey('id', $first);
+        self::assertArrayHasKey('firstName', $first);
+        self::assertArrayHasKey('lastName', $first);
+        self::assertArrayHasKey('startYear', $first);
+        self::assertSame('Maret', $first['lastName']);
     }
 
     public function testListWithValidOrderByReturnsSuccess(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/persons?q=a&orderBy=firstName');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testListWithInvalidOrderByFallsBackToId(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/persons?q=a&orderBy=invalid');
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
     }
 
     public function testShowReturnsFullProfileWithRelations(): void
@@ -67,21 +67,21 @@ final class PersonApiControllerTest extends WebTestCase
 
         $this->client->request(Request::METHOD_GET, '/api/persons/' . $person->getId());
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $data = $this->responseData();
-        $this->assertSame($person->getId(), $data['id']);
-        $this->assertArrayHasKey('godFathers', $data);
-        $this->assertArrayHasKey('godChildren', $data);
-        $this->assertArrayHasKey('characteristics', $data);
+        self::assertSame($person->getId(), $data['id']);
+        self::assertArrayHasKey('godFathers', $data);
+        self::assertArrayHasKey('godChildren', $data);
+        self::assertArrayHasKey('characteristics', $data);
     }
 
     public function testShowReturnsNotFoundForUnknownId(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/persons/999999');
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
+        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
         $error = $this->responseError();
-        $this->assertSame('PERSON_NOT_FOUND', $error['code']);
+        self::assertSame('PERSON_NOT_FOUND', $error['code']);
     }
 
     public function testUpdateOwnProfileReturnsUpdatedPerson(): void
@@ -97,9 +97,9 @@ final class PersonApiControllerTest extends WebTestCase
             'description' => 'Description modifiée',
         ]);
 
-        $this->assertResponseIsSuccessful();
+        self::assertResponseIsSuccessful();
         $data = $this->responseData();
-        $this->assertSame('Biographie modifiée', $data['biography']);
+        self::assertSame('Biographie modifiée', $data['biography']);
     }
 
     public function testUpdateAnotherPersonProfileReturnsForbidden(): void
@@ -113,7 +113,7 @@ final class PersonApiControllerTest extends WebTestCase
             'startYear' => 2021,
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     public function testUpdateRequiresAuthentication(): void
@@ -126,7 +126,7 @@ final class PersonApiControllerTest extends WebTestCase
             'startYear' => 2021,
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
+        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testDeleteAsAdminReturnsNoContent(): void
@@ -141,7 +141,7 @@ final class PersonApiControllerTest extends WebTestCase
 
         $this->client->request(Request::METHOD_DELETE, '/api/persons/' . $temp->getId());
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
     }
 
     public function testDeleteAsNonAdminReturnsForbidden(): void
@@ -151,7 +151,7 @@ final class PersonApiControllerTest extends WebTestCase
 
         $this->client->request(Request::METHOD_DELETE, '/api/persons/' . $person->getId());
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
+        self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
     private function getFirstPerson(): Person
@@ -159,7 +159,7 @@ final class PersonApiControllerTest extends WebTestCase
         /** @var PersonRepository $personRepository */
         $personRepository = self::getContainer()->get(PersonRepository::class);
         $persons = $personRepository->getAll();
-        $this->assertNotEmpty($persons);
+        self::assertNotEmpty($persons);
         return $persons[0];
     }
 
@@ -168,9 +168,9 @@ final class PersonApiControllerTest extends WebTestCase
         /** @var UserRepository $userRepository */
         $userRepository = self::getContainer()->get(UserRepository::class);
         $user = $userRepository->findOneBy(['email' => $email]);
-        $this->assertInstanceOf(User::class, $user);
+        self::assertInstanceOf(User::class, $user);
         $person = $user->getPerson();
-        $this->assertInstanceOf(Person::class, $person);
+        self::assertInstanceOf(Person::class, $person);
         return $person;
     }
 }

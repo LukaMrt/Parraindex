@@ -62,26 +62,6 @@ final readonly class PersonService
         return $this->personRepository->getAll($orderBy, $q, $limit);
     }
 
-    public function findByIdentity(string $firstName, string $lastName): ?Person
-    {
-        return $this->personRepository->getByIdentity($firstName, $lastName);
-    }
-
-    public function prepareMissingCharacteristics(Person $person): void
-    {
-        /** @var CharacteristicType[] $allTypes */
-        $allTypes = $this->characteristicTypeRepository->findAll();
-        $person->createMissingCharacteristics($allTypes);
-    }
-
-    /**
-     * @return Person[]
-     */
-    public function getAllWithSponsors(): array
-    {
-        return $this->personRepository->findAllWithSponsors();
-    }
-
     /**
      * @return Person[]
      */
@@ -103,17 +83,6 @@ final readonly class PersonService
     public function delete(Person $person): void
     {
         $this->personRepository->delete($person);
-    }
-
-    /**
-     * @return Person[]
-     */
-    public function getAllShuffled(): array
-    {
-        $people = $this->personRepository->findAll();
-        shuffle($people);
-
-        return $people;
     }
 
     /**

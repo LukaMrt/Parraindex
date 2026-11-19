@@ -8,6 +8,7 @@ use App\Entity\Person\Person;
 use App\Entity\Person\PersonLink;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 
 class PersonLinkFixture extends Fixture implements DependentFixtureInterface
@@ -66,7 +67,7 @@ class PersonLinkFixture extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @return string[]
+     * @return list<class-string<FixtureInterface>>
      */
     #[\Override]
     public function getDependencies(): array

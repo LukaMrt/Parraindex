@@ -21,7 +21,7 @@ final class PersonTest extends TestCase
         $person->setFirstName('john');
 
         // Then
-        $this->assertSame('John', $person->getFirstName());
+        self::assertSame('John', $person->getFirstName());
     }
 
     public function testSetFirstNameLowercasesRest(): void
@@ -33,7 +33,7 @@ final class PersonTest extends TestCase
         $person->setFirstName('JOHN');
 
         // Then
-        $this->assertSame('John', $person->getFirstName());
+        self::assertSame('John', $person->getFirstName());
     }
 
     public function testSetLastNameCapitalizesFirstLetter(): void
@@ -45,7 +45,7 @@ final class PersonTest extends TestCase
         $person->setLastName('doe');
 
         // Then
-        $this->assertSame('Doe', $person->getLastName());
+        self::assertSame('Doe', $person->getLastName());
     }
 
     public function testSetLastNameLowercasesRest(): void
@@ -57,7 +57,7 @@ final class PersonTest extends TestCase
         $person->setLastName('DOE');
 
         // Then
-        $this->assertSame('Doe', $person->getLastName());
+        self::assertSame('Doe', $person->getLastName());
     }
 
     public function testGetFullNameReturnsFormattedName(): void
@@ -71,7 +71,7 @@ final class PersonTest extends TestCase
         $result = $person->getFullName();
 
         // Then
-        $this->assertSame('John DOE', $result);
+        self::assertSame('John DOE', $result);
     }
 
     public function testConstructorInitializesCollections(): void
@@ -80,9 +80,9 @@ final class PersonTest extends TestCase
         $person = new Person();
 
         // Then
-        $this->assertCount(0, $person->getGodFathers());
-        $this->assertCount(0, $person->getGodChildren());
-        $this->assertCount(0, $person->getCharacteristics());
+        self::assertCount(0, $person->getGodFathers());
+        self::assertCount(0, $person->getGodChildren());
+        self::assertCount(0, $person->getCharacteristics());
     }
 
     public function testEqualsReturnsTrueForSameId(): void
@@ -98,7 +98,7 @@ final class PersonTest extends TestCase
         $result = $person1->equals($person2);
 
         // Then
-        $this->assertTrue($result);
+        self::assertTrue($result);
     }
 
     public function testEqualsReturnsFalseForDifferentId(): void
@@ -114,7 +114,7 @@ final class PersonTest extends TestCase
         $result = $person1->equals($person2);
 
         // Then
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testEqualsReturnsFalseForNull(): void
@@ -127,7 +127,7 @@ final class PersonTest extends TestCase
         $result = $person->equals(null);
 
         // Then
-        $this->assertFalse($result);
+        self::assertFalse($result);
     }
 
     public function testCreateMissingCharacteristicsAddsNewCharacteristics(): void
@@ -145,7 +145,7 @@ final class PersonTest extends TestCase
         $person->createMissingCharacteristics([$type1, $type2]);
 
         // Then
-        $this->assertCount(2, $person->getCharacteristics());
+        self::assertCount(2, $person->getCharacteristics());
     }
 
     public function testCreateMissingCharacteristicsDoesNotAddExistingCharacteristics(): void
@@ -166,7 +166,7 @@ final class PersonTest extends TestCase
         $person->createMissingCharacteristics([$type1]);
 
         // Then
-        $this->assertCount(1, $person->getCharacteristics());
+        self::assertCount(1, $person->getCharacteristics());
     }
 
     public function testAddGodFatherAddsToCollection(): void
@@ -179,8 +179,8 @@ final class PersonTest extends TestCase
         $person->addGodFather($sponsor);
 
         // Then
-        $this->assertCount(1, $person->getGodFathers());
-        $this->assertTrue($person->getGodFathers()->contains($sponsor));
+        self::assertCount(1, $person->getGodFathers());
+        self::assertTrue($person->getGodFathers()->contains($sponsor));
     }
 
     public function testRemoveGodFatherRemovesFromCollection(): void
@@ -194,7 +194,7 @@ final class PersonTest extends TestCase
         $person->removeGodFather($sponsor);
 
         // Then
-        $this->assertCount(0, $person->getGodFathers());
+        self::assertCount(0, $person->getGodFathers());
     }
 
     public function testAddGodChildAddsToCollection(): void
@@ -207,8 +207,8 @@ final class PersonTest extends TestCase
         $person->addGodChild($sponsor);
 
         // Then
-        $this->assertCount(1, $person->getGodChildren());
-        $this->assertTrue($person->getGodChildren()->contains($sponsor));
+        self::assertCount(1, $person->getGodChildren());
+        self::assertTrue($person->getGodChildren()->contains($sponsor));
     }
 
     public function testRemoveGodChildRemovesFromCollection(): void
@@ -222,6 +222,6 @@ final class PersonTest extends TestCase
         $person->removeGodChild($sponsor);
 
         // Then
-        $this->assertCount(0, $person->getGodChildren());
+        self::assertCount(0, $person->getGodChildren());
     }
 }
