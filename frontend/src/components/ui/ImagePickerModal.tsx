@@ -212,7 +212,7 @@ export function ImagePickerModal({ open, onClose, onConfirm }: Props) {
             ) : (
               <div className="w-full overflow-auto rounded-xl border border-line bg-bg flex items-center justify-center p-2">
                 <ReactCrop
-                  crop={crop}
+                  {...(crop ? { crop } : {})}
                   onChange={(c) => {
                     setCrop(c);
                   }}

@@ -16,7 +16,7 @@ export function promoColor(startYear: number): string {
   const idx =
     (((startYear - BASE_YEAR) % PROMO_PALETTE.length) + PROMO_PALETTE.length) %
     PROMO_PALETTE.length;
-  return PROMO_PALETTE[idx];
+  return PROMO_PALETTE[idx] ?? PROMO_PALETTE[0];
 }
 
 /** Hex couleur → couleur de texte lisible (#000 ou #fff) */

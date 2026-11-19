@@ -22,7 +22,7 @@ class PersonRepository extends ServiceEntityRepository
     }
 
     /**
-     * @return Person[]
+     * @return list<Person>
      */
     public function getAll(string $orderBy = 'id', ?string $q = null, int $limit = 20): array
     {
@@ -41,12 +41,9 @@ class PersonRepository extends ServiceEntityRepository
         }
 
         $qb = $this->createQueryBuilder('p')
-            ->leftJoin('p.filieres', 'pf')->addSelect('pf')
-            ->leftJoin('pf.filiere', 'f')->addSelect('f')
-            ->leftJoin('pf.school', 's')->addSelect('s')
-            ->leftJoin('p.associations', 'pa')->addSelect('pa')
-            ->leftJoin('pa.association', 'assoc')->addSelect('assoc')
-            ->orderBy('p.' . $orderBy, SortDirection::Ascending);
+            ->select('p.id')
+            ->orderBy('p.' . $orderBy, SortDirection::Ascending)
+            ->addOrderBy('p.id', SortDirection::Ascending);
 
         if ($q !== null && trim($q) !== '') {
             $escaped = addcslashes(trim($q), '%_\\');
@@ -55,9 +52,19 @@ class PersonRepository extends ServiceEntityRepository
                 ->setMaxResults(max(1, min($limit, 100)));
         }
 
-        /** @var Person[] $result */
-        $result = $qb->getQuery()->getResult();
-        return $result;
+        /** @var int[] $ids */
+        $ids = $qb->getQuery()->getSingleColumnResult();
+
+        // Hydrate les relations puis restaure l'ordre demandé
+        $byId = [];
+        foreach ($this->findAllWithRelationsByIds($ids) as $person) {
+            $byId[$person->getId()] = $person;
+        }
+
+        return array_values(array_filter(
+            array_map(static fn(int $id): ?Person => $byId[$id] ?? null, $ids),
+            static fn(?Person $p): bool => $p instanceof Person,
+        ));
     }
 
     public function getByIdentity(string $firstName, string $lastName): ?Person
@@ -77,25 +84,7 @@ class PersonRepository extends ServiceEntityRepository
 
     public function findWithRelations(int $id): ?Person
     {
-        /** @var Person|null $result */
-        $result = $this->createQueryBuilder('p')
-            ->leftJoin('p.godFathers', 'gf')->addSelect('gf')
-            ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
-            ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
-            ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
-            ->leftJoin('p.characteristics', 'c')->addSelect('c')
-            ->leftJoin('c.characteristicType', 'ct')->addSelect('ct')
-            ->leftJoin('p.filieres', 'pf')->addSelect('pf')
-            ->leftJoin('pf.filiere', 'f')->addSelect('f')
-            ->leftJoin('pf.school', 's')->addSelect('s')
-            ->leftJoin('p.associations', 'pa')->addSelect('pa')
-            ->leftJoin('pa.association', 'assoc')->addSelect('assoc')
-            ->where('p.id = :id')
-            ->setParameter('id', $id)
-            ->getQuery()
-            ->getOneOrNullResult();
-
-        return $result;
+        return $this->findAllWithRelationsByIds([$id])[0] ?? null;
     }
 
     /**
@@ -103,6 +92,7 @@ class PersonRepository extends ServiceEntityRepository
      */
     public function findPaginated(int $offset, int $limit): array
     {
+        /** @var int[] $ids */
         $ids = $this->createQueryBuilder('p')
             ->select('p.id')
             ->orderBy('p.id', SortDirection::Ascending)
@@ -111,35 +101,18 @@ class PersonRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleColumnResult();
 
-        if ($ids === []) {
-            return [];
-        }
-
-        /** @var Person[] $result */
-        $result = $this->createQueryBuilder('p')
-            ->leftJoin('p.godFathers', 'gf')->addSelect('gf')
-            ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
-            ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
-            ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
-            ->leftJoin('p.characteristics', 'c')->addSelect('c')
-            ->leftJoin('c.characteristicType', 'ct')->addSelect('ct')
-            ->leftJoin('p.filieres', 'pf')->addSelect('pf')
-            ->leftJoin('pf.filiere', 'f')->addSelect('f')
-            ->leftJoin('pf.school', 's')->addSelect('s')
-            ->leftJoin('p.associations', 'pa')->addSelect('pa')
-            ->leftJoin('pa.association', 'assoc')->addSelect('assoc')
-            ->where('p.id IN (:ids)')
-            ->setParameter('ids', $ids)
-            ->orderBy('p.id', SortDirection::Ascending)
-            ->getQuery()
-            ->getResult();
-
-        return $result;
+        return $this->findAllWithRelationsByIds($ids);
     }
 
     /**
+     * Charge les personnes et toutes leurs relations en hydratation multi-étapes :
+     * une requête par groupe de collections plutôt qu'un seul gros JOIN, qui produirait
+     * un produit cartésien (parrains × fillots × caractéristiques × filières × …).
+     * Les requêtes suivantes réutilisent les entités déjà gérées (identity map) et
+     * initialisent leurs collections au passage.
+     *
      * @param int[] $ids
-     * @return Person[]
+     * @return Person[] triées par id
      */
     public function findAllWithRelationsByIds(array $ids): array
     {
@@ -153,11 +126,43 @@ class PersonRepository extends ServiceEntityRepository
             ->leftJoin('gf.godFather', 'gfp')->addSelect('gfp')
             ->leftJoin('p.godChildren', 'gc')->addSelect('gc')
             ->leftJoin('gc.godChild', 'gcp')->addSelect('gcp')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->orderBy('p.id', SortDirection::Ascending)
+            ->getQuery()
+            ->getResult();
+
+        if ($result === []) {
+            return [];
+        }
+
+        $this->createQueryBuilder('p')
+            ->leftJoin('p.characteristics', 'c')->addSelect('c')
+            ->leftJoin('c.characteristicType', 'ct')->addSelect('ct')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $this->createQueryBuilder('p')
             ->leftJoin('p.filieres', 'pf')->addSelect('pf')
             ->leftJoin('pf.filiere', 'f')->addSelect('f')
             ->leftJoin('pf.school', 's')->addSelect('s')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $this->createQueryBuilder('p')
             ->leftJoin('p.associations', 'pa')->addSelect('pa')
             ->leftJoin('pa.association', 'assoc')->addSelect('assoc')
+            ->where('p.id IN (:ids)')
+            ->setParameter('ids', $ids)
+            ->getQuery()
+            ->getResult();
+
+        $this->createQueryBuilder('p')
+            ->leftJoin('p.links', 'l')->addSelect('l')
             ->where('p.id IN (:ids)')
             ->setParameter('ids', $ids)
             ->getQuery()

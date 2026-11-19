@@ -1,20 +1,34 @@
-import type { CSSProperties } from 'react';
+import type { CSSProperties, KeyboardEvent } from 'react';
 import { Avatar } from '../ui';
 import { promoColor } from '../../lib/colors';
 import type { Person } from '../../types/person';
 
+export type PersonSummary = Pick<
+  Person,
+  'id' | 'firstName' | 'lastName' | 'fullName' | 'picture' | 'startYear'
+>;
+
 interface PersonGraphNodeProps {
-  person: Person;
+  person: PersonSummary;
   diameter: number;
   isSelf?: boolean;
   dim?: boolean;
   loading?: boolean;
-  /** Nom de l'attribut data-* à poser sur le nœud (ex: "data-fg-node") pour le ciblage drag */
-  dataAttr?: string;
+  /** Position du centre du nœud dans le canvas */
+  cx: number;
+  cy: number;
   style?: CSSProperties;
+  /** Libellé accessible de l'action (ex. « Voir la fiche de … ») */
+  actionLabel?: string;
   onClick?: () => void;
-  onMouseEnter?: () => void;
-  onMouseLeave?: () => void;
+  onHoverChange?: (hovered: boolean) => void;
+}
+
+/** "Thomas", "Bernard" → "Thomas B." : lève l'ambiguïté entre homonymes de prénom */
+export function shortName(p: Pick<PersonSummary, 'firstName' | 'lastName'>): string {
+  const first = p.firstName.charAt(0).toUpperCase() + p.firstName.slice(1).toLowerCase();
+  const initial = p.lastName.charAt(0).toUpperCase();
+  return initial ? `${first} ${initial}.` : first;
 }
 
 export function PersonGraphNode({
@@ -23,30 +37,51 @@ export function PersonGraphNode({
   isSelf = false,
   dim = false,
   loading = false,
-  dataAttr,
+  cx,
+  cy,
   style,
+  actionLabel,
   onClick,
-  onMouseEnter,
-  onMouseLeave,
+  onHoverChange,
 }: PersonGraphNodeProps) {
   const color = promoColor(person.startYear);
+  const interactive = onClick !== undefined;
+
+  const handleKeyDown = (e: KeyboardEvent) => {
+    if (!onClick) return;
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      onClick();
+    }
+  };
 
   return (
     <div
       data-testid={`family-node-${String(person.id)}`}
-      {...(dataAttr ? { [dataAttr]: true } : {})}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive ? 0 : undefined}
+      aria-label={actionLabel ?? `${person.fullName}, promo ${String(person.startYear)}`}
+      aria-busy={loading || undefined}
+      title={`${person.fullName} · promo ${String(person.startYear)}`}
       onClick={onClick}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
+      onKeyDown={handleKeyDown}
+      onMouseEnter={() => onHoverChange?.(true)}
+      onMouseLeave={() => onHoverChange?.(false)}
+      onFocus={() => onHoverChange?.(true)}
+      onBlur={() => onHoverChange?.(false)}
+      className="rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ink focus-visible:ring-offset-2"
       style={{
+        position: 'absolute',
+        left: cx - diameter / 2,
+        top: cy - diameter / 2,
+        width: diameter,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
         gap: 4,
-        cursor: isSelf ? 'default' : 'pointer',
+        cursor: interactive ? 'pointer' : 'default',
         opacity: dim ? 0.3 : 1,
         transition: 'opacity 0.15s',
-        width: diameter,
         ...style,
       }}
     >
@@ -63,7 +98,7 @@ export function PersonGraphNode({
             : `0 0 0 2px ${color}, 0 2px 6px rgba(0,0,0,0.06)`,
         }}
       >
-        <Avatar person={person} size={diameter} imageSize="full" />
+        <Avatar person={person} size={diameter} imageSize="thumb" />
         {loading && (
           <div
             style={{
@@ -96,7 +131,7 @@ export function PersonGraphNode({
           color: isSelf ? 'var(--color-ink)' : 'var(--color-ink-2)',
           textAlign: 'center',
           lineHeight: 1.15,
-          maxWidth: 72,
+          maxWidth: 96,
           whiteSpace: 'nowrap',
           overflow: 'hidden',
           textOverflow: 'ellipsis',
@@ -106,7 +141,7 @@ export function PersonGraphNode({
           border: '1px solid var(--color-line)',
         }}
       >
-        {person.firstName}
+        {shortName(person)}
       </div>
     </div>
   );

@@ -3,12 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 import { Link, useNavigate, useParams } from 'react-router';
 import { Avatar, Breadcrumb, Card, Skeleton, StatCard } from '../../components/ui';
 import { useAuth } from '../../hooks/useAuth';
-import { personQueries } from '../../lib/queries';
+import { isNotFound, personQueries } from '../../lib/queries';
 import { promoColor } from '../../lib/colors';
 import { resendVerificationEmail } from '../../lib/api/auth';
 import { isUniversityEmail } from '../../lib/email';
 import type { Association, Characteristic, Person } from '../../types/person';
 import { FamilyGraph } from './FamilyGraph';
+import { directoryHref } from '../tree/directoryState';
 
 // ── Sub-components ────────────────────────────────────────────────────────────
 
@@ -181,16 +182,42 @@ export function PersonPage() {
     data: person,
     isLoading,
     isError,
+    error,
+    refetch,
+    isRefetching,
   } = useQuery({
     ...personQueries.detail(Number(id)),
     enabled: !!id,
   });
 
   if (isLoading) return <PersonPageSkeleton />;
+  if (isError && !isNotFound(error)) {
+    return (
+      <div className="flex min-h-[40vh] flex-col items-center justify-center gap-3 text-[14px] text-ink-3">
+        <p>Impossible de charger ce profil. Vérifiez votre connexion.</p>
+        <button
+          type="button"
+          disabled={isRefetching}
+          onClick={() => {
+            void refetch();
+          }}
+          className="rounded-lg border border-line bg-surface px-3.5 py-1.5 text-[13px] font-medium text-ink-2 transition-colors hover:border-ink hover:text-ink disabled:opacity-50"
+        >
+          {isRefetching ? 'Chargement…' : 'Réessayer'}
+        </button>
+      </div>
+    );
+  }
   if (isError || !person) {
     return (
-      <div className="flex min-h-[40vh] items-center justify-center text-[14px] text-ink-3">
-        Personne introuvable.
+      <div className="flex min-h-[40vh] flex-col items-center justify-center gap-3 text-[14px] text-ink-3">
+        <p>Personne introuvable.</p>
+        <Link
+          to={directoryHref()}
+          className="text-[13px] font-medium text-ink underline underline-offset-2"
+        >
+          Retour à l&apos;annuaire
+        </Link>
       </div>
     );
   }
@@ -207,7 +234,7 @@ export function PersonPage() {
       <div className="mx-auto max-w-[980px] px-4 pb-20 pt-5 sm:px-7 sm:pt-7">
         <Breadcrumb
           items={[
-            { label: 'Annuaire', onClick: () => void navigate('/tree') },
+            { label: 'Annuaire', onClick: () => void navigate(directoryHref()) },
             { label: person.fullName },
           ]}
           className="mb-6"

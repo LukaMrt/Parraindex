@@ -73,6 +73,20 @@ final class TreeApiControllerTest extends WebTestCase
         self::assertCount(2, $items);
     }
 
+    public function testTreeNeverExposesPrivateCharacteristics(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/api/tree?page=1&limit=50');
+
+        self::assertResponseIsSuccessful();
+        foreach ($this->responseItems() as $person) {
+            self::assertIsArray($person['characteristics']);
+            foreach ($person['characteristics'] as $characteristic) {
+                self::assertIsArray($characteristic);
+                self::assertTrue($characteristic['visible']);
+            }
+        }
+    }
+
     /**
      * @return array<int, array<string, mixed>>
      */

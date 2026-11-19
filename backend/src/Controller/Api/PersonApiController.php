@@ -78,7 +78,10 @@ final class PersonApiController extends AbstractController
             return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, "La personne demandée n'existe pas");
         }
 
-        return ApiResponse::success($this->personService->mapToResponseDto($person));
+        return ApiResponse::success($this->personService->mapToResponseDto(
+            $person,
+            $this->isGranted(PersonVoter::EDIT, $person),
+        ));
     }
 
     #[Route('/api/persons/{id}', name: 'api_persons_update', methods: ['PUT'])]
@@ -105,7 +108,7 @@ final class PersonApiController extends AbstractController
 
         $this->personService->update($person);
 
-        return ApiResponse::success($this->personService->mapToResponseDto($person));
+        return ApiResponse::success($this->personService->mapToResponseDto($person, true));
     }
 
     #[Route('/api/persons/{id}', name: 'api_persons_delete', methods: ['DELETE'])]

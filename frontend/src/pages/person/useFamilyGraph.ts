@@ -1,101 +1,120 @@
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect, useMemo, useState } from 'react';
-import type { Dispatch, SetStateAction } from 'react';
-import { usePanZoom } from '../../hooks/usePanZoom';
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import type { PersonSummary } from '../../components/graph/PersonGraphNode';
 import { fetchPersonsBatch } from '../../lib/api/persons';
 import { personQueries } from '../../lib/queries';
-import type { UsePanZoomResult } from '../../hooks/usePanZoom';
 import type { Person } from '../../types/person';
-import { COL_W, computeLayout, toSummary } from './familyGraphLayout';
+import { computeLayout, toSummary } from './familyGraphLayout';
 import type { Layout } from './familyGraphLayout';
 
-export interface FamilyGraphState extends UsePanZoomResult {
+export interface FamilyGraphState {
   layout: Layout;
-  containerHeight: number;
   initialLoading: boolean;
+  /** Erreur de chargement (initial ou expansion), null sinon */
+  error: string | null;
   loadingAncestors: boolean;
   loadingDescendants: boolean;
-  hoverId: number | null;
-  ancestorGens: Person[][];
-  descendantGens: Person[][];
+  ancestorDepth: number;
+  descendantDepth: number;
   canExpandAncestors: boolean;
   canExpandDescendants: boolean;
-  setHoverId: (id: number | null) => void;
-  setZoom: Dispatch<SetStateAction<number>>;
-  setPan: Dispatch<SetStateAction<{ x: number; y: number }>>;
+  fetchedPersons: Map<number, Person>;
+  retry: () => void;
   shrinkAncestors: () => void;
   expandAncestors: () => void;
   shrinkDescendants: () => void;
   expandDescendants: () => void;
 }
 
+const LOAD_ERROR = "Impossible de charger l'arbre. Vérifiez votre connexion.";
+
+/**
+ * État de l'arbre familial d'une personne : générations chargées à la demande
+ * (« Amont » = parrains de parrains…, « Aval » = fillots de fillots…).
+ *
+ * Le composant appelant est remonté à chaque changement de personne (`key={person.id}`) :
+ * l'état n'est donc jamais réinitialisé par un simple rafraîchissement des données.
+ */
 export function useFamilyGraph(person: Person): FamilyGraphState {
   const queryClient = useQueryClient();
 
-  const batchFetch = (ids: number[]): Promise<Map<number, Person>> => {
-    const cached = new Map<number, Person>();
-    const missing: number[] = [];
-
-    for (const id of ids) {
-      const hit = queryClient.getQueryData<Person>(personQueries.detail(id).queryKey);
-      if (hit) cached.set(id, hit);
-      else missing.push(id);
-    }
-
-    if (missing.length === 0) return Promise.resolve(cached);
-
-    return fetchPersonsBatch(missing).then((result) => {
-      if (result.ok) {
-        result.data.forEach((p) => {
-          queryClient.setQueryData(personQueries.detail(p.id).queryKey, p);
-          cached.set(p.id, p);
-        });
+  const batchFetch = useCallback(
+    async (ids: number[]): Promise<Map<number, Person>> => {
+      const result = new Map<number, Person>();
+      const missing: number[] = [];
+      for (const id of ids) {
+        const hit = queryClient.getQueryData<Person>(personQueries.detail(id).queryKey);
+        if (hit) result.set(id, hit);
+        else missing.push(id);
       }
-      return cached;
-    });
-  };
-  const directIds = useMemo(
-    () => [
-      ...person.godFathers.map((s) => s.godFatherId),
-      ...person.godChildren.map((s) => s.godChildId),
-    ],
-    [person],
+      if (missing.length === 0) return result;
+
+      const res = await fetchPersonsBatch(missing);
+      if (!res.ok) throw new Error(res.error.message);
+      for (const p of res.data) {
+        queryClient.setQueryData(personQueries.detail(p.id).queryKey, p);
+        result.set(p.id, p);
+      }
+      return result;
+    },
+    [queryClient],
   );
 
-  const [fetchedPersons, setFetchedPersons] = useState<Map<number, Person>>(
-    () => new Map([[person.id, person]]),
+  // Instantané de la racine au montage : sert à amorcer le chargement initial une seule fois
+  const [initialRoot] = useState(person);
+
+  const [loaded, setLoaded] = useState<Map<number, Person>>(() => new Map());
+  const [ancestorGens, setAncestorGens] = useState<PersonSummary[][]>([]);
+  const [descendantGens, setDescendantGens] = useState<PersonSummary[][]>([]);
+  const [initialLoading, setInitialLoading] = useState(
+    () => person.godFathers.length + person.godChildren.length > 0,
   );
-  const [ancestorGens, setAncestorGens] = useState<Person[][]>([]);
-  const [descendantGens, setDescendantGens] = useState<Person[][]>([]);
-  const [initialLoading, setInitialLoading] = useState(() => directIds.length > 0);
+  const [error, setError] = useState<string | null>(null);
+  const [attempt, setAttempt] = useState(0);
   const [loadingAncestors, setLoadingAncestors] = useState(false);
   const [loadingDescendants, setLoadingDescendants] = useState(false);
-  const [hoverId, setHoverId] = useState<number | null>(null);
 
-  const panZoom = usePanZoom({ dragBlockSelector: '[data-fg-node]', minZoom: 0.1 });
+  // La racine affichée est toujours la version la plus récente
+  const fetchedPersons = useMemo(() => {
+    const map = new Map(loaded);
+    map.set(person.id, person);
+    return map;
+  }, [loaded, person]);
 
-  // ── Initial fetch: load direct family members
+  const mergeLoaded = (fetched: Map<number, Person>) => {
+    setLoaded((prev) => new Map([...prev, ...fetched]));
+  };
+
+  // ── Chargement initial : parrains et fillots directs
 
   useEffect(() => {
-    if (directIds.length === 0) return;
+    const parentIds = initialRoot.godFathers.map((s) => s.godFatherId);
+    const childIds = initialRoot.godChildren.map((s) => s.godChildId);
+    if (parentIds.length + childIds.length === 0) return;
 
-    void batchFetch(directIds).then((fetched) => {
-      setFetchedPersons((prev) => new Map([...prev, ...fetched]));
-
-      const parents = person.godFathers
-        .map((s) => fetched.get(s.godFatherId))
-        .filter((p): p is Person => p !== undefined)
-        .map(toSummary);
-      const children = person.godChildren
-        .map((s) => fetched.get(s.godChildId))
-        .filter((p): p is Person => p !== undefined)
-        .map(toSummary);
-
-      if (parents.length > 0) setAncestorGens([parents]);
-      if (children.length > 0) setDescendantGens([children]);
-      setInitialLoading(false);
-    });
-  }, [directIds]);
+    let cancelled = false;
+    batchFetch([...parentIds, ...childIds])
+      .then((fetched) => {
+        if (cancelled) return;
+        setLoaded((prev) => new Map([...prev, ...fetched]));
+        const pick = (ids: number[]) =>
+          ids.map((id) => fetched.get(id)).filter((p): p is Person => p !== undefined);
+        const parents = pick(parentIds).map(toSummary);
+        const children = pick(childIds).map(toSummary);
+        setAncestorGens(parents.length > 0 ? [parents] : []);
+        setDescendantGens(children.length > 0 ? [children] : []);
+        setError(null);
+        setInitialLoading(false);
+      })
+      .catch(() => {
+        if (cancelled) return;
+        setError(LOAD_ERROR);
+        setInitialLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [initialRoot, batchFetch, attempt]);
 
   // ── Layout
 
@@ -106,133 +125,90 @@ export function useFamilyGraph(person: Person): FamilyGraphState {
     [rootSummary, ancestorGens, descendantGens, fetchedPersons],
   );
 
-  const containerHeight = Math.max(320, Math.min(580, 80 + layout.rowCount * COL_W));
+  // ── Expansion
 
-  // ── Depth expansion
+  /** Tous les nœuds affichés (amont + racine + aval) */
+  const displayedIds = useMemo(
+    () => new Set([person.id, ...ancestorGens.flat(), ...descendantGens.flat()].map(idOf)),
+    [person.id, ancestorGens, descendantGens],
+  );
 
-  const canExpandAncestors = useMemo(() => {
-    const existingIds = new Set([person.id, ...ancestorGens.flat().map((p) => p.id)]);
-    const currentDepth = ancestorGens.length;
-    // Parrains non encore chargés
-    for (const id of existingIds) {
-      const p = fetchedPersons.get(id);
-      if ((p?.godFathers ?? []).some((s) => !existingIds.has(s.godFatherId))) return true;
-    }
-    // Liens chargés mais pas encore affichés (cross-links au-delà de la profondeur courante)
-    for (const p of fetchedPersons.values()) {
-      for (const s of p.godChildren) {
-        if (!existingIds.has(s.godFatherId) || !existingIds.has(s.godChildId)) continue;
-        const childDist = layout.ancestorDist.get(s.godChildId);
-        if (childDist !== undefined && childDist + 1 > currentDepth) return true;
-      }
-    }
-    return false;
-  }, [ancestorGens, fetchedPersons, person.id, layout]);
-
-  const canExpandDescendants = useMemo(() => {
-    const existingIds = new Set([person.id, ...descendantGens.flat().map((p) => p.id)]);
-    const currentDepth = descendantGens.length;
-    for (const id of existingIds) {
-      const p = fetchedPersons.get(id);
-      if ((p?.godChildren ?? []).some((s) => !existingIds.has(s.godChildId))) return true;
-    }
-    for (const p of fetchedPersons.values()) {
-      for (const s of p.godChildren) {
-        if (!existingIds.has(s.godFatherId) || !existingIds.has(s.godChildId)) continue;
-        const fatherDist = layout.descendantDist.get(s.godFatherId);
-        if (fatherDist !== undefined && fatherDist + 1 > currentDepth) return true;
-      }
-    }
-    return false;
-  }, [descendantGens, fetchedPersons, person.id, layout]);
-
-  const expandAncestors = () => {
-    const frontier =
-      ancestorGens.length > 0 ? (ancestorGens[ancestorGens.length - 1] ?? []) : [rootSummary];
-    const existingIds = new Set([
+  /** Prochains parrains (resp. fillots) à charger, d'après tous les nœuds du côté concerné */
+  const nextIds = (side: 'up' | 'down'): number[] => {
+    const sideNodes = [
       person.id,
-      ...ancestorGens.flat().map((p) => p.id),
-      ...descendantGens.flat().map((p) => p.id),
-    ]);
-    const newIds = [
-      ...new Set(
-        frontier
-          .flatMap((p) => fetchedPersons.get(p.id)?.godFathers.map((s) => s.godFatherId) ?? [])
-          .filter((id) => !existingIds.has(id)),
-      ),
+      ...(side === 'up' ? ancestorGens : descendantGens).flat().map(idOf),
     ];
-    if (newIds.length === 0) {
-      // Pas de nouveaux nœuds, mais on incrémente la profondeur pour révéler les cross-links
-      setAncestorGens((prev) => [...prev, []]);
-      return;
-    }
-
-    setLoadingAncestors(true);
-    void batchFetch(newIds).then((fetched) => {
-      setFetchedPersons((prev) => new Map([...prev, ...fetched]));
-      const allFetched = new Map([...fetchedPersons, ...fetched]);
-      const newGen = newIds
-        .map((id) => allFetched.get(id))
-        .filter((p): p is Person => p !== undefined)
-        .map(toSummary);
-      setAncestorGens((prev) => [...prev, newGen]);
-      setLoadingAncestors(false);
+    const ids = sideNodes.flatMap((id) => {
+      const p = fetchedPersons.get(id);
+      if (!p) return [];
+      return side === 'up'
+        ? p.godFathers.map((s) => s.godFatherId)
+        : p.godChildren.map((s) => s.godChildId);
     });
+    return [...new Set(ids.filter((id) => !displayedIds.has(id)))];
   };
 
-  const expandDescendants = () => {
-    const frontier =
-      descendantGens.length > 0 ? (descendantGens[descendantGens.length - 1] ?? []) : [rootSummary];
-    const existingIds = new Set([
-      person.id,
-      ...ancestorGens.flat().map((p) => p.id),
-      ...descendantGens.flat().map((p) => p.id),
-    ]);
-    const newIds = [
-      ...new Set(
-        frontier
-          .flatMap((p) => fetchedPersons.get(p.id)?.godChildren.map((s) => s.godChildId) ?? [])
-          .filter((id) => !existingIds.has(id)),
-      ),
-    ];
-    if (newIds.length === 0) {
-      setDescendantGens((prev) => [...prev, []]);
-      return;
-    }
+  // « + » n'est actif que s'il ajoute réellement des personnes
+  const canExpandAncestors = !initialLoading && error === null && nextIds('up').length > 0;
+  const canExpandDescendants = !initialLoading && error === null && nextIds('down').length > 0;
 
-    setLoadingDescendants(true);
-    void batchFetch(newIds).then((fetched) => {
-      setFetchedPersons((prev) => new Map([...prev, ...fetched]));
-      const allFetched = new Map([...fetchedPersons, ...fetched]);
-      const newGen = newIds
-        .map((id) => allFetched.get(id))
-        .filter((p): p is Person => p !== undefined)
-        .map(toSummary);
-      setDescendantGens((prev) => [...prev, newGen]);
-      setLoadingDescendants(false);
-    });
+  const expand = (side: 'up' | 'down') => {
+    const setGens = side === 'up' ? setAncestorGens : setDescendantGens;
+    const setLoading = side === 'up' ? setLoadingAncestors : setLoadingDescendants;
+    const ids = nextIds(side);
+    if (ids.length === 0) return;
+    setLoading(true);
+    batchFetch(ids)
+      .then((fetched) => {
+        mergeLoaded(fetched);
+        const gen = ids
+          .map((id) => fetched.get(id))
+          .filter((p): p is Person => p !== undefined)
+          .map(toSummary);
+        if (gen.length > 0) setGens((prev) => [...prev, gen]);
+      })
+      .catch(() => {
+        setError(LOAD_ERROR);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return {
-    ...panZoom,
     layout,
-    containerHeight,
     initialLoading,
+    error,
     loadingAncestors,
     loadingDescendants,
-    hoverId,
-    ancestorGens,
-    descendantGens,
+    ancestorDepth: ancestorGens.length,
+    descendantDepth: descendantGens.length,
     canExpandAncestors,
     canExpandDescendants,
-    setHoverId,
+    fetchedPersons,
+    retry: () => {
+      setError(null);
+      if (ancestorGens.length + descendantGens.length === 0) {
+        setInitialLoading(true);
+        setAttempt((n) => n + 1);
+      }
+    },
     shrinkAncestors: () => {
       setAncestorGens((prev) => prev.slice(0, -1));
     },
-    expandAncestors,
+    expandAncestors: () => {
+      expand('up');
+    },
     shrinkDescendants: () => {
       setDescendantGens((prev) => prev.slice(0, -1));
     },
-    expandDescendants,
+    expandDescendants: () => {
+      expand('down');
+    },
   };
+}
+
+function idOf(p: PersonSummary | number): number {
+  return typeof p === 'number' ? p : p.id;
 }

@@ -23,7 +23,7 @@ async function request<T>(method: string, url: string, body?: unknown): Promise<
       method,
       headers,
       credentials: 'same-origin',
-      body: body !== undefined ? JSON.stringify(body) : undefined,
+      ...(body !== undefined ? { body: JSON.stringify(body) } : {}),
     });
   } catch {
     return { ok: false, error: NETWORK_ERROR };

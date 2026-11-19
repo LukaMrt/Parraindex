@@ -8,20 +8,19 @@ interface FeatureCard {
   iconPath: string;
 }
 
-const BASE_CARDS: FeatureCard[] = [
-  {
-    title: 'Annuaire',
-    description: 'Parcourez tous les étudiants en grille, liste ou arbre de parrainage.',
-    to: '/tree',
-    iconPath: 'M3 4h14M3 9h14M3 14h14',
-  },
-  {
-    title: 'À propos',
-    description: 'En savoir plus sur le projet Parraindex et comment y contribuer.',
-    to: '/about',
-    iconPath: 'M5 10h10M11 6l4 4-4 4',
-  },
-];
+const DIRECTORY_CARD: FeatureCard = {
+  title: 'Annuaire',
+  description: 'Parcourez tous les étudiants en grille, liste ou arbre de parrainage.',
+  to: '/tree',
+  iconPath: 'M3 4h14M3 9h14M3 14h14',
+};
+
+const ABOUT_CARD: FeatureCard = {
+  title: 'À propos',
+  description: 'En savoir plus sur le projet Parraindex et comment y contribuer.',
+  to: '/about',
+  iconPath: 'M5 10h10M11 6l4 4-4 4',
+};
 
 const PROFILE_CARD_BASE = {
   title: 'Mon profil',
@@ -33,8 +32,8 @@ export function FeatureCards() {
   const { user } = useAuth();
 
   const cards: FeatureCard[] = user
-    ? [BASE_CARDS[0], { ...PROFILE_CARD_BASE, to: `/person/${user.person.id}` }, BASE_CARDS[1]]
-    : BASE_CARDS;
+    ? [DIRECTORY_CARD, { ...PROFILE_CARD_BASE, to: `/person/${user.person.id}` }, ABOUT_CARD]
+    : [DIRECTORY_CARD, ABOUT_CARD];
 
   return (
     <div

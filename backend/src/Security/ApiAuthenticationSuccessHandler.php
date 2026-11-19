@@ -43,7 +43,7 @@ final readonly class ApiAuthenticationSuccessHandler implements AuthenticationSu
             email: (string) $user->getEmail(),
             isAdmin: $user->isAdmin(),
             isValidated: $user->isValidated(),
-            person: $this->personService->mapToResponseDto($loaded),
+            person: $this->personService->mapToResponseDto($loaded, true),
         );
 
         $response = ApiResponse::success($dto);

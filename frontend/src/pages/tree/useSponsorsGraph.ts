@@ -1,29 +1,18 @@
+import { useMemo } from 'react';
 import type { Person } from '../../types/person';
+import type { Sponsor } from '../../types/sponsor';
 
-export interface SponsorLink {
-  id: number;
-  godFatherId: number;
-  godChildId: number;
-}
+/** Lien de parrainage complet (type, date, description) : rien n'est perdu pour l'affichage */
+export type SponsorLink = Sponsor;
 
-export interface SponsorsGraphResult {
-  links: SponsorLink[];
-  loading: boolean;
-}
-
-export function useSponsorsGraph(persons: Person[]): SponsorsGraphResult {
-  const seen = new Set<string>();
-  const links: SponsorLink[] = [];
-
-  for (const p of persons) {
-    for (const s of p.godChildren) {
-      const k = `${s.godFatherId}-${s.godChildId}`;
-      if (!seen.has(k)) {
-        seen.add(k);
-        links.push({ id: s.id, godFatherId: s.godFatherId, godChildId: s.godChildId });
-      }
+/** Tous les parrainages entre personnes chargées, dédupliqués par id */
+export function useSponsorsGraph(persons: Person[]): SponsorLink[] {
+  return useMemo(() => {
+    const byId = new Map<number, Sponsor>();
+    for (const p of persons) {
+      for (const s of p.godChildren) byId.set(s.id, s);
+      for (const s of p.godFathers) byId.set(s.id, s);
     }
-  }
-
-  return { links, loading: false };
+    return [...byId.values()];
+  }, [persons]);
 }

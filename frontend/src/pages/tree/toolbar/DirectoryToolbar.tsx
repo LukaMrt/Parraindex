@@ -34,6 +34,10 @@ interface DirectoryToolbarProps {
   onClearSchools: () => void;
   resultCount: number;
   loading: boolean;
+  /** Toutes les pages ne sont pas encore chargées : listes de filtres incomplètes */
+  filtersPartial?: boolean;
+  /** Vue qui ignore recherche et filtres (Réseau : toujours le réseau complet) */
+  filtersDisabled?: boolean;
 }
 
 export function DirectoryToolbar({
@@ -57,6 +61,8 @@ export function DirectoryToolbar({
   onClearSchools,
   resultCount,
   loading,
+  filtersPartial = false,
+  filtersDisabled = false,
 }: DirectoryToolbarProps) {
   return (
     <div className="border-b border-line bg-surface px-4 py-4 sm:px-7 sm:py-5">
@@ -70,14 +76,16 @@ export function DirectoryToolbar({
             onSearchChange(e.target.value);
           }}
           wrapperClassName="flex-1 min-w-[200px]"
-          disabled={loading}
+          aria-label="Rechercher un étudiant"
+          disabled={loading || filtersDisabled}
         />
 
         <ViewSwitcher value={view} onChange={onViewChange} />
 
         <button
           onClick={onToggleAlphabetical}
-          disabled={loading}
+          disabled={loading || filtersDisabled}
+          aria-pressed={alphabetical}
           className={cn(
             'flex h-9 cursor-pointer items-center gap-1.5 rounded-[9px] border px-3.5 text-[13px] font-medium transition-all duration-150',
             alphabetical
@@ -102,7 +110,12 @@ export function DirectoryToolbar({
 
       {/* Ligne 2 : filtres + compteur */}
       <div className="mt-3.5 flex flex-wrap items-center gap-2">
-        {loading ? (
+        {filtersDisabled ? (
+          <p className="text-[12.5px] text-ink-3">
+            La vue Réseau affiche toujours le réseau complet : recherche et filtres ne s&apos;y
+            appliquent pas.
+          </p>
+        ) : loading ? (
           <div className="h-9 w-64 animate-pulse rounded-[9px] bg-line" />
         ) : (
           <>
@@ -131,8 +144,9 @@ export function DirectoryToolbar({
               onClear={onClearSchools}
             />
 
-            <span className="ml-auto text-[12.5px] font-medium text-ink-3">
+            <span className="ml-auto text-[12.5px] font-medium text-ink-3" aria-live="polite">
               {resultCount} résultat{resultCount > 1 ? 's' : ''}
+              {filtersPartial && ' (chargement…)'}
             </span>
           </>
         )}

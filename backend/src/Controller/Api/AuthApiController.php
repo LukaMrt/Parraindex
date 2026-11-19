@@ -231,7 +231,7 @@ final class AuthApiController extends AbstractController
             email: (string) $user->getEmail(),
             isAdmin: $user->isAdmin(),
             isValidated: $user->isValidated(),
-            person: $this->personService->mapToResponseDto($loaded),
+            person: $this->personService->mapToResponseDto($loaded, true),
         );
     }
 }

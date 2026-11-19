@@ -14,7 +14,7 @@ const badgeVariants = cva('inline-flex items-center gap-1.5 font-medium', {
   defaultVariants: { variant: 'default' },
 });
 
-interface BadgeProps extends HTMLAttributes<'span'>, VariantProps<typeof badgeVariants> {
+interface BadgeProps extends HTMLAttributes<HTMLSpanElement>, VariantProps<typeof badgeVariants> {
   /** Couleur pour variant=promo ou type */
   color?: string;
   /** Affiche un point coloré avant le texte */

@@ -1,11 +1,26 @@
-import type { Result } from '../types/api';
+import type { ErrorCode, Result } from '../types/api';
 import { getHomeStats } from './api/home';
 import { getAccount, getPerson, searchPersons } from './api/persons';
 import { getSponsor } from './api/sponsors';
 
-/** Converts a Result<T> into a resolved T or a thrown Error. */
+/** Erreur levée par les query functions : conserve le code API pour l'UI. */
+export class ApiQueryError extends Error {
+  constructor(
+    message: string,
+    public readonly code: ErrorCode,
+  ) {
+    super(message);
+    this.name = 'ApiQueryError';
+  }
+}
+
+export function isNotFound(error: unknown): boolean {
+  return error instanceof ApiQueryError && error.code.endsWith('_NOT_FOUND');
+}
+
+/** Converts a Result<T> into a resolved T or a thrown ApiQueryError. */
 export function throwable<T>(result: Result<T>): T {
-  if (!result.ok) throw new Error(result.error.message);
+  if (!result.ok) throw new ApiQueryError(result.error.message, result.error.code);
   return result.data;
 }
 
@@ -27,6 +42,18 @@ export const personQueries = {
   detail: (id: number) => ({
     queryKey: ['persons', id] as const,
     queryFn: () => getPerson(id).then(throwable),
+  }),
+  /**
+   * Version éditable d'une fiche : inclut les caractéristiques privées (l'API ne les
+   * renvoie qu'au propriétaire / aux admins). Clé distincte de `detail` pour ne jamais
+   * réutiliser une version publique en cache (issue d'un batch d'arbre, par exemple) :
+   * à l'enregistrement, les caractéristiques absentes seraient supprimées.
+   */
+  editable: (id: number) => ({
+    queryKey: ['persons', id, 'edit'] as const,
+    queryFn: () => getPerson(id).then(throwable),
+    staleTime: 0,
+    gcTime: 0,
   }),
   account: (id: number) => ({
     queryKey: ['persons', id, 'account'] as const,

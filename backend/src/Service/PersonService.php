@@ -55,7 +55,7 @@ final readonly class PersonService
 
     /**
      * @param 'id'|'firstName'|'lastName'|'startYear'|'createdAt' $orderBy
-     * @return Person[]
+     * @return list<Person>
      */
     public function getAll(string $orderBy = 'id', ?string $q = null, int $limit = 20): array
     {
@@ -94,7 +94,11 @@ final readonly class PersonService
         return $this->personRepository->findAllWithRelationsByIds($ids);
     }
 
-    public function mapToResponseDto(Person $person): PersonResponseDto
+    /**
+     * @param boolean $includePrivate Inclut les caractéristiques masquées (visible = false),
+     *                                à réserver à la personne elle-même et aux admins.
+     */
+    public function mapToResponseDto(Person $person, bool $includePrivate = false): PersonResponseDto
     {
         $filename = $person->getPicture();
         $picture  = $filename !== null && str_ends_with($filename, '.gif')
@@ -113,10 +117,11 @@ final readonly class PersonService
             description: $person->getDescription(),
             godFathers: array_map($this->mapSponsorToResponseDto(...), $person->getGodFathers()->toArray()),
             godChildren: array_map($this->mapSponsorToResponseDto(...), $person->getGodChildren()->toArray()),
-            characteristics: array_filter(
+            characteristics: array_values(array_filter(
                 array_map($this->mapCharacteristicToDto(...), $person->getCharacteristics()->toArray()),
-                static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto,
-            ),
+                static fn(?CharacteristicDto $c): bool => $c instanceof CharacteristicDto
+                    && ($includePrivate || $c->visible),
+            )),
             filieres: array_map(
                 static fn(PersonFiliere $personFiliere): FiliereResponseDto => new FiliereResponseDto(
                     name: $personFiliere->getFiliere()?->getName() ?? throw new \LogicException('PersonFiliere has no Filiere.'),

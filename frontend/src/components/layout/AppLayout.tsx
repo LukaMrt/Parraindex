@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router';
+import { Outlet, ScrollRestoration } from 'react-router';
 import { ToastContainer } from '../ui/Toast';
 import { useNotification } from '../../hooks/useNotification';
 import { Header } from './Header';
@@ -13,6 +13,8 @@ export function AppLayout() {
         <Outlet />
       </main>
       <ToastContainer notifications={notifications} onDismiss={dismiss} />
+      {/* Remonte en haut à chaque nouvelle page, restaure la position au retour arrière */}
+      <ScrollRestoration />
     </div>
   );
 }

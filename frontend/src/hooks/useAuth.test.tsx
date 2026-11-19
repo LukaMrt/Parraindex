@@ -1,8 +1,8 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { renderHook, act, waitFor } from '@testing-library/react';
-import React from 'react';
 import type { ReactNode } from 'react';
 import { AuthProvider } from '../context/AuthContext';
+import { NotificationProvider } from '../context/NotificationContext';
 import { useAuth } from './useAuth';
 
 vi.mock('../lib/api/auth', () => ({
@@ -22,18 +22,30 @@ const mockPerson: Person = {
   fullName: 'Alice Dupont',
   startYear: 2020,
   picture: null,
-  color: '#000',
+  birthdate: null,
+  biography: null,
+  description: null,
+  godFathers: [],
+  godChildren: [],
+  characteristics: [],
+  filieres: [],
+  associations: [],
+  links: [],
 };
 
 const mockMe: Me = {
   id: 1,
   email: 'test@example.com',
   isAdmin: false,
-  isVerified: true,
+  isValidated: true,
   person: mockPerson,
 };
 
-const wrapper = ({ children }: { children: ReactNode }) => <AuthProvider>{children}</AuthProvider>;
+const wrapper = ({ children }: { children: ReactNode }) => (
+  <NotificationProvider>
+    <AuthProvider>{children}</AuthProvider>
+  </NotificationProvider>
+);
 
 beforeEach(() => {
   vi.mocked(authApi.getMe).mockResolvedValue({

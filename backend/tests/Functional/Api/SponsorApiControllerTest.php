@@ -187,7 +187,7 @@ final class SponsorApiControllerTest extends WebTestCase
     }
 
     /**
-     * @return Person[]
+     * @return list<Person>
      */
     private function getAllPersons(): array
     {

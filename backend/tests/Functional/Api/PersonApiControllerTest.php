@@ -154,6 +154,65 @@ final class PersonApiControllerTest extends WebTestCase
         self::assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
+    public function testShowHidesPrivateCharacteristicsFromAnonymous(): void
+    {
+        $person = $this->getPersonByEmail('lilian.baudry@etu.univ-lyon1.fr');
+
+        $this->client->request(Request::METHOD_GET, '/api/persons/' . $this->idOf($person));
+
+        self::assertResponseIsSuccessful();
+        self::assertSame([], $this->privateCharacteristics($this->responseData()));
+    }
+
+    public function testShowHidesPrivateCharacteristicsFromOtherUser(): void
+    {
+        $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
+        $other = $this->getPersonByEmail('luka.maret@etu.univ-lyon1.fr');
+
+        $this->client->request(Request::METHOD_GET, '/api/persons/' . $this->idOf($other));
+
+        self::assertResponseIsSuccessful();
+        self::assertSame([], $this->privateCharacteristics($this->responseData()));
+    }
+
+    public function testShowIncludesPrivateCharacteristicsForOwner(): void
+    {
+        $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
+        $person = $this->getPersonByEmail('lilian.baudry@etu.univ-lyon1.fr');
+
+        $this->client->request(Request::METHOD_GET, '/api/persons/' . $this->idOf($person));
+
+        self::assertResponseIsSuccessful();
+        self::assertNotEmpty($this->privateCharacteristics($this->responseData()));
+    }
+
+    public function testBatchHidesPrivateCharacteristics(): void
+    {
+        $person = $this->getPersonByEmail('lilian.baudry@etu.univ-lyon1.fr');
+
+        $this->client->jsonRequest('POST', '/api/persons/batch', ['ids' => [$this->idOf($person)]]);
+
+        self::assertResponseIsSuccessful();
+        $items = $this->responseDataList();
+        self::assertCount(1, $items);
+        self::assertSame([], $this->privateCharacteristics($items[0]));
+    }
+
+    /**
+     * @param array<mixed> $person
+     * @return list<mixed>
+     */
+    private function privateCharacteristics(array $person): array
+    {
+        self::assertArrayHasKey('characteristics', $person);
+        self::assertIsArray($person['characteristics']);
+
+        return array_values(array_filter(
+            $person['characteristics'],
+            static fn(mixed $c): bool => is_array($c) && ($c['visible'] ?? null) === false,
+        ));
+    }
+
     private function getFirstPerson(): Person
     {
         /** @var PersonRepository $personRepository */

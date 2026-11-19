@@ -108,6 +108,7 @@ function AddSponsorForm({
         godChildName: result.data.godChildName,
         type: result.data.type,
         date: result.data.date,
+        description: result.data.description,
       });
       notify('success', 'Parrainage ajouté');
       setOtherPerson(null);
@@ -1377,7 +1378,7 @@ export function EditPersonPage() {
 
   const [personQuery, accountQuery] = useQueries({
     queries: [
-      { ...personQueries.detail(personId), enabled: !!id },
+      { ...personQueries.editable(personId), enabled: !!id },
       { ...personQueries.account(personId), enabled: !!id },
     ],
   });
@@ -1465,7 +1466,7 @@ export function EditPersonPage() {
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    if (!person || !id) return;
+    if (!person || !id || !user) return;
 
     for (const f of filieres) {
       if (!f.name.trim()) {
@@ -1522,7 +1523,12 @@ export function EditPersonPage() {
         if (c.id < 0) {
           // nouvelle caractéristique — on envoie typeId sans id
           const typeId = (c as Characteristic & { _typeId?: number })._typeId;
-          return { id: null, typeId, value: c.value, visible: c.visible };
+          return {
+            id: null,
+            ...(typeId !== undefined ? { typeId } : {}),
+            value: c.value,
+            visible: c.visible,
+          };
         }
         return { id: c.id, value: c.value, visible: c.visible };
       }),
@@ -1552,7 +1558,7 @@ export function EditPersonPage() {
   }
 
   async function handleSaveAccount() {
-    if (!person || !id) return;
+    if (!person || !id || !user) return;
     if (accountNewPassword && accountNewPassword !== accountConfirmPassword) {
       notify('error', 'Les mots de passe ne correspondent pas');
       return;
@@ -1562,9 +1568,11 @@ export function EditPersonPage() {
     const isOwnProfile = user.person.id === person.id;
 
     const result = await updateAccount(person.id, {
-      email: accountEmail !== '' ? accountEmail : undefined,
-      currentPassword: isOwnProfile ? accountCurrentPassword || undefined : undefined,
-      newPassword: accountNewPassword || undefined,
+      ...(accountEmail ? { email: accountEmail } : {}),
+      ...(isOwnProfile && accountCurrentPassword
+        ? { currentPassword: accountCurrentPassword }
+        : {}),
+      ...(accountNewPassword ? { newPassword: accountNewPassword } : {}),
     });
 
     if (!result.ok) {

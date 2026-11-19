@@ -21,7 +21,7 @@ export default defineConfig({
         test: {
           name: 'node',
           environment: 'node',
-          include: ['src/lib/*.test.ts'],
+          include: ['src/lib/*.test.ts', 'src/pages/**/*.test.ts'],
         },
       },
     ],
