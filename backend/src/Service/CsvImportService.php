@@ -246,8 +246,8 @@ final readonly class CsvImportService
 
         $sponsorDate = trim($data['sponsorDate'] ?? '');
         if ($sponsorDate !== '') {
-            $date = \DateTime::createFromFormat('Y-m-d', $sponsorDate);
-            if ($date instanceof \DateTime) {
+            $date = \DateTimeImmutable::createFromFormat('Y-m-d', $sponsorDate);
+            if ($date instanceof \DateTimeImmutable) {
                 $sponsor->setDate($date);
             }
         }

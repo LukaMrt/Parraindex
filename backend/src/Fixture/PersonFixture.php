@@ -69,7 +69,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2019)
             ->setBirthdate(new \DateTimeImmutable('2001-03-14'))
 
-            ->setCreatedAt(new \DateTime('2019-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2019-09-01'));
         $manager->persist($henri);
         $this->addReference(self::HENRI, $henri);
 
@@ -81,7 +81,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2019)
             ->setBirthdate(new \DateTimeImmutable('2001-07-22'))
 
-            ->setCreatedAt(new \DateTime('2019-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2019-09-01'));
         $manager->persist($camille);
         $this->addReference(self::CAMILLE, $camille);
 
@@ -93,7 +93,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2019)
             ->setBirthdate(new \DateTimeImmutable('2000-11-05'))
 
-            ->setCreatedAt(new \DateTime('2019-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2019-09-01'));
         $manager->persist($baptiste);
         $this->addReference(self::BAPTISTE, $baptiste);
 
@@ -106,7 +106,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2020)
             ->setBirthdate(new \DateTimeImmutable('2002-01-18'))
             ->setPicture('f85ab55cafa6746471f601a71c1d7ccc425a37c5.jpg')
-            ->setCreatedAt(new \DateTime('2020-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2020-09-01'));
         $manager->persist($lilian);
         $this->addReference(self::LILIAN, $lilian);
 
@@ -118,7 +118,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2020)
             ->setBirthdate(new \DateTimeImmutable('2002-04-30'))
 
-            ->setCreatedAt(new \DateTime('2020-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2020-09-01'));
         $manager->persist($marine);
         $this->addReference(self::MARINE, $marine);
 
@@ -130,7 +130,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2020)
             ->setBirthdate(new \DateTimeImmutable('2001-08-15'))
 
-            ->setCreatedAt(new \DateTime('2020-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2020-09-01'));
         $manager->persist($thomas);
         $this->addReference(self::THOMAS, $thomas);
 
@@ -142,7 +142,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2020)
             ->setBirthdate(new \DateTimeImmutable('2002-02-28'))
 
-            ->setCreatedAt(new \DateTime('2020-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2020-09-01'));
         $manager->persist($pauline);
         $this->addReference(self::PAULINE, $pauline);
 
@@ -155,7 +155,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setBirthdate(new \DateTimeImmutable('2003-05-12'))
             ->setPicture('04d04249801564c92579b9f8237de49a2c03e1a1.jpg')
-            ->setCreatedAt(new \DateTime('2021-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2021-09-01'));
         $manager->persist($luka);
         $this->addReference(self::LUKA, $luka);
 
@@ -167,7 +167,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setBirthdate(new \DateTimeImmutable('2003-09-03'))
 
-            ->setCreatedAt(new \DateTime('2021-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2021-09-01'));
         $manager->persist($melvyn);
         $this->addReference(self::MELVYN, $melvyn);
 
@@ -179,7 +179,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setBirthdate(new \DateTimeImmutable('2002-12-20'))
 
-            ->setCreatedAt(new \DateTime('2021-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2021-09-01'));
         $manager->persist($vincent);
         $this->addReference(self::VINCENT, $vincent);
 
@@ -191,7 +191,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setBirthdate(new \DateTimeImmutable('2003-07-08'))
 
-            ->setCreatedAt(new \DateTime('2021-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2021-09-01'));
         $manager->persist($sarah);
         $this->addReference(self::SARAH, $sarah);
 
@@ -203,7 +203,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2021)
             ->setBirthdate(new \DateTimeImmutable('2003-03-25'))
 
-            ->setCreatedAt(new \DateTime('2021-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2021-09-01'));
         $manager->persist($julian);
         $this->addReference(self::JULIAN, $julian);
 
@@ -216,7 +216,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setBirthdate(new \DateTimeImmutable('2004-01-14'))
 
-            ->setCreatedAt(new \DateTime('2022-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2022-09-01'));
         $manager->persist($emma);
         $this->addReference(self::EMMA, $emma);
 
@@ -228,7 +228,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setBirthdate(new \DateTimeImmutable('2004-06-22'))
 
-            ->setCreatedAt(new \DateTime('2022-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2022-09-01'));
         $manager->persist($romain);
         $this->addReference(self::ROMAIN, $romain);
 
@@ -240,7 +240,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setBirthdate(new \DateTimeImmutable('2004-09-11'))
 
-            ->setCreatedAt(new \DateTime('2022-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2022-09-01'));
         $manager->persist($clara);
         $this->addReference(self::CLARA, $clara);
 
@@ -252,7 +252,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2022)
             ->setBirthdate(new \DateTimeImmutable('2004-04-01'))
 
-            ->setCreatedAt(new \DateTime('2022-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2022-09-01'));
         $manager->persist($maxime);
         $this->addReference(self::MAXIME, $maxime);
 
@@ -265,7 +265,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2023)
             ->setBirthdate(new \DateTimeImmutable('2005-02-14'))
 
-            ->setCreatedAt(new \DateTime('2023-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2023-09-01'));
         $manager->persist($zoe);
         $this->addReference(self::ZOE, $zoe);
 
@@ -277,7 +277,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2023)
             ->setBirthdate(new \DateTimeImmutable('2005-08-30'))
 
-            ->setCreatedAt(new \DateTime('2023-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2023-09-01'));
         $manager->persist($lucas);
         $this->addReference(self::LUCAS, $lucas);
 
@@ -289,7 +289,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2023)
             ->setBirthdate(new \DateTimeImmutable('2005-05-19'))
 
-            ->setCreatedAt(new \DateTime('2023-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2023-09-01'));
         $manager->persist($ines);
         $this->addReference(self::INES, $ines);
 
@@ -301,7 +301,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2023)
             ->setBirthdate(new \DateTimeImmutable('2005-11-07'))
 
-            ->setCreatedAt(new \DateTime('2023-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2023-09-01'));
         $manager->persist($theo);
         $this->addReference(self::THEO, $theo);
 
@@ -313,7 +313,7 @@ class PersonFixture extends Fixture
             ->setStartYear(2023)
             ->setBirthdate(new \DateTimeImmutable('2005-03-27'))
 
-            ->setCreatedAt(new \DateTime('2023-09-01'));
+            ->setCreatedAt(new \DateTimeImmutable('2023-09-01'));
         $manager->persist($manon);
         $this->addReference(self::MANON, $manon);
 

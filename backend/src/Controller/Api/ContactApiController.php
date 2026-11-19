@@ -31,7 +31,7 @@ final class ContactApiController extends AbstractController
             ->setContacterEmail($dto->contacterEmail)
             ->setType($dto->type)
             ->setDescription($dto->description)
-            ->setCreatedAt(new \DateTime())
+            ->setCreatedAt(new \DateTimeImmutable())
             ->setRelatedPersonFirstName($dto->relatedPersonFirstName)
             ->setRelatedPersonLastName($dto->relatedPersonLastName)
             ->setRelatedPerson2FirstName($dto->relatedPerson2FirstName)
@@ -47,7 +47,7 @@ final class ContactApiController extends AbstractController
         }
 
         if ($dto->sponsorDate !== null) {
-            $contact->setSponsorDate(new \DateTime($dto->sponsorDate));
+            $contact->setSponsorDate(new \DateTimeImmutable($dto->sponsorDate));
         }
 
         $this->contactService->create($contact);

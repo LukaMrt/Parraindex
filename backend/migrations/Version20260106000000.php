@@ -18,6 +18,12 @@ final class Version20260106000000 extends AbstractMigration
         return 'Replace password field with registration_token in contact table for security';
     }
 
+    #[\Override]
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         // Replace password column with registration_token column

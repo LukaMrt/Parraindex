@@ -34,7 +34,7 @@ final class ContactRepositoryTest extends KernelTestCase
         $contact->setContacterFirstName('Test');
         $contact->setContacterLastName('User');
         $contact->setDescription('Test message');
-        $contact->setCreatedAt(new \DateTime());
+        $contact->setCreatedAt(new \DateTimeImmutable());
 
         // When
         $this->repository->create($contact);
@@ -58,7 +58,7 @@ final class ContactRepositoryTest extends KernelTestCase
         $contact1->setContacterFirstName('User');
         $contact1->setContacterLastName('One');
         $contact1->setDescription('Bug report 1');
-        $contact1->setCreatedAt(new \DateTime());
+        $contact1->setCreatedAt(new \DateTimeImmutable());
 
         $contact2 = new Contact();
         $contact2->setType(Type::OTHER);
@@ -66,7 +66,7 @@ final class ContactRepositoryTest extends KernelTestCase
         $contact2->setContacterFirstName('User');
         $contact2->setContacterLastName('Two');
         $contact2->setDescription('Other message');
-        $contact2->setCreatedAt(new \DateTime());
+        $contact2->setCreatedAt(new \DateTimeImmutable());
 
         $this->repository->create($contact1);
         $this->repository->create($contact2);
@@ -88,7 +88,7 @@ final class ContactRepositoryTest extends KernelTestCase
         $contact->setContacterFirstName('Original');
         $contact->setContacterLastName('User');
         $contact->setDescription('Original message');
-        $contact->setCreatedAt(new \DateTime());
+        $contact->setCreatedAt(new \DateTimeImmutable());
 
         $this->repository->create($contact);
 
@@ -117,7 +117,7 @@ final class ContactRepositoryTest extends KernelTestCase
         $contact->setRelatedPerson2LastName('Johnson');
         $contact->setEntryYear(2024);
         $contact->setSponsorType(\App\Entity\Sponsor\Type::HEART);
-        $contact->setCreatedAt(new \DateTime());
+        $contact->setCreatedAt(new \DateTimeImmutable());
 
         // When
         $this->repository->create($contact);

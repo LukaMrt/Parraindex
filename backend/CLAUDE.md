@@ -72,6 +72,8 @@ Tests organisés en `tests/Unit` (entités), `tests/Integration/Repository` (vra
 - Repositories exposent `create()` / `update()` (gère les timestamps) / `delete()`.
 - Ne jamais exposer une entité en JSON : passer par un DTO de réponse.
 - Toute modification de schéma → `composer migration:new` + commit de la migration (la CI échoue s'il reste des changements non migrés).
+- Migrations non transactionnelles (`isTransactional(): false`, DDL MySQL auto-commit) avec un `down()` fonctionnel : la CI joue up → rollback complet → up → `schema:validate`.
+- Dates : toujours `\DateTimeImmutable` + `Types::DATE(TIME)_IMMUTABLE` (les types mutables sont dépréciés par DBAL 4.6).
 
 ## Config (variables d'environnement, pas de DSN)
 `DATABASE_DRIVER/HOST/PORT/USER/PASSWORD/NAME`, `MAIL_HOST/PORT/USER/PASSWORD/NAME`, `APP_SECRET`, `APP_URL`. En local : Mailpit sur `:1025` (SMTP) / `:8025` (web).

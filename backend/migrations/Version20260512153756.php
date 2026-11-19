@@ -17,6 +17,12 @@ final class Version20260512153756 extends AbstractMigration
         return '';
     }
 
+    #[\Override]
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE user ADD is_validated TINYINT(1) NOT NULL DEFAULT 1');

@@ -192,10 +192,10 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
             $sponsor = new Sponsor()
                 ->setGodFather($godFather)
                 ->setGodChild($godChild)
-                ->setDate(new \DateTime($date))
+                ->setDate(new \DateTimeImmutable($date))
                 ->setType($type)
                 ->setDescription($description)
-                ->setCreatedAt(new \DateTime($date));
+                ->setCreatedAt(new \DateTimeImmutable($date));
             $manager->persist($sponsor);
         }
 

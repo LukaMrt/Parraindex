@@ -17,6 +17,12 @@ final class Version20260520204549 extends AbstractMigration
         return 'Add school entity and link to person_filiere';
     }
 
+    #[\Override]
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
@@ -29,9 +35,9 @@ final class Version20260520204549 extends AbstractMigration
     public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
-        $this->addSql('DROP TABLE school');
         $this->addSql('ALTER TABLE person_filiere DROP FOREIGN KEY FK_C4EEE17C32A47EE');
         $this->addSql('DROP INDEX IDX_C4EEE17C32A47EE ON person_filiere');
         $this->addSql('ALTER TABLE person_filiere DROP school_id');
+        $this->addSql('DROP TABLE school');
     }
 }

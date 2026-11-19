@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use SortDirection;
 use App\Entity\Person\User;
 use Doctrine\ORM\Query\Expr\Join;
 use App\Entity\Person\Person;
@@ -45,7 +46,7 @@ class PersonRepository extends ServiceEntityRepository
             ->leftJoin('pf.school', 's')->addSelect('s')
             ->leftJoin('p.associations', 'pa')->addSelect('pa')
             ->leftJoin('pa.association', 'assoc')->addSelect('assoc')
-            ->orderBy('p.' . $orderBy, 'ASC');
+            ->orderBy('p.' . $orderBy, SortDirection::Ascending);
 
         if ($q !== null && trim($q) !== '') {
             $escaped = addcslashes(trim($q), '%_\\');
@@ -104,7 +105,7 @@ class PersonRepository extends ServiceEntityRepository
     {
         $ids = $this->createQueryBuilder('p')
             ->select('p.id')
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.id', SortDirection::Ascending)
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
@@ -129,7 +130,7 @@ class PersonRepository extends ServiceEntityRepository
             ->leftJoin('pa.association', 'assoc')->addSelect('assoc')
             ->where('p.id IN (:ids)')
             ->setParameter('ids', $ids)
-            ->orderBy('p.id', 'ASC')
+            ->orderBy('p.id', SortDirection::Ascending)
             ->getQuery()
             ->getResult();
 
@@ -182,7 +183,7 @@ class PersonRepository extends ServiceEntityRepository
         $result = $this->createQueryBuilder('p')
             ->select('p.startYear AS startYear, COUNT(p.id) AS count')
             ->groupBy('p.startYear')
-            ->orderBy('p.startYear', 'ASC')
+            ->orderBy('p.startYear', SortDirection::Ascending)
             ->getQuery()
             ->getScalarResult();
 
@@ -205,12 +206,12 @@ class PersonRepository extends ServiceEntityRepository
             ->leftJoin(
                 User::class,
                 'u',
-                Join::WITH,
+                Join::ON,
                 'u.person = p.id'
             )
             ->where('u.id IS NULL')
-            ->orderBy('p.lastName', 'ASC')
-            ->addOrderBy('p.firstName', 'ASC')
+            ->orderBy('p.lastName', SortDirection::Ascending)
+            ->addOrderBy('p.firstName', SortDirection::Ascending)
             ->setFirstResult($offset)
             ->setMaxResults($limit)
             ->getQuery()
@@ -226,7 +227,7 @@ class PersonRepository extends ServiceEntityRepository
             ->leftJoin(
                 User::class,
                 'u',
-                Join::WITH,
+                Join::ON,
                 'u.person = p.id'
             )
             ->where('u.id IS NULL')
@@ -241,7 +242,7 @@ class PersonRepository extends ServiceEntityRepository
             ->join(
                 User::class,
                 'u',
-                Join::WITH,
+                Join::ON,
                 'u.person = p.id'
             )
             ->where('p.id = :personId')

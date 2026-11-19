@@ -14,6 +14,12 @@ final class Version20260108080000 extends AbstractMigration
         return 'Add database indexes for frequently queried columns to improve performance';
     }
 
+    #[\Override]
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('CREATE INDEX idx_person_name ON person (first_name, last_name)');

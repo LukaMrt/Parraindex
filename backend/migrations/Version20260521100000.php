@@ -14,6 +14,12 @@ final class Version20260521100000 extends AbstractMigration
         return 'Add diploma_name to person_filiere, add start_date and end_date to person_association';
     }
 
+    #[\Override]
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE person_filiere ADD diploma_name VARCHAR(255) DEFAULT NULL');

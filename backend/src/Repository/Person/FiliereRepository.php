@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository\Person;
 
+use SortDirection;
 use App\Entity\Person\Filiere;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,7 +26,7 @@ class FiliereRepository extends ServiceEntityRepository
     {
         /** @var Filiere[] $result */
         $result = $this->createQueryBuilder('f')
-            ->orderBy('f.name', 'ASC')
+            ->orderBy('f.name', SortDirection::Ascending)
             ->getQuery()
             ->getResult();
 

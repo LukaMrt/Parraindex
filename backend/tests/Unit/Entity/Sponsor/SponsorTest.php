@@ -13,7 +13,7 @@ final class SponsorTest extends TestCase
     {
         // Given
         $sponsor = new Sponsor();
-        $date    = new \DateTime('2024-01-15');
+        $date    = new \DateTimeImmutable('2024-01-15');
         $sponsor->setDate($date);
 
         // When
@@ -39,7 +39,7 @@ final class SponsorTest extends TestCase
     {
         // Given
         $sponsor = new Sponsor();
-        $date    = new \DateTime('2024-01-15 14:30:45');
+        $date    = new \DateTimeImmutable('2024-01-15 14:30:45');
         $sponsor->setDate($date);
 
         // When

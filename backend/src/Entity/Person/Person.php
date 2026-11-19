@@ -62,7 +62,7 @@ class Person implements \Stringable
     private ?\DateTimeImmutable $updatedAt = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
-    private ?\DateTimeInterface $birthdate = null;
+    private ?\DateTimeImmutable $birthdate = null;
 
     #[ORM\Column(type: Types::TEXT, length: 65_535, nullable: true)]
     private ?string $biography = null;
@@ -88,8 +88,8 @@ class Person implements \Stringable
     #[ORM\OneToMany(targetEntity: Sponsor::class, mappedBy: 'godFather', orphanRemoval: true)]
     private Collection $godChildren;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private ?\DateTimeInterface $createdAt;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+    private ?\DateTimeImmutable $createdAt;
 
     /**
      * @var Collection<int, Characteristic>
@@ -120,7 +120,7 @@ class Person implements \Stringable
         $this->godFathers      = new ArrayCollection();
         $this->godChildren     = new ArrayCollection();
         $this->characteristics = new ArrayCollection();
-        $this->createdAt       = new \DateTime();
+        $this->createdAt       = new \DateTimeImmutable();
         $this->filieres        = new ArrayCollection();
         $this->associations    = new ArrayCollection();
         $this->links = new ArrayCollection();
@@ -201,12 +201,12 @@ class Person implements \Stringable
         return $this->updatedAt;
     }
 
-    public function getBirthdate(): ?\DateTimeInterface
+    public function getBirthdate(): ?\DateTimeImmutable
     {
         return $this->birthdate;
     }
 
-    public function setBirthdate(?\DateTimeInterface $birthdate): static
+    public function setBirthdate(?\DateTimeImmutable $birthdate): static
     {
         $this->birthdate = $birthdate;
 
@@ -325,12 +325,12 @@ class Person implements \Stringable
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(?\DateTimeInterface $createdAt): static
+    public function setCreatedAt(?\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 

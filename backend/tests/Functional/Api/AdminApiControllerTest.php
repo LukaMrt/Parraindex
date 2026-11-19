@@ -79,7 +79,7 @@ final class AdminApiControllerTest extends WebTestCase
             ->setContacterEmail('test@example.com')
             ->setType(ContactType::OTHER)
             ->setDescription('Test contact')
-            ->setCreatedAt(new \DateTime());
+            ->setCreatedAt(new \DateTimeImmutable());
 
         /** @var ContactRepository $contactRepository */
         $contactRepository = self::getContainer()->get(ContactRepository::class);

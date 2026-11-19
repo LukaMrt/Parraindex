@@ -17,6 +17,12 @@ final class Version20260520210304 extends AbstractMigration
         return 'Add color to filiere, add logo to school';
     }
 
+    #[\Override]
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE filiere ADD color VARCHAR(7) DEFAULT NULL');

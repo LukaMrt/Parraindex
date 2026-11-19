@@ -2,3 +2,6 @@ doctrine_migrations:
     migrations_paths:
         'DoctrineMigrations': '%kernel.project_dir%/migrations'
     enable_profiler: true
+    # MySQL valide implicitement chaque instruction DDL : les nouvelles migrations
+    # sont générées non transactionnelles (isTransactional() => false)
+    transactional: false

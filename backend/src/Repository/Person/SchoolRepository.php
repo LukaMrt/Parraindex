@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository\Person;
 
+use SortDirection;
 use App\Entity\Person\School;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,7 +26,7 @@ class SchoolRepository extends ServiceEntityRepository
     {
         /** @var School[] $result */
         $result = $this->createQueryBuilder('s')
-            ->orderBy('s.name', 'ASC')
+            ->orderBy('s.name', SortDirection::Ascending)
             ->getQuery()
             ->getResult();
 

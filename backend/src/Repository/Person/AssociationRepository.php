@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository\Person;
 
+use SortDirection;
 use App\Entity\Person\Association;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -25,7 +26,7 @@ class AssociationRepository extends ServiceEntityRepository
     {
         /** @var Association[] $result */
         $result = $this->createQueryBuilder('a')
-            ->orderBy('a.name', 'ASC')
+            ->orderBy('a.name', SortDirection::Ascending)
             ->getQuery()
             ->getResult();
 

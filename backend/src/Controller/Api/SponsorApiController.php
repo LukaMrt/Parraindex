@@ -61,7 +61,7 @@ final class SponsorApiController extends AbstractController
             ->setDescription($dto->description);
 
         if ($dto->date !== null) {
-            $sponsor->setDate(new \DateTime($dto->date));
+            $sponsor->setDate(new \DateTimeImmutable($dto->date));
         }
 
         $this->sponsorService->update($sponsor);
@@ -92,7 +92,7 @@ final class SponsorApiController extends AbstractController
             ->setDescription($dto->description);
 
         if ($dto->date !== null) {
-            $sponsor->setDate(new \DateTime($dto->date));
+            $sponsor->setDate(new \DateTimeImmutable($dto->date));
         }
 
         $this->sponsorService->update($sponsor);

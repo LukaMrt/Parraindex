@@ -137,7 +137,7 @@ final class SponsorApiControllerTest extends WebTestCase
         self::assertInstanceOf(Person::class, $other);
 
         $sponsor = new Sponsor();
-        $sponsor->setGodFather($luka)->setGodChild($other)->setType(Type::UNKNOWN)->setCreatedAt(new \DateTime());
+        $sponsor->setGodFather($luka)->setGodChild($other)->setType(Type::UNKNOWN)->setCreatedAt(new \DateTimeImmutable());
         /** @var SponsorRepository $sponsorRepo */
         $sponsorRepo = self::getContainer()->get(SponsorRepository::class);
         $sponsorRepo->update($sponsor);

@@ -17,6 +17,12 @@ final class Version20260511193802 extends AbstractMigration
         return 'Add updatedAt field to Person for VichUploader change detection';
     }
 
+    #[\Override]
+    public function isTransactional(): bool
+    {
+        return false;
+    }
+
     public function up(Schema $schema): void
     {
         $this->addSql('ALTER TABLE person ADD updated_at DATETIME DEFAULT NULL');

@@ -36,12 +36,12 @@ class Contact
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
-    private ?\DateTimeInterface $createdAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
-    #[ORM\Column(type: Types::DATETIME_MUTABLE, nullable: true)]
-    private ?\DateTimeInterface $resolutionDate = null;
+    #[ORM\Column(type: Types::DATETIME_IMMUTABLE, nullable: true)]
+    private ?\DateTimeImmutable $resolutionDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     #[Assert\When(
@@ -85,12 +85,12 @@ class Contact
     )]
     private ?SponsorType $sponsorType = null;
 
-    #[ORM\Column(type: Types::DATE_MUTABLE, nullable: true)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     #[Assert\When(
         expression: 'this.getType().value in [3]',
         constraints: [new Assert\NotNull()]
     )]
-    private ?\DateTime $sponsorDate = null;
+    private ?\DateTimeImmutable $sponsorDate = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $registrationToken = null;
@@ -173,24 +173,24 @@ class Contact
         return $this;
     }
 
-    public function getCreatedAt(): ?\DateTimeInterface
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
 
         return $this;
     }
 
-    public function getResolutionDate(): ?\DateTimeInterface
+    public function getResolutionDate(): ?\DateTimeImmutable
     {
         return $this->resolutionDate;
     }
 
-    public function setResolutionDate(?\DateTimeInterface $resolutionDate): static
+    public function setResolutionDate(?\DateTimeImmutable $resolutionDate): static
     {
         $this->resolutionDate = $resolutionDate;
 
@@ -269,12 +269,12 @@ class Contact
         return $this;
     }
 
-    public function getSponsorDate(): ?\DateTime
+    public function getSponsorDate(): ?\DateTimeImmutable
     {
         return $this->sponsorDate;
     }
 
-    public function setSponsorDate(?\DateTime $sponsorDate): static
+    public function setSponsorDate(?\DateTimeImmutable $sponsorDate): static
     {
         $this->sponsorDate = $sponsorDate;
 

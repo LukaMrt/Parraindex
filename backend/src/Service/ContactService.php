@@ -32,7 +32,7 @@ final readonly class ContactService
 
     public function close(Contact $contact): void
     {
-        $contact->setResolutionDate(new \DateTime());
+        $contact->setResolutionDate(new \DateTimeImmutable());
         $this->contactRepository->update($contact);
     }
 
