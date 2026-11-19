@@ -59,7 +59,7 @@ final readonly class CsvImportService
         $rows = $this->parseCsv($csvContent);
 
         if ($rows === []) {
-            $result['errors'][] = 'Le fichier CSV est vide ou ne contient que l\'en-tête.';
+            $result['errors'][] = "Le fichier CSV est vide ou ne contient que l'en-tête.";
             return $result;
         }
 

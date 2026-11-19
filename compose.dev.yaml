@@ -27,7 +27,7 @@ services:
       - ./backend/templates:/app/templates
 
   frontend:
-    image: node:22-alpine
+    image: node:24-alpine
     working_dir: /app
     ports:
       - "3000:3000"

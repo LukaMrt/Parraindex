@@ -33,7 +33,7 @@ final class SponsorApiController extends AbstractController
         $sponsor = $this->sponsorService->getById($id);
 
         if (!$sponsor instanceof Sponsor) {
-            return ApiResponse::notFound(ErrorCode::SPONSOR_NOT_FOUND, 'Le parrainage demandé n\'existe pas');
+            return ApiResponse::notFound(ErrorCode::SPONSOR_NOT_FOUND, "Le parrainage demandé n'existe pas");
         }
 
         return ApiResponse::success($this->sponsorService->mapToResponseDto($sponsor));
@@ -47,11 +47,11 @@ final class SponsorApiController extends AbstractController
         $godChild  = $this->personService->getById($dto->godChildId);
 
         if (!$godFather instanceof Person) {
-            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, 'Le parrain demandé n\'existe pas');
+            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, "Le parrain demandé n'existe pas");
         }
 
         if (!$godChild instanceof Person) {
-            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, 'Le filleul demandé n\'existe pas');
+            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, "Le filleul demandé n'existe pas");
         }
 
         $sponsor = new Sponsor();
@@ -79,11 +79,11 @@ final class SponsorApiController extends AbstractController
         $godChild  = $this->personService->getById($dto->godChildId);
 
         if (!$godFather instanceof Person) {
-            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, 'Le parrain demandé n\'existe pas');
+            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, "Le parrain demandé n'existe pas");
         }
 
         if (!$godChild instanceof Person) {
-            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, 'Le filleul demandé n\'existe pas');
+            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, "Le filleul demandé n'existe pas");
         }
 
         $sponsor->setGodFather($godFather)

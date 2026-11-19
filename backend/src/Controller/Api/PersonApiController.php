@@ -75,7 +75,7 @@ final class PersonApiController extends AbstractController
         $person = $this->personService->getWithRelations($id);
 
         if (!$person instanceof Person) {
-            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, 'La personne demandée n\'existe pas');
+            return ApiResponse::notFound(ErrorCode::PERSON_NOT_FOUND, "La personne demandée n'existe pas");
         }
 
         return ApiResponse::success($this->personService->mapToResponseDto($person));

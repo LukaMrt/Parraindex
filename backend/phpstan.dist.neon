@@ -41,4 +41,12 @@ parameters:
     checkTooWideReturnTypesInProtectedAndPublicMethods: true
     checkDynamicProperties: true
 
-    # ignoreErrors:
+    ignoreErrors:
+        # DBAL 4.6 deprecie les types de date mutables. Le passage des entites
+        # (Contact, Person, Sponsor) en DateTimeImmutable touche fixtures, formulaires
+        # et EasyAdmin : a traiter dans un changement dedie, puis retirer cette exception.
+        -
+            identifier: classConstant.deprecated
+            message: '#constant DATE(TIME)?_MUTABLE of class Doctrine\\DBAL\\Types\\Types#'
+            paths:
+                - src/Entity/*

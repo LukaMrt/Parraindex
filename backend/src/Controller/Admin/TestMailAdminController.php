@@ -61,13 +61,13 @@ final class TestMailAdminController extends AbstractController
             ->from(new Address($this->mailUser, $this->mailName))
             ->to($recipient)
             ->subject('[Parraindex] Email de test')
-            ->html('<p>Ceci est un email de test envoyé depuis le tableau de bord Parraindex. Si vous recevez ce message, l\'envoi d\'emails fonctionne correctement.</p>');
+            ->html("<p>Ceci est un email de test envoyé depuis le tableau de bord Parraindex. Si vous recevez ce message, l'envoi d'emails fonctionne correctement.</p>");
 
         try {
             $this->mailer->send($email);
             $this->addFlash('success', sprintf('Email de test envoyé avec succès à %s.', $recipient));
         } catch (TransportExceptionInterface $transportException) {
-            $this->addFlash('danger', sprintf('Échec de l\'envoi : %s', $transportException->getMessage()));
+            $this->addFlash('danger', sprintf("Échec de l'envoi : %s", $transportException->getMessage()));
         }
 
         return $this->redirect($redirectUrl);

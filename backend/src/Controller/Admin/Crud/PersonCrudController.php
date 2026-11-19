@@ -41,7 +41,7 @@ final class PersonCrudController extends AbstractCrudController
         yield IdField::new('id')->hideOnForm();
         yield TextField::new('firstName', 'Prénom');
         yield TextField::new('lastName', 'Nom');
-        yield IntegerField::new('startYear', 'Année d\'entrée');
+        yield IntegerField::new('startYear', "Année d'entrée");
         yield DateField::new('birthdate', 'Date de naissance')->hideOnIndex();
         yield TextareaField::new('biography', 'Biographie')->hideOnIndex();
         yield TextareaField::new('description', 'Description')->hideOnIndex();

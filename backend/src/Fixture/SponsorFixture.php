@@ -23,7 +23,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::LILIAN,
                 '2020-09-01',
                 Type::CLASSIC,
-                'Henri a repéré le potentiel de Lilian dès les journées d\'intégration.',
+                "Henri a repéré le potentiel de Lilian dès les journées d'intégration.",
             ],
             [
                 PersonFixture::CAMILLE,
@@ -44,7 +44,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::PAULINE,
                 '2020-09-08',
                 Type::HEART,
-                'Camille a voulu transmettre sa passion pour l\'UX à Pauline lors d\'une soirée de la promo.',
+                "Camille a voulu transmettre sa passion pour l'UX à Pauline lors d'une soirée de la promo.",
             ],
 
             // ── Génération 2020 → 2021 ──────────────────────────────────────
@@ -53,14 +53,14 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::LUKA,
                 '2021-09-03',
                 Type::CLASSIC,
-                'Lilian a immédiatement vu en Luka un développeur en devenir et n\'a pas hésité.',
+                "Lilian a immédiatement vu en Luka un développeur en devenir et n'a pas hésité.",
             ],
             [
                 PersonFixture::MARINE,
                 PersonFixture::MELVYN,
                 '2021-09-07',
                 Type::CLASSIC,
-                'Marine a choisi Melvyn pour sa passion de la sécurité, domaine qu\'elle affectionne.',
+                "Marine a choisi Melvyn pour sa passion de la sécurité, domaine qu'elle affectionne.",
             ],
             [
                 PersonFixture::THOMAS,
@@ -74,7 +74,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::SARAH,
                 '2021-09-04',
                 Type::HEART,
-                'Pauline et Sarah se sont rencontrées lors d\'un hackathon et le courant est passé instantanément.',
+                "Pauline et Sarah se sont rencontrées lors d'un hackathon et le courant est passé instantanément.",
             ],
             [
                 PersonFixture::THOMAS,
@@ -104,7 +104,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::CLARA,
                 '2022-09-05',
                 Type::HEART,
-                'Sarah et Clara ont sympathisé autour de leur intérêt commun pour l\'éco-conception.',
+                "Sarah et Clara ont sympathisé autour de leur intérêt commun pour l'éco-conception.",
             ],
             [
                 PersonFixture::JULIAN,
@@ -118,7 +118,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::MAXIME,
                 '2022-10-15',
                 Type::HEART,
-                'Vincent a décidé d\'adopter Maxime en parrainage de coeur après plusieurs sessions de code ensemble.',
+                "Vincent a décidé d'adopter Maxime en parrainage de coeur après plusieurs sessions de code ensemble.",
             ],
 
             // ── Liens sautant une promotion ─────────────────────────────────
@@ -127,21 +127,21 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::LUKA,
                 '2021-09-15',
                 Type::HEART,
-                'Henri a suivi Luka de loin depuis son entrée à l\'IUT et a voulu formaliser ce lien de parrainage de cœur, au-delà de la chaîne classique.',
+                "Henri a suivi Luka de loin depuis son entrée à l'IUT et a voulu formaliser ce lien de parrainage de cœur, au-delà de la chaîne classique.",
             ],
             [
                 PersonFixture::CAMILLE,
                 PersonFixture::VINCENT,
                 '2021-10-01',
                 Type::CLASSIC,
-                'Camille a rencontré Vincent lors d\'un atelier clean code et a voulu transmettre directement sa rigueur de développeuse, sans attendre.',
+                "Camille a rencontré Vincent lors d'un atelier clean code et a voulu transmettre directement sa rigueur de développeuse, sans attendre.",
             ],
             [
                 PersonFixture::THOMAS,
                 PersonFixture::EMMA,
                 '2022-09-20',
                 Type::CLASSIC,
-                'Thomas a repéré Emma lors d\'une session de mentorat inter-promos et a souhaité l\'accompagner malgré l\'écart de promotion.',
+                "Thomas a repéré Emma lors d'une session de mentorat inter-promos et a souhaité l'accompagner malgré l'écart de promotion.",
             ],
 
             // ── Génération 2022 → 2023 ──────────────────────────────────────
@@ -150,7 +150,7 @@ class SponsorFixture extends Fixture implements DependentFixtureInterface
                 PersonFixture::ZOE,
                 '2023-09-01',
                 Type::CLASSIC,
-                'Emma a immédiatement su qu\'elle voulait être la marraine de Zoé en voyant son portfolio CSS.',
+                "Emma a immédiatement su qu'elle voulait être la marraine de Zoé en voyant son portfolio CSS.",
             ],
             [
                 PersonFixture::ROMAIN,

@@ -153,7 +153,7 @@ final class AuthApiController extends AbstractController
         }
 
         if ($this->userService->extractNamesFromEmail((string) $user->getEmail()) === null) {
-            return ApiResponse::forbidden('La vérification par email n\'est disponible que pour les comptes avec un email universitaire reconnu');
+            return ApiResponse::forbidden("La vérification par email n'est disponible que pour les comptes avec un email universitaire reconnu");
         }
 
         if ($user->isValidated()) {

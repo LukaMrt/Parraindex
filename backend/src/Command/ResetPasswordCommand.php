@@ -37,7 +37,7 @@ final class ResetPasswordCommand extends Command
         $rawId = $input->getArgument('id');
 
         if (!is_numeric($rawId)) {
-            $io->error('L\'identifiant doit être un entier.');
+            $io->error("L'identifiant doit être un entier.");
             return Command::FAILURE;
         }
 
