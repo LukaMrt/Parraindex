@@ -4,20 +4,19 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Api;
 
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Tests\Traits\ApiTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 
 final class TreeApiControllerTest extends WebTestCase
 {
-    private KernelBrowser $client;
+    use ApiTestTrait;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->client = self::createClient();
     }
-
 
     public function testTreeReturnsAllPersonsAsSummaries(): void
     {
@@ -82,15 +81,5 @@ final class TreeApiControllerTest extends WebTestCase
         /** @var array<int, array<string, mixed>> $items */
         $items = $this->responseData()['items'] ?? [];
         return $items;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function responseData(): array
-    {
-        /** @var array<string, array<string, mixed>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['data'] ?? [];
     }
 }

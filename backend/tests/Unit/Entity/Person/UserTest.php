@@ -63,7 +63,7 @@ final class UserTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testGetPictureReturnsDefaultPictureWhenNull(): void
+    public function testGetPictureReturnsNullWhenNotSet(): void
     {
         // Given
         $user = new User();
@@ -72,7 +72,7 @@ final class UserTest extends TestCase
         $result = $user->getPicture();
 
         // Then
-        $this->assertSame('no-picture.svg', $result);
+        $this->assertNull($result);
     }
 
     public function testGetPictureReturnsActualPictureWhenSet(): void

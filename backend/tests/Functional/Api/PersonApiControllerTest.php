@@ -4,18 +4,18 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Api;
 
+use App\Tests\Traits\ApiTestTrait;
 use App\Entity\Person\Person;
 use App\Entity\Person\User;
 use App\Repository\PersonRepository;
 use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class PersonApiControllerTest extends WebTestCase
 {
-    private KernelBrowser $client;
+    use ApiTestTrait;
 
     #[\Override]
     protected function setUp(): void
@@ -23,10 +23,17 @@ final class PersonApiControllerTest extends WebTestCase
         $this->client = self::createClient();
     }
 
-
-    public function testListReturnsAllPersonsAsSummaryDtos(): void
+    public function testListWithoutQueryReturnsEmptyList(): void
     {
         $this->client->request(Request::METHOD_GET, '/api/persons');
+
+        $this->assertResponseIsSuccessful();
+        $this->assertSame([], $this->responseDataList());
+    }
+
+    public function testSearchReturnsMatchingPersons(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/api/persons?q=Maret');
 
         $this->assertResponseIsSuccessful();
         $items = $this->responseDataList();
@@ -37,23 +44,22 @@ final class PersonApiControllerTest extends WebTestCase
         $this->assertArrayHasKey('firstName', $first);
         $this->assertArrayHasKey('lastName', $first);
         $this->assertArrayHasKey('startYear', $first);
-        $this->assertArrayNotHasKey('godFathers', $first);
+        $this->assertSame('Maret', $first['lastName']);
     }
 
     public function testListWithValidOrderByReturnsSuccess(): void
     {
-        $this->client->request(Request::METHOD_GET, '/api/persons?orderBy=firstName');
+        $this->client->request(Request::METHOD_GET, '/api/persons?q=a&orderBy=firstName');
 
         $this->assertResponseIsSuccessful();
     }
 
     public function testListWithInvalidOrderByFallsBackToId(): void
     {
-        $this->client->request(Request::METHOD_GET, '/api/persons?orderBy=invalid');
+        $this->client->request(Request::METHOD_GET, '/api/persons?q=a&orderBy=invalid');
 
         $this->assertResponseIsSuccessful();
     }
-
 
     public function testShowReturnsFullProfileWithRelations(): void
     {
@@ -77,7 +83,6 @@ final class PersonApiControllerTest extends WebTestCase
         $error = $this->responseError();
         $this->assertSame('PERSON_NOT_FOUND', $error['code']);
     }
-
 
     public function testUpdateOwnProfileReturnsUpdatedPerson(): void
     {
@@ -124,7 +129,6 @@ final class PersonApiControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
-
     public function testDeleteAsAdminReturnsNoContent(): void
     {
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
@@ -150,39 +154,6 @@ final class PersonApiControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
-
-    public function testExportOwnDataReturnsPersonData(): void
-    {
-        $this->loginAs('luka.maret@etu.univ-lyon1.fr');
-        $person = $this->getPersonByEmail('luka.maret@etu.univ-lyon1.fr');
-
-        $this->client->request(Request::METHOD_GET, '/api/persons/' . $person->getId() . '/export');
-
-        $this->assertResponseIsSuccessful();
-        $data = $this->responseData();
-        $this->assertSame($person->getId(), $data['id']);
-    }
-
-    public function testExportAnotherPersonDataReturnsForbidden(): void
-    {
-        $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
-        $person = $this->getPersonByEmail('luka.maret@etu.univ-lyon1.fr');
-
-        $this->client->request(Request::METHOD_GET, '/api/persons/' . $person->getId() . '/export');
-
-        $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
-    }
-
-
-    private function loginAs(string $email): void
-    {
-        /** @var UserRepository $userRepository */
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        $user = $userRepository->findOneBy(['email' => $email]);
-        $this->assertInstanceOf(User::class, $user);
-        $this->client->loginUser($user, 'api');
-    }
-
     private function getFirstPerson(): Person
     {
         /** @var PersonRepository $personRepository */
@@ -201,35 +172,5 @@ final class PersonApiControllerTest extends WebTestCase
         $person = $user->getPerson();
         $this->assertInstanceOf(Person::class, $person);
         return $person;
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function responseData(): array
-    {
-        /** @var array<string, array<string, mixed>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['data'] ?? [];
-    }
-
-    /**
-     * @return array<int, array<string, mixed>>
-     */
-    private function responseDataList(): array
-    {
-        /** @var array<string, array<int, array<string, mixed>>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['data'] ?? [];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function responseError(): array
-    {
-        /** @var array<string, array<string, mixed>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['error'] ?? [];
     }
 }

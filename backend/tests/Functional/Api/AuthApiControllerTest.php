@@ -4,16 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Api;
 
-use App\Entity\Person\User;
-use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
+use App\Tests\Traits\ApiTestTrait;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class AuthApiControllerTest extends WebTestCase
 {
-    private KernelBrowser $client;
+    use ApiTestTrait;
 
     #[\Override]
     protected function setUp(): void
@@ -21,11 +19,10 @@ final class AuthApiControllerTest extends WebTestCase
         $this->client = self::createClient();
     }
 
-
     public function testLoginWithValidCredentialsReturnsUserData(): void
     {
         $this->client->jsonRequest('POST', '/api/auth/login', [
-            'username' => 'luka.maret@etu.univ-lyon1.fr',
+            'email'    => 'luka.maret@etu.univ-lyon1.fr',
             'password' => 'password',
         ]);
 
@@ -40,7 +37,7 @@ final class AuthApiControllerTest extends WebTestCase
     public function testLoginWithInvalidCredentialsReturnsUnauthorized(): void
     {
         $this->client->jsonRequest('POST', '/api/auth/login', [
-            'username' => 'luka.maret@etu.univ-lyon1.fr',
+            'email'    => 'luka.maret@etu.univ-lyon1.fr',
             'password' => 'wrong_password',
         ]);
 
@@ -52,13 +49,12 @@ final class AuthApiControllerTest extends WebTestCase
     public function testLoginWithUnknownEmailReturnsUnauthorized(): void
     {
         $this->client->jsonRequest('POST', '/api/auth/login', [
-            'username' => 'unknown@etu.univ-lyon1.fr',
+            'email'    => 'unknown@etu.univ-lyon1.fr',
             'password' => 'password',
         ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
-
 
     public function testMeWhenAuthenticatedReturnsUserProfile(): void
     {
@@ -81,7 +77,6 @@ final class AuthApiControllerTest extends WebTestCase
         $this->assertSame('UNAUTHORIZED', $error['code']);
     }
 
-
     public function testLogoutWhenAuthenticatedReturnsSuccess(): void
     {
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
@@ -91,28 +86,36 @@ final class AuthApiControllerTest extends WebTestCase
         $this->assertResponseIsSuccessful();
     }
 
-
     public function testRegisterWithMissingFieldsReturnsValidationError(): void
     {
         $this->client->jsonRequest('POST', '/api/auth/register', [
             'email' => 'test@etu.univ-lyon1.fr',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseIsUnprocessable();
         $error = $this->responseError();
         $this->assertSame('VALIDATION_ERROR', $error['code']);
     }
 
-
     public function testResetPasswordRequestAlwaysReturnsSuccess(): void
     {
         $this->client->jsonRequest('POST', '/api/auth/reset-password/request', [
-            'email' => 'unknown@etu.univ-lyon1.fr',
+            'email'       => 'unknown@etu.univ-lyon1.fr',
+            'callbackUrl' => 'http://localhost/reset-password',
         ]);
 
         $this->assertResponseIsSuccessful();
     }
 
+    public function testResetPasswordRequestWithoutCallbackUrlReturnsValidationError(): void
+    {
+        $this->client->jsonRequest('POST', '/api/auth/reset-password/request', [
+            'email' => 'unknown@etu.univ-lyon1.fr',
+        ]);
+
+        $this->assertResponseIsUnprocessable();
+        $this->assertSame('VALIDATION_ERROR', $this->responseError()['code']);
+    }
 
     public function testResetPasswordConfirmWithInvalidTokenReturnsError(): void
     {
@@ -121,38 +124,8 @@ final class AuthApiControllerTest extends WebTestCase
             'password' => 'NewStr0ng!Pass',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseIsUnprocessable();
         $error = $this->responseError();
         $this->assertSame('VALIDATION_ERROR', $error['code']);
-    }
-
-
-    private function loginAs(string $email): void
-    {
-        /** @var UserRepository $userRepository */
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        $user = $userRepository->findOneBy(['email' => $email]);
-        $this->assertInstanceOf(User::class, $user);
-        $this->client->loginUser($user, 'api');
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function responseData(): array
-    {
-        /** @var array<string, array<string, mixed>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['data'] ?? [];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function responseError(): array
-    {
-        /** @var array<string, array<string, mixed>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['error'] ?? [];
     }
 }

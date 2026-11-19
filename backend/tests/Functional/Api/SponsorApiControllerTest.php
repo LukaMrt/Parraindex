@@ -4,28 +4,27 @@ declare(strict_types=1);
 
 namespace App\Tests\Functional\Api;
 
+use App\Tests\Traits\ApiTestTrait;
+use App\Dto\Sponsor\SponsorTypeDto;
 use App\Entity\Person\Person;
 use App\Entity\Person\User;
 use App\Entity\Sponsor\Sponsor;
 use App\Entity\Sponsor\Type;
 use App\Repository\PersonRepository;
 use App\Repository\SponsorRepository;
-use App\Repository\UserRepository;
-use Symfony\Bundle\FrameworkBundle\KernelBrowser;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 final class SponsorApiControllerTest extends WebTestCase
 {
-    private KernelBrowser $client;
+    use ApiTestTrait;
 
     #[\Override]
     protected function setUp(): void
     {
         $this->client = self::createClient();
     }
-
 
     public function testShowReturnsFullSponsorData(): void
     {
@@ -50,7 +49,6 @@ final class SponsorApiControllerTest extends WebTestCase
         $this->assertSame('SPONSOR_NOT_FOUND', $error['code']);
     }
 
-
     public function testCreateSponsorAsAuthenticatedUserReturnsCreated(): void
     {
         $this->loginAs('luka.maret@etu.univ-lyon1.fr');
@@ -62,7 +60,7 @@ final class SponsorApiControllerTest extends WebTestCase
         $this->client->jsonRequest('POST', '/api/sponsors', [
             'godFatherId' => $godFather->getId(),
             'godChildId'  => $godChild->getId(),
-            'type'        => 1,
+            'type'        => SponsorTypeDto::CLASSIC->value,
         ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_CREATED);
@@ -93,18 +91,17 @@ final class SponsorApiControllerTest extends WebTestCase
         $this->assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
     }
 
-
     public function testUpdateSponsorAsParticipantReturnsUpdatedData(): void
     {
-        $this->loginAs('luka.maret@etu.univ-lyon1.fr');
-        $sponsor = $this->getFirstSponsor();
+        $luka    = $this->loginAs('luka.maret@etu.univ-lyon1.fr');
+        $sponsor = $this->findSponsor($luka, involved: true);
 
         $this->assertInstanceOf(Person::class, $sponsor->getGodFather());
         $this->assertInstanceOf(Person::class, $sponsor->getGodChild());
         $this->client->jsonRequest('PUT', '/api/sponsors/' . $sponsor->getId(), [
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId'  => $sponsor->getGodChild()->getId(),
-            'type'        => 1,
+            'type'        => SponsorTypeDto::CLASSIC->value,
             'description' => 'Description modifiée',
         ]);
 
@@ -115,26 +112,23 @@ final class SponsorApiControllerTest extends WebTestCase
 
     public function testUpdateSponsorAsUnrelatedUserReturnsForbidden(): void
     {
-        $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
-        $sponsor = $this->getFirstSponsor();
+        $lilian  = $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
+        $sponsor = $this->findSponsor($lilian, involved: false);
 
         $this->assertInstanceOf(Person::class, $sponsor->getGodFather());
         $this->assertInstanceOf(Person::class, $sponsor->getGodChild());
         $this->client->jsonRequest('PUT', '/api/sponsors/' . $sponsor->getId(), [
             'godFatherId' => $sponsor->getGodFather()->getId(),
             'godChildId'  => $sponsor->getGodChild()->getId(),
-            'type'        => 1,
+            'type'        => SponsorTypeDto::CLASSIC->value,
         ]);
 
         $this->assertResponseStatusCodeSame(Response::HTTP_FORBIDDEN);
     }
 
-
     public function testDeleteSponsorAsParticipantReturnsNoContent(): void
     {
-        $this->loginAs('luka.maret@etu.univ-lyon1.fr');
-
-        $lukaUser = $this->getUserByEmail('luka.maret@etu.univ-lyon1.fr');
+        $lukaUser = $this->loginAs('luka.maret@etu.univ-lyon1.fr');
         $luka     = $lukaUser->getPerson();
         $this->assertInstanceOf(Person::class, $luka);
 
@@ -154,8 +148,8 @@ final class SponsorApiControllerTest extends WebTestCase
 
     public function testDeleteSponsorAsUnrelatedUserReturnsForbidden(): void
     {
-        $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
-        $sponsor = $this->getFirstSponsor();
+        $lilian  = $this->loginAs('lilian.baudry@etu.univ-lyon1.fr');
+        $sponsor = $this->findSponsor($lilian, involved: false);
 
         $this->client->request(Request::METHOD_DELETE, '/api/sponsors/' . $sponsor->getId());
 
@@ -163,18 +157,24 @@ final class SponsorApiControllerTest extends WebTestCase
     }
 
 
-    private function loginAs(string $email): void
+    /**
+     * Sponsor des fixtures dont l'utilisateur est (ou n'est pas) parrain/filleul.
+     */
+    private function findSponsor(User $user, bool $involved): Sponsor
     {
-        $this->client->loginUser($this->getUserByEmail($email), 'api');
-    }
+        /** @var SponsorRepository $sponsorRepository */
+        $sponsorRepository = self::getContainer()->get(SponsorRepository::class);
+        $person = $user->getPerson();
 
-    private function getUserByEmail(string $email): User
-    {
-        /** @var UserRepository $userRepository */
-        $userRepository = self::getContainer()->get(UserRepository::class);
-        $user = $userRepository->findOneBy(['email' => $email]);
-        $this->assertInstanceOf(User::class, $user);
-        return $user;
+        $sponsor = array_find(
+            $sponsorRepository->findAll(),
+            static fn (Sponsor $s): bool => $involved === (
+                $s->getGodFather()?->equals($person) === true || $s->getGodChild()?->equals($person) === true
+            ),
+        );
+        $this->assertInstanceOf(Sponsor::class, $sponsor);
+
+        return $sponsor;
     }
 
     private function getFirstSponsor(): Sponsor
@@ -194,25 +194,5 @@ final class SponsorApiControllerTest extends WebTestCase
         /** @var PersonRepository $personRepository */
         $personRepository = self::getContainer()->get(PersonRepository::class);
         return $personRepository->getAll();
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function responseData(): array
-    {
-        /** @var array<string, array<string, mixed>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['data'] ?? [];
-    }
-
-    /**
-     * @return array<string, mixed>
-     */
-    private function responseError(): array
-    {
-        /** @var array<string, array<string, mixed>> $body */
-        $body = json_decode((string) $this->client->getResponse()->getContent(), true);
-        return $body['error'] ?? [];
     }
 }

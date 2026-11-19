@@ -38,7 +38,7 @@ final class ContactApiControllerTest extends WebTestCase
             'contacterFirstName' => 'Jean',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseIsUnprocessable();
     }
 
     public function testCreateContactWithInvalidEmailReturnsValidationError(): void
@@ -51,6 +51,6 @@ final class ContactApiControllerTest extends WebTestCase
             'description'        => 'Test',
         ]);
 
-        $this->assertResponseStatusCodeSame(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $this->assertResponseIsUnprocessable();
     }
 }

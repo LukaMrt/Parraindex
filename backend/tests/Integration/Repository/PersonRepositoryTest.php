@@ -47,9 +47,12 @@ final class PersonRepositoryTest extends KernelTestCase
         $this->assertNotEmpty($persons);
 
         // Verify ordering
-        $firstNames       = array_map(static fn (Person $p): string => $p->getFirstName(), $persons);
+        $firstNames = array_map(static fn (Person $p): string => $p->getFirstName(), $persons);
+        // MySQL trie avec une collation insensible aux accents (« Théo » < « Thomas ») :
+        // on compare avec un tri ICU plutôt qu'avec sort(), qui trie octet par octet.
         $sortedFirstNames = $firstNames;
-        sort($sortedFirstNames);
+        $collator = new \Collator('fr_FR');
+        $collator->sort($sortedFirstNames);
         $this->assertSame($sortedFirstNames, $firstNames);
     }
 
@@ -128,7 +131,7 @@ final class PersonRepositoryTest extends KernelTestCase
         $this->assertInstanceOf(\DateTimeInterface::class, $person->getCreatedAt());
     }
 
-    public function testUpdateSetsDefaultPictureWhenNull(): void
+    public function testUpdateKeepsPictureNullWhenNotSet(): void
     {
         // Given
         $person = new Person();
@@ -140,6 +143,7 @@ final class PersonRepositoryTest extends KernelTestCase
         $this->repository->update($person);
 
         // Then
-        $this->assertSame('no-picture.svg', $person->getPicture());
+        // L'avatar par défaut est géré par le front : aucune valeur n'est forcée en base
+        $this->assertNull($person->getPicture());
     }
 }
